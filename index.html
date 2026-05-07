@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latam Expeditions | Viajes, experiencias y paquetes por Latinoamérica</title>
+  <meta name="description" content="Diseña viajes por Latinoamérica combinando experiencias, hoteles y paquetes a medida desde tu país." />
+  <meta property="og:title" content="Latam Expeditions" />
+  <meta property="og:description" content="Experiencias, hoteles y paquetes por Perú, Chile, Argentina, Ecuador, Bolivia y más destinos de Latinoamérica." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/img/og/latam-expeditions-share.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --latam-green: #063f2a;
+      --latam-green-2: #0b573b;
+      --latam-green-3: #0e6b49;
+      --latam-yellow: #f7c600;
+      --latam-yellow-soft: #ffe983;
+      --latam-cream: #fff8df;
+      --latam-ink: #17211c;
+      --latam-muted: #65736d;
+      --latam-border: #e4ebe7;
+      --latam-pink: #e6009f;
+      --white: #ffffff;
+      --shadow-soft: 0 20px 55px rgba(6, 63, 42, 0.12);
+      --shadow-card: 0 18px 45px rgba(15, 33, 25, 0.10);
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 18px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--latam-ink);
+      background: #fbfdfb;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+    button, input, select { font: inherit; }
+
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--latam-border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .topbar__inner {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 28px;
+      align-items: center;
+      padding: 18px 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 250px;
+    }
+
+    .brand__mark {
+      width: 30px;
+      height: 50px;
+      border: 6px solid var(--latam-yellow);
+      flex: 0 0 auto;
+    }
+
+    .brand__name {
+      font-family: Montserrat, sans-serif;
+      line-height: 0.9;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .brand__name span {
+      display: block;
+      margin-top: 10px;
+      font-size: 27px;
+      letter-spacing: 0.24em;
+      font-weight: 600;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      color: #1f2b26;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .nav a { border-bottom: 3px solid transparent; padding: 8px 0; }
+    .nav a:hover { border-bottom-color: var(--latam-yellow); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .country-pill {
+      border: 1px solid var(--latam-border);
+      background: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      color: var(--latam-green);
+      cursor: pointer;
+    }
+
+    .reserve-btn {
+      border: 0;
+      background: var(--latam-yellow);
+      color: #111;
+      font-family: Montserrat, sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 16px 26px;
+      border-radius: 0;
+      cursor: pointer;
+      box-shadow: 0 12px 28px rgba(247, 198, 0, 0.25);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 620px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: var(--latam-green);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.48)),
+        url("assets/img/home/hero-latam-expeditions.jpg") center/cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      width: min(100% - 36px, 1050px);
+      text-align: center;
+      color: white;
+      padding-top: 44px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .hero h1 {
+      margin: 24px auto 14px;
+      max-width: 900px;
+      font-family: Montserrat, sans-serif;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      font-size: clamp(44px, 7vw, 86px);
+      line-height: 0.96;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 0 auto 34px;
+      font-size: clamp(17px, 2vw, 22px);
+      line-height: 1.55;
+      color: rgba(255,255,255,0.92);
+      font-weight: 600;
+    }
+
+    .search-card {
+      width: min(100%, 950px);
+      margin: 0 auto;
+      background: var(--white);
+      color: var(--latam-ink);
+      border-radius: 999px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.8fr auto;
+      gap: 0;
+      align-items: center;
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .search-field {
+      padding: 23px 28px;
+      border-right: 1px solid var(--latam-border);
+    }
+
+    .search-field label {
+      display: block;
+      font-weight: 900;
+      color: var(--latam-green);
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .search-field input,
+    .search-field select {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      color: var(--latam-muted);
+      background: transparent;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .search-btn {
+      margin: 12px;
+      border: 0;
+      width: 66px;
+      height: 66px;
+      border-radius: 50%;
+      background: var(--latam-green-2);
+      color: white;
+      font-size: 25px;
+      cursor: pointer;
+    }
+
+    .hero-note {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255,255,255,0.92);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    main { overflow: hidden; }
+
+    .section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 32px;
+    }
+
+    .section-kicker {
+      font-family: Montserrat, sans-serif;
+      color: var(--latam-yellow);
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .section h2 {
+      font-family: Montserrat, sans-serif;
+      font-size: clamp(32px, 4.5vw, 54px);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      margin: 0;
+      color: var(--latam-green);
+    }
+
+    .section-heading p {
+      margin: 0;
+      max-width: 430px;
+      color: var(--latam-muted);
+      font-size: 17px;
+      line-height: 1.6;
+      font-weight: 600;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .trip-card {
+      background: #fff;
+      border: 1px solid var(--latam-border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .trip-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 60px rgba(6, 63, 42, 0.18);
+    }
+
+    .trip-card__media {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: #dbe5df;
+    }
+
+    .trip-card__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .tag {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      background: rgba(255,255,255,0.92);
+      color: var(--latam-green);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 900;
+      font-size: 14px;
+    }
+
+    .trip-card__body {
+      padding: 24px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--latam-muted);
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 13px;
+    }
+
+    .trip-card h3 {
+      margin: 0 0 12px;
+      color: var(--latam-green);
+      font-family: Montserrat, sans-serif;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .trip-card p {
+      color: var(--latam-muted);
+      line-height: 1.55;
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 0 22px;
+    }
+
+    .price-row {
+      border-top: 1px solid var(--latam-border);
+      padding-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .price small {
+      display: block;
+      color: var(--latam-muted);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .price strong {
+      color: var(--latam-green);
+      font-family: Montserrat, sans-serif;
+      font-size: 23px;
+    }
+
+    .card-btn {
+      border: 0;
+      background: var(--latam-green);
+      color: white;
+      border-radius: 999px;
+      padding: 13px 18px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .builder-band {
+      background: linear-gradient(135deg, var(--latam-green), #0c2f22);
+      color: white;
+      padding: 70px 24px;
+    }
+
+    .builder-band__inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 38px;
+      align-items: center;
+    }
+
+    .builder-band h2 {
+      font-family: Montserrat, sans-serif;
+      font-size: clamp(34px, 5vw, 62px);
+      line-height: 1;
+      margin: 0 0 18px;
+      letter-spacing: -0.05em;
+    }
+
+    .builder-band h2 span { color: var(--latam-yellow); }
+
+    .builder-band p {
+      margin: 0;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.65;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .step {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      backdrop-filter: blur(8px);
+    }
+
+    .step strong {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--latam-yellow);
+      color: #111;
+      display: grid;
+      place-items: center;
+      font-family: Montserrat, sans-serif;
+      margin-bottom: 16px;
+    }
+
+    .step h3 {
+      margin: 0 0 8px;
+      font-family: Montserrat, sans-serif;
+      font-size: 19px;
+    }
+
+    .step p {
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.78);
+    }
+
+    .destinations {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+    }
+
+    .destination-large,
+    .destination-stack article {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      min-height: 450px;
+      background: #d8e4dd;
+      color: white;
+      box-shadow: var(--shadow-card);
+    }
+
+    .destination-stack {
+      display: grid;
+      gap: 24px;
+    }
+
+    .destination-stack article { min-height: 213px; }
+
+    .destination-large img,
+    .destination-stack img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+    }
+
+    .destination-large::after,
+    .destination-stack article::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,0.66));
+    }
+
+    .destination-content {
+      position: absolute;
+      z-index: 2;
+      left: 28px;
+      right: 28px;
+      bottom: 26px;
+    }
+
+    .destination-content h3 {
+      font-family: Montserrat, sans-serif;
+      font-size: 32px;
+      margin: 0 0 8px;
+    }
+
+    .destination-content p {
+      margin: 0;
+      color: rgba(255,255,255,0.86);
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .country-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+      background: rgba(4, 18, 12, 0.58);
+      backdrop-filter: blur(8px);
+    }
+
+    .country-modal.is-open { display: flex; }
+
+    .country-box {
+      width: min(100%, 760px);
+      background: #fff;
+      border-radius: 34px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+
+    .country-box__head {
+      padding: 34px;
+      background: linear-gradient(135deg, var(--latam-cream), #fff);
+      border-bottom: 1px solid var(--latam-border);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .country-box__head h2 {
+      margin: 0 0 8px;
+      font-family: Montserrat, sans-serif;
+      color: var(--latam-green);
+      font-size: 34px;
+      letter-spacing: -0.04em;
+    }
+
+    .country-box__head p {
+      margin: 0;
+      color: var(--latam-muted);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .close-modal {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--latam-border);
+      background: #fff;
+      cursor: pointer;
+      font-size: 22px;
+    }
+
+    .country-grid {
+      padding: 28px 34px 34px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .country-option {
+      border: 1px solid var(--latam-border);
+      border-radius: 18px;
+      background: #fff;
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+      font-weight: 900;
+      color: var(--latam-green);
+    }
+
+    .country-option span {
+      display: block;
+      margin-top: 6px;
+      color: var(--latam-muted);
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    footer {
+      background: #061b12;
+      color: white;
+      padding: 42px 24px;
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: center;
+      color: rgba(255,255,255,0.72);
+      font-weight: 600;
+    }
+
+    @media (max-width: 980px) {
+      .topbar__inner { grid-template-columns: 1fr auto; }
+      .nav { display: none; }
+      .brand__name span { font-size: 20px; }
+      .reserve-btn { display: none; }
+      .search-card { grid-template-columns: 1fr; border-radius: 32px; }
+      .search-field { border-right: 0; border-bottom: 1px solid var(--latam-border); }
+      .search-btn { width: calc(100% - 24px); border-radius: 999px; }
+      .cards-grid, .builder-band__inner, .destinations { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .country-grid { grid-template-columns: 1fr; }
+      .section-heading { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 560px) {
+      .brand { min-width: 0; }
+      .brand__mark { width: 24px; height: 42px; border-width: 5px; }
+      .brand__name { font-size: 14px; }
+      .brand__name span { font-size: 16px; letter-spacing: 0.16em; }
+      .country-pill { padding: 9px 11px; font-size: 13px; }
+      .topbar__inner { padding: 14px 16px; }
+      .hero { min-height: 680px; }
+      .section { padding: 58px 18px; }
+      .price-row { flex-direction: column; align-items: flex-start; }
+      .card-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <a class="brand" href="./index.html" aria-label="Latam Expeditions inicio">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__name">Latam <span>Expeditions</span></span>
+      </a>
+
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#experiencias">Experiencias</a>
+        <a href="#paquetes">Paquetes</a>
+        <a href="#destinos">Destinos</a>
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="country-pill" type="button" data-open-country>🌎 <span id="countryLabel">Latam Expeditions Perú</span></button>
+        <a class="reserve-btn" href="#paquetes">Reservar online</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero" aria-label="Buscador principal de viajes">
+    <div class="hero__content">
+      <span class="eyebrow">OTI de viajes por Latinoamérica</span>
+      <h1>Diseña tu próxima expedición por Latinoamérica</h1>
+      <p>Combina experiencias, hoteles y paquetes por país. Vuelos disponibles como cotización adicional o incluidos en paquetes seleccionados.</p>
+
+      <form class="search-card" id="tripSearchForm">
+        <div class="search-field">
+          <label for="destination">¿A dónde quieres viajar?</label>
+          <input id="destination" name="destination" type="search" placeholder="Ej. Machu Picchu, Patagonia, Galápagos" />
+        </div>
+        <div class="search-field">
+          <label for="travelType">Tipo de viaje</label>
+          <select id="travelType" name="travelType">
+            <option value="experiences">Experiencias</option>
+            <option value="hotel-packages">Paquete + hotel</option>
+            <option value="flight-packages">Paquete + vuelo</option>
+            <option value="custom">Viaje a medida</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="date">Fecha estimada</label>
+          <input id="date" name="date" type="month" />
+        </div>
+        <button class="search-btn" type="submit" aria-label="Buscar viajes">⌕</button>
+      </form>
+
+      <div class="hero-note">✦ Recomendaciones personalizadas según tu país de origen</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="section" id="experiencias">
+      <div class="section-heading">
+        <div>
+          <div class="section-kicker">Experiencias destacadas</div>
+          <h2>Viajes listos para reservar o combinar</h2>
+        </div>
+        <p>Empieza con experiencias sueltas y conviértelas en paquetes agregando hotel, traslados, trenes o vuelos cotizados por asesor.</p>
+      </div>
+
+      <div class="cards-grid">
+        <article class="trip-card">
+          <div class="trip-card__media">
+            <img src="assets/img/experiences/machu-picchu-full-day.jpg" alt="Viajeros en Machu Picchu" />
+            <span class="tag">Express</span>
+          </div>
+          <div class="trip-card__body">
+            <div class="meta">📍 Perú · Cusco / Machu Picchu</div>
+            <h3>Machu Picchu Full Day</h3>
+            <p>Experiencia de día completo con ingreso oficial, tren, bus y guía profesional.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>USD 320.90</strong></div>
+              <a class="card-btn" href="product.html?slug=machu-picchu-full-day">Ver experiencia</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="trip-card">
+          <div class="trip-card__media">
+            <img src="assets/img/experiences/sacred-valley.jpg" alt="Paisaje del Valle Sagrado" />
+            <span class="tag">Cultural</span>
+          </div>
+          <div class="trip-card__body">
+            <div class="meta">📍 Perú · Cusco / Valle Sagrado</div>
+            <h3>Valle Sagrado VIP</h3>
+            <p>Ruta cultural con conexión ideal para paquetes Cusco y Machu Picchu overnight.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>USD 49.90</strong></div>
+              <a class="card-btn" href="product.html?slug=valle-sagrado-vip">Ver experiencia</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="trip-card">
+          <div class="trip-card__media">
+            <img src="assets/img/experiences/patagonia.jpg" alt="Montañas de la Patagonia" />
+            <span class="tag">Naturaleza</span>
+          </div>
+          <div class="trip-card__body">
+            <div class="meta">📍 Chile / Argentina · Patagonia</div>
+            <h3>Patagonia esencial</h3>
+            <p>Base para viaje a medida con hotel, excursiones escénicas y vuelos cotizados.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>Consultar</strong></div>
+              <a class="card-btn" href="all-experiences.html?destination=patagonia">Diseñar viaje</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="builder-band" id="como-funciona">
+      <div class="builder-band__inner">
+        <div>
+          <h2>Arma tu viaje <span>en capas</span></h2>
+          <p>La lógica comercial separa experiencias, alojamiento, trenes, extras y vuelos para evitar duplicidades y permitir paquetes flexibles según país de origen.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <strong>1</strong>
+            <h3>Elige destino</h3>
+            <p>Detectamos o seleccionas tu país para priorizar ofertas recomendadas.</p>
+          </article>
+          <article class="step">
+            <strong>2</strong>
+            <h3>Combina servicios</h3>
+            <p>Reserva experiencias solas o agrega hotel, trenes, traslados y extras.</p>
+          </article>
+          <article class="step">
+            <strong>3</strong>
+            <h3>Cotiza vuelos</h3>
+            <p>Los vuelos se cotizan aparte o se integran en paquetes especiales.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="paquetes">
+      <div class="section-heading">
+        <div>
+          <div class="section-kicker">Paquetes por duración</div>
+          <h2>Paquetes dinámicos con hotel opcional</h2>
+        </div>
+        <p>Cards enlazadas a productos dinámicos. El detalle puede mostrar rutas recomendadas, clásicas, de aventura o naturaleza.</p>
+      </div>
+
+      <div class="cards-grid">
+        <article class="trip-card">
+          <div class="trip-card__media">
+            <img src="assets/img/packages/peru-4d3n.jpg" alt="Cusco y Machu Picchu" />
+            <span class="tag">4D/3N</span>
+          </div>
+          <div class="trip-card__body">
+            <div class="meta">📍 Recomendado para Chile, Colombia y México</div>
+            <h3>Cusco + Machu Picchu</h3>
+            <p>Paquete flexible con experiencias base, hotel opcional y tren seleccionable.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>USD 589.90</strong></div>
+              <a class="card-btn" href="product.html?slug=paquetes-peru-4-dias-3-noches&option=0">Ver paquete</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="trip-card">
+          <div class="trip-card__media">
+            <img src="assets/img/packages/ecuador-galapagos.jpg" alt="Islas Galápagos" />
+            <span class="tag">A medida</span>
+          </div>
+          <div class="trip-card__body">
+            <div class="meta">📍 Ecuador · Quito / Galápagos</div>
+            <h3>Ecuador natural</h3>
+            <p>Ruta sugerida con hoteles y excursiones, ideal para mercados de Perú y Chile.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>Consultar</strong></div>
+              <a class="card-btn" href="all-experiences.html?destination=ecuador">Solicitar ruta</a>
+            </div>
+          </div>
+        </article>
+
+        <article class="trip-card">
+          <div class="trip-card__media">
+            <img src="assets/img/packages/argentina-buenos-aires.jpg" alt="Buenos Aires" />
+            <span class="tag">Urbano</span>
+          </div>
+          <div class="trip-card__body">
+            <div class="meta">📍 Argentina · Buenos Aires / Patagonia</div>
+            <h3>Argentina esencial</h3>
+            <p>Combina experiencias urbanas, escapadas naturales y vuelos internos cotizados.</p>
+            <div class="price-row">
+              <div class="price"><small>Desde</small><strong>Consultar</strong></div>
+              <a class="card-btn" href="all-experiences.html?destination=argentina">Diseñar viaje</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="destinos">
+      <div class="section-heading">
+        <div>
+          <div class="section-kicker">Destinos Latam</div>
+          <h2>Ofertas cruzadas según país de origen</h2>
+        </div>
+        <p>La home puede priorizar destinos internacionales para cada mercado: Chile ve Perú y Argentina; Perú ve Chile, Ecuador y Argentina.</p>
+      </div>
+
+      <div class="destinations">
+        <article class="destination-large">
+          <img src="assets/img/destinations/peru.jpg" alt="Machu Picchu en Perú" />
+          <div class="destination-content">
+            <h3>Perú</h3>
+            <p>Cusco, Machu Picchu, Lima, Ica, Arequipa y Puno.</p>
+          </div>
+        </article>
+        <div class="destination-stack">
+          <article>
+            <img src="assets/img/destinations/chile.jpg" alt="Paisaje de Chile" />
+            <div class="destination-content">
+              <h3>Chile</h3>
+              <p>Atacama, Santiago, Torres del Paine y viñedos.</p>
+            </div>
+          </article>
+          <article>
+            <img src="assets/img/destinations/ecuador.jpg" alt="Ecuador y Galápagos" />
+            <div class="destination-content">
+              <h3>Ecuador</h3>
+              <p>Quito, Andes, Amazonía y Galápagos.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="country-modal" id="countryModal" role="dialog" aria-modal="true" aria-labelledby="countryTitle">
+    <div class="country-box">
+      <div class="country-box__head">
+        <div>
+          <h2 id="countryTitle">¿Desde qué país nos visitas?</h2>
+          <p>Usaremos esta selección para recomendarte destinos, paquetes y monedas más relevantes. También puede detectarse automáticamente por IP en una fase posterior.</p>
+        </div>
+        <button class="close-modal" type="button" data-close-country aria-label="Cerrar">×</button>
+      </div>
+      <div class="country-grid">
+        <button class="country-option" data-country="Perú" data-offers="Chile, Ecuador y Argentina">🇵🇪 Perú <span>Recomendados: Chile, Ecuador y Argentina</span></button>
+        <button class="country-option" data-country="Chile" data-offers="Perú, Argentina y Ecuador">🇨🇱 Chile <span>Recomendados: Perú, Argentina y Ecuador</span></button>
+        <button class="country-option" data-country="Colombia" data-offers="Perú, Ecuador y Argentina">🇨🇴 Colombia <span>Recomendados: Perú, Ecuador y Argentina</span></button>
+        <button class="country-option" data-country="México" data-offers="Perú, Chile y Argentina">🇲🇽 México <span>Recomendados: Perú, Chile y Argentina</span></button>
+        <button class="country-option" data-country="Argentina" data-offers="Perú, Chile y Ecuador">🇦🇷 Argentina <span>Recomendados: Perú, Chile y Ecuador</span></button>
+        <button class="country-option" data-country="Otro país" data-offers="Top Latinoamérica">🌎 Otro país <span>Ver destinos más vendidos de Latinoamérica</span></button>
+      </div>
+    </div>
+  </div>
+
+  <footer id="contacto">
+    <div class="footer-inner">
+      <strong>Latam Expeditions</strong>
+      <span>Experiencias, hoteles y paquetes por Latinoamérica.</span>
+      <span>WhatsApp · Email · Reserva online</span>
+    </div>
+  </footer>
+
+  <script>
+    const countryModal = document.getElementById('countryModal');
+    const countryLabel = document.getElementById('countryLabel');
+    const openCountryButtons = document.querySelectorAll('[data-open-country]');
+    const closeCountryButtons = document.querySelectorAll('[data-close-country]');
+    const countryOptions = document.querySelectorAll('.country-option');
+    const savedCountry = localStorage.getItem('latamExpeditionsCountry');
+
+    function openCountryModal() {
+      countryModal.classList.add('is-open');
+    }
+
+    function closeCountryModal() {
+      countryModal.classList.remove('is-open');
+    }
+
+    if (savedCountry) {
+      countryLabel.textContent = `Latam Expeditions ${savedCountry}`;
+    } else {
+      setTimeout(openCountryModal, 700);
+    }
+
+    openCountryButtons.forEach((button) => button.addEventListener('click', openCountryModal));
+    closeCountryButtons.forEach((button) => button.addEventListener('click', closeCountryModal));
+
+    countryOptions.forEach((button) => {
+      button.addEventListener('click', () => {
+        const country = button.dataset.country;
+        localStorage.setItem('latamExpeditionsCountry', country);
+        countryLabel.textContent = `Latam Expeditions ${country}`;
+        closeCountryModal();
+      });
+    });
+
+    countryModal.addEventListener('click', (event) => {
+      if (event.target === countryModal) closeCountryModal();
+    });
+
+    document.getElementById('tripSearchForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const form = new FormData(event.currentTarget);
+      const destination = encodeURIComponent(form.get('destination') || 'latinoamerica');
+      const travelType = encodeURIComponent(form.get('travelType') || 'experiences');
+      window.location.href = `all-experiences.html?search=${destination}&type=${travelType}`;
+    });
+  </script>
+</body>
+</html>
