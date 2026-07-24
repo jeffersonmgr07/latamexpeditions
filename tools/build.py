@@ -49,21 +49,13 @@ def price_label(item) -> str:
 
 def picture(img: str, alt: str, base: str = "", lazy: bool = True,
             width: int = 1200, height: int = 800, css_class: str = "", style: str = "") -> str:
-    """<picture> con WebP y respaldo JPG.
-
-    Los navegadores modernos descargan el WebP (≈60 % más ligero) y el resto
-    recibe el JPG original, sin necesidad de JavaScript.
-    """
-    stem = img.rsplit(".", 1)[0]
+    """Genera una imagen JPG optimizada con dimensiones y carga diferida."""
     loading = 'loading="lazy" decoding="async"' if lazy else 'fetchpriority="high" decoding="async"'
     cls = f' class="{css_class}"' if css_class else ""
     sty = f' style="{style}"' if style else ""
     return (
-        f'<picture>'
-        f'<source srcset="{base}assets/img/{stem}.webp" type="image/webp" />'
         f'<img src="{base}assets/img/{img}" alt="{alt}" width="{width}" height="{height}" '
         f'{loading}{cls}{sty} />'
-        f'</picture>'
     )
 
 

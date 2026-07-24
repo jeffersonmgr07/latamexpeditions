@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Prepara una imagen para el sitio: recorte 3:2, redimensión y WebP.
+"""Prepara una imagen JPG para el sitio: recorte 3:2 y redimensión.
 
 Uso:
     python3 tools/preparar_imagen.py foto.jpg peru-nuevo-tour-01
 
 Acepta cualquier proporción de entrada y recorta al centro. Genera
-assets/img/<nombre>.jpg y assets/img/<nombre>.webp.
+assets/img/<nombre>.jpg.
 """
 import pathlib, sys
 from PIL import Image
@@ -18,7 +18,7 @@ def main():
         sys.exit(1)
 
     origen = pathlib.Path(sys.argv[1])
-    nombre = sys.argv[2].removesuffix(".jpg").removesuffix(".webp")
+    nombre = sys.argv[2].removesuffix(".jpg").removesuffix(".jpeg")
     destino = pathlib.Path(__file__).resolve().parent.parent / "assets/img"
 
     if not origen.exists():
@@ -42,11 +42,8 @@ def main():
 
     im = im.resize((ANCHO, ALTO), Image.LANCZOS)
     im.save(destino / f"{nombre}.jpg", "JPEG", quality=86, optimize=True)
-    im.save(destino / f"{nombre}.webp", "WEBP", quality=82, method=6)
-
     kb_j = (destino / f"{nombre}.jpg").stat().st_size / 1024
-    kb_w = (destino / f"{nombre}.webp").stat().st_size / 1024
-    print(f"Listo: {nombre}.jpg ({kb_j:.0f} KB) y {nombre}.webp ({kb_w:.0f} KB)")
+    print(f"Listo: {nombre}.jpg ({kb_j:.0f} KB)")
     print(f"Ahora añade \"img\": \"{nombre}.jpg\" en assets/data/catalog.json y ejecuta tools/build.py")
 
 if __name__ == "__main__":
