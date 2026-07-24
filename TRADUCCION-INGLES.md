@@ -1,45 +1,47 @@
-# Traducción al inglés — Latam Expeditions
+# Latam Expeditions — Traducción al inglés + páginas del footer
 
-Este documento resume la traducción al 100 % al inglés y cómo continuar con más idiomas.
+Resumen de los dos trabajos realizados: (1) traducción al 100 % al inglés y (2) contenido para todas las páginas del footer, ambos bilingües.
 
-## Cómo funciona ahora
+## Cómo funciona la traducción
 
-El español es el idioma base: vive directamente en el HTML. Cuando el visitante elige otro idioma en el selector, `assets/js/main.js`:
+El español es el idioma base: vive directamente en el HTML. Cuando el visitante elige otro idioma, `assets/js/main.js`:
 
 1. Descarga dos diccionarios desde `assets/data/i18n/<idioma>/`:
-   - `ui-translations.json` — claves por atributo `data-i18n` (nav, hero, buscador, CTA). Ya existía.
-   - `content.json` — **nuevo**: un mapa «texto en español» → «traducción» que cubre **todo el resto del sitio**.
-2. Recorre el DOM y sustituye cada nodo de texto, `placeholder`, `aria-label`, `alt`, el `<title>` y los metadatos SEO cuyo texto original en español esté en `content.json`.
+   - `ui-translations.json` — claves por atributo `data-i18n` (nav, hero, buscador, CTA).
+   - `content.json` — **el diccionario grande**: mapea «texto en español» → «traducción» y cubre **todo el resto del sitio**.
+2. Recorre el DOM y sustituye cada nodo de texto, `placeholder`, `aria-label`, `alt`, el `<title>` y los metadatos SEO cuyo original en español esté en `content.json`.
 3. Guarda los originales, así que volver al español no recarga la página.
 
-Para el contenido que se genera por JavaScript (modal de reserva, tarjetas de «Mis viajes», mensajes de error/PayPal) `booking.js` y `cuentas.js` usan `window.LatamI18n.t()` y `window.LatamI18n.apply()`, expuestos por `main.js`.
+El contenido generado por JavaScript (modal de reserva, «Mis viajes», mensajes de error/PayPal) se traduce con `window.LatamI18n.t()` / `.apply()` desde `booking.js` y `cuentas.js`.
 
-## Qué quedó traducido (100 %)
+## Contenido nuevo en el footer (todo bilingüe)
 
-Las 67 páginas de contenido: inicio, experiencias, paquetes, destinos, estilos de viaje, nosotros, contacto, login, registro, mi-reserva, mis-viajes, 404, las **36 páginas de experiencias** y las **19 de paquetes**. Incluye modals, etiquetas, badges, formularios, instrucciones, `alt`, `placeholders`, `aria-labels`, títulos de pestaña, metadatos SEO y los mensajes dinámicos del flujo de reserva y de cuentas.
+- **legal.html** — Términos y condiciones, Política de reservas (nueva), Política de cancelación y reembolso, Política de privacidad, Política de cookies y Libro de reclamaciones.
+- **nosotros.html** — Nuestro compromiso y Plan de sostenibilidad (secciones ampliadas con ancla propia).
+- **contacto.html** — Preguntas frecuentes (ampliadas a 12), Planifica tu viaje, Viajes en grupo o privados, Red de oficinas, Cambios y postergaciones, Agencias y agentes, Conviértete en proveedor y Trabaja con nosotros.
+- **destinos.html** — Requisitos por país y Mejor temporada para viajar.
 
-Verificado con un script que recorre todo el sitio: **0 textos en español** en las páginas traducidas.
+Todos los enlaces del footer se actualizaron para apuntar a la sección correcta (p. ej. `contacto.html#planifica`, `destinos.html#requisitos`, `legal.html#reservas`), en todas las páginas y subpáginas.
 
-## Qué quedó aplazado (según lo acordado)
+> **Importante:** el contenido legal (términos, privacidad, reservas, cookies, reclamaciones) es una plantilla profesional de base y **debe ser revisado por un asesor legal** antes de su publicación definitiva. Está redactado para una operación con sede en Perú.
 
-Las **páginas legales** (`legal.html`: términos, privacidad, cookies, cancelación…) siguen en español porque aún no tienen contenido definitivo. Su barra de navegación y footer **sí** están en inglés. Cuando tengas el texto legal, se traduce igual que el resto (ver abajo).
+## Verificación
 
-## Archivos modificados / nuevos
+Un script recorre las 68 páginas y comprueba que, con el idioma en inglés, **no quede ningún texto en español** en ninguna página (incluidas legal y todas las del footer). Resultado: 0 fugas.
 
-- **Nuevo:** `assets/data/i18n/en/content.json` (1359 entradas).
-- **Modificado:** `assets/js/main.js` (motor i18n ampliado), `assets/js/booking.js` y `assets/js/cuentas.js` (traducción de textos dinámicos).
-- **Ningún archivo HTML fue modificado** — toda la traducción vive en la carpeta `i18n`, como pediste.
+## Archivos entregados (solo lo modificado)
+
+- **Nuevos:** `assets/data/i18n/en/content.json` y este documento.
+- **Modificados:** `assets/js/main.js`, `assets/js/booking.js`, `assets/js/cuentas.js` y 66 archivos HTML (contenido del footer + enlaces del footer).
+
+Sube estos archivos a tu repositorio respetando las mismas rutas (carpeta `latamexpeditions-main`).
 
 ## Cómo añadir el siguiente idioma (p. ej. portugués)
 
 El selector ya incluye PT, FR, DE, IT, JA, ZH. Para completar uno:
 
 1. Copia `assets/data/i18n/en/content.json` a `assets/data/i18n/pt/content.json`.
-2. Traduce **solo los valores** (el lado derecho). **No cambies las claves**: deben quedar en español, porque son el texto original que se busca en la página.
-3. Opcional: completa `assets/data/i18n/pt/ui-translations.json` (nav/hero/buscador/CTA).
+2. Traduce **solo los valores** (el lado derecho). **No cambies las claves**: deben quedar en español, porque son el texto que se busca en la página.
+3. Opcional: completa `assets/data/i18n/pt/ui-translations.json`.
 
-Eso es todo. No hace falta tocar HTML ni JS.
-
-## Cómo mantenerlo
-
-Si en el futuro agregas texto nuevo **en español** al HTML, solo añade su par `"texto en español": "traducción"` en el `content.json` de cada idioma. Si un texto no está en el diccionario, se muestra en español (degradación segura, nunca se rompe).
+Si en el futuro agregas texto nuevo en español al HTML, solo añade su par `"español": "traducción"` en el `content.json` de cada idioma. Lo que no esté traducido se muestra en español (nunca se rompe).
