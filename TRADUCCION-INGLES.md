@@ -1,47 +1,56 @@
-# Latam Expeditions — Traducción al inglés + páginas del footer
+# Latam Expeditions — Inglés, páginas del footer, formularios y rediseño
 
-Resumen de los dos trabajos realizados: (1) traducción al 100 % al inglés y (2) contenido para todas las páginas del footer, ambos bilingües.
+Resumen de todo lo realizado. Todo es **bilingüe** (español base + inglés en `assets/data/i18n/en/content.json`).
 
-## Cómo funciona la traducción
+## 1. Traducción al inglés (100 %)
 
-El español es el idioma base: vive directamente en el HTML. Cuando el visitante elige otro idioma, `assets/js/main.js`:
+El español vive en el HTML. Al elegir otro idioma, `assets/js/main.js` descarga `en/ui-translations.json` (nav/hero) y `en/content.json` (todo lo demás) y traduce el DOM, atributos, `<title>` y metadatos. El contenido dinámico (reservas, cuentas, formularios) se traduce con `window.LatamI18n`. Verificado: **0 textos en español** con el idioma en inglés, en las 82 páginas.
 
-1. Descarga dos diccionarios desde `assets/data/i18n/<idioma>/`:
-   - `ui-translations.json` — claves por atributo `data-i18n` (nav, hero, buscador, CTA).
-   - `content.json` — **el diccionario grande**: mapea «texto en español» → «traducción» y cubre **todo el resto del sitio**.
-2. Recorre el DOM y sustituye cada nodo de texto, `placeholder`, `aria-label`, `alt`, el `<title>` y los metadatos SEO cuyo original en español esté en `content.json`.
-3. Guarda los originales, así que volver al español no recarga la página.
+## 2. Páginas del footer (nuevas, dedicadas)
 
-El contenido generado por JavaScript (modal de reserva, «Mis viajes», mensajes de error/PayPal) se traduce con `window.LatamI18n.t()` / `.apply()` desde `booking.js` y `cuentas.js`.
+Cada tema tiene ahora su propia página HTML, y el footer apunta a ellas en todo el sitio:
 
-## Contenido nuevo en el footer (todo bilingüe)
+**Legales** (una por tema): `terminos.html`, `politica-reservas.html` (incluye la política de cancelación con ancla `#cancelacion`), `politica-privacidad.html`, `politica-cookies.html`, `libro-reclamaciones.html`. `legal.html` quedó como índice que enlaza a todas.
 
-- **legal.html** — Términos y condiciones, Política de reservas (nueva), Política de cancelación y reembolso, Política de privacidad, Política de cookies y Libro de reclamaciones.
-- **nosotros.html** — Nuestro compromiso y Plan de sostenibilidad (secciones ampliadas con ancla propia).
-- **contacto.html** — Preguntas frecuentes (ampliadas a 12), Planifica tu viaje, Viajes en grupo o privados, Red de oficinas, Cambios y postergaciones, Agencias y agentes, Conviértete en proveedor y Trabaja con nosotros.
-- **destinos.html** — Requisitos por país y Mejor temporada para viajar.
+**Información útil:** `planifica-tu-viaje.html`, `viajes-en-grupo.html`, `requisitos-por-pais.html` (incluye mejor temporada, ancla `#temporada`), `contactar-asesor.html` (red de asesores por destino + contacto directo), `preguntas-frecuentes.html` (respuestas detalladas).
 
-Todos los enlaces del footer se actualizaron para apuntar a la sección correcta (p. ej. `contacto.html#planifica`, `destinos.html#requisitos`, `legal.html#reservas`), en todas las páginas y subpáginas.
+**Empresas y trabajo:** `agencias.html`, `proveedores.html`, `trabaja.html`.
 
-> **Importante:** el contenido legal (términos, privacidad, reservas, cookies, reclamaciones) es una plantilla profesional de base y **debe ser revisado por un asesor legal** antes de su publicación definitiva. Está redactado para una operación con sede en Perú.
+"Sobre nosotros" y "Nuestro compromiso / Plan de sostenibilidad" siguen como secciones ancladas en `nosotros.html`.
 
-## Verificación
+> **Importante — revisión legal:** los textos legales (términos, reservas, privacidad, cookies) son una plantilla profesional de base pensada para una operación con sede en Perú y **deben ser revisados por un asesor legal** antes de publicarse. En `libro-reclamaciones.html` reemplaza `[completar con tu RUC]` y `[completar con tu domicilio]` por tus datos reales.
 
-Un script recorre las 68 páginas y comprueba que, con el idioma en inglés, **no quede ningún texto en español** en ninguna página (incluidas legal y todas las del footer). Resultado: 0 fugas.
+## 3. Formularios → tu correo (Google Apps Script)
 
-## Archivos entregados (solo lo modificado)
+Estas páginas tienen formulario y envían a **reservas@latamexpeditions.com**: libro de reclamaciones, agencias, proveedores, cambios y postergaciones, y el formulario de propuesta de `contacto.html`. El envío usa el **mismo** backend de Apps Script que ya usas para reservas (`catalog.json → booking.endpoint`), mediante `assets/js/forms.js`.
 
-- **Nuevos:** `assets/data/i18n/en/content.json` y este documento.
-- **Modificados:** `assets/js/main.js`, `assets/js/booking.js`, `assets/js/cuentas.js` y 66 archivos HTML (contenido del footer + enlaces del footer).
+**Para activarlo (1 minuto), sigue las instrucciones dentro de `backend/Formularios.gs`:**
 
-Sube estos archivos a tu repositorio respetando las mismas rutas (carpeta `latamexpeditions-main`).
+1. Copia `backend/Formularios.gs` a tu proyecto de Apps Script.
+2. En `doPost()` de `Codigo.gs`, antes de `return json({ ok: false, error: 'Acción no reconocida.' });`, añade:
+   ```js
+   if (['complaint','agency','supplier','changeRequest','contactLead'].indexOf(action) !== -1)
+     return json(enviarFormulario(action, data));
+   ```
+3. Vuelve a desplegar (Nueva versión). No cambia la URL: es la misma de `catalog.json`.
 
-## Cómo añadir el siguiente idioma (p. ej. portugués)
+Mientras el endpoint siga con el texto `PEGAR_AQUI_...`, los formularios mostrarán un mensaje de error controlado. En cuanto pegues tu URL de Apps Script en `catalog.json`, empezarán a enviar correos.
 
-El selector ya incluye PT, FR, DE, IT, JA, ZH. Para completar uno:
+## 4. Rediseño (paleta dorado · negro · verde)
+
+Se añadió un bloque de estilos al final de `assets/css/main.css`: dorado `#C6A15B` para acentos, botones y detalles; fondos marfil cálidos en vez de blanco puro; títulos con más jerarquía (subrayado dorado, verde para encabezados); secciones oscuras para dar ritmo; y componentes nuevos para formularios, pasos y tarjetas de asesor. Es un bloque aditivo: no borra tus estilos anteriores. Si quieres afinar algún color, todo está en las variables `--latam-gold`, `--latam-black`, `--latam-bg-alt` de ese bloque.
+
+## 5. Archivos entregados
+
+**Nuevos (18):** 14 páginas HTML del footer, `assets/data/i18n/en/content.json`, `assets/js/forms.js`, `backend/Formularios.gs` y este documento.
+**Modificados (71):** `assets/css/main.css`, `assets/js/main.js`, `assets/js/booking.js`, `assets/js/cuentas.js` y 67 HTML (contenido + enlaces del footer).
+
+Sube todo respetando las rutas (carpeta `latamexpeditions-main`).
+
+## 6. Añadir el siguiente idioma (p. ej. portugués)
 
 1. Copia `assets/data/i18n/en/content.json` a `assets/data/i18n/pt/content.json`.
-2. Traduce **solo los valores** (el lado derecho). **No cambies las claves**: deben quedar en español, porque son el texto que se busca en la página.
+2. Traduce **solo los valores** (lado derecho). **No cambies las claves** (son el texto en español que se busca en la página).
 3. Opcional: completa `assets/data/i18n/pt/ui-translations.json`.
 
-Si en el futuro agregas texto nuevo en español al HTML, solo añade su par `"español": "traducción"` en el `content.json` de cada idioma. Lo que no esté traducido se muestra en español (nunca se rompe).
+Si agregas texto nuevo en español al HTML, solo añade su par `"español": "traducción"` en el `content.json` de cada idioma. Lo que no esté traducido se muestra en español (nunca se rompe).

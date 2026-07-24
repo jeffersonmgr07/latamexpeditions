@@ -206,7 +206,7 @@
               Con menos de 24 horas o en caso de no presentarte, el pago no es reembolsable.
               Si somos nosotros quienes cancelamos por causas operativas o meteorológicas,
               te devolvemos el 100 % o reprogramamos sin coste, a tu elección.
-              <a href="${BASE}legal.html#cancelacion" target="_blank" rel="noopener">Ver política completa</a>
+              <a href="${BASE}politica-reservas.html#cancelacion" target="_blank" rel="noopener">Ver política completa</a>
             </div>
           </section>
 
