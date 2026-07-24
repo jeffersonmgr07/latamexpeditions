@@ -453,12 +453,17 @@
   /* ------------------------------------------- Estado de sesión en el menú */
 
   function initEstadoSesion() {
+    const token = sesion.token;
     const user = sesion.user;
-    if (!user) return;
-    // La cabecera pasa de "Iniciar sesión" a mostrar el nombre.
-    $$('[data-auth-label]').forEach((n) => { n.textContent = user.name.split(' ')[0]; });
-    $$('[data-auth-in]').forEach((n) => { n.hidden = false; });
-    $$('[data-auth-out]').forEach((n) => { n.hidden = true; });
+    const autenticado = Boolean(token && user && user.name);
+
+    // Se aplica siempre el estado completo para evitar que "Cerrar sesión"
+    // aparezca por estilos inline, datos antiguos o una carga parcial.
+    $$('[data-auth-in]').forEach((n) => { n.hidden = !autenticado; });
+    $$('[data-auth-out]').forEach((n) => { n.hidden = autenticado; });
+    $$('[data-auth-label]').forEach((n) => {
+      n.textContent = autenticado ? user.name.split(' ')[0] : T('Iniciar sesión');
+    });
   }
 
   /* --------------------------------------------------------- Arranque */
@@ -473,6 +478,7 @@
       console.warn('[cuentas] No se pudo cargar la configuración');
     }
     initEstadoSesion();
+    document.addEventListener('latam:langchange', initEstadoSesion);
     initGoogle();
     initLogout();
     initLogin();

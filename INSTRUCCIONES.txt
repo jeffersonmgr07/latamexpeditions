@@ -1,0 +1,19 @@
+CAMBIOS INCLUIDOS
+
+1. Hero de inicio con assets/img/latam-hero-01.webp y capa verde semitransparente.
+2. Fondo fotográfico con capa verde en “Diseñamos tu viaje en tres pasos”.
+3. Logo principal 10% más grande; en escritorio se desplaza suavemente a la derecha sin aumentar la altura del header.
+4. login.html y registro.html usan assets/img/logo-blanco.png. Debes subir esa imagen manualmente con ese nombre exacto.
+5. “Cerrar sesión” solo se muestra cuando existen token y usuario de sesión.
+6. Respuestas de contacto ampliadas en español y traducción completa al inglés.
+
+SUBIR A GITHUB CONSERVANDO LAS RUTAS:
+- assets/css/main.css
+- assets/js/cuentas.js
+- assets/data/i18n/en/content.json
+- contacto.html
+- login.html
+- registro.html
+
+ADEMÁS, ASEGÚRATE DE SUBIR TU NUEVO LOGO BLANCO EN:
+- assets/img/logo-blanco.png
