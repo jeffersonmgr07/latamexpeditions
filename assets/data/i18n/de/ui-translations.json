@@ -1,5 +1,27 @@
 {
-  "nav": {"experiences":"Experiencias","packages":"Paquetes","destinations":"Destinos","travelStyles":"Estilos de viaje","login":"Iniciar sesión"},
-  "hero": {"eyebrow":"Descubre Latinoamérica con expertos locales","title":"Viajes memorables por Latinoamérica, diseñados para ti","subtitle":"Explora destinos icónicos, culturas vivas y paisajes únicos.","note":"Rutas personalizadas según tu país, temporada y estilo de viaje"},
-  "search": {"destination":"¿A dónde quieres viajar?","type":"Estilo de viaje","date":"Fecha estimada"}
+  "nav": {
+    "experiences": "Erlebnisse",
+    "packages": "Pauschalreisen",
+    "destinations": "Reiseziele",
+    "travelStyles": "Reisestile",
+    "contact": "Kontakt",
+    "login": "Anmelden"
+  },
+  "hero": {
+    "eyebrow": "Entdecken Sie Lateinamerika mit lokalen Experten",
+    "title": "Unvergessliche Reisen durch Lateinamerika, für Sie gestaltet",
+    "subtitle": "Entdecken Sie ikonische Ziele, lebendige Kulturen und einzigartige Landschaften mit Routen, die zu Ihrem Tempo und Budget passen.",
+    "note": "Individuelle Routen je nach Herkunftsland, Saison und Reisestil"
+  },
+  "search": {
+    "destination": "Wohin möchten Sie reisen?",
+    "type": "Reisestil",
+    "date": "Geschätztes Datum",
+    "submit": "Reisen suchen"
+  },
+  "cta": {
+    "quote": "Angebot anfordern",
+    "whatsapp": "Per WhatsApp fragen",
+    "viewAll": "Alle ansehen"
+  }
 }
