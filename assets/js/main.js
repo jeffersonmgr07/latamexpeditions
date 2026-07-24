@@ -61,44 +61,170 @@
     return entry || FALLBACK_COUNTRY;
   }
 
-  /* --------------------------------------------------- 3. Internacionalización */
+  /* --------------------------------------------------- 3. Internacionalización
+   *
+   * Modelo de traducción:
+   *   · El español es el idioma base: vive directamente en el marcado HTML.
+   *   · Para cualquier otro idioma se descargan dos diccionarios desde
+   *     assets/data/i18n/<lang>/:
+   *        - ui-translations.json : claves por atributo data-i18n (nav, hero…).
+   *        - content.json         : mapa «texto español» → «traducción», que
+   *          cubre TODO el resto del sitio (párrafos, botones, badges, alt,
+   *          placeholders, aria-label, <title> y metadatos SEO).
+   *   · Un recorrido del DOM sustituye cada nodo de texto/atributo cuyo texto
+   *     original en español exista en content.json.
+   *   · Se guardan los originales para restaurar el español sin recargar.
+   */
 
   const SUPPORTED_LANGS = ['es', 'en', 'pt', 'fr', 'de', 'it', 'ja', 'zh'];
+  const I18N_SKIP_TAGS = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEMPLATE: 1, CODE: 1 };
 
   /** Devuelve un valor anidado con notación de puntos: get(obj, 'nav.experiences'). */
   function getPath(object, path) {
     return path.split('.').reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : null), object);
   }
+  const normKey = (s) => s.replace(/\s+/g, ' ').trim();
 
-  function applyTranslations(dict) {
+  // Registro de cambios para poder restaurar el idioma base (español).
+  let _textReg = [];   // { node, orig }
+  let _attrReg = [];   // { el, attr, orig }
+  let _contentDict = {};
+
+  function restoreBase() {
+    _textReg.forEach((r) => { r.node.nodeValue = r.orig; });
+    _attrReg.forEach((r) => {
+      if (r.orig === null || r.orig === undefined) return;
+      if (r.attr === 'text') r.el.textContent = r.orig;
+      else r.el.setAttribute(r.attr, r.orig);
+    });
+    _textReg = [];
+    _attrReg = [];
+  }
+
+  /* Diccionario por atributo (compatibilidad con el data-i18n existente). */
+  function applyAttrKeyed(dict) {
     $$('[data-i18n]').forEach((node) => {
       const value = getPath(dict, node.dataset.i18n);
-      if (typeof value === 'string') node.textContent = value;
+      if (typeof value === 'string') { _attrReg.push({ el: node, attr: 'text', orig: node.textContent }); node.textContent = value; }
     });
     $$('[data-i18n-placeholder]').forEach((node) => {
       const value = getPath(dict, node.dataset.i18nPlaceholder);
-      if (typeof value === 'string') node.placeholder = value;
+      if (typeof value === 'string') { _attrReg.push({ el: node, attr: 'placeholder', orig: node.getAttribute('placeholder') }); node.setAttribute('placeholder', value); }
     });
     $$('[data-i18n-aria-label]').forEach((node) => {
       const value = getPath(dict, node.dataset.i18nAriaLabel);
-      if (typeof value === 'string') node.setAttribute('aria-label', value);
+      if (typeof value === 'string') { _attrReg.push({ el: node, attr: 'aria-label', orig: node.getAttribute('aria-label') }); node.setAttribute('aria-label', value); }
     });
+  }
+
+  /* ¿El nodo está en una zona que no debe traducirse automáticamente? */
+  function inSkippedZone(node) {
+    for (let p = node.parentNode; p && p.nodeType === 1; p = p.parentNode) {
+      if (I18N_SKIP_TAGS[p.nodeName]) return true;
+      if (p.hasAttribute('data-i18n') || p.hasAttribute('data-i18n-skip') ||
+          p.hasAttribute('data-i18n-placeholder') || p.hasAttribute('data-i18n-aria-label')) return true;
+    }
+    return false;
+  }
+
+  /* Diccionario por texto fuente: recorre nodos de texto y los reemplaza. */
+  function translateTextNodes(dict, rootEl) {
+    const root = rootEl || document.body;
+    if (!root) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+    const pending = [];
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      const raw = node.nodeValue;
+      if (!raw || !raw.trim()) continue;
+      if (inSkippedZone(node)) continue;
+      const val = dict[normKey(raw)];
+      if (typeof val === 'string') pending.push([node, raw, val]);
+    }
+    pending.forEach(([node, raw, val]) => {
+      _textReg.push({ node, orig: raw });
+      const lead = (raw.match(/^\s*/) || [''])[0];
+      const trail = (raw.match(/\s*$/) || [''])[0];
+      node.nodeValue = lead + val + trail;
+    });
+  }
+
+  /* Atributos visibles + metadatos SEO. */
+  function translateAttrs(dict) {
+    ['placeholder', 'aria-label', 'title', 'alt'].forEach((attr) => {
+      $$('[' + attr + ']').forEach((el) => {
+        if (I18N_SKIP_TAGS[el.nodeName]) return;
+        if (attr === 'placeholder' && el.hasAttribute('data-i18n-placeholder')) return;
+        if (attr === 'aria-label' && el.hasAttribute('data-i18n-aria-label')) return;
+        if (el.closest('[data-i18n-skip]')) return;
+        const cur = el.getAttribute(attr);
+        if (!cur || !cur.trim()) return;
+        const val = dict[normKey(cur)];
+        if (typeof val === 'string') { _attrReg.push({ el, attr, orig: cur }); el.setAttribute(attr, val); }
+      });
+    });
+    if (document.title) {
+      const val = dict[normKey(document.title)];
+      if (typeof val === 'string') { _attrReg.push({ el: document.querySelector('title'), attr: 'text', orig: document.title }); document.title = val; }
+    }
+    $$('meta[name="description"], meta[property="og:title"], meta[property="og:description"], meta[name="twitter:title"], meta[name="twitter:description"], meta[property="og:image:alt"]').forEach((m) => {
+      const cur = m.getAttribute('content');
+      if (!cur || !cur.trim()) return;
+      const val = dict[normKey(cur)];
+      if (typeof val === 'string') { _attrReg.push({ el: m, attr: 'content', orig: cur }); m.setAttribute('content', val); }
+    });
+  }
+
+  async function fetchJSON(url) {
+    const res = await fetch(url, { cache: 'force-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
   }
 
   async function loadLanguage(lang) {
     if (!SUPPORTED_LANGS.includes(lang)) lang = 'es';
+    restoreBase();
     document.documentElement.lang = lang;
+    _contentDict = {};
     // El español es el idioma base del marcado: no requiere descarga.
-    if (lang === 'es') return;
+    if (lang === 'es') {
+      window.LatamI18n.lang = 'es';
+      document.dispatchEvent(new CustomEvent('latam:langchange', { detail: { lang } }));
+      return;
+    }
     try {
-      const response = await fetch(`${BASE}assets/data/i18n/${lang}/ui-translations.json`, { cache: 'force-cache' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      applyTranslations(await response.json());
+      const [ui, content] = await Promise.all([
+        fetchJSON(`${BASE}assets/data/i18n/${lang}/ui-translations.json`).catch(() => ({})),
+        fetchJSON(`${BASE}assets/data/i18n/${lang}/content.json`).catch(() => ({}))
+      ]);
+      applyAttrKeyed(ui || {});
+      _contentDict = content || {};
+      translateTextNodes(_contentDict);
+      translateAttrs(_contentDict);
+      window.LatamI18n.lang = lang;
+      document.dispatchEvent(new CustomEvent('latam:langchange', { detail: { lang } }));
     } catch (error) {
       console.warn('[i18n] No se pudo cargar el idioma "%s". Se mantiene español.', lang);
       document.documentElement.lang = 'es';
     }
   }
+
+  /* API pública para los scripts que generan contenido dinámico (booking, cuentas). */
+  window.LatamI18n = {
+    lang: 'es',
+    /** Traduce una cadena española suelta (alertas, mensajes) al idioma activo. */
+    t(es) {
+      if (this.lang === 'es' || !es) return es;
+      const v = _contentDict[normKey(es)];
+      return typeof v === 'string' ? v : es;
+    },
+    /** Re-traduce un subárbol recién insertado en el DOM. */
+    apply(rootEl) {
+      if (this.lang === 'es') return;
+      translateTextNodes(_contentDict, rootEl || document.body);
+      translateAttrs(_contentDict);
+    }
+  };
 
   function initLanguage() {
     const select = $('#languageSelect');

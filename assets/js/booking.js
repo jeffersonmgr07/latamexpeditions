@@ -21,6 +21,10 @@
   const $$ = (s, sc) => Array.from((sc || document).querySelectorAll(s));
   const BASE = document.documentElement.dataset.base || './';
 
+  // Traducción en tiempo de ejecución (idioma activo gestionado por main.js).
+  const T = (s) => (window.LatamI18n && window.LatamI18n.t ? window.LatamI18n.t(s) : s);
+  const applyI18n = (el) => { try { if (window.LatamI18n && window.LatamI18n.apply) window.LatamI18n.apply(el); } catch (e) { /* i18n opcional */ } };
+
   const trigger = $('[data-book]');
   if (!trigger) return;
 
@@ -227,6 +231,7 @@
         </div>
       </div>`;
     document.body.appendChild(wrap);
+    applyI18n(wrap);
     return wrap;
   }
 
@@ -241,7 +246,7 @@
     const docs = CONFIG.documentTypes.map((t) => `<option>${t}</option>`).join('');
     list.innerHTML = Array.from({ length: n }, (_, i) => `
       <div class="pax-card" data-pax="${i}">
-        <h4><span>${i + 1}</span> ${i === 0 ? 'Titular de la reserva' : `Pasajero ${i + 1}`}</h4>
+        <h4><span>${i + 1}</span> ${i === 0 ? 'Titular de la reserva' : `${T('Pasajero')} ${i + 1}`}</h4>
         <div class="pax-grid">
           <div class="form-field">
             <label for="pxName${i}">Nombres y apellidos</label>
@@ -269,6 +274,7 @@
           </div>
         </div>
       </div>`).join('');
+    applyI18n(list);
   }
 
   function pintarCategorias() {
@@ -283,7 +289,7 @@
         <span class="tier__head">
           <span class="tier__name">${escapar(t.name)}<span class="tier__stars">${escapar(t.stars)}</span></span>
           <span class="tier__price">${money(t.pricePerPerson)}
-            <small>${delta > 0 ? '+' + money(delta) + ' por persona' : 'precio base'}</small>
+            <small>${delta > 0 ? '+' + money(delta) + ' ' + T('por persona') : 'precio base'}</small>
           </span>
         </span>
         <p class="tier__hotels">${escapar(t.hotels.join(' · '))}</p>
@@ -353,7 +359,7 @@
   function pintarResumen() {
     const fecha = new Date(state.date + 'T00:00:00');
     $('#bkSumDate').textContent = fecha.toLocaleDateString('es', { day: '2-digit', month: 'long', year: 'numeric' });
-    $('#bkSumPax').textContent = state.travelers === 1 ? '1 viajero' : `${state.travelers} viajeros`;
+    $('#bkSumPax').textContent = state.travelers === 1 ? T('1 viajero') : `${state.travelers} ${T('viajeros')}`;
     $('#bkSumUnit').textContent = money(precioUnitario());
     $('#bkSumTotal').textContent = money(state.total);
     const filaTier = $('#bkSumTier');
@@ -365,12 +371,12 @@
     $('#bkPayAmount').textContent = money(state.due);
 
     if (state.mode === 'completo') {
-      $('#bkPayLabel').textContent = 'Pago total';
-      $('#bkPayNote').textContent = 'Al ser un importe reducido, se abona completo ahora. No queda saldo pendiente.';
+      $('#bkPayLabel').textContent = T('Pago total');
+      $('#bkPayNote').textContent = T('Al ser un importe reducido, se abona completo ahora. No queda saldo pendiente.');
     } else {
       const saldo = round2(state.total - state.due);
-      $('#bkPayLabel').textContent = 'Reserva ahora';
-      $('#bkPayNote').textContent = `Pagas ${money(state.due)} para confirmar la reserva. El saldo de ${money(saldo)} se abona el día del tour o antes, como prefieras.`;
+      $('#bkPayLabel').textContent = T('Reserva ahora');
+      $('#bkPayNote').textContent = `${T('Pagas')} ${money(state.due)} ${T('para confirmar la reserva. El saldo de')} ${money(saldo)} ${T('se abona el día del tour o antes, como prefieras.')}`;
     }
   }
 
@@ -439,7 +445,7 @@
 
   async function montarBotonesPago() {
     const contenedor = $('#paypalButtons');
-    contenedor.innerHTML = '<div class="booking-loading">Cargando pasarela de pago…</div>';
+    contenedor.innerHTML = `<div class="booking-loading">${T('Cargando pasarela de pago…')}</div>`;
     $('#bkFallback').hidden = true;
 
     if (!CONFIG.paypalClientId || CONFIG.paypalClientId.startsWith('PEGAR_AQUI')) {
@@ -475,7 +481,7 @@
           if (pagoEnProceso) return;
           pagoEnProceso = true;
           $('#bkActions').hidden = true;
-          contenedor.innerHTML = '<div class="booking-loading">Confirmando el pago…</div>';
+          contenedor.innerHTML = `<div class="booking-loading">${T('Confirmando el pago…')}</div>`;
           try {
             // El servidor recupera los datos guardados al crear la orden. El
             // navegador ya no puede sustituir el producto después de pagar.
@@ -520,8 +526,8 @@
     $('#bkDoneEmail').textContent = state.holder.email;
     const saldo = Number(respuesta.balance || 0);
     $('#bkDoneBalance').textContent = saldo > 0
-      ? `Saldo pendiente: ${money(saldo)}, a abonar antes o el día del tour.`
-      : 'La reserva quedó pagada por completo.';
+      ? `${T('Saldo pendiente')}: ${money(saldo)} — ${T('a abonar antes o el día del tour.')}`
+      : T('La reserva quedó pagada por completo.');
 
     let usuario = null;
     try { usuario = JSON.parse(localStorage.getItem('latamExpeditionsUser') || 'null'); } catch (e) { /* sin acceso */ }
@@ -532,6 +538,7 @@
       } else {
         cuenta.innerHTML = `Crea una cuenta con <strong>${escapar(state.holder.email)}</strong> para ver esta y tus próximas reservas en <a href="${BASE}registro.html">Mis viajes</a>.`;
       }
+      applyI18n(cuenta);
     }
 
     irAPaso(4);
@@ -566,7 +573,7 @@
 
   const mostrarError = (msg) => {
     const box = $('#bookingError');
-    box.textContent = msg;
+    box.textContent = T(msg);
     box.classList.add('is-visible');
     box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   };

@@ -18,6 +18,10 @@
   const KEY_TOKEN = 'latamExpeditionsToken';
   const KEY_USER = 'latamExpeditionsUser';
 
+  // Traducción en tiempo de ejecución (idioma activo gestionado por main.js).
+  const T = (s) => (window.LatamI18n && window.LatamI18n.t ? window.LatamI18n.t(s) : s);
+  const applyI18n = (el) => { try { if (window.LatamI18n && window.LatamI18n.apply) window.LatamI18n.apply(el); } catch (e) { /* i18n opcional */ } };
+
   let ENDPOINT = null;
   let GOOGLE_CLIENT_ID = null;
   let GOOGLE_NONCE = null;
@@ -67,7 +71,7 @@
   function error(contenedor, mensaje) {
     const box = $(contenedor);
     if (!box) return;
-    box.textContent = mensaje;
+    box.textContent = T(mensaje);
     box.classList.add('is-visible');
     box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
@@ -78,7 +82,7 @@
 
   function cargando(boton, activo, textoOriginal) {
     boton.disabled = activo;
-    boton.textContent = activo ? 'Un momento…' : textoOriginal;
+    boton.textContent = activo ? T('Un momento…') : textoOriginal;
   }
 
   /* ------------------------------------------------------------ Formato */
@@ -188,7 +192,7 @@
       ? ''
       : dias === 0 ? '<span class="trip-badge trip-badge--soon">Hoy</span>'
       : dias === 1 ? '<span class="trip-badge trip-badge--soon">Mañana</span>'
-      : dias <= 7 ? `<span class="trip-badge trip-badge--soon">En ${dias} días</span>`
+      : dias <= 7 ? `<span class="trip-badge trip-badge--soon">${T('En')} ${dias} ${T('días')}</span>`
       : '';
 
     const saldo = r.balance > 0
@@ -226,7 +230,7 @@
 
     const nombre = sesion.user && sesion.user.name ? sesion.user.name.split(' ')[0] : '';
     const saludo = $('#tripsGreeting');
-    if (saludo && nombre) saludo.textContent = `Hola, ${nombre}`;
+    if (saludo && nombre) saludo.textContent = `${T('Hola')}, ${nombre}`;
 
     try {
       const r = await llamar('myTrips', { token: sesion.token });
@@ -248,6 +252,9 @@
       pas.innerHTML = r.past.length
         ? r.past.map((x) => tarjetaViaje(x, true)).join('')
         : '<p class="form-note">Aquí aparecerán tus viajes una vez realizados.</p>';
+
+      applyI18n(prox);
+      applyI18n(pas);
 
       $('#tripsCountUpcoming').textContent = r.upcoming.length;
       $('#tripsCountPast').textContent = r.past.length;
@@ -314,7 +321,7 @@
             code: $('#lookupCode').value.trim(),
             lastName: $('#lookupName').value.trim()
           });
-          reenviar.textContent = `Enviado a ${r.sentTo}`;
+          reenviar.textContent = `${T('Enviado a')} ${r.sentTo}`;
           reenviar.disabled = true;
         } catch (err) {
           error('#authError', err.message);
@@ -350,6 +357,7 @@
       </div>
       ${pasajeros ? `<div class="pax-summary"><h4>Pasajeros</h4><ol>${pasajeros}</ol></div>` : ''}`;
 
+    applyI18n($('#lookupResultBody'));
     $('#lookupResult').hidden = false;
     $('#lookupResult').scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
