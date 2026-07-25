@@ -2883,6 +2883,1350 @@
         "Naturaleza sin masificación"
       ],
       "marketRef": "Sin referencia de mercado: producto propio"
+    },
+    {
+      "slug": "bogota-monserrate-candelaria",
+      "title": "Bogotá: Monserrate, La Candelaria y centro histórico",
+      "country": "Colombia",
+      "region": "Bogotá",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "6 horas",
+      "priceFrom": 59,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Bogotá: Monserrate, La Candelaria y centro histórico",
+      "excerpt": "Descubre la capital desde el mirador de Monserrate y recorre a pie las plazas, iglesias y calles históricas de La Candelaria.",
+      "description": "Descubre la capital desde el mirador de Monserrate y recorre a pie las plazas, iglesias y calles históricas de La Candelaria.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Encuentro y traslado a Monserrate",
+        "Ascenso a Monserrate",
+        "La Candelaria",
+        "Plaza de Bolívar"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "zipaquira-catedral-de-sal",
+      "title": "Catedral de Sal de Zipaquirá desde Bogotá",
+      "country": "Colombia",
+      "region": "Bogotá / Zipaquirá",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "7 horas",
+      "priceFrom": 79,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Catedral de Sal de Zipaquirá desde Bogotá",
+      "excerpt": "Viaja desde Bogotá a Zipaquirá y explora el complejo subterráneo construido en antiguos túneles de sal.",
+      "description": "Viaja desde Bogotá a Zipaquirá y explora el complejo subterráneo construido en antiguos túneles de sal.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Bogotá",
+        "Centro histórico de Zipaquirá",
+        "Catedral de Sal",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "guatavita-zipaquira",
+      "title": "Laguna de Guatavita y Catedral de Sal de Zipaquirá",
+      "country": "Colombia",
+      "region": "Bogotá / Cundinamarca",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "11 horas",
+      "priceFrom": 109,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Laguna de Guatavita y Catedral de Sal de Zipaquirá",
+      "excerpt": "Combina la leyenda de El Dorado en Guatavita con una visita completa a la Catedral de Sal de Zipaquirá.",
+      "description": "Combina la leyenda de El Dorado en Guatavita con una visita completa a la Catedral de Sal de Zipaquirá.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Bogotá",
+        "Laguna de Guatavita",
+        "Pueblo de Guatavita",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "villa-de-leyva-full-day",
+      "title": "Villa de Leyva: pueblo colonial y atractivos de Boyacá",
+      "country": "Colombia",
+      "region": "Bogotá / Boyacá",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "12 horas",
+      "priceFrom": 119,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Villa de Leyva: pueblo colonial y atractivos de Boyacá",
+      "excerpt": "Conoce una de las poblaciones coloniales mejor conservadas de Colombia y selecciona visitas complementarias en sus alrededores.",
+      "description": "Conoce una de las poblaciones coloniales mejor conservadas de Colombia y selecciona visitas complementarias en sus alrededores.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Bogotá",
+        "Puente de Boyacá",
+        "Villa de Leyva",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "rosario-vip-catamaran",
+      "title": "Islas del Rosario VIP en catamarán con almuerzo y snorkel",
+      "country": "Colombia",
+      "region": "Cartagena / Islas del Rosario",
+      "style": "playa",
+      "styleLabel": "Playa",
+      "duration": "8 horas",
+      "priceFrom": 119,
+      "currency": "USD",
+      "img": "estilo-playa-verano-01.jpg",
+      "alt": "Islas del Rosario VIP en catamarán con almuerzo y snorkel",
+      "excerpt": "Disfruta una navegación más cómoda en catamarán, con espacios amplios, almuerzo y paradas para nadar o hacer snorkel.",
+      "description": "Disfruta una navegación más cómoda en catamarán, con espacios amplios, almuerzo y paradas para nadar o hacer snorkel.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Embarque",
+        "Salida de Cartagena",
+        "Primera zona de baño",
+        "Almuerzo a bordo"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "bahia-cholon",
+      "title": "Bahía de Cholón: día de playa y ambiente festivo",
+      "country": "Colombia",
+      "region": "Cartagena / Barú",
+      "style": "playa",
+      "styleLabel": "Playa",
+      "duration": "7 horas",
+      "priceFrom": 89,
+      "currency": "USD",
+      "img": "estilo-playa-verano-01.jpg",
+      "alt": "Bahía de Cholón: día de playa y ambiente festivo",
+      "excerpt": "Navega a Cholón para disfrutar del ambiente caribeño, música, baño y almuerzo, con advertencias claras sobre vendedores y consumo adicional.",
+      "description": "Navega a Cholón para disfrutar del ambiente caribeño, música, baño y almuerzo, con advertencias claras sobre vendedores y consumo adicional.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida del muelle",
+        "Recorrido panorámico",
+        "Cholón",
+        "Almuerzo"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "volcan-totumo",
+      "title": "Volcán del Totumo y baño de lodo",
+      "country": "Colombia",
+      "region": "Cartagena / Santa Catalina",
+      "style": "aventura",
+      "styleLabel": "Aventura",
+      "duration": "6 horas",
+      "priceFrom": 55,
+      "currency": "USD",
+      "img": "estilo-aventura-01.jpg",
+      "alt": "Volcán del Totumo y baño de lodo",
+      "excerpt": "Vive la experiencia de flotar en el lodo mineral del Totumo y completa la jornada con baño en la ciénaga o parada costera.",
+      "description": "Vive la experiencia de flotar en el lodo mineral del Totumo y completa la jornada con baño en la ciénaga o parada costera.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Cartagena",
+        "Volcán del Totumo",
+        "Limpieza en la ciénaga",
+        "Parada de almuerzo o playa"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "cartagena-gastronomica",
+      "title": "Tour gastronómico de Cartagena con degustaciones",
+      "country": "Colombia",
+      "region": "Cartagena de Indias",
+      "style": "gastronomia",
+      "styleLabel": "Gastronomía",
+      "duration": "3 horas",
+      "priceFrom": 49,
+      "currency": "USD",
+      "img": "estilo-gastronomia-01.jpg",
+      "alt": "Tour gastronómico de Cartagena con degustaciones",
+      "excerpt": "Prueba sabores cartageneros mientras recorres mercados, plazas o calles históricas con contexto cultural.",
+      "description": "Prueba sabores cartageneros mientras recorres mercados, plazas o calles históricas con contexto cultural.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Punto de encuentro",
+        "Fritos y bebidas locales",
+        "Dulces y café",
+        "Cocina caribeña"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "cartagena-nocturna",
+      "title": "Cartagena nocturna: plazas, bares y ambiente caribeño",
+      "country": "Colombia",
+      "region": "Cartagena de Indias",
+      "style": "gastronomia",
+      "styleLabel": "Gastronomía",
+      "duration": "4 horas",
+      "priceFrom": 45,
+      "currency": "USD",
+      "img": "estilo-gastronomia-01.jpg",
+      "alt": "Cartagena nocturna: plazas, bares y ambiente caribeño",
+      "excerpt": "Descubre el ambiente nocturno de Getsemaní y la Ciudad Amurallada con una ruta guiada por plazas, bares y terrazas.",
+      "description": "Descubre el ambiente nocturno de Getsemaní y la Ciudad Amurallada con una ruta guiada por plazas, bares y terrazas.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Encuentro en Getsemaní",
+        "Primera parada",
+        "Ciudad Amurallada",
+        "Rooftop o bar"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "chiva-rumbera-cartagena",
+      "title": "Chiva rumbera por Cartagena",
+      "country": "Colombia",
+      "region": "Cartagena de Indias",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "3 horas",
+      "priceFrom": 35,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Chiva rumbera por Cartagena",
+      "excerpt": "Recorre la ciudad en una chiva tradicional con música, animación y paradas panorámicas antes de finalizar cerca de la zona nocturna.",
+      "description": "Recorre la ciudad en una chiva tradicional con música, animación y paradas panorámicas antes de finalizar cerca de la zona nocturna.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Recogida o punto asignado",
+        "Recorrido panorámico",
+        "Parada en murallas",
+        "Zona nocturna"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "santa-marta-city-tour",
+      "title": "City Tour Santa Marta y Quinta de San Pedro Alejandrino",
+      "country": "Colombia",
+      "region": "Santa Marta",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "4 horas",
+      "priceFrom": 45,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "City Tour Santa Marta y Quinta de San Pedro Alejandrino",
+      "excerpt": "Conoce el centro histórico de Santa Marta, sus plazas y la Quinta de San Pedro Alejandrino en un recorrido de medio día.",
+      "description": "Conoce el centro histórico de Santa Marta, sus plazas y la Quinta de San Pedro Alejandrino en un recorrido de medio día.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Recogida",
+        "Quinta de San Pedro Alejandrino",
+        "Centro histórico",
+        "Bahía de Santa Marta"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "parque-tayrona-full-day",
+      "title": "Parque Nacional Natural Tayrona: Cabo San Juan",
+      "country": "Colombia",
+      "region": "Santa Marta / Tayrona",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "12 horas",
+      "priceFrom": 79,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Parque Nacional Natural Tayrona: Cabo San Juan",
+      "excerpt": "Camina por selva tropical y playas del Tayrona hasta Cabo San Juan, con tiempo para descansar y bañarte donde esté permitido.",
+      "description": "Camina por selva tropical y playas del Tayrona hasta Cabo San Juan, con tiempo para descansar y bañarte donde esté permitido.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Santa Marta",
+        "Ingreso al parque",
+        "Caminata por senderos",
+        "Cabo San Juan"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "minca-cascadas-cafe",
+      "title": "Minca: cascadas, café y naturaleza",
+      "country": "Colombia",
+      "region": "Santa Marta / Sierra Nevada",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "8 horas",
+      "priceFrom": 69,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Minca: cascadas, café y naturaleza",
+      "excerpt": "Sube desde Santa Marta a Minca para conocer una finca cafetera, cascadas y paisajes de la Sierra Nevada.",
+      "description": "Sube desde Santa Marta a Minca para conocer una finca cafetera, cascadas y paisajes de la Sierra Nevada.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Santa Marta",
+        "Pueblo de Minca",
+        "Finca cafetera",
+        "Almuerzo"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "playa-cristal-siete-olas",
+      "title": "Playa Cristal y mirador de las Siete Olas",
+      "country": "Colombia",
+      "region": "Santa Marta / Tayrona",
+      "style": "playa",
+      "styleLabel": "Playa",
+      "duration": "9 horas",
+      "priceFrom": 95,
+      "currency": "USD",
+      "img": "estilo-playa-verano-01.jpg",
+      "alt": "Playa Cristal y mirador de las Siete Olas",
+      "excerpt": "Combina el mirador de las Siete Olas con traslado terrestre y marítimo a Playa Cristal dentro del Tayrona.",
+      "description": "Combina el mirador de las Siete Olas con traslado terrestre y marítimo a Playa Cristal dentro del Tayrona.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Santa Marta",
+        "Mirador de las Siete Olas",
+        "Lancha a Playa Cristal",
+        "Playa Cristal"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "ciudad-perdida-4-dias",
+      "title": "Trek Ciudad Perdida 4 días",
+      "country": "Colombia",
+      "region": "Santa Marta / Sierra Nevada",
+      "style": "aventura",
+      "styleLabel": "Aventura",
+      "duration": "4 días / 3 noches",
+      "priceFrom": 699,
+      "currency": "USD",
+      "img": "estilo-aventura-01.jpg",
+      "alt": "Trek Ciudad Perdida 4 días",
+      "excerpt": "Realiza la ruta clásica a Teyuna con guías locales, campamentos, comidas y acompañamiento durante cuatro días.",
+      "description": "Realiza la ruta clásica a Teyuna con guías locales, campamentos, comidas y acompañamiento durante cuatro días.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Santa Marta – El Mamey – primer campamento",
+        "Campamento – sector indígena – campamento 3",
+        "Ciudad Perdida",
+        "Regreso a El Mamey y Santa Marta"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "ciudad-perdida-5-dias",
+      "title": "Trek Ciudad Perdida 5 días",
+      "country": "Colombia",
+      "region": "Santa Marta / Sierra Nevada",
+      "style": "aventura",
+      "styleLabel": "Aventura",
+      "duration": "5 días / 4 noches",
+      "priceFrom": 799,
+      "currency": "USD",
+      "img": "estilo-aventura-01.jpg",
+      "alt": "Trek Ciudad Perdida 5 días",
+      "excerpt": "Recorre Teyuna a un ritmo más pausado, con mayor tiempo de descanso e interpretación cultural que la ruta clásica.",
+      "description": "Recorre Teyuna a un ritmo más pausado, con mayor tiempo de descanso e interpretación cultural que la ruta clásica.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Santa Marta – El Mamey – campamento",
+        "Ruta por la Sierra Nevada",
+        "Comunidades y campamento cercano",
+        "Ciudad Perdida"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "valle-cocora-salento",
+      "title": "Valle del Cocora y Salento",
+      "country": "Colombia",
+      "region": "Eje Cafetero",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "8 horas",
+      "priceFrom": 79,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Valle del Cocora y Salento",
+      "excerpt": "Camina entre palmas de cera en el Valle del Cocora y disfruta de tiempo libre en las calles coloridas de Salento.",
+      "description": "Camina entre palmas de cera en el Valle del Cocora y disfruta de tiempo libre en las calles coloridas de Salento.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida",
+        "Valle del Cocora",
+        "Almuerzo",
+        "Salento"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "tour-cafe-colombiano",
+      "title": "Experiencia del café colombiano en finca tradicional",
+      "country": "Colombia",
+      "region": "Eje Cafetero",
+      "style": "gastronomia",
+      "styleLabel": "Gastronomía",
+      "duration": "4 horas",
+      "priceFrom": 45,
+      "currency": "USD",
+      "img": "estilo-gastronomia-01.jpg",
+      "alt": "Experiencia del café colombiano en finca tradicional",
+      "excerpt": "Aprende cómo se cultiva, recolecta, procesa y prepara el café en una finca del Paisaje Cultural Cafetero.",
+      "description": "Aprende cómo se cultiva, recolecta, procesa y prepara el café en una finca del Paisaje Cultural Cafetero.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Bienvenida en finca",
+        "Cultivo y recolección",
+        "Beneficio y secado",
+        "Tueste y preparación"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "filandia-miradores",
+      "title": "Filandia, arquitectura y miradores del Eje Cafetero",
+      "country": "Colombia",
+      "region": "Eje Cafetero",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "6 horas",
+      "priceFrom": 65,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Filandia, arquitectura y miradores del Eje Cafetero",
+      "excerpt": "Recorre Filandia, sus calles tradicionales, talleres artesanales y miradores sobre el paisaje cafetero.",
+      "description": "Recorre Filandia, sus calles tradicionales, talleres artesanales y miradores sobre el paisaje cafetero.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida",
+        "Centro de Filandia",
+        "Taller artesanal",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "parque-del-cafe",
+      "title": "Parque del Café: entrada y transporte",
+      "country": "Colombia",
+      "region": "Eje Cafetero / Quindío",
+      "style": "familia",
+      "styleLabel": "Familia",
+      "duration": "10 horas",
+      "priceFrom": 89,
+      "currency": "USD",
+      "img": "estilo-familia-01.jpg",
+      "alt": "Parque del Café: entrada y transporte",
+      "excerpt": "Disfruta las atracciones, espectáculos y contenidos culturales del Parque del Café con transporte de ida y vuelta.",
+      "description": "Disfruta las atracciones, espectáculos y contenidos culturales del Parque del Café con transporte de ida y vuelta.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida",
+        "Ingreso al parque",
+        "Tiempo libre",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "termales-santa-rosa-cabal",
+      "title": "Termales de Santa Rosa de Cabal",
+      "country": "Colombia",
+      "region": "Eje Cafetero / Risaralda",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "7 horas",
+      "priceFrom": 95,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Termales de Santa Rosa de Cabal",
+      "excerpt": "Relájate en piscinas termales rodeadas de montaña y cascadas, con transporte desde las principales ciudades del Eje Cafetero.",
+      "description": "Relájate en piscinas termales rodeadas de montaña y cascadas, con transporte desde las principales ciudades del Eje Cafetero.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida",
+        "Ingreso a termales",
+        "Baño termal",
+        "Almuerzo"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "cali-city-tour",
+      "title": "City Tour Cali: historia, miradores y barrios tradicionales",
+      "country": "Colombia",
+      "region": "Cali",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "4 horas",
+      "priceFrom": 45,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "City Tour Cali: historia, miradores y barrios tradicionales",
+      "excerpt": "Conoce los principales símbolos de Cali, sus barrios tradicionales, miradores y espacios vinculados a la cultura salsera.",
+      "description": "Conoce los principales símbolos de Cali, sus barrios tradicionales, miradores y espacios vinculados a la cultura salsera.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Recogida",
+        "Centro histórico",
+        "San Antonio",
+        "Cristo Rey o Sebastián de Belalcázar"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "cali-tour-salsa",
+      "title": "Cali: experiencia de salsa con clase y noche local",
+      "country": "Colombia",
+      "region": "Cali",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "4 horas",
+      "priceFrom": 59,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Cali: experiencia de salsa con clase y noche local",
+      "excerpt": "Aprende pasos básicos con un instructor y descubre la escena salsera caleña en un espacio seleccionado.",
+      "description": "Aprende pasos básicos con un instructor y descubre la escena salsera caleña en un espacio seleccionado.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Encuentro",
+        "Clase de salsa",
+        "Traslado a salsoteca",
+        "Experiencia nocturna"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "hacienda-el-paraiso",
+      "title": "Hacienda El Paraíso y pueblos del Valle",
+      "country": "Colombia",
+      "region": "Cali / Valle del Cauca",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "8 horas",
+      "priceFrom": 75,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Hacienda El Paraíso y pueblos del Valle",
+      "excerpt": "Visita la hacienda vinculada a la novela María y complementa el día con paisajes, gastronomía y pueblos del Valle.",
+      "description": "Visita la hacienda vinculada a la novela María y complementa el día con paisajes, gastronomía y pueblos del Valle.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Cali",
+        "Hacienda El Paraíso",
+        "Recorrido panorámico",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "gastronomia-valle-cauca",
+      "title": "Ruta gastronómica del Valle del Cauca",
+      "country": "Colombia",
+      "region": "Cali",
+      "style": "gastronomia",
+      "styleLabel": "Gastronomía",
+      "duration": "4 horas",
+      "priceFrom": 55,
+      "currency": "USD",
+      "img": "estilo-gastronomia-01.jpg",
+      "alt": "Ruta gastronómica del Valle del Cauca",
+      "excerpt": "Prueba pandebono, lulada, cholado y otros sabores regionales mientras conoces mercados y barrios tradicionales.",
+      "description": "Prueba pandebono, lulada, cholado y otros sabores regionales mientras conoces mercados y barrios tradicionales.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Encuentro",
+        "Panadería tradicional",
+        "Mercado o galería",
+        "Plato o antojo local"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "san-andres-johnny-cay-acuario",
+      "title": "Johnny Cay, Acuario y Haynes Cay",
+      "country": "Colombia",
+      "region": "San Andrés",
+      "style": "playa",
+      "styleLabel": "Playa",
+      "duration": "7 horas",
+      "priceFrom": 65,
+      "currency": "USD",
+      "img": "estilo-playa-verano-01.jpg",
+      "alt": "Johnny Cay, Acuario y Haynes Cay",
+      "excerpt": "Navega a los cayos más conocidos de San Andrés para disfrutar playas, aguas claras y fauna marina.",
+      "description": "Navega a los cayos más conocidos de San Andrés para disfrutar playas, aguas claras y fauna marina.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Embarque",
+        "Johnny Cay",
+        "Haynes Cay y Acuario",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "san-andres-vuelta-isla",
+      "title": "Vuelta a la isla de San Andrés",
+      "country": "Colombia",
+      "region": "San Andrés",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "5 horas",
+      "priceFrom": 39,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Vuelta a la isla de San Andrés",
+      "excerpt": "Recorre los principales puntos de la isla, playas, miradores y atractivos culturales en vehículo turístico.",
+      "description": "Recorre los principales puntos de la isla, playas, miradores y atractivos culturales en vehículo turístico.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida",
+        "Casa Museo Isleña",
+        "Cueva de Morgan",
+        "Hoyo Soplador"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "san-andres-mantarrayas",
+      "title": "Encuentro responsable con mantarrayas en San Andrés",
+      "country": "Colombia",
+      "region": "San Andrés",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "3 horas",
+      "priceFrom": 49,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Encuentro responsable con mantarrayas en San Andrés",
+      "excerpt": "Navega a aguas poco profundas para observar mantarrayas bajo indicaciones de guías y sin prácticas que dañen a la fauna.",
+      "description": "Navega a aguas poco profundas para observar mantarrayas bajo indicaciones de guías y sin prácticas que dañen a la fauna.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Embarque",
+        "Navegación",
+        "Observación en el agua",
+        "Parada de baño"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "san-andres-snorkel-sea-walk",
+      "title": "Snorkel y Sea Walk en San Andrés",
+      "country": "Colombia",
+      "region": "San Andrés",
+      "style": "aventura",
+      "styleLabel": "Aventura",
+      "duration": "4 horas",
+      "priceFrom": 89,
+      "currency": "USD",
+      "img": "estilo-aventura-01.jpg",
+      "alt": "Snorkel y Sea Walk en San Andrés",
+      "excerpt": "Explora el mundo submarino con snorkel y una caminata con casco de aire, sujeto a evaluación médica y condiciones del mar.",
+      "description": "Explora el mundo submarino con snorkel y una caminata con casco de aire, sujeto a evaluación médica y condiciones del mar.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Registro",
+        "Traslado marítimo",
+        "Sea Walk",
+        "Snorkel"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "san-andres-catamaran",
+      "title": "Catamarán por la bahía de San Andrés",
+      "country": "Colombia",
+      "region": "San Andrés",
+      "style": "playa",
+      "styleLabel": "Playa",
+      "duration": "4 horas",
+      "priceFrom": 69,
+      "currency": "USD",
+      "img": "estilo-playa-verano-01.jpg",
+      "alt": "Catamarán por la bahía de San Andrés",
+      "excerpt": "Navega en catamarán con música, vistas de la isla y paradas de baño según las condiciones del mar.",
+      "description": "Navega en catamarán con música, vistas de la isla y paradas de baño según las condiciones del mar.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Embarque",
+        "Navegación por la bahía",
+        "Parada de baño",
+        "Navegación de retorno"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "chicamocha-panachi",
+      "title": "Parque Nacional del Chicamocha y teleférico",
+      "country": "Colombia",
+      "region": "Santander",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "10 horas",
+      "priceFrom": 89,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Parque Nacional del Chicamocha y teleférico",
+      "excerpt": "Contempla el cañón del Chicamocha, recorre PANACHI y cruza en teleférico según la opción contratada.",
+      "description": "Contempla el cañón del Chicamocha, recorre PANACHI y cruza en teleférico según la opción contratada.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Bucaramanga",
+        "PANACHI",
+        "Teleférico",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "barichara-full-day",
+      "title": "Barichara y Camino Real",
+      "country": "Colombia",
+      "region": "Santander",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "9 horas",
+      "priceFrom": 79,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Barichara y Camino Real",
+      "excerpt": "Descubre la arquitectura en piedra de Barichara y realiza un tramo del Camino Real hacia Guane según la opción elegida.",
+      "description": "Descubre la arquitectura en piedra de Barichara y realiza un tramo del Camino Real hacia Guane según la opción elegida.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de San Gil o Bucaramanga",
+        "Centro histórico",
+        "Camino Real",
+        "Almuerzo libre"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "santander-aventura-rafting-canopy",
+      "title": "Aventura en Santander: rafting y canopy",
+      "country": "Colombia",
+      "region": "San Gil / Santander",
+      "style": "aventura",
+      "styleLabel": "Aventura",
+      "duration": "7 horas",
+      "priceFrom": 95,
+      "currency": "USD",
+      "img": "estilo-aventura-01.jpg",
+      "alt": "Aventura en Santander: rafting y canopy",
+      "excerpt": "Combina rafting en un río seleccionado con canopy o actividad complementaria, con equipo técnico e instructores.",
+      "description": "Combina rafting en un río seleccionado con canopy o actividad complementaria, con equipo técnico e instructores.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Registro",
+        "Traslado al río",
+        "Rafting",
+        "Almuerzo"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "desierto-tatacoa",
+      "title": "Desierto de la Tatacoa y observación astronómica",
+      "country": "Colombia",
+      "region": "Huila / Villavieja",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "10 horas",
+      "priceFrom": 89,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Desierto de la Tatacoa y observación astronómica",
+      "excerpt": "Explora los paisajes rojo y gris de la Tatacoa y completa la jornada con una sesión astronómica cuando el cielo lo permita.",
+      "description": "Explora los paisajes rojo y gris de la Tatacoa y completa la jornada con una sesión astronómica cuando el cielo lo permita.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida desde Neiva o Villavieja",
+        "Villavieja",
+        "Desierto rojo",
+        "Desierto gris"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "san-agustin-arqueologico",
+      "title": "Parque Arqueológico de San Agustín",
+      "country": "Colombia",
+      "region": "Huila / San Agustín",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "8 horas",
+      "priceFrom": 75,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Parque Arqueológico de San Agustín",
+      "excerpt": "Conoce estatuas, montículos funerarios y museos del principal conjunto arqueológico del sur de Colombia.",
+      "description": "Conoce estatuas, montículos funerarios y museos del principal conjunto arqueológico del sur de Colombia.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Recogida",
+        "Museo y Mesitas",
+        "Almuerzo libre",
+        "Bosque de las Estatuas"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "leticia-tres-fronteras",
+      "title": "Leticia y encuentro de las Tres Fronteras",
+      "country": "Colombia",
+      "region": "Amazonas / Leticia",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "5 horas",
+      "priceFrom": 59,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Leticia y encuentro de las Tres Fronteras",
+      "excerpt": "Conoce Leticia, cruza hacia Tabatinga y navega o visita Santa Rosa para comprender la vida entre Colombia, Brasil y Perú.",
+      "description": "Conoce Leticia, cruza hacia Tabatinga y navega o visita Santa Rosa para comprender la vida entre Colombia, Brasil y Perú.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Leticia",
+        "Tabatinga",
+        "Almuerzo libre",
+        "Santa Rosa o río Amazonas"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "comunidad-ticuna-amazonas",
+      "title": "Comunidad Ticuna y cultura amazónica",
+      "country": "Colombia",
+      "region": "Amazonas / Leticia",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "8 horas",
+      "priceFrom": 89,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Comunidad Ticuna y cultura amazónica",
+      "excerpt": "Visita una comunidad Ticuna con mediación local, aprendiendo sobre territorio, artesanía y prácticas culturales sin convertirlas en espectáculo.",
+      "description": "Visita una comunidad Ticuna con mediación local, aprendiendo sobre territorio, artesanía y prácticas culturales sin convertirlas en espectáculo.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Leticia",
+        "Llegada a comunidad",
+        "Recorrido cultural",
+        "Almuerzo local"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "rio-amazonas-delfines-rosados",
+      "title": "Río Amazonas y avistamiento de delfines rosados",
+      "country": "Colombia",
+      "region": "Amazonas / Leticia",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "8 horas",
+      "priceFrom": 99,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Río Amazonas y avistamiento de delfines rosados",
+      "excerpt": "Navega por el Amazonas y busca delfines rosados y grises con guías locales; los avistamientos nunca se garantizan.",
+      "description": "Navega por el Amazonas y busca delfines rosados y grises con guías locales; los avistamientos nunca se garantizan.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Embarque",
+        "Navegación por el Amazonas",
+        "Lagos o canales",
+        "Almuerzo"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "avistamiento-ballenas-pacifico",
+      "title": "Avistamiento de ballenas en el Pacífico colombiano",
+      "country": "Colombia",
+      "region": "Bahía Solano / Nuquí",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "4 horas",
+      "priceFrom": 79,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Avistamiento de ballenas en el Pacífico colombiano",
+      "excerpt": "Navega con guías locales para observar ballenas jorobadas durante la temporada, manteniendo distancias y tiempos responsables.",
+      "description": "Navega con guías locales para observar ballenas jorobadas durante la temporada, manteniendo distancias y tiempos responsables.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Encuentro",
+        "Salida en lancha",
+        "Búsqueda y observación",
+        "Parada costera"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "nuqui-playas-termales",
+      "title": "Nuquí: playas, selva y termales naturales",
+      "country": "Colombia",
+      "region": "Chocó / Nuquí",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "8 horas",
+      "priceFrom": 95,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Nuquí: playas, selva y termales naturales",
+      "excerpt": "Combina traslado en lancha, caminata corta por selva, playa y baños termales en una jornada del Pacífico.",
+      "description": "Combina traslado en lancha, caminata corta por selva, playa y baños termales en una jornada del Pacífico.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida de Nuquí",
+        "Caminata por selva",
+        "Termales naturales",
+        "Almuerzo local"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "bahia-solano-playas-pacifico",
+      "title": "Bahía Solano: playas y cascadas del Pacífico",
+      "country": "Colombia",
+      "region": "Chocó / Bahía Solano",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "8 horas",
+      "priceFrom": 89,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Bahía Solano: playas y cascadas del Pacífico",
+      "excerpt": "Explora una playa del Pacífico y una cascada cercana con traslados locales y guía de la zona.",
+      "description": "Explora una playa del Pacífico y una cascada cercana con traslados locales y guía de la zona.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Salida",
+        "Sendero de selva",
+        "Cascada",
+        "Almuerzo"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+    },
+    {
+      "slug": "cano-cristales",
+      "title": "Caño Cristales: río de los cinco colores",
+      "country": "Colombia",
+      "region": "Meta / La Macarena",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
+      "duration": "10 horas",
+      "priceFrom": 149,
+      "currency": "USD",
+      "img": "estilo-naturaleza-01.jpg",
+      "alt": "Caño Cristales: río de los cinco colores",
+      "excerpt": "Visita Caño Cristales con permisos, guía autorizado y ruta asignada por la autoridad ambiental según aforo y condiciones.",
+      "description": "Visita Caño Cristales con permisos, guía autorizado y ruta asignada por la autoridad ambiental según aforo y condiciones.",
+      "includes": [
+        "Guía local según opción",
+        "Transporte indicado",
+        "Asistencia operativa"
+      ],
+      "notIncludes": [
+        "Gastos personales",
+        "Propinas",
+        "Servicios opcionales"
+      ],
+      "highlights": [
+        "Registro en La Macarena",
+        "Traslado fluvial",
+        "Traslado terrestre",
+        "Sendero autorizado"
+      ],
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
     }
   ],
   "packages": [
