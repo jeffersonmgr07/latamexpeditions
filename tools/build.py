@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import pathlib
 import datetime
+import html as html_lib
 
 import partials as P
 
@@ -26,6 +27,118 @@ PAGES: list[tuple[str, str]] = []  # (ruta relativa, prioridad) para el sitemap
 
 # País -> slug sin acentos, para que los filtros de la URL coincidan siempre.
 COUNTRY_SLUG = {d["name"]: d["slug"] for d in DATA["destinations"]}
+
+# Traducciones generadas a partir de los bloques `en` del catálogo. El sitio
+# conserva un HTML estático por producto y main.js sustituye los textos cuando
+# el visitante selecciona inglés.
+GENERATED_EN: dict[str, str] = {}
+
+MASTER_UI_EN = {
+    "Información esencial": "Essential information",
+    "Ubicación": "Location",
+    "Duración": "Duration",
+    "Dificultad": "Difficulty",
+    "Tipo de servicio": "Service type",
+    "Edad mínima": "Minimum age",
+    "Tamaño del grupo": "Group size",
+    "Distancia a pie": "Walking distance",
+    "Altitud": "Altitude",
+    "Nivel físico": "Physical level",
+    "Código del producto": "Product code",
+    "Categorías": "Categories",
+    "Sobre esta experiencia": "About this experience",
+    "Lo más destacado": "Highlights",
+    "Horarios y operación": "Schedule and operation",
+    "Días de operación": "Operating days",
+    "Horarios de salida": "Departure times",
+    "Horario de salida": "Departure time",
+    "Selecciona un horario": "Select a departure time",
+    "La hora elegida quedará registrada en tu reserva.": "Your selected time will be recorded in your booking.",
+    "Selecciona una hora de salida.": "Select a departure time.",
+    "Ventana de recogida": "Pickup window",
+    "Punto de encuentro": "Meeting point",
+    "Recogida en hotel": "Hotel pickup",
+    "Lugar de finalización": "End point",
+    "Itinerario detallado": "Detailed itinerary",
+    "Hora": "Time",
+    "Actividad": "Activity",
+    "Duración estimada": "Estimated duration",
+    "Qué incluye": "What's included",
+    "No incluye": "Not included",
+    "Entradas y pagos adicionales": "Admissions and additional payments",
+    "Servicio o entrada": "Service or admission",
+    "Condición": "Status",
+    "Información": "Information",
+    "Idiomas disponibles": "Available languages",
+    "Incluidos": "Included",
+    "Bajo solicitud": "On request",
+    "Recomendaciones": "Recommendations",
+    "Restricciones": "Restrictions",
+    "Accesibilidad": "Accessibility",
+    "Clima y operación": "Weather and operation",
+    "Cancelación": "Cancellation",
+    "Voucher y confirmación": "Voucher and confirmation",
+    "Preguntas frecuentes": "Frequently asked questions",
+    "Precio desde": "Price from",
+    "por persona": "per person",
+    "Reservar ahora": "Book now",
+    "Solicitar opción privada": "Request a private option",
+    "Tarifa y condiciones": "Rate and conditions",
+    "Información importante": "Important information",
+    "También te puede interesar": "You may also like",
+    "Otras experiencias en Colombia": "Other experiences in Colombia",
+    "Confirmación inmediata tras el pago": "Immediate confirmation after payment",
+    "Selecciona el horario durante la reserva": "Select your departure time during booking",
+    "Itinerario referencial": "Reference itinerary",
+    "Español": "Spanish",
+    "Inglés": "English",
+    "Sí": "Yes",
+    "No": "No",
+}
+
+
+def norm_translation(value: str) -> str:
+    return " ".join(str(value).split()).strip()
+
+
+def tr(es: str, en: str | None = None) -> str:
+    """Registra una traducción exacta y devuelve el texto español."""
+    if isinstance(es, str) and isinstance(en, str):
+        es_n = norm_translation(es)
+        en_n = norm_translation(en)
+        if es_n and en_n and es_n != en_n:
+            GENERATED_EN[es_n] = en_n
+    return es
+
+
+def register_parallel_translations(es_value, en_value) -> None:
+    """Registra recursivamente strings paralelos del catálogo ES/EN."""
+    if isinstance(es_value, str) and isinstance(en_value, str):
+        tr(es_value, en_value)
+        return
+    if isinstance(es_value, list) and isinstance(en_value, list):
+        for es_item, en_item in zip(es_value, en_value):
+            register_parallel_translations(es_item, en_item)
+        return
+    if isinstance(es_value, dict) and isinstance(en_value, dict):
+        for key, es_item in es_value.items():
+            if key == "en" or key not in en_value:
+                continue
+            register_parallel_translations(es_item, en_value[key])
+
+
+def register_master_ui() -> None:
+    for es, en in MASTER_UI_EN.items():
+        tr(es, en)
+
+
+def build_i18n_content() -> None:
+    """Combina traducciones existentes con las generadas desde el catálogo."""
+    path = ROOT / "assets/data/i18n/en/content.json"
+    current = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    current.update(GENERATED_EN)
+    path.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"  ✓ assets/data/i18n/en/content.json ({len(GENERATED_EN)} traducciones generadas)")
 
 
 def write(path: str, html: str, priority: str | None = "0.7") -> None:
@@ -516,8 +629,292 @@ def build_styles() -> None:
     write("estilos-viaje.html", html, "0.8")
 
 
+def master_related(item):
+    """Prioriza productos de la misma ciudad y luego del mismo país."""
+    candidates = [e for e in DATA["experiences"] if e["slug"] != item["slug"]]
+    ordered = []
+    for group in (
+        [e for e in candidates if e.get("region") == item.get("region")],
+        [e for e in candidates if e.get("country") == item.get("country")],
+        candidates,
+    ):
+        for candidate in group:
+            if candidate not in ordered:
+                ordered.append(candidate)
+    return ordered[:3]
+
+
+def render_master_experience(item) -> str:
+    """Ficha extensa para productos migrados a la plantilla maestra."""
+    master = item["master"]
+    en_item = item.get("en", {})
+    en_master = en_item.get("master", {})
+    register_parallel_translations(item, en_item)
+    register_master_ui()
+
+    title_es = f"{item['title']} | Experiencia en {item['country']} | Latam Expeditions"
+    title_en = f"{en_item.get('title', item['title'])} | Experience in {en_item.get('country', item['country'])} | Latam Expeditions"
+    tr(title_es, title_en)
+    desc_es = item["description"][:158]
+    desc_en = en_item.get("description", item["description"])[:158]
+    tr(desc_es, desc_en)
+    eyebrow_es = f"{item['styleLabel']} · {item['duration']}"
+    eyebrow_en = f"{en_item.get('styleLabel', item['styleLabel'])} · {en_item.get('duration', item['duration'])}"
+    tr(eyebrow_es, eyebrow_en)
+    destination_es = f"{item['region']}, {item['country']}"
+    destination_en = f"{en_item.get('region', item['region'])}, {en_item.get('country', item['country'])}"
+    tr(destination_es, destination_en)
+    categories_es = " · ".join(master.get("categories", []))
+    categories_en = " · ".join(en_master.get("categories", master.get("categories", [])))
+    tr(categories_es, categories_en)
+    departures_es = " · ".join(master.get("departureTimes", []))
+    departures_en = " · ".join(en_master.get("departureTimes", master.get("departureTimes", [])))
+    tr(departures_es, departures_en)
+    included_lang_es = " · ".join(master.get("languages", {}).get("included", []))
+    included_lang_en = " · ".join(en_master.get("languages", {}).get("included", []))
+    request_lang_es = " · ".join(master.get("languages", {}).get("onRequest", [])) or "Consultar"
+    request_lang_en = " · ".join(en_master.get("languages", {}).get("onRequest", [])) or "Ask us"
+    tr(included_lang_es, included_lang_en)
+    tr(request_lang_es, request_lang_en)
+    tr("Consultar", "Ask us")
+
+    def label(es):
+        tr(es, MASTER_UI_EN.get(es, es))
+        return es
+
+    facts = [
+        ("fa-location-dot", label("Ubicación"), destination_es),
+        ("fa-clock", label("Duración"), item["duration"]),
+        ("fa-person-hiking", label("Dificultad"), master["difficulty"]),
+        ("fa-people-group", label("Tipo de servicio"), master["groupType"]),
+        ("fa-child-reaching", label("Edad mínima"), master["minAge"]),
+        ("fa-users", label("Tamaño del grupo"), master["maxGroup"]),
+        ("fa-shoe-prints", label("Distancia a pie"), master["walkingDistance"]),
+        ("fa-mountain", label("Altitud"), master["altitude"]),
+    ]
+    facts_html = "".join(
+        f'<div class="tour-fact"><i class="fa-solid {icon}" aria-hidden="true"></i>'
+        f'<div><dt>{name}</dt><dd>{value}</dd></div></div>'
+        for icon, name, value in facts
+    )
+    highlights = "".join(
+        f'<li><i class="fa-solid fa-star" aria-hidden="true"></i><span>{x}</span></li>'
+        for x in item["highlights"]
+    )
+    includes = "".join(
+        f'<li><i class="fa-solid fa-check" aria-hidden="true"></i><span>{x}</span></li>'
+        for x in item["includes"]
+    )
+    excludes = "".join(
+        f'<li><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>{x}</span></li>'
+        for x in item["notIncludes"]
+    )
+    itinerary = "".join(
+        f'<li class="tour-timeline__item"><div class="tour-timeline__time">{stop["time"]}</div>'
+        f'<div class="tour-timeline__content"><h3>{stop["title"]}</h3><p>{stop["description"]}</p>'
+        f'<span><strong>{label("Duración estimada")}</strong>: <em>{stop["duration"]}</em></span></div></li>'
+        for stop in master["itinerary"]
+    )
+    entry_rows = "".join(
+        f'<tr><th scope="row">{entry["name"]}</th><td><span class="tour-status">{entry["status"]}</span></td><td>{entry["notes"]}</td></tr>'
+        for entry in master.get("entries", [])
+    )
+    recommendations = "".join(f'<li>{x}</li>' for x in master.get("recommendations", []))
+    restrictions = "".join(f'<li>{x}</li>' for x in master.get("restrictions", []))
+    faqs = "".join(
+        f'<details class="tour-faq"><summary>{faq["question"]}</summary><p>{faq["answer"]}</p></details>'
+        for faq in master.get("faqs", [])
+    )
+    departures_attr = html_lib.escape(json.dumps(master.get("departureTimes", []), ensure_ascii=False), quote=True)
+    related_items = master_related(item)
+    for related_item in related_items:
+        related_en = related_item.get("en", {})
+        if related_en:
+            register_parallel_translations(related_item, related_en)
+            tr(f": {related_item['title']}", f": {related_en.get('title', related_item['title'])}")
+    related_cards = "\n        ".join(trip_card(e, "experience", base="../") for e in related_items)
+
+    ld_obj = {
+        "@context": "https://schema.org",
+        "@type": "TouristTrip",
+        "name": item["title"],
+        "description": item["description"],
+        "url": f"{DOMAIN}/experiencias/{item['slug']}.html",
+        "image": f"{DOMAIN}/assets/img/{item['img']}",
+        "touristType": master.get("categories", [item["styleLabel"]]),
+        "itinerary": {
+            "@type": "ItemList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": i + 1, "name": stop["title"], "description": stop["description"]}
+                for i, stop in enumerate(master["itinerary"])
+            ],
+        },
+        "provider": {"@type": "TravelAgency", "name": SITE["name"], "url": DOMAIN},
+    }
+    if item.get("priceFrom"):
+        ld_obj["offers"] = {
+            "@type": "Offer", "price": item["priceFrom"], "priceCurrency": item["currency"],
+            "availability": "https://schema.org/InStock",
+            "url": f"{DOMAIN}/experiencias/{item['slug']}.html",
+        }
+    ld = P.jsonld(ld_obj) + P.jsonld({
+        "@context": "https://schema.org", "@type": "FAQPage",
+        "mainEntity": [
+            {"@type": "Question", "name": faq["question"],
+             "acceptedAnswer": {"@type": "Answer", "text": faq["answer"]}}
+            for faq in master.get("faqs", [])
+        ],
+    }) + P.jsonld({
+        "@context": "https://schema.org", "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Inicio", "item": f"{DOMAIN}/index.html"},
+            {"@type": "ListItem", "position": 2, "name": "Experiencias", "item": f"{DOMAIN}/experiencias.html"},
+            {"@type": "ListItem", "position": 3, "name": item["title"]},
+        ],
+    })
+
+    html = P.head(
+        title=title_es, description=desc_es,
+        canonical=f"experiencias/{item['slug']}.html", base="../",
+        image=f"assets/img/{item['img']}", extra=ld,
+    )
+    html += P.header(base="../")
+    html += f'''  <main id="contenido">
+    <section class="page-hero detail-hero detail-hero--master" style="--detail-image:url('../assets/img/{item['img']}')">
+      <div class="page-hero__inner">
+        {P.breadcrumb([("Inicio", "index.html"), ("Experiencias", "experiencias.html"), (item["title"], None)], base="../")}
+        <span class="eyebrow">{eyebrow_es}</span>
+        <h1>{item['title']}</h1>
+        <p>{item['excerpt']}</p>
+        <div class="tour-hero-meta">
+          <span><i class="fa-solid fa-location-dot" aria-hidden="true"></i>{destination_es}</span>
+          <span><i class="fa-regular fa-clock" aria-hidden="true"></i>{item['duration']}</span>
+          <span><i class="fa-solid fa-tag" aria-hidden="true"></i><b>{label("Precio desde")}</b> {price_label(item)}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tour-master">
+      <div class="detail-grid detail-grid--master">
+        <div class="tour-section-stack">
+          <section class="detail-card" aria-labelledby="essentialTitle">
+            <h2 id="essentialTitle">{label("Información esencial")}</h2>
+            <dl class="tour-facts">{facts_html}</dl>
+            <div class="tour-meta-strip">
+              <p><strong>{label("Código del producto")}</strong>: <span>{master['code']}</span></p>
+              <p><strong>{label("Categorías")}</strong>: <span>{categories_es}</span></p>
+              <p><strong>{label("Nivel físico")}</strong>: <span>{master['physicalLevel']}</span></p>
+            </div>
+          </section>
+
+          <section class="detail-card" aria-labelledby="aboutTitle">
+            <h2 id="aboutTitle">{label("Sobre esta experiencia")}</h2>
+            <p class="tour-lead">{item['description']}</p>
+            <h3 class="tour-subtitle">{label("Lo más destacado")}</h3>
+            <ul class="detail-list tour-highlight-list">{highlights}</ul>
+          </section>
+
+          <section class="detail-card" aria-labelledby="scheduleTitle">
+            <h2 id="scheduleTitle">{label("Horarios y operación")}</h2>
+            <div class="tour-logistics">
+              <div><span>{label("Días de operación")}</span><strong>{master['operatingDays']}</strong></div>
+              <div><span>{label("Horarios de salida")}</span><strong>{departures_es}</strong></div>
+              <div><span>{label("Ventana de recogida")}</span><strong>{master['pickupWindow']}</strong></div>
+              <div><span>{label("Punto de encuentro")}</span><strong>{master['meetingPoint']}</strong></div>
+              <div><span>{label("Recogida en hotel")}</span><strong>{master['hotelPickup']}</strong></div>
+              <div><span>{label("Lugar de finalización")}</span><strong>{master['endPoint']}</strong></div>
+            </div>
+          </section>
+
+          <section class="detail-card" aria-labelledby="itineraryTitle">
+            <h2 id="itineraryTitle">{label("Itinerario detallado")}</h2>
+            <p class="tour-note"><strong>{label("Itinerario referencial")}</strong>. <span>{master['operationalNote']}</span></p>
+            <ol class="tour-timeline">{itinerary}</ol>
+          </section>
+
+          <div class="tour-split">
+            <section class="detail-card"><h2>{label("Qué incluye")}</h2><ul class="detail-list">{includes}</ul></section>
+            <section class="detail-card"><h2>{label("No incluye")}</h2><ul class="detail-list detail-list--x">{excludes}</ul></section>
+          </div>
+
+          <section class="detail-card" aria-labelledby="entriesTitle">
+            <h2 id="entriesTitle">{label("Entradas y pagos adicionales")}</h2>
+            <div class="tour-table-wrap"><table class="tour-table">
+              <thead><tr><th>{label("Servicio o entrada")}</th><th>{label("Condición")}</th><th>{label("Información")}</th></tr></thead>
+              <tbody>{entry_rows}</tbody>
+            </table></div>
+          </section>
+
+          <section class="detail-card" aria-labelledby="languagesTitle">
+            <h2 id="languagesTitle">{label("Idiomas disponibles")}</h2>
+            <div class="tour-language-grid">
+              <div><span>{label("Incluidos")}</span><strong>{included_lang_es}</strong></div>
+              <div><span>{label("Bajo solicitud")}</span><strong>{request_lang_es}</strong></div>
+            </div>
+            <p class="tour-note">{master['languages']['note']}</p>
+          </section>
+
+          <div class="tour-split">
+            <section class="detail-card"><h2>{label("Recomendaciones")}</h2><ul class="tour-bullet-list">{recommendations}</ul></section>
+            <section class="detail-card"><h2>{label("Restricciones")}</h2><ul class="tour-bullet-list">{restrictions}</ul></section>
+          </div>
+
+          <div class="tour-split">
+            <section class="detail-card"><h2>{label("Accesibilidad")}</h2><p class="tour-body-copy">{master['accessibility']}</p></section>
+            <section class="detail-card"><h2>{label("Clima y operación")}</h2><p class="tour-body-copy">{master['weather']}</p></section>
+          </div>
+
+          <div class="tour-split">
+            <section class="detail-card"><h2>{label("Cancelación")}</h2><p class="tour-body-copy">{master['cancellation']}</p></section>
+            <section class="detail-card"><h2>{label("Voucher y confirmación")}</h2><p class="tour-body-copy">{master['voucher']}</p></section>
+          </div>
+
+          <section class="detail-card" aria-labelledby="faqTitle">
+            <h2 id="faqTitle">{label("Preguntas frecuentes")}</h2>
+            <div class="tour-faq-list">{faqs}</div>
+          </section>
+        </div>
+
+        <aside class="detail-aside tour-booking-aside">
+          <div class="detail-card tour-booking-card">
+            {picture(item['img'], item['alt'], '../', style='border-radius:18px;margin-bottom:20px')}
+            <div class="price-block"><small>{label("Precio desde")}</small><strong>{price_label(item)}</strong><span>{label("por persona")}</span></div>
+            <div class="fact-row"><span>{label("Duración")}</span><strong>{item['duration']}</strong></div>
+            <div class="fact-row"><span>{label("Horarios de salida")}</span><strong>{departures_es}</strong></div>
+            <div class="fact-row"><span>{label("Idiomas disponibles")}</span><strong>{included_lang_es}</strong></div>
+            <div class="cta-stack" style="margin-top:22px">
+              <button type="button" class="btn-primary btn-book"
+                data-book="{item['slug']}" data-book-kind="experience"
+                data-book-title="{html_lib.escape(item['title'], quote=True)}" data-book-price="{item.get('priceFrom') or 0}"
+                data-book-country="{html_lib.escape(item['country'], quote=True)}" data-book-duration="{html_lib.escape(item['duration'], quote=True)}"
+                data-book-departures="{departures_attr}" {'' if item.get('priceFrom') else 'hidden'}>{label("Reservar ahora")}</button>
+              <a class="btn-outline" href="../contacto.html?experiencia={item['slug']}">{label("Solicitar opción privada")}</a>
+            </div>
+            <p class="cta-reassure"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i>{label("Confirmación inmediata tras el pago")}</p>
+            <div class="tour-booking-note"><h3>{label("Tarifa y condiciones")}</h3><p>{master['priceNote']}</p></div>
+            <div class="tour-booking-note"><h3>{label("Información importante")}</h3><p><span>{label("Selecciona el horario durante la reserva")}</span>.</p></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="section-heading"><div><p class="section-kicker">{label("También te puede interesar")}</p><h2>{label("Otras experiencias en Colombia")}</h2></div></div>
+      <div class="cards-grid">{related_cards}</div>
+    </section>
+  </main>
+
+{P.country_modal()}'''
+    html += P.footer(base="../", extra_scripts='  <script src="../assets/js/booking.js" defer></script>\n')
+    return html
+
+
 def build_experience_details() -> None:
     for item in DATA["experiences"]:
+        if item.get("master"):
+            write(f"experiencias/{item['slug']}.html", render_master_experience(item), "0.8")
+            continue
+
         includes = "".join(
             f'<li><i class="fa-solid fa-check" aria-hidden="true"></i><span>{x}</span></li>'
             for x in item["includes"]
@@ -560,7 +957,6 @@ def build_experience_details() -> None:
             ],
         })
 
-
         html = P.head(
             title=f"{item['title']} | Experiencia en {item['country']} | Latam Expeditions",
             description=item["description"][:158],
@@ -570,7 +966,7 @@ def build_experience_details() -> None:
             extra=ld,
         )
         html += P.header(base="../")
-        html += f"""  <main id="contenido">
+        html += f'''  <main id="contenido">
     <section class="page-hero detail-hero" style="--detail-image:url('../assets/img/{item['img']}')">
       <div class="page-hero__inner">
         {P.breadcrumb([("Inicio", "index.html"), ("Experiencias", "experiencias.html"), (item["title"], None)], base="../")}
@@ -588,58 +984,36 @@ def build_experience_details() -> None:
             <p style="color:var(--latam-muted);font-weight:600;line-height:1.7;margin:0 0 22px">{item['description']}</p>
             <ul class="detail-list">{highlights}</ul>
           </div>
-          <div class="detail-card" style="margin-bottom:24px">
-            <h2>Qué incluye</h2>
-            <ul class="detail-list">{includes}</ul>
-          </div>
-          <div class="detail-card">
-            <h2>No incluye</h2>
-            <ul class="detail-list detail-list--x">{excludes}</ul>
-          </div>
+          <div class="detail-card" style="margin-bottom:24px"><h2>Qué incluye</h2><ul class="detail-list">{includes}</ul></div>
+          <div class="detail-card"><h2>No incluye</h2><ul class="detail-list detail-list--x">{excludes}</ul></div>
         </div>
-
-        <aside class="detail-aside">
-          <div class="detail-card">
-            <div class="price-block">
-              <small>Precio desde</small>
-              <strong>{price_label(item)}</strong>
-            </div>
-            <div class="fact-row"><span>Destino</span><strong>{item['region']}, {item['country']}</strong></div>
-            <div class="fact-row"><span>Duración</span><strong>{item['duration']}</strong></div>
-            <div class="fact-row"><span>Estilo</span><strong>{item['styleLabel']}</strong></div>
-            <div class="fact-row"><span>Idiomas</span><strong>Español · Inglés</strong></div>
-            <div class="cta-stack" style="margin-top:22px">
-              <button type="button" class="btn-primary btn-book"
-                data-book="{item['slug']}" data-book-kind="experience"
-                data-book-title="{item['title']}" data-book-price="{item.get('priceFrom') or 0}"
-                data-book-country="{item['country']}" data-book-duration="{item['duration']}"
-                {'' if item.get('priceFrom') else 'hidden'}>Reservar ahora</button>
-              {'' if item.get('priceFrom') else f'<a class="btn-primary" href="../contacto.html?experiencia={item["slug"]}">Solicitar cotización</a>'}
-            </div>
-            <p class="cta-reassure">
-              <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-              Cancelación gratuita hasta 24 h antes · Confirmación inmediata
-            </p>
+        <aside class="detail-aside"><div class="detail-card">
+          <div class="price-block"><small>Precio desde</small><strong>{price_label(item)}</strong></div>
+          <div class="fact-row"><span>Destino</span><strong>{item['region']}, {item['country']}</strong></div>
+          <div class="fact-row"><span>Duración</span><strong>{item['duration']}</strong></div>
+          <div class="fact-row"><span>Estilo</span><strong>{item['styleLabel']}</strong></div>
+          <div class="fact-row"><span>Idiomas</span><strong>Español · Inglés</strong></div>
+          <div class="cta-stack" style="margin-top:22px">
+            <button type="button" class="btn-primary btn-book" data-book="{item['slug']}" data-book-kind="experience"
+              data-book-title="{item['title']}" data-book-price="{item.get('priceFrom') or 0}"
+              data-book-country="{item['country']}" data-book-duration="{item['duration']}"
+              {'' if item.get('priceFrom') else 'hidden'}>Reservar ahora</button>
+            {'' if item.get('priceFrom') else f'<a class="btn-primary" href="../contacto.html?experiencia={item["slug"]}">Solicitar cotización</a>'}
           </div>
-        </aside>
+          <p class="cta-reassure"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i>Cancelación gratuita hasta 24 h antes · Confirmación inmediata</p>
+        </div></aside>
       </div>
     </section>
-
     <section class="section" style="padding-top:0">
-      <div class="section-heading">
-        <div><p class="section-kicker">También te puede interesar</p><h2>Otras experiencias</h2></div>
-      </div>
-      <div class="cards-grid">
-        {related_cards}
-      </div>
+      <div class="section-heading"><div><p class="section-kicker">También te puede interesar</p><h2>Otras experiencias</h2></div></div>
+      <div class="cards-grid">{related_cards}</div>
     </section>
   </main>
 
-{P.country_modal()}"""
+{P.country_modal()}'''
         html += P.footer(base="../", extra_scripts=(
             '  <script src="../assets/js/booking.js" defer></script>\n' if item.get("priceFrom") else ""))
         write(f"experiencias/{item['slug']}.html", html, "0.8")
-
 
 def build_package_details() -> None:
     for item in DATA["packages"]:
@@ -1353,6 +1727,7 @@ def main() -> None:
     build_mi_reserva()
     build_mis_viajes()
     build_404()
+    build_i18n_content()
     build_meta_files()
     limpiar_huerfanos()
     print(f"\nListo: {len(PAGES)} páginas en el sitemap.")

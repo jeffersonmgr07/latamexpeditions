@@ -237,68 +237,1972 @@
       "marketRef": "Viator/GetYourGuide: 45-90 USD"
     },
     {
-      "slug": "guatape-piedra-penol",
-      "title": "Guatapé y Piedra del Peñol",
-      "country": "Colombia",
-      "region": "Medellín",
-      "style": "aventura",
-      "styleLabel": "Aventura",
-      "duration": "1 día",
-      "priceFrom": 45.0,
-      "currency": "USD",
-      "img": "destino-colombia-01.jpg",
-      "alt": "Pueblo colorido de Guatapé y la Piedra del Peñol",
-      "excerpt": "740 escalones, embalse en lancha y el pueblo más colorido de Colombia.",
-      "description": "Excursión de día completo desde Medellín: subida a la Piedra del Peñol por sus 740 escalones para ver el embalse desde arriba, navegación por el lago y paseo por los zócalos pintados de Guatapé.",
-      "includes": [
-        "Transporte ida y vuelta desde Medellín",
-        "Paseo en lancha por el embalse",
-        "Guía en español o inglés",
-        "Desayuno típico"
-      ],
-      "notIncludes": [
-        "Ingreso a la Piedra del Peñol",
-        "Almuerzo",
-        "Propinas"
-      ],
-      "highlights": [
-        "Vista panorámica del embalse",
-        "Pueblo patrimonio de zócalos",
-        "Salidas diarias desde Medellín"
-      ],
-      "marketRef": "GetYourGuide/Viator: 35-70 USD"
-    },
-    {
-      "slug": "comuna-13-medellin",
-      "title": "Comuna 13 y grafitis",
+      "slug": "city-tour-medellin",
+      "title": "City Tour Medellín",
       "country": "Colombia",
       "region": "Medellín",
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "4 horas",
-      "priceFrom": 30.0,
+      "priceFrom": 35.0,
       "currency": "USD",
       "img": "estilo-cultura-01.jpg",
-      "alt": "Murales y escaleras eléctricas de la Comuna 13 en Medellín",
-      "excerpt": "Escaleras eléctricas, muralismo y la historia de la transformación del barrio.",
-      "description": "Recorrido guiado por la Comuna 13 con guías del propio barrio: las escaleras eléctricas que cambiaron su movilidad, el muralismo como memoria y el relato en primera persona de cómo pasó de ser la zona más violenta de Medellín a un referente urbano.",
+      "alt": "Vista urbana y cultural de Medellín durante un city tour",
+      "excerpt": "Una introducción completa a Medellín entre miradores, Plaza Botero, espacios renovados e historia paisa.",
+      "description": "Descubre las distintas caras de Medellín en un recorrido de medio día que combina paisajes urbanos, tradición antioqueña, arte y transformación social. Visita Pueblito Paisa, camina por Plaza Botero y conoce espacios que explican cómo la ciudad pasó de un pasado complejo a convertirse en referente de innovación urbana.",
       "includes": [
-        "Guía nacido en la Comuna 13",
-        "Recorrido a pie de 4 horas",
-        "Uso de las escaleras eléctricas",
-        "Degustación de fruta local"
+        "Transporte turístico durante el recorrido",
+        "Guía profesional en español o inglés",
+        "Recogida en hoteles seleccionados o punto de encuentro",
+        "Paradas guiadas y tiempo para fotografías",
+        "Seguro de asistencia durante la actividad"
       ],
       "notIncludes": [
-        "Traslados desde el hotel",
-        "Almuerzo",
-        "Compras de arte"
+        "Ingreso al Museo de Antioquia",
+        "Alimentos y bebidas",
+        "Recogida fuera de las zonas indicadas",
+        "Gastos personales y propinas"
       ],
       "highlights": [
-        "Guías de la propia comunidad",
-        "Uno de los tours mejor valorados de Colombia",
-        "Grupos reducidos"
+        "Pueblito Paisa y vista del Valle de Aburrá",
+        "Plaza Botero y Palacio de la Cultura",
+        "Espacios de renovación urbana del centro",
+        "Dos horarios de salida para organizar mejor el día"
       ],
-      "marketRef": "GetYourGuide/Viator: 20-45 USD"
+      "master": {
+        "code": "COL-MDE-001",
+        "location": "Medellín, Valle de Aburrá, Antioquia",
+        "categories": [
+          "Ciudad",
+          "Historia",
+          "Cultura",
+          "Arquitectura"
+        ],
+        "difficulty": "Baja",
+        "physicalLevel": "Apto para viajeros con movilidad habitual; incluye caminatas cortas y algunas superficies irregulares.",
+        "minAge": "4 años",
+        "maxGroup": "15 viajeros en servicio compartido",
+        "groupType": "Compartido; opción privada bajo solicitud",
+        "walkingDistance": "Aproximadamente 2 kilómetros, distribuidos en varias paradas",
+        "altitude": "Medellín se encuentra alrededor de 1.500 m s. n. m.",
+        "operatingDays": "Todos los días, sujeto a disponibilidad y cierres locales",
+        "departureTimes": [
+          "08:00",
+          "14:00"
+        ],
+        "pickupWindow": "Entre 20 y 40 minutos antes de la salida, según el punto asignado",
+        "meetingPoint": "Puntos seleccionados en El Poblado y Laureles; el punto definitivo se confirma en el voucher",
+        "hotelPickup": "Disponible desde hoteles seleccionados de El Poblado y Laureles. Alojamientos fuera de cobertura reciben un punto de encuentro cercano.",
+        "endPoint": "Regreso al punto de recogida o finalización en una zona céntrica acordada",
+        "itinerary": [
+          {
+            "time": "08:00 / 14:00",
+            "title": "Recogida y presentación del recorrido",
+            "description": "Encuentro con el guía en el hotel seleccionado o punto asignado. Se revisa la ruta del día y se inicia el traslado panorámico por Medellín.",
+            "duration": "20 a 30 min"
+          },
+          {
+            "time": "08:30 / 14:30",
+            "title": "Cerro Nutibara y Pueblito Paisa",
+            "description": "Parada en uno de los miradores clásicos de la ciudad. El guía explica la tradición antioqueña, la transformación urbana del Valle de Aburrá y los principales barrios visibles desde la colina.",
+            "duration": "45 min"
+          },
+          {
+            "time": "09:30 / 15:30",
+            "title": "Parque de los Pies Descalzos y sector administrativo",
+            "description": "Caminata por espacios de renovación urbana cercanos a La Alpujarra. Se comentan la arquitectura contemporánea, los proyectos públicos y la evolución del centro de Medellín.",
+            "duration": "35 min"
+          },
+          {
+            "time": "10:15 / 16:15",
+            "title": "Plaza Botero y centro tradicional",
+            "description": "Recorrido guiado entre las esculturas monumentales de Fernando Botero, el Palacio de la Cultura Rafael Uribe Uribe y las calles del centro. El ingreso al Museo de Antioquia es opcional y no forma parte de la ruta base.",
+            "duration": "55 min"
+          },
+          {
+            "time": "11:20 / 17:20",
+            "title": "Parque de las Luces y corredor urbano",
+            "description": "Parada fotográfica y explicación sobre la recuperación de antiguos espacios ferroviarios y comerciales. La ruta puede adaptarse por movilidad, eventos o cierres del centro.",
+            "duration": "30 min"
+          },
+          {
+            "time": "12:00 / 18:00",
+            "title": "Parques del Río y regreso",
+            "description": "Última vista panorámica junto al corredor del río Medellín antes del retorno. La experiencia finaliza aproximadamente cuatro horas después de la salida.",
+            "duration": "30 a 45 min"
+          }
+        ],
+        "entries": [
+          {
+            "name": "Pueblito Paisa y miradores públicos",
+            "status": "Incluidos",
+            "notes": "Acceso libre mientras los espacios permanezcan abiertos."
+          },
+          {
+            "name": "Museo de Antioquia",
+            "status": "No incluido / opcional",
+            "notes": "Puede visitarse por cuenta propia; incluirlo requiere ajustar la duración del recorrido."
+          }
+        ],
+        "languages": {
+          "included": [
+            "Español",
+            "Inglés"
+          ],
+          "onRequest": [
+            "Portugués",
+            "Francés"
+          ],
+          "note": "Los idiomas bajo solicitud dependen de disponibilidad y pueden generar un suplemento por guía privado."
+        },
+        "recommendations": [
+          "Usar calzado cómodo y ropa ligera.",
+          "Llevar protector solar, agua y una chaqueta liviana.",
+          "Mantener objetos de valor discretos durante las caminatas por el centro.",
+          "Informar previamente si se viaja con coche de bebé o movilidad reducida."
+        ],
+        "restrictions": [
+          "No se permite consumir alcohol dentro del vehículo.",
+          "Los menores deben viajar acompañados por un adulto.",
+          "El orden de las paradas puede variar por tráfico, manifestaciones, eventos o cierres viales."
+        ],
+        "accessibility": "Accesibilidad parcial. El vehículo admite movilidad reducida con aviso previo, pero algunas aceras, pendientes y miradores pueden requerir asistencia.",
+        "weather": "El tour opera con lluvia ligera. En caso de tormenta fuerte o cierre de un atractivo, se adapta la parada por otra de valor equivalente.",
+        "cancellation": "Cancelación gratuita hasta 24 horas antes del inicio. Las cancelaciones posteriores y la no presentación no son reembolsables.",
+        "voucher": "Voucher digital aceptado. Debe mostrarse desde el teléfono junto con un documento de identidad. La hora y el punto exactos se reconfirman el día anterior.",
+        "priceNote": "Tarifa por persona en servicio compartido. El precio privado se cotiza según cantidad de viajeros y zona de recogida.",
+        "operationalNote": "Itinerario de referencia. Los tiempos pueden variar por tráfico y condiciones operativas de Medellín.",
+        "faqs": [
+          {
+            "question": "¿El tour entra al Museo de Antioquia?",
+            "answer": "La visita base recorre la Plaza Botero y los exteriores del museo. El ingreso no está incluido porque requiere tiempo adicional; podemos incorporarlo en una opción privada o indicarte cómo visitarlo al finalizar."
+          },
+          {
+            "question": "¿Recogen en cualquier hotel de Medellín?",
+            "answer": "La recogida compartida se ofrece en hoteles seleccionados de El Poblado y Laureles. Para otras zonas asignamos un punto cercano o cotizamos traslado privado."
+          },
+          {
+            "question": "¿Es adecuado para niños y adultos mayores?",
+            "answer": "Sí, siempre que puedan realizar caminatas cortas. Podemos reducir tramos a pie con aviso previo, aunque algunos espacios tienen desniveles y aceras irregulares."
+          },
+          {
+            "question": "¿La ruta es exactamente la misma todos los días?",
+            "answer": "Los atractivos principales se mantienen, pero el orden puede cambiar por tráfico, eventos, cierres del centro o condiciones de seguridad. Cualquier reemplazo conserva el enfoque histórico y panorámico."
+          }
+        ]
+      },
+      "marketRef": "Mercado 2026: tours compartidos de 4 h entre USD 19 y 39; privados desde USD 93 por persona o USD 135 por grupo.",
+      "en": {
+        "title": "Medellín City Tour",
+        "country": "Colombia",
+        "region": "Medellín",
+        "styleLabel": "Cultural",
+        "duration": "4 hours",
+        "alt": "Urban and cultural view of Medellín during a city tour",
+        "excerpt": "A complete introduction to Medellín through viewpoints, Botero Square, renewed public spaces and Paisa history.",
+        "description": "Discover Medellín's different faces on a half-day tour combining urban landscapes, Antioquian tradition, art and social transformation. Visit Pueblito Paisa, walk through Botero Square and explore spaces that explain how the city moved beyond a complex past to become a benchmark for urban innovation.",
+        "includes": [
+          "Tourist transportation during the route",
+          "Professional guide in Spanish or English",
+          "Pickup from selected hotels or meeting point",
+          "Guided stops and time for photographs",
+          "Activity assistance insurance"
+        ],
+        "notIncludes": [
+          "Admission to the Museum of Antioquia",
+          "Food and drinks",
+          "Pickup outside the stated areas",
+          "Personal expenses and tips"
+        ],
+        "highlights": [
+          "Pueblito Paisa and views over the Aburrá Valley",
+          "Botero Square and the Palace of Culture",
+          "Renewed public spaces in central Medellín",
+          "Two departure times to organize your day"
+        ],
+        "master": {
+          "code": "COL-MDE-001",
+          "location": "Medellín, Aburrá Valley, Antioquia",
+          "categories": [
+            "City",
+            "History",
+            "Culture",
+            "Architecture"
+          ],
+          "difficulty": "Easy",
+          "physicalLevel": "Suitable for travelers with regular mobility; includes short walks and some uneven surfaces.",
+          "minAge": "4 years",
+          "maxGroup": "15 travelers on the shared service",
+          "groupType": "Shared; private option available on request",
+          "walkingDistance": "Approximately 2 kilometers, split between several stops",
+          "altitude": "Medellín is located at approximately 1,500 meters above sea level.",
+          "operatingDays": "Daily, subject to availability and local closures",
+          "departureTimes": [
+            "08:00",
+            "14:00"
+          ],
+          "pickupWindow": "Between 20 and 40 minutes before departure, depending on the assigned point",
+          "meetingPoint": "Selected points in El Poblado and Laureles; the final point is confirmed on the voucher",
+          "hotelPickup": "Available from selected hotels in El Poblado and Laureles. Accommodations outside the coverage area receive a nearby meeting point.",
+          "endPoint": "Return to the pickup point or finish in an agreed central area",
+          "itinerary": [
+            {
+              "time": "08:00 / 14:00",
+              "title": "Pickup and tour introduction",
+              "description": "Meet your guide at the selected hotel or assigned point. Review the day's route and begin a panoramic drive through Medellín.",
+              "duration": "20 to 30 min"
+            },
+            {
+              "time": "08:30 / 14:30",
+              "title": "Nutibara Hill and Pueblito Paisa",
+              "description": "Stop at one of the city's classic viewpoints. Your guide explains Antioquian traditions, the urban transformation of the Aburrá Valley and the main neighborhoods visible from the hill.",
+              "duration": "45 min"
+            },
+            {
+              "time": "09:30 / 15:30",
+              "title": "Barefoot Park and administrative district",
+              "description": "Walk through renewed public spaces near La Alpujarra while learning about contemporary architecture, public projects and the evolution of central Medellín.",
+              "duration": "35 min"
+            },
+            {
+              "time": "10:15 / 16:15",
+              "title": "Botero Square and the historic center",
+              "description": "Guided walk among Fernando Botero's monumental sculptures, the Rafael Uribe Uribe Palace of Culture and central streets. Admission to the Museum of Antioquia is optional and not part of the base route.",
+              "duration": "55 min"
+            },
+            {
+              "time": "11:20 / 17:20",
+              "title": "Lights Park and urban corridor",
+              "description": "Photo stop and explanation of the recovery of former railway and commercial areas. The route may be adapted due to mobility, events or downtown closures.",
+              "duration": "30 min"
+            },
+            {
+              "time": "12:00 / 18:00",
+              "title": "River Parks and return",
+              "description": "Final panoramic view along the Medellín River corridor before returning. The experience ends approximately four hours after departure.",
+              "duration": "30 to 45 min"
+            }
+          ],
+          "entries": [
+            {
+              "name": "Pueblito Paisa and public viewpoints",
+              "status": "Included",
+              "notes": "Free access while the spaces remain open."
+            },
+            {
+              "name": "Museum of Antioquia",
+              "status": "Not included / optional",
+              "notes": "It may be visited independently; adding it requires an adjustment to the tour duration."
+            }
+          ],
+          "languages": {
+            "included": [
+              "Spanish",
+              "English"
+            ],
+            "onRequest": [
+              "Portuguese",
+              "French"
+            ],
+            "note": "Languages on request depend on availability and may require a private-guide supplement."
+          },
+          "recommendations": [
+            "Wear comfortable shoes and light clothing.",
+            "Bring sunscreen, water and a light jacket.",
+            "Keep valuables discreet during walks in the city center.",
+            "Let us know in advance when traveling with a stroller or reduced mobility."
+          ],
+          "restrictions": [
+            "Alcohol may not be consumed inside the vehicle.",
+            "Minors must travel with an adult.",
+            "The order of stops may change due to traffic, demonstrations, events or road closures."
+          ],
+          "accessibility": "Partially accessible. The vehicle can accommodate reduced mobility with prior notice, but some sidewalks, slopes and viewpoints may require assistance.",
+          "weather": "The tour operates in light rain. During a strong storm or attraction closure, the stop is replaced by another of equivalent value.",
+          "cancellation": "Free cancellation up to 24 hours before the start. Later cancellations and no-shows are non-refundable.",
+          "voucher": "Digital voucher accepted. Show it on your phone together with an ID. The exact time and meeting point are reconfirmed the day before.",
+          "priceNote": "Per-person rate for the shared service. Private pricing is quoted according to group size and pickup area.",
+          "operationalNote": "Reference itinerary. Times may vary due to traffic and operating conditions in Medellín.",
+          "faqs": [
+            {
+              "question": "Does the tour enter the Museum of Antioquia?",
+              "answer": "The base visit covers Botero Square and the museum exterior. Admission is not included because it requires extra time; we can add it to a private option or explain how to visit after the tour."
+            },
+            {
+              "question": "Do you pick up from every hotel in Medellín?",
+              "answer": "Shared pickup is available from selected hotels in El Poblado and Laureles. For other areas, we assign a nearby point or quote a private transfer."
+            },
+            {
+              "question": "Is it suitable for children and older adults?",
+              "answer": "Yes, provided they can manage short walks. We can reduce walking sections with prior notice, although some areas have slopes and uneven sidewalks."
+            },
+            {
+              "question": "Is the route exactly the same every day?",
+              "answer": "The main sights remain, but the order may change due to traffic, events, downtown closures or safety conditions. Any replacement preserves the historical and panoramic focus."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "comuna-13-medellin",
+      "title": "Comuna 13 + Grafitis + Metrocable",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "cultura",
+      "styleLabel": "Cultural",
+      "duration": "4 horas",
+      "priceFrom": 29.0,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Murales, escaleras eléctricas y barrios de ladera de la Comuna 13 en Medellín",
+      "excerpt": "Metro, Metrocable, arte urbano, escaleras eléctricas y sabores locales con un guía de la comunidad.",
+      "description": "Conoce la transformación de la Comuna 13 desde una mirada local y respetuosa. Viaja en el sistema Metro, disfruta una vista panorámica desde el Metrocable y recorre los murales, escaleras eléctricas y espacios comunitarios que convirtieron el arte en una herramienta de memoria y cambio social.",
+      "includes": [
+        "Guía local en español o inglés",
+        "Billetes de Metro, Metrocable y transporte integrado de la ruta",
+        "Recorrido guiado por murales y escaleras eléctricas",
+        "Dos degustaciones de productos locales",
+        "Parada en mirador o terraza comunitaria"
+      ],
+      "notIncludes": [
+        "Recogida y regreso al hotel en la opción base",
+        "Almuerzo completo",
+        "Ingresos a galerías o museos privados",
+        "Compras de arte, bebidas adicionales y propinas"
+      ],
+      "highlights": [
+        "Viaje panorámico en Metro y Metrocable",
+        "Relatos de transformación contados por un guía local",
+        "Grafitis, música y escaleras eléctricas al aire libre",
+        "Grupos reducidos y degustaciones incluidas"
+      ],
+      "master": {
+        "code": "COL-MDE-002",
+        "location": "Comuna 13, San Javier y sistema Metro de Medellín",
+        "categories": [
+          "Arte urbano",
+          "Cultura local",
+          "Transformación social",
+          "Transporte urbano"
+        ],
+        "difficulty": "Moderada",
+        "physicalLevel": "Requiere caminar por pendientes, escaleras y zonas concurridas durante aproximadamente dos horas.",
+        "minAge": "5 años",
+        "maxGroup": "12 viajeros en grupo reducido",
+        "groupType": "Compartido; opción privada bajo solicitud",
+        "walkingDistance": "Entre 2,5 y 3 kilómetros, con pendientes y escaleras eléctricas al aire libre",
+        "altitude": "Aproximadamente 1.500 a 1.800 m s. n. m.",
+        "operatingDays": "Todos los días",
+        "departureTimes": [
+          "08:30",
+          "13:30"
+        ],
+        "pickupWindow": "No incluye recogida en hotel en la opción base",
+        "meetingPoint": "Estación Poblado del Metro; el acceso y la hora exacta se confirman en el voucher",
+        "hotelPickup": "Disponible como suplemento privado desde El Poblado o Laureles",
+        "endPoint": "Estación Poblado del Metro o punto acordado para la opción privada",
+        "itinerary": [
+          {
+            "time": "08:30 / 13:30",
+            "title": "Encuentro en la estación Poblado",
+            "description": "Presentación del guía, explicación del sistema integrado de transporte y recomendaciones de seguridad antes de iniciar el trayecto en Metro.",
+            "duration": "15 min"
+          },
+          {
+            "time": "08:45 / 13:45",
+            "title": "Metro hacia San Javier",
+            "description": "Recorrido por la ciudad mientras el guía explica el papel del Metro en la movilidad y cultura ciudadana de Medellín.",
+            "duration": "30 min"
+          },
+          {
+            "time": "09:20 / 14:20",
+            "title": "Experiencia en Metrocable",
+            "description": "Trayecto panorámico en cable aéreo para observar la geografía del Valle de Aburrá y comprender cómo la infraestructura conectó barrios de ladera.",
+            "duration": "30 a 40 min"
+          },
+          {
+            "time": "10:05 / 15:05",
+            "title": "Ingreso al circuito de arte urbano",
+            "description": "Traslado en transporte integrado y comienzo de la caminata con un guía local. Se presentan murales, colectivos artísticos y relatos de transformación comunitaria.",
+            "duration": "45 min"
+          },
+          {
+            "time": "10:50 / 15:50",
+            "title": "Escaleras eléctricas y presentaciones locales",
+            "description": "Ascenso por los seis tramos de escaleras al aire libre, con pausas para interpretar grafitis, escuchar artistas y observar el barrio desde distintos niveles.",
+            "duration": "50 min"
+          },
+          {
+            "time": "11:40 / 16:40",
+            "title": "Sabores locales y mirador",
+            "description": "Degustación de dos productos locales y parada en un mirador o terraza comunitaria. Las degustaciones pueden variar según operación y temporada.",
+            "duration": "35 min"
+          },
+          {
+            "time": "12:20 / 17:20",
+            "title": "Regreso en transporte público",
+            "description": "Retorno acompañado hacia la estación Poblado. El tour concluye aproximadamente cuatro horas después del encuentro.",
+            "duration": "40 min"
+          }
+        ],
+        "entries": [
+          {
+            "name": "Metro, Metrocable y transporte integrado de la ruta",
+            "status": "Incluidos",
+            "notes": "Válidos únicamente durante el itinerario acompañado."
+          },
+          {
+            "name": "Escaleras eléctricas de la Comuna 13",
+            "status": "Incluidas",
+            "notes": "Espacio público; puede cerrar temporalmente por mantenimiento o lluvia intensa."
+          },
+          {
+            "name": "Galerías o museos privados",
+            "status": "No incluidos / opcionales",
+            "notes": "El ingreso se paga directamente cuando el viajero desea entrar."
+          }
+        ],
+        "languages": {
+          "included": [
+            "Español",
+            "Inglés"
+          ],
+          "onRequest": [
+            "Portugués",
+            "Francés"
+          ],
+          "note": "Otros idiomas requieren confirmación previa y normalmente se operan en modalidad privada."
+        },
+        "recommendations": [
+          "Usar calzado con buena adherencia.",
+          "Llevar agua, protector solar y protección para lluvia.",
+          "Viajar con equipaje mínimo y mantener objetos de valor seguros.",
+          "Informar sobre restricciones alimentarias para adaptar las degustaciones."
+        ],
+        "restrictions": [
+          "No es recomendable para personas que no puedan subir pendientes o escaleras sin asistencia.",
+          "Los menores deben permanecer acompañados.",
+          "No se permiten conductas que incomoden a residentes ni fotografías invasivas."
+        ],
+        "accessibility": "Accesibilidad parcial. Las escaleras eléctricas facilitan parte del ascenso, pero existen pendientes, escalones y aglomeraciones. Consultar antes de reservar si se utiliza silla de ruedas.",
+        "weather": "Opera con lluvia ligera. El Metrocable, las escaleras o terrazas pueden suspenderse por clima, mantenimiento o decisiones operativas; se ofrecerá una alternativa equivalente cuando sea posible.",
+        "cancellation": "Cancelación gratuita hasta 24 horas antes. Los billetes de transporte ya utilizados no son reembolsables.",
+        "voucher": "Voucher digital y documento de identidad. Se recomienda llegar 15 minutos antes; el grupo no puede retrasar la salida por pasajeros ausentes.",
+        "priceNote": "Tarifa por persona con transporte público, Metrocable y degustaciones incluidas. La recogida privada se cotiza aparte.",
+        "operationalNote": "La experiencia se realiza con respeto por la comunidad y se enfoca en arte, memoria y transformación, no en turismo de pobreza.",
+        "faqs": [
+          {
+            "question": "¿El Metrocable llega directamente a los grafitis?",
+            "answer": "No. El paseo en Metrocable es una experiencia panorámica complementaria. Después se utiliza transporte integrado y se continúa a pie hacia el circuito de murales y escaleras eléctricas."
+          },
+          {
+            "question": "¿Cuánta comida se incluye?",
+            "answer": "Se incluyen dos degustaciones pequeñas, por ejemplo helado de mango biche, empanada, fruta o bebida local. No sustituyen un almuerzo completo y pueden variar por disponibilidad."
+          },
+          {
+            "question": "¿Es seguro visitar la Comuna 13?",
+            "answer": "La ruta turística recibe visitantes a diario, pero sigue siendo un barrio residencial. Se debe permanecer con el guía, cuidar pertenencias y respetar sus indicaciones y las de la comunidad."
+          },
+          {
+            "question": "¿Puedo tomar el tour con silla de ruedas?",
+            "answer": "Algunas zonas son accesibles, pero la ruta completa tiene pendientes, escalones y alta afluencia. Necesitamos conocer las condiciones de movilidad para proponer una versión adaptada o privada."
+          }
+        ]
+      },
+      "marketRef": "Mercado 2026: USD 19-28 para tours de 4 h con cable y comida; opciones privadas desde USD 80.",
+      "en": {
+        "title": "Comuna 13 + Graffiti + Metrocable",
+        "country": "Colombia",
+        "region": "Medellín",
+        "styleLabel": "Cultural",
+        "duration": "4 hours",
+        "alt": "Murals, outdoor escalators and hillside neighborhoods in Medellín's Comuna 13",
+        "excerpt": "Metro, Metrocable, street art, outdoor escalators and local flavors with a community guide.",
+        "description": "Discover Comuna 13's transformation through a respectful local perspective. Ride Medellín's Metro system, enjoy panoramic views from the Metrocable and walk through murals, outdoor escalators and community spaces where art became a tool for memory and social change.",
+        "includes": [
+          "Local guide in Spanish or English",
+          "Metro, Metrocable and integrated route transportation tickets",
+          "Guided walk through murals and outdoor escalators",
+          "Two local product tastings",
+          "Stop at a community viewpoint or rooftop"
+        ],
+        "notIncludes": [
+          "Hotel pickup and return in the base option",
+          "Full lunch",
+          "Admission to private galleries or museums",
+          "Art purchases, additional drinks and tips"
+        ],
+        "highlights": [
+          "Panoramic Metro and Metrocable ride",
+          "Transformation stories told by a local guide",
+          "Graffiti, music and outdoor escalators",
+          "Small groups and included tastings"
+        ],
+        "master": {
+          "code": "COL-MDE-002",
+          "location": "Comuna 13, San Javier and the Medellín Metro system",
+          "categories": [
+            "Street art",
+            "Local culture",
+            "Social transformation",
+            "Urban transportation"
+          ],
+          "difficulty": "Moderate",
+          "physicalLevel": "Requires walking on slopes, stairs and busy areas for approximately two hours.",
+          "minAge": "5 years",
+          "maxGroup": "12 travelers in a small group",
+          "groupType": "Shared; private option available on request",
+          "walkingDistance": "Between 2.5 and 3 kilometers, with slopes and outdoor escalators",
+          "altitude": "Approximately 1,500 to 1,800 meters above sea level",
+          "operatingDays": "Daily",
+          "departureTimes": [
+            "08:30",
+            "13:30"
+          ],
+          "pickupWindow": "Hotel pickup is not included in the base option",
+          "meetingPoint": "Poblado Metro Station; the exact entrance and time are confirmed on the voucher",
+          "hotelPickup": "Available as a private supplement from El Poblado or Laureles",
+          "endPoint": "Poblado Metro Station or an agreed point for the private option",
+          "itinerary": [
+            {
+              "time": "08:30 / 13:30",
+              "title": "Meet at Poblado Station",
+              "description": "Meet your guide, learn how Medellín's integrated transport system works and review safety recommendations before boarding the Metro.",
+              "duration": "15 min"
+            },
+            {
+              "time": "08:45 / 13:45",
+              "title": "Metro ride to San Javier",
+              "description": "Travel across the city while your guide explains the Metro's role in Medellín's mobility and civic culture.",
+              "duration": "30 min"
+            },
+            {
+              "time": "09:20 / 14:20",
+              "title": "Metrocable experience",
+              "description": "Panoramic cable-car ride to observe the geography of the Aburrá Valley and understand how infrastructure connected hillside neighborhoods.",
+              "duration": "30 to 40 min"
+            },
+            {
+              "time": "10:05 / 15:05",
+              "title": "Enter the street-art route",
+              "description": "Transfer by integrated transport and begin the walk with a local guide. Discover murals, art collectives and stories of community transformation.",
+              "duration": "45 min"
+            },
+            {
+              "time": "10:50 / 15:50",
+              "title": "Outdoor escalators and local performances",
+              "description": "Climb the six outdoor escalator sections, pausing to interpret graffiti, listen to local artists and view the neighborhood from different levels.",
+              "duration": "50 min"
+            },
+            {
+              "time": "11:40 / 16:40",
+              "title": "Local flavors and viewpoint",
+              "description": "Taste two local products and stop at a community viewpoint or rooftop. Tastings may vary according to operation and season.",
+              "duration": "35 min"
+            },
+            {
+              "time": "12:20 / 17:20",
+              "title": "Return by public transport",
+              "description": "Guided return to Poblado Station. The tour ends approximately four hours after the meeting time.",
+              "duration": "40 min"
+            }
+          ],
+          "entries": [
+            {
+              "name": "Metro, Metrocable and integrated route transportation",
+              "status": "Included",
+              "notes": "Valid only during the guided itinerary."
+            },
+            {
+              "name": "Comuna 13 outdoor escalators",
+              "status": "Included",
+              "notes": "Public space; may temporarily close for maintenance or heavy rain."
+            },
+            {
+              "name": "Private galleries or museums",
+              "status": "Not included / optional",
+              "notes": "Admission is paid directly when travelers choose to enter."
+            }
+          ],
+          "languages": {
+            "included": [
+              "Spanish",
+              "English"
+            ],
+            "onRequest": [
+              "Portuguese",
+              "French"
+            ],
+            "note": "Other languages require advance confirmation and are usually operated privately."
+          },
+          "recommendations": [
+            "Wear shoes with good grip.",
+            "Bring water, sunscreen and rain protection.",
+            "Carry minimal luggage and keep valuables secure.",
+            "Tell us about dietary restrictions so tastings can be adapted."
+          ],
+          "restrictions": [
+            "Not recommended for travelers unable to manage slopes or stairs without assistance.",
+            "Minors must remain with an adult.",
+            "Behavior that disturbs residents and invasive photography are not allowed."
+          ],
+          "accessibility": "Partially accessible. The outdoor escalators assist with part of the climb, but slopes, steps and crowds remain. Ask before booking when using a wheelchair.",
+          "weather": "Operates in light rain. The Metrocable, escalators or rooftops may be suspended due to weather, maintenance or operational decisions; an equivalent alternative will be offered when possible.",
+          "cancellation": "Free cancellation up to 24 hours before the start. Transportation tickets already used are non-refundable.",
+          "voucher": "Digital voucher and ID. Arrive 15 minutes early; the group cannot delay departure for absent passengers.",
+          "priceNote": "Per-person rate including public transportation, Metrocable and tastings. Private pickup is quoted separately.",
+          "operationalNote": "The experience respects the community and focuses on art, memory and transformation, not poverty tourism.",
+          "faqs": [
+            {
+              "question": "Does the Metrocable go directly to the graffiti area?",
+              "answer": "No. The Metrocable ride is a complementary panoramic experience. Afterwards, integrated transport is used and the route continues on foot to the murals and outdoor escalators."
+            },
+            {
+              "question": "How much food is included?",
+              "answer": "Two small tastings are included, such as mango biche ice cream, an empanada, fruit or a local drink. They do not replace a full lunch and may vary by availability."
+            },
+            {
+              "question": "Is it safe to visit Comuna 13?",
+              "answer": "The tourist route welcomes visitors daily, but it remains a residential neighborhood. Stay with the guide, watch your belongings and follow the guide's and community's instructions."
+            },
+            {
+              "question": "Can I take the tour in a wheelchair?",
+              "answer": "Some areas are accessible, but the full route has slopes, steps and crowds. We need your mobility details to propose an adapted or private version."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "guatape-piedra-penol",
+      "title": "Guatapé + Piedra del Peñol",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "aventura",
+      "styleLabel": "Aventura",
+      "duration": "11 horas",
+      "priceFrom": 49.0,
+      "currency": "USD",
+      "img": "destino-colombia-01.jpg",
+      "alt": "Piedra del Peñol y embalse de Guatapé en Antioquia",
+      "excerpt": "Día completo con desayuno, almuerzo, navegación, Guatapé y ascenso opcional a la Piedra.",
+      "description": "Sal de Medellín hacia uno de los paisajes más reconocidos de Antioquia. Conoce la historia del Viejo Peñol, visita la Piedra del Peñol, navega por el embalse y recorre las calles de Guatapé con sus zócalos de colores. La jornada incluye transporte y comidas para que puedas concentrarte en disfrutar el destino.",
+      "includes": [
+        "Transporte ida y vuelta desde puntos seleccionados de Medellín",
+        "Guía profesional en español o inglés",
+        "Desayuno típico y almuerzo",
+        "Paseo compartido en barco por el embalse",
+        "Visita a la Réplica del Viejo Peñol y Guatapé",
+        "Seguro de asistencia durante la excursión"
+      ],
+      "notIncludes": [
+        "Entrada para subir la Piedra del Peñol",
+        "Bebidas especiales y consumos fuera del menú",
+        "Recogida fuera de las zonas indicadas",
+        "Gastos personales y propinas"
+      ],
+      "highlights": [
+        "Más de 700 escalones con vista panorámica opcional",
+        "Navegación por el embalse de Guatapé",
+        "Desayuno y almuerzo incluidos",
+        "Calle de los Recuerdos y Plaza de los Zócalos"
+      ],
+      "master": {
+        "code": "COL-MDE-003",
+        "location": "El Peñol y Guatapé, Oriente de Antioquia",
+        "categories": [
+          "Full day",
+          "Naturaleza",
+          "Pueblos",
+          "Navegación"
+        ],
+        "difficulty": "Baja sin ascenso / Moderada a alta con ascenso a la Piedra",
+        "physicalLevel": "El recorrido general es accesible para la mayoría de viajeros. Subir más de 700 escalones es opcional y exige buen estado físico.",
+        "minAge": "3 años; el ascenso a la Piedra queda a criterio del acompañante y del personal del atractivo",
+        "maxGroup": "30 viajeros en servicio compartido",
+        "groupType": "Compartido; opción privada bajo solicitud",
+        "walkingDistance": "Aproximadamente 3 kilómetros más el ascenso opcional a la Piedra",
+        "altitude": "Entre 1.890 y 2.135 m s. n. m., aproximadamente",
+        "operatingDays": "Todos los días",
+        "departureTimes": [
+          "06:30"
+        ],
+        "pickupWindow": "Entre 06:00 y 07:00 según el hotel o punto asignado",
+        "meetingPoint": "Puntos seleccionados en El Poblado y Laureles; confirmación final el día anterior",
+        "hotelPickup": "Recogida en hoteles seleccionados; otras zonas reciben punto de encuentro o suplemento privado",
+        "endPoint": "Regreso a Medellín entre 18:00 y 19:30, sujeto al tráfico",
+        "itinerary": [
+          {
+            "time": "06:30",
+            "title": "Salida desde Medellín",
+            "description": "Recogida en puntos seleccionados y viaje hacia el Oriente antioqueño. El guía presenta el programa y las condiciones del ascenso opcional.",
+            "duration": "1 h 30 a 2 h"
+          },
+          {
+            "time": "08:15",
+            "title": "Desayuno típico",
+            "description": "Parada en restaurante de carretera para un desayuno colombiano. Se ofrecen alternativas básicas para restricciones alimentarias notificadas con anticipación.",
+            "duration": "35 min"
+          },
+          {
+            "time": "09:15",
+            "title": "Réplica del Viejo Peñol",
+            "description": "Visita al conjunto que recuerda el antiguo pueblo inundado por el embalse y explicación de la historia hidroeléctrica de la región.",
+            "duration": "35 min"
+          },
+          {
+            "time": "10:10",
+            "title": "Piedra del Peñol",
+            "description": "Tiempo para subir los más de 700 escalones o disfrutar los alrededores y cafés de la base. La entrada al ascenso se paga directamente en taquilla.",
+            "duration": "1 h 30"
+          },
+          {
+            "time": "12:00",
+            "title": "Almuerzo",
+            "description": "Almuerzo en restaurante local con varias opciones de plato. Las bebidas especiales y consumos adicionales no están incluidos.",
+            "duration": "50 min"
+          },
+          {
+            "time": "13:10",
+            "title": "Navegación por el embalse",
+            "description": "Paseo compartido en embarcación para observar islas, paisajes y propiedades alrededor del lago. La ruta depende del nivel del agua y las condiciones de navegación.",
+            "duration": "45 a 60 min"
+          },
+          {
+            "time": "14:25",
+            "title": "Recorrido por Guatapé",
+            "description": "Caminata guiada por la Calle de los Recuerdos, la Plaza de los Zócalos, el malecón y fachadas coloridas. Tiempo libre para fotografías y compras.",
+            "duration": "1 h 30"
+          },
+          {
+            "time": "16:15",
+            "title": "Retorno a Medellín",
+            "description": "Salida hacia Medellín con una parada técnica cuando sea necesaria. La llegada varía según el tráfico de ingreso a la ciudad.",
+            "duration": "2 a 3 h"
+          }
+        ],
+        "entries": [
+          {
+            "name": "Paseo compartido en barco por el embalse",
+            "status": "Incluido",
+            "notes": "Sujeto a condiciones de navegación y disponibilidad operativa."
+          },
+          {
+            "name": "Ascenso a la Piedra del Peñol",
+            "status": "No incluido / opcional",
+            "notes": "Referencia oficial consultada: COP 20.000 por persona; la tarifa puede cambiar y se paga en taquilla."
+          },
+          {
+            "name": "Réplica del Viejo Peñol y espacios públicos de Guatapé",
+            "status": "Incluidos",
+            "notes": "Acceso a áreas públicas durante el recorrido."
+          }
+        ],
+        "languages": {
+          "included": [
+            "Español",
+            "Inglés"
+          ],
+          "onRequest": [
+            "Portugués",
+            "Francés"
+          ],
+          "note": "En salidas compartidas el guiado puede ser bilingüe. Un idioma exclusivo requiere servicio privado."
+        },
+        "recommendations": [
+          "Llevar efectivo en pesos colombianos para la entrada a la Piedra y compras pequeñas.",
+          "Usar calzado deportivo si se planea realizar el ascenso.",
+          "Llevar protector solar, impermeable ligero y medicación personal.",
+          "Desayunar ligero si se suele sufrir mareo en carretera o navegación."
+        ],
+        "restrictions": [
+          "El ascenso no se recomienda a personas con limitaciones cardíacas, respiratorias o de movilidad sin aprobación médica.",
+          "La navegación puede suspenderse por tormenta, viento fuerte o decisión de la autoridad.",
+          "Los menores deben estar acompañados durante todo el día."
+        ],
+        "accessibility": "La excursión puede adaptarse parcialmente sin subir la Piedra. El barco, algunas calles empedradas y los escalones no son completamente accesibles; consultar antes de reservar.",
+        "weather": "Opera con lluvia ligera. Tormentas fuertes pueden alterar la navegación, el ascenso o el orden de visitas. Si un componente no puede operar, se aplicará la política del proveedor local.",
+        "cancellation": "Cancelación gratuita hasta 24 horas antes. Una vez emitidos servicios especiales o iniciada la excursión, no hay reembolso por decidir no subir la Piedra.",
+        "voucher": "Voucher digital, documento y datos del hotel. La recogida se reconfirma el día anterior y puede asignarse un punto cercano para optimizar la ruta.",
+        "priceNote": "Tarifa compartida con transporte, desayuno, almuerzo y navegación. La entrada para subir la Piedra se paga directamente y no está incluida.",
+        "operationalNote": "La hora de regreso es aproximada y puede extenderse por tráfico, fines de semana o temporada alta.",
+        "faqs": [
+          {
+            "question": "¿Es obligatorio subir la Piedra del Peñol?",
+            "answer": "No. Puedes permanecer en la base, visitar cafés y disfrutar vistas del entorno mientras el resto del grupo realiza el ascenso. La entrada solo se paga si decides subir."
+          },
+          {
+            "question": "¿La entrada a la Piedra está incluida?",
+            "answer": "No. Se paga directamente en taquilla porque el valor puede cambiar. La referencia oficial consultada es COP 20.000 por persona, pero debes considerar la tarifa vigente el día del viaje."
+          },
+          {
+            "question": "¿Qué comidas están incluidas?",
+            "answer": "Se incluye desayuno típico y almuerzo con opciones definidas por el restaurante. Bebidas especiales, postres y consumos fuera del menú no están incluidos."
+          },
+          {
+            "question": "¿El regreso puede ser después de las 19:00?",
+            "answer": "Sí. La distancia y el tráfico de entrada a Medellín pueden prolongar la jornada, especialmente fines de semana y festivos. Evita programar vuelos o actividades ajustadas esa noche."
+          }
+        ]
+      },
+      "marketRef": "Mercado 2026: USD 40-54 compartido con comidas y barco; entrada a la Piedra usualmente aparte.",
+      "en": {
+        "title": "Guatapé + Piedra del Peñol",
+        "country": "Colombia",
+        "region": "Medellín",
+        "styleLabel": "Adventure",
+        "duration": "11 hours",
+        "alt": "Piedra del Peñol and the Guatapé reservoir in Antioquia",
+        "excerpt": "Full day with breakfast, lunch, boat ride, Guatapé and an optional climb up the rock.",
+        "description": "Leave Medellín for one of Antioquia's most recognizable landscapes. Learn the story of Old Peñol, visit Piedra del Peñol, cruise the reservoir and walk through Guatapé's colorful zócalo-lined streets. Transportation and meals are included so you can focus on enjoying the destination.",
+        "includes": [
+          "Round-trip transportation from selected Medellín points",
+          "Professional guide in Spanish or English",
+          "Traditional breakfast and lunch",
+          "Shared boat ride on the reservoir",
+          "Visit to the Old Peñol replica and Guatapé",
+          "Assistance insurance during the excursion"
+        ],
+        "notIncludes": [
+          "Admission to climb Piedra del Peñol",
+          "Special drinks and items outside the set menu",
+          "Pickup outside the stated areas",
+          "Personal expenses and tips"
+        ],
+        "highlights": [
+          "Optional 700-plus-step climb with panoramic views",
+          "Boat ride on the Guatapé reservoir",
+          "Breakfast and lunch included",
+          "Memory Street and Zócalos Square"
+        ],
+        "master": {
+          "code": "COL-MDE-003",
+          "location": "El Peñol and Guatapé, eastern Antioquia",
+          "categories": [
+            "Full day",
+            "Nature",
+            "Towns",
+            "Boat ride"
+          ],
+          "difficulty": "Easy without the climb / Moderate to challenging with the rock climb",
+          "physicalLevel": "The general route is suitable for most travelers. Climbing more than 700 steps is optional and requires good physical condition.",
+          "minAge": "3 years; climbing the rock is at the discretion of the accompanying adult and attraction staff",
+          "maxGroup": "30 travelers on the shared service",
+          "groupType": "Shared; private option available on request",
+          "walkingDistance": "Approximately 3 kilometers plus the optional rock climb",
+          "altitude": "Approximately 1,890 to 2,135 meters above sea level",
+          "operatingDays": "Daily",
+          "departureTimes": [
+            "06:30"
+          ],
+          "pickupWindow": "Between 06:00 and 07:00 depending on the assigned hotel or point",
+          "meetingPoint": "Selected points in El Poblado and Laureles; final confirmation the day before",
+          "hotelPickup": "Pickup from selected hotels; other areas receive a meeting point or private supplement",
+          "endPoint": "Return to Medellín between 18:00 and 19:30, subject to traffic",
+          "itinerary": [
+            {
+              "time": "06:30",
+              "title": "Departure from Medellín",
+              "description": "Pickup from selected points and travel toward eastern Antioquia. Your guide presents the program and conditions for the optional climb.",
+              "duration": "1.5 to 2 hours"
+            },
+            {
+              "time": "08:15",
+              "title": "Traditional breakfast",
+              "description": "Stop at a roadside restaurant for a Colombian breakfast. Basic alternatives are available for dietary restrictions notified in advance.",
+              "duration": "35 min"
+            },
+            {
+              "time": "09:15",
+              "title": "Replica of Old Peñol",
+              "description": "Visit the complex recalling the former town flooded by the reservoir and learn about the region's hydroelectric history.",
+              "duration": "35 min"
+            },
+            {
+              "time": "10:10",
+              "title": "Piedra del Peñol",
+              "description": "Time to climb more than 700 steps or enjoy the surroundings and cafés at the base. Admission for the climb is paid directly at the ticket office.",
+              "duration": "1.5 hours"
+            },
+            {
+              "time": "12:00",
+              "title": "Lunch",
+              "description": "Lunch at a local restaurant with several set-menu options. Special drinks and additional consumption are not included.",
+              "duration": "50 min"
+            },
+            {
+              "time": "13:10",
+              "title": "Reservoir boat ride",
+              "description": "Shared boat ride to view islands, landscapes and properties around the lake. The route depends on water level and navigation conditions.",
+              "duration": "45 to 60 min"
+            },
+            {
+              "time": "14:25",
+              "title": "Guatapé walking tour",
+              "description": "Guided walk along Memory Street, Zócalos Square, the waterfront and colorful façades. Free time for photographs and shopping.",
+              "duration": "1.5 hours"
+            },
+            {
+              "time": "16:15",
+              "title": "Return to Medellín",
+              "description": "Depart for Medellín with a technical stop when required. Arrival varies according to traffic entering the city.",
+              "duration": "2 to 3 hours"
+            }
+          ],
+          "entries": [
+            {
+              "name": "Shared boat ride on the reservoir",
+              "status": "Included",
+              "notes": "Subject to navigation conditions and operating availability."
+            },
+            {
+              "name": "Climb to the top of Piedra del Peñol",
+              "status": "Not included / optional",
+              "notes": "Official reference consulted: COP 20,000 per person; the rate may change and is paid at the ticket office."
+            },
+            {
+              "name": "Old Peñol replica and Guatapé public spaces",
+              "status": "Included",
+              "notes": "Access to public areas during the route."
+            }
+          ],
+          "languages": {
+            "included": [
+              "Spanish",
+              "English"
+            ],
+            "onRequest": [
+              "Portuguese",
+              "French"
+            ],
+            "note": "Shared departures may be guided bilingually. An exclusive language requires private service."
+          },
+          "recommendations": [
+            "Carry Colombian pesos in cash for the rock admission and small purchases.",
+            "Wear sports shoes if planning to climb.",
+            "Bring sunscreen, a light raincoat and personal medication.",
+            "Eat lightly if you are prone to motion sickness on roads or boats."
+          ],
+          "restrictions": [
+            "The climb is not recommended for travelers with heart, respiratory or mobility limitations without medical approval.",
+            "The boat ride may be suspended due to storms, strong winds or authority decisions.",
+            "Minors must remain accompanied throughout the day."
+          ],
+          "accessibility": "The excursion can be partially adapted without climbing the rock. The boat, some cobbled streets and steps are not fully accessible; ask before booking.",
+          "weather": "Operates in light rain. Strong storms may alter the boat ride, climb or order of visits. If a component cannot operate, the local supplier's policy will apply.",
+          "cancellation": "Free cancellation up to 24 hours before the start. Once special services are issued or the excursion begins, there is no refund for choosing not to climb the rock.",
+          "voucher": "Digital voucher, ID and hotel details. Pickup is reconfirmed the day before and a nearby point may be assigned to optimize the route.",
+          "priceNote": "Shared rate including transportation, breakfast, lunch and boat ride. Admission to climb the rock is paid directly and is not included.",
+          "operationalNote": "The return time is approximate and may extend due to traffic, weekends or peak season.",
+          "faqs": [
+            {
+              "question": "Is climbing Piedra del Peñol mandatory?",
+              "answer": "No. You may remain at the base, visit cafés and enjoy the surroundings while the rest of the group climbs. Admission is paid only if you choose to go up."
+            },
+            {
+              "question": "Is admission to the rock included?",
+              "answer": "No. It is paid directly at the ticket office because the price may change. The official reference consulted is COP 20,000 per person, but you should consider the rate in effect on the travel date."
+            },
+            {
+              "question": "Which meals are included?",
+              "answer": "A traditional breakfast and lunch with restaurant-defined options are included. Special drinks, desserts and items outside the set menu are not included."
+            },
+            {
+              "question": "Can the return be later than 19:00?",
+              "answer": "Yes. Distance and traffic entering Medellín may extend the day, especially on weekends and holidays. Avoid scheduling flights or tight activities that evening."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "tour-pablo-escobar",
+      "title": "Tour Pablo Escobar: historia, memoria y transformación",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "cultura",
+      "styleLabel": "Historia y memoria",
+      "duration": "4 horas 30 minutos",
+      "priceFrom": 39.0,
+      "currency": "USD",
+      "img": "estilo-cultura-01.jpg",
+      "alt": "Parque de la Inflexión y recorrido histórico por Medellín",
+      "excerpt": "Un recorrido crítico por los lugares del narcotráfico, sus víctimas y la transformación posterior de Medellín.",
+      "description": "Comprende uno de los periodos más difíciles de Medellín desde una perspectiva histórica y responsable. El recorrido conecta el Parque de la Inflexión, lugares relacionados con la persecución de Pablo Escobar, un cementerio y un espacio de interpretación para explicar las consecuencias del narcotráfico y la transformación de la ciudad sin glorificar la violencia.",
+      "includes": [
+        "Transporte turístico y recogida en zonas seleccionadas",
+        "Guía profesional en español o inglés",
+        "Entrada a un espacio de interpretación histórica",
+        "Una cerveza local o bebida sin alcohol",
+        "Seguro de asistencia durante el recorrido"
+      ],
+      "notIncludes": [
+        "Almuerzo y bebidas adicionales",
+        "Encuentros con familiares o ingreso a viviendas privadas",
+        "Recogida fuera de las zonas indicadas",
+        "Gastos personales y propinas"
+      ],
+      "highlights": [
+        "Parque de la Inflexión y memoria de las víctimas",
+        "Contexto histórico sin glorificar el narcotráfico",
+        "Paradas en Los Olivos y Jardines Montesacro",
+        "Espacio de interpretación y conversación sobre la nueva Medellín"
+      ],
+      "master": {
+        "code": "COL-MDE-004",
+        "location": "Medellín y Envigado, Antioquia",
+        "categories": [
+          "Historia contemporánea",
+          "Memoria",
+          "Transformación urbana"
+        ],
+        "difficulty": "Baja",
+        "physicalLevel": "Caminatas breves y traslados en vehículo; algunas paradas tienen desniveles.",
+        "minAge": "12 años por el contenido histórico sensible",
+        "maxGroup": "12 viajeros",
+        "groupType": "Compartido en grupo reducido; opción privada bajo solicitud",
+        "walkingDistance": "Aproximadamente 1,5 kilómetros distribuidos en varias paradas",
+        "altitude": "Aproximadamente 1.500 m s. n. m.",
+        "operatingDays": "Todos los días, sujeto a horarios del espacio de interpretación",
+        "departureTimes": [
+          "08:30",
+          "14:00"
+        ],
+        "pickupWindow": "Entre 20 y 40 minutos antes según la zona asignada",
+        "meetingPoint": "Hoteles seleccionados de El Poblado y Laureles o punto confirmado en el voucher",
+        "hotelPickup": "Incluida en zonas seleccionadas; otras zonas requieren punto de encuentro o suplemento",
+        "endPoint": "Regreso al punto de recogida",
+        "itinerary": [
+          {
+            "time": "08:30 / 14:00",
+            "title": "Recogida y contexto histórico",
+            "description": "Inicio con una explicación sobre la violencia de las décadas de 1980 y 1990, sus víctimas y el enfoque de memoria que guía toda la experiencia.",
+            "duration": "25 min"
+          },
+          {
+            "time": "09:00 / 14:30",
+            "title": "Parque de la Inflexión",
+            "description": "Visita al espacio construido donde estuvo el edificio Mónaco. El guía aborda el impacto del narcotráfico y la decisión de resignificar el lugar en homenaje a las víctimas.",
+            "duration": "40 min"
+          },
+          {
+            "time": "09:50 / 15:20",
+            "title": "Sector Los Olivos",
+            "description": "Parada exterior cerca del lugar donde terminó la persecución de Escobar. Se contrastan versiones históricas y se evita ingresar a propiedades privadas o glorificar la violencia.",
+            "duration": "35 min"
+          },
+          {
+            "time": "10:35 / 16:05",
+            "title": "Cementerio Jardines Montesacro",
+            "description": "Recorrido respetuoso por el cementerio y explicación sobre personas, hechos y consecuencias del conflicto. No se permiten conductas irrespetuosas ni contenido promocional invasivo.",
+            "duration": "40 min"
+          },
+          {
+            "time": "11:25 / 16:55",
+            "title": "Espacio de interpretación histórica",
+            "description": "Ingreso a un museo o espacio interpretativo confirmado por el operador para revisar documentos, fotografías y relatos. El proveedor exacto puede variar según disponibilidad.",
+            "duration": "55 min"
+          },
+          {
+            "time": "12:25 / 17:55",
+            "title": "Cierre: la transformación de Medellín",
+            "description": "Conversación final con una cerveza local o bebida sin alcohol sobre memoria, instituciones, cultura ciudadana y los cambios que definen la Medellín actual.",
+            "duration": "30 min"
+          },
+          {
+            "time": "12:55 / 18:25",
+            "title": "Regreso",
+            "description": "Traslado de vuelta al punto acordado. La hora final puede variar por tráfico.",
+            "duration": "20 a 40 min"
+          }
+        ],
+        "entries": [
+          {
+            "name": "Parque de la Inflexión y paradas exteriores",
+            "status": "Incluidos",
+            "notes": "Espacios públicos y visitas interpretativas."
+          },
+          {
+            "name": "Espacio de interpretación o museo histórico",
+            "status": "Incluido",
+            "notes": "El lugar específico se confirma según horarios y disponibilidad del operador."
+          },
+          {
+            "name": "Propiedades privadas o visitas a familiares",
+            "status": "No incluidas",
+            "notes": "La experiencia no promete acceso a viviendas privadas ni encuentros personales."
+          }
+        ],
+        "languages": {
+          "included": [
+            "Español",
+            "Inglés"
+          ],
+          "onRequest": [
+            "Portugués",
+            "Francés"
+          ],
+          "note": "Otros idiomas están sujetos a guía privado y suplemento."
+        },
+        "recommendations": [
+          "Participar con una actitud respetuosa hacia víctimas, residentes y espacios visitados.",
+          "Llevar documento de identidad y calzado cómodo.",
+          "Evitar exhibir objetos de valor durante las paradas.",
+          "Consultar antes de reservar si el contenido sobre violencia puede afectar a algún viajero."
+        ],
+        "restrictions": [
+          "No se permite consumir drogas ni promover actividades ilegales.",
+          "No se admiten disfraces, bromas o fotografías que glorifiquen la violencia.",
+          "Los menores de 12 años no son recomendados por el contenido sensible.",
+          "La bebida alcohólica se sirve únicamente a mayores de edad; existe alternativa sin alcohol."
+        ],
+        "accessibility": "Accesibilidad parcial. La mayoría del recorrido se realiza en vehículo, pero el cementerio y algunos accesos pueden tener pendientes o superficies irregulares.",
+        "weather": "Opera con lluvia ligera. Las paradas exteriores pueden acortarse o cambiar de orden por clima o seguridad.",
+        "cancellation": "Cancelación gratuita hasta 24 horas antes. Si una entrada ya fue emitida, puede aplicarse una retención equivalente a su costo.",
+        "voucher": "Voucher digital, documento y hotel de recogida. La identidad del espacio de interpretación se comunica en la confirmación operativa.",
+        "priceNote": "Tarifa por persona en grupo reducido, con transporte, entrada interpretativa y una bebida. La opción privada se cotiza por vehículo.",
+        "operationalNote": "El recorrido se presenta como historia crítica y memoria de las víctimas. No es una celebración del narcotráfico ni garantiza encuentros con familiares.",
+        "faqs": [
+          {
+            "question": "¿Este tour glorifica a Pablo Escobar?",
+            "answer": "No. La narrativa se centra en hechos históricos, consecuencias, víctimas y transformación de Medellín. El guía evita mitificar la violencia y contextualiza las distintas versiones de cada lugar."
+          },
+          {
+            "question": "¿Se visita una casa de la familia Escobar?",
+            "answer": "No se garantiza acceso a viviendas privadas ni encuentros con familiares. La opción base incluye un espacio de interpretación o museo confirmado por el operador."
+          },
+          {
+            "question": "¿Pueden participar menores?",
+            "answer": "La edad mínima recomendada es 12 años debido a relatos de violencia y conflicto. Los adolescentes deben estar acompañados por un adulto."
+          },
+          {
+            "question": "¿La cerveza está incluida para todos?",
+            "answer": "Se incluye una cerveza local para mayores de edad o una bebida sin alcohol. No se promueve el consumo excesivo y no se incluyen bebidas adicionales."
+          }
+        ]
+      },
+      "marketRef": "Mercado 2026: tours grupales USD 27-45 con museo o bebida; privados USD 75-150+ p/p.",
+      "en": {
+        "title": "Pablo Escobar Tour: history, memory and transformation",
+        "country": "Colombia",
+        "region": "Medellín",
+        "styleLabel": "History and memory",
+        "duration": "4 hours 30 minutes",
+        "alt": "Inflexión Memorial Park and a historical route through Medellín",
+        "excerpt": "A critical journey through drug-trafficking sites, its victims and Medellín's later transformation.",
+        "description": "Understand one of Medellín's most difficult periods through a historical and responsible perspective. The route connects Inflexión Memorial Park, places linked to the pursuit of Pablo Escobar, a cemetery and an interpretation venue to explain the consequences of drug trafficking and the city's transformation without glorifying violence.",
+        "includes": [
+          "Tourist transportation and pickup in selected areas",
+          "Professional guide in Spanish or English",
+          "Admission to a historical interpretation venue",
+          "One local beer or non-alcoholic drink",
+          "Assistance insurance during the route"
+        ],
+        "notIncludes": [
+          "Lunch and additional drinks",
+          "Family meetings or access to private homes",
+          "Pickup outside the stated areas",
+          "Personal expenses and tips"
+        ],
+        "highlights": [
+          "Inflexión Memorial Park and remembrance of victims",
+          "Historical context without glorifying drug trafficking",
+          "Stops in Los Olivos and Jardines Montesacro",
+          "Interpretation venue and conversation about the new Medellín"
+        ],
+        "master": {
+          "code": "COL-MDE-004",
+          "location": "Medellín and Envigado, Antioquia",
+          "categories": [
+            "Contemporary history",
+            "Memory",
+            "Urban transformation"
+          ],
+          "difficulty": "Easy",
+          "physicalLevel": "Short walks and vehicle transfers; some stops have slopes.",
+          "minAge": "12 years due to sensitive historical content",
+          "maxGroup": "12 travelers",
+          "groupType": "Shared small group; private option available on request",
+          "walkingDistance": "Approximately 1.5 kilometers split between several stops",
+          "altitude": "Approximately 1,500 meters above sea level",
+          "operatingDays": "Daily, subject to the interpretation venue's hours",
+          "departureTimes": [
+            "08:30",
+            "14:00"
+          ],
+          "pickupWindow": "Between 20 and 40 minutes before departure depending on the assigned area",
+          "meetingPoint": "Selected hotels in El Poblado and Laureles or a point confirmed on the voucher",
+          "hotelPickup": "Included in selected areas; other areas require a meeting point or supplement",
+          "endPoint": "Return to the pickup point",
+          "itinerary": [
+            {
+              "time": "08:30 / 14:00",
+              "title": "Pickup and historical context",
+              "description": "Begin with an explanation of the violence of the 1980s and 1990s, its victims and the memory-based approach guiding the entire experience.",
+              "duration": "25 min"
+            },
+            {
+              "time": "09:00 / 14:30",
+              "title": "Inflexión Memorial Park",
+              "description": "Visit the space built where the Mónaco building once stood. Your guide discusses the impact of drug trafficking and the decision to redefine the site in honor of victims.",
+              "duration": "40 min"
+            },
+            {
+              "time": "09:50 / 15:20",
+              "title": "Los Olivos area",
+              "description": "Exterior stop near the place where the pursuit of Escobar ended. Historical versions are compared without entering private property or glorifying violence.",
+              "duration": "35 min"
+            },
+            {
+              "time": "10:35 / 16:05",
+              "title": "Jardines Montesacro Cemetery",
+              "description": "Respectful cemetery visit and explanation of people, events and consequences of the conflict. Disrespectful behavior and invasive promotional content are not allowed.",
+              "duration": "40 min"
+            },
+            {
+              "time": "11:25 / 16:55",
+              "title": "Historical interpretation venue",
+              "description": "Entry to a museum or interpretation space confirmed by the operator to review documents, photographs and accounts. The specific provider may vary by availability.",
+              "duration": "55 min"
+            },
+            {
+              "time": "12:25 / 17:55",
+              "title": "Closing: Medellín's transformation",
+              "description": "Final conversation over a local beer or non-alcoholic drink about memory, institutions, civic culture and the changes defining present-day Medellín.",
+              "duration": "30 min"
+            },
+            {
+              "time": "12:55 / 18:25",
+              "title": "Return",
+              "description": "Transfer back to the agreed point. Final time may vary due to traffic.",
+              "duration": "20 to 40 min"
+            }
+          ],
+          "entries": [
+            {
+              "name": "Inflexión Memorial Park and exterior stops",
+              "status": "Included",
+              "notes": "Public spaces and interpretive visits."
+            },
+            {
+              "name": "Historical interpretation venue or museum",
+              "status": "Included",
+              "notes": "The specific venue is confirmed according to operator hours and availability."
+            },
+            {
+              "name": "Private properties or family visits",
+              "status": "Not included",
+              "notes": "The experience does not promise access to private homes or personal meetings."
+            }
+          ],
+          "languages": {
+            "included": [
+              "Spanish",
+              "English"
+            ],
+            "onRequest": [
+              "Portuguese",
+              "French"
+            ],
+            "note": "Other languages are subject to a private guide and supplement."
+          },
+          "recommendations": [
+            "Participate respectfully toward victims, residents and visited spaces.",
+            "Bring an ID and comfortable shoes.",
+            "Avoid displaying valuables during stops.",
+            "Ask before booking if stories of violence may affect a traveler."
+          ],
+          "restrictions": [
+            "Drug use and promotion of illegal activities are not allowed.",
+            "Costumes, jokes or photographs glorifying violence are not permitted.",
+            "Children under 12 are not recommended due to sensitive content.",
+            "Alcohol is served only to adults; a non-alcoholic alternative is available."
+          ],
+          "accessibility": "Partially accessible. Most of the route is by vehicle, but the cemetery and some entrances may have slopes or uneven surfaces.",
+          "weather": "Operates in light rain. Outdoor stops may be shortened or reordered due to weather or safety.",
+          "cancellation": "Free cancellation up to 24 hours before the start. If an admission has already been issued, a retention equal to its cost may apply.",
+          "voucher": "Digital voucher, ID and pickup hotel. The interpretation venue is communicated in the operational confirmation.",
+          "priceNote": "Per-person small-group rate including transportation, interpretation admission and one drink. The private option is quoted per vehicle.",
+          "operationalNote": "The route is presented as critical history and remembrance of victims. It is not a celebration of drug trafficking and does not guarantee family meetings.",
+          "faqs": [
+            {
+              "question": "Does this tour glorify Pablo Escobar?",
+              "answer": "No. The narrative focuses on historical facts, consequences, victims and Medellín's transformation. The guide avoids mythologizing violence and contextualizes different versions of each site."
+            },
+            {
+              "question": "Do we visit a house belonging to the Escobar family?",
+              "answer": "Access to private homes or family meetings is not guaranteed. The base option includes an interpretation venue or museum confirmed by the operator."
+            },
+            {
+              "question": "Can minors participate?",
+              "answer": "The recommended minimum age is 12 due to stories of violence and conflict. Teenagers must be accompanied by an adult."
+            },
+            {
+              "question": "Is beer included for everyone?",
+              "answer": "One local beer is included for adults, or a non-alcoholic drink. Excessive consumption is not promoted and additional drinks are not included."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "parapente-medellin",
+      "title": "Parapente en Medellín con transporte y GoPro",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "aventura",
+      "styleLabel": "Aventura",
+      "duration": "3 a 4 horas",
+      "priceFrom": 99.0,
+      "currency": "USD",
+      "img": "estilo-aventura-01.jpg",
+      "alt": "Vuelo tándem en parapente sobre las montañas del Valle de Aburrá",
+      "excerpt": "Vuela en tándem sobre el Valle de Aburrá con piloto certificado, transporte compartido y material GoPro.",
+      "description": "Vive Medellín desde el aire en un vuelo tándem desde San Félix. La experiencia incluye traslado desde zonas seleccionadas, preparación con un piloto certificado, un vuelo estándar de aproximadamente 15 a 20 minutos y fotografías y videos GoPro, siempre sujetos a las condiciones meteorológicas y de seguridad.",
+      "includes": [
+        "Transporte compartido ida y vuelta desde puntos seleccionados",
+        "Vuelo tándem estándar con piloto certificado",
+        "Equipo de vuelo y cobertura básica del operador",
+        "Fotografías y videos GoPro",
+        "Asistencia en español y apoyo operativo en inglés"
+      ],
+      "notIncludes": [
+        "Extensión de la duración del vuelo",
+        "Alimentos y bebidas",
+        "Transporte privado o recogida fuera de cobertura",
+        "Gastos personales y propinas"
+      ],
+      "highlights": [
+        "Vista aérea de Medellín, Bello y el Valle de Aburrá",
+        "Vuelo tándem sin necesidad de experiencia previa",
+        "Material GoPro incluido",
+        "Tres ventanas de salida sujetas al clima"
+      ],
+      "master": {
+        "code": "COL-MDE-005",
+        "location": "San Félix, municipio de Bello, norte del Valle de Aburrá",
+        "categories": [
+          "Aventura",
+          "Aéreo",
+          "Naturaleza",
+          "Adrenalina"
+        ],
+        "difficulty": "Baja técnicamente / intensidad emocional alta",
+        "physicalLevel": "No requiere experiencia, pero se debe correr algunos pasos durante el despegue y seguir instrucciones del piloto.",
+        "minAge": "8 años, sujeto a evaluación del operador y autorización del adulto responsable",
+        "maxGroup": "8 viajeros por bloque; los vuelos se realizan uno a uno",
+        "groupType": "Traslado compartido y vuelo tándem individual",
+        "walkingDistance": "Caminata corta en terreno de montaña y zona de despegue",
+        "altitude": "Zona de vuelo por encima del Valle de Aburrá; la altura exacta depende de las condiciones",
+        "operatingDays": "Todos los días con condiciones meteorológicas aptas",
+        "departureTimes": [
+          "08:00",
+          "10:30",
+          "13:00"
+        ],
+        "pickupWindow": "Entre 20 y 40 minutos antes de la salida",
+        "meetingPoint": "Puntos seleccionados en El Poblado y Laureles; traslado privado opcional",
+        "hotelPickup": "Incluida desde hoteles seleccionados en la opción publicada",
+        "endPoint": "Regreso al punto de recogida, entre 3 y 4 horas después",
+        "itinerary": [
+          {
+            "time": "08:00 / 10:30 / 13:00",
+            "title": "Recogida y traslado a San Félix",
+            "description": "Viaje hacia la zona de despegue en la montaña. El conductor confirma las condiciones previstas y el orden estimado de los vuelos.",
+            "duration": "45 a 60 min"
+          },
+          {
+            "time": "+01:00",
+            "title": "Registro, seguro y preparación",
+            "description": "Registro con el operador, verificación de peso y condiciones, asignación de piloto tándem y explicación del equipo. La autorización final para volar corresponde al piloto.",
+            "duration": "30 a 60 min"
+          },
+          {
+            "time": "+01:45",
+            "title": "Briefing de seguridad",
+            "description": "Instrucciones sobre despegue, postura durante el vuelo y aterrizaje. Se ajustan casco y arnés certificado antes de ingresar a la zona de salida.",
+            "duration": "15 min"
+          },
+          {
+            "time": "Ventana de vuelo",
+            "title": "Vuelo tándem sobre el Valle de Aburrá",
+            "description": "Vuelo aproximado de 15 a 20 minutos con piloto certificado. La duración y la ruta dependen de viento, térmicas, seguridad y control del tráfico aéreo local.",
+            "duration": "15 a 20 min"
+          },
+          {
+            "time": "Después del aterrizaje",
+            "title": "Entrega de fotografías y videos",
+            "description": "Transferencia digital del material GoPro incluido, sujeto al funcionamiento del equipo. Tiempo para descansar y esperar a otros viajeros del mismo traslado.",
+            "duration": "20 a 45 min"
+          },
+          {
+            "time": "+03:00 aprox.",
+            "title": "Regreso a Medellín",
+            "description": "Traslado de retorno. El tiempo total puede extenderse si las condiciones obligan a esperar una ventana segura de vuelo.",
+            "duration": "45 a 60 min"
+          }
+        ],
+        "entries": [
+          {
+            "name": "Vuelo tándem estándar de 15 a 20 minutos",
+            "status": "Incluido",
+            "notes": "Duración sujeta a condiciones meteorológicas y decisión del piloto."
+          },
+          {
+            "name": "Fotografías y videos GoPro",
+            "status": "Incluidos",
+            "notes": "Entrega digital cuando el equipo funciona correctamente."
+          },
+          {
+            "name": "Extensión de vuelo de 20 o 30 minutos",
+            "status": "No incluida / opcional",
+            "notes": "Se solicita en el lugar y depende de clima, peso y disponibilidad."
+          }
+        ],
+        "languages": {
+          "included": [
+            "Español",
+            "Inglés básico operativo"
+          ],
+          "onRequest": [
+            "Guía acompañante en inglés completo"
+          ],
+          "note": "El piloto brinda instrucciones de seguridad; un acompañante bilingüe exclusivo puede generar suplemento."
+        },
+        "recommendations": [
+          "Vestir pantalón largo, chaqueta y calzado cerrado con buena sujeción.",
+          "Aplicar protector solar y llevar agua.",
+          "Comer ligero y evitar alcohol antes de volar.",
+          "Informar peso, edad y cualquier condición médica al reservar."
+        ],
+        "restrictions": [
+          "No apto para personas embarazadas.",
+          "No se permite volar bajo efectos de alcohol o drogas.",
+          "Personas con cirugía reciente, afecciones cardíacas, epilepsia o lesiones deben consultar a su médico y al operador.",
+          "Viajeros por encima de 110 kg deben consultar antes de pagar; el límite final depende del piloto y el clima."
+        ],
+        "accessibility": "No es accesible para silla de ruedas en la operación estándar. Se requiere capacidad para seguir instrucciones y realizar algunos pasos durante el despegue y aterrizaje.",
+        "weather": "Actividad completamente dependiente del clima. Niebla, lluvia, viento inadecuado o baja visibilidad pueden causar espera, reprogramación o cancelación.",
+        "cancellation": "Cancelación gratuita hasta 24 horas antes. Si el operador cancela por clima, se ofrece reprogramación o devolución del servicio no realizado.",
+        "voucher": "Voucher digital, documento y peso real del pasajero. La hora puede reconfirmarse el mismo día según el pronóstico y la ventana de vuelo.",
+        "priceNote": "Tarifa por persona con transporte compartido, vuelo estándar y material GoPro. Vuelos extendidos y transporte privado se cotizan aparte.",
+        "operationalNote": "Un horario reservado es una ventana de operación, no una hora exacta de despegue. La seguridad meteorológica tiene prioridad.",
+        "faqs": [
+          {
+            "question": "¿Cuánto dura realmente el vuelo?",
+            "answer": "El vuelo estándar dura normalmente entre 15 y 20 minutos. Puede ser más corto si cambian las condiciones; las extensiones dependen del clima y se pagan aparte."
+          },
+          {
+            "question": "¿Necesito experiencia previa?",
+            "answer": "No. El vuelo es tándem con un piloto certificado. Solo debes seguir las instrucciones, mantener la postura indicada y correr algunos pasos al despegar si el piloto lo solicita."
+          },
+          {
+            "question": "¿Qué ocurre si el clima no permite volar?",
+            "answer": "Se espera una ventana razonable cuando el pronóstico lo permite. Si la operación se cancela, podrás reprogramar o solicitar devolución del servicio no realizado según la política confirmada."
+          },
+          {
+            "question": "¿Hay límite de peso?",
+            "answer": "La referencia de publicación es consultar previamente por encima de 110 kg. El piloto establece el límite final según equipo, viento y seguridad, por lo que el peso debe declararse con exactitud."
+          }
+        ]
+      },
+      "marketRef": "Mercado 2026: vuelo directo USD 55-80; con transporte y GoPro USD 88-125; opción publicada USD 99.",
+      "en": {
+        "title": "Medellín Paragliding with transportation and GoPro",
+        "country": "Colombia",
+        "region": "Medellín",
+        "styleLabel": "Adventure",
+        "duration": "3 to 4 hours",
+        "alt": "Tandem paragliding flight over the mountains of the Aburrá Valley",
+        "excerpt": "Fly tandem over the Aburrá Valley with a certified pilot, shared transportation and GoPro material.",
+        "description": "See Medellín from the air on a tandem flight from San Félix. The experience includes transportation from selected areas, preparation with a certified pilot, a standard flight of approximately 15 to 20 minutes and GoPro photos and videos, always subject to weather and safety conditions.",
+        "includes": [
+          "Shared round-trip transportation from selected points",
+          "Standard tandem flight with a certified pilot",
+          "Flight equipment and the operator's basic coverage",
+          "GoPro photographs and videos",
+          "Assistance in Spanish and operational English support"
+        ],
+        "notIncludes": [
+          "Extended flight duration",
+          "Food and drinks",
+          "Private transportation or pickup outside coverage",
+          "Personal expenses and tips"
+        ],
+        "highlights": [
+          "Aerial views of Medellín, Bello and the Aburrá Valley",
+          "Tandem flight with no previous experience required",
+          "GoPro material included",
+          "Three departure windows subject to weather"
+        ],
+        "master": {
+          "code": "COL-MDE-005",
+          "location": "San Félix, Bello municipality, north of the Aburrá Valley",
+          "categories": [
+            "Adventure",
+            "Aerial",
+            "Nature",
+            "Adrenaline"
+          ],
+          "difficulty": "Technically easy / emotionally intense",
+          "physicalLevel": "No experience required, but travelers must run a few steps during takeoff and follow the pilot's instructions.",
+          "minAge": "8 years, subject to operator evaluation and authorization from the responsible adult",
+          "maxGroup": "8 travelers per time block; flights take place individually",
+          "groupType": "Shared transfer and individual tandem flight",
+          "walkingDistance": "Short walk on mountain terrain and in the launch area",
+          "altitude": "Flight zone above the Aburrá Valley; exact height depends on conditions",
+          "operatingDays": "Daily when weather conditions are suitable",
+          "departureTimes": [
+            "08:00",
+            "10:30",
+            "13:00"
+          ],
+          "pickupWindow": "Between 20 and 40 minutes before departure",
+          "meetingPoint": "Selected points in El Poblado and Laureles; optional private transfer",
+          "hotelPickup": "Included from selected hotels in the published option",
+          "endPoint": "Return to the pickup point, between 3 and 4 hours later",
+          "itinerary": [
+            {
+              "time": "08:00 / 10:30 / 13:00",
+              "title": "Pickup and transfer to San Félix",
+              "description": "Travel to the mountain launch area. The driver confirms expected conditions and the estimated flight order.",
+              "duration": "45 to 60 min"
+            },
+            {
+              "time": "+01:00",
+              "title": "Registration, insurance and preparation",
+              "description": "Register with the operator, verify weight and conditions, meet your tandem pilot and review the equipment. Final authorization to fly belongs to the pilot.",
+              "duration": "30 to 60 min"
+            },
+            {
+              "time": "+01:45",
+              "title": "Safety briefing",
+              "description": "Instructions on takeoff, in-flight posture and landing. A certified helmet and harness are fitted before entering the launch area.",
+              "duration": "15 min"
+            },
+            {
+              "time": "Flight window",
+              "title": "Tandem flight over the Aburrá Valley",
+              "description": "Approximate 15-to-20-minute flight with a certified pilot. Duration and route depend on wind, thermals, safety and local air-traffic control.",
+              "duration": "15 to 20 min"
+            },
+            {
+              "time": "After landing",
+              "title": "Photo and video delivery",
+              "description": "Digital transfer of included GoPro material, subject to equipment operation. Time to rest and wait for other travelers sharing the transfer.",
+              "duration": "20 to 45 min"
+            },
+            {
+              "time": "Approximately +03:00",
+              "title": "Return to Medellín",
+              "description": "Return transfer. Total time may extend if conditions require waiting for a safe flight window.",
+              "duration": "45 to 60 min"
+            }
+          ],
+          "entries": [
+            {
+              "name": "Standard 15-to-20-minute tandem flight",
+              "status": "Included",
+              "notes": "Duration subject to weather and pilot decision."
+            },
+            {
+              "name": "GoPro photographs and videos",
+              "status": "Included",
+              "notes": "Digital delivery when the equipment operates correctly."
+            },
+            {
+              "name": "20- or 30-minute flight extension",
+              "status": "Not included / optional",
+              "notes": "Requested on site and subject to weather, weight and availability."
+            }
+          ],
+          "languages": {
+            "included": [
+              "Spanish",
+              "Operational basic English"
+            ],
+            "onRequest": [
+              "Full English-speaking escort guide"
+            ],
+            "note": "The pilot provides safety instructions; an exclusive bilingual escort may require a supplement."
+          },
+          "recommendations": [
+            "Wear long pants, a jacket and secure closed-toe shoes.",
+            "Apply sunscreen and bring water.",
+            "Eat lightly and avoid alcohol before flying.",
+            "Report weight, age and any medical condition when booking."
+          ],
+          "restrictions": [
+            "Not suitable for pregnant travelers.",
+            "Flying under the influence of alcohol or drugs is not allowed.",
+            "Travelers with recent surgery, heart conditions, epilepsy or injuries should consult their doctor and the operator.",
+            "Travelers over 110 kg must ask before paying; the final limit depends on the pilot and weather."
+          ],
+          "accessibility": "Not wheelchair accessible under the standard operation. Travelers must be able to follow instructions and take a few steps during takeoff and landing.",
+          "weather": "Completely weather-dependent. Fog, rain, unsuitable wind or low visibility may cause waiting, rescheduling or cancellation.",
+          "cancellation": "Free cancellation up to 24 hours before the start. If the operator cancels due to weather, rescheduling or a refund for the unperformed service is offered.",
+          "voucher": "Digital voucher, ID and the traveler's actual weight. The time may be reconfirmed on the same day according to the forecast and flight window.",
+          "priceNote": "Per-person rate including shared transportation, standard flight and GoPro material. Extended flights and private transportation are quoted separately.",
+          "operationalNote": "A reserved time is an operating window, not an exact takeoff time. Weather safety takes priority.",
+          "faqs": [
+            {
+              "question": "How long does the flight actually last?",
+              "answer": "The standard flight normally lasts 15 to 20 minutes. It may be shorter if conditions change; extensions depend on the weather and cost extra."
+            },
+            {
+              "question": "Do I need previous experience?",
+              "answer": "No. It is a tandem flight with a certified pilot. You only need to follow instructions, maintain the indicated posture and run a few steps during takeoff if asked."
+            },
+            {
+              "question": "What happens if the weather does not allow flying?",
+              "answer": "A reasonable safe window is awaited when the forecast allows. If the operation is canceled, you may reschedule or request a refund for the unperformed service according to the confirmed policy."
+            },
+            {
+              "question": "Is there a weight limit?",
+              "answer": "The published reference is to ask in advance above 110 kg. The pilot sets the final limit according to equipment, wind and safety, so weight must be declared accurately."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "medellin-nocturno-gastronomia-rooftops",
+      "title": "Tour Nocturno Medellín: gastronomía y rooftops",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "gastronomia",
+      "styleLabel": "Gastronomía",
+      "duration": "4 horas",
+      "priceFrom": 49.0,
+      "currency": "USD",
+      "img": "estilo-gastronomia-01.jpg",
+      "alt": "Terraza nocturna y gastronomía en el sector de Provenza en Medellín",
+      "excerpt": "Sabores colombianos, caminata por El Poblado y dos rooftops seleccionados en una noche guiada y segura.",
+      "description": "Descubre la cara gastronómica y nocturna de Medellín en un grupo reducido. Prueba sabores locales, recorre Manila y Provenza y visita dos rooftops seleccionados con un anfitrión que coordina accesos, explica el entorno y comparte recomendaciones para disfrutar la noche de manera responsable.",
+      "includes": [
+        "Anfitrión o guía bilingüe durante cuatro horas",
+        "Tres degustaciones de comida o bebida local",
+        "Una bebida de bienvenida con alternativa sin alcohol",
+        "Acceso programado a dos rooftops",
+        "Orientación de seguridad y transporte al finalizar"
+      ],
+      "notIncludes": [
+        "Cena completa y bebidas adicionales",
+        "Recogida y regreso al hotel en la opción base",
+        "Consumos mínimos o eventos especiales no anunciados",
+        "Gastos personales y propinas"
+      ],
+      "highlights": [
+        "Degustaciones en El Poblado y Manila",
+        "Dos rooftops seleccionados según la noche",
+        "Grupo reducido y anfitrión bilingüe",
+        "Enfoque responsable, sin barra libre"
+      ],
+      "master": {
+        "code": "COL-MDE-006",
+        "location": "El Poblado, Manila y Provenza, Medellín",
+        "categories": [
+          "Gastronomía",
+          "Vida nocturna",
+          "Rooftops",
+          "Caminata urbana"
+        ],
+        "difficulty": "Baja",
+        "physicalLevel": "Caminata urbana de aproximadamente 2 kilómetros, con escaleras en algunos establecimientos.",
+        "minAge": "18 años",
+        "maxGroup": "12 viajeros",
+        "groupType": "Compartido en grupo reducido; opción privada bajo solicitud",
+        "walkingDistance": "Aproximadamente 2 kilómetros",
+        "altitude": "Aproximadamente 1.500 m s. n. m.",
+        "operatingDays": "Martes a sábado; fechas especiales sujetas a disponibilidad",
+        "departureTimes": [
+          "18:30"
+        ],
+        "pickupWindow": "No incluye recogida en la opción base",
+        "meetingPoint": "Parque de El Poblado o restaurante cercano confirmado en el voucher",
+        "hotelPickup": "Disponible como suplemento privado; se recomienda llegar caminando o en transporte autorizado",
+        "endPoint": "Sector Provenza aproximadamente a las 22:30",
+        "itinerary": [
+          {
+            "time": "18:30",
+            "title": "Encuentro y orientación nocturna",
+            "description": "Presentación del anfitrión, revisión de la ruta y recomendaciones de movilidad y seguridad para disfrutar El Poblado y Provenza de forma responsable.",
+            "duration": "15 min"
+          },
+          {
+            "time": "18:45",
+            "title": "Primera degustación paisa",
+            "description": "Visita a un establecimiento local para probar una preparación salada, como empanada, arepa o alternativa del día, acompañada de una bebida sin alcohol.",
+            "duration": "40 min"
+          },
+          {
+            "time": "19:30",
+            "title": "Café, cacao o postre colombiano",
+            "description": "Segunda parada centrada en ingredientes colombianos. La selección cambia según disponibilidad y puede adaptarse a algunas restricciones alimentarias.",
+            "duration": "35 min"
+          },
+          {
+            "time": "20:15",
+            "title": "Caminata por Manila y Provenza",
+            "description": "Recorrido guiado por corredores gastronómicos, diseño urbano y vida nocturna. El anfitrión explica cómo elegir transporte seguro y evitar situaciones de riesgo.",
+            "duration": "35 min"
+          },
+          {
+            "time": "20:50",
+            "title": "Primer rooftop y bebida de bienvenida",
+            "description": "Acceso a una terraza seleccionada con una cerveza, cóctel básico o alternativa sin alcohol. La música y el establecimiento dependen del día de operación.",
+            "duration": "55 min"
+          },
+          {
+            "time": "21:50",
+            "title": "Segundo rooftop o espacio con música",
+            "description": "Última parada para observar la ciudad y compartir con el grupo. El ingreso programado está incluido, pero consumos adicionales se pagan directamente.",
+            "duration": "40 min"
+          },
+          {
+            "time": "22:30",
+            "title": "Finalización en Provenza",
+            "description": "El anfitrión orienta sobre taxis autorizados y aplicaciones de transporte. El regreso al hotel no está incluido en la opción base.",
+            "duration": "Fin del tour"
+          }
+        ],
+        "entries": [
+          {
+            "name": "Tres degustaciones de comida o bebida local",
+            "status": "Incluidas",
+            "notes": "Porciones de degustación; no equivalen a una cena completa."
+          },
+          {
+            "name": "Una bebida de bienvenida en rooftop",
+            "status": "Incluida",
+            "notes": "Disponible con alcohol solo para mayores de edad; existe alternativa sin alcohol."
+          },
+          {
+            "name": "Accesos programados a dos rooftops",
+            "status": "Incluidos",
+            "notes": "Los locales pueden cambiar por aforo, eventos privados o código de vestimenta."
+          },
+          {
+            "name": "Bebidas y alimentos adicionales",
+            "status": "No incluidos",
+            "notes": "Se pagan directamente en cada establecimiento."
+          }
+        ],
+        "languages": {
+          "included": [
+            "Español",
+            "Inglés"
+          ],
+          "onRequest": [
+            "Portugués"
+          ],
+          "note": "Otros idiomas y recorrido privado se cotizan según disponibilidad."
+        },
+        "recommendations": [
+          "Llevar documento físico o digital válido para verificar la edad.",
+          "Usar vestimenta casual arreglada y calzado cómodo.",
+          "No llevar objetos de alto valor ni aceptar bebidas de desconocidos.",
+          "Regresar en taxi autorizado o aplicación de transporte."
+        ],
+        "restrictions": [
+          "Actividad exclusiva para mayores de 18 años.",
+          "No se admite a participantes en estado evidente de embriaguez o bajo efectos de drogas.",
+          "Cada local puede aplicar derecho de admisión y código de vestimenta.",
+          "No se incluye consumo ilimitado ni se promueve el exceso de alcohol."
+        ],
+        "accessibility": "Accesibilidad parcial. La caminata es urbana, pero algunos rooftops solo tienen escaleras o espacios estrechos. Consultar antes de reservar.",
+        "weather": "Opera con lluvia ligera; las terrazas pueden utilizar áreas cubiertas o ser sustituidas. Tormentas fuertes pueden modificar la ruta.",
+        "cancellation": "Cancelación gratuita hasta 24 horas antes. Reservas y consumos previamente garantizados pueden ser no reembolsables después de ese plazo.",
+        "voucher": "Voucher digital y documento de identidad. El establecimiento inicial y el nombre del anfitrión se confirman el mismo día.",
+        "priceNote": "Tarifa por persona con guía, tres degustaciones, una bebida y accesos programados. No incluye cena completa, barra libre ni regreso al hotel.",
+        "operationalNote": "La ruta cambia para mantener calidad, disponibilidad y seguridad. Los nombres de rooftops no se garantizan hasta la confirmación final.",
+        "faqs": [
+          {
+            "question": "¿El tour incluye una cena completa?",
+            "answer": "No. Incluye tres degustaciones que permiten probar sabores locales, pero no sustituyen una cena completa. Puedes comprar alimentos adicionales durante el recorrido."
+          },
+          {
+            "question": "¿Cuántas bebidas alcohólicas están incluidas?",
+            "answer": "Se incluye una bebida de bienvenida; otras degustaciones pueden ser sin alcohol. Los consumos adicionales se pagan directamente y no existe barra libre."
+          },
+          {
+            "question": "¿Qué ropa debo usar?",
+            "answer": "Recomendamos estilo casual arreglado, calzado cómodo y evitar ropa deportiva de playa. Cada local mantiene su propio código y derecho de admisión."
+          },
+          {
+            "question": "¿Incluye el regreso al hotel?",
+            "answer": "No en la opción base. El tour termina en Provenza y el anfitrión orienta sobre transporte autorizado. Podemos cotizar recogida y regreso privado."
+          }
+        ]
+      },
+      "marketRef": "Mercado 2026: rooftops/pub crawls USD 27-47; gastrotours desde USD 33-55; producto combinado USD 49.",
+      "en": {
+        "title": "Medellín Night Tour: food and rooftops",
+        "country": "Colombia",
+        "region": "Medellín",
+        "styleLabel": "Food",
+        "duration": "4 hours",
+        "alt": "Nighttime rooftop and food experience in Medellín's Provenza district",
+        "excerpt": "Colombian flavors, a walk through El Poblado and two selected rooftops on a guided and safety-focused evening.",
+        "description": "Discover Medellín's food and nightlife scene in a small group. Taste local flavors, walk through Manila and Provenza and visit two selected rooftops with a host who coordinates access, explains the area and shares recommendations for enjoying the night responsibly.",
+        "includes": [
+          "Bilingual host or guide for four hours",
+          "Three local food or drink tastings",
+          "One welcome drink with a non-alcoholic alternative",
+          "Scheduled access to two rooftops",
+          "Safety and transportation guidance at the end"
+        ],
+        "notIncludes": [
+          "Full dinner and additional drinks",
+          "Hotel pickup and return in the base option",
+          "Minimum consumption or unannounced special events",
+          "Personal expenses and tips"
+        ],
+        "highlights": [
+          "Tastings in El Poblado and Manila",
+          "Two rooftops selected according to the night",
+          "Small group and bilingual host",
+          "Responsible approach with no open bar"
+        ],
+        "master": {
+          "code": "COL-MDE-006",
+          "location": "El Poblado, Manila and Provenza, Medellín",
+          "categories": [
+            "Food",
+            "Nightlife",
+            "Rooftops",
+            "Urban walk"
+          ],
+          "difficulty": "Easy",
+          "physicalLevel": "Urban walk of approximately 2 kilometers, with stairs at some venues.",
+          "minAge": "18 years",
+          "maxGroup": "12 travelers",
+          "groupType": "Shared small group; private option available on request",
+          "walkingDistance": "Approximately 2 kilometers",
+          "altitude": "Approximately 1,500 meters above sea level",
+          "operatingDays": "Tuesday to Saturday; special dates subject to availability",
+          "departureTimes": [
+            "18:30"
+          ],
+          "pickupWindow": "Pickup is not included in the base option",
+          "meetingPoint": "El Poblado Park or a nearby restaurant confirmed on the voucher",
+          "hotelPickup": "Available as a private supplement; walking or authorized transportation is recommended",
+          "endPoint": "Provenza area at approximately 22:30",
+          "itinerary": [
+            {
+              "time": "18:30",
+              "title": "Meet and nighttime orientation",
+              "description": "Meet your host, review the route and receive mobility and safety recommendations for enjoying El Poblado and Provenza responsibly.",
+              "duration": "15 min"
+            },
+            {
+              "time": "18:45",
+              "title": "First Paisa tasting",
+              "description": "Visit a local venue to taste a savory preparation such as an empanada, arepa or the day's alternative, accompanied by a non-alcoholic drink.",
+              "duration": "40 min"
+            },
+            {
+              "time": "19:30",
+              "title": "Colombian coffee, cacao or dessert",
+              "description": "Second stop focused on Colombian ingredients. The selection changes by availability and may be adapted for some dietary restrictions.",
+              "duration": "35 min"
+            },
+            {
+              "time": "20:15",
+              "title": "Walk through Manila and Provenza",
+              "description": "Guided walk through dining corridors, urban design and nightlife. Your host explains how to choose safe transportation and avoid risky situations.",
+              "duration": "35 min"
+            },
+            {
+              "time": "20:50",
+              "title": "First rooftop and welcome drink",
+              "description": "Access to a selected rooftop with a beer, basic cocktail or non-alcoholic alternative. Music and venue depend on the operating day.",
+              "duration": "55 min"
+            },
+            {
+              "time": "21:50",
+              "title": "Second rooftop or live-music venue",
+              "description": "Final stop to view the city and spend time with the group. Scheduled admission is included, but additional consumption is paid directly.",
+              "duration": "40 min"
+            },
+            {
+              "time": "22:30",
+              "title": "Finish in Provenza",
+              "description": "Your host provides guidance on authorized taxis and transportation apps. Return to the hotel is not included in the base option.",
+              "duration": "End of tour"
+            }
+          ],
+          "entries": [
+            {
+              "name": "Three local food or drink tastings",
+              "status": "Included",
+              "notes": "Tasting portions; they do not equal a full dinner."
+            },
+            {
+              "name": "One rooftop welcome drink",
+              "status": "Included",
+              "notes": "Alcohol is available only to adults; a non-alcoholic option is provided."
+            },
+            {
+              "name": "Scheduled access to two rooftops",
+              "status": "Included",
+              "notes": "Venues may change due to capacity, private events or dress code."
+            },
+            {
+              "name": "Additional food and drinks",
+              "status": "Not included",
+              "notes": "Paid directly at each venue."
+            }
+          ],
+          "languages": {
+            "included": [
+              "Spanish",
+              "English"
+            ],
+            "onRequest": [
+              "Portuguese"
+            ],
+            "note": "Other languages and private routes are quoted according to availability."
+          },
+          "recommendations": [
+            "Carry a valid physical or digital ID for age verification.",
+            "Wear smart casual clothing and comfortable shoes.",
+            "Do not carry high-value items or accept drinks from strangers.",
+            "Return by authorized taxi or transportation app."
+          ],
+          "restrictions": [
+            "Activity exclusively for travelers aged 18 and over.",
+            "Participants who are clearly intoxicated or under the influence of drugs are not admitted.",
+            "Each venue may apply its own admission policy and dress code.",
+            "Unlimited consumption is not included and excessive drinking is not promoted."
+          ],
+          "accessibility": "Partially accessible. The walk is urban, but some rooftops have only stairs or narrow spaces. Ask before booking.",
+          "weather": "Operates in light rain; rooftops may use covered areas or be replaced. Strong storms may alter the route.",
+          "cancellation": "Free cancellation up to 24 hours before the start. Reservations and consumption guaranteed in advance may be non-refundable after that deadline.",
+          "voucher": "Digital voucher and ID. The first venue and host's name are confirmed on the same day.",
+          "priceNote": "Per-person rate including guide, three tastings, one drink and scheduled access. It does not include a full dinner, open bar or return to the hotel.",
+          "operationalNote": "The route changes to maintain quality, availability and safety. Rooftop names are not guaranteed until final confirmation.",
+          "faqs": [
+            {
+              "question": "Does the tour include a full dinner?",
+              "answer": "No. Three tastings are included to sample local flavors, but they do not replace a full dinner. You may purchase additional food during the route."
+            },
+            {
+              "question": "How many alcoholic drinks are included?",
+              "answer": "One welcome drink is included; other tastings may be non-alcoholic. Additional consumption is paid directly and there is no open bar."
+            },
+            {
+              "question": "What should I wear?",
+              "answer": "We recommend smart casual clothing, comfortable shoes and avoiding beach sportswear. Each venue maintains its own dress code and admission policy."
+            },
+            {
+              "question": "Is the return to the hotel included?",
+              "answer": "Not in the base option. The tour ends in Provenza and the host provides guidance on authorized transportation. Private pickup and return can be quoted."
+            }
+          ]
+        }
+      }
     },
     {
       "slug": "buenos-aires-city-tango",

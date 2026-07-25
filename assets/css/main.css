@@ -661,3 +661,89 @@ picture { display: contents; }
 /* ---------- FAQ ---------- */
 details.detail-card[open]{border-color:var(--latam-gold-soft);}
 details.detail-card summary::marker{color:var(--latam-gold);}
+
+/* ========================================================================== */
+/*  Ficha maestra de tours                                                    */
+/* ========================================================================== */
+.detail-hero--master{min-height:500px;}
+.detail-hero--master .page-hero__inner{padding-bottom:56px;}
+.tour-hero-meta{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:24px;}
+.tour-hero-meta span{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(0,0,0,.22);color:#fff;font-size:13px;font-weight:700;backdrop-filter:blur(8px);}
+.detail-grid--master{grid-template-columns:minmax(0,1fr) 360px;gap:32px;}
+.tour-section-stack{display:grid;gap:24px;min-width:0;}
+.tour-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0;}
+.tour-fact{display:grid;grid-template-columns:38px minmax(0,1fr);gap:12px;align-items:start;padding:16px;border:1px solid var(--latam-border);border-radius:var(--radius-lg);background:var(--latam-bg-alt);}
+.tour-fact>i{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--latam-green);color:var(--latam-gold);font-size:15px;}
+.tour-fact dt{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--latam-muted);font-weight:800;margin:0 0 5px;}
+.tour-fact dd{margin:0;color:var(--latam-ink);font-size:14px;line-height:1.5;font-weight:650;}
+.tour-meta-strip{display:grid;gap:9px;margin-top:18px;padding:16px 18px;border-radius:var(--radius-lg);background:var(--latam-green-soft);}
+.tour-meta-strip p{margin:0!important;color:var(--latam-ink)!important;font-size:14px!important;line-height:1.55!important;font-weight:550!important;}
+.tour-lead,.tour-body-copy{margin:0;color:var(--latam-muted);font-weight:550;line-height:1.78;font-size:15.5px;}
+.tour-subtitle{margin:26px 0 14px;font-family:Montserrat,sans-serif;font-size:17px;color:var(--latam-green);}
+.tour-highlight-list{grid-template-columns:repeat(2,minmax(0,1fr));}
+.tour-logistics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1px solid var(--latam-border);border-radius:var(--radius-lg);overflow:hidden;}
+.tour-logistics>div{display:grid;gap:6px;padding:17px 18px;border-right:1px solid var(--latam-border);border-bottom:1px solid var(--latam-border);}
+.tour-logistics>div:nth-child(2n){border-right:0;}
+.tour-logistics>div:nth-last-child(-n+2){border-bottom:0;}
+.tour-logistics span,.tour-language-grid span{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--latam-muted);font-weight:800;}
+.tour-logistics strong,.tour-language-grid strong{color:var(--latam-ink);font-size:14px;line-height:1.55;font-weight:650;}
+.tour-note{margin:0 0 24px!important;padding:14px 16px;border-left:4px solid var(--latam-gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;background:var(--latam-gold-soft);color:#62502d!important;font-size:14px!important;line-height:1.65!important;font-weight:550!important;}
+.tour-timeline{list-style:none;padding:0;margin:0;display:grid;}
+.tour-timeline__item{position:relative;display:grid;grid-template-columns:112px minmax(0,1fr);gap:22px;padding:0 0 28px;}
+.tour-timeline__item:not(:last-child)::after{content:"";position:absolute;left:104px;top:24px;bottom:0;width:2px;background:var(--latam-gold-soft);}
+.tour-timeline__time{align-self:start;justify-self:stretch;padding:8px 10px;border-radius:999px;background:var(--latam-green);color:#fff;text-align:center;font-size:12.5px;font-weight:800;line-height:1.25;position:relative;z-index:1;}
+.tour-timeline__content{padding:0 0 0 4px;}
+.tour-timeline__content h3{margin:2px 0 8px;font-family:Montserrat,sans-serif;color:var(--latam-green);font-size:17px;line-height:1.3;}
+.tour-timeline__content p{margin:0 0 8px;color:var(--latam-muted);font-size:14.5px;line-height:1.68;font-weight:550;}
+.tour-timeline__content span{font-size:12.5px;color:var(--latam-gold-deep);font-weight:750;}
+.tour-split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;}
+.tour-split>.detail-card{height:100%;}
+.tour-table-wrap{overflow-x:auto;border:1px solid var(--latam-border);border-radius:var(--radius-lg);}
+.tour-table{width:100%;border-collapse:collapse;min-width:650px;font-size:14px;}
+.tour-table th,.tour-table td{padding:15px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--latam-border);line-height:1.55;}
+.tour-table thead th{background:var(--latam-green);color:#fff;font-size:12px;text-transform:uppercase;letter-spacing:.05em;}
+.tour-table tbody th{color:var(--latam-ink);font-weight:750;width:28%;}
+.tour-table tbody tr:last-child th,.tour-table tbody tr:last-child td{border-bottom:0;}
+.tour-status{display:inline-flex;padding:5px 9px;border-radius:999px;background:var(--latam-gold-soft);color:#6b5321;font-size:12px;font-weight:800;white-space:nowrap;}
+.tour-language-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:16px;}
+.tour-language-grid>div{display:grid;gap:6px;padding:16px;border:1px solid var(--latam-border);border-radius:var(--radius-lg);background:var(--latam-bg-alt);}
+.tour-bullet-list{margin:0;padding-left:21px;display:grid;gap:11px;color:var(--latam-muted);font-size:14.5px;line-height:1.62;font-weight:550;}
+.tour-faq-list{display:grid;gap:12px;}
+.tour-faq{border:1px solid var(--latam-border);border-radius:var(--radius-lg);padding:0 17px;background:var(--latam-bg-alt);}
+.tour-faq[open]{border-color:var(--latam-gold);background:#fff;}
+.tour-faq summary{cursor:pointer;list-style:none;padding:16px 32px 16px 0;position:relative;color:var(--latam-green);font-family:Montserrat,sans-serif;font-weight:750;font-size:15px;line-height:1.4;}
+.tour-faq summary::-webkit-details-marker{display:none;}
+.tour-faq summary::after{content:"+";position:absolute;right:0;top:13px;font-size:22px;color:var(--latam-gold-deep);}
+.tour-faq[open] summary::after{content:"−";}
+.tour-faq p{margin:0;padding:0 0 17px;color:var(--latam-muted);font-size:14.5px;line-height:1.68;font-weight:550;}
+.tour-booking-aside{position:relative;}
+.tour-booking-card{position:sticky;top:98px;padding:24px;}
+.tour-booking-card .price-block span{display:block;margin-top:4px;color:var(--latam-muted);font-size:12px;font-weight:650;}
+.tour-booking-note{margin-top:16px;padding-top:16px;border-top:1px solid var(--latam-border);}
+.tour-booking-note h3{margin:0 0 6px;font-family:Montserrat,sans-serif;color:var(--latam-green);font-size:13.5px;}
+.tour-booking-note p{margin:0;color:var(--latam-muted);font-size:12.8px;line-height:1.55;font-weight:550;}
+@media(max-width:1020px){
+  .detail-grid--master{grid-template-columns:minmax(0,1fr) 320px;gap:24px;}
+  .tour-facts{grid-template-columns:1fr;}
+  .tour-highlight-list{grid-template-columns:1fr;}
+}
+@media(max-width:820px){
+  .detail-hero--master{min-height:430px;}
+  .detail-grid--master{grid-template-columns:1fr;}
+  .tour-booking-card{position:static;}
+  .tour-split{grid-template-columns:1fr;}
+}
+@media(max-width:620px){
+  .detail-hero--master .page-hero__inner{padding-bottom:38px;}
+  .tour-hero-meta{gap:8px;}
+  .tour-hero-meta span{font-size:11.5px;padding:7px 9px;}
+  .tour-logistics{grid-template-columns:1fr;}
+  .tour-logistics>div,.tour-logistics>div:nth-child(2n),.tour-logistics>div:nth-last-child(-n+2){border-right:0;border-bottom:1px solid var(--latam-border);}
+  .tour-logistics>div:last-child{border-bottom:0;}
+  .tour-timeline__item{grid-template-columns:88px minmax(0,1fr);gap:15px;}
+  .tour-timeline__item:not(:last-child)::after{left:80px;}
+  .tour-timeline__time{font-size:11px;padding:7px 6px;}
+  .tour-language-grid{grid-template-columns:1fr;}
+  .tour-master .detail-card{padding:20px;}
+}
+.tour-timeline__content span em{font-style:normal;font-weight:750;}

@@ -28,6 +28,11 @@
   const trigger = $('[data-book]');
   if (!trigger) return;
 
+  function parseDataJSON(value, fallback) {
+    try { return value ? JSON.parse(value) : fallback; }
+    catch (error) { console.warn('[booking] Dato JSON inválido', error); return fallback; }
+  }
+
   /* ------------------------------------------------------------- Estado */
 
   let CONFIG = null;
@@ -38,10 +43,12 @@
     price: parseFloat(trigger.dataset.bookPrice || '0'),
     country: trigger.dataset.bookCountry || '',
     duration: trigger.dataset.bookDuration || '',
-    tiers: JSON.parse(trigger.dataset.bookTiers || 'null')
+    tiers: parseDataJSON(trigger.dataset.bookTiers, null),
+    departures: parseDataJSON(trigger.dataset.bookDepartures, [])
   };
-  const state = { date: '', travelers: 2, holder: {}, pax: [], total: 0, due: 0,
-                  mode: 'deposito', tier: null, requestKey: '' };
+  const state = { date: '', departureTime: PRODUCT.departures[0] || '', travelers: 2,
+                  holder: {}, pax: [], total: 0, due: 0, mode: 'deposito',
+                  tier: null, requestKey: '' };
   // Si el producto tiene categorías de hotel, se arranca en la más económica.
   if (PRODUCT.tiers && PRODUCT.tiers.length) state.tier = PRODUCT.tiers[0].code;
   let step = 1;
@@ -95,6 +102,16 @@
   /* ---------------------------------------------------------------- Modal */
 
   function construirModal() {
+    const departureField = PRODUCT.departures.length ? `
+              <div class="form-field">
+                <label for="bkDeparture">Horario de salida</label>
+                <select id="bkDeparture" required>
+                  <option value="">Selecciona un horario</option>
+                  ${PRODUCT.departures.map((time) => `<option value="${escapar(time)}" ${time === state.departureTime ? 'selected' : ''}>${escapar(time)}</option>`).join('')}
+                </select>
+                <small>La hora elegida quedará registrada en tu reserva.</small>
+                <span class="form-error">Selecciona una hora de salida.</span>
+              </div>` : '';
     const wrap = document.createElement('div');
     wrap.className = 'booking-modal';
     wrap.id = 'bookingModal';
@@ -136,6 +153,7 @@
                   <span class="form-error">Entre 1 y ${CONFIG.maxTravelers} viajeros.</span>
                 </div>
               </div>
+              ${departureField}
               <div class="grid-2" style="gap:16px">
                 <div class="form-field">
                   <label for="bkEmail">Correo del titular</label>
@@ -180,6 +198,7 @@
             <div class="booking-summary">
               <div class="fact-row"><span>Experiencia</span><strong>${escapar(PRODUCT.title)}</strong></div>
               <div class="fact-row"><span>Fecha</span><strong id="bkSumDate">—</strong></div>
+              <div class="fact-row" ${PRODUCT.departures.length ? '' : 'hidden'}><span>Horario de salida</span><strong id="bkSumDeparture">—</strong></div>
               <div class="fact-row"><span>Viajeros</span><strong id="bkSumPax">—</strong></div>
               <div class="fact-row" ${PRODUCT.tiers ? '' : 'hidden'}><span>Categoría de hotel</span><strong id="bkSumTier">—</strong></div>
               <div class="fact-row"><span>Precio por persona</span><strong id="bkSumUnit">—</strong></div>
@@ -339,6 +358,7 @@
 
   function guardarPaso1() {
     state.date = $('#bkDate').value;
+    state.departureTime = PRODUCT.departures.length ? $('#bkDeparture').value : '';
     state.travelers = parseInt($('#bkTravelers').value, 10);
     state.holder = {
       email: $('#bkEmail').value.trim(),
@@ -359,6 +379,8 @@
   function pintarResumen() {
     const fecha = new Date(state.date + 'T00:00:00');
     $('#bkSumDate').textContent = fecha.toLocaleDateString('es', { day: '2-digit', month: 'long', year: 'numeric' });
+    const departure = $('#bkSumDeparture');
+    if (departure && PRODUCT.departures.length) departure.textContent = state.departureTime || '—';
     $('#bkSumPax').textContent = state.travelers === 1 ? T('1 viajero') : `${state.travelers} ${T('viajeros')}`;
     $('#bkSumUnit').textContent = money(precioUnitario());
     $('#bkSumTotal').textContent = money(state.total);
@@ -403,6 +425,7 @@
       kind: PRODUCT.kind,
       title: PRODUCT.title,
       date: state.date,
+      departureTime: state.departureTime,
       travelers: state.travelers,
       tier: state.tier,
       holder: state.holder,

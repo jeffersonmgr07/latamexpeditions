@@ -109,8 +109,12 @@ const PRECIOS = {
   'islas-ballestas-paracas': 40.00,
   'cartagena-centro-getsemani': 25.00,
   'islas-rosario-baru': 65.00,
-  'guatape-piedra-penol': 45.00,
-  'comuna-13-medellin': 30.00,
+  'guatape-piedra-penol': 49.00,
+  'comuna-13-medellin': 29.00,
+  'city-tour-medellin': 35.00,
+  'tour-pablo-escobar': 39.00,
+  'parapente-medellin': 99.00,
+  'medellin-nocturno-gastronomia-rooftops': 49.00,
   'buenos-aires-city-tango': 110.00,
   'cataratas-iguazu-argentina': 70.00,
   'perito-moreno-calafate': 95.00,
@@ -130,6 +134,16 @@ const PRECIOS = {
   'chichen-itza-cenote': 95.00,
   'tulum-cenotes': 75.00,
   'xcaret-parque': 190.00
+};
+
+/** Horarios oficiales disponibles para los productos con salida seleccionable. */
+const HORARIOS_PRODUCTOS = {
+  'city-tour-medellin': ['08:00', '14:00'],
+  'comuna-13-medellin': ['08:30', '13:30'],
+  'guatape-piedra-penol': ['06:30'],
+  'tour-pablo-escobar': ['08:30', '14:00'],
+  'parapente-medellin': ['08:00', '10:30', '13:00'],
+  'medellin-nocturno-gastronomia-rooftops': ['18:30']
 };
 
 /**
@@ -306,6 +320,15 @@ function validarYCalcular(data) {
 
   const fechaTexto = textoPlano(data.date, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(fechaTexto)) throw new Error('Fecha inválida.');
+
+  const horariosPermitidos = HORARIOS_PRODUCTOS[slug] || [];
+  const departureTime = textoPlano(data.departureTime, 5);
+  if (horariosPermitidos.length && horariosPermitidos.indexOf(departureTime) === -1) {
+    throw new Error('Selecciona un horario de salida válido.');
+  }
+  if (!horariosPermitidos.length && departureTime && !/^\d{2}:\d{2}$/.test(departureTime)) {
+    throw new Error('Selecciona un horario de salida válido.');
+  }
   const fecha = new Date(fechaTexto + 'T00:00:00');
   if (isNaN(fecha.getTime())) throw new Error('Fecha inválida.');
   const limite = new Date();
@@ -327,6 +350,7 @@ function validarYCalcular(data) {
     kind: textoPlano(data.kind || (PRECIOS_PAQUETES[slug] ? 'package' : 'experience'), 20),
     title: textoPlano(data.title || slug, 120),
     date: fechaTexto,
+    departureTime: departureTime || '',
     travelers: viajeros,
     tier: tier || null,
     holder: {
@@ -633,7 +657,7 @@ function generarCodigo() {
 const CABECERAS = ['Fecha registro', 'Código', 'Estado', 'Tour', 'Slug', 'Categoría', 'Fecha del tour',
   'Viajeros', 'Precio unitario', 'Total', 'Pagado', 'Saldo', 'Modo',
   'Email titular', 'Teléfono', 'Comentarios', 'Pasajeros',
-  'Order ID PayPal', 'Capture ID', 'Email pagador'];
+  'Order ID PayPal', 'Capture ID', 'Email pagador', 'Hora de salida'];
 
 const HOJA_ORDENES_PAYPAL = 'Ordenes PayPal';
 const CAB_ORDENES_PAYPAL = ['Creada', 'Actualizada', 'Order ID', 'Estado', 'Request Key',
@@ -651,6 +675,9 @@ function hojaReservas() {
     h.appendRow(CABECERAS);
     h.getRange(1, 1, 1, CABECERAS.length).setFontWeight('bold').setBackground('#0a3d2c').setFontColor('#ffffff');
     h.setFrozenRows(1);
+  } else if (h.getLastColumn() < CABECERAS.length) {
+    h.getRange(1, 1, 1, CABECERAS.length).setValues([CABECERAS]);
+    h.getRange(1, 1, 1, CABECERAS.length).setFontWeight('bold').setBackground('#0a3d2c').setFontColor('#ffffff');
   }
   return h;
 }
@@ -756,7 +783,7 @@ function guardarEnHoja(r) {
     new Date(), r.code, 'PAGADA', textoHoja(r.data.title), r.data.slug, r.data.tier || '—', r.data.date,
     r.calc.viajeros, r.calc.precio, r.total, r.paidAmount, r.balance, r.mode,
     textoHoja(r.data.holder.email), textoHoja(r.data.holder.phone), textoHoja(r.data.holder.notes || ''), textoHoja(pax),
-    r.orderId, r.captureId, textoHoja(r.payerEmail)
+    r.orderId, r.captureId, textoHoja(r.payerEmail), textoHoja(r.data.departureTime || '')
   ]);
   return { code: r.code, duplicate: false };
 }
@@ -806,6 +833,7 @@ function avisarAgencia(r) {
       'Código:        ' + r.code,
       'Tour:          ' + r.data.title,
       'Fecha:         ' + r.data.date,
+      'Hora de salida:' + (r.data.departureTime || ' Por confirmar'),
       'Viajeros:      ' + r.calc.viajeros,
       '',
       'Total:         USD ' + r.total.toFixed(2),
@@ -873,6 +901,7 @@ function htmlVoucher(r) {
         '<h2 style="margin:0 0 18px;font-size:17px;color:#121a16">' + escaparHtml(d.title) + '</h2>' +
         '<table style="width:100%;border-collapse:collapse;font-size:13.5px">' +
           fila('Fecha del servicio', fecha) +
+          fila('Hora de salida', escaparHtml(d.departureTime || 'Por confirmar')) +
           fila('Titular de la reserva', escaparHtml(d.passengers[0].name)) +
           fila('Cantidad de pasajeros', String(r.calc.viajeros)) +
           (d.tier ? fila('Categoría de hotel', escaparHtml(NOMBRE_CATEGORIA[d.tier] || d.tier)) : '') +

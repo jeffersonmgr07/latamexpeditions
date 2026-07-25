@@ -512,7 +512,7 @@ function correoGoogleAutoritativo(perfil) {
 const COL = {
   registro: 0, codigo: 1, estado: 2, tour: 3, slug: 4, categoria: 5, fecha: 6,
   viajeros: 7, unitario: 8, total: 9, pagado: 10, saldo: 11, modo: 12,
-  email: 13, telefono: 14, comentarios: 15, pasajeros: 16
+  email: 13, telefono: 14, comentarios: 15, pasajeros: 16, horaSalida: 20
 };
 
 function filaAReserva(fila) {
@@ -530,7 +530,8 @@ function filaAReserva(fila) {
     total: Number(fila[COL.total]) || 0,
     paid: Number(fila[COL.pagado]) || 0,
     balance: Number(fila[COL.saldo]) || 0,
-    passengers: String(fila[COL.pasajeros] || '')
+    passengers: String(fila[COL.pasajeros] || ''),
+    departureTime: String(fila[COL.horaSalida] || '')
   };
 }
 

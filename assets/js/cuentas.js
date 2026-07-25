@@ -210,6 +210,7 @@
           <span class="trip-status trip-status--${escapar(String(r.status).toLowerCase())}">${escapar(r.status)}</span>
         </div>
         <div class="trip-item__facts">
+          ${r.departureTime ? `<div class="fact-row"><span>Horario de salida</span><strong>${escapar(r.departureTime)}</strong></div>` : ''}
           <div class="fact-row"><span>Viajeros</span><strong>${r.travelers}</strong></div>
           ${r.tier && r.tier !== '—' ? `<div class="fact-row"><span>Categoría</span><strong>${escapar(r.tier)}</strong></div>` : ''}
           <div class="fact-row"><span>Total</span><strong>${money(r.total)}</strong></div>
@@ -349,6 +350,7 @@
       </div>
       <div class="trip-item__facts">
         <div class="fact-row"><span>Titular</span><strong>${escapar(b.holderName)}</strong></div>
+        ${b.departureTime ? `<div class="fact-row"><span>Horario de salida</span><strong>${escapar(b.departureTime)}</strong></div>` : ''}
         <div class="fact-row"><span>Viajeros</span><strong>${b.travelers}</strong></div>
         ${b.tier && b.tier !== '—' ? `<div class="fact-row"><span>Categoría</span><strong>${escapar(b.tier)}</strong></div>` : ''}
         <div class="fact-row"><span>Total</span><strong>${money(b.total)}</strong></div>
