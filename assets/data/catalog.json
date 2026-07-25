@@ -4365,137 +4365,6 @@
       "flightsAvailable": true
     },
     {
-      "slug": "colombia-caribe-4d3n",
-      "title": "Cartagena esencial",
-      "country": "Colombia",
-      "region": "Cartagena",
-      "nights": "4D/3N",
-      "priceFrom": 480.0,
-      "currency": "USD",
-      "img": "paquete-colombia-5d4n-01.jpg",
-      "alt": "Ciudad amurallada de Cartagena al atardecer",
-      "excerpt": "Ciudad amurallada, Getsemaní e Islas del Rosario.",
-      "itinerary": [
-        "Día 1 · Llegada a Cartagena y atardecer en la muralla",
-        "Día 2 · City tour histórico y Getsemaní",
-        "Día 3 · Islas del Rosario con almuerzo y snorkel",
-        "Día 4 · Tiempo libre y traslado de salida"
-      ],
-      "includes": [
-        "3 noches de alojamiento con desayuno",
-        "Traslados aeropuerto - hotel - aeropuerto",
-        "City tour histórico con guía certificado",
-        "Excursión a Islas del Rosario con almuerzo",
-        "Asistencia 24/7 durante el viaje"
-      ],
-      "notIncludes": [
-        "Vuelos internacionales y domésticos",
-        "Comidas no especificadas",
-        "Propinas y gastos personales",
-        "Seguro de viaje (recomendado)"
-      ],
-      "hotelTiers": [
-        {
-          "code": "3e",
-          "stars": "3*",
-          "name": "Turista",
-          "pricePerPerson": 480.0,
-          "hotels": [
-            "Hotel Casa Villa Colonial",
-            "Getsemaní Suites"
-          ]
-        },
-        {
-          "code": "4e",
-          "stars": "4*",
-          "name": "Primera",
-          "pricePerPerson": 620.0,
-          "hotels": [
-            "Hotel Casa del Arzobispado",
-            "NH Urban Royal"
-          ]
-        },
-        {
-          "code": "5e",
-          "stars": "5*",
-          "name": "Lujo",
-          "pricePerPerson": 840.0,
-          "hotels": [
-            "Sofitel Legend Santa Clara",
-            "Hotel Charleston Santa Teresa"
-          ]
-        }
-      ],
-      "flightsAvailable": true
-    },
-    {
-      "slug": "colombia-completo-7d6n",
-      "title": "Colombia esencial: Bogotá, Medellín y Cartagena",
-      "country": "Colombia",
-      "region": "Bogotá / Medellín / Cartagena",
-      "nights": "7D/6N",
-      "priceFrom": 1290.0,
-      "currency": "USD",
-      "img": "destino-colombia-01.jpg",
-      "alt": "Vista panorámica de Medellín desde el metrocable",
-      "excerpt": "Las tres ciudades clave del país, con vuelos internos incluidos.",
-      "itinerary": [
-        "Día 1 · Llegada a Bogotá y city tour por La Candelaria",
-        "Día 2 · Catedral de Sal de Zipaquirá y Monserrate",
-        "Día 3 · Vuelo a Medellín y recorrido por la Comuna 13",
-        "Día 4 · Guatapé y Piedra del Peñol con almuerzo",
-        "Día 5 · Vuelo a Cartagena y atardecer en la muralla",
-        "Día 6 · Islas del Rosario con almuerzo",
-        "Día 7 · Traslado de salida"
-      ],
-      "includes": [
-        "6 noches de alojamiento con desayuno",
-        "Vuelos internos Bogotá - Medellín - Cartagena",
-        "Todos los traslados y excursiones indicadas",
-        "Guías locales certificados en cada ciudad",
-        "Asistencia 24/7 durante el viaje"
-      ],
-      "notIncludes": [
-        "Vuelos internacionales",
-        "Comidas no especificadas",
-        "Propinas y gastos personales",
-        "Seguro de viaje (recomendado)"
-      ],
-      "hotelTiers": [
-        {
-          "code": "3e",
-          "stars": "3*",
-          "name": "Turista",
-          "pricePerPerson": 1290.0,
-          "hotels": [
-            "Hotel Bogotá Estelar",
-            "Casa Villa Colonial"
-          ]
-        },
-        {
-          "code": "4e",
-          "stars": "4*",
-          "name": "Primera",
-          "pricePerPerson": 1680.0,
-          "hotels": [
-            "NH Collection Royal",
-            "Hotel Casa del Arzobispado"
-          ]
-        },
-        {
-          "code": "5e",
-          "stars": "5*",
-          "name": "Lujo",
-          "pricePerPerson": 2260.0,
-          "hotels": [
-            "Four Seasons Casa Medina",
-            "Sofitel Legend Santa Clara"
-          ]
-        }
-      ],
-      "flightsAvailable": true
-    },
-    {
       "slug": "argentina-ba-iguazu-5d4n",
       "title": "Buenos Aires e Iguazú",
       "country": "Argentina",
@@ -5087,6 +4956,2968 @@
         }
       ],
       "flightsAvailable": true
+    },
+    {
+      "slug": "bogota-esencial",
+      "title": "Bogotá Esencial",
+      "titleEn": "Essential Bogotá",
+      "country": "Colombia",
+      "region": "Bogotá",
+      "nights": "4D/3N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "bogota-monserrate-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Bogotá Esencial en Colombia",
+      "altEn": "Landscapes and experiences included in the Essential Bogotá package in Colombia",
+      "excerpt": "Una primera visita equilibrada con el centro histórico, Monserrate y Zipaquirá.",
+      "excerptEn": "A well-balanced first visit featuring the historic center, Monserrate and Zipaquirá.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Bogotá, asistencia, traslado al hotel y tiempo libre.",
+        "Día 2 · Monserrate, La Candelaria, Plaza de Bolívar, Museo del Oro y Museo Botero.",
+        "Día 3 · Excursión a la Catedral de Sal de Zipaquirá y recorrido por el centro histórico.",
+        "Día 4 · Desayuno, tiempo libre según el vuelo y traslado al aeropuerto."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Bogotá, assistance, hotel transfer and free time.",
+        "Day 2 · Monserrate, La Candelaria, Bolívar Square, Gold Museum and Botero Museum.",
+        "Day 3 · Excursion to the Salt Cathedral of Zipaquirá and a walk through the historic center.",
+        "Day 4 · Breakfast, free time depending on the flight schedule and airport transfer."
+      ],
+      "code": "CO-PKG-001",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Essential Bogotá",
+        "excerpt": "A well-balanced first visit featuring the historic center, Monserrate and Zipaquirá.",
+        "itinerary": [
+          "Day 1 · Arrival in Bogotá, assistance, hotel transfer and free time.",
+          "Day 2 · Monserrate, La Candelaria, Bolívar Square, Gold Museum and Botero Museum.",
+          "Day 3 · Excursion to the Salt Cathedral of Zipaquirá and a walk through the historic center.",
+          "Day 4 · Breakfast, free time depending on the flight schedule and airport transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "bogota-zipaquira-y-guatavita",
+      "title": "Bogotá, Zipaquirá y Guatavita",
+      "titleEn": "Bogotá, Zipaquirá and Guatavita",
+      "country": "Colombia",
+      "region": "Bogotá",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "guatavita-zipaquira-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Bogotá, Zipaquirá y Guatavita en Colombia",
+      "altEn": "Landscapes and experiences included in the Bogotá, Zipaquirá and Guatavita package in Colombia",
+      "excerpt": "Historia, arquitectura subterránea y el paisaje cultural de Guatavita en cinco días.",
+      "excerptEn": "History, underground architecture and Guatavita’s cultural landscape in five days.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Bogotá, traslado y alojamiento.",
+        "Día 2 · City tour completo por Bogotá y ascenso a Monserrate.",
+        "Día 3 · Catedral de Sal de Zipaquirá y centro histórico de la población.",
+        "Día 4 · Laguna de Guatavita y pueblo de Guatavita, con caminata interpretativa.",
+        "Día 5 · Traslado al aeropuerto y salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Bogotá, transfer and accommodation.",
+        "Day 2 · Full Bogotá city tour and ascent to Monserrate.",
+        "Day 3 · Salt Cathedral of Zipaquirá and the town’s historic center.",
+        "Day 4 · Guatavita Lagoon and Guatavita town, including an interpretive walk.",
+        "Day 5 · Airport transfer and departure."
+      ],
+      "code": "CO-PKG-002",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Bogotá, Zipaquirá and Guatavita",
+        "excerpt": "History, underground architecture and Guatavita’s cultural landscape in five days.",
+        "itinerary": [
+          "Day 1 · Arrival in Bogotá, transfer and accommodation.",
+          "Day 2 · Full Bogotá city tour and ascent to Monserrate.",
+          "Day 3 · Salt Cathedral of Zipaquirá and the town’s historic center.",
+          "Day 4 · Guatavita Lagoon and Guatavita town, including an interpretive walk.",
+          "Day 5 · Airport transfer and departure."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "bogota-y-villa-de-leyva",
+      "title": "Bogotá y Villa de Leyva",
+      "titleEn": "Bogotá and Villa de Leyva",
+      "country": "Colombia",
+      "region": "Bogotá y Boyacá",
+      "nights": "6D/5N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "villa-de-leyva-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Bogotá y Villa de Leyva en Colombia",
+      "altEn": "Landscapes and experiences included in the Bogotá and Villa de Leyva package in Colombia",
+      "excerpt": "Combina la capital con Zipaquirá y la arquitectura colonial de Villa de Leyva.",
+      "excerptEn": "Combine the capital with Zipaquirá and the colonial architecture of Villa de Leyva.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Bogotá y traslado al hotel.",
+        "Día 2 · Bogotá histórica, Monserrate y principales museos.",
+        "Día 3 · Zipaquirá y continuación hacia Villa de Leyva.",
+        "Día 4 · Villa de Leyva y atractivos cercanos, con tiempo libre en la plaza.",
+        "Día 5 · Regreso a Bogotá y tarde libre.",
+        "Día 6 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Bogotá and hotel transfer.",
+        "Day 2 · Historic Bogotá, Monserrate and major museums.",
+        "Day 3 · Zipaquirá and onward transfer to Villa de Leyva.",
+        "Day 4 · Villa de Leyva and nearby attractions, with free time around the main square.",
+        "Day 5 · Return to Bogotá and free afternoon.",
+        "Day 6 · Departure transfer."
+      ],
+      "code": "CO-PKG-003",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Bogotá and Villa de Leyva",
+        "excerpt": "Combine the capital with Zipaquirá and the colonial architecture of Villa de Leyva.",
+        "itinerary": [
+          "Day 1 · Arrival in Bogotá and hotel transfer.",
+          "Day 2 · Historic Bogotá, Monserrate and major museums.",
+          "Day 3 · Zipaquirá and onward transfer to Villa de Leyva.",
+          "Day 4 · Villa de Leyva and nearby attractions, with free time around the main square.",
+          "Day 5 · Return to Bogotá and free afternoon.",
+          "Day 6 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "medellin-esencial",
+      "title": "Medellín Esencial",
+      "titleEn": "Essential Medellín",
+      "country": "Colombia",
+      "region": "Medellín",
+      "nights": "4D/3N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "colombia-medellin-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Medellín Esencial en Colombia",
+      "altEn": "Landscapes and experiences included in the Essential Medellín package in Colombia",
+      "excerpt": "Los imprescindibles de Medellín y Guatapé en una escapada de cuatro días.",
+      "excerptEn": "The essentials of Medellín and Guatapé in a four-day getaway.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Medellín y traslado al hotel.",
+        "Día 2 · City tour, Plaza Botero, Comuna 13, grafitis y Metrocable.",
+        "Día 3 · Guatapé, Piedra del Peñol y paseo por el embalse.",
+        "Día 4 · Traslado al aeropuerto."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Medellín and hotel transfer.",
+        "Day 2 · City tour, Botero Square, Comuna 13, street art and Metrocable.",
+        "Day 3 · Guatapé, El Peñol Rock and reservoir boat ride.",
+        "Day 4 · Airport transfer."
+      ],
+      "code": "CO-PKG-004",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Essential Medellín",
+        "excerpt": "The essentials of Medellín and Guatapé in a four-day getaway.",
+        "itinerary": [
+          "Day 1 · Arrival in Medellín and hotel transfer.",
+          "Day 2 · City tour, Botero Square, Comuna 13, street art and Metrocable.",
+          "Day 3 · Guatapé, El Peñol Rock and reservoir boat ride.",
+          "Day 4 · Airport transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "medellin-cultural-y-cafetera",
+      "title": "Medellín Cultural y Cafetera",
+      "titleEn": "Medellín: Culture and Coffee",
+      "country": "Colombia",
+      "region": "Medellín y Antioquia",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "tour-cafe-colombiano-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Medellín Cultural y Cafetera en Colombia",
+      "altEn": "Landscapes and experiences included in the Medellín: Culture and Coffee package in Colombia",
+      "excerpt": "Medellín, Guatapé y una experiencia cafetera auténtica sin cambiar de región.",
+      "excerptEn": "Medellín, Guatapé and an authentic coffee experience without leaving the region.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada y traslado al hotel.",
+        "Día 2 · Medellín, Plaza Botero, Comuna 13 y Metrocable.",
+        "Día 3 · Guatapé y Piedra del Peñol.",
+        "Día 4 · Finca cafetera: cultivo, cosecha, proceso y degustación.",
+        "Día 5 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival and hotel transfer.",
+        "Day 2 · Medellín, Botero Square, Comuna 13 and Metrocable.",
+        "Day 3 · Guatapé and El Peñol Rock.",
+        "Day 4 · Coffee farm: cultivation, harvest, processing and tasting.",
+        "Day 5 · Departure transfer."
+      ],
+      "code": "CO-PKG-005",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Medellín: Culture and Coffee",
+        "excerpt": "Medellín, Guatapé and an authentic coffee experience without leaving the region.",
+        "itinerary": [
+          "Day 1 · Arrival and hotel transfer.",
+          "Day 2 · Medellín, Botero Square, Comuna 13 and Metrocable.",
+          "Day 3 · Guatapé and El Peñol Rock.",
+          "Day 4 · Coffee farm: cultivation, harvest, processing and tasting.",
+          "Day 5 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "medellin-guatape-y-pueblos-de-antioquia",
+      "title": "Medellín, Guatapé y Pueblos de Antioquia",
+      "titleEn": "Medellín, Guatapé and Antioquian Towns",
+      "country": "Colombia",
+      "region": "Medellín y Antioquia",
+      "nights": "6D/5N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "guatape-piedra-penol-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Medellín, Guatapé y Pueblos de Antioquia en Colombia",
+      "altEn": "Landscapes and experiences included in the Medellín, Guatapé and Antioquian Towns package in Colombia",
+      "excerpt": "Una ruta más completa por la cultura urbana, cafetera y tradicional de Antioquia.",
+      "excerptEn": "A fuller journey through Antioquia’s urban, coffee-growing and traditional culture.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Medellín.",
+        "Día 2 · City tour y Comuna 13.",
+        "Día 3 · Guatapé y Piedra del Peñol.",
+        "Día 4 · Experiencia en finca cafetera.",
+        "Día 5 · Excursión a Jardín o Jericó, según la opción seleccionada.",
+        "Día 6 · Traslado al aeropuerto."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Medellín.",
+        "Day 2 · City tour and Comuna 13.",
+        "Day 3 · Guatapé and El Peñol Rock.",
+        "Day 4 · Coffee farm experience.",
+        "Day 5 · Excursion to Jardín or Jericó, depending on the selected option.",
+        "Day 6 · Airport transfer."
+      ],
+      "code": "CO-PKG-006",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Medellín, Guatapé and Antioquian Towns",
+        "excerpt": "A fuller journey through Antioquia’s urban, coffee-growing and traditional culture.",
+        "itinerary": [
+          "Day 1 · Arrival in Medellín.",
+          "Day 2 · City tour and Comuna 13.",
+          "Day 3 · Guatapé and El Peñol Rock.",
+          "Day 4 · Coffee farm experience.",
+          "Day 5 · Excursion to Jardín or Jericó, depending on the selected option.",
+          "Day 6 · Airport transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "cartagena-esencial",
+      "title": "Cartagena Esencial",
+      "titleEn": "Essential Cartagena",
+      "country": "Colombia",
+      "region": "Cartagena",
+      "nights": "4D/3N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "colombia-cartagena-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Cartagena Esencial en Colombia",
+      "altEn": "Landscapes and experiences included in the Essential Cartagena package in Colombia",
+      "excerpt": "Historia colonial y mar Caribe en el paquete clásico de Cartagena.",
+      "excerptEn": "Colonial history and the Caribbean Sea in Cartagena’s classic package.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Cartagena y traslado al hotel.",
+        "Día 2 · Ciudad amurallada, Castillo de San Felipe y Getsemaní.",
+        "Día 3 · Islas del Rosario y Barú con navegación y tiempo de playa.",
+        "Día 4 · Traslado al aeropuerto."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Cartagena and hotel transfer.",
+        "Day 2 · Walled City, San Felipe Castle and Getsemaní.",
+        "Day 3 · Rosario Islands and Barú with boat transportation and beach time.",
+        "Day 4 · Airport transfer."
+      ],
+      "code": "CO-PKG-007",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Essential Cartagena",
+        "excerpt": "Colonial history and the Caribbean Sea in Cartagena’s classic package.",
+        "itinerary": [
+          "Day 1 · Arrival in Cartagena and hotel transfer.",
+          "Day 2 · Walled City, San Felipe Castle and Getsemaní.",
+          "Day 3 · Rosario Islands and Barú with boat transportation and beach time.",
+          "Day 4 · Airport transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "cartagena-caribe",
+      "title": "Cartagena Caribe",
+      "titleEn": "Caribbean Cartagena",
+      "country": "Colombia",
+      "region": "Cartagena",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "islas-rosario-baru-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Cartagena Caribe en Colombia",
+      "altEn": "Landscapes and experiences included in the Caribbean Cartagena package in Colombia",
+      "excerpt": "Cinco días de cultura, islas y una actividad adicional a elección.",
+      "excerptEn": "Five days of culture, islands and one additional activity of your choice.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada y traslado al hotel.",
+        "Día 2 · Cartagena histórica y Getsemaní.",
+        "Día 3 · Islas del Rosario y Barú.",
+        "Día 4 · Volcán del Totumo o experiencia gastronómica, según opción.",
+        "Día 5 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival and hotel transfer.",
+        "Day 2 · Historic Cartagena and Getsemaní.",
+        "Day 3 · Rosario Islands and Barú.",
+        "Day 4 · Totumo Mud Volcano or a food experience, depending on the selected option.",
+        "Day 5 · Departure transfer."
+      ],
+      "code": "CO-PKG-008",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Caribbean Cartagena",
+        "excerpt": "Five days of culture, islands and one additional activity of your choice.",
+        "itinerary": [
+          "Day 1 · Arrival and hotel transfer.",
+          "Day 2 · Historic Cartagena and Getsemaní.",
+          "Day 3 · Rosario Islands and Barú.",
+          "Day 4 · Totumo Mud Volcano or a food experience, depending on the selected option.",
+          "Day 5 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "cartagena-islas-premium",
+      "title": "Cartagena Islas Premium",
+      "titleEn": "Cartagena Premium Islands",
+      "country": "Colombia",
+      "region": "Cartagena",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "rosario-vip-catamaran-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Cartagena Islas Premium en Colombia",
+      "altEn": "Landscapes and experiences included in the Cartagena Premium Islands package in Colombia",
+      "excerpt": "Una versión de mayor nivel con catamarán, servicio privado y clubes de playa seleccionados.",
+      "excerptEn": "An upgraded version with catamaran sailing, private services and selected beach clubs.",
+      "category": "Lujo",
+      "style": "playa",
+      "itinerary": [
+        "Día 1 · Llegada, traslado privado y alojamiento.",
+        "Día 2 · Visita privada o semiprivada a Cartagena y Getsemaní.",
+        "Día 3 · Navegación en catamarán por las Islas del Rosario.",
+        "Día 4 · Club de playa premium en Barú o experiencia en Cholón.",
+        "Día 5 · Traslado privado al aeropuerto."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival, private transfer and accommodation.",
+        "Day 2 · Private or semi-private visit to Cartagena and Getsemaní.",
+        "Day 3 · Catamaran sailing around the Rosario Islands.",
+        "Day 4 · Premium beach club in Barú or a Cholón experience.",
+        "Day 5 · Private airport transfer."
+      ],
+      "code": "CO-PKG-009",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Cartagena Premium Islands",
+        "excerpt": "An upgraded version with catamaran sailing, private services and selected beach clubs.",
+        "itinerary": [
+          "Day 1 · Arrival, private transfer and accommodation.",
+          "Day 2 · Private or semi-private visit to Cartagena and Getsemaní.",
+          "Day 3 · Catamaran sailing around the Rosario Islands.",
+          "Day 4 · Premium beach club in Barú or a Cholón experience.",
+          "Day 5 · Private airport transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "santa-marta-tayrona-y-minca",
+      "title": "Santa Marta, Tayrona y Minca",
+      "titleEn": "Santa Marta, Tayrona and Minca",
+      "country": "Colombia",
+      "region": "Santa Marta",
+      "nights": "4D/3N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "parque-tayrona-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Santa Marta, Tayrona y Minca en Colombia",
+      "altEn": "Landscapes and experiences included in the Santa Marta, Tayrona and Minca package in Colombia",
+      "excerpt": "Ciudad, selva, playas y montaña en el circuito corto más completo de Santa Marta.",
+      "excerptEn": "City, rainforest, beaches and mountains in Santa Marta’s most complete short program.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada y recorrido introductorio por Santa Marta.",
+        "Día 2 · Parque Tayrona y Cabo San Juan, según condiciones de operación.",
+        "Día 3 · Minca, café, cacao y cascadas.",
+        "Día 4 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival and introductory tour of Santa Marta.",
+        "Day 2 · Tayrona National Park and Cabo San Juan, subject to operating conditions.",
+        "Day 3 · Minca, coffee, cacao and waterfalls.",
+        "Day 4 · Departure transfer."
+      ],
+      "code": "CO-PKG-010",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Santa Marta, Tayrona and Minca",
+        "excerpt": "City, rainforest, beaches and mountains in Santa Marta’s most complete short program.",
+        "itinerary": [
+          "Day 1 · Arrival and introductory tour of Santa Marta.",
+          "Day 2 · Tayrona National Park and Cabo San Juan, subject to operating conditions.",
+          "Day 3 · Minca, coffee, cacao and waterfalls.",
+          "Day 4 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "santa-marta-y-caribe-natural",
+      "title": "Santa Marta y Caribe Natural",
+      "titleEn": "Santa Marta and the Natural Caribbean",
+      "country": "Colombia",
+      "region": "Santa Marta",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "playa-cristal-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Santa Marta y Caribe Natural en Colombia",
+      "altEn": "Landscapes and experiences included in the Santa Marta and the Natural Caribbean package in Colombia",
+      "excerpt": "Un programa de naturaleza con Tayrona, Minca y una segunda experiencia de playa.",
+      "excerptEn": "A nature-focused program featuring Tayrona, Minca and a second beach experience.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada y city tour.",
+        "Día 2 · Tayrona y Cabo San Juan.",
+        "Día 3 · Minca con café, cacao y cascadas.",
+        "Día 4 · Playa Cristal o navegación por las bahías de Tayrona.",
+        "Día 5 · Traslado al aeropuerto."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival and city tour.",
+        "Day 2 · Tayrona and Cabo San Juan.",
+        "Day 3 · Minca with coffee, cacao and waterfalls.",
+        "Day 4 · Playa Cristal or sailing around Tayrona’s bays.",
+        "Day 5 · Airport transfer."
+      ],
+      "code": "CO-PKG-011",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Santa Marta and the Natural Caribbean",
+        "excerpt": "A nature-focused program featuring Tayrona, Minca and a second beach experience.",
+        "itinerary": [
+          "Day 1 · Arrival and city tour.",
+          "Day 2 · Tayrona and Cabo San Juan.",
+          "Day 3 · Minca with coffee, cacao and waterfalls.",
+          "Day 4 · Playa Cristal or sailing around Tayrona’s bays.",
+          "Day 5 · Airport transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "ciudad-perdida-trek",
+      "title": "Ciudad Perdida Trek",
+      "titleEn": "Lost City Trek",
+      "country": "Colombia",
+      "region": "Sierra Nevada de Santa Marta",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "ciudad-perdida-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Ciudad Perdida Trek en Colombia",
+      "altEn": "Landscapes and experiences included in the Lost City Trek package in Colombia",
+      "excerpt": "Trekking de cinco días por la Sierra Nevada hasta el sitio arqueológico de Teyuna.",
+      "excerptEn": "A five-day trek through the Sierra Nevada to the archaeological site of Teyuna.",
+      "category": "Aventura",
+      "style": "aventura",
+      "itinerary": [
+        "Día 1 · Santa Marta, traslado a El Mamey e inicio de la caminata.",
+        "Día 2 · Trekking por la Sierra Nevada y comunidades locales.",
+        "Día 3 · Ascenso final y visita guiada a Ciudad Perdida.",
+        "Día 4 · Inicio del retorno por la misma ruta con noche en campamento.",
+        "Día 5 · Caminata a El Mamey y regreso a Santa Marta."
+      ],
+      "itineraryEn": [
+        "Day 1 · Santa Marta, transfer to El Mamey and start of the trek.",
+        "Day 2 · Trekking through the Sierra Nevada and local communities.",
+        "Day 3 · Final ascent and guided visit to the Lost City.",
+        "Day 4 · Start of the return journey with an overnight stay at camp.",
+        "Day 5 · Hike to El Mamey and return to Santa Marta."
+      ],
+      "code": "CO-PKG-012",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Lost City Trek",
+        "excerpt": "A five-day trek through the Sierra Nevada to the archaeological site of Teyuna.",
+        "itinerary": [
+          "Day 1 · Santa Marta, transfer to El Mamey and start of the trek.",
+          "Day 2 · Trekking through the Sierra Nevada and local communities.",
+          "Day 3 · Final ascent and guided visit to the Lost City.",
+          "Day 4 · Start of the return journey with an overnight stay at camp.",
+          "Day 5 · Hike to El Mamey and return to Santa Marta."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "eje-cafetero-esencial",
+      "title": "Eje Cafetero Esencial",
+      "titleEn": "Essential Coffee Region",
+      "country": "Colombia",
+      "region": "Eje Cafetero",
+      "nights": "4D/3N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "valle-cocora-salento-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Eje Cafetero Esencial en Colombia",
+      "altEn": "Landscapes and experiences included in the Essential Coffee Region package in Colombia",
+      "excerpt": "Los paisajes y la cultura cafetera esenciales en cuatro días.",
+      "excerptEn": "The Coffee Region’s essential landscapes and culture in four days.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Pereira o Armenia y traslado al hotel.",
+        "Día 2 · Salento y caminata en el Valle del Cocora.",
+        "Día 3 · Finca cafetera y visita a Filandia.",
+        "Día 4 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Pereira or Armenia and hotel transfer.",
+        "Day 2 · Salento and a hike in Cocora Valley.",
+        "Day 3 · Coffee farm and visit to Filandia.",
+        "Day 4 · Departure transfer."
+      ],
+      "code": "CO-PKG-013",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Essential Coffee Region",
+        "excerpt": "The Coffee Region’s essential landscapes and culture in four days.",
+        "itinerary": [
+          "Day 1 · Arrival in Pereira or Armenia and hotel transfer.",
+          "Day 2 · Salento and a hike in Cocora Valley.",
+          "Day 3 · Coffee farm and visit to Filandia.",
+          "Day 4 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "eje-cafetero-completo",
+      "title": "Eje Cafetero Completo",
+      "titleEn": "Complete Coffee Region",
+      "country": "Colombia",
+      "region": "Eje Cafetero",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "termales-santa-rosa-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Eje Cafetero Completo en Colombia",
+      "altEn": "Landscapes and experiences included in the Complete Coffee Region package in Colombia",
+      "excerpt": "Naturaleza, café, pueblos con encanto y termales en un itinerario equilibrado.",
+      "excerptEn": "Nature, coffee, charming towns and hot springs in a well-balanced itinerary.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada y traslado al alojamiento.",
+        "Día 2 · Salento y Valle del Cocora.",
+        "Día 3 · Finca cafetera y Filandia.",
+        "Día 4 · Termales de Santa Rosa de Cabal.",
+        "Día 5 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival and transfer to your accommodation.",
+        "Day 2 · Salento and Cocora Valley.",
+        "Day 3 · Coffee farm and Filandia.",
+        "Day 4 · Santa Rosa de Cabal hot springs.",
+        "Day 5 · Departure transfer."
+      ],
+      "code": "CO-PKG-014",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Complete Coffee Region",
+        "excerpt": "Nature, coffee, charming towns and hot springs in a well-balanced itinerary.",
+        "itinerary": [
+          "Day 1 · Arrival and transfer to your accommodation.",
+          "Day 2 · Salento and Cocora Valley.",
+          "Day 3 · Coffee farm and Filandia.",
+          "Day 4 · Santa Rosa de Cabal hot springs.",
+          "Day 5 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "eje-cafetero-familiar",
+      "title": "Eje Cafetero Familiar",
+      "titleEn": "Family Coffee Region",
+      "country": "Colombia",
+      "region": "Eje Cafetero",
+      "nights": "6D/5N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "parque-del-cafe-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Eje Cafetero Familiar en Colombia",
+      "altEn": "Landscapes and experiences included in the Family Coffee Region package in Colombia",
+      "excerpt": "Un programa familiar con parques temáticos, naturaleza y cultura cafetera.",
+      "excerptEn": "A family program combining theme parks, nature and coffee culture.",
+      "category": "Familiar",
+      "style": "familia",
+      "itinerary": [
+        "Día 1 · Llegada a Pereira o Armenia.",
+        "Día 2 · Salento y Valle del Cocora.",
+        "Día 3 · Finca cafetera y Filandia.",
+        "Día 4 · Parque del Café.",
+        "Día 5 · PANACA o Termales de Santa Rosa, según opción.",
+        "Día 6 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Pereira or Armenia.",
+        "Day 2 · Salento and Cocora Valley.",
+        "Day 3 · Coffee farm and Filandia.",
+        "Day 4 · National Coffee Park.",
+        "Day 5 · PANACA or Santa Rosa hot springs, depending on the selected option.",
+        "Day 6 · Departure transfer."
+      ],
+      "code": "CO-PKG-015",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Family Coffee Region",
+        "excerpt": "A family program combining theme parks, nature and coffee culture.",
+        "itinerary": [
+          "Day 1 · Arrival in Pereira or Armenia.",
+          "Day 2 · Salento and Cocora Valley.",
+          "Day 3 · Coffee farm and Filandia.",
+          "Day 4 · National Coffee Park.",
+          "Day 5 · PANACA or Santa Rosa hot springs, depending on the selected option.",
+          "Day 6 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "cali-salsa-y-cultura",
+      "title": "Cali, Salsa y Cultura",
+      "titleEn": "Cali: Salsa and Culture",
+      "country": "Colombia",
+      "region": "Cali",
+      "nights": "4D/3N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "cali-salsa-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Cali, Salsa y Cultura en Colombia",
+      "altEn": "Landscapes and experiences included in the Cali: Salsa and Culture package in Colombia",
+      "excerpt": "La identidad de Cali a través de sus barrios, sabores y salsa.",
+      "excerptEn": "Experience Cali’s identity through its neighborhoods, flavors and salsa.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Cali y traslado.",
+        "Día 2 · City tour y experiencia gastronómica vallecaucana.",
+        "Día 3 · Clase de salsa y espectáculo nocturno.",
+        "Día 4 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Cali and transfer.",
+        "Day 2 · City tour and Valle del Cauca food experience.",
+        "Day 3 · Salsa class and evening show.",
+        "Day 4 · Departure transfer."
+      ],
+      "code": "CO-PKG-016",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Cali: Salsa and Culture",
+        "excerpt": "Experience Cali’s identity through its neighborhoods, flavors and salsa.",
+        "itinerary": [
+          "Day 1 · Arrival in Cali and transfer.",
+          "Day 2 · City tour and Valle del Cauca food experience.",
+          "Day 3 · Salsa class and evening show.",
+          "Day 4 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "cali-y-valle-del-cauca",
+      "title": "Cali y Valle del Cauca",
+      "titleEn": "Cali and the Cauca Valley",
+      "country": "Colombia",
+      "region": "Cali y Valle del Cauca",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "hacienda-el-paraiso-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Cali y Valle del Cauca en Colombia",
+      "altEn": "Landscapes and experiences included in the Cali and the Cauca Valley package in Colombia",
+      "excerpt": "Cali y el patrimonio cultural del Valle del Cauca en cinco días.",
+      "excerptEn": "Cali and the cultural heritage of the Cauca Valley in five days.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Cali.",
+        "Día 2 · City tour y gastronomía.",
+        "Día 3 · Salsa, cultura y vida nocturna.",
+        "Día 4 · Hacienda El Paraíso y pueblos del Valle.",
+        "Día 5 · Traslado al aeropuerto."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Cali.",
+        "Day 2 · City tour and local food.",
+        "Day 3 · Salsa, culture and nightlife.",
+        "Day 4 · Hacienda El Paraíso and towns of the Cauca Valley.",
+        "Day 5 · Airport transfer."
+      ],
+      "code": "CO-PKG-017",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Cali and the Cauca Valley",
+        "excerpt": "Cali and the cultural heritage of the Cauca Valley in five days.",
+        "itinerary": [
+          "Day 1 · Arrival in Cali.",
+          "Day 2 · City tour and local food.",
+          "Day 3 · Salsa, culture and nightlife.",
+          "Day 4 · Hacienda El Paraíso and towns of the Cauca Valley.",
+          "Day 5 · Airport transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "san-andres-caribe",
+      "title": "San Andrés Caribe",
+      "titleEn": "Caribbean San Andrés",
+      "country": "Colombia",
+      "region": "San Andrés",
+      "nights": "4D/3N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "san-andres-johnny-cay-01.jpg",
+      "alt": "Paisajes y experiencias del paquete San Andrés Caribe en Colombia",
+      "altEn": "Landscapes and experiences included in the Caribbean San Andrés package in Colombia",
+      "excerpt": "Las experiencias esenciales del mar de los siete colores en cuatro días.",
+      "excerptEn": "The essential experiences of the Sea of Seven Colors in four days.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a San Andrés y traslado al hotel.",
+        "Día 2 · Johnny Cay, Acuario y Haynes Cay.",
+        "Día 3 · Vuelta a la isla y tarde libre.",
+        "Día 4 · Traslado al aeropuerto."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in San Andrés and hotel transfer.",
+        "Day 2 · Johnny Cay, Aquarium Cay and Haynes Cay.",
+        "Day 3 · Island tour and free afternoon.",
+        "Day 4 · Airport transfer."
+      ],
+      "code": "CO-PKG-018",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Caribbean San Andrés",
+        "excerpt": "The essential experiences of the Sea of Seven Colors in four days.",
+        "itinerary": [
+          "Day 1 · Arrival in San Andrés and hotel transfer.",
+          "Day 2 · Johnny Cay, Aquarium Cay and Haynes Cay.",
+          "Day 3 · Island tour and free afternoon.",
+          "Day 4 · Airport transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "san-andres-completo",
+      "title": "San Andrés Completo",
+      "titleEn": "Complete San Andrés",
+      "country": "Colombia",
+      "region": "San Andrés",
+      "nights": "5D/4N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "san-andres-catamaran-01.jpg",
+      "alt": "Paisajes y experiencias del paquete San Andrés Completo en Colombia",
+      "altEn": "Landscapes and experiences included in the Complete San Andrés package in Colombia",
+      "excerpt": "Cinco días con cayos, recorrido terrestre y una experiencia marina adicional.",
+      "excerptEn": "Five days featuring cays, an island tour and one additional marine experience.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada y traslado.",
+        "Día 2 · Johnny Cay y Acuario.",
+        "Día 3 · Vuelta a la isla.",
+        "Día 4 · Catamarán, snorkel o encuentro con mantarrayas, según opción.",
+        "Día 5 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival and transfer.",
+        "Day 2 · Johnny Cay and Aquarium Cay.",
+        "Day 3 · Island tour.",
+        "Day 4 · Catamaran, snorkeling or stingray encounter, depending on the selected option.",
+        "Day 5 · Departure transfer."
+      ],
+      "code": "CO-PKG-019",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Complete San Andrés",
+        "excerpt": "Five days featuring cays, an island tour and one additional marine experience.",
+        "itinerary": [
+          "Day 1 · Arrival and transfer.",
+          "Day 2 · Johnny Cay and Aquarium Cay.",
+          "Day 3 · Island tour.",
+          "Day 4 · Catamaran, snorkeling or stingray encounter, depending on the selected option.",
+          "Day 5 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "cartagena-y-santa-marta",
+      "title": "Cartagena y Santa Marta",
+      "titleEn": "Cartagena and Santa Marta",
+      "country": "Colombia",
+      "region": "Cartagena y Santa Marta",
+      "nights": "6D/5N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "colombia-cartagena-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Cartagena y Santa Marta en Colombia",
+      "altEn": "Landscapes and experiences included in the Cartagena and Santa Marta package in Colombia",
+      "excerpt": "El circuito terrestre más natural del Caribe colombiano.",
+      "excerptEn": "The most natural overland circuit along Colombia’s Caribbean coast.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Cartagena.",
+        "Día 2 · Cartagena histórica y Getsemaní.",
+        "Día 3 · Islas del Rosario y Barú.",
+        "Día 4 · Traslado terrestre a Santa Marta y city tour.",
+        "Día 5 · Parque Tayrona o Minca, según opción.",
+        "Día 6 · Traslado de salida desde Santa Marta."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Cartagena.",
+        "Day 2 · Historic Cartagena and Getsemaní.",
+        "Day 3 · Rosario Islands and Barú.",
+        "Day 4 · Overland transfer to Santa Marta and city tour.",
+        "Day 5 · Tayrona National Park or Minca, depending on the selected option.",
+        "Day 6 · Departure transfer from Santa Marta."
+      ],
+      "code": "CO-PKG-020",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Cartagena and Santa Marta",
+        "excerpt": "The most natural overland circuit along Colombia’s Caribbean coast.",
+        "itinerary": [
+          "Day 1 · Arrival in Cartagena.",
+          "Day 2 · Historic Cartagena and Getsemaní.",
+          "Day 3 · Rosario Islands and Barú.",
+          "Day 4 · Overland transfer to Santa Marta and city tour.",
+          "Day 5 · Tayrona National Park or Minca, depending on the selected option.",
+          "Day 6 · Departure transfer from Santa Marta."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "cali-y-eje-cafetero",
+      "title": "Cali y Eje Cafetero",
+      "titleEn": "Cali and the Coffee Region",
+      "country": "Colombia",
+      "region": "Cali y Eje Cafetero",
+      "nights": "6D/5N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "valle-cocora-salento-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Cali y Eje Cafetero en Colombia",
+      "altEn": "Landscapes and experiences included in the Cali and the Coffee Region package in Colombia",
+      "excerpt": "Salsa, cultura urbana y paisajes cafeteros en una ruta de seis días.",
+      "excerptEn": "Salsa, urban culture and coffee landscapes in a six-day route.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Cali.",
+        "Día 2 · City tour, gastronomía y salsa.",
+        "Día 3 · Traslado hacia Pereira, Armenia o Salento.",
+        "Día 4 · Salento y Valle del Cocora.",
+        "Día 5 · Finca cafetera y Filandia.",
+        "Día 6 · Salida desde Pereira o Armenia."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Cali.",
+        "Day 2 · City tour, local food and salsa.",
+        "Day 3 · Transfer to Pereira, Armenia or Salento.",
+        "Day 4 · Salento and Cocora Valley.",
+        "Day 5 · Coffee farm and Filandia.",
+        "Day 6 · Departure from Pereira or Armenia."
+      ],
+      "code": "CO-PKG-021",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Cali and the Coffee Region",
+        "excerpt": "Salsa, urban culture and coffee landscapes in a six-day route.",
+        "itinerary": [
+          "Day 1 · Arrival in Cali.",
+          "Day 2 · City tour, local food and salsa.",
+          "Day 3 · Transfer to Pereira, Armenia or Salento.",
+          "Day 4 · Salento and Cocora Valley.",
+          "Day 5 · Coffee farm and Filandia.",
+          "Day 6 · Departure from Pereira or Armenia."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "medellin-y-eje-cafetero",
+      "title": "Medellín y Eje Cafetero",
+      "titleEn": "Medellín and the Coffee Region",
+      "country": "Colombia",
+      "region": "Medellín y Eje Cafetero",
+      "nights": "6D/5N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "colombia-medellin-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Medellín y Eje Cafetero en Colombia",
+      "altEn": "Landscapes and experiences included in the Medellín and the Coffee Region package in Colombia",
+      "excerpt": "Dos regiones emblemáticas unidas por cultura, montaña y café.",
+      "excerptEn": "Two iconic regions connected by culture, mountains and coffee.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Medellín.",
+        "Día 2 · Medellín y Comuna 13.",
+        "Día 3 · Guatapé y Piedra del Peñol.",
+        "Día 4 · Traslado al Eje Cafetero.",
+        "Día 5 · Salento, Cocora y finca cafetera.",
+        "Día 6 · Salida desde Pereira o Armenia."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Medellín.",
+        "Day 2 · Medellín and Comuna 13.",
+        "Day 3 · Guatapé and El Peñol Rock.",
+        "Day 4 · Transfer to the Coffee Region.",
+        "Day 5 · Salento, Cocora Valley and a coffee farm.",
+        "Day 6 · Departure from Pereira or Armenia."
+      ],
+      "code": "CO-PKG-022",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Medellín and the Coffee Region",
+        "excerpt": "Two iconic regions connected by culture, mountains and coffee.",
+        "itinerary": [
+          "Day 1 · Arrival in Medellín.",
+          "Day 2 · Medellín and Comuna 13.",
+          "Day 3 · Guatapé and El Peñol Rock.",
+          "Day 4 · Transfer to the Coffee Region.",
+          "Day 5 · Salento, Cocora Valley and a coffee farm.",
+          "Day 6 · Departure from Pereira or Armenia."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "medellin-y-cartagena",
+      "title": "Medellín y Cartagena",
+      "titleEn": "Medellín and Cartagena",
+      "country": "Colombia",
+      "region": "Medellín y Cartagena",
+      "nights": "6D/5N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "colombia-cartagena-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Medellín y Cartagena en Colombia",
+      "altEn": "Landscapes and experiences included in the Medellín and Cartagena package in Colombia",
+      "excerpt": "Montaña, innovación urbana y Caribe en un solo viaje.",
+      "excerptEn": "Mountains, urban innovation and the Caribbean in one journey.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Medellín.",
+        "Día 2 · City tour y Comuna 13.",
+        "Día 3 · Guatapé y Piedra del Peñol.",
+        "Día 4 · Vuelo doméstico a Cartagena y traslado al hotel.",
+        "Día 5 · Cartagena histórica o Islas del Rosario, según opción.",
+        "Día 6 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Medellín.",
+        "Day 2 · City tour and Comuna 13.",
+        "Day 3 · Guatapé and El Peñol Rock.",
+        "Day 4 · Domestic flight to Cartagena and hotel transfer.",
+        "Day 5 · Historic Cartagena or Rosario Islands, depending on the selected option.",
+        "Day 6 · Departure transfer."
+      ],
+      "code": "CO-PKG-023",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Medellín and Cartagena",
+        "excerpt": "Mountains, urban innovation and the Caribbean in one journey.",
+        "itinerary": [
+          "Day 1 · Arrival in Medellín.",
+          "Day 2 · City tour and Comuna 13.",
+          "Day 3 · Guatapé and El Peñol Rock.",
+          "Day 4 · Domestic flight to Cartagena and hotel transfer.",
+          "Day 5 · Historic Cartagena or Rosario Islands, depending on the selected option.",
+          "Day 6 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "bogota-y-medellin",
+      "title": "Bogotá y Medellín",
+      "titleEn": "Bogotá and Medellín",
+      "country": "Colombia",
+      "region": "Bogotá y Medellín",
+      "nights": "6D/5N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "bogota-monserrate-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Bogotá y Medellín en Colombia",
+      "altEn": "Landscapes and experiences included in the Bogotá and Medellín package in Colombia",
+      "excerpt": "Las dos grandes ciudades andinas con sus excursiones más representativas.",
+      "excerptEn": "Colombia’s two major Andean cities with their most representative excursions.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Bogotá.",
+        "Día 2 · Bogotá histórica y Monserrate.",
+        "Día 3 · Zipaquirá y vuelo a Medellín.",
+        "Día 4 · Medellín y Comuna 13.",
+        "Día 5 · Guatapé y Piedra del Peñol.",
+        "Día 6 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Bogotá.",
+        "Day 2 · Historic Bogotá and Monserrate.",
+        "Day 3 · Zipaquirá and flight to Medellín.",
+        "Day 4 · Medellín and Comuna 13.",
+        "Day 5 · Guatapé and El Peñol Rock.",
+        "Day 6 · Departure transfer."
+      ],
+      "code": "CO-PKG-024",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Bogotá and Medellín",
+        "excerpt": "Colombia’s two major Andean cities with their most representative excursions.",
+        "itinerary": [
+          "Day 1 · Arrival in Bogotá.",
+          "Day 2 · Historic Bogotá and Monserrate.",
+          "Day 3 · Zipaquirá and flight to Medellín.",
+          "Day 4 · Medellín and Comuna 13.",
+          "Day 5 · Guatapé and El Peñol Rock.",
+          "Day 6 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
+    },
+    {
+      "slug": "bogota-medellin-y-cartagena",
+      "title": "Bogotá, Medellín y Cartagena",
+      "titleEn": "Bogotá, Medellín and Cartagena",
+      "country": "Colombia",
+      "region": "Bogotá, Medellín y Cartagena",
+      "nights": "8D/7N",
+      "priceFrom": null,
+      "currency": "USD",
+      "img": "colombia-cartagena-01.jpg",
+      "alt": "Paisajes y experiencias del paquete Bogotá, Medellín y Cartagena en Colombia",
+      "altEn": "Landscapes and experiences included in the Bogotá, Medellín and Cartagena package in Colombia",
+      "excerpt": "El gran circuito clásico de Colombia: capital, Antioquia y Caribe.",
+      "excerptEn": "Colombia’s classic grand circuit: the capital, Antioquia and the Caribbean.",
+      "category": "Combinado",
+      "style": "cultura",
+      "itinerary": [
+        "Día 1 · Llegada a Bogotá.",
+        "Día 2 · Bogotá histórica y Monserrate.",
+        "Día 3 · Zipaquirá y vuelo a Medellín.",
+        "Día 4 · Medellín y Comuna 13.",
+        "Día 5 · Guatapé y Piedra del Peñol.",
+        "Día 6 · Vuelo a Cartagena y recorrido por el centro histórico.",
+        "Día 7 · Islas del Rosario y Barú.",
+        "Día 8 · Traslado de salida."
+      ],
+      "itineraryEn": [
+        "Day 1 · Arrival in Bogotá.",
+        "Day 2 · Historic Bogotá and Monserrate.",
+        "Day 3 · Zipaquirá and flight to Medellín.",
+        "Day 4 · Medellín and Comuna 13.",
+        "Day 5 · Guatapé and El Peñol Rock.",
+        "Day 6 · Flight to Cartagena and historic center tour.",
+        "Day 7 · Rosario Islands and Barú.",
+        "Day 8 · Departure transfer."
+      ],
+      "code": "CO-PKG-025",
+      "includes": [
+        "Alojamiento en hotel previsto o similar con desayuno",
+        "Traslados de llegada y salida según el programa",
+        "Tours y actividades indicados en el itinerario",
+        "Guías locales en español o inglés durante las visitas",
+        "Asistencia por WhatsApp durante el viaje"
+      ],
+      "includesEn": [
+        "Accommodation at the planned hotel or a similar property with breakfast",
+        "Arrival and departure transfers as described in the program",
+        "Tours and activities listed in the itinerary",
+        "Local Spanish- or English-speaking guides during sightseeing",
+        "WhatsApp assistance throughout the trip"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales",
+        "Vuelos domésticos, salvo que la opción contratada los indique expresamente",
+        "Comidas no mencionadas",
+        "Seguro de viaje",
+        "Propinas y gastos personales"
+      ],
+      "notIncludesEn": [
+        "International flights",
+        "Domestic flights unless expressly included in the selected option",
+        "Meals not mentioned",
+        "Travel insurance",
+        "Tips and personal expenses"
+      ],
+      "hotelTiers": [
+        {
+          "code": "3e",
+          "stars": "3*",
+          "name": "Turista",
+          "nameEn": "Standard",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "4e",
+          "stars": "4*",
+          "name": "Primera",
+          "nameEn": "Superior",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        },
+        {
+          "code": "5e",
+          "stars": "5*",
+          "name": "Lujo",
+          "nameEn": "Luxury",
+          "pricePerPerson": 0,
+          "hotels": [
+            "Hotel previsto o similar"
+          ]
+        }
+      ],
+      "flightsAvailable": true,
+      "en": {
+        "title": "Bogotá, Medellín and Cartagena",
+        "excerpt": "Colombia’s classic grand circuit: the capital, Antioquia and the Caribbean.",
+        "itinerary": [
+          "Day 1 · Arrival in Bogotá.",
+          "Day 2 · Historic Bogotá and Monserrate.",
+          "Day 3 · Zipaquirá and flight to Medellín.",
+          "Day 4 · Medellín and Comuna 13.",
+          "Day 5 · Guatapé and El Peñol Rock.",
+          "Day 6 · Flight to Cartagena and historic center tour.",
+          "Day 7 · Rosario Islands and Barú.",
+          "Day 8 · Departure transfer."
+        ],
+        "includes": [
+          "Accommodation at the planned hotel or a similar property with breakfast",
+          "Arrival and departure transfers as described in the program",
+          "Tours and activities listed in the itinerary",
+          "Local Spanish- or English-speaking guides during sightseeing",
+          "WhatsApp assistance throughout the trip"
+        ],
+        "notIncludes": [
+          "International flights",
+          "Domestic flights unless expressly included in the selected option",
+          "Meals not mentioned",
+          "Travel insurance",
+          "Tips and personal expenses"
+        ]
+      }
     }
   ],
   "destinations": [
@@ -5267,5 +8098,159 @@
     ],
     "payFullBelow": 60,
     "googleClientId": "PEGAR_AQUI_TU_CLIENT_ID_DE_GOOGLE.apps.googleusercontent.com"
-  }
+  },
+  "colombiaRegions": [
+    {
+      "name": "Amazonas / Leticia",
+      "slug": "amazonas-leticia"
+    },
+    {
+      "name": "Bahía Solano / Nuquí",
+      "slug": "bahia-solano-nuqui"
+    },
+    {
+      "name": "Bogotá",
+      "slug": "bogota"
+    },
+    {
+      "name": "Bogotá / Boyacá",
+      "slug": "bogota-boyaca"
+    },
+    {
+      "name": "Bogotá / Cundinamarca",
+      "slug": "bogota-cundinamarca"
+    },
+    {
+      "name": "Bogotá / Zipaquirá",
+      "slug": "bogota-zipaquira"
+    },
+    {
+      "name": "Bogotá y Boyacá",
+      "slug": "bogota-y-boyaca"
+    },
+    {
+      "name": "Bogotá y Medellín",
+      "slug": "bogota-y-medellin"
+    },
+    {
+      "name": "Bogotá, Medellín y Cartagena",
+      "slug": "bogota-medellin-y-cartagena"
+    },
+    {
+      "name": "Cali",
+      "slug": "cali"
+    },
+    {
+      "name": "Cali / Valle del Cauca",
+      "slug": "cali-valle-del-cauca"
+    },
+    {
+      "name": "Cali y Eje Cafetero",
+      "slug": "cali-y-eje-cafetero"
+    },
+    {
+      "name": "Cali y Valle del Cauca",
+      "slug": "cali-y-valle-del-cauca"
+    },
+    {
+      "name": "Cartagena",
+      "slug": "cartagena"
+    },
+    {
+      "name": "Cartagena / Barú",
+      "slug": "cartagena-baru"
+    },
+    {
+      "name": "Cartagena / Islas del Rosario",
+      "slug": "cartagena-islas-del-rosario"
+    },
+    {
+      "name": "Cartagena / Santa Catalina",
+      "slug": "cartagena-santa-catalina"
+    },
+    {
+      "name": "Cartagena de Indias",
+      "slug": "cartagena-de-indias"
+    },
+    {
+      "name": "Cartagena y Santa Marta",
+      "slug": "cartagena-y-santa-marta"
+    },
+    {
+      "name": "Chocó / Bahía Solano",
+      "slug": "choco-bahia-solano"
+    },
+    {
+      "name": "Chocó / Nuquí",
+      "slug": "choco-nuqui"
+    },
+    {
+      "name": "Eje Cafetero",
+      "slug": "eje-cafetero"
+    },
+    {
+      "name": "Eje Cafetero / Quindío",
+      "slug": "eje-cafetero-quindio"
+    },
+    {
+      "name": "Eje Cafetero / Risaralda",
+      "slug": "eje-cafetero-risaralda"
+    },
+    {
+      "name": "Huila / San Agustín",
+      "slug": "huila-san-agustin"
+    },
+    {
+      "name": "Huila / Villavieja",
+      "slug": "huila-villavieja"
+    },
+    {
+      "name": "Medellín",
+      "slug": "medellin"
+    },
+    {
+      "name": "Medellín y Antioquia",
+      "slug": "medellin-y-antioquia"
+    },
+    {
+      "name": "Medellín y Cartagena",
+      "slug": "medellin-y-cartagena"
+    },
+    {
+      "name": "Medellín y Eje Cafetero",
+      "slug": "medellin-y-eje-cafetero"
+    },
+    {
+      "name": "Meta / La Macarena",
+      "slug": "meta-la-macarena"
+    },
+    {
+      "name": "San Andrés",
+      "slug": "san-andres"
+    },
+    {
+      "name": "San Gil / Santander",
+      "slug": "san-gil-santander"
+    },
+    {
+      "name": "Santa Marta",
+      "slug": "santa-marta"
+    },
+    {
+      "name": "Santa Marta / Sierra Nevada",
+      "slug": "santa-marta-sierra-nevada"
+    },
+    {
+      "name": "Santa Marta / Tayrona",
+      "slug": "santa-marta-tayrona"
+    },
+    {
+      "name": "Santander",
+      "slug": "santander"
+    },
+    {
+      "name": "Sierra Nevada de Santa Marta",
+      "slug": "sierra-nevada-de-santa-marta"
+    }
+  ]
 }
