@@ -181,12 +181,12 @@ def trip_card(item, kind: str, base: str = "", lazy: bool = True) -> str:
     if kind == "experience":
         href = f"{base}experiencias/{item['slug']}.html"
         tag = item["styleLabel"]
-        tags = f'{item["style"]} {COUNTRY_SLUG.get(item["country"], "")}'
+        tags = ' '.join(dict.fromkeys((item.get('styles') or [item['style']]) + [COUNTRY_SLUG.get(item['country'], '')]))
         cta = "Ver experiencia"
     else:
         href = f"{base}paquetes/{item['slug']}.html"
         tag = item["nights"]
-        tags = f'{COUNTRY_SLUG.get(item["country"], "")} {slug_duracion(item["nights"])}'
+        tags = ' '.join(dict.fromkeys((item.get('styles') or []) + [COUNTRY_SLUG.get(item['country'], ''), slug_duracion(item['nights'])]))
         cta = "Ver paquete"
 
     return f"""<article class="trip-card" data-tags="{tags}">
@@ -911,6 +911,10 @@ def render_master_experience(item) -> str:
 
 def build_experience_details() -> None:
     for item in DATA["experiences"]:
+        if item.get("country") == "Colombia" and (ROOT / "experiencias" / f"{item['slug']}.html").exists():
+            PAGES.append((f"experiencias/{item['slug']}.html", "0.8"))
+            print(f"  ↺ experiencias/{item['slug']}.html (ficha Colombia preservada)")
+            continue
         if item.get("master"):
             write(f"experiencias/{item['slug']}.html", render_master_experience(item), "0.8")
             continue
@@ -1017,6 +1021,10 @@ def build_experience_details() -> None:
 
 def build_package_details() -> None:
     for item in DATA["packages"]:
+        if item.get("country") == "Colombia" and (ROOT / "paquetes" / f"{item['slug']}.html").exists():
+            PAGES.append((f"paquetes/{item['slug']}.html", "0.8"))
+            print(f"  ↺ paquetes/{item['slug']}.html (ficha Colombia preservada)")
+            continue
         itinerary = "".join(f"<li>{day}</li>" for day in item["itinerary"])
         includes = "".join(
             f'<li><i class="fa-solid fa-check" aria-hidden="true"></i><span>{x}</span></li>'
@@ -1697,9 +1705,19 @@ def limpiar_huerfanos() -> None:
     publicada, con contenido y precios viejos, y Google la indexa. Pasó al
     ampliar el catálogo, así que ahora se limpia en cada build.
     """
+    # Alias históricos que deben conservarse como redirecciones para no romper
+    # enlaces guardados ni URLs ya indexadas.
+    alias_historicos = {
+        "experiencias": {"cartagena-colonial.html"},
+        "paquetes": {
+            "colombia-caribe.html",
+            "colombia-caribe-4d3n.html",
+            "colombia-completo-7d6n.html",
+        },
+    }
     esperados = {
-        "experiencias": {f"{e['slug']}.html" for e in DATA["experiences"]},
-        "paquetes": {f"{p['slug']}.html" for p in DATA["packages"]},
+        "experiencias": {f"{e['slug']}.html" for e in DATA["experiences"]} | alias_historicos["experiencias"],
+        "paquetes": {f"{p['slug']}.html" for p in DATA["packages"]} | alias_historicos["paquetes"],
     }
     for carpeta, validos in esperados.items():
         directorio = ROOT / carpeta
