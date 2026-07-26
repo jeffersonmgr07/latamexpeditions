@@ -1,90 +1,343 @@
 /* =========================================================================
-   Latam Expeditions \u2014 motor de internacionalizaci\u00f3n (i18n)
-   El espa\u00f1ol vive en el HTML. Al elegir otro idioma se descarga
-   assets/data/i18n/<lang>/content.json (diccionario "texto espa\u00f1ol" ->
-   traducci\u00f3n) y ui-translations.json (claves data-i18n), y se traducen el
-   DOM, atributos, <title> y metadatos. Lo no traducido queda en espa\u00f1ol.
+   Latam Expeditions — i18n, navegación, selector de país y filtros
    ========================================================================= */
 (function () {
-  var DEFAULT = 'es';
-  var SUPPORTED = ['es', 'en', 'pt', 'fr', 'de', 'it', 'ja', 'zh'];
-  var lang = DEFAULT, content = {}, ui = {}, cache = null;
-  var base = (function () {
-    var s = document.querySelector('script[src$="assets/js/main.js"]');
-    return s ? (s.getAttribute('src') || '').replace(/assets\/js\/main\.js.*$/, '') : '';
-  })();
-  function store(l) { try { localStorage.setItem('latam_lang', l); } catch (e) {} }
-  function stored() { try { return localStorage.getItem('latam_lang') || DEFAULT; } catch (e) { return DEFAULT; } }
-  function flat(l) { return content[l] || {}; }
-  function nested(o, k) { return k.split('.').reduce(function (a, p) { return (a && a[p] != null) ? a[p] : null; }, o || {}); }
+  'use strict';
+
+  const DEFAULT = 'es';
+  const SUPPORTED = ['es', 'en', 'pt', 'fr', 'de', 'it', 'ja', 'zh'];
+  let lang = DEFAULT;
+  const content = {};
+  const ui = {};
+  let cache = null;
+  const originalTextNodes = new WeakMap();
+  const originalAttributes = new WeakMap();
+  const originalTitle = document.title;
+
+  function rememberText(node) {
+    if (!originalTextNodes.has(node)) originalTextNodes.set(node, node.nodeValue);
+    return originalTextNodes.get(node);
+  }
+
+  function rememberAttribute(el, attr) {
+    let attrs = originalAttributes.get(el);
+    if (!attrs) { attrs = new Map(); originalAttributes.set(el, attrs); }
+    if (!attrs.has(attr)) attrs.set(attr, el.getAttribute(attr));
+    return attrs.get(attr);
+  }
+
+  const script = document.querySelector('script[src$="assets/js/main.js"]');
+  const base = document.documentElement.dataset.base || (script ? (script.getAttribute('src') || '').replace(/assets\/js\/main\.js.*$/, '') : './');
+  const store = (key, value) => { try { localStorage.setItem(key, value); } catch (_) {} };
+  const read = (key, fallback = '') => { try { return localStorage.getItem(key) || fallback; } catch (_) { return fallback; } };
+  const nested = (obj, key) => key.split('.').reduce((acc, part) => (acc && acc[part] != null ? acc[part] : null), obj || {});
+  const dictionary = (code) => content[code] || {};
+
   function buildCache() {
-    cache = { texts: [], attrs: [], metas: [], i18nEls: [], title: document.title };
-    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
-      acceptNode: function (n) {
-        if (!n.nodeValue || !n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-        var p = n.parentNode;
-        if (!p || !p.nodeName) return NodeFilter.FILTER_REJECT;
-        var tag = p.nodeName;
-        if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'TEXTAREA' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
-        if (p.closest && p.closest('[data-i18n]')) return NodeFilter.FILTER_REJECT;
+    cache = { texts: [], attrs: [], metas: [], uiEls: [], direct: [], title: originalTitle };
+
+    document.querySelectorAll('[data-en]').forEach((el) => {
+      if (!el.dataset.esText) el.dataset.esText = el.textContent;
+      cache.direct.push({ el, es: el.dataset.esText, en: el.getAttribute('data-en') || el.dataset.esText });
+    });
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        const parent = node.parentElement;
+        if (!parent) return NodeFilter.FILTER_REJECT;
+        if (/^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(parent.tagName)) return NodeFilter.FILTER_REJECT;
+        if (parent.closest('[data-en], [data-i18n]')) return NodeFilter.FILTER_REJECT;
         return NodeFilter.FILTER_ACCEPT;
       }
     });
-    var n; while ((n = walker.nextNode())) cache.texts.push({ node: n, orig: n.nodeValue });
-    ['placeholder', 'title', 'alt', 'aria-label'].forEach(function (a) {
-      document.querySelectorAll('[' + a + ']').forEach(function (el) {
-        var v = el.getAttribute(a); if (v && v.trim()) cache.attrs.push({ el: el, attr: a, orig: v });
+    let node;
+    while ((node = walker.nextNode())) cache.texts.push({ node, orig: rememberText(node) });
+
+    ['placeholder', 'title', 'alt', 'aria-label'].forEach((attr) => {
+      document.querySelectorAll(`[${attr}]`).forEach((el) => {
+        const value = rememberAttribute(el, attr);
+        if (value && value.trim()) cache.attrs.push({ el, attr, orig: value });
       });
     });
-    document.querySelectorAll('meta[name="description"],meta[property="og:description"],meta[property="og:title"],meta[name="twitter:description"],meta[name="twitter:title"]').forEach(function (m) {
-      var v = m.getAttribute('content'); if (v && v.trim()) cache.metas.push({ el: m, orig: v });
+
+    document.querySelectorAll('[data-en-alt]').forEach((el) => {
+      el.dataset.esAlt = el.getAttribute('alt') || '';
     });
-    document.querySelectorAll('[data-i18n]').forEach(function (el) {
-      cache.i18nEls.push({ el: el, key: el.getAttribute('data-i18n'), orig: el.textContent });
+
+    document.querySelectorAll('meta[name="description"],meta[property="og:description"],meta[property="og:title"],meta[name="twitter:description"],meta[name="twitter:title"]').forEach((el) => {
+      const value = rememberAttribute(el, 'content');
+      if (value && value.trim()) cache.metas.push({ el, orig: value });
+    });
+
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      if (!el.dataset.i18nOrig) el.dataset.i18nOrig = el.textContent;
+      cache.uiEls.push({ el, key: el.getAttribute('data-i18n'), orig: el.dataset.i18nOrig });
     });
   }
-  function applyLang(l) {
+
+  function translateText(original, code) {
+    if (code === DEFAULT) return original;
+    const key = String(original).trim();
+    const value = dictionary(code)[key];
+    return value != null ? String(original).replace(key, value) : original;
+  }
+
+  function applyLang(code) {
     if (!cache) buildCache();
-    var d = flat(l), u = ui[l] || {}, def = (l === DEFAULT);
-    cache.texts.forEach(function (t) { var k = t.orig.trim(); t.node.nodeValue = def ? t.orig : (d[k] != null ? t.orig.replace(k, d[k]) : t.orig); });
-    cache.i18nEls.forEach(function (o) { var k = (o.orig || '').trim(); o.el.textContent = def ? o.orig : (nested(u, o.key) != null ? nested(u, o.key) : (d[k] != null ? d[k] : o.orig)); });
-    cache.attrs.forEach(function (a) { var k = a.orig.trim(); a.el.setAttribute(a.attr, def ? a.orig : (d[k] != null ? d[k] : a.orig)); });
-    cache.metas.forEach(function (m) { var k = m.orig.trim(); m.el.setAttribute('content', def ? m.orig : (d[k] != null ? d[k] : m.orig)); });
-    var tk = cache.title.trim(); document.title = def ? cache.title : (d[tk] != null ? d[tk] : cache.title);
-    document.documentElement.lang = l;
+    const isDefault = code === DEFAULT;
+
+    cache.direct.forEach(({ el, es, en }) => { el.textContent = code === 'en' ? en : es; });
+    document.querySelectorAll('[data-en-alt]').forEach((el) => {
+      el.setAttribute('alt', code === 'en' ? (el.getAttribute('data-en-alt') || el.dataset.esAlt || '') : (el.dataset.esAlt || ''));
+    });
+    cache.texts.forEach((item) => { item.node.nodeValue = isDefault ? item.orig : translateText(item.orig, code); });
+    cache.uiEls.forEach((item) => {
+      const translated = nested(ui[code], item.key);
+      item.el.textContent = isDefault ? item.orig : (translated != null ? translated : translateText(item.orig, code));
+    });
+    cache.attrs.forEach((item) => {
+      if (item.el.hasAttribute('data-en-alt') && item.attr === 'alt') return;
+      item.el.setAttribute(item.attr, isDefault ? item.orig : translateText(item.orig, code));
+    });
+    cache.metas.forEach((item) => item.el.setAttribute('content', isDefault ? item.orig : translateText(item.orig, code)));
+    document.title = isDefault ? cache.title : translateText(cache.title, code);
+    document.documentElement.lang = code;
+    document.dispatchEvent(new CustomEvent('latam:languagechange', { detail: { lang: code } }));
   }
-  function load(l, cb) {
-    if (l === DEFAULT || content[l] !== undefined) { cb && cb(); return; }
-    var done = 0, fin = function () { if (++done >= 2) cb && cb(); };
-    fetch(base + 'assets/data/i18n/' + l + '/content.json').then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) { content[l] = j; fin(); }).catch(function () { content[l] = {}; fin(); });
-    fetch(base + 'assets/data/i18n/' + l + '/ui-translations.json').then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) { ui[l] = j; fin(); }).catch(function () { ui[l] = {}; fin(); });
+
+  function load(code) {
+    if (code === DEFAULT || content[code] !== undefined) return Promise.resolve();
+    return Promise.all([
+      fetch(`${base}assets/data/i18n/${code}/content.json`).then((r) => r.ok ? r.json() : {}).catch(() => ({})),
+      fetch(`${base}assets/data/i18n/${code}/ui-translations.json`).then((r) => r.ok ? r.json() : {}).catch(() => ({}))
+    ]).then(([dict, uiDict]) => { content[code] = dict; ui[code] = uiDict; });
   }
-  function set(l) { if (SUPPORTED.indexOf(l) < 0) l = DEFAULT; lang = l; store(l); load(l, function () { applyLang(l); }); }
+
+  function setLanguage(code) {
+    if (!SUPPORTED.includes(code)) code = DEFAULT;
+    lang = code;
+    store('latam_lang', code);
+    return load(code).then(() => applyLang(code));
+  }
+
   window.LatamI18n = {
-    t: function (s) { if (lang === DEFAULT) return s; var v = flat(lang)[String(s).trim()]; return v != null ? v : s; },
-    apply: function (root) { if (lang === DEFAULT || !root) return; var d = flat(lang); var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null); var n; while ((n = w.nextNode())) { var k = (n.nodeValue || '').trim(); if (k && d[k] != null) n.nodeValue = n.nodeValue.replace(k, d[k]); } },
-    lang: function () { return lang; }, set: set
+    t(text) {
+      if (lang === DEFAULT) return text;
+      return dictionary(lang)[String(text).trim()] || text;
+    },
+    apply(root) {
+      if (!root) return;
+      root.querySelectorAll?.('[data-en]').forEach((el) => {
+        if (!el.dataset.esText) el.dataset.esText = el.textContent;
+        el.textContent = lang === 'en' ? (el.getAttribute('data-en') || el.dataset.esText) : el.dataset.esText;
+      });
+      root.querySelectorAll?.('[data-en-alt]').forEach((el) => {
+        if (!el.dataset.esAlt) el.dataset.esAlt = el.getAttribute('alt') || '';
+        el.setAttribute('alt', lang === 'en' ? (el.getAttribute('data-en-alt') || el.dataset.esAlt) : el.dataset.esAlt);
+      });
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!node.nodeValue?.trim() || !parent || parent.closest('[data-en], [data-i18n]') || /^(SCRIPT|STYLE|TEXTAREA|NOSCRIPT)$/.test(parent.tagName)) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      let node;
+      while ((node = walker.nextNode())) {
+        const original = rememberText(node);
+        node.nodeValue = lang === DEFAULT ? original : translateText(original, lang);
+      }
+      ['placeholder', 'title', 'alt', 'aria-label'].forEach((attr) => {
+        root.querySelectorAll?.(`[${attr}]`).forEach((el) => {
+          if (el.hasAttribute('data-en-alt') && attr === 'alt') return;
+          const original = rememberAttribute(el, attr);
+          if (original != null) el.setAttribute(attr, lang === DEFAULT ? original : translateText(original, lang));
+        });
+      });
+    },
+    lang: () => lang,
+    set: setLanguage,
+    invalidate() { cache = null; }
   };
-  document.addEventListener('DOMContentLoaded', function () {
-    var sel = document.getElementById('languageSelect');
-    if (!sel) return;
-    var l = stored(); sel.value = l;
-    sel.addEventListener('change', function () { set(sel.value); });
-    if (l !== DEFAULT) set(l);
+
+  function setupNavigation() {
+    const navToggle = document.getElementById('navToggle');
+    const mobileNav = document.getElementById('mobileNav');
+    const closeNav = () => {
+      if (!mobileNav) return;
+      mobileNav.classList.remove('is-open');
+      navToggle?.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('nav-open');
+    };
+    navToggle?.addEventListener('click', () => {
+      const open = !mobileNav?.classList.contains('is-open');
+      mobileNav?.classList.toggle('is-open', open);
+      navToggle.setAttribute('aria-expanded', String(open));
+      document.body.classList.toggle('nav-open', open);
+    });
+    document.querySelectorAll('[data-close-nav]').forEach((el) => el.addEventListener('click', closeNav));
+    mobileNav?.addEventListener('click', (e) => { if (e.target === mobileNav) closeNav(); });
+
+    const loginMenu = document.querySelector('.login-menu');
+    const loginToggle = loginMenu?.querySelector('.login-toggle');
+    const loginDropdown = loginMenu?.querySelector('.login-dropdown');
+    const closeLogin = () => {
+      loginMenu?.classList.remove('is-open');
+      loginToggle?.setAttribute('aria-expanded', 'false');
+    };
+    loginToggle?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = !loginMenu.classList.contains('is-open');
+      loginMenu.classList.toggle('is-open', open);
+      loginToggle.setAttribute('aria-expanded', String(open));
+    });
+    loginDropdown?.addEventListener('click', (e) => e.stopPropagation());
+    document.addEventListener('click', closeLogin);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeNav(); closeLogin(); } });
+  }
+
+  function setupCountrySelector() {
+    const modal = document.getElementById('countryModal');
+    if (!modal) return;
+    const label = document.getElementById('countryLabel');
+    const bar = document.getElementById('countryBar');
+    const barName = document.getElementById('countryBarName');
+    const barFlag = document.getElementById('countryBarFlag');
+    const search = document.getElementById('countrySearch');
+    const flags = { 'Perú':'🇵🇪','Colombia':'🇨🇴','Chile':'🇨🇱','Argentina':'🇦🇷','Bolivia':'🇧🇴','Brasil':'🇧🇷','Ecuador':'🇪🇨','México':'🇲🇽','Venezuela':'🇻🇪','Uruguay':'🇺🇾','Costa Rica':'🇨🇷','Otro país':'🌎' };
+    let lastFocused = null;
+
+    const open = () => {
+      lastFocused = document.activeElement;
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      search?.focus();
+    };
+    const close = () => {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      lastFocused?.focus?.();
+    };
+    const showCountry = (country, showBar = true) => {
+      if (!country) return;
+      if (label) label.textContent = country;
+      if (barName) barName.textContent = country;
+      if (barFlag) barFlag.textContent = flags[country] || '🌎';
+      if (bar && showBar && sessionStorage.getItem('latam_country_bar_hidden') !== '1') bar.classList.add('is-visible');
+      document.documentElement.dataset.country = country;
+    };
+
+    document.querySelectorAll('[data-open-country], [data-change-country]').forEach((el) => el.addEventListener('click', open));
+    document.querySelectorAll('[data-close-country]').forEach((el) => el.addEventListener('click', close));
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+    document.querySelectorAll('.country-option').forEach((option) => option.addEventListener('click', () => {
+      const country = option.dataset.country || option.textContent.trim();
+      store('latam_country', country);
+      sessionStorage.removeItem('latam_country_bar_hidden');
+      showCountry(country, true);
+      close();
+      document.dispatchEvent(new CustomEvent('latam:countrychange', { detail: { country } }));
+    }));
+    search?.addEventListener('input', () => {
+      const q = search.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+      document.querySelectorAll('.country-option').forEach((option) => {
+        const value = option.textContent.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        option.hidden = !value.includes(q);
+      });
+    });
+    document.querySelector('[data-dismiss-bar]')?.addEventListener('click', () => {
+      bar?.classList.remove('is-visible');
+      sessionStorage.setItem('latam_country_bar_hidden', '1');
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('is-open')) close(); });
+
+    const selected = read('latam_country');
+    if (selected) showCountry(selected, false);
+  }
+
+  function setupFilters() {
+    const norm = (value) => (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    document.querySelectorAll('[data-filterable]').forEach((root) => {
+      const cards = [...root.querySelectorAll('.trip-card')];
+      const groups = [...root.querySelectorAll('[data-filter-group]')];
+      const count = root.querySelector('#resultsCount');
+      const empty = root.querySelector('#emptyState');
+      const reset = root.querySelector('#filterReset');
+      const active = {};
+      const apply = () => {
+        let visible = 0;
+        cards.forEach((card) => {
+          const tags = (card.dataset.tags || '').split(/\s+/).filter(Boolean);
+          const ok = Object.values(active).every((value) => !value || tags.includes(value));
+          card.hidden = !ok;
+          if (ok) visible += 1;
+        });
+        if (count) count.textContent = `${visible} ${document.documentElement.lang === 'en' ? 'results' : 'resultados'}`;
+        if (empty) empty.hidden = visible > 0;
+        if (reset) reset.hidden = !Object.values(active).some(Boolean);
+      };
+      groups.forEach((group) => {
+        const key = group.dataset.filterGroup;
+        group.querySelectorAll('[data-filter]').forEach((button) => button.addEventListener('click', () => {
+          const value = button.dataset.filter;
+          active[key] = active[key] === value ? '' : value;
+          group.querySelectorAll('[data-filter]').forEach((item) => {
+            const on = item.dataset.filter === active[key];
+            item.classList.toggle('is-active', on);
+            item.setAttribute('aria-pressed', String(on));
+          });
+          apply();
+        }));
+      });
+      reset?.addEventListener('click', () => {
+        Object.keys(active).forEach((key) => { active[key] = ''; });
+        root.querySelectorAll('[data-filter]').forEach((item) => { item.classList.remove('is-active'); item.setAttribute('aria-pressed', 'false'); });
+        apply();
+      });
+      const params = new URLSearchParams(location.search);
+      groups.forEach((group) => {
+        const key = group.dataset.filterGroup;
+        const value = params.get(group.dataset.filterParam);
+        if (!value) return;
+        active[key] = norm(value);
+        const button = group.querySelector(`[data-filter="${CSS.escape(norm(value))}"]`);
+        button?.classList.add('is-active');
+        button?.setAttribute('aria-pressed', 'true');
+      });
+      apply();
+    });
+
+    const form = document.querySelector('#tripSearch, .hero-search form, form.search-form');
+    const destination = document.querySelector('#searchDestination');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const value = destination?.value;
+      if (!value) return;
+      const country = ['peru','chile','ecuador','colombia','argentina','brasil','bolivia','mexico','costa-rica','uruguay','venezuela'].includes(value);
+      location.href = `${base}experiencias.html?${country ? 'destino' : 'ciudad'}=${encodeURIComponent(value)}`;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    setupNavigation();
+    setupCountrySelector();
+    setupFilters();
+
+    const languageSelect = document.getElementById('languageSelect');
+    const params = new URLSearchParams(location.search);
+    const queryLanguage = params.get('lang');
+    const initial = SUPPORTED.includes(queryLanguage) ? queryLanguage : read('latam_lang', DEFAULT);
+    if (queryLanguage) {
+      params.delete('lang');
+      const clean = `${location.pathname}${params.toString() ? `?${params}` : ''}${location.hash}`;
+      history.replaceState({}, '', clean);
+    }
+    if (languageSelect) {
+      languageSelect.value = initial;
+      languageSelect.addEventListener('change', () => setLanguage(languageSelect.value));
+    }
+    if (initial !== DEFAULT) setLanguage(initial);
+    else { lang = DEFAULT; store('latam_lang', DEFAULT); }
   });
 })();
-
-/* ============================ Filtros y buscador ========================= */
-document.addEventListener('DOMContentLoaded',()=>{
-  const norm=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-  document.querySelectorAll('[data-filterable]').forEach(root=>{
-    const cards=[...root.querySelectorAll('.trip-card')], groups=[...root.querySelectorAll('[data-filter-group]')], count=root.querySelector('#resultsCount'), empty=root.querySelector('#emptyState'), reset=root.querySelector('#filterReset');
-    const active={};
-    const apply=()=>{let visible=0;cards.forEach(card=>{const tags=(card.dataset.tags||'').split(/\s+/);const ok=Object.values(active).every(v=>!v||tags.includes(v));card.hidden=!ok;if(ok)visible++;});if(count)count.textContent=`${visible} ${document.documentElement.lang==='en'?'results':'resultados'}`;if(empty)empty.hidden=visible>0;if(reset)reset.hidden=!Object.values(active).some(Boolean);};
-    groups.forEach(g=>{const key=g.dataset.filterGroup;g.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{const v=b.dataset.filter;active[key]=active[key]===v?'':v;g.querySelectorAll('[data-filter]').forEach(x=>{const on=x.dataset.filter===active[key];x.classList.toggle('is-active',on);x.setAttribute('aria-pressed',on)});apply()}));});
-    if(reset)reset.addEventListener('click',()=>{Object.keys(active).forEach(k=>active[k]='');root.querySelectorAll('[data-filter]').forEach(x=>{x.classList.remove('is-active');x.setAttribute('aria-pressed','false')});apply()});
-    const q=new URLSearchParams(location.search);groups.forEach(g=>{const key=g.dataset.filterGroup,param=g.dataset.filterParam,v=q.get(param);if(v){active[key]=norm(v);const b=g.querySelector(`[data-filter="${CSS.escape(norm(v))}"]`);if(b){b.classList.add('is-active');b.setAttribute('aria-pressed','true')}}});apply();
-  });
-  const form=document.querySelector('#tripSearch, .hero-search form, form.search-form'); const dest=document.querySelector('#searchDestination');
-  if(form&&dest)form.addEventListener('submit',e=>{e.preventDefault();const v=dest.value;if(!v)return;const country=['peru','chile','ecuador','colombia','argentina','brasil','bolivia','mexico','costa-rica','uruguay','venezuela'].includes(v);location.href=`experiencias.html?${country?'destino':'ciudad'}=${encodeURIComponent(v)}`;});
-});

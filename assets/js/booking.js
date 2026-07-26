@@ -1,424 +1,1387 @@
 /**
- * Latam Expeditions — motor de reserva
- *
- * Modal de tres pasos, al estilo de las OTAs:
- *   Paso 1  Fecha, número de viajeros y contacto del titular
- *   Paso 2  Datos de cada pasajero (nombre, documento, nacionalidad, nacimiento)
- *   Paso 3  Resumen, política de cancelación y pago con PayPal
- *
- * El pago NO se confirma en el navegador. El botón de PayPal pide al backend
- * (Google Apps Script) que cree la orden, y tras la aprobación le pide que la
- * capture. Solo el backend conoce el secreto de PayPal y solo él decide si una
- * reserva es válida. Este archivo nunca marca una reserva como pagada por su
- * cuenta.
- *
- * Se carga únicamente en las páginas que tienen un botón [data-book].
+ * Latam Expeditions — reserva unificada para experiencias y paquetes.
+ * Adultos/niños, nacionalidades, hotel/ocupación y pago seguro con PayPal.
  */
 (function () {
   'use strict';
 
-  const $ = (s, sc) => (sc || document).querySelector(s);
-  const $$ = (s, sc) => Array.from((sc || document).querySelectorAll(s));
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const BASE = document.documentElement.dataset.base || './';
-
-  // Traducción en tiempo de ejecución (idioma activo gestionado por main.js).
-  const T = (s) => (window.LatamI18n && window.LatamI18n.t ? window.LatamI18n.t(s) : s);
-  const applyI18n = (el) => { try { if (window.LatamI18n && window.LatamI18n.apply) window.LatamI18n.apply(el); } catch (e) { /* i18n opcional */ } };
-
+  const T = (text) => window.LatamI18n?.t ? window.LatamI18n.t(text) : text;
+  const applyI18n = (root) => { try { window.LatamI18n?.apply?.(root); } catch (_) {} };
   const trigger = $('[data-book]');
   if (!trigger) return;
 
-  function parseDataJSON(value, fallback) {
+  const parseJSON = (value, fallback) => {
     try { return value ? JSON.parse(value) : fallback; }
-    catch (error) { console.warn('[booking] Dato JSON inválido', error); return fallback; }
-  }
+    catch (error) { console.warn('[booking] JSON inválido', error); return fallback; }
+  };
+  const escapeHTML = (value) => String(value ?? '').replace(/[&<>'"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
+  const round2 = (value) => Math.round(Number(value) * 100) / 100;
+  const money = (value) => `USD ${Number(value).toLocaleString(document.documentElement.lang === 'en' ? 'en-US' : 'es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
-  /* ------------------------------------------------------------- Estado */
+  const COUNTRIES = [
+    [
+        "Afganistán",
+        "Afghanistan"
+    ],
+    [
+        "Albania",
+        "Albania"
+    ],
+    [
+        "Alemania",
+        "Germany"
+    ],
+    [
+        "Andorra",
+        "Andorra"
+    ],
+    [
+        "Angola",
+        "Angola"
+    ],
+    [
+        "Anguila",
+        "Anguilla"
+    ],
+    [
+        "Antigua y Barbuda",
+        "Antigua & Barbuda"
+    ],
+    [
+        "Antártida",
+        "Antarctica"
+    ],
+    [
+        "Arabia Saudí",
+        "Saudi Arabia"
+    ],
+    [
+        "Argelia",
+        "Algeria"
+    ],
+    [
+        "Argentina",
+        "Argentina"
+    ],
+    [
+        "Armenia",
+        "Armenia"
+    ],
+    [
+        "Aruba",
+        "Aruba"
+    ],
+    [
+        "Australia",
+        "Australia"
+    ],
+    [
+        "Austria",
+        "Austria"
+    ],
+    [
+        "Azerbaiyán",
+        "Azerbaijan"
+    ],
+    [
+        "Bahamas",
+        "Bahamas"
+    ],
+    [
+        "Bangladés",
+        "Bangladesh"
+    ],
+    [
+        "Barbados",
+        "Barbados"
+    ],
+    [
+        "Baréin",
+        "Bahrain"
+    ],
+    [
+        "Belice",
+        "Belize"
+    ],
+    [
+        "Benín",
+        "Benin"
+    ],
+    [
+        "Bermudas",
+        "Bermuda"
+    ],
+    [
+        "Bielorrusia",
+        "Belarus"
+    ],
+    [
+        "Bolivia",
+        "Bolivia"
+    ],
+    [
+        "Bosnia y Herzegovina",
+        "Bosnia & Herzegovina"
+    ],
+    [
+        "Botsuana",
+        "Botswana"
+    ],
+    [
+        "Brasil",
+        "Brazil"
+    ],
+    [
+        "Brunéi",
+        "Brunei"
+    ],
+    [
+        "Bulgaria",
+        "Bulgaria"
+    ],
+    [
+        "Burkina Faso",
+        "Burkina Faso"
+    ],
+    [
+        "Burundi",
+        "Burundi"
+    ],
+    [
+        "Bután",
+        "Bhutan"
+    ],
+    [
+        "Bélgica",
+        "Belgium"
+    ],
+    [
+        "Cabo Verde",
+        "Cape Verde"
+    ],
+    [
+        "Camboya",
+        "Cambodia"
+    ],
+    [
+        "Camerún",
+        "Cameroon"
+    ],
+    [
+        "Canadá",
+        "Canada"
+    ],
+    [
+        "Canarias",
+        "Canary Islands"
+    ],
+    [
+        "Caribe neerlandés",
+        "Caribbean Netherlands"
+    ],
+    [
+        "Catar",
+        "Qatar"
+    ],
+    [
+        "Ceuta y Melilla",
+        "Ceuta & Melilla"
+    ],
+    [
+        "Chad",
+        "Chad"
+    ],
+    [
+        "Chequia",
+        "Czechia"
+    ],
+    [
+        "Chile",
+        "Chile"
+    ],
+    [
+        "China",
+        "China"
+    ],
+    [
+        "Chipre",
+        "Cyprus"
+    ],
+    [
+        "Ciudad del Vaticano",
+        "Vatican City"
+    ],
+    [
+        "Colombia",
+        "Colombia"
+    ],
+    [
+        "Comoras",
+        "Comoros"
+    ],
+    [
+        "Congo",
+        "Congo - Brazzaville"
+    ],
+    [
+        "Corea del Norte",
+        "North Korea"
+    ],
+    [
+        "Corea del Sur",
+        "South Korea"
+    ],
+    [
+        "Costa Rica",
+        "Costa Rica"
+    ],
+    [
+        "Croacia",
+        "Croatia"
+    ],
+    [
+        "Cuba",
+        "Cuba"
+    ],
+    [
+        "Curazao",
+        "Curaçao"
+    ],
+    [
+        "Côte d’Ivoire",
+        "Côte d’Ivoire"
+    ],
+    [
+        "Diego García",
+        "Diego Garcia"
+    ],
+    [
+        "Dinamarca",
+        "Denmark"
+    ],
+    [
+        "Dominica",
+        "Dominica"
+    ],
+    [
+        "Ecuador",
+        "Ecuador"
+    ],
+    [
+        "Egipto",
+        "Egypt"
+    ],
+    [
+        "El Salvador",
+        "El Salvador"
+    ],
+    [
+        "Emiratos Árabes Unidos",
+        "United Arab Emirates"
+    ],
+    [
+        "Eritrea",
+        "Eritrea"
+    ],
+    [
+        "Eslovaquia",
+        "Slovakia"
+    ],
+    [
+        "Eslovenia",
+        "Slovenia"
+    ],
+    [
+        "España",
+        "Spain"
+    ],
+    [
+        "Estados Unidos",
+        "United States"
+    ],
+    [
+        "Estonia",
+        "Estonia"
+    ],
+    [
+        "Esuatini",
+        "Eswatini"
+    ],
+    [
+        "Etiopía",
+        "Ethiopia"
+    ],
+    [
+        "Filipinas",
+        "Philippines"
+    ],
+    [
+        "Finlandia",
+        "Finland"
+    ],
+    [
+        "Fiyi",
+        "Fiji"
+    ],
+    [
+        "Francia",
+        "France"
+    ],
+    [
+        "Gabón",
+        "Gabon"
+    ],
+    [
+        "Gambia",
+        "Gambia"
+    ],
+    [
+        "Georgia",
+        "Georgia"
+    ],
+    [
+        "Ghana",
+        "Ghana"
+    ],
+    [
+        "Gibraltar",
+        "Gibraltar"
+    ],
+    [
+        "Granada",
+        "Grenada"
+    ],
+    [
+        "Grecia",
+        "Greece"
+    ],
+    [
+        "Groenlandia",
+        "Greenland"
+    ],
+    [
+        "Guadalupe",
+        "Guadeloupe"
+    ],
+    [
+        "Guam",
+        "Guam"
+    ],
+    [
+        "Guatemala",
+        "Guatemala"
+    ],
+    [
+        "Guayana Francesa",
+        "French Guiana"
+    ],
+    [
+        "Guernesey",
+        "Guernsey"
+    ],
+    [
+        "Guinea",
+        "Guinea"
+    ],
+    [
+        "Guinea Ecuatorial",
+        "Equatorial Guinea"
+    ],
+    [
+        "Guinea-Bisáu",
+        "Guinea-Bissau"
+    ],
+    [
+        "Guyana",
+        "Guyana"
+    ],
+    [
+        "Haití",
+        "Haiti"
+    ],
+    [
+        "Honduras",
+        "Honduras"
+    ],
+    [
+        "Hungría",
+        "Hungary"
+    ],
+    [
+        "India",
+        "India"
+    ],
+    [
+        "Indonesia",
+        "Indonesia"
+    ],
+    [
+        "Irak",
+        "Iraq"
+    ],
+    [
+        "Irlanda",
+        "Ireland"
+    ],
+    [
+        "Irán",
+        "Iran"
+    ],
+    [
+        "Isla Bouvet",
+        "Bouvet Island"
+    ],
+    [
+        "Isla Clipperton",
+        "Clipperton Island"
+    ],
+    [
+        "Isla Norfolk",
+        "Norfolk Island"
+    ],
+    [
+        "Isla de Man",
+        "Isle of Man"
+    ],
+    [
+        "Isla de Navidad",
+        "Christmas Island"
+    ],
+    [
+        "Isla de la Ascensión",
+        "Ascension Island"
+    ],
+    [
+        "Islandia",
+        "Iceland"
+    ],
+    [
+        "Islas Aland",
+        "Åland Islands"
+    ],
+    [
+        "Islas Caimán",
+        "Cayman Islands"
+    ],
+    [
+        "Islas Cocos",
+        "Cocos (Keeling) Islands"
+    ],
+    [
+        "Islas Cook",
+        "Cook Islands"
+    ],
+    [
+        "Islas Feroe",
+        "Faroe Islands"
+    ],
+    [
+        "Islas Georgia del Sur y Sandwich del Sur",
+        "South Georgia & South Sandwich Islands"
+    ],
+    [
+        "Islas Heard y McDonald",
+        "Heard & McDonald Islands"
+    ],
+    [
+        "Islas Malvinas",
+        "Falkland Islands"
+    ],
+    [
+        "Islas Marianas del Norte",
+        "Northern Mariana Islands"
+    ],
+    [
+        "Islas Marshall",
+        "Marshall Islands"
+    ],
+    [
+        "Islas Pitcairn",
+        "Pitcairn Islands"
+    ],
+    [
+        "Islas Salomón",
+        "Solomon Islands"
+    ],
+    [
+        "Islas Turcas y Caicos",
+        "Turks & Caicos Islands"
+    ],
+    [
+        "Islas Vírgenes Británicas",
+        "British Virgin Islands"
+    ],
+    [
+        "Islas Vírgenes de EE. UU.",
+        "U.S. Virgin Islands"
+    ],
+    [
+        "Islas menores alejadas de EE. UU.",
+        "U.S. Outlying Islands"
+    ],
+    [
+        "Israel",
+        "Israel"
+    ],
+    [
+        "Italia",
+        "Italy"
+    ],
+    [
+        "Jamaica",
+        "Jamaica"
+    ],
+    [
+        "Japón",
+        "Japan"
+    ],
+    [
+        "Jersey",
+        "Jersey"
+    ],
+    [
+        "Jordania",
+        "Jordan"
+    ],
+    [
+        "Kazajistán",
+        "Kazakhstan"
+    ],
+    [
+        "Kenia",
+        "Kenya"
+    ],
+    [
+        "Kirguistán",
+        "Kyrgyzstan"
+    ],
+    [
+        "Kiribati",
+        "Kiribati"
+    ],
+    [
+        "Kosovo",
+        "Kosovo"
+    ],
+    [
+        "Kuwait",
+        "Kuwait"
+    ],
+    [
+        "Laos",
+        "Laos"
+    ],
+    [
+        "Lesoto",
+        "Lesotho"
+    ],
+    [
+        "Letonia",
+        "Latvia"
+    ],
+    [
+        "Liberia",
+        "Liberia"
+    ],
+    [
+        "Libia",
+        "Libya"
+    ],
+    [
+        "Liechtenstein",
+        "Liechtenstein"
+    ],
+    [
+        "Lituania",
+        "Lithuania"
+    ],
+    [
+        "Luxemburgo",
+        "Luxembourg"
+    ],
+    [
+        "Líbano",
+        "Lebanon"
+    ],
+    [
+        "Macedonia del Norte",
+        "North Macedonia"
+    ],
+    [
+        "Madagascar",
+        "Madagascar"
+    ],
+    [
+        "Malasia",
+        "Malaysia"
+    ],
+    [
+        "Malaui",
+        "Malawi"
+    ],
+    [
+        "Maldivas",
+        "Maldives"
+    ],
+    [
+        "Mali",
+        "Mali"
+    ],
+    [
+        "Malta",
+        "Malta"
+    ],
+    [
+        "Marruecos",
+        "Morocco"
+    ],
+    [
+        "Martinica",
+        "Martinique"
+    ],
+    [
+        "Mauricio",
+        "Mauritius"
+    ],
+    [
+        "Mauritania",
+        "Mauritania"
+    ],
+    [
+        "Mayotte",
+        "Mayotte"
+    ],
+    [
+        "Micronesia",
+        "Micronesia"
+    ],
+    [
+        "Moldavia",
+        "Moldova"
+    ],
+    [
+        "Mongolia",
+        "Mongolia"
+    ],
+    [
+        "Montenegro",
+        "Montenegro"
+    ],
+    [
+        "Montserrat",
+        "Montserrat"
+    ],
+    [
+        "Mozambique",
+        "Mozambique"
+    ],
+    [
+        "Myanmar (Birmania)",
+        "Myanmar (Burma)"
+    ],
+    [
+        "México",
+        "Mexico"
+    ],
+    [
+        "Mónaco",
+        "Monaco"
+    ],
+    [
+        "Naciones Unidas",
+        "United Nations"
+    ],
+    [
+        "Namibia",
+        "Namibia"
+    ],
+    [
+        "Nauru",
+        "Nauru"
+    ],
+    [
+        "Nepal",
+        "Nepal"
+    ],
+    [
+        "Nicaragua",
+        "Nicaragua"
+    ],
+    [
+        "Nigeria",
+        "Nigeria"
+    ],
+    [
+        "Niue",
+        "Niue"
+    ],
+    [
+        "Noruega",
+        "Norway"
+    ],
+    [
+        "Nueva Caledonia",
+        "New Caledonia"
+    ],
+    [
+        "Nueva Zelanda",
+        "New Zealand"
+    ],
+    [
+        "Níger",
+        "Niger"
+    ],
+    [
+        "Omán",
+        "Oman"
+    ],
+    [
+        "Pakistán",
+        "Pakistan"
+    ],
+    [
+        "Palaos",
+        "Palau"
+    ],
+    [
+        "Panamá",
+        "Panama"
+    ],
+    [
+        "Papúa Nueva Guinea",
+        "Papua New Guinea"
+    ],
+    [
+        "Paraguay",
+        "Paraguay"
+    ],
+    [
+        "Países Bajos",
+        "Netherlands"
+    ],
+    [
+        "Perú",
+        "Peru"
+    ],
+    [
+        "Polinesia Francesa",
+        "French Polynesia"
+    ],
+    [
+        "Polonia",
+        "Poland"
+    ],
+    [
+        "Portugal",
+        "Portugal"
+    ],
+    [
+        "Pseudoacentos",
+        "Pseudo-Accents"
+    ],
+    [
+        "Pseudobidi",
+        "Pseudo-Bidi"
+    ],
+    [
+        "Puerto Rico",
+        "Puerto Rico"
+    ],
+    [
+        "RAE de Hong Kong (China)",
+        "Hong Kong SAR China"
+    ],
+    [
+        "RAE de Macao (China)",
+        "Macao SAR China"
+    ],
+    [
+        "Región desconocida",
+        "Unknown Region"
+    ],
+    [
+        "Reino Unido",
+        "United Kingdom"
+    ],
+    [
+        "República Centroafricana",
+        "Central African Republic"
+    ],
+    [
+        "República Democrática del Congo",
+        "Congo - Kinshasa"
+    ],
+    [
+        "República Dominicana",
+        "Dominican Republic"
+    ],
+    [
+        "Reunión",
+        "Réunion"
+    ],
+    [
+        "Ruanda",
+        "Rwanda"
+    ],
+    [
+        "Rumanía",
+        "Romania"
+    ],
+    [
+        "Rusia",
+        "Russia"
+    ],
+    [
+        "Samoa",
+        "Samoa"
+    ],
+    [
+        "Samoa Americana",
+        "American Samoa"
+    ],
+    [
+        "San Bartolomé",
+        "St. Barthélemy"
+    ],
+    [
+        "San Cristóbal y Nieves",
+        "St. Kitts & Nevis"
+    ],
+    [
+        "San Marino",
+        "San Marino"
+    ],
+    [
+        "San Martín",
+        "St. Martin"
+    ],
+    [
+        "San Pedro y Miquelón",
+        "St. Pierre & Miquelon"
+    ],
+    [
+        "San Vicente y las Granadinas",
+        "St. Vincent & Grenadines"
+    ],
+    [
+        "Santa Elena",
+        "St. Helena"
+    ],
+    [
+        "Santa Lucía",
+        "St. Lucia"
+    ],
+    [
+        "Santo Tomé y Príncipe",
+        "São Tomé & Príncipe"
+    ],
+    [
+        "Senegal",
+        "Senegal"
+    ],
+    [
+        "Serbia",
+        "Serbia"
+    ],
+    [
+        "Seychelles",
+        "Seychelles"
+    ],
+    [
+        "Sierra Leona",
+        "Sierra Leone"
+    ],
+    [
+        "Singapur",
+        "Singapore"
+    ],
+    [
+        "Sint Maarten",
+        "Sint Maarten"
+    ],
+    [
+        "Siria",
+        "Syria"
+    ],
+    [
+        "Somalia",
+        "Somalia"
+    ],
+    [
+        "Sri Lanka",
+        "Sri Lanka"
+    ],
+    [
+        "Sudáfrica",
+        "South Africa"
+    ],
+    [
+        "Sudán",
+        "Sudan"
+    ],
+    [
+        "Sudán del Sur",
+        "South Sudan"
+    ],
+    [
+        "Suecia",
+        "Sweden"
+    ],
+    [
+        "Suiza",
+        "Switzerland"
+    ],
+    [
+        "Surinam",
+        "Suriname"
+    ],
+    [
+        "Svalbard y Jan Mayen",
+        "Svalbard & Jan Mayen"
+    ],
+    [
+        "Sáhara Occidental",
+        "Western Sahara"
+    ],
+    [
+        "Tailandia",
+        "Thailand"
+    ],
+    [
+        "Taiwán",
+        "Taiwan"
+    ],
+    [
+        "Tanzania",
+        "Tanzania"
+    ],
+    [
+        "Tayikistán",
+        "Tajikistan"
+    ],
+    [
+        "Territorio Británico del Océano Índico",
+        "British Indian Ocean Territory"
+    ],
+    [
+        "Territorios Australes Franceses",
+        "French Southern Territories"
+    ],
+    [
+        "Territorios Palestinos",
+        "Palestinian Territories"
+    ],
+    [
+        "Territorios alejados de Oceanía",
+        "Outlying Oceania"
+    ],
+    [
+        "Timor-Leste",
+        "Timor-Leste"
+    ],
+    [
+        "Togo",
+        "Togo"
+    ],
+    [
+        "Tokelau",
+        "Tokelau"
+    ],
+    [
+        "Tonga",
+        "Tonga"
+    ],
+    [
+        "Trinidad y Tobago",
+        "Trinidad & Tobago"
+    ],
+    [
+        "Tristán de Acuña",
+        "Tristan da Cunha"
+    ],
+    [
+        "Turkmenistán",
+        "Turkmenistan"
+    ],
+    [
+        "Turquía",
+        "Türkiye"
+    ],
+    [
+        "Tuvalu",
+        "Tuvalu"
+    ],
+    [
+        "Túnez",
+        "Tunisia"
+    ],
+    [
+        "Ucrania",
+        "Ukraine"
+    ],
+    [
+        "Uganda",
+        "Uganda"
+    ],
+    [
+        "Unión Europea",
+        "European Union"
+    ],
+    [
+        "Uruguay",
+        "Uruguay"
+    ],
+    [
+        "Uzbekistán",
+        "Uzbekistan"
+    ],
+    [
+        "Vanuatu",
+        "Vanuatu"
+    ],
+    [
+        "Venezuela",
+        "Venezuela"
+    ],
+    [
+        "Vietnam",
+        "Vietnam"
+    ],
+    [
+        "Wallis y Futuna",
+        "Wallis & Futuna"
+    ],
+    [
+        "Yemen",
+        "Yemen"
+    ],
+    [
+        "Yibuti",
+        "Djibouti"
+    ],
+    [
+        "Zambia",
+        "Zambia"
+    ],
+    [
+        "Zimbabue",
+        "Zimbabwe"
+    ],
+    [
+        "zona del euro",
+        "Eurozone"
+    ]
+];
 
-  let CONFIG = null;
   const PRODUCT = {
     slug: trigger.dataset.book,
     kind: trigger.dataset.bookKind || 'experience',
     title: trigger.dataset.bookTitle || '',
-    price: parseFloat(trigger.dataset.bookPrice || '0'),
+    price: Number(trigger.dataset.bookPrice || 0),
     country: trigger.dataset.bookCountry || '',
     duration: trigger.dataset.bookDuration || '',
-    tiers: parseDataJSON(trigger.dataset.bookTiers, null),
-    departures: parseDataJSON(trigger.dataset.bookDepartures, [])
+    tiers: parseJSON(trigger.dataset.bookTiers, []),
+    departures: parseJSON(trigger.dataset.bookDepartures, []),
+    childFactor: Number(trigger.dataset.bookChildFactor || (trigger.dataset.bookKind === 'package' ? 0.70 : 0.75))
   };
-  const state = { date: '', departureTime: PRODUCT.departures[0] || '', travelers: 2,
-                  holder: {}, pax: [], total: 0, due: 0, mode: 'deposito',
-                  tier: null, requestKey: '' };
-  // Si el producto tiene categorías de hotel, se arranca en la más económica.
-  if (PRODUCT.tiers && PRODUCT.tiers.length) state.tier = PRODUCT.tiers[0].code;
+
+  let CONFIG = null;
   let step = 1;
   let paypalButtons = null;
-  let pagoEnProceso = false;
+  let paymentInProgress = false;
+  const state = {
+    date: '', departureTime: PRODUCT.departures[0] || '', adults: 2, children: 0,
+    travelers: 2, tier: PRODUCT.tiers[0]?.code || null, occupancy: 'double',
+    holder: {}, passengers: [], adultUnit: PRODUCT.price, childUnit: round2(PRODUCT.price * PRODUCT.childFactor),
+    total: 0, due: 0, mode: 'deposito', requestKey: ''
+  };
 
-  /* ------------------------------------------------------- Cálculo del cobro */
+  const nationalityOptions = () => `<option value="" data-en="Select a nationality">Selecciona una nacionalidad</option>${COUNTRIES.map(([es, en]) => `<option value="${escapeHTML(es)}" data-en="${escapeHTML(en)}">${escapeHTML(es)}</option>`).join('')}`;
+  const numberOptions = (min, max, selected) => Array.from({ length: max - min + 1 }, (_, i) => i + min).map((n) => `<option value="${n}" ${n === selected ? 'selected' : ''}>${n}</option>`).join('');
 
-  /**
-   * Importe a cobrar ahora.
-   *
-   * Los tours de bajo importe se cobran completos, que es lo que hacen las OTAs
-   * con actividades baratas: un depósito de 30 USD sobre un tour de 25 no tiene
-   * sentido. Por encima del umbral se cobra el porcentaje configurado,
-   * redondeado siempre al alza a la decena para no mostrar cifras como 63,40.
-   */
-  function calcularCobro(total) {
-    const c = CONFIG;
-    if (total <= c.payFullBelow) return { due: round2(total), mode: 'completo' };
-    let due = Math.ceil((total * c.depositPercent) / 100 / c.depositRoundTo) * c.depositRoundTo;
-    due = Math.max(c.depositMin, Math.min(due, c.depositMax));
-    return { due: Math.min(due, round2(total)), mode: 'deposito' };
+  function getTier() {
+    return PRODUCT.tiers.find((tier) => tier.code === state.tier) || PRODUCT.tiers[0] || null;
   }
 
-  const round2 = (n) => Math.round(n * 100) / 100;
-  const money = (n) => `USD ${n.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
-
-  function nuevaClaveSolicitud() {
-    if (window.crypto && typeof window.crypto.randomUUID === 'function') {
-      return window.crypto.randomUUID().replace(/-/g, '');
-    }
-    const aleatorio = Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-    return `${Date.now().toString(36)}${aleatorio}`.slice(0, 64);
+  function selectedAdultPrice() {
+    const tier = getTier();
+    if (!tier) return PRODUCT.price;
+    const occupancyPrices = tier.occupancyPrices || {};
+    return Number(occupancyPrices[state.occupancy] ?? tier.pricePerPerson ?? PRODUCT.price);
   }
 
-  /** Precio por persona: el de la categoría elegida, o el base si no hay. */
-  function precioUnitario() {
-    if (!PRODUCT.tiers || !state.tier) return PRODUCT.price;
-    const t = PRODUCT.tiers.find((x) => x.code === state.tier);
-    return t ? t.pricePerPerson : PRODUCT.price;
+  function calculateCharge(total) {
+    if (total <= CONFIG.payFullBelow) return { due: round2(total), mode: 'completo' };
+    let due = Math.ceil((total * CONFIG.depositPercent) / 100 / CONFIG.depositRoundTo) * CONFIG.depositRoundTo;
+    due = Math.max(CONFIG.depositMin, Math.min(due, CONFIG.depositMax));
+    return { due: Math.min(round2(total), due), mode: 'deposito' };
   }
 
-  function recalcular() {
-    state.total = round2(precioUnitario() * state.travelers);
-    const r = calcularCobro(state.total);
-    state.due = r.due;
-    state.mode = r.mode;
+  function recalculate() {
+    state.travelers = state.adults + state.children;
+    state.adultUnit = round2(selectedAdultPrice());
+    state.childUnit = round2(state.adultUnit * PRODUCT.childFactor);
+    state.total = round2(state.adults * state.adultUnit + state.children * state.childUnit);
+    const charge = calculateCharge(state.total);
+    state.due = charge.due;
+    state.mode = charge.mode;
+    updateLiveQuote();
   }
 
-  /* ---------------------------------------------------------------- Modal */
+  function updateLiveQuote() {
+    const totalPax = $('#bkTravelerTotal');
+    if (totalPax) totalPax.textContent = String(state.travelers);
+    const live = $('#bkLivePrice');
+    if (live) live.textContent = money(state.total);
+    const unit = $('#bkLiveUnit');
+    if (unit) unit.textContent = state.children ? `${money(state.adultUnit)} / ${money(state.childUnit)}` : money(state.adultUnit);
+  }
 
-  function construirModal() {
-    const departureField = PRODUCT.departures.length ? `
-              <div class="form-field">
-                <label for="bkDeparture">Horario de salida</label>
-                <select id="bkDeparture" required>
-                  <option value="">Selecciona un horario</option>
-                  ${PRODUCT.departures.map((time) => `<option value="${escapar(time)}" ${time === state.departureTime ? 'selected' : ''}>${escapar(time)}</option>`).join('')}
-                </select>
-                <small>La hora elegida quedará registrada en tu reserva.</small>
-                <span class="form-error">Selecciona una hora de salida.</span>
-              </div>` : '';
-    const wrap = document.createElement('div');
-    wrap.className = 'booking-modal';
-    wrap.id = 'bookingModal';
-    wrap.setAttribute('role', 'dialog');
-    wrap.setAttribute('aria-modal', 'true');
-    wrap.setAttribute('aria-labelledby', 'bookingTitle');
-    wrap.innerHTML = `
+  function buildModal() {
+    const departure = PRODUCT.departures.length ? `
+      <div class="form-field">
+        <label for="bkDeparture">Horario de salida</label>
+        <select id="bkDeparture" required>
+          <option value="">Selecciona un horario</option>
+          ${PRODUCT.departures.map((time) => `<option value="${escapeHTML(time)}" ${time === state.departureTime ? 'selected' : ''}>${escapeHTML(time)}</option>`).join('')}
+        </select>
+        <span class="form-error">Selecciona una hora de salida.</span>
+      </div>` : '';
+
+    const tierFields = PRODUCT.tiers.length ? `
+      <div class="booking-subsection booking-subsection--hotel">
+        <h3>Categoría de hotel y acomodación</h3>
+        <div class="booking-form-grid booking-form-grid--2">
+          <div class="form-field">
+            <label for="bkTier">Categoría de hotel</label>
+            <select id="bkTier" required>${PRODUCT.tiers.map((tier) => `<option value="${tier.code}" data-en="${escapeHTML(tier.stars)} · ${escapeHTML(tier.nameEn || tier.name)} — ${escapeHTML((tier.hotels || []).join(' / '))}">${escapeHTML(tier.stars)} · ${escapeHTML(tier.name)} — ${escapeHTML((tier.hotels || []).join(' / '))}</option>`).join('')}</select>
+          </div>
+          <div class="form-field">
+            <label for="bkOccupancy">Acomodación</label>
+            <select id="bkOccupancy" required>
+              <option value="single">Habitación simple</option>
+              <option value="double" selected>Habitación doble</option>
+              <option value="matrimonial">Habitación matrimonial</option>
+              <option value="triple">Habitación triple</option>
+              <option value="family">Habitación familiar</option>
+            </select>
+          </div>
+        </div>
+        <div class="booking-live-quote"><span>Precio por adulto / niño</span><strong id="bkLiveUnit">—</strong><span>Total referencial</span><strong id="bkLivePrice">—</strong></div>
+        <p class="form-note" data-en="The child price is calculated at ${Math.round(PRODUCT.childFactor * 100)}% of the selected adult fare. The final hotel or an equivalent property is confirmed before payment.">El precio infantil se calcula al ${Math.round(PRODUCT.childFactor * 100)}% de la tarifa adulta seleccionada. El hotel final o uno equivalente se confirma antes del pago.</p>
+      </div>` : '';
+
+    const modal = document.createElement('div');
+    modal.className = 'booking-modal';
+    modal.id = 'bookingModal';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'bookingTitle');
+    modal.innerHTML = `
       <div class="booking-box">
         <div class="booking-head">
-          <div>
-            <h2 id="bookingTitle">Reservar ${escapar(PRODUCT.title)}</h2>
-            <p>${escapar(PRODUCT.country)} · ${escapar(PRODUCT.duration)}</p>
-          </div>
+          <div><h2 id="bookingTitle">Reservar ${escapeHTML(PRODUCT.title)}</h2><p>${escapeHTML(PRODUCT.country)} · ${escapeHTML(PRODUCT.duration)}</p></div>
           <button type="button" class="close-modal" data-close-booking aria-label="Cerrar reserva">&times;</button>
         </div>
-
         <ol class="booking-steps">
           <li data-step-label="1" aria-current="step">Fecha y viajeros</li>
           <li data-step-label="2">Datos de pasajeros</li>
           <li data-step-label="3">Pago</li>
         </ol>
-
         <div class="booking-body">
           <div class="booking-error" id="bookingError" role="alert"></div>
 
-          <!-- Paso 1 -->
           <section class="booking-step is-active" data-step="1">
-            <div class="form-grid">
-              <div class="grid-2" style="gap:16px">
-                <div class="form-field">
-                  <label for="bkDate">Fecha del tour</label>
-                  <input type="date" id="bkDate" required />
-                  <small>Con al menos ${CONFIG.minLeadDays} días de antelación.</small>
-                  <span class="form-error">Elige una fecha válida.</span>
-                </div>
-                <div class="form-field">
-                  <label for="bkTravelers">Número de viajeros</label>
-                  <input type="number" id="bkTravelers" min="1" max="${CONFIG.maxTravelers}" value="2" required />
-                  <span class="form-error">Entre 1 y ${CONFIG.maxTravelers} viajeros.</span>
-                </div>
+            <div class="booking-form-grid booking-form-grid--2">
+              <div class="form-field"><label for="bkDate">Fecha del tour</label><input type="date" id="bkDate" required><small>Con al menos <span id="bkLeadDays"></span> días de anticipación.</small><span class="form-error">Elige una fecha válida.</span></div>
+              ${departure || '<div class="form-field booking-field-placeholder" aria-hidden="true"></div>'}
+            </div>
+            <div class="booking-subsection">
+              <h3>Viajeros</h3>
+              <div class="booking-form-grid booking-form-grid--3 travelers-grid">
+                <div class="form-field"><label for="bkAdults">Adultos</label><select id="bkAdults">${numberOptions(1, 12, state.adults)}</select></div>
+                <div class="form-field"><label for="bkChildren">Niños</label><select id="bkChildren">${numberOptions(0, 8, state.children)}</select><small>0 a 11 años</small></div>
+                <div class="traveler-total"><span>Total de viajeros</span><strong id="bkTravelerTotal">${state.travelers}</strong></div>
               </div>
-              ${departureField}
-              <div class="grid-2" style="gap:16px">
-                <div class="form-field">
-                  <label for="bkEmail">Correo del titular</label>
-                  <input type="email" id="bkEmail" required autocomplete="email" />
-                  <small>Aquí enviaremos la confirmación y el voucher.</small>
-                  <span class="form-error">Introduce un correo válido.</span>
-                </div>
-                <div class="form-field">
-                  <label for="bkPhone">Teléfono o WhatsApp</label>
-                  <input type="tel" id="bkPhone" required autocomplete="tel" />
-                  <span class="form-error">Necesitamos un teléfono de contacto.</span>
-                </div>
+            </div>
+            ${tierFields}
+            <div class="booking-subsection">
+              <h3>Contacto del titular</h3>
+              <div class="booking-form-grid booking-form-grid--2">
+                <div class="form-field"><label for="bkEmail">Correo del titular</label><input type="email" id="bkEmail" autocomplete="email" required><span class="form-error">Escribe un correo válido.</span></div>
+                <div class="form-field"><label for="bkPhone">Teléfono / WhatsApp</label><input type="tel" id="bkPhone" autocomplete="tel" minlength="5" required><span class="form-error">Escribe un teléfono válido.</span></div>
               </div>
-              <div class="form-field">
-                <label for="bkNotes">Comentarios (opcional)</label>
-                <textarea id="bkNotes" rows="2" placeholder="Alergias, movilidad reducida, hotel de recojo, celebraciones…"></textarea>
-              </div>
+              <div class="form-field"><label for="bkNotes">Comentarios o solicitudes (opcional)</label><textarea id="bkNotes" rows="3" maxlength="1200"></textarea></div>
             </div>
           </section>
 
-          <!-- Paso 1b: categoría de hotel, solo en paquetes -->
-          <section class="booking-step" data-step="15">
-            <p class="form-note" style="margin:0 0 18px">
-              Todas las categorías incluyen los mismos servicios, traslados y excursiones.
-              Lo único que cambia es el hotel.
-            </p>
-            <div class="tier-list" id="bkTiers"></div>
-            <p class="tier-note">Hoteles indicados o similares de la misma categoría, según disponibilidad en tus fechas.</p>
-          </section>
-
-          <!-- Paso 2 -->
           <section class="booking-step" data-step="2">
-            <p class="form-note" style="margin:0 0 18px">
-              Los nombres deben coincidir exactamente con el documento con el que viajan.
-              Varios ingresos, como el de Machu Picchu, se emiten a nombre del pasajero y no admiten cambios.
-            </p>
+            <p class="form-note">Los nombres deben coincidir exactamente con el documento de viaje. Completa los datos de cada adulto y niño.</p>
             <div id="bkPaxList"></div>
           </section>
 
-          <!-- Paso 3 -->
           <section class="booking-step" data-step="3">
             <div class="booking-summary">
-              <div class="fact-row"><span>Experiencia</span><strong>${escapar(PRODUCT.title)}</strong></div>
+              <div class="fact-row"><span>Experiencia</span><strong>${escapeHTML(PRODUCT.title)}</strong></div>
               <div class="fact-row"><span>Fecha</span><strong id="bkSumDate">—</strong></div>
               <div class="fact-row" ${PRODUCT.departures.length ? '' : 'hidden'}><span>Horario de salida</span><strong id="bkSumDeparture">—</strong></div>
-              <div class="fact-row"><span>Viajeros</span><strong id="bkSumPax">—</strong></div>
-              <div class="fact-row" ${PRODUCT.tiers ? '' : 'hidden'}><span>Categoría de hotel</span><strong id="bkSumTier">—</strong></div>
-              <div class="fact-row"><span>Precio por persona</span><strong id="bkSumUnit">—</strong></div>
+              <div class="fact-row"><span>Adultos</span><strong id="bkSumAdults">—</strong></div>
+              <div class="fact-row"><span>Niños</span><strong id="bkSumChildren">—</strong></div>
+              <div class="fact-row"><span>Total de viajeros</span><strong id="bkSumPax">—</strong></div>
+              <div class="fact-row" ${PRODUCT.tiers.length ? '' : 'hidden'}><span>Categoría de hotel</span><strong id="bkSumTier">—</strong></div>
+              <div class="fact-row" ${PRODUCT.tiers.length ? '' : 'hidden'}><span>Acomodación</span><strong id="bkSumOccupancy">—</strong></div>
+              <div class="fact-row"><span>Tarifa adulto</span><strong id="bkSumAdultUnit">—</strong></div>
+              <div class="fact-row" id="bkChildPriceRow"><span>Tarifa niño</span><strong id="bkSumChildUnit">—</strong></div>
               <div class="booking-total"><span>Total del tour</span><strong id="bkSumTotal">—</strong></div>
             </div>
-
             <div class="booking-pay">
-              <div class="booking-pay__amount">
-                <span id="bkPayLabel">Pagas ahora</span>
-                <strong id="bkPayAmount">—</strong>
-              </div>
+              <div class="booking-pay__amount"><span id="bkPayLabel">Pagas ahora</span><strong id="bkPayAmount">—</strong></div>
               <p class="booking-pay__note" id="bkPayNote"></p>
               <div id="paypalButtons"></div>
-              <div class="booking-fallback" id="bkFallback" hidden>
-                No hemos podido cargar la pasarela de pago.
-                <a href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a>
-                y cerramos la reserva contigo.
-              </div>
-            </div>
-
-            <div class="policy-box">
-              <strong>Cancelación gratuita hasta 24 horas antes</strong>
-              Si cancelas con más de 24 horas de antelación te devolvemos el importe completo.
-              Con menos de 24 horas o en caso de no presentarte, el pago no es reembolsable.
-              Si somos nosotros quienes cancelamos por causas operativas o meteorológicas,
-              te devolvemos el 100 % o reprogramamos sin coste, a tu elección.
-              <a href="${BASE}politica-reservas.html#cancelacion" target="_blank" rel="noopener">Ver política completa</a>
+              <div class="booking-fallback" id="bkFallback" hidden>No hemos podido cargar la pasarela de pago. <a href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a>.</div>
             </div>
           </section>
 
-          <!-- Confirmación -->
-          <section class="booking-step" data-step="4">
-            <div class="booking-done">
-              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-              <h3>Reserva confirmada</h3>
-              <p>Hemos recibido tu pago. Tu código de reserva es:</p>
-              <div class="booking-code" id="bkCode">—</div>
-              <p>Te hemos enviado la confirmación y el travel voucher a <strong id="bkDoneEmail"></strong>.
-                 Si no lo ves en unos minutos, revisa la carpeta de spam.</p>
-              <p id="bkDoneBalance"></p>
-              <p id="bkDoneAccount"></p>
-            </div>
+          <section class="booking-step booking-success" data-step="4">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i><h2>Reserva confirmada</h2>
+            <p>Tu código de reserva es <strong id="bkCode">—</strong>.</p><p>Enviamos la confirmación a <strong id="bkDoneEmail">—</strong>.</p><p id="bkDoneBalance"></p><p id="bkDoneAccount"></p>
+            <button type="button" class="btn-primary" data-close-booking>Cerrar</button>
           </section>
-
-          <div class="booking-actions" id="bkActions">
-            <button type="button" class="btn-outline" id="bkBack" hidden>Atrás</button>
-            <button type="button" class="btn-primary" id="bkNext" style="margin-left:auto">Continuar</button>
-          </div>
         </div>
+        <div class="booking-actions" id="bkActions"><button type="button" class="btn-outline" id="bkBack" hidden>Volver</button><button type="button" class="btn-primary" id="bkNext">Continuar</button></div>
       </div>`;
-    document.body.appendChild(wrap);
-    applyI18n(wrap);
-    return wrap;
+    document.body.appendChild(modal);
+    window.LatamI18n?.invalidate?.();
+    applyI18n(modal);
+    return modal;
   }
 
-  const escapar = (s) => String(s).replace(/[&<>"']/g, (c) =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-
-  /* ------------------------------------------------- Formularios de pasajeros */
-
-  function pintarPasajeros() {
-    const list = $('#bkPaxList');
-    const n = state.travelers;
-    const docs = CONFIG.documentTypes.map((t) => `<option>${t}</option>`).join('');
-    list.innerHTML = Array.from({ length: n }, (_, i) => `
-      <div class="pax-card" data-pax="${i}">
-        <h4><span>${i + 1}</span> ${i === 0 ? 'Titular de la reserva' : `${T('Pasajero')} ${i + 1}`}</h4>
-        <div class="pax-grid">
-          <div class="form-field">
-            <label for="pxName${i}">Nombres y apellidos</label>
-            <input type="text" id="pxName${i}" data-f="name" required />
-            <span class="form-error">Tal como figura en el documento.</span>
-          </div>
-          <div class="form-field">
-            <label for="pxNat${i}">Nacionalidad</label>
-            <input type="text" id="pxNat${i}" data-f="nationality" required />
-            <span class="form-error">Indica la nacionalidad.</span>
-          </div>
-          <div class="form-field">
-            <label for="pxDocType${i}">Tipo de documento</label>
-            <select id="pxDocType${i}" data-f="docType">${docs}</select>
-          </div>
-          <div class="form-field">
-            <label for="pxDoc${i}">Número de documento</label>
-            <input type="text" id="pxDoc${i}" data-f="docNumber" required />
-            <span class="form-error">Necesitamos el número de documento.</span>
-          </div>
-          <div class="form-field">
-            <label for="pxBirth${i}">Fecha de nacimiento</label>
-            <input type="date" id="pxBirth${i}" data-f="birth" required />
-            <span class="form-error">Indica la fecha de nacimiento.</span>
-          </div>
-        </div>
-      </div>`).join('');
-    applyI18n(list);
+  function showError(message) {
+    const box = $('#bookingError');
+    box.textContent = T(message);
+    box.classList.add('is-visible');
+    box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
+  function clearError() { $('#bookingError')?.classList.remove('is-visible'); }
 
-  function pintarCategorias() {
-    const cont = $('#bkTiers');
-    if (!cont || !PRODUCT.tiers) return;
-    const base = PRODUCT.tiers[0].pricePerPerson;
-    cont.innerHTML = PRODUCT.tiers.map((t) => {
-      const delta = t.pricePerPerson - base;
-      return `
-      <label class="tier">
-        <input type="radio" name="tier" value="${t.code}" ${t.code === state.tier ? 'checked' : ''} />
-        <span class="tier__head">
-          <span class="tier__name">${escapar(t.name)}<span class="tier__stars">${escapar(t.stars)}</span></span>
-          <span class="tier__price">${money(t.pricePerPerson)}
-            <small>${delta > 0 ? '+' + money(delta) + ' ' + T('por persona') : 'precio base'}</small>
-          </span>
-        </span>
-        <p class="tier__hotels">${escapar(t.hotels.join(' · '))}</p>
-      </label>`;
-    }).join('');
-
-    cont.addEventListener('change', (e) => {
-      if (e.target.name !== 'tier') return;
-      state.tier = e.target.value;
-      recalcular();
-    });
-  }
-
-  /* ----------------------------------------------------------- Validación */
-
-  function validarCampo(input) {
+  function fieldValid(input) {
     const field = input.closest('.form-field');
-    const ok = input.checkValidity();
-    if (field) field.classList.toggle('has-error', !ok);
-    input.setAttribute('aria-invalid', String(!ok));
-    return ok;
-  }
-
-  function validarPaso(n) {
-    const section = $(`.booking-step[data-step="${n}"]`);
-    let valid = true;
-    let first = null;
-    $$('input, select, textarea', section).forEach((input) => {
-      if (!validarCampo(input) && valid) { first = input; valid = false; }
-    });
-
-    if (n === 1 && valid) {
-      const date = new Date($('#bkDate').value + 'T00:00:00');
-      const limit = new Date();
-      limit.setDate(limit.getDate() + CONFIG.minLeadDays);
-      limit.setHours(0, 0, 0, 0);
-      if (date < limit) {
-        mostrarError(`Necesitamos al menos ${CONFIG.minLeadDays} días de antelación para confirmar los servicios. Para fechas más próximas, escríbenos por WhatsApp.`);
-        $('#bkDate').closest('.form-field').classList.add('has-error');
-        return false;
-      }
-    }
-    if (first) first.focus();
-    if (!valid) mostrarError('Revisa los campos marcados en rojo.');
+    const valid = input.checkValidity();
+    field?.classList.toggle('has-error', !valid);
+    input.setAttribute('aria-invalid', String(!valid));
     return valid;
   }
 
-  function guardarPaso1() {
+  function saveStep1() {
     state.date = $('#bkDate').value;
-    state.departureTime = PRODUCT.departures.length ? $('#bkDeparture').value : '';
-    state.travelers = parseInt($('#bkTravelers').value, 10);
-    state.holder = {
-      email: $('#bkEmail').value.trim(),
-      phone: $('#bkPhone').value.trim(),
-      notes: $('#bkNotes').value.trim()
-    };
-    recalcular();
+    state.departureTime = $('#bkDeparture')?.value || '';
+    state.adults = Number($('#bkAdults').value);
+    state.children = Number($('#bkChildren').value);
+    state.tier = $('#bkTier')?.value || state.tier;
+    state.occupancy = $('#bkOccupancy')?.value || 'double';
+    state.holder = { email: $('#bkEmail').value.trim(), phone: $('#bkPhone').value.trim(), notes: $('#bkNotes').value.trim() };
+    recalculate();
   }
 
-  function guardarPaso2() {
-    state.pax = $$('.pax-card').map((card) => {
-      const p = {};
-      $$('[data-f]', card).forEach((input) => { p[input.dataset.f] = input.value.trim(); });
-      return p;
+  function validateStep1() {
+    const inputs = ['#bkDate','#bkDeparture','#bkEmail','#bkPhone'].map((selector) => $(selector)).filter(Boolean);
+    let valid = inputs.every(fieldValid);
+    const total = Number($('#bkAdults').value) + Number($('#bkChildren').value);
+    if (total < 1 || total > CONFIG.maxTravelers) { valid = false; showError(`La reserva admite entre 1 y ${CONFIG.maxTravelers} viajeros.`); }
+    if (!valid) showError('Revisa los campos marcados antes de continuar.');
+    return valid;
+  }
+
+  function buildPassengers() {
+    const list = $('#bkPaxList');
+    const passengerTypes = [...Array(state.adults).fill('adult'), ...Array(state.children).fill('child')];
+    list.innerHTML = passengerTypes.map((type, index) => `
+      <fieldset class="passenger-card" data-pax="${index}" data-passenger-type="${type}">
+        <legend>${index === 0 ? 'Titular de la reserva' : `Pasajero ${index + 1}`} <small>· ${type === 'adult' ? 'Adulto' : 'Niño'}</small></legend>
+        <div class="booking-form-grid booking-form-grid--2">
+          <div class="form-field"><label for="paxName${index}">Nombres y apellidos</label><input id="paxName${index}" data-pax-field="name" autocomplete="name" minlength="3" required><span class="form-error">Completa el nombre.</span></div>
+          <div class="form-field"><label for="paxNationality${index}">Nacionalidad</label><select id="paxNationality${index}" data-pax-field="nationality" required>${nationalityOptions()}</select><span class="form-error">Selecciona una nacionalidad.</span></div>
+          <div class="form-field"><label for="paxDocType${index}">Tipo de documento</label><select id="paxDocType${index}" data-pax-field="docType" required>${CONFIG.documentTypes.map((typeName) => `<option value="${escapeHTML(typeName)}">${escapeHTML(typeName)}</option>`).join('')}</select></div>
+          <div class="form-field"><label for="paxDoc${index}">Número de documento</label><input id="paxDoc${index}" data-pax-field="docNumber" required maxlength="50"><span class="form-error">Completa el documento.</span></div>
+          <div class="form-field"><label for="paxBirth${index}">Fecha de nacimiento</label><input type="date" id="paxBirth${index}" data-pax-field="birth" required max="${new Date().toISOString().slice(0,10)}"><span class="form-error">Completa una fecha válida.</span></div>
+        </div>
+      </fieldset>`).join('');
+    applyI18n(list);
+    window.LatamI18n?.invalidate?.();
+  }
+
+  function validateStep2() {
+    const inputs = $$('[data-pax-field]', $('#bkPaxList'));
+    const valid = inputs.every(fieldValid);
+    if (!valid) showError('Completa los datos de todos los pasajeros.');
+    return valid;
+  }
+
+  function saveStep2() {
+    state.passengers = $$('.passenger-card').map((card) => {
+      const value = (field) => card.querySelector(`[data-pax-field="${field}"]`).value.trim();
+      return { name: value('name'), nationality: value('nationality'), docType: value('docType'), docNumber: value('docNumber'), birth: value('birth'), passengerType: card.dataset.passengerType };
     });
   }
 
-  function pintarResumen() {
-    const fecha = new Date(state.date + 'T00:00:00');
-    $('#bkSumDate').textContent = fecha.toLocaleDateString('es', { day: '2-digit', month: 'long', year: 'numeric' });
-    const departure = $('#bkSumDeparture');
-    if (departure && PRODUCT.departures.length) departure.textContent = state.departureTime || '—';
-    $('#bkSumPax').textContent = state.travelers === 1 ? T('1 viajero') : `${state.travelers} ${T('viajeros')}`;
-    $('#bkSumUnit').textContent = money(precioUnitario());
+  function occupancyLabel(code) {
+    const label = ({ single:'Habitación simple', double:'Habitación doble', matrimonial:'Habitación matrimonial', triple:'Habitación triple', family:'Habitación familiar' })[code] || code;
+    return T(label);
+  }
+
+  function paintSummary() {
+    const formattedDate = new Intl.DateTimeFormat(document.documentElement.lang === 'en' ? 'en-US' : 'es-PE', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${state.date}T12:00:00Z`));
+    $('#bkSumDate').textContent = formattedDate;
+    if ($('#bkSumDeparture')) $('#bkSumDeparture').textContent = state.departureTime || '—';
+    $('#bkSumAdults').textContent = String(state.adults);
+    $('#bkSumChildren').textContent = String(state.children);
+    $('#bkSumPax').textContent = String(state.travelers);
+    if (PRODUCT.tiers.length) {
+      const tier = getTier();
+      $('#bkSumTier').textContent = `${tier.stars} · ${document.documentElement.lang === 'en' ? (tier.nameEn || tier.name) : tier.name} — ${(tier.hotels || []).join(' / ')}`;
+      $('#bkSumOccupancy').textContent = occupancyLabel(state.occupancy);
+    }
+    $('#bkSumAdultUnit').textContent = money(state.adultUnit);
+    $('#bkSumChildUnit').textContent = money(state.childUnit);
+    $('#bkChildPriceRow').hidden = state.children === 0;
     $('#bkSumTotal').textContent = money(state.total);
-    const filaTier = $('#bkSumTier');
-    if (filaTier && PRODUCT.tiers) {
-      const t = PRODUCT.tiers.find((x) => x.code === state.tier);
-      filaTier.textContent = t ? `${t.name} (${t.stars})` : '—';
-      filaTier.closest('.fact-row').hidden = false;
-    }
     $('#bkPayAmount').textContent = money(state.due);
-
-    if (state.mode === 'completo') {
-      $('#bkPayLabel').textContent = T('Pago total');
-      $('#bkPayNote').textContent = T('Al ser un importe reducido, se abona completo ahora. No queda saldo pendiente.');
-    } else {
-      const saldo = round2(state.total - state.due);
-      $('#bkPayLabel').textContent = T('Reserva ahora');
-      $('#bkPayNote').textContent = `${T('Pagas')} ${money(state.due)} ${T('para confirmar la reserva. El saldo de')} ${money(saldo)} ${T('se abona el día del tour o antes, como prefieras.')}`;
-    }
+    const isEnglish = document.documentElement.lang === 'en';
+    $('#bkPayLabel').textContent = state.mode === 'completo'
+      ? (isEnglish ? 'Pay in full now' : 'Pago total ahora')
+      : (isEnglish ? 'Book now' : 'Reserva ahora');
+    $('#bkPayNote').textContent = state.mode === 'completo'
+      ? (isEnglish ? 'The full product amount is charged to confirm the booking.' : 'El importe del producto se paga por completo para confirmar la reserva.')
+      : (isEnglish
+        ? `Pay ${money(state.due)} now. The remaining balance of ${money(round2(state.total - state.due))} will be coordinated according to the voucher terms.`
+        : `Pagas ${money(state.due)} ahora. El saldo de ${money(round2(state.total - state.due))} se coordina según las condiciones del voucher.`);
   }
 
-  /* --------------------------------------------------------------- PayPal */
-
-  function cargarPayPal() {
-    return new Promise((resolve, reject) => {
-      if (window.paypal) return resolve(window.paypal);
-      const script = document.createElement('script');
-      script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(CONFIG.paypalClientId)}` +
-        `&currency=${CONFIG.currency}&intent=capture&components=buttons&locale=es_ES`;
-      script.onload = () => resolve(window.paypal);
-      script.onerror = () => reject(new Error('No se pudo cargar el SDK de PayPal'));
-      document.head.appendChild(script);
+  function goToStep(next) {
+    step = next;
+    $$('.booking-step').forEach((section) => section.classList.toggle('is-active', Number(section.dataset.step) === next));
+    $$('.booking-steps li').forEach((item) => {
+      const number = Number(item.dataset.stepLabel);
+      item.classList.toggle('is-done', number < next);
+      if (number === next) item.setAttribute('aria-current', 'step'); else item.removeAttribute('aria-current');
     });
+    $('#bkBack').hidden = next === 1 || next === 4;
+    $('#bkNext').hidden = next >= 3;
+    $('.booking-steps').hidden = next === 4;
+    $('#bkActions').hidden = next === 4;
+    $('.booking-box').scrollTo({ top: 0, behavior: 'smooth' });
+    clearError();
   }
 
-  /** Payload que se envía al backend. Nunca incluye importes de confianza:
-   *  el backend recalcula el precio desde su propia copia del catálogo. */
-  function payloadReserva() {
+  function requestKey() {
+    if (crypto?.randomUUID) return crypto.randomUUID().replace(/-/g, '');
+    return `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`.slice(0, 64);
+  }
+
+  function payload() {
     return {
       requestKey: state.requestKey,
       slug: PRODUCT.slug,
@@ -427,9 +1390,12 @@
       date: state.date,
       departureTime: state.departureTime,
       travelers: state.travelers,
+      adults: state.adults,
+      children: state.children,
       tier: state.tier,
+      occupancy: state.occupancy,
       holder: state.holder,
-      passengers: state.pax,
+      passengers: state.passengers,
       quotedTotal: state.total,
       quotedDue: state.due,
       mode: state.mode,
@@ -438,261 +1404,149 @@
     };
   }
 
-  async function llamarBackend(action, data) {
-    if (!CONFIG.endpoint || CONFIG.endpoint.startsWith('PEGAR_AQUI')) {
-      throw new Error('El sistema de reservas aún no está conectado con Google Apps Script.');
-    }
-
+  async function callBackend(action, data) {
+    if (!CONFIG.endpoint || CONFIG.endpoint.startsWith('PEGAR_AQUI')) throw new Error('El sistema de reservas aún no está conectado con Google Apps Script.');
     const controller = typeof AbortController === 'function' ? new AbortController() : null;
-    const timeout = controller ? setTimeout(() => controller.abort(), 60000) : null;
+    const timer = controller ? setTimeout(() => controller.abort(), 60000) : null;
     try {
-      const response = await fetch(CONFIG.endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ action, data }),
-        signal: controller ? controller.signal : undefined
-      });
+      const response = await fetch(CONFIG.endpoint, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:JSON.stringify({ action, data }), signal:controller?.signal });
       if (!response.ok) throw new Error(`El servidor respondió ${response.status}`);
       const json = await response.json();
       if (!json.ok) throw new Error(json.error || 'Error desconocido del servidor');
       return json;
-    } catch (err) {
-      if (err && err.name === 'AbortError') {
-        throw new Error('La confirmación está tardando demasiado. No vuelvas a pagar; revisa tu correo o escríbenos.');
-      }
-      throw err;
-    } finally {
-      if (timeout) clearTimeout(timeout);
-    }
+    } catch (error) {
+      if (error?.name === 'AbortError') throw new Error('La confirmación está tardando demasiado. No vuelvas a pagar; revisa tu correo o escríbenos.');
+      throw error;
+    } finally { if (timer) clearTimeout(timer); }
   }
 
-  async function montarBotonesPago() {
-    const contenedor = $('#paypalButtons');
-    contenedor.innerHTML = `<div class="booking-loading">${T('Cargando pasarela de pago…')}</div>`;
+  function loadPayPal() {
+    if (window.paypal) return Promise.resolve(window.paypal);
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(CONFIG.paypalClientId)}&currency=${encodeURIComponent(CONFIG.currency)}&intent=capture&components=buttons`;
+      script.async = true;
+      script.onload = () => resolve(window.paypal);
+      script.onerror = () => reject(new Error('No se pudo cargar PayPal'));
+      document.head.appendChild(script);
+    });
+  }
+
+  async function mountPayment() {
+    const container = $('#paypalButtons');
+    container.innerHTML = `<div class="booking-loading">${T('Cargando pasarela de pago…')}</div>`;
     $('#bkFallback').hidden = true;
-
-    if (!CONFIG.paypalClientId || CONFIG.paypalClientId.startsWith('PEGAR_AQUI')) {
-      contenedor.innerHTML = '';
+    if (!CONFIG.paypalClientId || CONFIG.paypalClientId.startsWith('PEGAR_AQUI') || !CONFIG.endpoint || CONFIG.endpoint.startsWith('PEGAR_AQUI')) {
+      container.innerHTML = '';
       $('#bkFallback').hidden = false;
-      mostrarError('La pasarela de pago aún no está configurada. Falta el Client ID de PayPal.');
+      showError('La pasarela todavía no está configurada. Completa el Client ID de PayPal y la URL de Google Apps Script.');
       return;
     }
-    if (!CONFIG.endpoint || CONFIG.endpoint.startsWith('PEGAR_AQUI')) {
-      contenedor.innerHTML = '';
-      $('#bkFallback').hidden = false;
-      mostrarError('El sistema de reservas aún no está conectado con Google Apps Script.');
-      return;
-    }
-
     try {
-      const paypal = await cargarPayPal();
-      contenedor.innerHTML = '';
-      if (paypalButtons && typeof paypalButtons.close === 'function') {
-        try { await paypalButtons.close(); } catch (e) { /* instancia anterior */ }
-      }
-
+      const paypal = await loadPayPal();
+      container.innerHTML = '';
+      if (paypalButtons?.close) { try { await paypalButtons.close(); } catch (_) {} }
       paypalButtons = paypal.Buttons({
-        style: { layout: 'vertical', shape: 'rect', label: 'pay', height: 46 },
-
-        createOrder: async () => {
-          limpiarError();
-          const r = await llamarBackend('createOrder', payloadReserva());
-          return r.orderId;
-        },
-
+        style: { layout:'vertical', shape:'rect', label:'pay', height:46 },
+        createOrder: async () => (await callBackend('createOrder', payload())).orderId,
         onApprove: async (data) => {
-          if (pagoEnProceso) return;
-          pagoEnProceso = true;
+          if (paymentInProgress) return;
+          paymentInProgress = true;
           $('#bkActions').hidden = true;
-          contenedor.innerHTML = `<div class="booking-loading">${T('Confirmando el pago…')}</div>`;
-          try {
-            // El servidor recupera los datos guardados al crear la orden. El
-            // navegador ya no puede sustituir el producto después de pagar.
-            const r = await llamarBackend('captureOrder', { orderId: data.orderID });
-            mostrarConfirmacion(r);
-          } catch (err) {
-            mostrarError(err.message || 'No pudimos confirmar el pago. No vuelvas a pagar.');
-            contenedor.innerHTML = '';
-            $('#bkFallback').hidden = false;
-          } finally {
-            pagoEnProceso = false;
-          }
+          container.innerHTML = `<div class="booking-loading">${T('Confirmando el pago…')}</div>`;
+          try { showConfirmation(await callBackend('captureOrder', { orderId:data.orderID })); }
+          catch (error) { showError(error.message || 'No pudimos confirmar el pago. No vuelvas a pagar.'); container.innerHTML=''; $('#bkFallback').hidden=false; }
+          finally { paymentInProgress = false; }
         },
-
-        onError: (err) => {
-          console.error('[PayPal]', err);
-          if (!pagoEnProceso) {
-            mostrarError('No se pudo abrir PayPal. No se ha realizado ningún cargo. Vuelve a intentarlo o escríbenos por WhatsApp.');
-            $('#bkActions').hidden = false;
-          }
-        },
-
-        onCancel: () => {
-          mostrarError('Has cancelado el pago. Tu reserva no se ha confirmado y no se ha realizado ningún cargo.');
-        }
+        onCancel: () => showError('Has cancelado el pago. No se ha realizado ningún cargo.'),
+        onError: (error) => { console.error('[PayPal]', error); showError('No se pudo abrir PayPal. No se ha realizado ningún cargo.'); $('#bkFallback').hidden=false; }
       });
-
-      if (typeof paypalButtons.isEligible === 'function' && !paypalButtons.isEligible()) {
-        throw new Error('PayPal no está disponible en este navegador');
-      }
+      if (paypalButtons.isEligible && !paypalButtons.isEligible()) throw new Error('PayPal no está disponible en este navegador');
       await paypalButtons.render('#paypalButtons');
     } catch (error) {
-      console.error(error);
-      contenedor.innerHTML = '';
-      $('#bkFallback').hidden = false;
-      mostrarError('No hemos podido cargar la pasarela de pago. Puedes reservar por WhatsApp.');
+      console.error(error); container.innerHTML=''; $('#bkFallback').hidden=false; showError('No hemos podido cargar la pasarela de pago. Puedes reservar por WhatsApp.');
     }
   }
 
-  function mostrarConfirmacion(respuesta) {
-    $('#bkCode').textContent = respuesta.bookingCode || '—';
+  function showConfirmation(response) {
+    $('#bkCode').textContent = response.bookingCode || '—';
     $('#bkDoneEmail').textContent = state.holder.email;
-    const saldo = Number(respuesta.balance || 0);
-    $('#bkDoneBalance').textContent = saldo > 0
-      ? `${T('Saldo pendiente')}: ${money(saldo)} — ${T('a abonar antes o el día del tour.')}`
-      : T('La reserva quedó pagada por completo.');
-
-    let usuario = null;
-    try { usuario = JSON.parse(localStorage.getItem('latamExpeditionsUser') || 'null'); } catch (e) { /* sin acceso */ }
-    const cuenta = $('#bkDoneAccount');
-    if (cuenta) {
-      if (usuario && String(usuario.email || '').toLowerCase() === state.holder.email.toLowerCase()) {
-        cuenta.innerHTML = `<a href="${BASE}mis-viajes.html">Ver esta reserva en Mis viajes</a>`;
-      } else {
-        cuenta.innerHTML = `Crea una cuenta con <strong>${escapar(state.holder.email)}</strong> para ver esta y tus próximas reservas en <a href="${BASE}registro.html">Mis viajes</a>.`;
-      }
-      applyI18n(cuenta);
-    }
-
-    irAPaso(4);
-    $('#bkActions').hidden = true;
-    limpiarError();
-  }
-
-  /* -------------------------------------------------------- Navegación UI */
-
-  function irAPaso(n) {
-    step = n;
-    $$('.booking-step').forEach((s) => s.classList.toggle('is-active', +s.dataset.step === n));
-    $$('.booking-steps li').forEach((li) => {
-      const i = +li.dataset.stepLabel;
-      li.classList.toggle('is-done', i < n);
-      i === n ? li.setAttribute('aria-current', 'step') : li.removeAttribute('aria-current');
-    });
-    $('#bkBack').hidden = n === 1 || n === 4;
-    $('#bkNext').hidden = n >= 3 && n !== 15;
-    // El paso 15 (categoría) se muestra bajo la etiqueta del paso 1.
-    if (n === 15) {
-      $$('.booking-steps li').forEach((li) => {
-        const i = +li.dataset.stepLabel;
-        li.classList.toggle('is-done', i < 1);
-        i === 1 ? li.setAttribute('aria-current', 'step') : li.removeAttribute('aria-current');
-      });
-    }
-    $('.booking-steps').hidden = n === 4;
-    $('.booking-box').scrollIntoView({ block: 'start', behavior: 'smooth' });
-    limpiarError();
-  }
-
-  const mostrarError = (msg) => {
-    const box = $('#bookingError');
-    box.textContent = T(msg);
-    box.classList.add('is-visible');
-    box.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-  };
-  const limpiarError = () => $('#bookingError').classList.remove('is-visible');
-
-  function completarDesdeCuenta() {
+    const balance = Number(response.balance || 0);
+    const isEnglish = document.documentElement.lang === 'en';
+    $('#bkDoneBalance').textContent = balance > 0
+      ? `${isEnglish ? 'Outstanding balance' : 'Saldo pendiente'}: ${money(balance)}.`
+      : (isEnglish ? 'The booking has been paid in full.' : 'La reserva quedó pagada por completo.');
     let user = null;
-    try { user = JSON.parse(localStorage.getItem('latamExpeditionsUser') || 'null'); } catch (e) { /* modo privado */ }
-    if (!user) return;
-    const email = $('#bkEmail');
-    const phone = $('#bkPhone');
-    if (email && !email.value && user.email) email.value = user.email;
-    if (phone && !phone.value && user.phone) phone.value = user.phone;
+    try { user = JSON.parse(localStorage.getItem('latamExpeditionsUser') || 'null'); } catch (_) {}
+    $('#bkDoneAccount').innerHTML = user && String(user.email || '').toLowerCase() === state.holder.email.toLowerCase()
+      ? `<a href="${BASE}mis-viajes.html">${isEnglish ? 'View this booking in My trips' : 'Ver esta reserva en Mis viajes'}</a>`
+      : (isEnglish
+        ? `Create an account with <strong>${escapeHTML(state.holder.email)}</strong> to view this booking in <a href="${BASE}registro.html">My trips</a>.`
+        : `Puedes crear una cuenta con <strong>${escapeHTML(state.holder.email)}</strong> para consultar esta reserva en <a href="${BASE}registro.html">Mis viajes</a>.`);
+    applyI18n($('#bkDoneAccount'));
+    state.confirmation = response;
+    window.LatamI18n?.invalidate?.();
+    goToStep(4);
   }
 
-  /* ------------------------------------------------------------- Arranque */
+  function prefillAccount() {
+    let user = null;
+    try { user = JSON.parse(localStorage.getItem('latamExpeditionsUser') || 'null'); } catch (_) {}
+    if (!user) return;
+    if (!$('#bkEmail').value && user.email) $('#bkEmail').value = user.email;
+    if (!$('#bkPhone').value && user.phone) $('#bkPhone').value = user.phone;
+  }
 
   async function init() {
     try {
-      const response = await fetch(`${BASE}assets/data/catalog.json`, { cache: 'no-store' });
+      const response = await fetch(`${BASE}assets/data/catalog.json`, { cache:'no-store' });
       CONFIG = (await response.json()).booking;
-    } catch (error) {
-      console.error('[booking] No se pudo cargar la configuración', error);
-      return;
-    }
+    } catch (error) { console.error('[booking] No se pudo cargar la configuración', error); return; }
 
-    const modal = construirModal();
+    state.adults = Number(CONFIG.defaultAdults || 2);
+    state.children = Number(CONFIG.defaultChildren || 0);
+    const modal = buildModal();
+    $('#bkLeadDays').textContent = String(CONFIG.minLeadDays);
     let lastFocused = null;
 
-    const abrir = () => {
+    const open = () => {
       lastFocused = document.activeElement;
-      recalcular();
-      completarDesdeCuenta();
-      modal.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-      $('#bkDate').focus();
+      recalculate(); prefillAccount();
+      modal.classList.add('is-open'); document.body.style.overflow='hidden'; $('#bkDate').focus();
     };
-    const cerrar = () => {
-      modal.classList.remove('is-open');
-      document.body.style.overflow = '';
-      if (lastFocused) lastFocused.focus();
-    };
+    const close = () => { modal.classList.remove('is-open'); document.body.style.overflow=''; lastFocused?.focus?.(); };
+    trigger.addEventListener('click', open);
+    $$('[data-close-booking]', modal).forEach((button) => button.addEventListener('click', close));
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('is-open') && step !== 4) close(); });
 
-    trigger.addEventListener('click', abrir);
-    $$('[data-close-booking]', modal).forEach((b) => b.addEventListener('click', cerrar));
-    modal.addEventListener('click', (e) => { if (e.target === modal) cerrar(); });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('is-open') && step !== 4) cerrar();
-    });
-
-    // Fecha mínima seleccionable en el calendario nativo.
-    const min = new Date();
-    min.setDate(min.getDate() + CONFIG.minLeadDays);
-    $('#bkDate').min = min.toISOString().slice(0, 10);
+    const minDate = new Date(); minDate.setDate(minDate.getDate() + CONFIG.minLeadDays); $('#bkDate').min = minDate.toISOString().slice(0,10);
+    ['#bkAdults','#bkChildren','#bkTier','#bkOccupancy'].forEach((selector) => $(selector)?.addEventListener('change', () => {
+      state.adults = Number($('#bkAdults').value); state.children = Number($('#bkChildren').value);
+      state.tier = $('#bkTier')?.value || state.tier; state.occupancy = $('#bkOccupancy')?.value || state.occupancy; recalculate();
+    }));
 
     $('#bkNext').addEventListener('click', async () => {
-      if (!validarPaso(step)) return;
       if (step === 1) {
-        guardarPaso1();
-        if (PRODUCT.tiers && PRODUCT.tiers.length > 1) {
-          pintarCategorias();
-          irAPaso(15);
-        } else {
-          pintarPasajeros();
-          irAPaso(2);
-        }
-      } else if (step === 15) {
-        recalcular();
-        pintarPasajeros();
-        irAPaso(2);
+        if (!validateStep1()) return;
+        saveStep1(); buildPassengers(); goToStep(2);
       } else if (step === 2) {
-        guardarPaso2();
-        state.requestKey = nuevaClaveSolicitud();
-        pintarResumen();
-        irAPaso(3);
-        await montarBotonesPago();
+        if (!validateStep2()) return;
+        saveStep2(); state.requestKey = requestKey(); paintSummary(); goToStep(3); await mountPayment();
       }
     });
-
-    $('#bkBack').addEventListener('click', () => {
-      if (step === 2 && PRODUCT.tiers && PRODUCT.tiers.length > 1) return irAPaso(15);
-      if (step === 15) return irAPaso(1);
-      irAPaso(Math.max(1, step - 1));
-    });
-
-    // Limpia el error de un campo en cuanto se corrige.
+    $('#bkBack').addEventListener('click', () => goToStep(Math.max(1, step - 1)));
     modal.addEventListener('input', (e) => {
       const field = e.target.closest('.form-field');
-      if (field && field.classList.contains('has-error') && e.target.checkValidity()) {
-        field.classList.remove('has-error');
-        e.target.setAttribute('aria-invalid', 'false');
-      }
+      if (field?.classList.contains('has-error') && e.target.checkValidity()) { field.classList.remove('has-error'); e.target.setAttribute('aria-invalid','false'); }
     });
+    document.addEventListener('latam:languagechange', () => {
+      recalculate();
+      if (step === 3) paintSummary();
+      if (step === 4 && state.confirmation) showConfirmation(state.confirmation);
+    });
+    recalculate();
   }
 
-  document.readyState === 'loading'
-    ? document.addEventListener('DOMContentLoaded', init)
-    : init();
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
 })();

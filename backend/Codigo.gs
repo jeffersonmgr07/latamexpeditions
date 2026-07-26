@@ -102,38 +102,158 @@ const CONFIG = {
  * evita que alguien invente un producto.
  */
 const PRECIOS = {
-  'machu-picchu-full-day': 340.00,
-  'valle-sagrado-clasico': 55.00,
-  'montana-colores': 45.00,
-  'lima-gastronomica': 75.00,
-  'islas-ballestas-paracas': 40.00,
-  'cartagena-centro-getsemani': 25.00,
-  'islas-rosario-baru': 65.00,
-  'guatape-piedra-penol': 49.00,
-  'comuna-13-medellin': 29.00,
-  'city-tour-medellin': 35.00,
-  'tour-pablo-escobar': 39.00,
-  'parapente-medellin': 99.00,
-  'medellin-nocturno-gastronomia-rooftops': 49.00,
-  'buenos-aires-city-tango': 110.00,
-  'cataratas-iguazu-argentina': 70.00,
-  'perito-moreno-calafate': 95.00,
-  'mendoza-vinos': 90.00,
-  'galapagos-4d-isla-santa-cruz': 790.00,
-  'quito-mitad-del-mundo': 55.00,
-  'cotopaxi-quilotoa': 70.00,
-  'rio-cristo-pan-de-azucar': 95.00,
-  'favela-rocinha': 40.00,
-  'iguazu-lado-brasileno': 65.00,
-  'uyuni-3-dias': 230.00,
-  'uyuni-full-day': 60.00,
-  'la-paz-teleferico-luna': 45.00,
-  'atacama-valle-luna': 75.00,
-  'geiseres-tatio': 55.00,
-  'torres-del-paine-full-day': 120.00,
-  'chichen-itza-cenote': 95.00,
-  'tulum-cenotes': 75.00,
-  'xcaret-parque': 190.00
+  'machu-picchu-full-day': 340.0,
+  'valle-sagrado-clasico': 55.0,
+  'montana-colores': 45.0,
+  'lima-gastronomica': 75.0,
+  'islas-ballestas-paracas': 40.0,
+  'cartagena-centro-getsemani': 25.0,
+  'islas-rosario-baru': 65.0,
+  'city-tour-medellin': 35.0,
+  'comuna-13-medellin': 29.0,
+  'guatape-piedra-penol': 49.0,
+  'tour-pablo-escobar': 39.0,
+  'parapente-medellin': 99.0,
+  'medellin-nocturno-gastronomia-rooftops': 49.0,
+  'buenos-aires-city-tango': 110.0,
+  'cataratas-iguazu-argentina': 70.0,
+  'perito-moreno-calafate': 95.0,
+  'mendoza-vinos': 90.0,
+  'galapagos-4d-isla-santa-cruz': 790.0,
+  'quito-mitad-del-mundo': 55.0,
+  'cotopaxi-quilotoa': 70.0,
+  'rio-cristo-pan-de-azucar': 95.0,
+  'favela-rocinha': 40.0,
+  'iguazu-lado-brasileno': 65.0,
+  'uyuni-3-dias': 230.0,
+  'uyuni-full-day': 60.0,
+  'la-paz-teleferico-luna': 45.0,
+  'atacama-valle-luna': 75.0,
+  'geiseres-tatio': 55.0,
+  'torres-del-paine-full-day': 120.0,
+  'chichen-itza-cenote': 95.0,
+  'tulum-cenotes': 75.0,
+  'xcaret-parque': 190.0,
+  'bogota-monserrate-candelaria': 59.0,
+  'zipaquira-catedral-de-sal': 79.0,
+  'guatavita-zipaquira': 109.0,
+  'villa-de-leyva-full-day': 119.0,
+  'rosario-vip-catamaran': 119.0,
+  'bahia-cholon': 89.0,
+  'volcan-totumo': 55.0,
+  'cartagena-gastronomica': 49.0,
+  'cartagena-nocturna': 45.0,
+  'chiva-rumbera-cartagena': 35.0,
+  'santa-marta-city-tour': 45.0,
+  'parque-tayrona-full-day': 79.0,
+  'minca-cascadas-cafe': 69.0,
+  'playa-cristal-siete-olas': 95.0,
+  'ciudad-perdida-4-dias': 699.0,
+  'ciudad-perdida-5-dias': 799.0,
+  'valle-cocora-salento': 79.0,
+  'tour-cafe-colombiano': 45.0,
+  'filandia-miradores': 65.0,
+  'parque-del-cafe': 89.0,
+  'termales-santa-rosa-cabal': 95.0,
+  'cali-city-tour': 45.0,
+  'cali-tour-salsa': 59.0,
+  'hacienda-el-paraiso': 75.0,
+  'gastronomia-valle-cauca': 55.0,
+  'san-andres-johnny-cay-acuario': 65.0,
+  'san-andres-vuelta-isla': 39.0,
+  'san-andres-mantarrayas': 49.0,
+  'san-andres-snorkel-sea-walk': 89.0,
+  'san-andres-catamaran': 69.0,
+  'chicamocha-panachi': 89.0,
+  'barichara-full-day': 79.0,
+  'santander-aventura-rafting-canopy': 95.0,
+  'desierto-tatacoa': 89.0,
+  'san-agustin-arqueologico': 75.0,
+  'leticia-tres-fronteras': 59.0,
+  'comunidad-ticuna-amazonas': 89.0,
+  'rio-amazonas-delfines-rosados': 99.0,
+  'avistamiento-ballenas-pacifico': 79.0,
+  'nuqui-playas-termales': 95.0,
+  'bahia-solano-playas-pacifico': 89.0,
+  'cano-cristales': 149.0
+};
+
+/** Factor infantil oficial por experiencia. */
+const FACTOR_NINOS = {
+  'machu-picchu-full-day': 0.75,
+  'valle-sagrado-clasico': 0.75,
+  'montana-colores': 0.75,
+  'lima-gastronomica': 0.75,
+  'islas-ballestas-paracas': 0.75,
+  'cartagena-centro-getsemani': 0.75,
+  'islas-rosario-baru': 0.75,
+  'city-tour-medellin': 0.75,
+  'comuna-13-medellin': 0.75,
+  'guatape-piedra-penol': 0.75,
+  'tour-pablo-escobar': 0.75,
+  'parapente-medellin': 0.75,
+  'medellin-nocturno-gastronomia-rooftops': 0.75,
+  'buenos-aires-city-tango': 0.75,
+  'cataratas-iguazu-argentina': 0.75,
+  'perito-moreno-calafate': 0.75,
+  'mendoza-vinos': 0.75,
+  'galapagos-4d-isla-santa-cruz': 0.75,
+  'quito-mitad-del-mundo': 0.75,
+  'cotopaxi-quilotoa': 0.75,
+  'rio-cristo-pan-de-azucar': 0.75,
+  'favela-rocinha': 0.75,
+  'iguazu-lado-brasileno': 0.75,
+  'uyuni-3-dias': 0.75,
+  'uyuni-full-day': 0.75,
+  'la-paz-teleferico-luna': 0.75,
+  'atacama-valle-luna': 0.75,
+  'geiseres-tatio': 0.75,
+  'torres-del-paine-full-day': 0.75,
+  'chichen-itza-cenote': 0.75,
+  'tulum-cenotes': 0.75,
+  'xcaret-parque': 0.75,
+  'bogota-monserrate-candelaria': 0.75,
+  'zipaquira-catedral-de-sal': 0.75,
+  'guatavita-zipaquira': 0.75,
+  'villa-de-leyva-full-day': 0.75,
+  'rosario-vip-catamaran': 0.75,
+  'bahia-cholon': 0.75,
+  'volcan-totumo': 0.75,
+  'cartagena-gastronomica': 0.75,
+  'cartagena-nocturna': 0.75,
+  'chiva-rumbera-cartagena': 0.75,
+  'santa-marta-city-tour': 0.75,
+  'parque-tayrona-full-day': 0.75,
+  'minca-cascadas-cafe': 0.75,
+  'playa-cristal-siete-olas': 0.75,
+  'ciudad-perdida-4-dias': 0.75,
+  'ciudad-perdida-5-dias': 0.75,
+  'valle-cocora-salento': 0.75,
+  'tour-cafe-colombiano': 0.75,
+  'filandia-miradores': 0.75,
+  'parque-del-cafe': 0.75,
+  'termales-santa-rosa-cabal': 0.75,
+  'cali-city-tour': 0.75,
+  'cali-tour-salsa': 0.75,
+  'hacienda-el-paraiso': 0.75,
+  'gastronomia-valle-cauca': 0.75,
+  'san-andres-johnny-cay-acuario': 0.75,
+  'san-andres-vuelta-isla': 0.75,
+  'san-andres-mantarrayas': 0.75,
+  'san-andres-snorkel-sea-walk': 0.75,
+  'san-andres-catamaran': 0.75,
+  'chicamocha-panachi': 0.75,
+  'barichara-full-day': 0.75,
+  'santander-aventura-rafting-canopy': 0.75,
+  'desierto-tatacoa': 0.75,
+  'san-agustin-arqueologico': 0.75,
+  'leticia-tres-fronteras': 0.75,
+  'comunidad-ticuna-amazonas': 0.75,
+  'rio-amazonas-delfines-rosados': 0.75,
+  'avistamiento-ballenas-pacifico': 0.75,
+  'nuqui-playas-termales': 0.75,
+  'bahia-solano-playas-pacifico': 0.75,
+  'cano-cristales': 0.75
 };
 
 /** Horarios oficiales disponibles para los productos con salida seleccionable. */
@@ -152,19 +272,834 @@ const HORARIOS_PRODUCTOS = {
  * aquí el precio. Una categoría inexistente rechaza la reserva.
  */
 const PRECIOS_PAQUETES = {
-  'peru-cusco-4d3n': { '3e': 590.00, '4e': 770.00, '5e': 1030.00 },
-  'peru-sur-7d6n': { '3e': 1180.00, '4e': 1530.00, '5e': 2060.00 },
-  'colombia-caribe-4d3n': { '3e': 480.00, '4e': 620.00, '5e': 840.00 },
-  'colombia-completo-7d6n': { '3e': 1290.00, '4e': 1680.00, '5e': 2260.00 },
-  'argentina-ba-iguazu-5d4n': { '3e': 890.00, '4e': 1160.00, '5e': 1560.00 },
-  'argentina-patagonia-7d6n': { '3e': 1650.00, '4e': 2140.00, '5e': 2890.00 },
-  'bolivia-uyuni-4d3n': { '3e': 620.00, '4e': 810.00, '5e': 1080.00 },
-  'chile-atacama-5d4n': { '3e': 980.00, '4e': 1270.00, '5e': 1720.00 },
-  'chile-patagonia-6d5n': { '3e': 1450.00, '4e': 1880.00, '5e': 2540.00 },
-  'ecuador-galapagos-5d4n': { '3e': 1390.00, '4e': 1810.00, '5e': 2430.00 },
-  'brasil-rio-4d3n': { '3e': 620.00, '4e': 810.00, '5e': 1080.00 },
-  'brasil-rio-iguazu-6d5n': { '3e': 1180.00, '4e': 1530.00, '5e': 2060.00 },
-  'mexico-riviera-5d4n': { '3e': 790.00, '4e': 1030.00, '5e': 1380.00 }
+  'peru-cusco-4d3n': {
+    '3e': {
+      'single': 590.0,
+      'double': 590.0,
+      'matrimonial': 590.0,
+      'triple': 590.0,
+      'family': 590.0
+    },
+    '4e': {
+      'single': 770.0,
+      'double': 770.0,
+      'matrimonial': 770.0,
+      'triple': 770.0,
+      'family': 770.0
+    },
+    '5e': {
+      'single': 1030.0,
+      'double': 1030.0,
+      'matrimonial': 1030.0,
+      'triple': 1030.0,
+      'family': 1030.0
+    }
+  },
+  'peru-sur-7d6n': {
+    '3e': {
+      'single': 1180.0,
+      'double': 1180.0,
+      'matrimonial': 1180.0,
+      'triple': 1180.0,
+      'family': 1180.0
+    },
+    '4e': {
+      'single': 1530.0,
+      'double': 1530.0,
+      'matrimonial': 1530.0,
+      'triple': 1530.0,
+      'family': 1530.0
+    },
+    '5e': {
+      'single': 2060.0,
+      'double': 2060.0,
+      'matrimonial': 2060.0,
+      'triple': 2060.0,
+      'family': 2060.0
+    }
+  },
+  'argentina-ba-iguazu-5d4n': {
+    '3e': {
+      'single': 890.0,
+      'double': 890.0,
+      'matrimonial': 890.0,
+      'triple': 890.0,
+      'family': 890.0
+    },
+    '4e': {
+      'single': 1160.0,
+      'double': 1160.0,
+      'matrimonial': 1160.0,
+      'triple': 1160.0,
+      'family': 1160.0
+    },
+    '5e': {
+      'single': 1560.0,
+      'double': 1560.0,
+      'matrimonial': 1560.0,
+      'triple': 1560.0,
+      'family': 1560.0
+    }
+  },
+  'argentina-patagonia-7d6n': {
+    '3e': {
+      'single': 1650.0,
+      'double': 1650.0,
+      'matrimonial': 1650.0,
+      'triple': 1650.0,
+      'family': 1650.0
+    },
+    '4e': {
+      'single': 2140.0,
+      'double': 2140.0,
+      'matrimonial': 2140.0,
+      'triple': 2140.0,
+      'family': 2140.0
+    },
+    '5e': {
+      'single': 2890.0,
+      'double': 2890.0,
+      'matrimonial': 2890.0,
+      'triple': 2890.0,
+      'family': 2890.0
+    }
+  },
+  'bolivia-uyuni-4d3n': {
+    '3e': {
+      'single': 620.0,
+      'double': 620.0,
+      'matrimonial': 620.0,
+      'triple': 620.0,
+      'family': 620.0
+    },
+    '4e': {
+      'single': 810.0,
+      'double': 810.0,
+      'matrimonial': 810.0,
+      'triple': 810.0,
+      'family': 810.0
+    },
+    '5e': {
+      'single': 1080.0,
+      'double': 1080.0,
+      'matrimonial': 1080.0,
+      'triple': 1080.0,
+      'family': 1080.0
+    }
+  },
+  'chile-atacama-5d4n': {
+    '3e': {
+      'single': 980.0,
+      'double': 980.0,
+      'matrimonial': 980.0,
+      'triple': 980.0,
+      'family': 980.0
+    },
+    '4e': {
+      'single': 1270.0,
+      'double': 1270.0,
+      'matrimonial': 1270.0,
+      'triple': 1270.0,
+      'family': 1270.0
+    },
+    '5e': {
+      'single': 1720.0,
+      'double': 1720.0,
+      'matrimonial': 1720.0,
+      'triple': 1720.0,
+      'family': 1720.0
+    }
+  },
+  'chile-patagonia-6d5n': {
+    '3e': {
+      'single': 1450.0,
+      'double': 1450.0,
+      'matrimonial': 1450.0,
+      'triple': 1450.0,
+      'family': 1450.0
+    },
+    '4e': {
+      'single': 1880.0,
+      'double': 1880.0,
+      'matrimonial': 1880.0,
+      'triple': 1880.0,
+      'family': 1880.0
+    },
+    '5e': {
+      'single': 2540.0,
+      'double': 2540.0,
+      'matrimonial': 2540.0,
+      'triple': 2540.0,
+      'family': 2540.0
+    }
+  },
+  'ecuador-galapagos-5d4n': {
+    '3e': {
+      'single': 1390.0,
+      'double': 1390.0,
+      'matrimonial': 1390.0,
+      'triple': 1390.0,
+      'family': 1390.0
+    },
+    '4e': {
+      'single': 1810.0,
+      'double': 1810.0,
+      'matrimonial': 1810.0,
+      'triple': 1810.0,
+      'family': 1810.0
+    },
+    '5e': {
+      'single': 2430.0,
+      'double': 2430.0,
+      'matrimonial': 2430.0,
+      'triple': 2430.0,
+      'family': 2430.0
+    }
+  },
+  'brasil-rio-4d3n': {
+    '3e': {
+      'single': 620.0,
+      'double': 620.0,
+      'matrimonial': 620.0,
+      'triple': 620.0,
+      'family': 620.0
+    },
+    '4e': {
+      'single': 810.0,
+      'double': 810.0,
+      'matrimonial': 810.0,
+      'triple': 810.0,
+      'family': 810.0
+    },
+    '5e': {
+      'single': 1080.0,
+      'double': 1080.0,
+      'matrimonial': 1080.0,
+      'triple': 1080.0,
+      'family': 1080.0
+    }
+  },
+  'brasil-rio-iguazu-6d5n': {
+    '3e': {
+      'single': 1180.0,
+      'double': 1180.0,
+      'matrimonial': 1180.0,
+      'triple': 1180.0,
+      'family': 1180.0
+    },
+    '4e': {
+      'single': 1530.0,
+      'double': 1530.0,
+      'matrimonial': 1530.0,
+      'triple': 1530.0,
+      'family': 1530.0
+    },
+    '5e': {
+      'single': 2060.0,
+      'double': 2060.0,
+      'matrimonial': 2060.0,
+      'triple': 2060.0,
+      'family': 2060.0
+    }
+  },
+  'mexico-riviera-5d4n': {
+    '3e': {
+      'single': 790.0,
+      'double': 790.0,
+      'matrimonial': 790.0,
+      'triple': 790.0,
+      'family': 790.0
+    },
+    '4e': {
+      'single': 1030.0,
+      'double': 1030.0,
+      'matrimonial': 1030.0,
+      'triple': 1030.0,
+      'family': 1030.0
+    },
+    '5e': {
+      'single': 1380.0,
+      'double': 1380.0,
+      'matrimonial': 1380.0,
+      'triple': 1380.0,
+      'family': 1380.0
+    }
+  },
+  'bogota-esencial': {
+    '3e': {
+      'single': 469.0,
+      'double': 329.0,
+      'matrimonial': 329.0,
+      'triple': 319.0,
+      'family': 309.0
+    },
+    '4e': {
+      'single': 629.0,
+      'double': 449.0,
+      'matrimonial': 449.0,
+      'triple': 429.0,
+      'family': 419.0
+    },
+    '5e': {
+      'single': 959.0,
+      'double': 679.0,
+      'matrimonial': 679.0,
+      'triple': 639.0,
+      'family': 629.0
+    }
+  },
+  'bogota-zipaquira-y-guatavita': {
+    '3e': {
+      'single': 649.0,
+      'double': 459.0,
+      'matrimonial': 459.0,
+      'triple': 439.0,
+      'family': 429.0
+    },
+    '4e': {
+      'single': 869.0,
+      'double': 619.0,
+      'matrimonial': 619.0,
+      'triple': 589.0,
+      'family': 579.0
+    },
+    '5e': {
+      'single': 1289.0,
+      'double': 919.0,
+      'matrimonial': 919.0,
+      'triple': 869.0,
+      'family': 849.0
+    }
+  },
+  'bogota-y-villa-de-leyva': {
+    '3e': {
+      'single': 659.0,
+      'double': 469.0,
+      'matrimonial': 469.0,
+      'triple': 449.0,
+      'family': 439.0
+    },
+    '4e': {
+      'single': 969.0,
+      'double': 689.0,
+      'matrimonial': 689.0,
+      'triple': 649.0,
+      'family': 639.0
+    },
+    '5e': {
+      'single': 1569.0,
+      'double': 1119.0,
+      'matrimonial': 1119.0,
+      'triple': 1059.0,
+      'family': 1039.0
+    }
+  },
+  'medellin-esencial': {
+    '3e': {
+      'single': 419.0,
+      'double': 299.0,
+      'matrimonial': 299.0,
+      'triple': 289.0,
+      'family': 279.0
+    },
+    '4e': {
+      'single': 589.0,
+      'double': 419.0,
+      'matrimonial': 419.0,
+      'triple': 399.0,
+      'family': 389.0
+    },
+    '5e': {
+      'single': 909.0,
+      'double': 649.0,
+      'matrimonial': 649.0,
+      'triple': 619.0,
+      'family': 599.0
+    }
+  },
+  'medellin-cultural-y-cafetera': {
+    '3e': {
+      'single': 559.0,
+      'double': 399.0,
+      'matrimonial': 399.0,
+      'triple': 379.0,
+      'family': 369.0
+    },
+    '4e': {
+      'single': 789.0,
+      'double': 559.0,
+      'matrimonial': 559.0,
+      'triple': 529.0,
+      'family': 519.0
+    },
+    '5e': {
+      'single': 1209.0,
+      'double': 859.0,
+      'matrimonial': 859.0,
+      'triple': 809.0,
+      'family': 799.0
+    }
+  },
+  'medellin-guatape-y-pueblos-de-antioquia': {
+    '3e': {
+      'single': 749.0,
+      'double': 529.0,
+      'matrimonial': 529.0,
+      'triple': 499.0,
+      'family': 489.0
+    },
+    '4e': {
+      'single': 1009.0,
+      'double': 719.0,
+      'matrimonial': 719.0,
+      'triple': 679.0,
+      'family': 669.0
+    },
+    '5e': {
+      'single': 1559.0,
+      'double': 1109.0,
+      'matrimonial': 1109.0,
+      'triple': 1049.0,
+      'family': 1029.0
+    }
+  },
+  'cartagena-esencial': {
+    '3e': {
+      'single': 489.0,
+      'double': 349.0,
+      'matrimonial': 349.0,
+      'triple': 329.0,
+      'family': 329.0
+    },
+    '4e': {
+      'single': 659.0,
+      'double': 469.0,
+      'matrimonial': 469.0,
+      'triple': 449.0,
+      'family': 439.0
+    },
+    '5e': {
+      'single': 979.0,
+      'double': 699.0,
+      'matrimonial': 699.0,
+      'triple': 659.0,
+      'family': 649.0
+    }
+  },
+  'cartagena-caribe': {
+    '3e': {
+      'single': 659.0,
+      'double': 469.0,
+      'matrimonial': 469.0,
+      'triple': 449.0,
+      'family': 439.0
+    },
+    '4e': {
+      'single': 889.0,
+      'double': 629.0,
+      'matrimonial': 629.0,
+      'triple': 599.0,
+      'family': 579.0
+    },
+    '5e': {
+      'single': 1309.0,
+      'double': 929.0,
+      'matrimonial': 929.0,
+      'triple': 879.0,
+      'family': 859.0
+    }
+  },
+  'cartagena-islas-premium': {
+    '3e': {
+      'single': 839.0,
+      'double': 599.0,
+      'matrimonial': 599.0,
+      'triple': 569.0,
+      'family': 559.0
+    },
+    '4e': {
+      'single': 1069.0,
+      'double': 759.0,
+      'matrimonial': 759.0,
+      'triple': 719.0,
+      'family': 699.0
+    },
+    '5e': {
+      'single': 1489.0,
+      'double': 1059.0,
+      'matrimonial': 1059.0,
+      'triple': 999.0,
+      'family': 979.0
+    }
+  },
+  'santa-marta-tayrona-y-minca': {
+    '3e': {
+      'single': 519.0,
+      'double': 369.0,
+      'matrimonial': 369.0,
+      'triple': 349.0,
+      'family': 349.0
+    },
+    '4e': {
+      'single': 689.0,
+      'double': 489.0,
+      'matrimonial': 489.0,
+      'triple': 469.0,
+      'family': 459.0
+    },
+    '5e': {
+      'single': 1009.0,
+      'double': 719.0,
+      'matrimonial': 719.0,
+      'triple': 679.0,
+      'family': 669.0
+    }
+  },
+  'santa-marta-y-caribe-natural': {
+    '3e': {
+      'single': 699.0,
+      'double': 499.0,
+      'matrimonial': 499.0,
+      'triple': 479.0,
+      'family': 469.0
+    },
+    '4e': {
+      'single': 929.0,
+      'double': 659.0,
+      'matrimonial': 659.0,
+      'triple': 629.0,
+      'family': 609.0
+    },
+    '5e': {
+      'single': 1349.0,
+      'double': 959.0,
+      'matrimonial': 959.0,
+      'triple': 909.0,
+      'family': 889.0
+    }
+  },
+  'ciudad-perdida-trek': {
+    '3e': {
+      'single': 1049.0,
+      'double': 749.0,
+      'matrimonial': 749.0,
+      'triple': 709.0,
+      'family': 699.0
+    },
+    '4e': {
+      'single': 1279.0,
+      'double': 909.0,
+      'matrimonial': 909.0,
+      'triple': 859.0,
+      'family': 839.0
+    },
+    '5e': {
+      'single': 1699.0,
+      'double': 1209.0,
+      'matrimonial': 1209.0,
+      'triple': 1139.0,
+      'family': 1119.0
+    }
+  },
+  'eje-cafetero-esencial': {
+    '3e': {
+      'single': 419.0,
+      'double': 299.0,
+      'matrimonial': 299.0,
+      'triple': 289.0,
+      'family': 279.0
+    },
+    '4e': {
+      'single': 589.0,
+      'double': 419.0,
+      'matrimonial': 419.0,
+      'triple': 399.0,
+      'family': 389.0
+    },
+    '5e': {
+      'single': 909.0,
+      'double': 649.0,
+      'matrimonial': 649.0,
+      'triple': 619.0,
+      'family': 599.0
+    }
+  },
+  'eje-cafetero-completo': {
+    '3e': {
+      'single': 589.0,
+      'double': 419.0,
+      'matrimonial': 419.0,
+      'triple': 399.0,
+      'family': 389.0
+    },
+    '4e': {
+      'single': 819.0,
+      'double': 579.0,
+      'matrimonial': 579.0,
+      'triple': 549.0,
+      'family': 539.0
+    },
+    '5e': {
+      'single': 1239.0,
+      'double': 879.0,
+      'matrimonial': 879.0,
+      'triple': 829.0,
+      'family': 809.0
+    }
+  },
+  'eje-cafetero-familiar': {
+    '3e': {
+      'single': 749.0,
+      'double': 529.0,
+      'matrimonial': 529.0,
+      'triple': 499.0,
+      'family': 489.0
+    },
+    '4e': {
+      'single': 1009.0,
+      'double': 719.0,
+      'matrimonial': 719.0,
+      'triple': 679.0,
+      'family': 669.0
+    },
+    '5e': {
+      'single': 1559.0,
+      'double': 1109.0,
+      'matrimonial': 1109.0,
+      'triple': 1049.0,
+      'family': 1029.0
+    }
+  },
+  'cali-salsa-y-cultura': {
+    '3e': {
+      'single': 489.0,
+      'double': 349.0,
+      'matrimonial': 349.0,
+      'triple': 329.0,
+      'family': 329.0
+    },
+    '4e': {
+      'single': 659.0,
+      'double': 469.0,
+      'matrimonial': 469.0,
+      'triple': 449.0,
+      'family': 439.0
+    },
+    '5e': {
+      'single': 979.0,
+      'double': 699.0,
+      'matrimonial': 699.0,
+      'triple': 659.0,
+      'family': 649.0
+    }
+  },
+  'cali-y-valle-del-cauca': {
+    '3e': {
+      'single': 629.0,
+      'double': 449.0,
+      'matrimonial': 449.0,
+      'triple': 429.0,
+      'family': 419.0
+    },
+    '4e': {
+      'single': 859.0,
+      'double': 609.0,
+      'matrimonial': 609.0,
+      'triple': 579.0,
+      'family': 569.0
+    },
+    '5e': {
+      'single': 1279.0,
+      'double': 909.0,
+      'matrimonial': 909.0,
+      'triple': 859.0,
+      'family': 839.0
+    }
+  },
+  'san-andres-caribe': {
+    '3e': {
+      'single': 699.0,
+      'double': 499.0,
+      'matrimonial': 499.0,
+      'triple': 479.0,
+      'family': 469.0
+    },
+    '4e': {
+      'single': 869.0,
+      'double': 619.0,
+      'matrimonial': 619.0,
+      'triple': 589.0,
+      'family': 579.0
+    },
+    '5e': {
+      'single': 1189.0,
+      'double': 849.0,
+      'matrimonial': 849.0,
+      'triple': 799.0,
+      'family': 789.0
+    }
+  },
+  'san-andres-completo': {
+    '3e': {
+      'single': 909.0,
+      'double': 649.0,
+      'matrimonial': 649.0,
+      'triple': 619.0,
+      'family': 599.0
+    },
+    '4e': {
+      'single': 1139.0,
+      'double': 809.0,
+      'matrimonial': 809.0,
+      'triple': 769.0,
+      'family': 749.0
+    },
+    '5e': {
+      'single': 1559.0,
+      'double': 1109.0,
+      'matrimonial': 1109.0,
+      'triple': 1049.0,
+      'family': 1029.0
+    }
+  },
+  'cartagena-y-santa-marta': {
+    '3e': {
+      'single': 909.0,
+      'double': 649.0,
+      'matrimonial': 649.0,
+      'triple': 619.0,
+      'family': 599.0
+    },
+    '4e': {
+      'single': 1219.0,
+      'double': 869.0,
+      'matrimonial': 869.0,
+      'triple': 819.0,
+      'family': 809.0
+    },
+    '5e': {
+      'single': 1819.0,
+      'double': 1299.0,
+      'matrimonial': 1299.0,
+      'triple': 1229.0,
+      'family': 1199.0
+    }
+  },
+  'cali-y-eje-cafetero': {
+    '3e': {
+      'single': 769.0,
+      'double': 549.0,
+      'matrimonial': 549.0,
+      'triple': 519.0,
+      'family': 509.0
+    },
+    '4e': {
+      'single': 1079.0,
+      'double': 769.0,
+      'matrimonial': 769.0,
+      'triple': 729.0,
+      'family': 709.0
+    },
+    '5e': {
+      'single': 1679.0,
+      'double': 1199.0,
+      'matrimonial': 1199.0,
+      'triple': 1129.0,
+      'family': 1109.0
+    }
+  },
+  'medellin-y-eje-cafetero': {
+    '3e': {
+      'single': 769.0,
+      'double': 549.0,
+      'matrimonial': 549.0,
+      'triple': 519.0,
+      'family': 509.0
+    },
+    '4e': {
+      'single': 1079.0,
+      'double': 769.0,
+      'matrimonial': 769.0,
+      'triple': 729.0,
+      'family': 709.0
+    },
+    '5e': {
+      'single': 1679.0,
+      'double': 1199.0,
+      'matrimonial': 1199.0,
+      'triple': 1129.0,
+      'family': 1109.0
+    }
+  },
+  'medellin-y-cartagena': {
+    '3e': {
+      'single': 909.0,
+      'double': 649.0,
+      'matrimonial': 649.0,
+      'triple': 619.0,
+      'family': 599.0
+    },
+    '4e': {
+      'single': 1219.0,
+      'double': 869.0,
+      'matrimonial': 869.0,
+      'triple': 819.0,
+      'family': 809.0
+    },
+    '5e': {
+      'single': 1819.0,
+      'double': 1299.0,
+      'matrimonial': 1299.0,
+      'triple': 1229.0,
+      'family': 1199.0
+    }
+  },
+  'bogota-y-medellin': {
+    '3e': {
+      'single': 909.0,
+      'double': 649.0,
+      'matrimonial': 649.0,
+      'triple': 619.0,
+      'family': 599.0
+    },
+    '4e': {
+      'single': 1219.0,
+      'double': 869.0,
+      'matrimonial': 869.0,
+      'triple': 819.0,
+      'family': 809.0
+    },
+    '5e': {
+      'single': 1819.0,
+      'double': 1299.0,
+      'matrimonial': 1299.0,
+      'triple': 1229.0,
+      'family': 1199.0
+    }
+  },
+  'bogota-medellin-y-cartagena': {
+    '3e': {
+      'single': 1329.0,
+      'double': 949.0,
+      'matrimonial': 949.0,
+      'triple': 899.0,
+      'family': 879.0
+    },
+    '4e': {
+      'single': 1779.0,
+      'double': 1269.0,
+      'matrimonial': 1269.0,
+      'triple': 1199.0,
+      'family': 1169.0
+    },
+    '5e': {
+      'single': 2679.0,
+      'double': 1909.0,
+      'matrimonial': 1909.0,
+      'triple': 1799.0,
+      'family': 1759.0
+    }
+  }
 };
 
 /* ========================================================================== */
@@ -286,10 +1221,16 @@ function validarYCalcular(data) {
   if (!data || !data.slug) throw new Error('Faltan datos de la reserva.');
 
   const slug = textoPlano(data.slug, 100).toLowerCase();
-  const precio = resolverPrecio({ slug: slug, tier: data.tier });
-
   const viajeros = parseInt(data.travelers, 10);
-  if (!(viajeros >= 1 && viajeros <= CONFIG.maxTravelers)) throw new Error('Demasiados viajeros.');
+  const adultos = data.adults === undefined ? viajeros : parseInt(data.adults, 10);
+  const ninos = data.children === undefined ? 0 : parseInt(data.children, 10);
+  if (!(viajeros >= 1 && viajeros <= CONFIG.maxTravelers) || adultos < 1 || ninos < 0 || adultos + ninos !== viajeros) {
+    throw new Error('La cantidad de viajeros no es válida.');
+  }
+
+  const tier = data.tier ? textoPlano(data.tier, 10) : '';
+  const occupancy = textoPlano(data.occupancy || 'double', 20);
+  const tarifas = resolverTarifas({ slug: slug, tier: tier, occupancy: occupancy });
 
   const holder = data.holder || {};
   const email = String(holder.email || '').trim().toLowerCase().slice(0, 254);
@@ -300,14 +1241,15 @@ function validarYCalcular(data) {
     throw new Error('Faltan datos de los pasajeros.');
   }
 
-  const pasajeros = data.passengers.map(function (entrada) {
+  const pasajeros = data.passengers.map(function (entrada, indice) {
     const p = entrada || {};
     const limpio = {
       name: textoPlano(p.name, 120),
       nationality: textoPlano(p.nationality, 60),
       docType: textoPlano(p.docType, 30),
       docNumber: textoPlano(p.docNumber, 50),
-      birth: textoPlano(p.birth, 10)
+      birth: textoPlano(p.birth, 10),
+      passengerType: textoPlano(p.passengerType || (indice < adultos ? 'adult' : 'child'), 10)
     };
     if (limpio.name.length < 3 || !limpio.nationality || !limpio.docType || !limpio.docNumber) {
       throw new Error('Faltan datos de los pasajeros.');
@@ -336,14 +1278,16 @@ function validarYCalcular(data) {
   limite.setHours(0, 0, 0, 0);
   if (fecha < limite) throw new Error('Fecha demasiado próxima.');
 
-  const total = redondear2(precio * viajeros);
+  const total = redondear2(tarifas.adulto * adultos + tarifas.nino * ninos);
   const cobro = calcularCobro(total);
 
+  if (data.quotedTotal !== undefined && Math.abs(Number(data.quotedTotal) - total) > 0.01) {
+    throw new Error('El total no coincide. Recarga la página e inténtalo de nuevo.');
+  }
   if (data.quotedDue !== undefined && Math.abs(Number(data.quotedDue) - cobro.due) > 0.01) {
     throw new Error('El importe no coincide. Recarga la página e inténtalo de nuevo.');
   }
 
-  const tier = data.tier ? textoPlano(data.tier, 10) : '';
   const booking = {
     requestKey: requestKeySeguro(data.requestKey),
     slug: slug,
@@ -352,7 +1296,10 @@ function validarYCalcular(data) {
     date: fechaTexto,
     departureTime: departureTime || '',
     travelers: viajeros,
+    adults: adultos,
+    children: ninos,
     tier: tier || null,
+    occupancy: PRECIOS_PAQUETES[slug] ? occupancy : null,
     holder: {
       email: email,
       phone: telefono,
@@ -362,21 +1309,27 @@ function validarYCalcular(data) {
     language: textoPlano(data.language || 'es', 10)
   };
 
-  return { precio: precio, viajeros: viajeros, total: total, due: cobro.due, mode: cobro.mode,
+  return { precio: tarifas.adulto, precioNino: tarifas.nino, viajeros: viajeros, adultos: adultos,
+           ninos: ninos, total: total, due: cobro.due, mode: cobro.mode,
            fecha: fecha, booking: booking };
 }
 
-/** Devuelve el precio por persona oficial del producto solicitado. */
-function resolverPrecio(data) {
-  if (typeof PRECIOS[data.slug] === 'number') return PRECIOS[data.slug];
+/** Devuelve las tarifas oficiales de adulto y niño. */
+function resolverTarifas(data) {
+  if (typeof PRECIOS[data.slug] === 'number') {
+    const adulto = PRECIOS[data.slug];
+    const factor = typeof FACTOR_NINOS[data.slug] === 'number' ? FACTOR_NINOS[data.slug] : 0.75;
+    return { adulto: adulto, nino: redondear2(adulto * factor) };
+  }
 
   const tiers = PRECIOS_PAQUETES[data.slug];
   if (tiers) {
-    const tier = data.tier;
-    if (!tier || typeof tiers[tier] !== 'number') {
-      throw new Error('Producto no disponible. Elige una categoría de hotel válida.');
-    }
-    return tiers[tier];
+    const tier = tiers[data.tier];
+    if (!tier) throw new Error('Producto no disponible. Elige una categoría de hotel válida.');
+    const occupancy = data.occupancy || 'double';
+    if (typeof tier[occupancy] !== 'number') throw new Error('Elige una acomodación válida.');
+    const adulto = tier[occupancy];
+    return { adulto: adulto, nino: redondear2(adulto * 0.70) };
   }
   throw new Error('Producto no disponible.');
 }

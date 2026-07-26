@@ -823,3 +823,202 @@ details.detail-card summary::marker{color:var(--latam-gold);}
   .detail-hero__content h1{font-size:clamp(26px,7vw,34px);}
 }
 
+
+/* ==========================================================================
+   Unificación de fichas de producto Colombia — julio 2026
+   ========================================================================== */
+.product-hero-clean {
+  background: linear-gradient(135deg, var(--latam-green, #0a3d2c), #126344);
+  color: #fff;
+  padding: clamp(54px, 7vw, 92px) 20px clamp(46px, 6vw, 76px);
+}
+.product-hero-clean .container { max-width: 1180px; margin: 0 auto; }
+.product-hero-clean h1 {
+  max-width: 900px;
+  margin: 0 0 14px;
+  color: #fff;
+  font-size: clamp(2rem, 4.4vw, 4.25rem);
+  line-height: 1.05;
+  letter-spacing: -.035em;
+}
+.product-hero-clean p {
+  max-width: 820px;
+  margin: 0;
+  color: rgba(255,255,255,.9);
+  font-size: clamp(1rem, 1.65vw, 1.25rem);
+  line-height: 1.65;
+}
+.product-detail-section { padding-top: clamp(34px, 5vw, 72px); }
+.detail-layout--aligned,
+.detail-layout {
+  align-items: start;
+}
+.product-booking-card {
+  position: sticky;
+  top: 96px;
+}
+.product-booking-card > img,
+.tour-booking-card > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 16px;
+  margin: 0 0 20px;
+}
+.product-booking-card .cta-stack .btn-primary,
+.product-booking-card .cta-stack button.btn-primary { width: 100%; }
+.dynamic-rate-note {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f4f8f5;
+  border: 1px solid #dce9e1;
+  font-size: .86rem;
+  line-height: 1.55;
+}
+.dynamic-rate-note strong { color: var(--latam-green, #0a3d2c); }
+.dynamic-rate-note p { margin: 5px 0 0; }
+
+/* Etiquetas y valores siempre separados de forma legible. */
+.tour-facts > div,
+.product-facts > div,
+.fact-row,
+.tour-logistics > div,
+.tour-meta-strip > div { column-gap: 8px; }
+.tour-facts > div > span::after,
+.product-facts > div > span::after,
+.fact-row > span::after,
+.tour-logistics > div > span::after,
+.tour-meta-strip > div > span::after,
+.tour-fact dt::after { content: ":"; }
+.tour-facts > div > span,
+.product-facts > div > span,
+.fact-row > span,
+.tour-fact dt { white-space: nowrap; }
+.tour-fact dt { display: inline; margin-right: 5px; }
+
+/* Itinerario detallado de paquetes. */
+.package-itinerary { display: grid; gap: 18px; }
+.package-day {
+  border: 1px solid #dfe9e3;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+}
+.package-day__head {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: #f3f8f5;
+  border-bottom: 1px solid #dfe9e3;
+}
+.package-day__head > span {
+  display: inline-flex;
+  justify-content: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--latam-green, #0a3d2c);
+  color: #fff;
+  font-weight: 800;
+  font-size: .82rem;
+}
+.package-day__head h3 { margin: 0; font-size: 1.05rem; line-height: 1.4; }
+.package-day ul { list-style: none; margin: 0; padding: 4px 18px 10px; }
+.package-day__row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px dashed #e0e8e3;
+}
+.package-day__row:last-child { border-bottom: 0; }
+.package-day__row time { color: var(--latam-green, #0a3d2c); font-weight: 800; }
+.package-day__row span { line-height: 1.55; }
+.hotel-pricing-table { min-width: 920px; }
+.hotel-pricing-table td:not(:nth-child(2)),
+.hotel-pricing-table th:not(:nth-child(2)) { white-space: nowrap; }
+
+/* Formulario de reserva: columnas uniformes y controles alineados. */
+.booking-box { width: min(920px, calc(100vw - 28px)); }
+.booking-body { padding-top: 22px; }
+.booking-form-grid {
+  display: grid;
+  gap: 16px;
+  align-items: start;
+}
+.booking-form-grid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.booking-form-grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.booking-form-grid .form-field { min-width: 0; margin: 0; }
+.booking-form-grid .form-field > label {
+  display: block;
+  min-height: 22px;
+  margin-bottom: 7px;
+}
+.booking-form-grid input,
+.booking-form-grid select,
+.booking-form-grid textarea { width: 100%; min-height: 48px; }
+.booking-subsection {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid #e1e7e4;
+}
+.booking-subsection:first-child { margin-top: 0; }
+.booking-subsection h3 { margin: 0 0 14px; font-size: 1rem; color: var(--latam-green, #0a3d2c); }
+.travelers-grid { align-items: stretch; }
+.traveler-total {
+  display: flex;
+  min-height: 78px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #d7e2dc;
+  border-radius: 12px;
+  background: #f4f8f5;
+  text-align: center;
+}
+.traveler-total span { font-size: .82rem; color: #5f6f67; }
+.traveler-total strong { font-size: 1.65rem; color: var(--latam-green, #0a3d2c); }
+.booking-live-quote {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px 18px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f4f8f5;
+  border: 1px solid #d7e2dc;
+}
+.booking-live-quote span { color: #607068; }
+.booking-live-quote strong { color: var(--latam-green, #0a3d2c); text-align: right; }
+.passenger-card {
+  margin: 0 0 18px;
+  padding: 20px;
+  border: 1px solid #dce5e0;
+  border-radius: 16px;
+}
+.passenger-card legend { padding: 0 8px; font-weight: 800; color: var(--latam-green, #0a3d2c); }
+.passenger-card legend small { font-weight: 600; color: #65736c; }
+.booking-summary .fact-row { align-items: flex-start; }
+.booking-summary .fact-row strong { max-width: 62%; text-align: right; }
+
+@media (max-width: 900px) {
+  .product-booking-card { position: static; }
+  .booking-field-placeholder { display: none; }
+}
+@media (max-width: 700px) {
+  .product-hero-clean { padding: 44px 18px 42px; }
+  .booking-form-grid--2,
+  .booking-form-grid--3 { grid-template-columns: 1fr; }
+  .package-day__head { grid-template-columns: 1fr; }
+  .package-day__head > span { justify-self: start; }
+  .package-day__row { grid-template-columns: 76px 1fr; gap: 10px; }
+  .booking-summary .fact-row { gap: 10px; }
+  .booking-summary .fact-row strong { max-width: 58%; }
+}

@@ -178,11 +178,11 @@
       "country": "Colombia",
       "region": "Cartagena",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "4 horas",
       "priceFrom": 25.0,
       "currency": "USD",
-      "img": "colombia-cartagena-01.jpg",
+      "img": "colombia-experiencia-cartagena-centro-getsemani.jpg",
       "alt": "Balcones floridos en el centro amurallado de Cartagena",
       "excerpt": "Ciudad amurallada, Getsemaní y atardecer en la muralla, a pie.",
       "description": "Recorrido a pie por la Cartagena que no sale en las postales: plazas del centro amurallado, historia del puerto colonial, murales y vida de barrio en Getsemaní, y cierre con el atardecer desde la muralla.",
@@ -202,7 +202,14 @@
         "Incluye Getsemaní, no solo el centro",
         "Salidas por la tarde"
       ],
-      "marketRef": "GetYourGuide: 12-35 USD"
+      "marketRef": "GetYourGuide: 12-35 USD",
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "islas-rosario-baru",
@@ -210,11 +217,11 @@
       "country": "Colombia",
       "region": "Cartagena",
       "style": "playa",
-      "styleLabel": "Playa",
+      "styleLabel": "Playa y verano",
       "duration": "1 día",
       "priceFrom": 65.0,
       "currency": "USD",
-      "img": "estilo-playa-verano-01.jpg",
+      "img": "colombia-experiencia-islas-rosario-baru.jpg",
       "alt": "Agua turquesa y playa de arena blanca en Islas del Rosario",
       "excerpt": "Día completo de navegación, snorkel y playa con almuerzo típico.",
       "description": "Salida en lancha desde Cartagena hacia el archipiélago del Rosario, con paradas para snorkel en arrecife, tiempo de playa en Barú y almuerzo de pescado frito con patacón y arroz de coco.",
@@ -234,7 +241,15 @@
         "Almuerzo incluido",
         "Playa de arena blanca en Barú"
       ],
-      "marketRef": "Viator/GetYourGuide: 45-90 USD"
+      "marketRef": "Viator/GetYourGuide: 45-90 USD",
+      "styles": [
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "city-tour-medellin",
@@ -242,11 +257,11 @@
       "country": "Colombia",
       "region": "Medellín",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "4 horas",
       "priceFrom": 35.0,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-city-tour-medellin.jpg",
       "alt": "Vista urbana y cultural de Medellín durante un city tour",
       "excerpt": "Una introducción completa a Medellín entre miradores, Plaza Botero, espacios renovados e historia paisa.",
       "description": "Descubre las distintas caras de Medellín en un recorrido de medio día que combina paisajes urbanos, tradición antioqueña, arte y transformación social. Visita Pueblito Paisa, camina por Plaza Botero y conoce espacios que explican cómo la ciudad pasó de un pasado complejo a convertirse en referente de innovación urbana.",
@@ -542,7 +557,14 @@
             }
           ]
         }
-      }
+      },
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "comuna-13-medellin",
@@ -550,11 +572,11 @@
       "country": "Colombia",
       "region": "Medellín",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "4 horas",
       "priceFrom": 29.0,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-comuna-13-medellin.jpg",
       "alt": "Murales, escaleras eléctricas y barrios de ladera de la Comuna 13 en Medellín",
       "excerpt": "Metro, Metrocable, arte urbano, escaleras eléctricas y sabores locales con un guía de la comunidad.",
       "description": "Conoce la transformación de la Comuna 13 desde una mirada local y respetuosa. Viaja en el sistema Metro, disfruta una vista panorámica desde el Metrocable y recorre los murales, escaleras eléctricas y espacios comunitarios que convirtieron el arte en una herramienta de memoria y cambio social.",
@@ -872,19 +894,26 @@
             }
           ]
         }
-      }
+      },
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "guatape-piedra-penol",
       "title": "Guatapé + Piedra del Peñol",
       "country": "Colombia",
       "region": "Medellín",
-      "style": "aventura",
-      "styleLabel": "Aventura",
+      "style": "naturaleza",
+      "styleLabel": "Naturaleza",
       "duration": "11 horas",
       "priceFrom": 49.0,
       "currency": "USD",
-      "img": "destino-colombia-01.jpg",
+      "img": "colombia-experiencia-guatape-piedra-penol.jpg",
       "alt": "Piedra del Peñol y embalse de Guatapé en Antioquia",
       "excerpt": "Día completo con desayuno, almuerzo, navegación, Guatapé y ascenso opcional a la Piedra.",
       "description": "Sal de Medellín hacia uno de los paisajes más reconocidos de Antioquia. Conoce la historia del Viejo Peñol, visita la Piedra del Peñol, navega por el embalse y recorre las calles de Guatapé con sus zócalos de colores. La jornada incluye transporte y comidas para que puedas concentrarte en disfrutar el destino.",
@@ -1214,7 +1243,16 @@
             }
           ]
         }
-      }
+      },
+      "styles": [
+        "naturaleza",
+        "cultura",
+        "familia",
+        "aventura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "tour-pablo-escobar",
@@ -1222,11 +1260,11 @@
       "country": "Colombia",
       "region": "Medellín",
       "style": "cultura",
-      "styleLabel": "Historia y memoria",
+      "styleLabel": "Cultura viva",
       "duration": "4 horas 30 minutos",
       "priceFrom": 39.0,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-tour-pablo-escobar.jpg",
       "alt": "Parque de la Inflexión y recorrido histórico por Medellín",
       "excerpt": "Un recorrido crítico por los lugares del narcotráfico, sus víctimas y la transformación posterior de Medellín.",
       "description": "Comprende uno de los periodos más difíciles de Medellín desde una perspectiva histórica y responsable. El recorrido conecta el Parque de la Inflexión, lugares relacionados con la persecución de Pablo Escobar, un cementerio y un espacio de interpretación para explicar las consecuencias del narcotráfico y la transformación de la ciudad sin glorificar la violencia.",
@@ -1544,7 +1582,13 @@
             }
           ]
         }
-      }
+      },
+      "styles": [
+        "cultura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "parapente-medellin",
@@ -1556,7 +1600,7 @@
       "duration": "3 a 4 horas",
       "priceFrom": 99.0,
       "currency": "USD",
-      "img": "estilo-aventura-01.jpg",
+      "img": "colombia-experiencia-parapente-medellin.jpg",
       "alt": "Vuelo tándem en parapente sobre las montañas del Valle de Aburrá",
       "excerpt": "Vuela en tándem sobre el Valle de Aburrá con piloto certificado, transporte compartido y material GoPro.",
       "description": "Vive Medellín desde el aire en un vuelo tándem desde San Félix. La experiencia incluye traslado desde zonas seleccionadas, preparación con un piloto certificado, un vuelo estándar de aproximadamente 15 a 20 minutos y fotografías y videos GoPro, siempre sujetos a las condiciones meteorológicas y de seguridad.",
@@ -1864,7 +1908,14 @@
             }
           ]
         }
-      }
+      },
+      "styles": [
+        "aventura",
+        "naturaleza"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "medellin-nocturno-gastronomia-rooftops",
@@ -1876,7 +1927,7 @@
       "duration": "4 horas",
       "priceFrom": 49.0,
       "currency": "USD",
-      "img": "estilo-gastronomia-01.jpg",
+      "img": "colombia-experiencia-medellin-nocturno-gastronomia-rooftops.jpg",
       "alt": "Terraza nocturna y gastronomía en el sector de Provenza en Medellín",
       "excerpt": "Sabores colombianos, caminata por El Poblado y dos rooftops seleccionados en una noche guiada y segura.",
       "description": "Descubre la cara gastronómica y nocturna de Medellín en un grupo reducido. Prueba sabores locales, recorre Manila y Provenza y visita dos rooftops seleccionados con un anfitrión que coordina accesos, explica el entorno y comparte recomendaciones para disfrutar la noche de manera responsable.",
@@ -2202,7 +2253,14 @@
             }
           ]
         }
-      }
+      },
+      "styles": [
+        "gastronomia",
+        "cultura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "buenos-aires-city-tango",
@@ -2890,11 +2948,11 @@
       "country": "Colombia",
       "region": "Bogotá",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "6 horas",
       "priceFrom": 59,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-bogota-monserrate-candelaria.jpg",
       "alt": "Bogotá: Monserrate, La Candelaria y centro histórico",
       "excerpt": "Descubre la capital desde el mirador de Monserrate y recorre a pie las plazas, iglesias y calles históricas de La Candelaria.",
       "description": "Descubre la capital desde el mirador de Monserrate y recorre a pie las plazas, iglesias y calles históricas de La Candelaria.",
@@ -2914,7 +2972,14 @@
         "La Candelaria",
         "Plaza de Bolívar"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "zipaquira-catedral-de-sal",
@@ -2922,11 +2987,11 @@
       "country": "Colombia",
       "region": "Bogotá / Zipaquirá",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "7 horas",
       "priceFrom": 79,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-zipaquira-catedral-de-sal.jpg",
       "alt": "Catedral de Sal de Zipaquirá desde Bogotá",
       "excerpt": "Viaja desde Bogotá a Zipaquirá y explora el complejo subterráneo construido en antiguos túneles de sal.",
       "description": "Viaja desde Bogotá a Zipaquirá y explora el complejo subterráneo construido en antiguos túneles de sal.",
@@ -2946,19 +3011,26 @@
         "Catedral de Sal",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "guatavita-zipaquira",
       "title": "Laguna de Guatavita y Catedral de Sal de Zipaquirá",
       "country": "Colombia",
       "region": "Bogotá / Cundinamarca",
-      "style": "naturaleza",
-      "styleLabel": "Naturaleza",
+      "style": "cultura",
+      "styleLabel": "Cultura viva",
       "duration": "11 horas",
       "priceFrom": 109,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-guatavita-zipaquira.jpg",
       "alt": "Laguna de Guatavita y Catedral de Sal de Zipaquirá",
       "excerpt": "Combina la leyenda de El Dorado en Guatavita con una visita completa a la Catedral de Sal de Zipaquirá.",
       "description": "Combina la leyenda de El Dorado en Guatavita con una visita completa a la Catedral de Sal de Zipaquirá.",
@@ -2978,7 +3050,15 @@
         "Pueblo de Guatavita",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "villa-de-leyva-full-day",
@@ -2986,11 +3066,11 @@
       "country": "Colombia",
       "region": "Bogotá / Boyacá",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "12 horas",
       "priceFrom": 119,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-villa-de-leyva-full-day.jpg",
       "alt": "Villa de Leyva: pueblo colonial y atractivos de Boyacá",
       "excerpt": "Conoce una de las poblaciones coloniales mejor conservadas de Colombia y selecciona visitas complementarias en sus alrededores.",
       "description": "Conoce una de las poblaciones coloniales mejor conservadas de Colombia y selecciona visitas complementarias en sus alrededores.",
@@ -3010,7 +3090,14 @@
         "Villa de Leyva",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "rosario-vip-catamaran",
@@ -3018,11 +3105,11 @@
       "country": "Colombia",
       "region": "Cartagena / Islas del Rosario",
       "style": "playa",
-      "styleLabel": "Playa",
+      "styleLabel": "Playa y verano",
       "duration": "8 horas",
       "priceFrom": 119,
       "currency": "USD",
-      "img": "estilo-playa-verano-01.jpg",
+      "img": "colombia-experiencia-rosario-vip-catamaran.jpg",
       "alt": "Islas del Rosario VIP en catamarán con almuerzo y snorkel",
       "excerpt": "Disfruta una navegación más cómoda en catamarán, con espacios amplios, almuerzo y paradas para nadar o hacer snorkel.",
       "description": "Disfruta una navegación más cómoda en catamarán, con espacios amplios, almuerzo y paradas para nadar o hacer snorkel.",
@@ -3042,7 +3129,15 @@
         "Primera zona de baño",
         "Almuerzo a bordo"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "bahia-cholon",
@@ -3050,11 +3145,11 @@
       "country": "Colombia",
       "region": "Cartagena / Barú",
       "style": "playa",
-      "styleLabel": "Playa",
+      "styleLabel": "Playa y verano",
       "duration": "7 horas",
       "priceFrom": 89,
       "currency": "USD",
-      "img": "estilo-playa-verano-01.jpg",
+      "img": "colombia-experiencia-bahia-cholon.jpg",
       "alt": "Bahía de Cholón: día de playa y ambiente festivo",
       "excerpt": "Navega a Cholón para disfrutar del ambiente caribeño, música, baño y almuerzo, con advertencias claras sobre vendedores y consumo adicional.",
       "description": "Navega a Cholón para disfrutar del ambiente caribeño, música, baño y almuerzo, con advertencias claras sobre vendedores y consumo adicional.",
@@ -3074,7 +3169,13 @@
         "Cholón",
         "Almuerzo"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "playa"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "volcan-totumo",
@@ -3086,7 +3187,7 @@
       "duration": "6 horas",
       "priceFrom": 55,
       "currency": "USD",
-      "img": "estilo-aventura-01.jpg",
+      "img": "colombia-experiencia-volcan-totumo.jpg",
       "alt": "Volcán del Totumo y baño de lodo",
       "excerpt": "Vive la experiencia de flotar en el lodo mineral del Totumo y completa la jornada con baño en la ciénaga o parada costera.",
       "description": "Vive la experiencia de flotar en el lodo mineral del Totumo y completa la jornada con baño en la ciénaga o parada costera.",
@@ -3106,7 +3207,15 @@
         "Limpieza en la ciénaga",
         "Parada de almuerzo o playa"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "aventura",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "cartagena-gastronomica",
@@ -3118,7 +3227,7 @@
       "duration": "3 horas",
       "priceFrom": 49,
       "currency": "USD",
-      "img": "estilo-gastronomia-01.jpg",
+      "img": "colombia-experiencia-cartagena-gastronomica.jpg",
       "alt": "Tour gastronómico de Cartagena con degustaciones",
       "excerpt": "Prueba sabores cartageneros mientras recorres mercados, plazas o calles históricas con contexto cultural.",
       "description": "Prueba sabores cartageneros mientras recorres mercados, plazas o calles históricas con contexto cultural.",
@@ -3138,19 +3247,27 @@
         "Dulces y café",
         "Cocina caribeña"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "gastronomia",
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "cartagena-nocturna",
       "title": "Cartagena nocturna: plazas, bares y ambiente caribeño",
       "country": "Colombia",
       "region": "Cartagena de Indias",
-      "style": "gastronomia",
-      "styleLabel": "Gastronomía",
+      "style": "cultura",
+      "styleLabel": "Cultura viva",
       "duration": "4 horas",
       "priceFrom": 45,
       "currency": "USD",
-      "img": "estilo-gastronomia-01.jpg",
+      "img": "colombia-experiencia-cartagena-nocturna.jpg",
       "alt": "Cartagena nocturna: plazas, bares y ambiente caribeño",
       "excerpt": "Descubre el ambiente nocturno de Getsemaní y la Ciudad Amurallada con una ruta guiada por plazas, bares y terrazas.",
       "description": "Descubre el ambiente nocturno de Getsemaní y la Ciudad Amurallada con una ruta guiada por plazas, bares y terrazas.",
@@ -3170,7 +3287,14 @@
         "Ciudad Amurallada",
         "Rooftop o bar"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "gastronomia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "chiva-rumbera-cartagena",
@@ -3178,11 +3302,11 @@
       "country": "Colombia",
       "region": "Cartagena de Indias",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "3 horas",
       "priceFrom": 35,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-chiva-rumbera-cartagena.jpg",
       "alt": "Chiva rumbera por Cartagena",
       "excerpt": "Recorre la ciudad en una chiva tradicional con música, animación y paradas panorámicas antes de finalizar cerca de la zona nocturna.",
       "description": "Recorre la ciudad en una chiva tradicional con música, animación y paradas panorámicas antes de finalizar cerca de la zona nocturna.",
@@ -3202,7 +3326,13 @@
         "Parada en murallas",
         "Zona nocturna"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "santa-marta-city-tour",
@@ -3210,11 +3340,11 @@
       "country": "Colombia",
       "region": "Santa Marta",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "4 horas",
       "priceFrom": 45,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-santa-marta-city-tour.jpg",
       "alt": "City Tour Santa Marta y Quinta de San Pedro Alejandrino",
       "excerpt": "Conoce el centro histórico de Santa Marta, sus plazas y la Quinta de San Pedro Alejandrino en un recorrido de medio día.",
       "description": "Conoce el centro histórico de Santa Marta, sus plazas y la Quinta de San Pedro Alejandrino en un recorrido de medio día.",
@@ -3234,7 +3364,14 @@
         "Centro histórico",
         "Bahía de Santa Marta"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "parque-tayrona-full-day",
@@ -3246,7 +3383,7 @@
       "duration": "12 horas",
       "priceFrom": 79,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-parque-tayrona-full-day.jpg",
       "alt": "Parque Nacional Natural Tayrona: Cabo San Juan",
       "excerpt": "Camina por selva tropical y playas del Tayrona hasta Cabo San Juan, con tiempo para descansar y bañarte donde esté permitido.",
       "description": "Camina por selva tropical y playas del Tayrona hasta Cabo San Juan, con tiempo para descansar y bañarte donde esté permitido.",
@@ -3266,7 +3403,15 @@
         "Caminata por senderos",
         "Cabo San Juan"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "playa",
+        "aventura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "minca-cascadas-cafe",
@@ -3278,7 +3423,7 @@
       "duration": "8 horas",
       "priceFrom": 69,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-minca-cascadas-cafe.jpg",
       "alt": "Minca: cascadas, café y naturaleza",
       "excerpt": "Sube desde Santa Marta a Minca para conocer una finca cafetera, cascadas y paisajes de la Sierra Nevada.",
       "description": "Sube desde Santa Marta a Minca para conocer una finca cafetera, cascadas y paisajes de la Sierra Nevada.",
@@ -3298,7 +3443,16 @@
         "Finca cafetera",
         "Almuerzo"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "aventura",
+        "familia",
+        "gastronomia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "playa-cristal-siete-olas",
@@ -3306,11 +3460,11 @@
       "country": "Colombia",
       "region": "Santa Marta / Tayrona",
       "style": "playa",
-      "styleLabel": "Playa",
+      "styleLabel": "Playa y verano",
       "duration": "9 horas",
       "priceFrom": 95,
       "currency": "USD",
-      "img": "estilo-playa-verano-01.jpg",
+      "img": "colombia-experiencia-playa-cristal-siete-olas.jpg",
       "alt": "Playa Cristal y mirador de las Siete Olas",
       "excerpt": "Combina el mirador de las Siete Olas con traslado terrestre y marítimo a Playa Cristal dentro del Tayrona.",
       "description": "Combina el mirador de las Siete Olas con traslado terrestre y marítimo a Playa Cristal dentro del Tayrona.",
@@ -3330,7 +3484,15 @@
         "Lancha a Playa Cristal",
         "Playa Cristal"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "ciudad-perdida-4-dias",
@@ -3342,7 +3504,7 @@
       "duration": "4 días / 3 noches",
       "priceFrom": 699,
       "currency": "USD",
-      "img": "estilo-aventura-01.jpg",
+      "img": "colombia-experiencia-ciudad-perdida-4-dias.jpg",
       "alt": "Trek Ciudad Perdida 4 días",
       "excerpt": "Realiza la ruta clásica a Teyuna con guías locales, campamentos, comidas y acompañamiento durante cuatro días.",
       "description": "Realiza la ruta clásica a Teyuna con guías locales, campamentos, comidas y acompañamiento durante cuatro días.",
@@ -3362,7 +3524,14 @@
         "Ciudad Perdida",
         "Regreso a El Mamey y Santa Marta"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "aventura",
+        "naturaleza"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "ciudad-perdida-5-dias",
@@ -3374,7 +3543,7 @@
       "duration": "5 días / 4 noches",
       "priceFrom": 799,
       "currency": "USD",
-      "img": "estilo-aventura-01.jpg",
+      "img": "colombia-experiencia-ciudad-perdida-5-dias.jpg",
       "alt": "Trek Ciudad Perdida 5 días",
       "excerpt": "Recorre Teyuna a un ritmo más pausado, con mayor tiempo de descanso e interpretación cultural que la ruta clásica.",
       "description": "Recorre Teyuna a un ritmo más pausado, con mayor tiempo de descanso e interpretación cultural que la ruta clásica.",
@@ -3394,7 +3563,14 @@
         "Comunidades y campamento cercano",
         "Ciudad Perdida"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "aventura",
+        "naturaleza"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "valle-cocora-salento",
@@ -3406,7 +3582,7 @@
       "duration": "8 horas",
       "priceFrom": 79,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-valle-cocora-salento.jpg",
       "alt": "Valle del Cocora y Salento",
       "excerpt": "Camina entre palmas de cera en el Valle del Cocora y disfruta de tiempo libre en las calles coloridas de Salento.",
       "description": "Camina entre palmas de cera en el Valle del Cocora y disfruta de tiempo libre en las calles coloridas de Salento.",
@@ -3426,7 +3602,16 @@
         "Almuerzo",
         "Salento"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "cultura",
+        "familia",
+        "aventura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "tour-cafe-colombiano",
@@ -3438,7 +3623,7 @@
       "duration": "4 horas",
       "priceFrom": 45,
       "currency": "USD",
-      "img": "estilo-gastronomia-01.jpg",
+      "img": "colombia-experiencia-tour-cafe-colombiano.jpg",
       "alt": "Experiencia del café colombiano en finca tradicional",
       "excerpt": "Aprende cómo se cultiva, recolecta, procesa y prepara el café en una finca del Paisaje Cultural Cafetero.",
       "description": "Aprende cómo se cultiva, recolecta, procesa y prepara el café en una finca del Paisaje Cultural Cafetero.",
@@ -3458,7 +3643,15 @@
         "Beneficio y secado",
         "Tueste y preparación"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "gastronomia",
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "filandia-miradores",
@@ -3466,11 +3659,11 @@
       "country": "Colombia",
       "region": "Eje Cafetero",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "6 horas",
       "priceFrom": 65,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-filandia-miradores.jpg",
       "alt": "Filandia, arquitectura y miradores del Eje Cafetero",
       "excerpt": "Recorre Filandia, sus calles tradicionales, talleres artesanales y miradores sobre el paisaje cafetero.",
       "description": "Recorre Filandia, sus calles tradicionales, talleres artesanales y miradores sobre el paisaje cafetero.",
@@ -3490,7 +3683,15 @@
         "Taller artesanal",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "parque-del-cafe",
@@ -3498,11 +3699,11 @@
       "country": "Colombia",
       "region": "Eje Cafetero / Quindío",
       "style": "familia",
-      "styleLabel": "Familia",
+      "styleLabel": "En familia",
       "duration": "10 horas",
       "priceFrom": 89,
       "currency": "USD",
-      "img": "estilo-familia-01.jpg",
+      "img": "colombia-experiencia-parque-del-cafe.jpg",
       "alt": "Parque del Café: entrada y transporte",
       "excerpt": "Disfruta las atracciones, espectáculos y contenidos culturales del Parque del Café con transporte de ida y vuelta.",
       "description": "Disfruta las atracciones, espectáculos y contenidos culturales del Parque del Café con transporte de ida y vuelta.",
@@ -3522,7 +3723,14 @@
         "Tiempo libre",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "familia",
+        "cultura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "termales-santa-rosa-cabal",
@@ -3534,7 +3742,7 @@
       "duration": "7 horas",
       "priceFrom": 95,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-termales-santa-rosa-cabal.jpg",
       "alt": "Termales de Santa Rosa de Cabal",
       "excerpt": "Relájate en piscinas termales rodeadas de montaña y cascadas, con transporte desde las principales ciudades del Eje Cafetero.",
       "description": "Relájate en piscinas termales rodeadas de montaña y cascadas, con transporte desde las principales ciudades del Eje Cafetero.",
@@ -3554,7 +3762,14 @@
         "Baño termal",
         "Almuerzo"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "cali-city-tour",
@@ -3562,11 +3777,11 @@
       "country": "Colombia",
       "region": "Cali",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "4 horas",
       "priceFrom": 45,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-cali-city-tour.jpg",
       "alt": "City Tour Cali: historia, miradores y barrios tradicionales",
       "excerpt": "Conoce los principales símbolos de Cali, sus barrios tradicionales, miradores y espacios vinculados a la cultura salsera.",
       "description": "Conoce los principales símbolos de Cali, sus barrios tradicionales, miradores y espacios vinculados a la cultura salsera.",
@@ -3586,7 +3801,14 @@
         "San Antonio",
         "Cristo Rey o Sebastián de Belalcázar"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "cali-tour-salsa",
@@ -3594,11 +3816,11 @@
       "country": "Colombia",
       "region": "Cali",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "4 horas",
       "priceFrom": 59,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-cali-tour-salsa.jpg",
       "alt": "Cali: experiencia de salsa con clase y noche local",
       "excerpt": "Aprende pasos básicos con un instructor y descubre la escena salsera caleña en un espacio seleccionado.",
       "description": "Aprende pasos básicos con un instructor y descubre la escena salsera caleña en un espacio seleccionado.",
@@ -3618,7 +3840,13 @@
         "Traslado a salsoteca",
         "Experiencia nocturna"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "hacienda-el-paraiso",
@@ -3626,11 +3854,11 @@
       "country": "Colombia",
       "region": "Cali / Valle del Cauca",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "8 horas",
       "priceFrom": 75,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-hacienda-el-paraiso.jpg",
       "alt": "Hacienda El Paraíso y pueblos del Valle",
       "excerpt": "Visita la hacienda vinculada a la novela María y complementa el día con paisajes, gastronomía y pueblos del Valle.",
       "description": "Visita la hacienda vinculada a la novela María y complementa el día con paisajes, gastronomía y pueblos del Valle.",
@@ -3650,7 +3878,14 @@
         "Recorrido panorámico",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "gastronomia-valle-cauca",
@@ -3662,7 +3897,7 @@
       "duration": "4 horas",
       "priceFrom": 55,
       "currency": "USD",
-      "img": "estilo-gastronomia-01.jpg",
+      "img": "colombia-experiencia-gastronomia-valle-cauca.jpg",
       "alt": "Ruta gastronómica del Valle del Cauca",
       "excerpt": "Prueba pandebono, lulada, cholado y otros sabores regionales mientras conoces mercados y barrios tradicionales.",
       "description": "Prueba pandebono, lulada, cholado y otros sabores regionales mientras conoces mercados y barrios tradicionales.",
@@ -3682,7 +3917,15 @@
         "Mercado o galería",
         "Plato o antojo local"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "gastronomia",
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "san-andres-johnny-cay-acuario",
@@ -3690,11 +3933,11 @@
       "country": "Colombia",
       "region": "San Andrés",
       "style": "playa",
-      "styleLabel": "Playa",
+      "styleLabel": "Playa y verano",
       "duration": "7 horas",
       "priceFrom": 65,
       "currency": "USD",
-      "img": "estilo-playa-verano-01.jpg",
+      "img": "colombia-experiencia-san-andres-johnny-cay-acuario.jpg",
       "alt": "Johnny Cay, Acuario y Haynes Cay",
       "excerpt": "Navega a los cayos más conocidos de San Andrés para disfrutar playas, aguas claras y fauna marina.",
       "description": "Navega a los cayos más conocidos de San Andrés para disfrutar playas, aguas claras y fauna marina.",
@@ -3714,19 +3957,27 @@
         "Haynes Cay y Acuario",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "san-andres-vuelta-isla",
       "title": "Vuelta a la isla de San Andrés",
       "country": "Colombia",
       "region": "San Andrés",
-      "style": "cultura",
-      "styleLabel": "Cultural",
+      "style": "playa",
+      "styleLabel": "Playa y verano",
       "duration": "5 horas",
       "priceFrom": 39,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-san-andres-vuelta-isla.jpg",
       "alt": "Vuelta a la isla de San Andrés",
       "excerpt": "Recorre los principales puntos de la isla, playas, miradores y atractivos culturales en vehículo turístico.",
       "description": "Recorre los principales puntos de la isla, playas, miradores y atractivos culturales en vehículo turístico.",
@@ -3746,7 +3997,15 @@
         "Cueva de Morgan",
         "Hoyo Soplador"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "playa",
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "san-andres-mantarrayas",
@@ -3758,7 +4017,7 @@
       "duration": "3 horas",
       "priceFrom": 49,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-san-andres-mantarrayas.jpg",
       "alt": "Encuentro responsable con mantarrayas en San Andrés",
       "excerpt": "Navega a aguas poco profundas para observar mantarrayas bajo indicaciones de guías y sin prácticas que dañen a la fauna.",
       "description": "Navega a aguas poco profundas para observar mantarrayas bajo indicaciones de guías y sin prácticas que dañen a la fauna.",
@@ -3778,7 +4037,15 @@
         "Observación en el agua",
         "Parada de baño"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "playa",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "san-andres-snorkel-sea-walk",
@@ -3790,7 +4057,7 @@
       "duration": "4 horas",
       "priceFrom": 89,
       "currency": "USD",
-      "img": "estilo-aventura-01.jpg",
+      "img": "colombia-experiencia-san-andres-snorkel-sea-walk.jpg",
       "alt": "Snorkel y Sea Walk en San Andrés",
       "excerpt": "Explora el mundo submarino con snorkel y una caminata con casco de aire, sujeto a evaluación médica y condiciones del mar.",
       "description": "Explora el mundo submarino con snorkel y una caminata con casco de aire, sujeto a evaluación médica y condiciones del mar.",
@@ -3810,7 +4077,15 @@
         "Sea Walk",
         "Snorkel"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "aventura",
+        "playa",
+        "naturaleza"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "san-andres-catamaran",
@@ -3818,11 +4093,11 @@
       "country": "Colombia",
       "region": "San Andrés",
       "style": "playa",
-      "styleLabel": "Playa",
+      "styleLabel": "Playa y verano",
       "duration": "4 horas",
       "priceFrom": 69,
       "currency": "USD",
-      "img": "estilo-playa-verano-01.jpg",
+      "img": "colombia-experiencia-san-andres-catamaran.jpg",
       "alt": "Catamarán por la bahía de San Andrés",
       "excerpt": "Navega en catamarán con música, vistas de la isla y paradas de baño según las condiciones del mar.",
       "description": "Navega en catamarán con música, vistas de la isla y paradas de baño según las condiciones del mar.",
@@ -3842,7 +4117,14 @@
         "Parada de baño",
         "Navegación de retorno"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "playa",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "chicamocha-panachi",
@@ -3854,7 +4136,7 @@
       "duration": "10 horas",
       "priceFrom": 89,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-chicamocha-panachi.jpg",
       "alt": "Parque Nacional del Chicamocha y teleférico",
       "excerpt": "Contempla el cañón del Chicamocha, recorre PANACHI y cruza en teleférico según la opción contratada.",
       "description": "Contempla el cañón del Chicamocha, recorre PANACHI y cruza en teleférico según la opción contratada.",
@@ -3874,7 +4156,15 @@
         "Teleférico",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "aventura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "barichara-full-day",
@@ -3882,11 +4172,11 @@
       "country": "Colombia",
       "region": "Santander",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "9 horas",
       "priceFrom": 79,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-barichara-full-day.jpg",
       "alt": "Barichara y Camino Real",
       "excerpt": "Descubre la arquitectura en piedra de Barichara y realiza un tramo del Camino Real hacia Guane según la opción elegida.",
       "description": "Descubre la arquitectura en piedra de Barichara y realiza un tramo del Camino Real hacia Guane según la opción elegida.",
@@ -3906,7 +4196,14 @@
         "Camino Real",
         "Almuerzo libre"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "santander-aventura-rafting-canopy",
@@ -3918,7 +4215,7 @@
       "duration": "7 horas",
       "priceFrom": 95,
       "currency": "USD",
-      "img": "estilo-aventura-01.jpg",
+      "img": "colombia-experiencia-santander-aventura-rafting-canopy.jpg",
       "alt": "Aventura en Santander: rafting y canopy",
       "excerpt": "Combina rafting en un río seleccionado con canopy o actividad complementaria, con equipo técnico e instructores.",
       "description": "Combina rafting en un río seleccionado con canopy o actividad complementaria, con equipo técnico e instructores.",
@@ -3938,7 +4235,14 @@
         "Rafting",
         "Almuerzo"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "aventura",
+        "naturaleza"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "desierto-tatacoa",
@@ -3950,7 +4254,7 @@
       "duration": "10 horas",
       "priceFrom": 89,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-desierto-tatacoa.jpg",
       "alt": "Desierto de la Tatacoa y observación astronómica",
       "excerpt": "Explora los paisajes rojo y gris de la Tatacoa y completa la jornada con una sesión astronómica cuando el cielo lo permita.",
       "description": "Explora los paisajes rojo y gris de la Tatacoa y completa la jornada con una sesión astronómica cuando el cielo lo permita.",
@@ -3970,7 +4274,15 @@
         "Desierto rojo",
         "Desierto gris"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "aventura",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "san-agustin-arqueologico",
@@ -3978,11 +4290,11 @@
       "country": "Colombia",
       "region": "Huila / San Agustín",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "8 horas",
       "priceFrom": 75,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-san-agustin-arqueologico.jpg",
       "alt": "Parque Arqueológico de San Agustín",
       "excerpt": "Conoce estatuas, montículos funerarios y museos del principal conjunto arqueológico del sur de Colombia.",
       "description": "Conoce estatuas, montículos funerarios y museos del principal conjunto arqueológico del sur de Colombia.",
@@ -4002,7 +4314,15 @@
         "Almuerzo libre",
         "Bosque de las Estatuas"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "leticia-tres-fronteras",
@@ -4010,11 +4330,11 @@
       "country": "Colombia",
       "region": "Amazonas / Leticia",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "5 horas",
       "priceFrom": 59,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-leticia-tres-fronteras.jpg",
       "alt": "Leticia y encuentro de las Tres Fronteras",
       "excerpt": "Conoce Leticia, cruza hacia Tabatinga y navega o visita Santa Rosa para comprender la vida entre Colombia, Brasil y Perú.",
       "description": "Conoce Leticia, cruza hacia Tabatinga y navega o visita Santa Rosa para comprender la vida entre Colombia, Brasil y Perú.",
@@ -4034,7 +4354,15 @@
         "Almuerzo libre",
         "Santa Rosa o río Amazonas"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "comunidad-ticuna-amazonas",
@@ -4042,11 +4370,11 @@
       "country": "Colombia",
       "region": "Amazonas / Leticia",
       "style": "cultura",
-      "styleLabel": "Cultural",
+      "styleLabel": "Cultura viva",
       "duration": "8 horas",
       "priceFrom": 89,
       "currency": "USD",
-      "img": "estilo-cultura-01.jpg",
+      "img": "colombia-experiencia-comunidad-ticuna-amazonas.jpg",
       "alt": "Comunidad Ticuna y cultura amazónica",
       "excerpt": "Visita una comunidad Ticuna con mediación local, aprendiendo sobre territorio, artesanía y prácticas culturales sin convertirlas en espectáculo.",
       "description": "Visita una comunidad Ticuna con mediación local, aprendiendo sobre territorio, artesanía y prácticas culturales sin convertirlas en espectáculo.",
@@ -4066,7 +4394,15 @@
         "Recorrido cultural",
         "Almuerzo local"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "rio-amazonas-delfines-rosados",
@@ -4078,7 +4414,7 @@
       "duration": "8 horas",
       "priceFrom": 99,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-rio-amazonas-delfines-rosados.jpg",
       "alt": "Río Amazonas y avistamiento de delfines rosados",
       "excerpt": "Navega por el Amazonas y busca delfines rosados y grises con guías locales; los avistamientos nunca se garantizan.",
       "description": "Navega por el Amazonas y busca delfines rosados y grises con guías locales; los avistamientos nunca se garantizan.",
@@ -4098,7 +4434,14 @@
         "Lagos o canales",
         "Almuerzo"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "avistamiento-ballenas-pacifico",
@@ -4110,7 +4453,7 @@
       "duration": "4 horas",
       "priceFrom": 79,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-avistamiento-ballenas-pacifico.jpg",
       "alt": "Avistamiento de ballenas en el Pacífico colombiano",
       "excerpt": "Navega con guías locales para observar ballenas jorobadas durante la temporada, manteniendo distancias y tiempos responsables.",
       "description": "Navega con guías locales para observar ballenas jorobadas durante la temporada, manteniendo distancias y tiempos responsables.",
@@ -4130,7 +4473,14 @@
         "Búsqueda y observación",
         "Parada costera"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "nuqui-playas-termales",
@@ -4142,7 +4492,7 @@
       "duration": "8 horas",
       "priceFrom": 95,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-nuqui-playas-termales.jpg",
       "alt": "Nuquí: playas, selva y termales naturales",
       "excerpt": "Combina traslado en lancha, caminata corta por selva, playa y baños termales en una jornada del Pacífico.",
       "description": "Combina traslado en lancha, caminata corta por selva, playa y baños termales en una jornada del Pacífico.",
@@ -4162,7 +4512,15 @@
         "Termales naturales",
         "Almuerzo local"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "playa",
+        "aventura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "bahia-solano-playas-pacifico",
@@ -4174,7 +4532,7 @@
       "duration": "8 horas",
       "priceFrom": 89,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-bahia-solano-playas-pacifico.jpg",
       "alt": "Bahía Solano: playas y cascadas del Pacífico",
       "excerpt": "Explora una playa del Pacífico y una cascada cercana con traslados locales y guía de la zona.",
       "description": "Explora una playa del Pacífico y una cascada cercana con traslados locales y guía de la zona.",
@@ -4194,7 +4552,15 @@
         "Cascada",
         "Almuerzo"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "playa",
+        "aventura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     },
     {
       "slug": "cano-cristales",
@@ -4206,7 +4572,7 @@
       "duration": "10 horas",
       "priceFrom": 149,
       "currency": "USD",
-      "img": "estilo-naturaleza-01.jpg",
+      "img": "colombia-experiencia-cano-cristales.jpg",
       "alt": "Caño Cristales: río de los cinco colores",
       "excerpt": "Visita Caño Cristales con permisos, guía autorizado y ruta asignada por la autoridad ambiental según aforo y condiciones.",
       "description": "Visita Caño Cristales con permisos, guía autorizado y ruta asignada por la autoridad ambiental según aforo y condiciones.",
@@ -4226,7 +4592,14 @@
         "Traslado terrestre",
         "Sendero autorizado"
       ],
-      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar."
+      "marketRef": "Contenido comparativo OTA y operador local; validar operación y tarifa antes de publicar.",
+      "styles": [
+        "naturaleza",
+        "aventura"
+      ],
+      "childPriceFactor": 0.75,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
     }
   ],
   "packages": [
@@ -4964,9 +5337,9 @@
       "country": "Colombia",
       "region": "Bogotá",
       "nights": "4D/3N",
-      "priceFrom": null,
+      "priceFrom": 329,
       "currency": "USD",
-      "img": "bogota-monserrate-01.jpg",
+      "img": "colombia-paquete-bogota-esencial.jpg",
       "alt": "Paisajes y experiencias del paquete Bogotá Esencial en Colombia",
       "altEn": "Landscapes and experiences included in the Essential Bogotá package in Colombia",
       "excerpt": "Una primera visita equilibrada con el centro histórico, Monserrate y Zipaquirá.",
@@ -5017,33 +5390,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 329,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Bogotá Museo"
+          ],
+          "occupancyPrices": {
+            "single": 469,
+            "double": 329,
+            "matrimonial": 329,
+            "triple": 319,
+            "family": 309
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 449,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel B3 Virrey"
+          ],
+          "occupancyPrices": {
+            "single": 629,
+            "double": 449,
+            "matrimonial": 449,
+            "triple": 429,
+            "family": 419
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 679,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sofitel Bogotá Victoria Regia"
+          ],
+          "occupancyPrices": {
+            "single": 959,
+            "double": 679,
+            "matrimonial": 679,
+            "triple": 639,
+            "family": 629
+          }
         }
       ],
       "flightsAvailable": true,
@@ -5070,7 +5464,14 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "bogota-zipaquira-y-guatavita",
@@ -5079,9 +5480,9 @@
       "country": "Colombia",
       "region": "Bogotá",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 459,
       "currency": "USD",
-      "img": "guatavita-zipaquira-01.jpg",
+      "img": "colombia-paquete-bogota-zipaquira-y-guatavita.jpg",
       "alt": "Paisajes y experiencias del paquete Bogotá, Zipaquirá y Guatavita en Colombia",
       "altEn": "Landscapes and experiences included in the Bogotá, Zipaquirá and Guatavita package in Colombia",
       "excerpt": "Historia, arquitectura subterránea y el paisaje cultural de Guatavita en cinco días.",
@@ -5134,33 +5535,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 459,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Bogotá Museo"
+          ],
+          "occupancyPrices": {
+            "single": 649,
+            "double": 459,
+            "matrimonial": 459,
+            "triple": 439,
+            "family": 429
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 619,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel B3 Virrey"
+          ],
+          "occupancyPrices": {
+            "single": 869,
+            "double": 619,
+            "matrimonial": 619,
+            "triple": 589,
+            "family": 579
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 919,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sofitel Bogotá Victoria Regia"
+          ],
+          "occupancyPrices": {
+            "single": 1289,
+            "double": 919,
+            "matrimonial": 919,
+            "triple": 869,
+            "family": 849
+          }
         }
       ],
       "flightsAvailable": true,
@@ -5188,7 +5610,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "bogota-y-villa-de-leyva",
@@ -5197,9 +5627,9 @@
       "country": "Colombia",
       "region": "Bogotá y Boyacá",
       "nights": "6D/5N",
-      "priceFrom": null,
+      "priceFrom": 469,
       "currency": "USD",
-      "img": "villa-de-leyva-01.jpg",
+      "img": "colombia-paquete-bogota-y-villa-de-leyva.jpg",
       "alt": "Paisajes y experiencias del paquete Bogotá y Villa de Leyva en Colombia",
       "altEn": "Landscapes and experiences included in the Bogotá and Villa de Leyva package in Colombia",
       "excerpt": "Combina la capital con Zipaquirá y la arquitectura colonial de Villa de Leyva.",
@@ -5254,33 +5684,57 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 469,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Bogotá Museo",
+            "Hotel Casa de los Fundadores"
+          ],
+          "occupancyPrices": {
+            "single": 659,
+            "double": 469,
+            "matrimonial": 469,
+            "triple": 449,
+            "family": 439
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 689,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel B3 Virrey",
+            "Hotel Casa Terra"
+          ],
+          "occupancyPrices": {
+            "single": 969,
+            "double": 689,
+            "matrimonial": 689,
+            "triple": 649,
+            "family": 639
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1119,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sofitel Bogotá Victoria Regia",
+            "Hospedería Duruelo"
+          ],
+          "occupancyPrices": {
+            "single": 1569,
+            "double": 1119,
+            "matrimonial": 1119,
+            "triple": 1059,
+            "family": 1039
+          }
         }
       ],
       "flightsAvailable": true,
@@ -5309,7 +5763,14 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "medellin-esencial",
@@ -5318,9 +5779,9 @@
       "country": "Colombia",
       "region": "Medellín",
       "nights": "4D/3N",
-      "priceFrom": null,
+      "priceFrom": 299,
       "currency": "USD",
-      "img": "colombia-medellin-01.jpg",
+      "img": "colombia-paquete-medellin-esencial.jpg",
       "alt": "Paisajes y experiencias del paquete Medellín Esencial en Colombia",
       "altEn": "Landscapes and experiences included in the Essential Medellín package in Colombia",
       "excerpt": "Los imprescindibles de Medellín y Guatapé en una escapada de cuatro días.",
@@ -5371,33 +5832,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 299,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Medellín"
+          ],
+          "occupancyPrices": {
+            "single": 419,
+            "double": 299,
+            "matrimonial": 299,
+            "triple": 289,
+            "family": 279
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 419,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sites Hotel Medellín"
+          ],
+          "occupancyPrices": {
+            "single": 589,
+            "double": 419,
+            "matrimonial": 419,
+            "triple": 399,
+            "family": 389
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 649,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Medellín Marriott Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 909,
+            "double": 649,
+            "matrimonial": 649,
+            "triple": 619,
+            "family": 599
+          }
         }
       ],
       "flightsAvailable": true,
@@ -5424,7 +5906,14 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "medellin-cultural-y-cafetera",
@@ -5433,9 +5922,9 @@
       "country": "Colombia",
       "region": "Medellín y Antioquia",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 399,
       "currency": "USD",
-      "img": "tour-cafe-colombiano-01.jpg",
+      "img": "colombia-paquete-medellin-cultural-y-cafetera.jpg",
       "alt": "Paisajes y experiencias del paquete Medellín Cultural y Cafetera en Colombia",
       "altEn": "Landscapes and experiences included in the Medellín: Culture and Coffee package in Colombia",
       "excerpt": "Medellín, Guatapé y una experiencia cafetera auténtica sin cambiar de región.",
@@ -5488,33 +5977,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 399,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Medellín"
+          ],
+          "occupancyPrices": {
+            "single": 559,
+            "double": 399,
+            "matrimonial": 399,
+            "triple": 379,
+            "family": 369
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 559,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sites Hotel Medellín"
+          ],
+          "occupancyPrices": {
+            "single": 789,
+            "double": 559,
+            "matrimonial": 559,
+            "triple": 529,
+            "family": 519
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 859,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Medellín Marriott Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1209,
+            "double": 859,
+            "matrimonial": 859,
+            "triple": 809,
+            "family": 799
+          }
         }
       ],
       "flightsAvailable": true,
@@ -5542,7 +6052,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "gastronomia",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "medellin-guatape-y-pueblos-de-antioquia",
@@ -5551,9 +6069,9 @@
       "country": "Colombia",
       "region": "Medellín y Antioquia",
       "nights": "6D/5N",
-      "priceFrom": null,
+      "priceFrom": 529,
       "currency": "USD",
-      "img": "guatape-piedra-penol-01.jpg",
+      "img": "colombia-paquete-medellin-guatape-y-pueblos-de-antioquia.jpg",
       "alt": "Paisajes y experiencias del paquete Medellín, Guatapé y Pueblos de Antioquia en Colombia",
       "altEn": "Landscapes and experiences included in the Medellín, Guatapé and Antioquian Towns package in Colombia",
       "excerpt": "Una ruta más completa por la cultura urbana, cafetera y tradicional de Antioquia.",
@@ -5608,33 +6126,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 529,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Medellín"
+          ],
+          "occupancyPrices": {
+            "single": 749,
+            "double": 529,
+            "matrimonial": 529,
+            "triple": 499,
+            "family": 489
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 719,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sites Hotel Medellín"
+          ],
+          "occupancyPrices": {
+            "single": 1009,
+            "double": 719,
+            "matrimonial": 719,
+            "triple": 679,
+            "family": 669
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1109,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Medellín Marriott Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1559,
+            "double": 1109,
+            "matrimonial": 1109,
+            "triple": 1049,
+            "family": 1029
+          }
         }
       ],
       "flightsAvailable": true,
@@ -5663,7 +6202,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "cartagena-esencial",
@@ -5672,9 +6219,9 @@
       "country": "Colombia",
       "region": "Cartagena",
       "nights": "4D/3N",
-      "priceFrom": null,
+      "priceFrom": 349,
       "currency": "USD",
-      "img": "colombia-cartagena-01.jpg",
+      "img": "colombia-paquete-cartagena-esencial.jpg",
       "alt": "Paisajes y experiencias del paquete Cartagena Esencial en Colombia",
       "altEn": "Landscapes and experiences included in the Essential Cartagena package in Colombia",
       "excerpt": "Historia colonial y mar Caribe en el paquete clásico de Cartagena.",
@@ -5725,33 +6272,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 349,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Don Pedro de Heredia"
+          ],
+          "occupancyPrices": {
+            "single": 489,
+            "double": 349,
+            "matrimonial": 349,
+            "triple": 329,
+            "family": 329
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 469,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Holiday Inn Express Cartagena Bocagrande"
+          ],
+          "occupancyPrices": {
+            "single": 659,
+            "double": 469,
+            "matrimonial": 469,
+            "triple": 449,
+            "family": 439
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 699,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hyatt Regency Cartagena"
+          ],
+          "occupancyPrices": {
+            "single": 979,
+            "double": 699,
+            "matrimonial": 699,
+            "triple": 659,
+            "family": 649
+          }
         }
       ],
       "flightsAvailable": true,
@@ -5778,7 +6346,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "playa",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "cartagena-caribe",
@@ -5787,9 +6363,9 @@
       "country": "Colombia",
       "region": "Cartagena",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 469,
       "currency": "USD",
-      "img": "islas-rosario-baru-01.jpg",
+      "img": "colombia-paquete-cartagena-caribe.jpg",
       "alt": "Paisajes y experiencias del paquete Cartagena Caribe en Colombia",
       "altEn": "Landscapes and experiences included in the Caribbean Cartagena package in Colombia",
       "excerpt": "Cinco días de cultura, islas y una actividad adicional a elección.",
@@ -5842,33 +6418,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 469,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Don Pedro de Heredia"
+          ],
+          "occupancyPrices": {
+            "single": 659,
+            "double": 469,
+            "matrimonial": 469,
+            "triple": 449,
+            "family": 439
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 629,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Holiday Inn Express Cartagena Bocagrande"
+          ],
+          "occupancyPrices": {
+            "single": 889,
+            "double": 629,
+            "matrimonial": 629,
+            "triple": 599,
+            "family": 579
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 929,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hyatt Regency Cartagena"
+          ],
+          "occupancyPrices": {
+            "single": 1309,
+            "double": 929,
+            "matrimonial": 929,
+            "triple": 879,
+            "family": 859
+          }
         }
       ],
       "flightsAvailable": true,
@@ -5896,7 +6493,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "cartagena-islas-premium",
@@ -5905,9 +6511,9 @@
       "country": "Colombia",
       "region": "Cartagena",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 599,
       "currency": "USD",
-      "img": "rosario-vip-catamaran-01.jpg",
+      "img": "colombia-paquete-cartagena-islas-premium.jpg",
       "alt": "Paisajes y experiencias del paquete Cartagena Islas Premium en Colombia",
       "altEn": "Landscapes and experiences included in the Cartagena Premium Islands package in Colombia",
       "excerpt": "Una versión de mayor nivel con catamarán, servicio privado y clubes de playa seleccionados.",
@@ -5960,33 +6566,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 599,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Don Pedro de Heredia"
+          ],
+          "occupancyPrices": {
+            "single": 839,
+            "double": 599,
+            "matrimonial": 599,
+            "triple": 569,
+            "family": 559
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 759,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Holiday Inn Express Cartagena Bocagrande"
+          ],
+          "occupancyPrices": {
+            "single": 1069,
+            "double": 759,
+            "matrimonial": 759,
+            "triple": 719,
+            "family": 699
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1059,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hyatt Regency Cartagena"
+          ],
+          "occupancyPrices": {
+            "single": 1489,
+            "double": 1059,
+            "matrimonial": 1059,
+            "triple": 999,
+            "family": 979
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6014,7 +6641,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "santa-marta-tayrona-y-minca",
@@ -6023,9 +6658,9 @@
       "country": "Colombia",
       "region": "Santa Marta",
       "nights": "4D/3N",
-      "priceFrom": null,
+      "priceFrom": 369,
       "currency": "USD",
-      "img": "parque-tayrona-01.jpg",
+      "img": "colombia-paquete-santa-marta-tayrona-y-minca.jpg",
       "alt": "Paisajes y experiencias del paquete Santa Marta, Tayrona y Minca en Colombia",
       "altEn": "Landscapes and experiences included in the Santa Marta, Tayrona and Minca package in Colombia",
       "excerpt": "Ciudad, selva, playas y montaña en el circuito corto más completo de Santa Marta.",
@@ -6076,33 +6711,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 369,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Tayromar"
+          ],
+          "occupancyPrices": {
+            "single": 519,
+            "double": 369,
+            "matrimonial": 369,
+            "triple": 349,
+            "family": 349
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 489,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Best Western Plus Santa Marta Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 689,
+            "double": 489,
+            "matrimonial": 489,
+            "triple": 469,
+            "family": 459
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 719,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Santa Marta Marriott Resort Playa Dormida"
+          ],
+          "occupancyPrices": {
+            "single": 1009,
+            "double": 719,
+            "matrimonial": 719,
+            "triple": 679,
+            "family": 669
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6129,7 +6785,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "santa-marta-y-caribe-natural",
@@ -6138,9 +6803,9 @@
       "country": "Colombia",
       "region": "Santa Marta",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 499,
       "currency": "USD",
-      "img": "playa-cristal-01.jpg",
+      "img": "colombia-paquete-santa-marta-y-caribe-natural.jpg",
       "alt": "Paisajes y experiencias del paquete Santa Marta y Caribe Natural en Colombia",
       "altEn": "Landscapes and experiences included in the Santa Marta and the Natural Caribbean package in Colombia",
       "excerpt": "Un programa de naturaleza con Tayrona, Minca y una segunda experiencia de playa.",
@@ -6193,33 +6858,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 499,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Tayromar"
+          ],
+          "occupancyPrices": {
+            "single": 699,
+            "double": 499,
+            "matrimonial": 499,
+            "triple": 479,
+            "family": 469
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 659,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Best Western Plus Santa Marta Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 929,
+            "double": 659,
+            "matrimonial": 659,
+            "triple": 629,
+            "family": 609
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 959,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Santa Marta Marriott Resort Playa Dormida"
+          ],
+          "occupancyPrices": {
+            "single": 1349,
+            "double": 959,
+            "matrimonial": 959,
+            "triple": 909,
+            "family": 889
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6247,7 +6933,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "ciudad-perdida-trek",
@@ -6256,9 +6951,9 @@
       "country": "Colombia",
       "region": "Sierra Nevada de Santa Marta",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 749,
       "currency": "USD",
-      "img": "ciudad-perdida-01.jpg",
+      "img": "colombia-paquete-ciudad-perdida-trek.jpg",
       "alt": "Paisajes y experiencias del paquete Ciudad Perdida Trek en Colombia",
       "altEn": "Landscapes and experiences included in the Lost City Trek package in Colombia",
       "excerpt": "Trekking de cinco días por la Sierra Nevada hasta el sitio arqueológico de Teyuna.",
@@ -6311,33 +7006,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 749,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Campamentos autorizados del trek + Hotel Tayromar"
+          ],
+          "occupancyPrices": {
+            "single": 1049,
+            "double": 749,
+            "matrimonial": 749,
+            "triple": 709,
+            "family": 699
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 909,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Campamentos autorizados del trek + Best Western Plus Santa Marta"
+          ],
+          "occupancyPrices": {
+            "single": 1279,
+            "double": 909,
+            "matrimonial": 909,
+            "triple": 859,
+            "family": 839
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1209,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Campamentos autorizados del trek + Santa Marta Marriott Playa Dormida"
+          ],
+          "occupancyPrices": {
+            "single": 1699,
+            "double": 1209,
+            "matrimonial": 1209,
+            "triple": 1139,
+            "family": 1119
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6365,7 +7081,14 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "aventura",
+        "naturaleza"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "eje-cafetero-esencial",
@@ -6374,9 +7097,9 @@
       "country": "Colombia",
       "region": "Eje Cafetero",
       "nights": "4D/3N",
-      "priceFrom": null,
+      "priceFrom": 299,
       "currency": "USD",
-      "img": "valle-cocora-salento-01.jpg",
+      "img": "colombia-paquete-eje-cafetero-esencial.jpg",
       "alt": "Paisajes y experiencias del paquete Eje Cafetero Esencial en Colombia",
       "altEn": "Landscapes and experiences included in the Essential Coffee Region package in Colombia",
       "excerpt": "Los paisajes y la cultura cafetera esenciales en cuatro días.",
@@ -6427,33 +7150,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 299,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Salento Real Eje Cafetero"
+          ],
+          "occupancyPrices": {
+            "single": 419,
+            "double": 299,
+            "matrimonial": 299,
+            "triple": 289,
+            "family": 279
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 419,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Mocawa Plaza Armenia"
+          ],
+          "occupancyPrices": {
+            "single": 589,
+            "double": 419,
+            "matrimonial": 419,
+            "triple": 399,
+            "family": 389
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 649,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Bio Habitat Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 909,
+            "double": 649,
+            "matrimonial": 649,
+            "triple": 619,
+            "family": 599
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6480,7 +7224,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "gastronomia",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "eje-cafetero-completo",
@@ -6489,9 +7242,9 @@
       "country": "Colombia",
       "region": "Eje Cafetero",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 419,
       "currency": "USD",
-      "img": "termales-santa-rosa-01.jpg",
+      "img": "colombia-paquete-eje-cafetero-completo.jpg",
       "alt": "Paisajes y experiencias del paquete Eje Cafetero Completo en Colombia",
       "altEn": "Landscapes and experiences included in the Complete Coffee Region package in Colombia",
       "excerpt": "Naturaleza, café, pueblos con encanto y termales en un itinerario equilibrado.",
@@ -6544,33 +7297,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 419,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Salento Real Eje Cafetero"
+          ],
+          "occupancyPrices": {
+            "single": 589,
+            "double": 419,
+            "matrimonial": 419,
+            "triple": 399,
+            "family": 389
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 579,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Mocawa Plaza Armenia"
+          ],
+          "occupancyPrices": {
+            "single": 819,
+            "double": 579,
+            "matrimonial": 579,
+            "triple": 549,
+            "family": 539
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 879,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Bio Habitat Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1239,
+            "double": 879,
+            "matrimonial": 879,
+            "triple": 829,
+            "family": 809
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6598,7 +7372,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "gastronomia",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "eje-cafetero-familiar",
@@ -6607,9 +7390,9 @@
       "country": "Colombia",
       "region": "Eje Cafetero",
       "nights": "6D/5N",
-      "priceFrom": null,
+      "priceFrom": 529,
       "currency": "USD",
-      "img": "parque-del-cafe-01.jpg",
+      "img": "colombia-paquete-eje-cafetero-familiar.jpg",
       "alt": "Paisajes y experiencias del paquete Eje Cafetero Familiar en Colombia",
       "altEn": "Landscapes and experiences included in the Family Coffee Region package in Colombia",
       "excerpt": "Un programa familiar con parques temáticos, naturaleza y cultura cafetera.",
@@ -6664,33 +7447,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 529,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Salento Real Eje Cafetero"
+          ],
+          "occupancyPrices": {
+            "single": 749,
+            "double": 529,
+            "matrimonial": 529,
+            "triple": 499,
+            "family": 489
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 719,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Mocawa Plaza Armenia"
+          ],
+          "occupancyPrices": {
+            "single": 1009,
+            "double": 719,
+            "matrimonial": 719,
+            "triple": 679,
+            "family": 669
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1109,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Bio Habitat Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1559,
+            "double": 1109,
+            "matrimonial": 1109,
+            "triple": 1049,
+            "family": 1029
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6719,7 +7523,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "familia",
+        "naturaleza",
+        "cultura",
+        "gastronomia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "cali-salsa-y-cultura",
@@ -6728,9 +7541,9 @@
       "country": "Colombia",
       "region": "Cali",
       "nights": "4D/3N",
-      "priceFrom": null,
+      "priceFrom": 349,
       "currency": "USD",
-      "img": "cali-salsa-01.jpg",
+      "img": "colombia-paquete-cali-salsa-y-cultura.jpg",
       "alt": "Paisajes y experiencias del paquete Cali, Salsa y Cultura en Colombia",
       "altEn": "Landscapes and experiences included in the Cali: Salsa and Culture package in Colombia",
       "excerpt": "La identidad de Cali a través de sus barrios, sabores y salsa.",
@@ -6781,33 +7594,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 349,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Cali Granada"
+          ],
+          "occupancyPrices": {
+            "single": 489,
+            "double": 349,
+            "matrimonial": 349,
+            "triple": 329,
+            "family": 329
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 469,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Dann Cali"
+          ],
+          "occupancyPrices": {
+            "single": 659,
+            "double": 469,
+            "matrimonial": 469,
+            "triple": 449,
+            "family": 439
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 699,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Movich Casa del Alférez"
+          ],
+          "occupancyPrices": {
+            "single": 979,
+            "double": 699,
+            "matrimonial": 699,
+            "triple": 659,
+            "family": 649
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6834,7 +7668,14 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "gastronomia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "cali-y-valle-del-cauca",
@@ -6843,9 +7684,9 @@
       "country": "Colombia",
       "region": "Cali y Valle del Cauca",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 449,
       "currency": "USD",
-      "img": "hacienda-el-paraiso-01.jpg",
+      "img": "colombia-paquete-cali-y-valle-del-cauca.jpg",
       "alt": "Paisajes y experiencias del paquete Cali y Valle del Cauca en Colombia",
       "altEn": "Landscapes and experiences included in the Cali and the Cauca Valley package in Colombia",
       "excerpt": "Cali y el patrimonio cultural del Valle del Cauca en cinco días.",
@@ -6898,33 +7739,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 449,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Cali Granada"
+          ],
+          "occupancyPrices": {
+            "single": 629,
+            "double": 449,
+            "matrimonial": 449,
+            "triple": 429,
+            "family": 419
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 609,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Dann Cali"
+          ],
+          "occupancyPrices": {
+            "single": 859,
+            "double": 609,
+            "matrimonial": 609,
+            "triple": 579,
+            "family": 569
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 909,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Movich Casa del Alférez"
+          ],
+          "occupancyPrices": {
+            "single": 1279,
+            "double": 909,
+            "matrimonial": 909,
+            "triple": 859,
+            "family": 839
+          }
         }
       ],
       "flightsAvailable": true,
@@ -6952,7 +7814,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "gastronomia",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "san-andres-caribe",
@@ -6961,9 +7831,9 @@
       "country": "Colombia",
       "region": "San Andrés",
       "nights": "4D/3N",
-      "priceFrom": null,
+      "priceFrom": 499,
       "currency": "USD",
-      "img": "san-andres-johnny-cay-01.jpg",
+      "img": "colombia-paquete-san-andres-caribe.jpg",
       "alt": "Paisajes y experiencias del paquete San Andrés Caribe en Colombia",
       "altEn": "Landscapes and experiences included in the Caribbean San Andrés package in Colombia",
       "excerpt": "Las experiencias esenciales del mar de los siete colores en cuatro días.",
@@ -7014,33 +7884,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 499,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sea Colors Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 699,
+            "double": 499,
+            "matrimonial": 499,
+            "triple": 479,
+            "family": 469
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 619,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Casablanca"
+          ],
+          "occupancyPrices": {
+            "single": 869,
+            "double": 619,
+            "matrimonial": 619,
+            "triple": 589,
+            "family": 579
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 849,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Aquamare Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1189,
+            "double": 849,
+            "matrimonial": 849,
+            "triple": 799,
+            "family": 789
+          }
         }
       ],
       "flightsAvailable": true,
@@ -7067,7 +7958,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "san-andres-completo",
@@ -7076,9 +7975,9 @@
       "country": "Colombia",
       "region": "San Andrés",
       "nights": "5D/4N",
-      "priceFrom": null,
+      "priceFrom": 649,
       "currency": "USD",
-      "img": "san-andres-catamaran-01.jpg",
+      "img": "colombia-paquete-san-andres-completo.jpg",
       "alt": "Paisajes y experiencias del paquete San Andrés Completo en Colombia",
       "altEn": "Landscapes and experiences included in the Complete San Andrés package in Colombia",
       "excerpt": "Cinco días con cayos, recorrido terrestre y una experiencia marina adicional.",
@@ -7131,33 +8030,54 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 649,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sea Colors Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 909,
+            "double": 649,
+            "matrimonial": 649,
+            "triple": 619,
+            "family": 599
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 809,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Casablanca"
+          ],
+          "occupancyPrices": {
+            "single": 1139,
+            "double": 809,
+            "matrimonial": 809,
+            "triple": 769,
+            "family": 749
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1109,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Aquamare Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1559,
+            "double": 1109,
+            "matrimonial": 1109,
+            "triple": 1049,
+            "family": 1029
+          }
         }
       ],
       "flightsAvailable": true,
@@ -7185,7 +8105,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "cartagena-y-santa-marta",
@@ -7194,9 +8122,9 @@
       "country": "Colombia",
       "region": "Cartagena y Santa Marta",
       "nights": "6D/5N",
-      "priceFrom": null,
+      "priceFrom": 649,
       "currency": "USD",
-      "img": "colombia-cartagena-01.jpg",
+      "img": "colombia-paquete-cartagena-y-santa-marta.jpg",
       "alt": "Paisajes y experiencias del paquete Cartagena y Santa Marta en Colombia",
       "altEn": "Landscapes and experiences included in the Cartagena and Santa Marta package in Colombia",
       "excerpt": "El circuito terrestre más natural del Caribe colombiano.",
@@ -7251,33 +8179,57 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 649,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Don Pedro de Heredia",
+            "Hotel Tayromar"
+          ],
+          "occupancyPrices": {
+            "single": 909,
+            "double": 649,
+            "matrimonial": 649,
+            "triple": 619,
+            "family": 599
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 869,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Holiday Inn Express Cartagena Bocagrande",
+            "Best Western Plus Santa Marta Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1219,
+            "double": 869,
+            "matrimonial": 869,
+            "triple": 819,
+            "family": 809
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1299,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hyatt Regency Cartagena",
+            "Santa Marta Marriott Resort Playa Dormida"
+          ],
+          "occupancyPrices": {
+            "single": 1819,
+            "double": 1299,
+            "matrimonial": 1299,
+            "triple": 1229,
+            "family": 1199
+          }
         }
       ],
       "flightsAvailable": true,
@@ -7306,7 +8258,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "playa",
+        "naturaleza",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "cali-y-eje-cafetero",
@@ -7315,9 +8276,9 @@
       "country": "Colombia",
       "region": "Cali y Eje Cafetero",
       "nights": "6D/5N",
-      "priceFrom": null,
+      "priceFrom": 549,
       "currency": "USD",
-      "img": "valle-cocora-salento-01.jpg",
+      "img": "colombia-paquete-cali-y-eje-cafetero.jpg",
       "alt": "Paisajes y experiencias del paquete Cali y Eje Cafetero en Colombia",
       "altEn": "Landscapes and experiences included in the Cali and the Coffee Region package in Colombia",
       "excerpt": "Salsa, cultura urbana y paisajes cafeteros en una ruta de seis días.",
@@ -7372,33 +8333,57 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 549,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Cali Granada",
+            "Salento Real Eje Cafetero"
+          ],
+          "occupancyPrices": {
+            "single": 769,
+            "double": 549,
+            "matrimonial": 549,
+            "triple": 519,
+            "family": 509
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 769,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel Dann Cali",
+            "Hotel Mocawa Plaza Armenia"
+          ],
+          "occupancyPrices": {
+            "single": 1079,
+            "double": 769,
+            "matrimonial": 769,
+            "triple": 729,
+            "family": 709
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1199,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Movich Casa del Alférez",
+            "Bio Habitat Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1679,
+            "double": 1199,
+            "matrimonial": 1199,
+            "triple": 1129,
+            "family": 1109
+          }
         }
       ],
       "flightsAvailable": true,
@@ -7427,7 +8412,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "gastronomia",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "medellin-y-eje-cafetero",
@@ -7436,9 +8430,9 @@
       "country": "Colombia",
       "region": "Medellín y Eje Cafetero",
       "nights": "6D/5N",
-      "priceFrom": null,
+      "priceFrom": 549,
       "currency": "USD",
-      "img": "colombia-medellin-01.jpg",
+      "img": "colombia-paquete-medellin-y-eje-cafetero.jpg",
       "alt": "Paisajes y experiencias del paquete Medellín y Eje Cafetero en Colombia",
       "altEn": "Landscapes and experiences included in the Medellín and the Coffee Region package in Colombia",
       "excerpt": "Dos regiones emblemáticas unidas por cultura, montaña y café.",
@@ -7493,33 +8487,57 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 549,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Medellín",
+            "Salento Real Eje Cafetero"
+          ],
+          "occupancyPrices": {
+            "single": 769,
+            "double": 549,
+            "matrimonial": 549,
+            "triple": 519,
+            "family": 509
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 769,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sites Hotel Medellín",
+            "Hotel Mocawa Plaza Armenia"
+          ],
+          "occupancyPrices": {
+            "single": 1079,
+            "double": 769,
+            "matrimonial": 769,
+            "triple": 729,
+            "family": 709
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1199,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Medellín Marriott Hotel",
+            "Bio Habitat Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1679,
+            "double": 1199,
+            "matrimonial": 1199,
+            "triple": 1129,
+            "family": 1109
+          }
         }
       ],
       "flightsAvailable": true,
@@ -7548,7 +8566,16 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "naturaleza",
+        "gastronomia",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "medellin-y-cartagena",
@@ -7557,9 +8584,9 @@
       "country": "Colombia",
       "region": "Medellín y Cartagena",
       "nights": "6D/5N",
-      "priceFrom": null,
+      "priceFrom": 649,
       "currency": "USD",
-      "img": "colombia-cartagena-01.jpg",
+      "img": "colombia-paquete-medellin-y-cartagena.jpg",
       "alt": "Paisajes y experiencias del paquete Medellín y Cartagena en Colombia",
       "altEn": "Landscapes and experiences included in the Medellín and Cartagena package in Colombia",
       "excerpt": "Montaña, innovación urbana y Caribe en un solo viaje.",
@@ -7614,33 +8641,57 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 649,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Medellín",
+            "Hotel Don Pedro de Heredia"
+          ],
+          "occupancyPrices": {
+            "single": 909,
+            "double": 649,
+            "matrimonial": 649,
+            "triple": 619,
+            "family": 599
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 869,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sites Hotel Medellín",
+            "Holiday Inn Express Cartagena Bocagrande"
+          ],
+          "occupancyPrices": {
+            "single": 1219,
+            "double": 869,
+            "matrimonial": 869,
+            "triple": 819,
+            "family": 809
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1299,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Medellín Marriott Hotel",
+            "Hyatt Regency Cartagena"
+          ],
+          "occupancyPrices": {
+            "single": 1819,
+            "double": 1299,
+            "matrimonial": 1299,
+            "triple": 1229,
+            "family": 1199
+          }
         }
       ],
       "flightsAvailable": true,
@@ -7669,7 +8720,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "playa",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "bogota-y-medellin",
@@ -7678,9 +8737,9 @@
       "country": "Colombia",
       "region": "Bogotá y Medellín",
       "nights": "6D/5N",
-      "priceFrom": null,
+      "priceFrom": 649,
       "currency": "USD",
-      "img": "bogota-monserrate-01.jpg",
+      "img": "colombia-paquete-bogota-y-medellin.jpg",
       "alt": "Paisajes y experiencias del paquete Bogotá y Medellín en Colombia",
       "altEn": "Landscapes and experiences included in the Bogotá and Medellín package in Colombia",
       "excerpt": "Las dos grandes ciudades andinas con sus excursiones más representativas.",
@@ -7735,33 +8794,57 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 649,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Bogotá Museo",
+            "ibis Medellín"
+          ],
+          "occupancyPrices": {
+            "single": 909,
+            "double": 649,
+            "matrimonial": 649,
+            "triple": 619,
+            "family": 599
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 869,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel B3 Virrey",
+            "Sites Hotel Medellín"
+          ],
+          "occupancyPrices": {
+            "single": 1219,
+            "double": 869,
+            "matrimonial": 869,
+            "triple": 819,
+            "family": 809
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1299,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sofitel Bogotá Victoria Regia",
+            "Medellín Marriott Hotel"
+          ],
+          "occupancyPrices": {
+            "single": 1819,
+            "double": 1299,
+            "matrimonial": 1299,
+            "triple": 1229,
+            "family": 1199
+          }
         }
       ],
       "flightsAvailable": true,
@@ -7790,7 +8873,14 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     },
     {
       "slug": "bogota-medellin-y-cartagena",
@@ -7799,9 +8889,9 @@
       "country": "Colombia",
       "region": "Bogotá, Medellín y Cartagena",
       "nights": "8D/7N",
-      "priceFrom": null,
+      "priceFrom": 949,
       "currency": "USD",
-      "img": "colombia-cartagena-01.jpg",
+      "img": "colombia-paquete-bogota-medellin-y-cartagena.jpg",
       "alt": "Paisajes y experiencias del paquete Bogotá, Medellín y Cartagena en Colombia",
       "altEn": "Landscapes and experiences included in the Bogotá, Medellín and Cartagena package in Colombia",
       "excerpt": "El gran circuito clásico de Colombia: capital, Antioquia y Caribe.",
@@ -7860,33 +8950,60 @@
       "hotelTiers": [
         {
           "code": "3e",
-          "stars": "3*",
+          "stars": "3★",
           "name": "Turista",
           "nameEn": "Standard",
-          "pricePerPerson": 0,
+          "pricePerPerson": 949,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "ibis Bogotá Museo",
+            "ibis Medellín",
+            "Hotel Don Pedro de Heredia"
+          ],
+          "occupancyPrices": {
+            "single": 1329,
+            "double": 949,
+            "matrimonial": 949,
+            "triple": 899,
+            "family": 879
+          }
         },
         {
           "code": "4e",
-          "stars": "4*",
+          "stars": "4★",
           "name": "Primera",
           "nameEn": "Superior",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1269,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Hotel B3 Virrey",
+            "Sites Hotel Medellín",
+            "Holiday Inn Express Cartagena Bocagrande"
+          ],
+          "occupancyPrices": {
+            "single": 1779,
+            "double": 1269,
+            "matrimonial": 1269,
+            "triple": 1199,
+            "family": 1169
+          }
         },
         {
           "code": "5e",
-          "stars": "5*",
+          "stars": "5★",
           "name": "Lujo",
           "nameEn": "Luxury",
-          "pricePerPerson": 0,
+          "pricePerPerson": 1909,
           "hotels": [
-            "Hotel previsto o similar"
-          ]
+            "Sofitel Bogotá Victoria Regia",
+            "Medellín Marriott Hotel",
+            "Hyatt Regency Cartagena"
+          ],
+          "occupancyPrices": {
+            "single": 2679,
+            "double": 1909,
+            "matrimonial": 1909,
+            "triple": 1799,
+            "family": 1759
+          }
         }
       ],
       "flightsAvailable": true,
@@ -7917,7 +9034,15 @@
           "Travel insurance",
           "Tips and personal expenses"
         ]
-      }
+      },
+      "styles": [
+        "cultura",
+        "playa",
+        "familia"
+      ],
+      "childPriceFactor": 0.7,
+      "pricingUpdated": "2026-07-25",
+      "pricingBasis": "Tarifa desde por persona en habitación doble/matrimonial, categoría 3★, sin vuelos internacionales."
     }
   ],
   "destinations": [
@@ -8094,10 +9219,15 @@
       "DNI",
       "Pasaporte",
       "Cédula",
+      "Carnet de extranjería",
       "Otro"
     ],
     "payFullBelow": 60,
-    "googleClientId": "PEGAR_AQUI_TU_CLIENT_ID_DE_GOOGLE.apps.googleusercontent.com"
+    "googleClientId": "PEGAR_AQUI_TU_CLIENT_ID_DE_GOOGLE.apps.googleusercontent.com",
+    "maxAdults": 12,
+    "maxChildren": 8,
+    "defaultAdults": 2,
+    "defaultChildren": 0
   },
   "colombiaRegions": [
     {
