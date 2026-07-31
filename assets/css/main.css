@@ -422,7 +422,8 @@ picture { display: contents; }
 
 .booking-step { display: none; }
 .booking-step.is-active { display: block; }
-.booking-actions { display: flex; gap: 12px; justify-content: space-between; margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--latam-border-soft); }
+.booking-actions { display: flex; gap: 12px; justify-content: flex-end; align-items: center; margin-top: 0; padding: 22px 30px 28px; border-top: 1px solid var(--latam-border-soft); background: #fff; border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
+.booking-actions #bkBack { margin-right: auto; }
 .booking-actions .btn-primary, .booking-actions .btn-outline { flex: 0 0 auto; }
 
 .pax-card { border: 1px solid var(--latam-border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 14px; }
@@ -461,8 +462,9 @@ picture { display: contents; }
   .booking-body { padding: 20px; }
   .booking-steps { padding: 0 20px; }
   .pax-grid { grid-template-columns: 1fr; }
-  .booking-actions { flex-direction: column-reverse; }
-  .booking-actions .btn-primary, .booking-actions .btn-outline { width: 100%; justify-content: center; }
+  .booking-actions { flex-direction: row; justify-content: flex-end; padding: 16px 20px calc(20px + env(safe-area-inset-bottom)); }
+  .booking-actions #bkBack { margin-right: auto; }
+  .booking-actions .btn-primary, .booking-actions .btn-outline { width: auto; justify-content: center; }
 }
 
 /* Refuerzo de confianza bajo el botón de reserva. Un solo CTA por pantalla:
@@ -900,6 +902,49 @@ details.detail-card summary::marker{color:var(--latam-gold);}
 .tour-fact dt { white-space: nowrap; }
 .tour-fact dt { display: inline; margin-right: 5px; }
 
+
+/* Información del producto: etiqueta tipo badge y valor en una línea separada. */
+.tour-facts.product-facts {
+  gap: 14px;
+}
+.tour-facts.product-facts > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid #dfe9e3;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbf9 100%);
+}
+.tour-facts.product-facts > div > span {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 6px 10px;
+  border: 1px solid #d4e4da;
+  border-radius: 999px;
+  background: var(--latam-green-soft, #eaf1ed);
+  color: var(--latam-green, #0a3d2c);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+  white-space: normal;
+}
+.tour-facts.product-facts > div > span::after { content: none; }
+.tour-facts.product-facts > div > strong {
+  display: block;
+  min-width: 0;
+  color: var(--latam-ink, #1b1b16);
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+
 /* Itinerario detallado de paquetes. */
 .package-itinerary { display: grid; gap: 18px; }
 .package-day {
@@ -943,6 +988,124 @@ details.detail-card summary::marker{color:var(--latam-gold);}
 .hotel-pricing-table { min-width: 920px; }
 .hotel-pricing-table td:not(:nth-child(2)),
 .hotel-pricing-table th:not(:nth-child(2)) { white-space: nowrap; }
+
+
+/* Tabla compacta para paquetes con hoteles concretos, sin columna duplicada. */
+.hotel-pricing-table--options { min-width: 780px; }
+.hotel-pricing-table--options th,
+.hotel-pricing-table--options td { white-space: nowrap; }
+.hotel-pricing-table--options tbody th {
+  min-width: 250px;
+  white-space: normal;
+}
+.hotel-option-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hotel-option-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--latam-green-soft, #eaf1ed);
+  color: var(--latam-green, #0a3d2c);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+.hotel-option-badge--premium {
+  background: var(--latam-gold-soft, #f4ecdd);
+  color: #6b5321;
+}
+.hotel-option-badge--muted {
+  background: #eef1ef;
+  color: #52615a;
+}
+
+/* Vista previa del hotel seleccionado dentro del modal. */
+.booking-hotel-preview {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #d7e2dc;
+  border-radius: 14px;
+  background: #fbfcfb;
+}
+.booking-hotel-preview[hidden] { display: none; }
+.booking-hotel-preview__media {
+  position: relative;
+  min-height: 126px;
+  overflow: hidden;
+  border-radius: 11px;
+  background: #eaf1ed;
+}
+.booking-hotel-preview__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 126px;
+  object-fit: cover;
+}
+.booking-hotel-preview__placeholder {
+  display: flex;
+  min-height: 126px;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 18px;
+  color: #617169;
+  text-align: center;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+.booking-hotel-preview__placeholder[hidden] { display: none; }
+.booking-hotel-preview__placeholder i {
+  color: var(--latam-green, #0a3d2c);
+  font-size: 26px;
+}
+.booking-hotel-preview__content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 6px 4px;
+}
+.booking-hotel-preview__badge {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: var(--latam-green-soft, #eaf1ed);
+  color: var(--latam-green, #0a3d2c);
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.booking-hotel-preview__content strong {
+  color: var(--latam-ink, #1b1b16);
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  line-height: 1.35;
+}
+.booking-hotel-preview__content small {
+  margin-top: 7px;
+  color: #63736b;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
 
 /* Formulario de reserva: columnas uniformes y controles alineados. */
 .booking-box { width: min(920px, calc(100vw - 28px)); }
@@ -1021,4 +1184,13 @@ details.detail-card summary::marker{color:var(--latam-gold);}
   .package-day__row { grid-template-columns: 76px 1fr; gap: 10px; }
   .booking-summary .fact-row { gap: 10px; }
   .booking-summary .fact-row strong { max-width: 58%; }
+  .booking-hotel-preview { grid-template-columns: 1fr; }
+  .booking-hotel-preview__media,
+  .booking-hotel-preview__media img,
+  .booking-hotel-preview__placeholder { min-height: 190px; }
+}
+
+@media (max-width: 430px) {
+  .booking-actions { gap: 8px; padding-left: 16px; padding-right: 16px; }
+  .booking-actions .btn-primary, .booking-actions .btn-outline { padding-left: 18px; padding-right: 18px; }
 }

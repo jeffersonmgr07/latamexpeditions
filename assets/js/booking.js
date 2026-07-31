@@ -21,6 +21,29 @@
   const round2 = (value) => Math.round(Number(value) * 100) / 100;
   const money = (value) => `USD ${Number(value).toLocaleString(document.documentElement.lang === 'en' ? 'en-US' : 'es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+  const assetURL = (path) => {
+    const value = String(path || '').trim();
+    if (!value) return '';
+    if (/^(?:https?:)?\/\//i.test(value) || value.startsWith('/') || value.startsWith('data:') || value.startsWith('blob:')) return value;
+    return `${BASE}${value.replace(/^\.?\//, '')}`;
+  };
+  const languageIsEnglish = () => document.documentElement.lang === 'en';
+  const tierHotels = (tier, english = languageIsEnglish()) => {
+    const translated = english && Array.isArray(tier?.hotelsEn) ? tier.hotelsEn : null;
+    return translated || (Array.isArray(tier?.hotels) ? tier.hotels : []);
+  };
+  const tierOptionLabel = (tier, english = languageIsEnglish()) => {
+    if (!tier) return '';
+    const explicit = english ? tier.optionLabelEn : tier.optionLabel;
+    if (explicit) return explicit;
+    const category = english ? (tier.starsEn || tier.stars || '') : (tier.stars || '');
+    const hotels = tierHotels(tier, english);
+    const name = hotels.length === 1
+      ? hotels[0]
+      : (english ? (tier.nameEn || tier.name || '') : (tier.name || ''));
+    return [category, name].filter(Boolean).join(' · ');
+  };
+
   const COUNTRIES = [
     [
         "Afganistán",
@@ -1085,7 +1108,8 @@
     duration: trigger.dataset.bookDuration || '',
     tiers: parseJSON(trigger.dataset.bookTiers, []),
     departures: parseJSON(trigger.dataset.bookDepartures, []),
-    childFactor: Number(trigger.dataset.bookChildFactor || (trigger.dataset.bookKind === 'package' ? 0.70 : 0.75))
+    childFactor: Number(trigger.dataset.bookChildFactor || (trigger.dataset.bookKind === 'package' ? 0.70 : 0.75)),
+    childMinAge: Number(trigger.dataset.bookChildMinAge || 0)
   };
 
   let CONFIG = null;
@@ -1129,6 +1153,7 @@
     state.due = charge.due;
     state.mode = charge.mode;
     updateLiveQuote();
+    updateHotelPreview();
   }
 
   function updateLiveQuote() {
@@ -1138,6 +1163,56 @@
     if (live) live.textContent = money(state.total);
     const unit = $('#bkLiveUnit');
     if (unit) unit.textContent = state.children ? `${money(state.adultUnit)} / ${money(state.childUnit)}` : money(state.adultUnit);
+  }
+
+
+  function updateHotelPreview() {
+    const preview = $('#bkHotelPreview');
+    if (!preview) return;
+    const tier = getTier();
+    if (!tier) { preview.hidden = true; return; }
+
+    const english = languageIsEnglish();
+    const image = $('#bkHotelImage');
+    const placeholder = $('#bkHotelPlaceholder');
+    const placeholderText = $('#bkHotelPlaceholderText');
+    const badge = $('#bkHotelBadge');
+    const name = $('#bkHotelName');
+    const caption = $('#bkHotelCaption');
+    const hotels = tierHotels(tier, english);
+    const noAccommodation = Boolean(tier.noAccommodation || tier.code === 'sin-hotel');
+    const selectedName = noAccommodation
+      ? (english ? 'Tour only, no accommodation' : 'Solo tour, sin alojamiento')
+      : (hotels.join(' / ') || (english ? (tier.nameEn || tier.name) : tier.name));
+
+    preview.hidden = false;
+    badge.textContent = english ? (tier.starsEn || tier.stars || 'Hotel') : (tier.stars || 'Hotel');
+    name.textContent = selectedName;
+    caption.textContent = noAccommodation
+      ? (english ? 'This option does not include a hotel night.' : 'Esta opción no incluye noche de hotel.')
+      : (english ? 'Reference photo of the selected accommodation.' : 'Foto referencial del alojamiento seleccionado.');
+
+    const imagePath = tier.image || '';
+    const showPlaceholder = (text) => {
+      image.hidden = true;
+      image.removeAttribute('src');
+      placeholder.hidden = false;
+      placeholderText.textContent = text;
+    };
+
+    if (!imagePath) {
+      showPlaceholder(noAccommodation
+        ? (english ? 'Tour without accommodation' : 'Tour sin alojamiento')
+        : (english ? 'Hotel photo pending' : 'Foto del hotel pendiente'));
+      return;
+    }
+
+    placeholder.hidden = true;
+    image.hidden = false;
+    image.alt = english ? (tier.imageAltEn || tier.imageAlt || selectedName) : (tier.imageAlt || selectedName);
+    image.onload = () => { image.hidden = false; placeholder.hidden = true; };
+    image.onerror = () => showPlaceholder(english ? 'Hotel photo pending' : 'Foto del hotel pendiente');
+    image.src = assetURL(imagePath);
   }
 
   function buildModal() {
@@ -1153,11 +1228,11 @@
 
     const tierFields = PRODUCT.tiers.length ? `
       <div class="booking-subsection booking-subsection--hotel">
-        <h3>Categoría de hotel y acomodación</h3>
+        <h3 data-en="Hotel option and accommodation">Opción de hotel y acomodación</h3>
         <div class="booking-form-grid booking-form-grid--2">
           <div class="form-field">
-            <label for="bkTier">Categoría de hotel</label>
-            <select id="bkTier" required>${PRODUCT.tiers.map((tier) => `<option value="${tier.code}" data-en="${escapeHTML(tier.stars)} · ${escapeHTML(tier.nameEn || tier.name)} — ${escapeHTML((tier.hotels || []).join(' / '))}">${escapeHTML(tier.stars)} · ${escapeHTML(tier.name)} — ${escapeHTML((tier.hotels || []).join(' / '))}</option>`).join('')}</select>
+            <label for="bkTier" data-en="Hotel option">Opción de hotel</label>
+            <select id="bkTier" required>${PRODUCT.tiers.map((tier) => `<option value="${escapeHTML(tier.code)}" data-en="${escapeHTML(tierOptionLabel(tier, true))}">${escapeHTML(tierOptionLabel(tier, false))}</option>`).join('')}</select>
           </div>
           <div class="form-field">
             <label for="bkOccupancy">Acomodación</label>
@@ -1170,6 +1245,20 @@
             </select>
           </div>
         </div>
+        <figure class="booking-hotel-preview" id="bkHotelPreview">
+          <div class="booking-hotel-preview__media">
+            <img id="bkHotelImage" alt="" loading="lazy" decoding="async" hidden>
+            <div class="booking-hotel-preview__placeholder" id="bkHotelPlaceholder">
+              <i class="fa-solid fa-hotel" aria-hidden="true"></i>
+              <span id="bkHotelPlaceholderText">Foto del hotel pendiente</span>
+            </div>
+          </div>
+          <figcaption class="booking-hotel-preview__content">
+            <span class="booking-hotel-preview__badge" id="bkHotelBadge">Hotel</span>
+            <strong id="bkHotelName">—</strong>
+            <small id="bkHotelCaption"></small>
+          </figcaption>
+        </figure>
         <div class="booking-live-quote"><span>Precio por adulto / niño</span><strong id="bkLiveUnit">—</strong><span>Total referencial</span><strong id="bkLivePrice">—</strong></div>
         <p class="form-note" data-en="The child price is calculated at ${Math.round(PRODUCT.childFactor * 100)}% of the selected adult fare. The final hotel or an equivalent property is confirmed before payment.">El precio infantil se calcula al ${Math.round(PRODUCT.childFactor * 100)}% de la tarifa adulta seleccionada. El hotel final o uno equivalente se confirma antes del pago.</p>
       </div>` : '';
@@ -1203,7 +1292,7 @@
               <h3>Viajeros</h3>
               <div class="booking-form-grid booking-form-grid--3 travelers-grid">
                 <div class="form-field"><label for="bkAdults">Adultos</label><select id="bkAdults">${numberOptions(1, 12, state.adults)}</select></div>
-                <div class="form-field"><label for="bkChildren">Niños</label><select id="bkChildren">${numberOptions(0, 8, state.children)}</select><small>0 a 11 años</small></div>
+                <div class="form-field"><label for="bkChildren">Niños</label><select id="bkChildren">${numberOptions(0, 8, state.children)}</select><small>${PRODUCT.childMinAge ? `${PRODUCT.childMinAge} a 11 años · menores, coordinar por WhatsApp` : '0 a 11 años'}</small></div>
                 <div class="traveler-total"><span>Total de viajeros</span><strong id="bkTravelerTotal">${state.travelers}</strong></div>
               </div>
             </div>
@@ -1231,7 +1320,7 @@
               <div class="fact-row"><span>Adultos</span><strong id="bkSumAdults">—</strong></div>
               <div class="fact-row"><span>Niños</span><strong id="bkSumChildren">—</strong></div>
               <div class="fact-row"><span>Total de viajeros</span><strong id="bkSumPax">—</strong></div>
-              <div class="fact-row" ${PRODUCT.tiers.length ? '' : 'hidden'}><span>Categoría de hotel</span><strong id="bkSumTier">—</strong></div>
+              <div class="fact-row" ${PRODUCT.tiers.length ? '' : 'hidden'}><span data-en="Hotel option">Opción de hotel</span><strong id="bkSumTier">—</strong></div>
               <div class="fact-row" ${PRODUCT.tiers.length ? '' : 'hidden'}><span>Acomodación</span><strong id="bkSumOccupancy">—</strong></div>
               <div class="fact-row"><span>Tarifa adulto</span><strong id="bkSumAdultUnit">—</strong></div>
               <div class="fact-row" id="bkChildPriceRow"><span>Tarifa niño</span><strong id="bkSumChildUnit">—</strong></div>
@@ -1341,7 +1430,7 @@
     $('#bkSumPax').textContent = String(state.travelers);
     if (PRODUCT.tiers.length) {
       const tier = getTier();
-      $('#bkSumTier').textContent = `${tier.stars} · ${document.documentElement.lang === 'en' ? (tier.nameEn || tier.name) : tier.name} — ${(tier.hotels || []).join(' / ')}`;
+      $('#bkSumTier').textContent = tierOptionLabel(tier);
       $('#bkSumOccupancy').textContent = occupancyLabel(state.occupancy);
     }
     $('#bkSumAdultUnit').textContent = money(state.adultUnit);

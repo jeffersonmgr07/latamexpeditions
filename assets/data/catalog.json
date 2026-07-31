@@ -4738,6 +4738,233 @@
       "flightsAvailable": true
     },
     {
+      "slug": "lima-paracas-ica-huacachina-2d1n",
+      "title": "Lima, Paracas, Ica y Huacachina",
+      "titleEn": "Lima, Paracas, Ica and Huacachina",
+      "country": "Perú",
+      "region": "Lima / Paracas / Ica / Huacachina",
+      "nights": "2D/1N",
+      "priceFrom": 116.6,
+      "currency": "USD",
+      "img": "peru-paquete-lima-paracas-ica-huacachina-2d1n.jpg",
+      "alt": "Islas Ballestas, desierto de Ica y oasis de Huacachina durante un viaje desde Lima",
+      "altEn": "Ballestas Islands, Ica desert and Huacachina oasis on a trip from Lima",
+      "excerpt": "Una escapada costera desde Lima con Islas Ballestas, degustación de vinos y piscos, aventura en Huacachina y city tour de Ica.",
+      "excerptEn": "A coastal getaway from Lima with the Ballestas Islands, wine and pisco tasting, Huacachina adventure and an Ica city tour.",
+      "category": "Circuito costero",
+      "style": "aventura",
+      "itinerary": [
+        "Día 1 · Salida desde Lima, navegación a las Islas Ballestas, visita a la bodega El Catador, Huacachina y carros areneros. Noche en Ica según la opción elegida.",
+        "Día 2 · City tour de Ica, Santuario de Luren, Plaza de Armas, chocolatería, Cachiche y retorno a Lima."
+      ],
+      "itineraryEn": [
+        "Day 1 · Departure from Lima, Ballestas Islands cruise, El Catador winery, Huacachina and dune-buggy adventure. Overnight in Ica according to the selected option.",
+        "Day 2 · Ica city tour, Luren Sanctuary, main square, chocolate shop, Cachiche and return to Lima."
+      ],
+      "code": "PE-PKG-003",
+      "includes": [
+        "Movilidad turística o ticket de bus Lima–Paracas–Ica–Lima",
+        "Bote deslizador y chaleco salvavidas para Islas Ballestas",
+        "Visita a la bodega El Catador con degustación de vinos y piscos",
+        "Visita a la laguna de Huacachina y paseo en carros areneros",
+        "Visita a Cachiche, la Palmera de las Siete Cabezas y atractivos del city tour de Ica",
+        "Degustación de tejas y chocotejas",
+        "Guía y asistencia permanente en español; inglés sujeto a disponibilidad",
+        "Ingresos a los atractivos indicados",
+        "Una noche de alojamiento cuando se selecciona una opción con hotel"
+      ],
+      "includesEn": [
+        "Tourist transportation or bus ticket Lima–Paracas–Ica–Lima",
+        "Speedboat and life jacket for the Ballestas Islands",
+        "Visit to El Catador winery with wine and pisco tasting",
+        "Visit to Huacachina lagoon and dune-buggy ride",
+        "Visit to Cachiche, the Seven-Headed Palm Tree and Ica city-tour attractions",
+        "Teja and chocoteja tasting",
+        "Guide and ongoing assistance in Spanish; English subject to availability",
+        "Admission fees for the listed attractions",
+        "One hotel night when an accommodation option is selected"
+      ],
+      "notIncludes": [
+        "Alimentación",
+        "Gastos personales y propinas",
+        "Servicios no indicados expresamente"
+      ],
+      "notIncludesEn": [
+        "Meals",
+        "Personal expenses and tips",
+        "Services not expressly listed"
+      ],
+      "hotelTiers": [
+        {
+          "code": "sin-hotel",
+          "stars": "Sin hotel",
+          "name": "Solo tour",
+          "nameEn": "Tour only",
+          "pricePerPerson": 126.21,
+          "hotels": [
+            "Sin alojamiento"
+          ],
+          "occupancyPrices": {
+            "single": 132.62,
+            "double": 126.21,
+            "matrimonial": 126.21,
+            "triple": 116.6,
+            "family": 116.6
+          },
+          "noAccommodation": true,
+          "optionLabel": "Sin alojamiento · Solo tour",
+          "optionLabelEn": "No accommodation · Tour only",
+          "hotelsEn": [
+            "No accommodation"
+          ],
+          "starsEn": "No hotel"
+        },
+        {
+          "code": "challaca",
+          "stars": "Base",
+          "name": "Hotel incluido",
+          "nameEn": "Included hotel",
+          "pricePerPerson": 148.63,
+          "hotels": [
+            "Hotel Challaca"
+          ],
+          "occupancyPrices": {
+            "single": 155.04,
+            "double": 148.63,
+            "matrimonial": 148.63,
+            "triple": 135.82,
+            "family": 135.82
+          },
+          "optionLabel": "Base · Hotel Challaca",
+          "optionLabelEn": "Base · Hotel Challaca",
+          "image": "assets/img/peru-hotel-challaca-ica.jpg",
+          "imageAlt": "Fachada o habitación del Hotel Challaca en Ica",
+          "imageAltEn": "Facade or room at Hotel Challaca in Ica",
+          "starsEn": "Base"
+        },
+        {
+          "code": "will-robert",
+          "stars": "Confort",
+          "name": "Will Robert",
+          "nameEn": "Will Robert",
+          "pricePerPerson": 196.68,
+          "hotels": [
+            "Hotel Will Robert"
+          ],
+          "occupancyPrices": {
+            "single": 225.51,
+            "double": 196.68,
+            "matrimonial": 196.68,
+            "triple": 183.87,
+            "family": 183.87
+          },
+          "optionLabel": "Confort · Hotel Will Robert",
+          "optionLabelEn": "Comfort · Hotel Will Robert",
+          "image": "assets/img/peru-hotel-will-robert-ica.jpg",
+          "imageAlt": "Fachada o habitación del Hotel Will Robert en Ica",
+          "imageAltEn": "Facade or room at Hotel Will Robert in Ica",
+          "starsEn": "Comfort"
+        },
+        {
+          "code": "villa-valverde",
+          "stars": "Confort",
+          "name": "Villa de Valverde",
+          "nameEn": "Villa de Valverde",
+          "pricePerPerson": 196.68,
+          "hotels": [
+            "Hotel Villa de Valverde"
+          ],
+          "occupancyPrices": {
+            "single": 219.11,
+            "double": 196.68,
+            "matrimonial": 196.68,
+            "triple": 183.87,
+            "family": 183.87
+          },
+          "optionLabel": "Confort · Hotel Villa de Valverde",
+          "optionLabelEn": "Comfort · Hotel Villa de Valverde",
+          "image": "assets/img/peru-hotel-villa-de-valverde-ica.jpg",
+          "imageAlt": "Fachada, piscina o habitación del Hotel Villa de Valverde en Ica",
+          "imageAltEn": "Facade, pool or room at Hotel Villa de Valverde in Ica",
+          "starsEn": "Comfort"
+        },
+        {
+          "code": "vinas-queirolo",
+          "stars": "Premium",
+          "name": "Viñas Queirolo",
+          "nameEn": "Viñas Queirolo",
+          "pricePerPerson": 260.75,
+          "hotels": [
+            "Hotel Viñas Queirolo"
+          ],
+          "occupancyPrices": {
+            "single": 315.2,
+            "double": 260.75,
+            "matrimonial": 260.75,
+            "triple": 247.94,
+            "family": 247.94
+          },
+          "optionLabel": "Premium · Hotel Viñas Queirolo",
+          "optionLabelEn": "Premium · Hotel Viñas Queirolo",
+          "image": "assets/img/peru-hotel-vinas-queirolo-ica.jpg",
+          "imageAlt": "Instalaciones o habitación del Hotel Viñas Queirolo en Ica",
+          "imageAltEn": "Facilities or room at Hotel Viñas Queirolo in Ica",
+          "starsEn": "Premium"
+        },
+        {
+          "code": "hacienda-caravedo",
+          "stars": "Premium",
+          "name": "Hacienda La Caravedo",
+          "nameEn": "Hacienda La Caravedo",
+          "pricePerPerson": 260.75,
+          "hotels": [
+            "Hacienda La Caravedo"
+          ],
+          "occupancyPrices": {
+            "single": 315.2,
+            "double": 260.75,
+            "matrimonial": 260.75,
+            "triple": 247.94,
+            "family": 247.94
+          },
+          "optionLabel": "Premium · Hacienda La Caravedo",
+          "optionLabelEn": "Premium · Hacienda La Caravedo",
+          "image": "assets/img/peru-hotel-hacienda-la-caravedo-ica.jpg",
+          "imageAlt": "Instalaciones o habitación de Hacienda La Caravedo en Ica",
+          "imageAltEn": "Facilities or room at Hacienda La Caravedo in Ica",
+          "starsEn": "Premium"
+        }
+      ],
+      "flightsAvailable": false,
+      "preserveDetail": true,
+      "childFactor": 1.0,
+      "childMinAge": 5,
+      "en": {
+        "title": "Lima, Paracas, Ica and Huacachina",
+        "excerpt": "A coastal getaway from Lima with the Ballestas Islands, wine and pisco tasting, Huacachina adventure and an Ica city tour.",
+        "itinerary": [
+          "Day 1 · Departure from Lima, Ballestas Islands cruise, El Catador winery, Huacachina and dune-buggy adventure. Overnight in Ica according to the selected option.",
+          "Day 2 · Ica city tour, Luren Sanctuary, main square, chocolate shop, Cachiche and return to Lima."
+        ],
+        "includes": [
+          "Tourist transportation or bus ticket Lima–Paracas–Ica–Lima",
+          "Speedboat and life jacket for the Ballestas Islands",
+          "Visit to El Catador winery with wine and pisco tasting",
+          "Visit to Huacachina lagoon and dune-buggy ride",
+          "Visit to Cachiche, the Seven-Headed Palm Tree and Ica city-tour attractions",
+          "Teja and chocoteja tasting",
+          "Guide and ongoing assistance in Spanish; English subject to availability",
+          "Admission fees for the listed attractions",
+          "One hotel night when an accommodation option is selected"
+        ],
+        "notIncludes": [
+          "Meals",
+          "Personal expenses and tips",
+          "Services not expressly listed"
+        ]
+      }
+    },
+    {
       "slug": "argentina-ba-iguazu-5d4n",
       "title": "Buenos Aires e Iguazú",
       "country": "Argentina",
