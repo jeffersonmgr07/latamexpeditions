@@ -319,7 +319,49 @@
     });
   }
 
+  // Foto de cabecera en todas las fichas de experiencias.
+  // Conserva la imagen de la ficha (og:image) en móvil. Si existe una
+  // versión -panoramica con el mismo nombre, la utiliza solamente en PC.
+  function setupExperienceHeroImage() {
+    const hero = document.querySelector('.experience-hero-clean');
+    const imageMeta = document.querySelector('meta[property="og:image"]');
+    if (!hero || !imageMeta?.content) return;
+
+    let photo;
+    try {
+      const original = new URL(imageMeta.content, location.href);
+      // Solo permitimos imágenes del propio proyecto, también en vista previa local.
+      if (original.origin !== location.origin &&
+          !['latamexpeditions.com', 'www.latamexpeditions.com'].includes(original.hostname)) return;
+      if (!original.pathname.startsWith('/assets/img/')) return;
+      photo = new URL(original.pathname, location.origin);
+    } catch (_) { return; }
+
+    const cssUrl = (url) => `url("${url.href}")`;
+    hero.style.setProperty('--experience-photo-mobile', cssUrl(photo));
+
+    const match = photo.pathname.match(/^(.*)(\.(?:jpg|jpeg|png|webp))$/i);
+    if (!match) return;
+    const panorama = new URL(`${match[1]}-panoramica${match[2]}`, location.origin);
+    const desktopQuery = window.matchMedia('(min-width: 761px)');
+    let panoramaChecked = false;
+
+    function loadPanorama() {
+      if (panoramaChecked || !desktopQuery.matches) return;
+      panoramaChecked = true;
+      const preload = new Image();
+      preload.onload = () => hero.style.setProperty('--experience-photo-desktop', cssUrl(panorama));
+      // Si no hay archivo panorámico, la imagen normal sigue funcionando.
+      preload.onerror = () => {};
+      preload.src = panorama.href;
+    }
+    loadPanorama();
+    if (desktopQuery.addEventListener) desktopQuery.addEventListener('change', loadPanorama);
+    else if (desktopQuery.addListener) desktopQuery.addListener(loadPanorama);
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    setupExperienceHeroImage();
     setupNavigation();
     setupCountrySelector();
     setupFilters();

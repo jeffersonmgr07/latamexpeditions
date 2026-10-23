@@ -1709,3 +1709,66 @@ details.detail-card summary::marker{color:var(--latam-gold);}
   .booking-success h2 { font-size:23px; }
   .booking-success .btn-primary { width:100%; }
 }
+
+/* === Hero fotográfico de EXPERIENCIAS | Latam Expeditions ===
+   Solo afecta a la cabecera de fichas /experiencias/.
+   Cada foto se obtiene automáticamente del og:image de su ficha;
+   en pantallas grandes se prioriza *-panoramica.jpg, si existe. */
+.experience-hero-clean {
+  --experience-photo-mobile: none;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  min-height: clamp(380px, 31vw, 540px);
+  background: #073b2b;
+}
+.experience-hero-clean::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: var(--experience-photo-mobile, none);
+  background-size: cover;
+  background-position: center 44%;
+  background-repeat: no-repeat;
+}
+.experience-hero-clean::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(95deg,
+    rgba(3, 37, 26, .90) 0%,
+    rgba(5, 57, 39, .78) 43%,
+    rgba(5, 57, 39, .45) 100%);
+}
+.experience-hero-clean > .container {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+.experience-hero-clean h1,
+.experience-hero-clean p {
+  text-shadow: 0 2px 22px rgba(0, 20, 12, .25);
+}
+@media (min-width: 761px) {
+  .experience-hero-clean::before {
+    background-image: var(--experience-photo-desktop, var(--experience-photo-mobile, none));
+    background-position: center center;
+  }
+}
+@media (max-width: 760px) {
+  .experience-hero-clean {
+    min-height: 300px;
+    padding: 42px 18px 46px;
+  }
+  .experience-hero-clean::before { background-position: center 40%; }
+  .experience-hero-clean::after {
+    background: linear-gradient(90deg,
+      rgba(2, 35, 24, .87) 0%,
+      rgba(4, 51, 35, .78) 60%,
+      rgba(4, 51, 35, .64) 100%);
+  }
+}
