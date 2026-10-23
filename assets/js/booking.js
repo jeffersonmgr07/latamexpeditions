@@ -1442,6 +1442,7 @@
             <p id="bkDoneBalance"></p>
             <p class="booking-success__email" id="bkDoneEmail"></p>
             <p id="bkDoneAccount"></p>
+            <button type="button" class="btn-outline" id="bkCheckReceipt" hidden>Comprobar recepción</button>
             <button type="button" class="btn-primary" data-close-booking>Entendido, cerrar</button>
           </section>
         </div>
@@ -1659,9 +1660,88 @@
     } finally { if (timer) clearTimeout(timer); }
   }
 
-  // Envío a Apps Script mediante un iframe oculto, sin leer respuestas CORS.
-  // El servidor notifica de forma directa con postMessage; JSONP/status queda
-  // como respaldo. Solo se muestra éxito tras recibir emailSent=true.
+  // Google Apps Script no admite lectura CORS desde GitHub Pages. Mantenemos el POST
+  // por formulario oculto y verificamos EXCLUSIVAMENTE mediante acuse o consulta de estado.
+  // Un timeout no significa que el correo haya fallado y NO debe iniciar otro POST.
+  const isGoogleScriptOrigin = (origin) => {
+    try {
+      const url = new URL(origin);
+      return url.protocol === 'https:' && (
+        url.hostname === 'script.google.com' ||
+        url.hostname === 'script.googleusercontent.com' ||
+        url.hostname.endsWith('.script.googleusercontent.com')
+      );
+    } catch (_) { return false; }
+  };
+  const isReceiptFor = (reply, requestKey) => Boolean(
+    reply && reply.type === 'latam-booking-receipt' && reply.requestKey === requestKey
+  );
+  const confirmedReceipt = (reply) => {
+    if (!reply || reply.pending) return null;
+    if (reply.ok === true && reply.emailSent === true) return reply;
+    throw new Error(reply.error || 'El servidor no pudo procesar la solicitud. Revisa tu correo antes de volver a intentar.');
+  };
+
+  // Consulta read-only vía JSONP. No contiene nombre, correo, documento ni dirección.
+  // Se usa un callback único en cada intento para evitar interferencia entre peticiones.
+  function queryReceiptStatus(requestKey, waitMs = 3200) {
+    return new Promise((resolve) => {
+      const callback = `__latamReceipt_${requestKey.slice(0, 12)}_${Math.random().toString(36).slice(2, 9)}`;
+      const script = document.createElement('script');
+      let done = false;
+      let timeout;
+      const finish = (value) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timeout);
+        delete window[callback];
+        script.remove();
+        resolve(value || null);
+      };
+      window[callback] = finish;
+      timeout = setTimeout(() => finish(null), waitMs);
+      script.onerror = () => finish(null);
+      const params = new URLSearchParams({ action:'status', requestKey, callback, _:String(Date.now()) });
+      script.src = `${CONFIG.endpoint.split('?')[0]}?${params.toString()}`;
+      document.head.appendChild(script);
+    });
+  }
+
+  // Segundo canal: página HTML de estado que también emite un acuse con postMessage.
+  // No crea reservas ni envía correos: es seguro volver a consultar.
+  function queryReceiptFrame(requestKey, waitMs = 3300) {
+    return new Promise((resolve) => {
+      const frame = document.createElement('iframe');
+      frame.hidden = true;
+      frame.setAttribute('aria-hidden','true');
+      let done = false;
+      let timeout;
+      const finish = (reply) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timeout);
+        window.removeEventListener('message', onMessage);
+        setTimeout(() => frame.remove(), 250);
+        resolve(reply || null);
+      };
+      const onMessage = (event) => {
+        if (!isGoogleScriptOrigin(event.origin) || !isReceiptFor(event.data, requestKey)) return;
+        if (!event.data.pending) finish(event.data);
+      };
+      window.addEventListener('message', onMessage);
+      timeout = setTimeout(() => finish(null), waitMs);
+      frame.src = `${CONFIG.endpoint.split('?')[0]}?${new URLSearchParams({ action:'status_html', requestKey, _:String(Date.now()) })}`;
+      document.body.appendChild(frame);
+    });
+  }
+
+  async function recheckEmailReceipt(requestKey) {
+    const result = await queryReceiptStatus(requestKey);
+    if (confirmedReceipt(result)) return result;
+    const viaFrame = await queryReceiptFrame(requestKey);
+    return confirmedReceipt(viaFrame);
+  }
+
   async function submitEmailOnly(data) {
     if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/i.test(CONFIG.endpoint || '')) {
       throw new Error('Configura la URL /exec pública de Google Apps Script antes de recibir solicitudes.');
@@ -1684,73 +1764,61 @@
     }
     document.body.append(iframe, form);
     let resolveDirect;
-    let finished = false;
+    let directReply = null;
     const direct = new Promise(resolve => { resolveDirect = resolve; });
-    const isGoogleScriptOrigin = (origin) => {
-      try {
-        const url = new URL(origin);
-        return url.protocol === 'https:' && (
-          url.hostname === 'script.google.com' ||
-          url.hostname === 'script.googleusercontent.com' ||
-          url.hostname.endsWith('.script.googleusercontent.com')
-        );
-      } catch (_) { return false; }
-    };
     const onMessage = (event) => {
-      if (!isGoogleScriptOrigin(event.origin)) return;
-      const reply = event.data;
-      if (reply?.type !== 'latam-booking-receipt' || reply.requestKey !== data.requestKey) return;
-      // Un estado pending no equivale a un correo enviado.
-      if (!reply.pending) resolveDirect(reply);
+      if (!isGoogleScriptOrigin(event.origin) || !isReceiptFor(event.data, data.requestKey)) return;
+      if (!event.data.pending) {
+        directReply = event.data;
+        resolveDirect(event.data);
+      }
     };
     window.addEventListener('message', onMessage);
-    const checkStatus = () => new Promise((resolve) => {
-      const callback = `__latamReceipt_${data.requestKey.slice(0,20)}`;
-      const script = document.createElement('script');
-      let done = false;
-      const finish = (value) => {
-        if (done) return;
-        done = true;
-        clearTimeout(timeout);
-        delete window[callback];
-        script.remove();
-        resolve(value);
-      };
-      window[callback] = finish;
-      const timeout = setTimeout(() => finish(null), 2300);
-      script.onerror = () => finish(null);
-      const params = new URLSearchParams({
-        action: 'status', requestKey: data.requestKey,
-        callback, cache: Date.now().toString()
-      });
-      script.src = `${CONFIG.endpoint.split('?')[0]}?${params.toString()}`;
-      document.head.appendChild(script);
-    });
-    const receipt = (reply) => {
-      if (!reply || reply.pending) return null;
-      if (reply.ok === true && reply.emailSent === true) return reply;
-      throw new Error(reply.error || 'El servidor no pudo registrar la solicitud. Revisa tu correo antes de volver a intentar.');
-    };
+    let submitted = false;
     try {
       form.submit();
-      for (let attempt = 0; attempt < 10; attempt++) {
+      submitted = true;
+      // Se consulta durante unos segundos: correo y caché no se actualizan
+      // simultáneamente. Se prueban canales alternativos sin reenviar el formulario.
+      for (let attempt = 0; attempt < 7; attempt++) {
         const immediate = await Promise.race([
           direct,
-          new Promise(resolve => setTimeout(() => resolve(null), 1600))
+          new Promise(resolve => setTimeout(() => resolve(null), 1000))
         ]);
-        const confirmed = receipt(immediate);
-        if (confirmed) { finished = true; return confirmed; }
-        const fromStatus = await Promise.race([direct, checkStatus()]);
-        const fallback = receipt(fromStatus);
-        if (fallback) { finished = true; return fallback; }
+        if (confirmedReceipt(immediate)) return immediate;
+        const status = await Promise.race([direct, queryReceiptStatus(data.requestKey)]);
+        if (confirmedReceipt(status)) return status;
+        if (attempt === 1 || attempt === 4) {
+          const frameStatus = await Promise.race([direct, queryReceiptFrame(data.requestKey)]);
+          if (confirmedReceipt(frameStatus)) return frameStatus;
+        }
       }
-      throw new Error('No pudimos confirmar el envío aunque puede haberse recibido. Revisa el correo contact@latamexpeditions.com antes de repetir la solicitud para evitar duplicados.');
+      if (confirmedReceipt(directReply)) return directReply;
+      // No presentar "correo enviado correctamente" sin acuse: el POST puede
+      // haberse entregado, pero la comprobación está bloqueada por el navegador.
+      console.warn('[Latam Reservas] Google Apps Script no devolvió acuse de recepción. No reenviar el POST automáticamente.');
+      return { unverified:true, requestKey:data.requestKey };
     } finally {
       window.removeEventListener('message', onMessage);
-      // Mantener los nodos un instante permite completar el POST cuando
-      // recibimos el acuse muy pronto, sin dejar iframes permanentes.
-      setTimeout(() => { iframe.remove(); form.remove(); }, finished ? 800 : 4000);
+      // Conservar la navegación hasta que el servidor la procese.
+      setTimeout(() => { iframe.remove(); form.remove(); }, submitted ? 6000 : 0);
     }
+  }
+
+
+  function showUnverifiedConfirmation() {
+    $('.booking-success').classList.add('booking-success--unverified');
+    $('.booking-success__mark').textContent = '?';
+    $('#bkSuccessTitle').textContent = 'Solicitud enviada · Verificación pendiente';
+    $('#bkSuccessText').textContent = 'Tus datos fueron enviados desde el formulario, pero Google Apps Script no devolvió un comprobante al navegador. Es posible que nuestro equipo ya los haya recibido. No envíes nuevamente la solicitud: revisa primero si recibiste la copia en tu correo y, si lo necesitas, consúltanos por WhatsApp.';
+    $('#bkCode').textContent = 'Pendiente de verificar';
+    $('#bkSuccessMethod').textContent = 'Forma de pago: Pago en efectivo al iniciar el tour (pendiente).';
+    $('#bkDoneBalance').textContent = `Pago pendiente: ${money(state.total)}.`;
+    $('#bkDoneEmail').textContent = `Correo indicado: ${state.holder.email}. La copia al cliente tampoco puede verificarse desde esta pantalla.`;
+    $('#bkDoneAccount').textContent = 'Pulsa «Comprobar recepción» para consultar el estado SIN volver a enviar los datos.';
+    $('#bkCheckReceipt').hidden = false;
+    state.confirmation = null;
+    goToStep(4);
   }
 
   function loadPayPal() {
@@ -1802,6 +1870,9 @@
   }
 
   function showConfirmation(response) {
+    $('.booking-success').classList.remove('booking-success--unverified');
+    $('.booking-success__mark').textContent = '✓';
+    $('#bkCheckReceipt').hidden = true;
     $('#bkCode').textContent = response.bookingCode || '—';
     $('#bkDoneEmail').textContent = state.paymentMethod === 'pay_on_tour' ? (response.clientEmailSent ? `Enviamos una copia a ${state.holder.email}.` : `Recibimos tu solicitud, pero no pudimos enviar la copia automática a ${state.holder.email}. Nuestro equipo se pondrá en contacto.`) : state.holder.email;
     const cash = state.paymentMethod === 'pay_on_tour';
@@ -2055,7 +2126,8 @@
       try {
         state.paymentMethod = 'pay_on_tour';
         const response = await submitEmailOnly(payload());
-        showConfirmation(response);
+        if (response.unverified) showUnverifiedConfirmation();
+        else showConfirmation(response);
       } catch (error) {
         showError(error.message || 'No pudimos registrar tu solicitud. Inténtalo nuevamente.');
       } finally {
@@ -2067,6 +2139,22 @@
     $('#bkPickup').addEventListener('input', () => {
       $('#bkPickupNotice').hidden = !$('#bkPickup').value.trim();
       $('#bkPickupNotice').textContent = pickupNotice;
+    });
+    $('#bkCheckReceipt').addEventListener('click', async () => {
+      const button = $('#bkCheckReceipt');
+      if (button.disabled || !state.requestKey) return;
+      button.disabled = true;
+      button.textContent = 'Comprobando…';
+      try {
+        const result = await recheckEmailReceipt(state.requestKey);
+        if (result) showConfirmation(result);
+        else $('#bkDoneAccount').textContent = 'Todavía no obtenemos un acuse de Google. No repitas el envío; revisa la copia en tu correo o contacta a nuestro equipo.';
+      } catch (error) {
+        $('#bkDoneAccount').textContent = error.message || 'No fue posible completar la verificación.';
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Comprobar recepción';
+      }
     });
     $('#bkBack').addEventListener('click', () => goToStep(Math.max(1, step - 1)));
     modal.addEventListener('input', (e) => {

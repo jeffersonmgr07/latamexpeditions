@@ -1772,3 +1772,9 @@ details.detail-card summary::marker{color:var(--latam-gold);}
       rgba(4, 51, 35, .64) 100%);
   }
 }
+
+/* Estado no confirmado: no simular reserva recibida sin acuse de Google. */
+.booking-success--unverified .booking-success__mark { background:#fff6e2;border-color:#e8d19e;color:#90651d; }
+.booking-success--unverified .booking-success__reference { background:#fffaf0;border-color:#ebdfc2; }
+.booking-success--unverified .booking-success__reference strong { color:#8b621a; }
+#bkCheckReceipt:not([hidden]) { margin:16px 8px 0 0; }
