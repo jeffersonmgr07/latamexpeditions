@@ -1126,6 +1126,33 @@
   const nationalityOptions = () => `<option value="" data-en="Select a nationality">Selecciona una nacionalidad</option>${COUNTRIES.map(([es, en]) => `<option value="${escapeHTML(es)}" data-en="${escapeHTML(en)}">${escapeHTML(es)}</option>`).join('')}`;
   const numberOptions = (min, max, selected) => Array.from({ length: max - min + 1 }, (_, i) => i + min).map((n) => `<option value="${n}" ${n === selected ? 'selected' : ''}>${n}</option>`).join('');
 
+  const isoDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const parseISODate = (value) => {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ''));
+    if (!match) return null;
+    const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    return Number.isNaN(date.getTime()) ? null : date;
+  };
+  const bookingLocale = () => document.documentElement.lang === 'en' ? 'en-US' : 'es-PE';
+  const formatBookingDate = (value, options = { day: '2-digit', month: 'long', year: 'numeric' }) => {
+    const date = parseISODate(value);
+    return date ? new Intl.DateTimeFormat(bookingLocale(), options).format(date) : '';
+  };
+  const ageOnTravelDate = (birthValue) => {
+    const birth = parseISODate(birthValue);
+    const travel = parseISODate(state.date);
+    if (!birth || !travel || birth > travel) return null;
+    let age = travel.getFullYear() - birth.getFullYear();
+    const beforeBirthday = travel.getMonth() < birth.getMonth() || (travel.getMonth() === birth.getMonth() && travel.getDate() < birth.getDate());
+    if (beforeBirthday) age -= 1;
+    return age >= 0 ? age : null;
+  };
+
   function getTier() {
     return PRODUCT.tiers.find((tier) => tier.code === state.tier) || PRODUCT.tiers[0] || null;
   }
@@ -1272,20 +1299,42 @@
     modal.innerHTML = `
       <div class="booking-box">
         <div class="booking-head">
-          <div><h2 id="bookingTitle">Reservar ${escapeHTML(PRODUCT.title)}</h2><p>${escapeHTML(PRODUCT.country)} · ${escapeHTML(PRODUCT.duration)}</p></div>
+          <div class="booking-head__copy">
+            <span class="booking-head__eyebrow">Reserva tu experiencia</span>
+            <h2 id="bookingTitle">${escapeHTML(PRODUCT.title)}</h2>
+            <p><i class="fa-solid fa-location-dot" aria-hidden="true"></i> ${escapeHTML(PRODUCT.country)} <span aria-hidden="true">·</span> <i class="fa-regular fa-clock" aria-hidden="true"></i> ${escapeHTML(PRODUCT.duration)}</p>
+          </div>
           <button type="button" class="close-modal" data-close-booking aria-label="Cerrar reserva">&times;</button>
         </div>
         <ol class="booking-steps">
-          <li data-step-label="1" aria-current="step">Fecha y viajeros</li>
-          <li data-step-label="2">Datos de pasajeros</li>
-          <li data-step-label="3">Pago</li>
+          <li data-step-label="1" aria-current="step"><span>1</span><b>Fecha y viajeros</b></li>
+          <li data-step-label="2"><span>2</span><b>Datos de pasajeros</b></li>
+          <li data-step-label="3"><span>3</span><b>Pago</b></li>
         </ol>
         <div class="booking-body">
           <div class="booking-error" id="bookingError" role="alert"></div>
 
           <section class="booking-step is-active" data-step="1">
             <div class="booking-form-grid booking-form-grid--2">
-              <div class="form-field"><label for="bkDate">Fecha del tour</label><input type="date" id="bkDate" required><small>Con al menos <span id="bkLeadDays"></span> días de anticipación.</small><span class="form-error">Elige una fecha válida.</span></div>
+              <div class="form-field booking-date-field" id="bkDateField">
+                <label id="bkDateLabelText">Fecha del tour</label>
+                <button type="button" class="booking-date-trigger" id="bkDateTrigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="bkCalendar">
+                  <span id="bkDateDisplay">Selecciona una fecha</span>
+                  <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+                </button>
+                <input type="hidden" id="bkDate" value="">
+                <div class="booking-calendar" id="bkCalendar" role="dialog" aria-label="Seleccionar fecha del tour" hidden>
+                  <div class="booking-calendar__head">
+                    <button type="button" class="booking-calendar__nav" id="bkCalPrev" aria-label="Mes anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                    <strong id="bkCalMonth">—</strong>
+                    <button type="button" class="booking-calendar__nav" id="bkCalNext" aria-label="Mes siguiente"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+                  </div>
+                  <div class="booking-calendar__weekdays" aria-hidden="true"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+                  <div class="booking-calendar__grid" id="bkCalGrid"></div>
+                </div>
+                <small>Con al menos <span id="bkLeadDays"></span> días de anticipación.</small>
+                <span class="form-error">Elige una fecha válida.</span>
+              </div>
               ${departure || '<div class="form-field booking-field-placeholder" aria-hidden="true"></div>'}
             </div>
             <div class="booking-subsection">
@@ -1376,8 +1425,14 @@
   }
 
   function validateStep1() {
-    const inputs = ['#bkDate','#bkDeparture','#bkEmail','#bkPhone'].map((selector) => $(selector)).filter(Boolean);
+    const inputs = ['#bkDeparture','#bkEmail','#bkPhone'].map((selector) => $(selector)).filter(Boolean);
     let valid = inputs.every(fieldValid);
+    const dateValue = $('#bkDate')?.value || '';
+    const minValue = $('#bkDate')?.dataset.min || '';
+    const validDate = Boolean(parseISODate(dateValue)) && (!minValue || dateValue >= minValue);
+    $('#bkDateField')?.classList.toggle('has-error', !validDate);
+    $('#bkDateTrigger')?.setAttribute('aria-invalid', String(!validDate));
+    valid = valid && validDate;
     const total = Number($('#bkAdults').value) + Number($('#bkChildren').value);
     if (total < 1 || total > CONFIG.maxTravelers) { valid = false; showError(`La reserva admite entre 1 y ${CONFIG.maxTravelers} viajeros.`); }
     if (!valid) showError('Revisa los campos marcados antes de continuar.');
@@ -1387,17 +1442,31 @@
   function buildPassengers() {
     const list = $('#bkPaxList');
     const passengerTypes = [...Array(state.adults).fill('adult'), ...Array(state.children).fill('child')];
+    const documentTypes = Array.isArray(CONFIG.documentTypes) && CONFIG.documentTypes.length
+      ? CONFIG.documentTypes
+      : ['Pasaporte', 'DNI / Cédula de identidad / ID', 'Carné de extranjería', 'Otro'];
+    const defaultDocument = CONFIG.defaultDocumentType || 'Pasaporte';
     list.innerHTML = passengerTypes.map((type, index) => `
       <fieldset class="passenger-card" data-pax="${index}" data-passenger-type="${type}">
         <legend>${index === 0 ? 'Titular de la reserva' : `Pasajero ${index + 1}`} <small>· ${type === 'adult' ? 'Adulto' : 'Niño'}</small></legend>
         <div class="booking-form-grid booking-form-grid--2">
           <div class="form-field"><label for="paxName${index}">Nombres y apellidos</label><input id="paxName${index}" data-pax-field="name" autocomplete="name" minlength="3" required><span class="form-error">Completa el nombre.</span></div>
           <div class="form-field"><label for="paxNationality${index}">Nacionalidad</label><select id="paxNationality${index}" data-pax-field="nationality" required>${nationalityOptions()}</select><span class="form-error">Selecciona una nacionalidad.</span></div>
-          <div class="form-field"><label for="paxDocType${index}">Tipo de documento</label><select id="paxDocType${index}" data-pax-field="docType" required>${CONFIG.documentTypes.map((typeName) => `<option value="${escapeHTML(typeName)}">${escapeHTML(typeName)}</option>`).join('')}</select></div>
+          <div class="form-field"><label for="paxDocType${index}">Tipo de documento</label><select id="paxDocType${index}" data-pax-field="docType" required>${documentTypes.map((typeName) => `<option value="${escapeHTML(typeName)}" ${typeName === defaultDocument ? 'selected' : ''}>${escapeHTML(typeName)}</option>`).join('')}</select></div>
           <div class="form-field"><label for="paxDoc${index}">Número de documento</label><input id="paxDoc${index}" data-pax-field="docNumber" required maxlength="50"><span class="form-error">Completa el documento.</span></div>
-          <div class="form-field"><label for="paxBirth${index}">Fecha de nacimiento</label><input type="date" id="paxBirth${index}" data-pax-field="birth" required max="${new Date().toISOString().slice(0,10)}"><span class="form-error">Completa una fecha válida.</span></div>
+          <div class="form-field passenger-birth-field"><label for="paxBirth${index}">Fecha de nacimiento</label><input type="date" id="paxBirth${index}" data-pax-field="birth" required max="${new Date().toISOString().slice(0,10)}"><span class="passenger-age" id="paxAge${index}" aria-live="polite">Edad el día del tour: —</span><span class="form-error">Completa una fecha válida.</span></div>
         </div>
       </fieldset>`).join('');
+    list.querySelectorAll('[data-pax-field="birth"]').forEach((input) => {
+      const updateAge = () => {
+        const age = ageOnTravelDate(input.value);
+        const output = input.closest('.passenger-birth-field')?.querySelector('.passenger-age');
+        if (output) output.textContent = age === null ? 'Edad el día del tour: —' : `Edad el día del tour: ${age} ${age === 1 ? 'año' : 'años'}`;
+      };
+      input.addEventListener('input', updateAge);
+      input.addEventListener('change', updateAge);
+      updateAge();
+    });
     applyI18n(list);
     window.LatamI18n?.invalidate?.();
   }
@@ -1461,7 +1530,7 @@
     $('#bkNext').hidden = next >= 3;
     $('.booking-steps').hidden = next === 4;
     $('#bkActions').hidden = next === 4;
-    $('.booking-box').scrollTo({ top: 0, behavior: 'smooth' });
+    $('.booking-body')?.scrollTo({ top: 0, behavior: 'smooth' });
     clearError();
   }
 
@@ -1586,6 +1655,79 @@
     if (!$('#bkPhone').value && user.phone) $('#bkPhone').value = user.phone;
   }
 
+  function setupBookingCalendar(minDate) {
+    const input = $('#bkDate');
+    const field = $('#bkDateField');
+    const triggerButton = $('#bkDateTrigger');
+    const display = $('#bkDateDisplay');
+    const calendar = $('#bkCalendar');
+    const monthLabel = $('#bkCalMonth');
+    const grid = $('#bkCalGrid');
+    const previousButton = $('#bkCalPrev');
+    const nextButton = $('#bkCalNext');
+    if (!input || !triggerButton || !calendar || !grid) return;
+
+    input.dataset.min = isoDate(minDate);
+    let viewDate = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+
+    const closeCalendar = () => {
+      calendar.hidden = true;
+      triggerButton.setAttribute('aria-expanded', 'false');
+    };
+    const openCalendar = () => {
+      const selected = parseISODate(input.value);
+      if (selected) viewDate = new Date(selected.getFullYear(), selected.getMonth(), 1);
+      renderCalendar();
+      calendar.hidden = false;
+      triggerButton.setAttribute('aria-expanded', 'true');
+    };
+    const renderCalendar = () => {
+      const monthText = new Intl.DateTimeFormat(bookingLocale(), { month: 'long', year: 'numeric' }).format(viewDate);
+      monthLabel.textContent = monthText.charAt(0).toUpperCase() + monthText.slice(1);
+      const first = new Date(viewDate.getFullYear(), viewDate.getMonth(), 1);
+      const firstWeekdayMonday = (first.getDay() + 6) % 7;
+      const gridStart = new Date(first);
+      gridStart.setDate(first.getDate() - firstWeekdayMonday);
+      const selected = input.value;
+      const today = isoDate(new Date());
+      const minValue = isoDate(minDate);
+      grid.innerHTML = Array.from({ length: 42 }, (_, index) => {
+        const day = new Date(gridStart);
+        day.setDate(gridStart.getDate() + index);
+        const value = isoDate(day);
+        const outside = day.getMonth() !== viewDate.getMonth();
+        const disabled = value < minValue;
+        const selectedDay = value === selected;
+        const isToday = value === today;
+        return `<button type="button" class="booking-calendar__day${outside ? ' is-outside' : ''}${selectedDay ? ' is-selected' : ''}${isToday ? ' is-today' : ''}" data-date="${value}" ${disabled ? 'disabled' : ''} aria-label="${escapeHTML(formatBookingDate(value))}" ${selectedDay ? 'aria-current="date"' : ''}>${day.getDate()}</button>`;
+      }).join('');
+      const previousMonthEnd = new Date(viewDate.getFullYear(), viewDate.getMonth(), 0);
+      previousButton.disabled = isoDate(previousMonthEnd) < minValue;
+    };
+
+    triggerButton.addEventListener('click', () => calendar.hidden ? openCalendar() : closeCalendar());
+    previousButton.addEventListener('click', () => { viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1); renderCalendar(); });
+    nextButton.addEventListener('click', () => { viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1); renderCalendar(); });
+    grid.addEventListener('click', (event) => {
+      const dayButton = event.target.closest('[data-date]');
+      if (!dayButton || dayButton.disabled) return;
+      input.value = dayButton.dataset.date;
+      state.date = input.value;
+      display.textContent = formatBookingDate(input.value, { weekday: 'short', day: '2-digit', month: 'long', year: 'numeric' });
+      field?.classList.remove('has-error');
+      triggerButton.setAttribute('aria-invalid', 'false');
+      closeCalendar();
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    document.addEventListener('click', (event) => {
+      if (!calendar.hidden && !field?.contains(event.target)) closeCalendar();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !calendar.hidden) { closeCalendar(); triggerButton.focus(); }
+    });
+    renderCalendar();
+  }
+
   async function init() {
     try {
       const response = await fetch(`${BASE}assets/data/catalog.json`, { cache:'no-store' });
@@ -1601,7 +1743,7 @@
     const open = () => {
       lastFocused = document.activeElement;
       recalculate(); prefillAccount();
-      modal.classList.add('is-open'); document.body.style.overflow='hidden'; $('#bkDate').focus();
+      modal.classList.add('is-open'); document.body.style.overflow='hidden'; $('#bkDateTrigger').focus();
     };
     const close = () => { modal.classList.remove('is-open'); document.body.style.overflow=''; lastFocused?.focus?.(); };
     trigger.addEventListener('click', open);
@@ -1609,7 +1751,10 @@
     modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('is-open') && step !== 4) close(); });
 
-    const minDate = new Date(); minDate.setDate(minDate.getDate() + CONFIG.minLeadDays); $('#bkDate').min = minDate.toISOString().slice(0,10);
+    const minDate = new Date();
+    minDate.setHours(12, 0, 0, 0);
+    minDate.setDate(minDate.getDate() + CONFIG.minLeadDays);
+    setupBookingCalendar(minDate);
     ['#bkAdults','#bkChildren','#bkTier','#bkOccupancy'].forEach((selector) => $(selector)?.addEventListener('change', () => {
       state.adults = Number($('#bkAdults').value); state.children = Number($('#bkChildren').value);
       state.tier = $('#bkTier')?.value || state.tier; state.occupancy = $('#bkOccupancy')?.value || state.occupancy; recalculate();
@@ -1631,6 +1776,7 @@
     });
     document.addEventListener('latam:languagechange', () => {
       recalculate();
+      if ($('#bkDate')?.value) $('#bkDateDisplay').textContent = formatBookingDate($('#bkDate').value, { weekday: 'short', day: '2-digit', month: 'long', year: 'numeric' });
       if (step === 3) paintSummary();
       if (step === 4 && state.confirmation) showConfirmation(state.confirmation);
     });

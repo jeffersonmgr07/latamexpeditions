@@ -9443,10 +9443,9 @@
     "paypalEnvironment": "sandbox",
     "endpoint": "PEGAR_AQUI_LA_URL_DE_TU_APPS_SCRIPT",
     "documentTypes": [
-      "DNI",
       "Pasaporte",
-      "Cédula",
-      "Carnet de extranjería",
+      "DNI / Cédula de identidad / ID",
+      "Carné de extranjería",
       "Otro"
     ],
     "payFullBelow": 60,
@@ -9454,7 +9453,8 @@
     "maxAdults": 12,
     "maxChildren": 8,
     "defaultAdults": 2,
-    "defaultChildren": 0
+    "defaultChildren": 0,
+    "defaultDocumentType": "Pasaporte"
   },
   "colombiaRegions": [
     {
