@@ -259,24 +259,21 @@
       "style": "cultura",
       "styleLabel": "Cultura viva",
       "duration": "4 horas",
-      "priceFrom": 35.0,
+      "priceFrom": 17.9,
       "currency": "USD",
       "img": "colombia-experiencia-city-tour-medellin.jpg",
       "alt": "Vista urbana y cultural de Medellín durante un city tour",
-      "excerpt": "Una introducción completa a Medellín entre miradores, Plaza Botero, espacios renovados e historia paisa.",
-      "description": "Descubre las distintas caras de Medellín en un recorrido de medio día que combina paisajes urbanos, tradición antioqueña, arte y transformación social. Visita Pueblito Paisa, camina por Plaza Botero y conoce espacios que explican cómo la ciudad pasó de un pasado complejo a convertirse en referente de innovación urbana.",
+      "excerpt": "City tour de Medellín con transporte y guía; puntos y duración por confirmar.",
+      "description": "Recorre atractivos destacados de Medellín con acompañamiento turístico, desde espacios culturales urbanos hasta plazas y parques. El recorrido concreto está sujeto al itinerario operativo del proveedor.",
       "includes": [
-        "Transporte turístico durante el recorrido",
-        "Guía profesional en español o inglés",
-        "Recogida en hoteles seleccionados o punto de encuentro",
-        "Paradas guiadas y tiempo para fotografías",
-        "Seguro de asistencia durante la actividad"
+        "Transporte turístico de ida y regreso",
+        "Tarjeta de asistencia médica",
+        "Guía de turismo acompañante"
       ],
       "notIncludes": [
-        "Ingreso al Museo de Antioquia",
-        "Alimentos y bebidas",
-        "Recogida fuera de las zonas indicadas",
-        "Gastos personales y propinas"
+        "Gastos personales no especificados",
+        "Tiquetes aéreos",
+        "Gastos adicionales durante el recorrido"
       ],
       "highlights": [
         "Pueblito Paisa y vista del Valle de Aburrá",
@@ -296,79 +293,26 @@
         "difficulty": "Baja",
         "physicalLevel": "Apto para viajeros con movilidad habitual; incluye caminatas cortas y algunas superficies irregulares.",
         "minAge": "4 años",
-        "maxGroup": "15 viajeros en servicio compartido",
+        "maxGroup": "Sujeto a cupos del proveedor",
         "groupType": "Compartido; opción privada bajo solicitud",
         "walkingDistance": "Aproximadamente 2 kilómetros, distribuidos en varias paradas",
         "altitude": "Medellín se encuentra alrededor de 1.500 m s. n. m.",
         "operatingDays": "Todos los días, sujeto a disponibilidad y cierres locales",
-        "departureTimes": [
-          "08:00",
-          "14:00"
-        ],
-        "pickupWindow": "Entre 20 y 40 minutos antes de la salida, según el punto asignado",
-        "meetingPoint": "Puntos seleccionados en El Poblado y Laureles; el punto definitivo se confirma en el voucher",
-        "hotelPickup": "Disponible desde hoteles seleccionados de El Poblado y Laureles. Alojamientos fuera de cobertura reciben un punto de encuentro cercano.",
-        "endPoint": "Regreso al punto de recogida o finalización en una zona céntrica acordada",
-        "itinerary": [
-          {
-            "time": "08:00 / 14:00",
-            "title": "Recogida y presentación del recorrido",
-            "description": "Encuentro con el guía en el hotel seleccionado o punto asignado. Se revisa la ruta del día y se inicia el traslado panorámico por Medellín.",
-            "duration": "20 a 30 min"
-          },
-          {
-            "time": "08:30 / 14:30",
-            "title": "Cerro Nutibara y Pueblito Paisa",
-            "description": "Parada en uno de los miradores clásicos de la ciudad. El guía explica la tradición antioqueña, la transformación urbana del Valle de Aburrá y los principales barrios visibles desde la colina.",
-            "duration": "45 min"
-          },
-          {
-            "time": "09:30 / 15:30",
-            "title": "Parque de los Pies Descalzos y sector administrativo",
-            "description": "Caminata por espacios de renovación urbana cercanos a La Alpujarra. Se comentan la arquitectura contemporánea, los proyectos públicos y la evolución del centro de Medellín.",
-            "duration": "35 min"
-          },
-          {
-            "time": "10:15 / 16:15",
-            "title": "Plaza Botero y centro tradicional",
-            "description": "Recorrido guiado entre las esculturas monumentales de Fernando Botero, el Palacio de la Cultura Rafael Uribe Uribe y las calles del centro. El ingreso al Museo de Antioquia es opcional y no forma parte de la ruta base.",
-            "duration": "55 min"
-          },
-          {
-            "time": "11:20 / 17:20",
-            "title": "Parque de las Luces y corredor urbano",
-            "description": "Parada fotográfica y explicación sobre la recuperación de antiguos espacios ferroviarios y comerciales. La ruta puede adaptarse por movilidad, eventos o cierres del centro.",
-            "duration": "30 min"
-          },
-          {
-            "time": "12:00 / 18:00",
-            "title": "Parques del Río y regreso",
-            "description": "Última vista panorámica junto al corredor del río Medellín antes del retorno. La experiencia finaliza aproximadamente cuatro horas después de la salida.",
-            "duration": "30 a 45 min"
-          }
-        ],
-        "entries": [
-          {
-            "name": "Pueblito Paisa y miradores públicos",
-            "status": "Incluidos",
-            "notes": "Acceso libre mientras los espacios permanezcan abiertos."
-          },
-          {
-            "name": "Museo de Antioquia",
-            "status": "No incluido / opcional",
-            "notes": "Puede visitarse por cuenta propia; incluirlo requiere ajustar la duración del recorrido."
-          }
-        ],
+        "departureTimes": [],
+        "pickupWindow": "Horario pendiente de confirmación con Cibeles Tours",
+        "meetingPoint": "Punto de encuentro por confirmar con el proveedor",
+        "hotelPickup": "Recogida sujeta a confirmación; no garantizada",
+        "endPoint": "Retorno según operación confirmada",
+        "itinerary": [],
+        "entries": [],
         "languages": {
           "included": [
-            "Español",
-            "Inglés"
+            "Español"
           ],
           "onRequest": [
-            "Portugués",
-            "Francés"
+            "Otros idiomas, por confirmar"
           ],
-          "note": "Los idiomas bajo solicitud dependen de disponibilidad y pueden generar un suplemento por guía privado."
+          "note": "No se promete guiado en inglés sin aceptación expresa del proveedor."
         },
         "recommendations": [
           "Usar calzado cómodo y ropa ligera.",
@@ -383,10 +327,10 @@
         ],
         "accessibility": "Accesibilidad parcial. El vehículo admite movilidad reducida con aviso previo, pero algunas aceras, pendientes y miradores pueden requerir asistencia.",
         "weather": "El tour opera con lluvia ligera. En caso de tormenta fuerte o cierre de un atractivo, se adapta la parada por otra de valor equivalente.",
-        "cancellation": "Cancelación gratuita hasta 24 horas antes del inicio. Las cancelaciones posteriores y la no presentación no son reembolsables.",
+        "cancellation": "Sujeto a condiciones del proveedor; confirmar antes de reservar",
         "voucher": "Voucher digital aceptado. Debe mostrarse desde el teléfono junto con un documento de identidad. La hora y el punto exactos se reconfirman el día anterior.",
-        "priceNote": "Tarifa por persona en servicio compartido. El precio privado se cotiza según cantidad de viajeros y zona de recogida.",
-        "operationalNote": "Itinerario de referencia. Los tiempos pueden variar por tráfico y condiciones operativas de Medellín.",
+        "priceNote": "Tarifa de referencia, por persona. Servicios según lista de inclusiones; extras se pagan aparte.",
+        "operationalNote": "Programa de referencia Cibeles Tours. Horarios exactos, idiomas, tipo de embarcación y cupos requieren confirmación.",
         "faqs": [
           {
             "question": "¿El tour entra al Museo de Antioquia?",
@@ -563,8 +507,16 @@
         "familia"
       ],
       "childPriceFactor": 0.75,
-      "pricingUpdated": "2026-07-25",
-      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
+      "pricingUpdated": "2026-10-23",
+      "pricingBasis": "Precio público de referencia Cibeles Tours en COP + 20%; USD estimado usando equivalencia publicada para Guatapé. Reconfirmar tarifa, divisa y cupos antes de cobrar.",
+      "supplierReference": {
+        "name": "Cibeles Tours",
+        "url": "https://cibelestours.com/itinerary/city-tour-medellin/",
+        "listedCop": 70000,
+        "markup": 0.2,
+        "rateBasis": "125000 COP / USD 26 equivalencia publicada por Cibeles",
+        "needsConfirmation": true
+      }
     },
     {
       "slug": "comuna-13-medellin",
@@ -574,24 +526,20 @@
       "style": "cultura",
       "styleLabel": "Cultura viva",
       "duration": "4 horas",
-      "priceFrom": 29.0,
+      "priceFrom": 25.9,
       "currency": "USD",
       "img": "colombia-experiencia-comuna-13-medellin.jpg",
       "alt": "Murales, escaleras eléctricas y barrios de ladera de la Comuna 13 en Medellín",
-      "excerpt": "Metro, Metrocable, arte urbano, escaleras eléctricas y sabores locales con un guía de la comunidad.",
-      "description": "Conoce la transformación de la Comuna 13 desde una mirada local y respetuosa. Viaja en el sistema Metro, disfruta una vista panorámica desde el Metrocable y recorre los murales, escaleras eléctricas y espacios comunitarios que convirtieron el arte en una herramienta de memoria y cambio social.",
+      "excerpt": "Ruta Medellín + Comuna 13. Tarifa de referencia en revisión (la ficha también muestra COP 115.000).",
+      "description": "Ruta urbana por Medellín que combina sectores representativos de la ciudad con los grafitis y escaleras eléctricas de Comuna 13. Los trayectos de Metro y Metrocable se mencionan en el recorrido publicado, pero sus billetes no aparecen expresamente identificados como incluidos.",
       "includes": [
-        "Guía local en español o inglés",
-        "Billetes de Metro, Metrocable y transporte integrado de la ruta",
-        "Recorrido guiado por murales y escaleras eléctricas",
-        "Dos degustaciones de productos locales",
-        "Parada en mirador o terraza comunitaria"
+        "Transporte de ida y regreso en vehículo turístico",
+        "Almuerzo típico",
+        "Tarjeta de asistencia médica",
+        "Guía acompañante"
       ],
       "notIncludes": [
-        "Recogida y regreso al hotel en la opción base",
-        "Almuerzo completo",
-        "Ingresos a galerías o museos privados",
-        "Compras de arte, bebidas adicionales y propinas"
+        "Gastos no especificados"
       ],
       "highlights": [
         "Viaje panorámico en Metro y Metrocable",
@@ -611,90 +559,43 @@
         "difficulty": "Moderada",
         "physicalLevel": "Requiere caminar por pendientes, escaleras y zonas concurridas durante aproximadamente dos horas.",
         "minAge": "5 años",
-        "maxGroup": "12 viajeros en grupo reducido",
+        "maxGroup": "Sujeto a cupos del proveedor",
         "groupType": "Compartido; opción privada bajo solicitud",
         "walkingDistance": "Entre 2,5 y 3 kilómetros, con pendientes y escaleras eléctricas al aire libre",
         "altitude": "Aproximadamente 1.500 a 1.800 m s. n. m.",
         "operatingDays": "Todos los días",
-        "departureTimes": [
-          "08:30",
-          "13:30"
-        ],
-        "pickupWindow": "No incluye recogida en hotel en la opción base",
-        "meetingPoint": "Estación Poblado del Metro; el acceso y la hora exacta se confirman en el voucher",
-        "hotelPickup": "Disponible como suplemento privado desde El Poblado o Laureles",
-        "endPoint": "Estación Poblado del Metro o punto acordado para la opción privada",
+        "departureTimes": [],
+        "pickupWindow": "Horario pendiente de confirmación con Cibeles Tours",
+        "meetingPoint": "Punto de encuentro por confirmar con el proveedor",
+        "hotelPickup": "Recogida sujeta a confirmación; no garantizada",
+        "endPoint": "Retorno según operación confirmada",
         "itinerary": [
           {
-            "time": "08:30 / 13:30",
-            "title": "Encuentro en la estación Poblado",
-            "description": "Presentación del guía, explicación del sistema integrado de transporte y recomendaciones de seguridad antes de iniciar el trayecto en Metro.",
-            "duration": "15 min"
+            "title": "Pueblito Paisa y Plaza Botero",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           },
           {
-            "time": "08:45 / 13:45",
-            "title": "Metro hacia San Javier",
-            "description": "Recorrido por la ciudad mientras el guía explica el papel del Metro en la movilidad y cultura ciudadana de Medellín.",
-            "duration": "30 min"
+            "title": "Parque de los Pies Descalzos y Parques del Río",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           },
           {
-            "time": "09:20 / 14:20",
-            "title": "Experiencia en Metrocable",
-            "description": "Trayecto panorámico en cable aéreo para observar la geografía del Valle de Aburrá y comprender cómo la infraestructura conectó barrios de ladera.",
-            "duration": "30 a 40 min"
+            "title": "Sector del Metro/Metrocable, sujeto a condiciones",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           },
           {
-            "time": "10:05 / 15:05",
-            "title": "Ingreso al circuito de arte urbano",
-            "description": "Traslado en transporte integrado y comienzo de la caminata con un guía local. Se presentan murales, colectivos artísticos y relatos de transformación comunitaria.",
-            "duration": "45 min"
-          },
-          {
-            "time": "10:50 / 15:50",
-            "title": "Escaleras eléctricas y presentaciones locales",
-            "description": "Ascenso por los seis tramos de escaleras al aire libre, con pausas para interpretar grafitis, escuchar artistas y observar el barrio desde distintos niveles.",
-            "duration": "50 min"
-          },
-          {
-            "time": "11:40 / 16:40",
-            "title": "Sabores locales y mirador",
-            "description": "Degustación de dos productos locales y parada en un mirador o terraza comunitaria. Las degustaciones pueden variar según operación y temporada.",
-            "duration": "35 min"
-          },
-          {
-            "time": "12:20 / 17:20",
-            "title": "Regreso en transporte público",
-            "description": "Retorno acompañado hacia la estación Poblado. El tour concluye aproximadamente cuatro horas después del encuentro.",
-            "duration": "40 min"
+            "title": "Grafitis y escaleras eléctricas de Comuna 13",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           }
         ],
-        "entries": [
-          {
-            "name": "Metro, Metrocable y transporte integrado de la ruta",
-            "status": "Incluidos",
-            "notes": "Válidos únicamente durante el itinerario acompañado."
-          },
-          {
-            "name": "Escaleras eléctricas de la Comuna 13",
-            "status": "Incluidas",
-            "notes": "Espacio público; puede cerrar temporalmente por mantenimiento o lluvia intensa."
-          },
-          {
-            "name": "Galerías o museos privados",
-            "status": "No incluidos / opcionales",
-            "notes": "El ingreso se paga directamente cuando el viajero desea entrar."
-          }
-        ],
+        "entries": [],
         "languages": {
           "included": [
-            "Español",
-            "Inglés"
+            "Español"
           ],
           "onRequest": [
-            "Portugués",
-            "Francés"
+            "Otros idiomas, por confirmar"
           ],
-          "note": "Otros idiomas requieren confirmación previa y normalmente se operan en modalidad privada."
+          "note": "No se promete guiado en inglés sin aceptación expresa del proveedor."
         },
         "recommendations": [
           "Usar calzado con buena adherencia.",
@@ -709,10 +610,10 @@
         ],
         "accessibility": "Accesibilidad parcial. Las escaleras eléctricas facilitan parte del ascenso, pero existen pendientes, escalones y aglomeraciones. Consultar antes de reservar si se utiliza silla de ruedas.",
         "weather": "Opera con lluvia ligera. El Metrocable, las escaleras o terrazas pueden suspenderse por clima, mantenimiento o decisiones operativas; se ofrecerá una alternativa equivalente cuando sea posible.",
-        "cancellation": "Cancelación gratuita hasta 24 horas antes. Los billetes de transporte ya utilizados no son reembolsables.",
+        "cancellation": "Sujeto a condiciones del proveedor; confirmar antes de reservar",
         "voucher": "Voucher digital y documento de identidad. Se recomienda llegar 15 minutos antes; el grupo no puede retrasar la salida por pasajeros ausentes.",
-        "priceNote": "Tarifa por persona con transporte público, Metrocable y degustaciones incluidas. La recogida privada se cotiza aparte.",
-        "operationalNote": "La experiencia se realiza con respeto por la comunidad y se enfoca en arte, memoria y transformación, no en turismo de pobreza.",
+        "priceNote": "Tarifa de referencia, por persona. Servicios según lista de inclusiones; extras se pagan aparte.",
+        "operationalNote": "Programa de referencia Cibeles Tours. Horarios exactos, idiomas, tipo de embarcación y cupos requieren confirmación.",
         "faqs": [
           {
             "question": "¿El Metrocable llega directamente a los grafitis?",
@@ -900,8 +801,16 @@
         "familia"
       ],
       "childPriceFactor": 0.75,
-      "pricingUpdated": "2026-07-25",
-      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
+      "pricingUpdated": "2026-10-23",
+      "pricingBasis": "Precio público de referencia Cibeles Tours en COP + 20%; USD estimado usando equivalencia publicada para Guatapé. Reconfirmar tarifa, divisa y cupos antes de cobrar.",
+      "supplierReference": {
+        "name": "Cibeles Tours",
+        "url": "https://cibelestours.com/itinerary/city-tour-comuna-13/",
+        "listedCop": 100000,
+        "markup": 0.2,
+        "rateBasis": "125000 COP / USD 26 equivalencia publicada por Cibeles",
+        "needsConfirmation": true
+      }
     },
     {
       "slug": "guatape-piedra-penol",
@@ -911,25 +820,24 @@
       "style": "naturaleza",
       "styleLabel": "Naturaleza",
       "duration": "11 horas",
-      "priceFrom": 49.0,
+      "priceFrom": 31.9,
       "currency": "USD",
       "img": "colombia-experiencia-guatape-piedra-penol.jpg",
       "alt": "Piedra del Peñol y embalse de Guatapé en Antioquia",
-      "excerpt": "Día completo con desayuno, almuerzo, navegación, Guatapé y ascenso opcional a la Piedra.",
-      "description": "Sal de Medellín hacia uno de los paisajes más reconocidos de Antioquia. Conoce la historia del Viejo Peñol, visita la Piedra del Peñol, navega por el embalse y recorre las calles de Guatapé con sus zócalos de colores. La jornada incluye transporte y comidas para que puedas concentrarte en disfrutar el destino.",
+      "excerpt": "Guatapé, navegación y comidas incluidas. Ascenso a la Piedra no incluido.",
+      "description": "Excursión desde Medellín hacia El Peñol y Guatapé, con vistas del embalse, paseo en barco, visita a los zócalos y al malecón. La subida a la Piedra del Peñol es opcional y se paga por separado.",
       "includes": [
-        "Transporte ida y vuelta desde puntos seleccionados de Medellín",
-        "Guía profesional en español o inglés",
-        "Desayuno típico y almuerzo",
-        "Paseo compartido en barco por el embalse",
-        "Visita a la Réplica del Viejo Peñol y Guatapé",
-        "Seguro de asistencia durante la excursión"
+        "Transporte turístico de ida y regreso",
+        "Desayuno y almuerzo",
+        "Tarjeta de asistencia médica",
+        "Guía de turismo acompañante",
+        "Paseo en barco rumbero"
       ],
       "notIncludes": [
-        "Entrada para subir la Piedra del Peñol",
-        "Bebidas especiales y consumos fuera del menú",
-        "Recogida fuera de las zonas indicadas",
-        "Gastos personales y propinas"
+        "Gastos personales no especificados",
+        "Tiquetes aéreos",
+        "Gastos adicionales durante el recorrido",
+        "Entrada y ascenso a la Piedra del Peñol (no incluido)"
       ],
       "highlights": [
         "Más de 700 escalones con vista panorámica opcional",
@@ -949,95 +857,47 @@
         "difficulty": "Baja sin ascenso / Moderada a alta con ascenso a la Piedra",
         "physicalLevel": "El recorrido general es accesible para la mayoría de viajeros. Subir más de 700 escalones es opcional y exige buen estado físico.",
         "minAge": "3 años; el ascenso a la Piedra queda a criterio del acompañante y del personal del atractivo",
-        "maxGroup": "30 viajeros en servicio compartido",
+        "maxGroup": "Sujeto a cupos del proveedor",
         "groupType": "Compartido; opción privada bajo solicitud",
         "walkingDistance": "Aproximadamente 3 kilómetros más el ascenso opcional a la Piedra",
         "altitude": "Entre 1.890 y 2.135 m s. n. m., aproximadamente",
         "operatingDays": "Todos los días",
-        "departureTimes": [
-          "06:30"
-        ],
-        "pickupWindow": "Entre 06:00 y 07:00 según el hotel o punto asignado",
-        "meetingPoint": "Puntos seleccionados en El Poblado y Laureles; confirmación final el día anterior",
-        "hotelPickup": "Recogida en hoteles seleccionados; otras zonas reciben punto de encuentro o suplemento privado",
-        "endPoint": "Regreso a Medellín entre 18:00 y 19:30, sujeto al tráfico",
+        "departureTimes": [],
+        "pickupWindow": "Horario pendiente de confirmación con Cibeles Tours",
+        "meetingPoint": "Punto de encuentro por confirmar con el proveedor",
+        "hotelPickup": "Recogida sujeta a confirmación; no garantizada",
+        "endPoint": "Retorno según operación confirmada",
         "itinerary": [
           {
-            "time": "06:30",
-            "title": "Salida desde Medellín",
-            "description": "Recogida en puntos seleccionados y viaje hacia el Oriente antioqueño. El guía presenta el programa y las condiciones del ascenso opcional.",
-            "duration": "1 h 30 a 2 h"
+            "title": "Paso panorámico por Guarne y Marinilla",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           },
           {
-            "time": "08:15",
-            "title": "Desayuno típico",
-            "description": "Parada en restaurante de carretera para un desayuno colombiano. Se ofrecen alternativas básicas para restricciones alimentarias notificadas con anticipación.",
-            "duration": "35 min"
+            "title": "El Peñol y réplica del antiguo pueblo",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           },
           {
-            "time": "09:15",
-            "title": "Réplica del Viejo Peñol",
-            "description": "Visita al conjunto que recuerda el antiguo pueblo inundado por el embalse y explicación de la historia hidroeléctrica de la región.",
-            "duration": "35 min"
+            "title": "Piedra del Peñol (ascenso opcional)",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           },
           {
-            "time": "10:10",
-            "title": "Piedra del Peñol",
-            "description": "Tiempo para subir los más de 700 escalones o disfrutar los alrededores y cafés de la base. La entrada al ascenso se paga directamente en taquilla.",
-            "duration": "1 h 30"
+            "title": "Plaza de los Zócalos y parque central",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           },
           {
-            "time": "12:00",
-            "title": "Almuerzo",
-            "description": "Almuerzo en restaurante local con varias opciones de plato. Las bebidas especiales y consumos adicionales no están incluidos.",
-            "duration": "50 min"
-          },
-          {
-            "time": "13:10",
-            "title": "Navegación por el embalse",
-            "description": "Paseo compartido en embarcación para observar islas, paisajes y propiedades alrededor del lago. La ruta depende del nivel del agua y las condiciones de navegación.",
-            "duration": "45 a 60 min"
-          },
-          {
-            "time": "14:25",
-            "title": "Recorrido por Guatapé",
-            "description": "Caminata guiada por la Calle de los Recuerdos, la Plaza de los Zócalos, el malecón y fachadas coloridas. Tiempo libre para fotografías y compras.",
-            "duration": "1 h 30"
-          },
-          {
-            "time": "16:15",
-            "title": "Retorno a Medellín",
-            "description": "Salida hacia Medellín con una parada técnica cuando sea necesaria. La llegada varía según el tráfico de ingreso a la ciudad.",
-            "duration": "2 a 3 h"
+            "title": "Malecón de Guatapé y barco rumbero",
+            "description": "Parada anunciada por el proveedor. Orden y tiempos sujetos a confirmación."
           }
         ],
-        "entries": [
-          {
-            "name": "Paseo compartido en barco por el embalse",
-            "status": "Incluido",
-            "notes": "Sujeto a condiciones de navegación y disponibilidad operativa."
-          },
-          {
-            "name": "Ascenso a la Piedra del Peñol",
-            "status": "No incluido / opcional",
-            "notes": "Referencia oficial consultada: COP 20.000 por persona; la tarifa puede cambiar y se paga en taquilla."
-          },
-          {
-            "name": "Réplica del Viejo Peñol y espacios públicos de Guatapé",
-            "status": "Incluidos",
-            "notes": "Acceso a áreas públicas durante el recorrido."
-          }
-        ],
+        "entries": [],
         "languages": {
           "included": [
-            "Español",
-            "Inglés"
+            "Español"
           ],
           "onRequest": [
-            "Portugués",
-            "Francés"
+            "Otros idiomas, por confirmar"
           ],
-          "note": "En salidas compartidas el guiado puede ser bilingüe. Un idioma exclusivo requiere servicio privado."
+          "note": "No se promete guiado en inglés sin aceptación expresa del proveedor."
         },
         "recommendations": [
           "Llevar efectivo en pesos colombianos para la entrada a la Piedra y compras pequeñas.",
@@ -1052,10 +912,10 @@
         ],
         "accessibility": "La excursión puede adaptarse parcialmente sin subir la Piedra. El barco, algunas calles empedradas y los escalones no son completamente accesibles; consultar antes de reservar.",
         "weather": "Opera con lluvia ligera. Tormentas fuertes pueden alterar la navegación, el ascenso o el orden de visitas. Si un componente no puede operar, se aplicará la política del proveedor local.",
-        "cancellation": "Cancelación gratuita hasta 24 horas antes. Una vez emitidos servicios especiales o iniciada la excursión, no hay reembolso por decidir no subir la Piedra.",
+        "cancellation": "Sujeto a condiciones del proveedor; confirmar antes de reservar",
         "voucher": "Voucher digital, documento y datos del hotel. La recogida se reconfirma el día anterior y puede asignarse un punto cercano para optimizar la ruta.",
-        "priceNote": "Tarifa compartida con transporte, desayuno, almuerzo y navegación. La entrada para subir la Piedra se paga directamente y no está incluida.",
-        "operationalNote": "La hora de regreso es aproximada y puede extenderse por tráfico, fines de semana o temporada alta.",
+        "priceNote": "Tarifa de referencia, por persona. Servicios según lista de inclusiones; extras se pagan aparte.",
+        "operationalNote": "Programa de referencia Cibeles Tours. Horarios exactos, idiomas, tipo de embarcación y cupos requieren confirmación.",
         "faqs": [
           {
             "question": "¿Es obligatorio subir la Piedra del Peñol?",
@@ -1251,8 +1111,16 @@
         "aventura"
       ],
       "childPriceFactor": 0.75,
-      "pricingUpdated": "2026-07-25",
-      "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
+      "pricingUpdated": "2026-10-23",
+      "pricingBasis": "Precio público de referencia Cibeles Tours en COP + 20%; USD estimado usando equivalencia publicada para Guatapé. Reconfirmar tarifa, divisa y cupos antes de cobrar.",
+      "supplierReference": {
+        "name": "Cibeles Tours",
+        "url": "https://cibelestours.com/itinerary/tour-guatape/",
+        "listedCop": 125000,
+        "markup": 0.2,
+        "rateBasis": "125000 COP / USD 26 equivalencia publicada por Cibeles",
+        "needsConfirmation": true
+      }
     },
     {
       "slug": "tour-pablo-escobar",
@@ -4600,6 +4468,211 @@
       "childPriceFactor": 0.75,
       "pricingUpdated": "2026-07-25",
       "pricingBasis": "Referencia de mercado OTA; tarifa final sujeta a fecha y disponibilidad."
+    },
+    {
+      "slug": "jardin-antioquia-cibeles",
+      "title": "Jardín, Antioquia: tour de un día",
+      "country": "Colombia",
+      "region": "Jardín",
+      "style": "cultura",
+      "styleLabel": "Cultura y naturaleza",
+      "duration": "1 día",
+      "priceFrom": 41.9,
+      "currency": "USD",
+      "img": "destino-colombia-01.jpg",
+      "alt": "Imagen general de Colombia; fotografía específica pendiente de licencia",
+      "excerpt": "Un día desde Medellín hacia Jardín, Antioquia. Consultar con el operador los horarios y paradas del programa.",
+      "description": "Un día desde Medellín hacia Jardín, Antioquia. Consultar con el operador los horarios y paradas del programa.",
+      "includes": [
+        "Servicios del programa sujetos a confirmación con el proveedor antes de reservar"
+      ],
+      "notIncludes": [
+        "Servicios no confirmados por el proveedor; solicitar ficha técnica antes de cobrar"
+      ],
+      "highlights": [
+        "Operación publicada por Cibeles Tours",
+        "Disponibilidad y horarios sujetos a confirmación"
+      ],
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 1,
+      "pricingUpdated": "2026-10-23",
+      "pricingBasis": "Tarifa pública Cibeles COP + 20% y conversión USD indicativa; NO tarifa neta de agencia ni reserva garantizada",
+      "supplierReference": {
+        "name": "Cibeles Tours",
+        "url": "https://cibelestours.com/itinerary/tour-jardin-antioquia/",
+        "listedCop": 165000,
+        "markup": 0.2,
+        "needsConfirmation": true
+      },
+      "requiresPhoto": true
+    },
+    {
+      "slug": "santorini-antioquia-cibeles",
+      "title": "Santorini Colombiano y finca hotel",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "cultura",
+      "styleLabel": "Cultura y naturaleza",
+      "duration": "1 día",
+      "priceFrom": 38.9,
+      "currency": "USD",
+      "img": "destino-colombia-01.jpg",
+      "alt": "Imagen general de Colombia; fotografía específica pendiente de licencia",
+      "excerpt": "Un día con recorrido por Santorini Colombiano y visita a finca hotel con áreas verdes y zonas de piscina. Salidas programadas con mínimo de 15 viajeros.",
+      "description": "Un día con recorrido por Santorini Colombiano y visita a finca hotel con áreas verdes y zonas de piscina. Salidas programadas con mínimo de 15 viajeros.",
+      "includes": [
+        "Transporte de ida y regreso",
+        "Desayuno y almuerzo",
+        "Tarjeta de asistencia médica",
+        "Guía acompañante"
+      ],
+      "notIncludes": [
+        "Gastos personales no especificados",
+        "Tiquetes aéreos",
+        "Gastos adicionales durante el recorrido"
+      ],
+      "highlights": [
+        "Operación publicada por Cibeles Tours",
+        "Disponibilidad y horarios sujetos a confirmación"
+      ],
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 1,
+      "pricingUpdated": "2026-10-23",
+      "pricingBasis": "Tarifa pública Cibeles COP + 20% y conversión USD indicativa; NO tarifa neta de agencia ni reserva garantizada",
+      "supplierReference": {
+        "name": "Cibeles Tours",
+        "url": "https://cibelestours.com/itinerary/tour-a-santorini/",
+        "listedCop": 154000,
+        "markup": 0.2,
+        "needsConfirmation": true
+      },
+      "requiresPhoto": true
+    },
+    {
+      "slug": "santa-fe-antioquia-cibeles",
+      "title": "Santa Fe de Antioquia: tour de un día",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "cultura",
+      "styleLabel": "Cultura y naturaleza",
+      "duration": "1 día",
+      "priceFrom": 31.9,
+      "currency": "USD",
+      "img": "destino-colombia-01.jpg",
+      "alt": "Imagen general de Colombia; fotografía específica pendiente de licencia",
+      "excerpt": "Excursión regional desde Medellín a Santa Fe de Antioquia. Ruta específica pendiente de confirmación con el proveedor.",
+      "description": "Excursión regional desde Medellín a Santa Fe de Antioquia. Ruta específica pendiente de confirmación con el proveedor.",
+      "includes": [
+        "Servicios del programa sujetos a confirmación con el proveedor antes de reservar"
+      ],
+      "notIncludes": [
+        "Servicios no confirmados por el proveedor; solicitar ficha técnica antes de cobrar"
+      ],
+      "highlights": [
+        "Operación publicada por Cibeles Tours",
+        "Disponibilidad y horarios sujetos a confirmación"
+      ],
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 1,
+      "pricingUpdated": "2026-10-23",
+      "pricingBasis": "Tarifa pública Cibeles COP + 20% y conversión USD indicativa; NO tarifa neta de agencia ni reserva garantizada",
+      "supplierReference": {
+        "name": "Cibeles Tours",
+        "url": "https://cibelestours.com/regionales/",
+        "listedCop": 125000,
+        "markup": 0.2,
+        "needsConfirmation": true
+      },
+      "requiresPhoto": true
+    },
+    {
+      "slug": "tour-flores-antioquia-cibeles",
+      "title": "Tour de las Flores, Antioquia",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "cultura",
+      "styleLabel": "Cultura y naturaleza",
+      "duration": "1 día",
+      "priceFrom": 31.9,
+      "currency": "USD",
+      "img": "destino-colombia-01.jpg",
+      "alt": "Imagen general de Colombia; fotografía específica pendiente de licencia",
+      "excerpt": "Experiencia temática de flores en Antioquia. Actividades, fechas y condiciones del programa sujetas a cotización confirmada.",
+      "description": "Experiencia temática de flores en Antioquia. Actividades, fechas y condiciones del programa sujetas a cotización confirmada.",
+      "includes": [
+        "Servicios del programa sujetos a confirmación con el proveedor antes de reservar"
+      ],
+      "notIncludes": [
+        "Servicios no confirmados por el proveedor; solicitar ficha técnica antes de cobrar"
+      ],
+      "highlights": [
+        "Operación publicada por Cibeles Tours",
+        "Disponibilidad y horarios sujetos a confirmación"
+      ],
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 1,
+      "pricingUpdated": "2026-10-23",
+      "pricingBasis": "Tarifa pública Cibeles COP + 20% y conversión USD indicativa; NO tarifa neta de agencia ni reserva garantizada",
+      "supplierReference": {
+        "name": "Cibeles Tours",
+        "url": "https://cibelestours.com/regionales/",
+        "listedCop": 125000,
+        "markup": 0.2,
+        "needsConfirmation": true
+      },
+      "requiresPhoto": true
+    },
+    {
+      "slug": "hacienda-napoles-cibeles",
+      "title": "Hacienda Nápoles, 2 días / 1 noche",
+      "country": "Colombia",
+      "region": "Medellín",
+      "style": "cultura",
+      "styleLabel": "Cultura y naturaleza",
+      "duration": "2 días / 1 noche",
+      "priceFrom": 121.9,
+      "currency": "USD",
+      "img": "destino-colombia-01.jpg",
+      "alt": "Imagen general de Colombia; fotografía específica pendiente de licencia",
+      "excerpt": "Plan de dos días y una noche desde Medellín hacia Hacienda Nápoles, con componentes por confirmar con el mayorista.",
+      "description": "Plan de dos días y una noche desde Medellín hacia Hacienda Nápoles, con componentes por confirmar con el mayorista.",
+      "includes": [
+        "Servicios del programa sujetos a confirmación con el proveedor antes de reservar"
+      ],
+      "notIncludes": [
+        "Servicios no confirmados por el proveedor; solicitar ficha técnica antes de cobrar"
+      ],
+      "highlights": [
+        "Operación publicada por Cibeles Tours",
+        "Disponibilidad y horarios sujetos a confirmación"
+      ],
+      "styles": [
+        "cultura",
+        "familia"
+      ],
+      "childPriceFactor": 1,
+      "pricingUpdated": "2026-10-23",
+      "pricingBasis": "Tarifa pública Cibeles COP + 20% y conversión USD indicativa; NO tarifa neta de agencia ni reserva garantizada",
+      "supplierReference": {
+        "name": "Cibeles Tours",
+        "url": "https://cibelestours.com/medellin-destinos/",
+        "listedCop": 485000,
+        "markup": 0.2,
+        "needsConfirmation": true
+      },
+      "requiresPhoto": true
     }
   ],
   "packages": [
