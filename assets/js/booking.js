@@ -1120,8 +1120,33 @@
     date: '', departureTime: PRODUCT.departures[0] || '', adults: 2, children: 0,
     travelers: 2, tier: PRODUCT.tiers[0]?.code || null, occupancy: 'double',
     holder: {}, passengers: [], adultUnit: PRODUCT.price, childUnit: round2(PRODUCT.price * PRODUCT.childFactor),
-    total: 0, due: 0, mode: 'deposito', requestKey: ''
+    total: 0, due: 0, mode: 'deposito', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour'
   };
+
+  // Zona informativa, no una validación automática de cobertura.
+  function pickupZone() {
+    const search = `${PRODUCT.slug} ${PRODUCT.title} ${PRODUCT.country}`.toLowerCase();
+    const zones = [
+      { match:/medell[ií]n|guatap[eé]|comuna-13|antioquia|jardin-antioquia|santa-fe-antioquia|hacienda-napoles/, city:'Medellín', center:'El Poblado', lat:6.2108, lon:-75.5704 },
+      { match:/cusco|machu.picchu|ollantaytambo|valle.sagrado|humantay|montana.colores/, city:'Cusco', center:'Plaza de Armas', lat:-13.5163, lon:-71.9780 },
+      { match:/cartagena|bar[uú]|rosario|cholon|totumo/, city:'Cartagena', center:'Centro Histórico', lat:10.4236, lon:-75.5510 },
+      { match:/bogot[aá]|zipaquir[aá]|guatavita|villa.de.leyva/, city:'Bogotá', center:'Plaza de Bolívar', lat:4.5981, lon:-74.0760 },
+      { match:/lima|paracas|ballestas/, city:'Lima', center:'Plaza Mayor', lat:-12.0453, lon:-77.0308 },
+      { match:/santa.marta|tayrona|m[aá]gica|mindo/, city:'Santa Marta', center:'Centro Histórico', lat:11.2408, lon:-74.1990 },
+      { match:/san.andr[eé]s/, city:'San Andrés', center:'Centro', lat:12.5847, lon:-81.7006 }
+    ];
+    return zones.find(z => z.match.test(search)) || null;
+  }
+  function pickupMapHTML() {
+    const z = pickupZone();
+    if (!z) return '<p class="form-note">La zona de recojo y el punto de encuentro se confirmarán después de revisar tu dirección.</p>';
+    const deltaLat = 1 / 111.1, deltaLon = 1 / (111.1 * Math.cos(z.lat * Math.PI / 180));
+    const bbox = [z.lon-deltaLon,z.lat-deltaLat,z.lon+deltaLon,z.lat+deltaLat].join('%2C');
+    const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${z.lat}%2C${z.lon}`;
+    return `<p class="form-note">Zona de referencia: ${escapeHTML(z.center)}, ${escapeHTML(z.city)} (aprox. 1 km alrededor). <strong>Mapa orientativo: no garantiza recojo.</strong></p><iframe class="booking-pickup-map" title="Mapa orientativo de recojo en ${escapeHTML(z.city)}" loading="lazy" referrerpolicy="no-referrer" src="${src}"></iframe>`;
+  }
+  const pickupNotice = 'Hemos recibido tu dirección. Nuestro equipo verificará si tu alojamiento se encuentra dentro de nuestra zona de recojo. Si está dentro de la cobertura, te informaremos la hora exacta de recojo por correo electrónico o WhatsApp. Si está fuera de nuestra zona de recojo, te enviaremos el punto de encuentro y la hora correspondiente.';
+  const onlineConfigured = () => Boolean(CONFIG?.paypalClientId && !CONFIG.paypalClientId.startsWith('PEGAR_AQUI') && CONFIG?.endpoint && !CONFIG.endpoint.startsWith('PEGAR_AQUI'));
 
   const nationalityOptions = () => `<option value="" data-en="Select a nationality">Selecciona una nacionalidad</option>${COUNTRIES.map(([es, en]) => `<option value="${escapeHTML(es)}" data-en="${escapeHTML(en)}">${escapeHTML(es)}</option>`).join('')}`;
   const numberOptions = (min, max, selected) => Array.from({ length: max - min + 1 }, (_, i) => i + min).map((n) => `<option value="${n}" ${n === selected ? 'selected' : ''}>${n}</option>`).join('');
@@ -1352,6 +1377,12 @@
                 <div class="form-field"><label for="bkEmail">Correo del titular</label><input type="email" id="bkEmail" autocomplete="email" required><span class="form-error">Escribe un correo válido.</span></div>
                 <div class="form-field"><label for="bkPhone">Teléfono / WhatsApp</label><input type="tel" id="bkPhone" autocomplete="tel" minlength="5" required><span class="form-error">Escribe un teléfono válido.</span></div>
               </div>
+              <div class="booking-subsection booking-pickup">
+                <h3>Dirección de recojo (opcional)</h3>
+                <div class="form-field"><label for="bkPickup">Hotel / Airbnb / Dirección de recojo</label><textarea id="bkPickup" rows="2" maxlength="400" placeholder="Ingresa el nombre y dirección completa de tu hotel o Airbnb"></textarea></div>
+                <div id="bkPickupMap">${pickupMapHTML()}</div>
+                <p class="booking-pickup-notice" id="bkPickupNotice" hidden></p>
+              </div>
               <div class="form-field"><label for="bkNotes">Comentarios o solicitudes (opcional)</label><textarea id="bkNotes" rows="3" maxlength="1200"></textarea></div>
             </div>
           </section>
@@ -1376,16 +1407,24 @@
               <div class="booking-total"><span>Total del tour</span><strong id="bkSumTotal">—</strong></div>
             </div>
             <div class="booking-pay">
+              <h3>¿Cómo deseas pagar?</h3>
+              <div class="booking-payment-options" role="radiogroup" aria-label="Forma de pago">
+                <label><input type="radio" name="bkPaymentMethod" value="pay_on_tour" checked><span><strong>Pagar en efectivo al iniciar el tour</strong><small>Pago pendiente hasta el inicio de la experiencia</small></span></label>
+                <label><input type="radio" name="bkPaymentMethod" value="online" ${onlineConfigured() ? '' : 'disabled'}><span><strong>Pagar online ahora</strong><small>${onlineConfigured() ? 'Paga de forma segura con PayPal' : 'Próximamente · pasarela por configurar'}</small></span></label>
+              </div>
+              <div id="bkPayOnTour"><p class="form-note">Tu registro se enviará a nuestro equipo. La reserva no estará pagada y la disponibilidad debe ser confirmada.</p><button type="button" class="btn-primary" id="bkSubmitCash">Enviar solicitud de reserva</button></div>
+              <div id="bkPayOnline" hidden>
               <div class="booking-pay__amount"><span id="bkPayLabel">Pagas ahora</span><strong id="bkPayAmount">—</strong></div>
               <p class="booking-pay__note" id="bkPayNote"></p>
               <div id="paypalButtons"></div>
               <div class="booking-fallback" id="bkFallback" hidden>No hemos podido cargar la pasarela de pago. <a href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a>.</div>
+              </div>
             </div>
           </section>
 
           <section class="booking-step booking-success" data-step="4">
-            <i class="fa-solid fa-circle-check" aria-hidden="true"></i><h2>Reserva confirmada</h2>
-            <p>Tu código de reserva es <strong id="bkCode">—</strong>.</p><p>Enviamos la confirmación a <strong id="bkDoneEmail">—</strong>.</p><p id="bkDoneBalance"></p><p id="bkDoneAccount"></p>
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i><h2 id="bkSuccessTitle">Reserva confirmada</h2><p id="bkSuccessText"></p><p id="bkSuccessMethod"></p>
+            <p>Tu código de reserva es <strong id="bkCode">—</strong>.</p><p>Correo del titular / estado de notificación: <strong id="bkDoneEmail">—</strong>.</p><p id="bkDoneBalance"></p><p id="bkDoneAccount"></p>
             <button type="button" class="btn-primary" data-close-booking>Cerrar</button>
           </section>
         </div>
@@ -1421,6 +1460,8 @@
     state.tier = $('#bkTier')?.value || state.tier;
     state.occupancy = $('#bkOccupancy')?.value || 'double';
     state.holder = { email: $('#bkEmail').value.trim(), phone: $('#bkPhone').value.trim(), notes: $('#bkNotes').value.trim() };
+    state.pickupAddress = $('#bkPickup').value.trim();
+    state.pickupStatus = 'pending_validation';
     recalculate();
   }
 
@@ -1454,14 +1495,14 @@
           <div class="form-field"><label for="paxNationality${index}">Nacionalidad</label><select id="paxNationality${index}" data-pax-field="nationality" required>${nationalityOptions()}</select><span class="form-error">Selecciona una nacionalidad.</span></div>
           <div class="form-field"><label for="paxDocType${index}">Tipo de documento</label><select id="paxDocType${index}" data-pax-field="docType" required>${documentTypes.map((typeName) => `<option value="${escapeHTML(typeName)}" ${typeName === defaultDocument ? 'selected' : ''}>${escapeHTML(typeName)}</option>`).join('')}</select></div>
           <div class="form-field"><label for="paxDoc${index}">Número de documento</label><input id="paxDoc${index}" data-pax-field="docNumber" required maxlength="50"><span class="form-error">Completa el documento.</span></div>
-          <div class="form-field passenger-birth-field"><label for="paxBirth${index}">Fecha de nacimiento</label><input type="date" id="paxBirth${index}" data-pax-field="birth" required max="${new Date().toISOString().slice(0,10)}"><span class="passenger-age" id="paxAge${index}" aria-live="polite">Edad el día del tour: —</span><span class="form-error">Completa una fecha válida.</span></div>
+          <div class="form-field passenger-birth-field"><label for="paxBirth${index}">Fecha de nacimiento</label><input type="date" id="paxBirth${index}" data-pax-field="birth" required max="${new Date().toISOString().slice(0,10)}"><span class="passenger-age" id="paxAge${index}" aria-live="polite">Edad: —</span><span class="form-error">Completa una fecha válida.</span></div>
         </div>
       </fieldset>`).join('');
     list.querySelectorAll('[data-pax-field="birth"]').forEach((input) => {
       const updateAge = () => {
         const age = ageOnTravelDate(input.value);
         const output = input.closest('.passenger-birth-field')?.querySelector('.passenger-age');
-        if (output) output.textContent = age === null ? 'Edad el día del tour: —' : `Edad el día del tour: ${age} ${age === 1 ? 'año' : 'años'}`;
+        if (output) output.textContent = age === null ? 'Edad: —' : `${age} ${age === 1 ? 'año' : 'años'}`;
       };
       input.addEventListener('input', updateAge);
       input.addEventListener('change', updateAge);
@@ -1493,6 +1534,8 @@
   function paintSummary() {
     const formattedDate = new Intl.DateTimeFormat(document.documentElement.lang === 'en' ? 'en-US' : 'es-PE', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${state.date}T12:00:00Z`));
     $('#bkSumDate').textContent = formattedDate;
+    $('#bkPickupNotice').hidden = !state.pickupAddress;
+    $('#bkPickupNotice').textContent = pickupNotice;
     if ($('#bkSumDeparture')) $('#bkSumDeparture').textContent = state.departureTime || '—';
     $('#bkSumAdults').textContent = String(state.adults);
     $('#bkSumChildren').textContent = String(state.children);
@@ -1553,6 +1596,10 @@
       tier: state.tier,
       occupancy: state.occupancy,
       holder: state.holder,
+      pickupAddress: state.pickupAddress,
+      pickupStatus: 'pending_validation',
+      paymentMethod: state.paymentMethod,
+      paymentStatus: state.paymentMethod === 'pay_on_tour' ? 'pending' : 'awaiting_payment',
       passengers: state.passengers,
       quotedTotal: state.total,
       quotedDue: state.due,
@@ -1628,15 +1675,19 @@
 
   function showConfirmation(response) {
     $('#bkCode').textContent = response.bookingCode || '—';
-    $('#bkDoneEmail').textContent = state.holder.email;
+    $('#bkDoneEmail').textContent = response.emailSent === false ? 'El correo no pudo enviarse; contacta a nuestro equipo indicando tu código.' : state.holder.email;
+    const cash = state.paymentMethod === 'pay_on_tour';
+    $('#bkSuccessTitle').textContent = cash ? 'Registro recibido correctamente' : 'Reserva confirmada';
+    $('#bkSuccessText').textContent = cash ? 'Tu solicitud para el tour ' + PRODUCT.title + ' ha sido registrada. Nuestro equipo verificará tu dirección de recojo (si fue proporcionada) y te confirmará por correo electrónico o WhatsApp el horario de recojo o el punto de encuentro correspondiente. Este registro está pendiente de confirmación.' : '';
+    $('#bkSuccessMethod').textContent = cash ? 'Forma de pago: Pago en efectivo al iniciar el tour (pendiente).' : ''; 
     const balance = Number(response.balance || 0);
     const isEnglish = document.documentElement.lang === 'en';
-    $('#bkDoneBalance').textContent = balance > 0
+    $('#bkDoneBalance').textContent = cash ? `Pago pendiente: ${money(state.total)}.` : balance > 0
       ? `${isEnglish ? 'Outstanding balance' : 'Saldo pendiente'}: ${money(balance)}.`
       : (isEnglish ? 'The booking has been paid in full.' : 'La reserva quedó pagada por completo.');
     let user = null;
     try { user = JSON.parse(localStorage.getItem('latamExpeditionsUser') || 'null'); } catch (_) {}
-    $('#bkDoneAccount').innerHTML = user && String(user.email || '').toLowerCase() === state.holder.email.toLowerCase()
+    $('#bkDoneAccount').innerHTML = cash ? '' : user && String(user.email || '').toLowerCase() === state.holder.email.toLowerCase()
       ? `<a href="${BASE}mis-viajes.html">${isEnglish ? 'View this booking in My trips' : 'Ver esta reserva en Mis viajes'}</a>`
       : (isEnglish
         ? `Create an account with <strong>${escapeHTML(state.holder.email)}</strong> to view this booking in <a href="${BASE}registro.html">My trips</a>.`
@@ -1766,8 +1817,41 @@
         saveStep1(); buildPassengers(); goToStep(2);
       } else if (step === 2) {
         if (!validateStep2()) return;
-        saveStep2(); state.requestKey = requestKey(); paintSummary(); goToStep(3); await mountPayment();
+        saveStep2(); state.requestKey = requestKey(); paintSummary(); goToStep(3); updatePaymentMethod();
       }
+    });
+    const updatePaymentMethod = () => {
+      state.paymentMethod = $('input[name="bkPaymentMethod"]:checked')?.value || 'pay_on_tour';
+      $('#bkPayOnTour').hidden = state.paymentMethod !== 'pay_on_tour';
+      $('#bkPayOnline').hidden = state.paymentMethod !== 'online';
+      if (state.paymentMethod === 'online') mountPayment();
+      clearError();
+    };
+    $$('input[name="bkPaymentMethod"]').forEach(radio => radio.addEventListener('change', updatePaymentMethod));
+    $('#bkSubmitCash').addEventListener('click', async () => {
+      if (paymentInProgress) return;
+      if (!CONFIG.endpoint || CONFIG.endpoint.startsWith('PEGAR_AQUI')) {
+        showError('El envío aún no está configurado. Debes publicar Google Apps Script y colocar su URL en catalog.json para recibir reservas por correo.');
+        return;
+      }
+      paymentInProgress = true;
+      $('#bkSubmitCash').disabled = true;
+      $('#bkSubmitCash').textContent = 'Enviando solicitud…';
+      try {
+        state.paymentMethod = 'pay_on_tour';
+        const response = await callBackend('registerPayOnTour', payload());
+        showConfirmation(response);
+      } catch (error) {
+        showError(error.message || 'No pudimos registrar tu solicitud. Inténtalo nuevamente.');
+      } finally {
+        paymentInProgress = false;
+        $('#bkSubmitCash').disabled = false;
+        $('#bkSubmitCash').textContent = 'Enviar solicitud de reserva';
+      }
+    });
+    $('#bkPickup').addEventListener('input', () => {
+      $('#bkPickupNotice').hidden = !$('#bkPickup').value.trim();
+      $('#bkPickupNotice').textContent = pickupNotice;
     });
     $('#bkBack').addEventListener('click', () => goToStep(Math.max(1, step - 1)));
     modal.addEventListener('input', (e) => {

@@ -1581,3 +1581,16 @@ details.detail-card summary::marker{color:var(--latam-gold);}
   .booking-steps li[data-step-label="2"] > b::after { content: "Pasajeros"; }
   .booking-steps li[data-step-label="3"] > b::after { content: "Pago"; }
 }
+
+/* Recogida y selección de pago en modal de reservas */
+.booking-pickup-map{display:block;width:100%;height:200px;border:1px solid #d9e2dc;border-radius:12px;margin-top:10px}
+.booking-pickup-notice{padding:13px 16px;border-radius:10px;background:#eef5f0;border:1px solid #cadbd0;color:#164b37;font-size:13px;line-height:1.55;margin:12px 0}
+.booking-payment-options{display:grid;gap:10px;margin:14px 0}
+.booking-payment-options label{display:flex;gap:12px;align-items:center;border:1px solid #c9d8d1;border-radius:12px;padding:15px;cursor:pointer;background:#fff}
+.booking-payment-options label:has(input:checked){border-color:#0a3d2c;background:#eff7f1}
+.booking-payment-options label:has(input:disabled){opacity:.5;cursor:not-allowed}
+.booking-payment-options input{width:18px;height:18px;flex-shrink:0;accent-color:#0a3d2c}
+.booking-payment-options span{display:grid;gap:4px}
+.booking-payment-options small{font-size:12px;color:#596d63}
+#bkPayOnTour .btn-primary{width:100%}
+@media(max-width:600px){.booking-pickup-map{height:155px}.booking-payment-options label{padding:12px}}

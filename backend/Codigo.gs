@@ -1120,6 +1120,7 @@ function doPost(e) {
     const data = body.data || {};
 
     // --- Reservas y pago (Codigo.gs) ---
+    if (action === 'registerPayOnTour') return json(registrarPagoEnTour(data));
     if (action === 'createOrder') return json({ ok: true, orderId: crearOrden(data) });
     if (action === 'captureOrder') return json(capturarOrden(data));
 
@@ -1306,6 +1307,9 @@ function validarYCalcular(data) {
       notes: textoMultilinea(holder.notes, 1200)
     },
     passengers: pasajeros,
+    pickupAddress: textoPlano(data.pickupAddress,400),
+    pickupStatus: 'pending_validation',
+    paymentMethod: 'online',
     language: textoPlano(data.language || 'es', 10)
   };
 
@@ -1610,7 +1614,8 @@ function generarCodigo() {
 const CABECERAS = ['Fecha registro', 'Código', 'Estado', 'Tour', 'Slug', 'Categoría', 'Fecha del tour',
   'Viajeros', 'Precio unitario', 'Total', 'Pagado', 'Saldo', 'Modo',
   'Email titular', 'Teléfono', 'Comentarios', 'Pasajeros',
-  'Order ID PayPal', 'Capture ID', 'Email pagador', 'Hora de salida'];
+  'Order ID PayPal', 'Capture ID', 'Email pagador', 'Hora de salida',
+  'Estado de recojo','Dirección de recojo','Forma de pago','Estado de pago'];
 
 const HOJA_ORDENES_PAYPAL = 'Ordenes PayPal';
 const CAB_ORDENES_PAYPAL = ['Creada', 'Actualizada', 'Order ID', 'Estado', 'Request Key',
@@ -1736,7 +1741,8 @@ function guardarEnHoja(r) {
     new Date(), r.code, 'PAGADA', textoHoja(r.data.title), r.data.slug, r.data.tier || '—', r.data.date,
     r.calc.viajeros, r.calc.precio, r.total, r.paidAmount, r.balance, r.mode,
     textoHoja(r.data.holder.email), textoHoja(r.data.holder.phone), textoHoja(r.data.holder.notes || ''), textoHoja(pax),
-    r.orderId, r.captureId, textoHoja(r.payerEmail), textoHoja(r.data.departureTime || '')
+    r.orderId, r.captureId, textoHoja(r.payerEmail), textoHoja(r.data.departureTime || ''),
+    'pending_validation',textoHoja(r.data.pickupAddress || ''),'online','paid'
   ]);
   return { code: r.code, duplicate: false };
 }
@@ -1754,6 +1760,45 @@ function registrarError(error, contexto) {
   } catch (e) {
     console.error('No se pudo registrar el error:', error, e);
   }
+}
+
+/** Registra una solicitud sin cobrar. Nunca la presenta como pagada. */
+function registrarPagoEnTour(data) {
+  if (data.paymentMethod !== 'pay_on_tour') throw new Error('Forma de pago no válida.');
+  const calc = validarYCalcular(data);
+  const key = textoPlano(data.requestKey, 80);
+  if (!/^[a-zA-Z0-9]{16,80}$/.test(key)) throw new Error('Identificador de reserva inválido.');
+  const hoja = hojaReservas();
+  const valores = hoja.getDataRange().getValues();
+  for (let i = 1; i < valores.length; i++) {
+    if (String(valores[i][17]) === 'CASH:' + key) return { ok:true, bookingCode:String(valores[i][1]), balance:Number(valores[i][11]), paymentStatus:'pending' };
+  }
+  const code = generarCodigo();
+  const address = textoPlano(data.pickupAddress, 400);
+  const holder = data.holder || {};
+  const viajeros = (data.passengers || []).map(function (x) {
+    return textoPlano(x.name,120) + ' (' + textoPlano(x.docType,50) + ' ' + textoPlano(x.docNumber,50) + ')';
+  }).join(' | ');
+  // Guardar antes de enviar emails, para que el registro sea auditable.
+  hoja.appendRow([new Date(),code,'PENDIENTE DE CONFIRMACIÓN',textoHoja(data.title),textoPlano(data.slug,100),textoPlano(data.tier,50),data.date,
+    data.travelers,calc.precio,calc.total,0,calc.total,'pay_on_tour',textoHoja(holder.email),textoHoja(holder.phone),textoHoja(holder.notes),textoHoja(viajeros),
+    'CASH:'+key,'','',textoHoja(data.departureTime),'pending_validation',textoHoja(address),'pay_on_tour','pending']);
+  const mensaje = [
+    'NUEVA SOLICITUD DE RESERVA — NO PAGADA', 'Código: '+code,'Tour: '+data.title,'Fecha: '+data.date,
+    'Viajeros: '+data.travelers,'Importe referencial: USD '+calc.total,'PAGO: EFECTIVO AL INICIAR EL TOUR (PENDIENTE)',
+    'Titular: '+(data.passengers[0]||{}).name,'Correo: '+holder.email,'WhatsApp: '+holder.phone,
+    'Recojo: '+(address||'No indicado'),'Estado de recojo: PENDIENTE DE VALIDACIÓN',
+    'Comentarios: '+(holder.notes||''),'Pasajeros: '+viajeros
+  ].join('\n');
+  try {
+    MailApp.sendEmail({to:'contact@latamexpeditions.com', subject:'[Solicitud SIN PAGO] '+code+' · '+data.title, body:mensaje, name:'Latam Expeditions'});
+    MailApp.sendEmail({to:holder.email, subject:'Solicitud recibida · '+code+' · Latam Expeditions', body:'Hemos recibido tu solicitud para '+data.title+' el '+data.date+'.\nCódigo: '+code+'\nPago pendiente en efectivo al iniciar el tour.\nRevisaremos la dirección de recojo y te confirmaremos el horario o punto de encuentro.\nLa disponibilidad todavía no está confirmada.', name:'Latam Expeditions'});
+  } catch(e) {
+    registrarError(e, 'Correo pendiente para reserva '+code);
+    // La reserva ya quedó registrada; comunicar el error sin afirmar envío del correo.
+    return {ok:true, bookingCode:code, balance:calc.total, paymentStatus:'pending', emailSent:false};
+  }
+  return {ok:true, bookingCode:code, balance:calc.total, paymentStatus:'pending', emailSent:true};
 }
 
 /* ========================================================================== */
