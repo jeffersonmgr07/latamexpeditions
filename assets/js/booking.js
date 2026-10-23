@@ -1432,10 +1432,17 @@
             </div>
           </section>
 
-          <section class="booking-step booking-success" data-step="4">
-            <i class="fa-solid fa-circle-check" aria-hidden="true"></i><h2 id="bkSuccessTitle">Reserva confirmada</h2><p id="bkSuccessText"></p><p id="bkSuccessMethod"></p>
-            <p>Tu código de reserva es <strong id="bkCode">—</strong>.</p><p>Correo del titular / estado de notificación: <strong id="bkDoneEmail">—</strong>.</p><p id="bkDoneBalance"></p><p id="bkDoneAccount"></p>
-            <button type="button" class="btn-primary" data-close-booking>Cerrar</button>
+          <section class="booking-step booking-success" data-step="4" role="status" aria-live="polite">
+            <div class="booking-success__mark" aria-hidden="true">✓</div>
+            <span class="booking-success__eyebrow">LATAM EXPEDITIONS · RESERVAS</span>
+            <h2 id="bkSuccessTitle">¡Tus datos se enviaron correctamente!</h2>
+            <p id="bkSuccessText"></p>
+            <div class="booking-success__reference"><small>Número de solicitud</small><strong id="bkCode">—</strong></div>
+            <p id="bkSuccessMethod"></p>
+            <p id="bkDoneBalance"></p>
+            <p class="booking-success__email" id="bkDoneEmail"></p>
+            <p id="bkDoneAccount"></p>
+            <button type="button" class="btn-primary" data-close-booking>Entendido, cerrar</button>
           </section>
         </div>
         <div class="booking-actions" id="bkActions"><button type="button" class="btn-outline" id="bkBack" hidden>Volver</button><button type="button" class="btn-primary" id="bkNext">Continuar</button></div>
@@ -1652,44 +1659,98 @@
     } finally { if (timer) clearTimeout(timer); }
   }
 
-  // Envío directo a Apps Script sin CORS: formulario oculto + confirmación
-  // mediante consulta JSONP de un identificador aleatorio. No se leen datos personales por JSONP.
+  // Envío a Apps Script mediante un iframe oculto, sin leer respuestas CORS.
+  // El servidor notifica de forma directa con postMessage; JSONP/status queda
+  // como respaldo. Solo se muestra éxito tras recibir emailSent=true.
   async function submitEmailOnly(data) {
     if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/i.test(CONFIG.endpoint || '')) {
       throw new Error('Configura la URL /exec pública de Google Apps Script antes de recibir solicitudes.');
     }
-    const id = `latam_booking_${data.requestKey.slice(0,20)}`;
     const iframe = document.createElement('iframe');
-    iframe.name = id; iframe.hidden = true; iframe.setAttribute('aria-hidden','true');
+    const id = `latam_booking_${data.requestKey.slice(0,20)}`;
+    iframe.name = id;
+    iframe.hidden = true;
+    iframe.setAttribute('aria-hidden','true');
     const form = document.createElement('form');
-    form.hidden = true; form.method = 'POST'; form.target = id; form.action = CONFIG.endpoint;
-    for (const [name,value] of Object.entries({ action:'registerPayOnTour', payload:JSON.stringify(data) })) {
-      const field = document.createElement('input');field.type='hidden';field.name=name;field.value=value;form.appendChild(field);
+    form.hidden = true;
+    form.method = 'POST';
+    form.target = id;
+    form.action = CONFIG.endpoint;
+    const fields = { action: 'registerPayOnTour', payload: JSON.stringify(data) };
+    for (const [name, value] of Object.entries(fields)) {
+      const field = document.createElement('input');
+      field.type = 'hidden'; field.name = name; field.value = value;
+      form.appendChild(field);
     }
-    document.body.append(iframe,form);
-    const cleanup = () => { setTimeout(() => { iframe.remove();form.remove(); }, 4000); };
+    document.body.append(iframe, form);
+    let resolveDirect;
+    let finished = false;
+    const direct = new Promise(resolve => { resolveDirect = resolve; });
+    const isGoogleScriptOrigin = (origin) => {
+      try {
+        const url = new URL(origin);
+        return url.protocol === 'https:' && (
+          url.hostname === 'script.google.com' ||
+          url.hostname === 'script.googleusercontent.com' ||
+          url.hostname.endsWith('.script.googleusercontent.com')
+        );
+      } catch (_) { return false; }
+    };
+    const onMessage = (event) => {
+      if (!isGoogleScriptOrigin(event.origin)) return;
+      const reply = event.data;
+      if (reply?.type !== 'latam-booking-receipt' || reply.requestKey !== data.requestKey) return;
+      // Un estado pending no equivale a un correo enviado.
+      if (!reply.pending) resolveDirect(reply);
+    };
+    window.addEventListener('message', onMessage);
     const checkStatus = () => new Promise((resolve) => {
       const callback = `__latamReceipt_${data.requestKey.slice(0,20)}`;
       const script = document.createElement('script');
       let done = false;
-      const finish = (value) => { if(done)return; done=true; clearTimeout(timeout); delete window[callback]; script.remove(); resolve(value); };
+      const finish = (value) => {
+        if (done) return;
+        done = true;
+        clearTimeout(timeout);
+        delete window[callback];
+        script.remove();
+        resolve(value);
+      };
       window[callback] = finish;
-      const timeout=setTimeout(() => finish(null), 2800);
-      script.onerror=()=>finish(null);
-      const params = new URLSearchParams({ action:'status', requestKey:data.requestKey, callback, cache:Date.now().toString() });
-      script.src=`${CONFIG.endpoint.split('?')[0]}?${params.toString()}`;
+      const timeout = setTimeout(() => finish(null), 2300);
+      script.onerror = () => finish(null);
+      const params = new URLSearchParams({
+        action: 'status', requestKey: data.requestKey,
+        callback, cache: Date.now().toString()
+      });
+      script.src = `${CONFIG.endpoint.split('?')[0]}?${params.toString()}`;
       document.head.appendChild(script);
     });
+    const receipt = (reply) => {
+      if (!reply || reply.pending) return null;
+      if (reply.ok === true && reply.emailSent === true) return reply;
+      throw new Error(reply.error || 'El servidor no pudo registrar la solicitud. Revisa tu correo antes de volver a intentar.');
+    };
     try {
       form.submit();
-      for(let attempt=0;attempt<14;attempt++) {
-        await new Promise(resolve=>setTimeout(resolve,1300));
-        const result=await checkStatus();
-        if(result?.ok && result?.emailSent) return result;
-        if(result?.error) throw new Error(result.error);
+      for (let attempt = 0; attempt < 10; attempt++) {
+        const immediate = await Promise.race([
+          direct,
+          new Promise(resolve => setTimeout(() => resolve(null), 1600))
+        ]);
+        const confirmed = receipt(immediate);
+        if (confirmed) { finished = true; return confirmed; }
+        const fromStatus = await Promise.race([direct, checkStatus()]);
+        const fallback = receipt(fromStatus);
+        if (fallback) { finished = true; return fallback; }
       }
-      throw new Error('No pudimos verificar la recepción del correo. Antes de volver a enviar la solicitud, revisa el buzón contact@latamexpeditions.com para evitar duplicados.');
-    } finally { cleanup(); }
+      throw new Error('No pudimos confirmar el envío aunque puede haberse recibido. Revisa el correo contact@latamexpeditions.com antes de repetir la solicitud para evitar duplicados.');
+    } finally {
+      window.removeEventListener('message', onMessage);
+      // Mantener los nodos un instante permite completar el POST cuando
+      // recibimos el acuse muy pronto, sin dejar iframes permanentes.
+      setTimeout(() => { iframe.remove(); form.remove(); }, finished ? 800 : 4000);
+    }
   }
 
   function loadPayPal() {
@@ -1742,10 +1803,10 @@
 
   function showConfirmation(response) {
     $('#bkCode').textContent = response.bookingCode || '—';
-    $('#bkDoneEmail').textContent = response.emailSent === false ? 'El correo no pudo enviarse; contacta a nuestro equipo indicando tu código.' : state.holder.email;
+    $('#bkDoneEmail').textContent = state.paymentMethod === 'pay_on_tour' ? (response.clientEmailSent ? `Enviamos una copia a ${state.holder.email}.` : `Recibimos tu solicitud, pero no pudimos enviar la copia automática a ${state.holder.email}. Nuestro equipo se pondrá en contacto.`) : state.holder.email;
     const cash = state.paymentMethod === 'pay_on_tour';
-    $('#bkSuccessTitle').textContent = cash ? 'Registro recibido correctamente' : 'Reserva confirmada';
-    $('#bkSuccessText').textContent = cash ? 'Tu solicitud para el tour ' + PRODUCT.title + ' ha sido registrada. Nuestro equipo verificará tu dirección de recojo (si fue proporcionada) y te confirmará por correo electrónico o WhatsApp el horario de recojo o el punto de encuentro correspondiente. Este registro está pendiente de confirmación.' : '';
+    $('#bkSuccessTitle').textContent = cash ? '¡Tus datos se enviaron correctamente!' : 'Reserva confirmada';
+    $('#bkSuccessText').textContent = cash ? 'Recibimos tu solicitud para el tour ' + PRODUCT.title + '. Nuestro equipo verificará tu dirección de recojo (si fue proporcionada) y te confirmará por correo electrónico o WhatsApp el horario de recojo o el punto de encuentro correspondiente. Este registro está pendiente de confirmación.' : '';
     $('#bkSuccessMethod').textContent = cash ? 'Forma de pago: Pago en efectivo al iniciar el tour (pendiente).' : ''; 
     const balance = Number(response.balance || 0);
     const isEnglish = document.documentElement.lang === 'en';
