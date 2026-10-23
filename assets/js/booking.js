@@ -1145,8 +1145,15 @@
     const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${z.lat}%2C${z.lon}`;
     return `<p class="form-note">Zona de referencia: ${escapeHTML(z.center)}, ${escapeHTML(z.city)} (aprox. 1 km alrededor). <strong>Mapa orientativo: no garantiza recojo.</strong></p><iframe class="booking-pickup-map" title="Mapa orientativo de recojo en ${escapeHTML(z.city)}" loading="lazy" referrerpolicy="no-referrer" src="${src}"></iframe>`;
   }
-  const pickupNotice = 'Hemos recibido tu dirección. Nuestro equipo verificará si tu alojamiento se encuentra dentro de nuestra zona de recojo. Si está dentro de la cobertura, te informaremos la hora exacta de recojo por correo electrónico o WhatsApp. Si está fuera de nuestra zona de recojo, te enviaremos el punto de encuentro y la hora correspondiente.';
-  const onlineConfigured = () => Boolean(CONFIG?.paypalClientId && !CONFIG.paypalClientId.startsWith('PEGAR_AQUI') && CONFIG?.endpoint && !CONFIG.endpoint.startsWith('PEGAR_AQUI'));
+  const pickupNotice = 'Al enviar la solicitud, nuestro equipo revisará si tu alojamiento se encuentra en la ruta de recojo. Te comunicaremos por correo o WhatsApp la hora de recojo o el punto de encuentro, según corresponda. La ubicación del mapa es solo orientativa.';
+  // Backend actual: solo correo. No habilitar PayPal por error al añadir un Client ID.
+  const onlineConfigured = () => false; // Habilitar solo con un backend que implemente createOrder y captureOrder.
+
+  // Prefijos internacionales, con países y territorios. +51 seleccionado por defecto.
+  const PHONE_COUNTRIES = [["Afganistán","+93","AF"],["Albania","+355","AL"],["Alemania","+49","DE"],["Angola","+244","AO"],["Anguila","+1264","AI"],["Antigua y Barbuda","+1268","AG"],["Arabia Saudí","+966","SA"],["Argelia","+213","DZ"],["Argentina","+54","AR"],["Armenia","+374","AM"],["Aruba","+297","AW"],["Australia","+61","AU"],["Austria","+43","AT"],["Azerbaiyán","+994","AZ"],["Bahamas","+1242","BS"],["Bangladés","+880","BD"],["Barbados","+1246","BB"],["Baréin","+973","BH"],["Belice","+501","BZ"],["Benín","+229","BJ"],["Bermudas","+1441","BM"],["Bielorrusia","+375","BY"],["Bolivia","+591","BO"],["Bosnia y Herzegovina","+387","BA"],["Botsuana","+267","BW"],["Brasil","+55","BR"],["Brunéi","+673","BN"],["Bulgaria","+359","BG"],["Burkina Faso","+226","BF"],["Burundi","+257","BI"],["Bután","+975","BT"],["Bélgica","+32","BE"],["Cabo Verde","+238","CV"],["Camboya","+855","KH"],["Camerún","+237","CM"],["Canadá","+1","CA"],["Catar","+974","QA"],["Chad","+235","TD"],["Chequia","+420","CZ"],["Chile","+56","CL"],["China","+86","CN"],["Chipre","+357","CY"],["Colombia","+57","CO"],["Comoras","+269","KM"],["Congo","+242","CG"],["Corea del Norte","+850","KP"],["Corea del Sur","+82","KR"],["Costa Rica","+506","CR"],["Croacia","+385","HR"],["Cuba","+53","CU"],["Côte d’Ivoire","+225","CI"],["Dinamarca","+45","DK"],["Dominica","+1767","DM"],["Ecuador","+593","EC"],["Egipto","+20","EG"],["El Salvador","+503","SV"],["Emiratos Árabes Unidos","+971","AE"],["Eritrea","+291","ER"],["Eslovaquia","+421","SK"],["Eslovenia","+386","SI"],["España","+34","ES"],["Estados Unidos","+1","US"],["Estonia","+372","EE"],["Esuatini","+268","SZ"],["Etiopía","+251","ET"],["Filipinas","+63","PH"],["Finlandia","+358","FI"],["Fiyi","+679","FJ"],["Francia","+33","FR"],["Gabón","+241","GA"],["Gambia","+220","GM"],["Georgia","+995","GE"],["Ghana","+233","GH"],["Gibraltar","+350","GI"],["Granada","+1473","GD"],["Grecia","+30","GR"],["Groenlandia","+299","GL"],["Guadalupe","+590","GP"],["Guam","+1671","GU"],["Guatemala","+502","GT"],["Guayana Francesa","+594","GF"],["Guernesey","+44","GG"],["Guinea","+224","GN"],["Guinea Ecuatorial","+240","GQ"],["Guinea-Bisáu","+245","GW"],["Guyana","+592","GY"],["Haití","+509","HT"],["Honduras","+504","HN"],["Hungría","+36","HU"],["India","+91","IN"],["Indonesia","+62","ID"],["Irak","+964","IQ"],["Irlanda","+353","IE"],["Irán","+98","IR"],["Isla de Man","+44","IM"],["Isla de Navidad","+61","CX"],["Isla Norfolk","+672","NF"],["Islandia","+354","IS"],["Islas Caimán","+1345","KY"],["Islas Cocos","+61","CC"],["Islas Cook","+682","CK"],["Islas Feroe","+298","FO"],["Islas Georgia del Sur y Sandwich del Sur","+500","GS"],["Islas Malvinas","+500","FK"],["Islas Marianas del Norte","+1670","MP"],["Islas Marshall","+692","MH"],["Islas Pitcairn","+64","PN"],["Islas Salomón","+677","SB"],["Israel","+972","IL"],["Italia","+39","IT"],["Jamaica","+1876","JM"],["Japón","+81","JP"],["Jersey","+44","JE"],["Jordania","+962","JO"],["Kazajistán","+76","KZ"],["Kenia","+254","KE"],["Kirguistán","+996","KG"],["Kiribati","+686","KI"],["Kuwait","+965","KW"],["Laos","+856","LA"],["Lesoto","+266","LS"],["Letonia","+371","LV"],["Liberia","+231","LR"],["Libia","+218","LY"],["Liechtenstein","+423","LI"],["Lituania","+370","LT"],["Luxemburgo","+352","LU"],["Líbano","+961","LB"],["Macedonia del Norte","+389","MK"],["Madagascar","+261","MG"],["Malasia","+60","MY"],["Malaui","+265","MW"],["Maldivas","+960","MV"],["Mali","+223","ML"],["Malta","+356","MT"],["Marruecos","+212","MA"],["Martinica","+596","MQ"],["Mauricio","+230","MU"],["Mauritania","+222","MR"],["Mayotte","+262","YT"],["Micronesia","+691","FM"],["Moldavia","+373","MD"],["Mongolia","+976","MN"],["Montserrat","+1664","MS"],["Mozambique","+258","MZ"],["México","+52","MX"],["Mónaco","+377","MC"],["Namibia","+264","NA"],["Nauru","+674","NR"],["Nepal","+977","NP"],["Nicaragua","+505","NI"],["Nigeria","+234","NG"],["Niue","+683","NU"],["Noruega","+47","NO"],["Nueva Caledonia","+687","NC"],["Nueva Zelanda","+64","NZ"],["Níger","+227","NE"],["Omán","+968","OM"],["Pakistán","+92","PK"],["Palaos","+680","PW"],["Panamá","+507","PA"],["Papúa Nueva Guinea","+675","PG"],["Paraguay","+595","PY"],["Países Bajos","+31","NL"],["Perú","+51","PE"],["Polinesia Francesa","+689","PF"],["Polonia","+48","PL"],["Portugal","+351","PT"],["Puerto Rico","+1787","PR"],["RAE de Hong Kong (China)","+852","HK"],["RAE de Macao (China)","+853","MO"],["Reino Unido","+44","GB"],["República Centroafricana","+236","CF"],["República Democrática del Congo","+243","CD"],["República Dominicana","+1809","DO"],["Reunión","+262","RE"],["Ruanda","+250","RW"],["Rumanía","+40","RO"],["Rusia","+7","RU"],["Samoa","+685","WS"],["Samoa Americana","+1684","AS"],["San Cristóbal y Nieves","+1869","KN"],["San Marino","+378","SM"],["San Pedro y Miquelón","+508","PM"],["San Vicente y las Granadinas","+1784","VC"],["Santa Elena","+290","SH"],["Santa Lucía","+1758","LC"],["Santo Tomé y Príncipe","+239","ST"],["Senegal","+221","SN"],["Serbia","+381","RS"],["Seychelles","+248","SC"],["Sierra Leona","+232","SL"],["Singapur","+65","SG"],["Siria","+963","SY"],["Somalia","+252","SO"],["Sri Lanka","+94","LK"],["Sudáfrica","+27","ZA"],["Sudán","+249","SD"],["Sudán del Sur","+211","SS"],["Suecia","+46","SE"],["Suiza","+41","CH"],["Surinam","+597","SR"],["Svalbard y Jan Mayen","+4779","SJ"],["Sáhara Occidental","+212","EH"],["Tailandia","+66","TH"],["Taiwán","+886","TW"],["Tanzania","+255","TZ"],["Tayikistán","+992","TJ"],["Territorio Británico del Océano Índico","+246","IO"],["Timor-Leste","+670","TL"],["Togo","+228","TG"],["Tokelau","+690","TK"],["Tonga","+676","TO"],["Trinidad y Tobago","+1868","TT"],["Turkmenistán","+993","TM"],["Turquía","+90","TR"],["Tuvalu","+688","TV"],["Túnez","+216","TN"],["Ucrania","+380","UA"],["Uganda","+256","UG"],["Uruguay","+598","UY"],["Uzbekistán","+998","UZ"],["Vanuatu","+678","VU"],["Venezuela","+58","VE"],["Vietnam","+84","VN"],["Wallis y Futuna","+681","WF"],["Yemen","+967","YE"],["Yibuti","+253","DJ"],["Zambia","+260","ZM"],["Zimbabue","+263","ZW"]];
+  const phoneCodeOptions = () => PHONE_COUNTRIES.map(([country, dial, iso]) =>
+    `<option value="${escapeHTML(dial)}" ${iso === 'PE' ? 'selected' : ''}>${escapeHTML(dial)} · ${escapeHTML(country)}</option>`
+  ).join('');
 
   const nationalityOptions = () => `<option value="" data-en="Select a nationality">Selecciona una nacionalidad</option>${COUNTRIES.map(([es, en]) => `<option value="${escapeHTML(es)}" data-en="${escapeHTML(en)}">${escapeHTML(es)}</option>`).join('')}`;
   const numberOptions = (min, max, selected) => Array.from({ length: max - min + 1 }, (_, i) => i + min).map((n) => `<option value="${n}" ${n === selected ? 'selected' : ''}>${n}</option>`).join('');
@@ -1350,9 +1357,9 @@
                 <input type="hidden" id="bkDate" value="">
                 <div class="booking-calendar" id="bkCalendar" role="dialog" aria-label="Seleccionar fecha del tour" hidden>
                   <div class="booking-calendar__head">
-                    <button type="button" class="booking-calendar__nav" id="bkCalPrev" aria-label="Mes anterior"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+                    <button type="button" class="booking-calendar__nav" id="bkCalPrev" aria-label="Mes anterior"><span aria-hidden="true">‹</span></button>
                     <strong id="bkCalMonth">—</strong>
-                    <button type="button" class="booking-calendar__nav" id="bkCalNext" aria-label="Mes siguiente"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+                    <button type="button" class="booking-calendar__nav" id="bkCalNext" aria-label="Mes siguiente"><span aria-hidden="true">›</span></button>
                   </div>
                   <div class="booking-calendar__weekdays" aria-hidden="true"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
                   <div class="booking-calendar__grid" id="bkCalGrid"></div>
@@ -1365,8 +1372,8 @@
             <div class="booking-subsection">
               <h3>Viajeros</h3>
               <div class="booking-form-grid booking-form-grid--3 travelers-grid">
-                <div class="form-field"><label for="bkAdults">Adultos</label><select id="bkAdults">${numberOptions(1, 12, state.adults)}</select></div>
-                <div class="form-field"><label for="bkChildren">Niños</label><select id="bkChildren">${numberOptions(0, 8, state.children)}</select><small>${PRODUCT.childMinAge ? `${PRODUCT.childMinAge} a 11 años · menores, coordinar por WhatsApp` : '0 a 11 años'}</small></div>
+                <div class="form-field"><label for="bkAdults">Adultos</label><div class="booking-counter" role="group" aria-label="Número de adultos"><button type="button" data-counter="bkAdults" data-change="-1" aria-label="Quitar un adulto">−</button><input type="number" id="bkAdults" min="1" max="12" value="${state.adults}" readonly aria-label="Adultos"><button type="button" data-counter="bkAdults" data-change="1" aria-label="Añadir un adulto">+</button></div></div>
+                <div class="form-field"><label for="bkChildren">Niños</label><div class="booking-counter" role="group" aria-label="Número de niños"><button type="button" data-counter="bkChildren" data-change="-1" aria-label="Quitar un niño">−</button><input type="number" id="bkChildren" min="0" max="8" value="${state.children}" readonly aria-label="Niños"><button type="button" data-counter="bkChildren" data-change="1" aria-label="Añadir un niño">+</button></div><small>${PRODUCT.childMinAge ? `${PRODUCT.childMinAge} a 11 años · menores, coordinar por WhatsApp` : '0 a 11 años'}</small></div>
                 <div class="traveler-total"><span>Total de viajeros</span><strong id="bkTravelerTotal">${state.travelers}</strong></div>
               </div>
             </div>
@@ -1375,15 +1382,15 @@
               <h3>Contacto del titular</h3>
               <div class="booking-form-grid booking-form-grid--2">
                 <div class="form-field"><label for="bkEmail">Correo del titular</label><input type="email" id="bkEmail" autocomplete="email" required><span class="form-error">Escribe un correo válido.</span></div>
-                <div class="form-field"><label for="bkPhone">Teléfono / WhatsApp</label><input type="tel" id="bkPhone" autocomplete="tel" minlength="5" required><span class="form-error">Escribe un teléfono válido.</span></div>
-              </div>
-              <div class="booking-subsection booking-pickup">
-                <h3>Dirección de recojo (opcional)</h3>
-                <div class="form-field"><label for="bkPickup">Hotel / Airbnb / Dirección de recojo</label><textarea id="bkPickup" rows="2" maxlength="400" placeholder="Ingresa el nombre y dirección completa de tu hotel o Airbnb"></textarea></div>
-                <div id="bkPickupMap">${pickupMapHTML()}</div>
-                <p class="booking-pickup-notice" id="bkPickupNotice" hidden></p>
+                <div class="form-field booking-phone-field"><label for="bkPhone">Teléfono / WhatsApp</label><div class="booking-phone-combined"><label class="visually-hidden" for="bkPhoneDial">Código de país</label><select id="bkPhoneDial" required aria-label="Código de país" title="Selecciona el país">${phoneCodeOptions()}</select><input type="tel" id="bkPhone" inputmode="tel" autocomplete="tel-national" placeholder="Número de WhatsApp" pattern="[0-9 ()\-]{6,25}" minlength="6" maxlength="25" required aria-label="Número de WhatsApp"></div><span class="form-error">Escribe un WhatsApp válido e indica su código de país.</span></div>
               </div>
               <div class="form-field"><label for="bkNotes">Comentarios o solicitudes (opcional)</label><textarea id="bkNotes" rows="3" maxlength="1200"></textarea></div>
+            </div>
+            <div class="booking-subsection booking-pickup">
+              <h3>Dirección de recojo (opcional)</h3>
+              <div class="form-field"><label for="bkPickup">Hotel / Airbnb / Dirección de recojo</label><textarea id="bkPickup" rows="2" maxlength="400" placeholder="Ingresa el nombre y dirección completa de tu hotel o Airbnb"></textarea></div>
+              <div id="bkPickupMap">${pickupMapHTML()}</div>
+              <p class="booking-pickup-notice" id="bkPickupNotice" hidden></p>
             </div>
           </section>
 
@@ -1400,6 +1407,9 @@
               <div class="fact-row"><span>Adultos</span><strong id="bkSumAdults">—</strong></div>
               <div class="fact-row"><span>Niños</span><strong id="bkSumChildren">—</strong></div>
               <div class="fact-row"><span>Total de viajeros</span><strong id="bkSumPax">—</strong></div>
+              <div class="fact-row"><span>Correo de contacto</span><strong id="bkSumEmail">—</strong></div>
+              <div class="fact-row"><span>WhatsApp</span><strong id="bkSumPhone">—</strong></div>
+              <div class="fact-row" id="bkSumPickupRow" hidden><span>Dirección propuesta de recojo (por validar)</span><strong id="bkSumPickup">—</strong></div>
               <div class="fact-row" ${PRODUCT.tiers.length ? '' : 'hidden'}><span data-en="Hotel option">Opción de hotel</span><strong id="bkSumTier">—</strong></div>
               <div class="fact-row" ${PRODUCT.tiers.length ? '' : 'hidden'}><span>Acomodación</span><strong id="bkSumOccupancy">—</strong></div>
               <div class="fact-row"><span>Tarifa adulto</span><strong id="bkSumAdultUnit">—</strong></div>
@@ -1459,14 +1469,16 @@
     state.children = Number($('#bkChildren').value);
     state.tier = $('#bkTier')?.value || state.tier;
     state.occupancy = $('#bkOccupancy')?.value || 'double';
-    state.holder = { email: $('#bkEmail').value.trim(), phone: $('#bkPhone').value.trim(), notes: $('#bkNotes').value.trim() };
+    const dialCode = $('#bkPhoneDial').value;
+    const nationalNumber = $('#bkPhone').value.replace(/\D/g, '');
+    state.holder = { email: $('#bkEmail').value.trim(), phone: `${dialCode}${nationalNumber}`, phoneCountryCode: dialCode, phoneNational: nationalNumber, notes: $('#bkNotes').value.trim() };
     state.pickupAddress = $('#bkPickup').value.trim();
     state.pickupStatus = 'pending_validation';
     recalculate();
   }
 
   function validateStep1() {
-    const inputs = ['#bkDeparture','#bkEmail','#bkPhone'].map((selector) => $(selector)).filter(Boolean);
+    const inputs = ['#bkDeparture','#bkEmail','#bkPhoneDial','#bkPhone'].map((selector) => $(selector)).filter(Boolean);
     let valid = inputs.every(fieldValid);
     const dateValue = $('#bkDate')?.value || '';
     const minValue = $('#bkDate')?.dataset.min || '';
@@ -1495,10 +1507,21 @@
           <div class="form-field"><label for="paxNationality${index}">Nacionalidad</label><select id="paxNationality${index}" data-pax-field="nationality" required>${nationalityOptions()}</select><span class="form-error">Selecciona una nacionalidad.</span></div>
           <div class="form-field"><label for="paxDocType${index}">Tipo de documento</label><select id="paxDocType${index}" data-pax-field="docType" required>${documentTypes.map((typeName) => `<option value="${escapeHTML(typeName)}" ${typeName === defaultDocument ? 'selected' : ''}>${escapeHTML(typeName)}</option>`).join('')}</select></div>
           <div class="form-field"><label for="paxDoc${index}">Número de documento</label><input id="paxDoc${index}" data-pax-field="docNumber" required maxlength="50"><span class="form-error">Completa el documento.</span></div>
-          <div class="form-field passenger-birth-field"><label for="paxBirth${index}">Fecha de nacimiento</label><input type="date" id="paxBirth${index}" data-pax-field="birth" required max="${new Date().toISOString().slice(0,10)}"><span class="passenger-age" id="paxAge${index}" aria-live="polite">Edad: —</span><span class="form-error">Completa una fecha válida.</span></div>
+          <div class="form-field passenger-birth-field" data-birth-calendar><label for="paxBirth${index}">Fecha de nacimiento</label>
+            <button type="button" class="booking-date-trigger" data-birth-trigger aria-haspopup="dialog" aria-expanded="false" aria-label="Elegir fecha de nacimiento"><span data-birth-display>Selecciona la fecha de nacimiento</span><i class="fa-regular fa-calendar" aria-hidden="true"></i></button>
+            <input type="date" class="booking-birth-native" id="paxBirth${index}" data-pax-field="birth" required min="1900-01-01" max="${isoDate(new Date())}" tabindex="-1" aria-label="Fecha de nacimiento seleccionada">
+            <div class="booking-calendar booking-birth-calendar" role="dialog" aria-label="Seleccionar fecha de nacimiento" hidden>
+              <div class="booking-calendar__head"><button type="button" class="booking-calendar__nav" data-birth-prev aria-label="Mes anterior"><span aria-hidden="true">‹</span></button><strong data-birth-month>—</strong><button type="button" class="booking-calendar__nav" data-birth-next aria-label="Mes siguiente"><span aria-hidden="true">›</span></button></div>
+              <div class="booking-birth-jump"><select data-birth-month-select aria-label="Mes de nacimiento"></select><select data-birth-year-select aria-label="Año de nacimiento"></select></div>
+              <div class="booking-calendar__weekdays" aria-hidden="true"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+              <div class="booking-calendar__grid" data-birth-grid></div>
+            </div>
+            <span class="passenger-age" id="paxAge${index}" aria-live="polite">Edad: —</span><span class="form-error">Completa una fecha válida.</span>
+          </div>
         </div>
       </fieldset>`).join('');
     list.querySelectorAll('[data-pax-field="birth"]').forEach((input) => {
+      setupPassengerBirthCalendar(input);
       const updateAge = () => {
         const age = ageOnTravelDate(input.value);
         const output = input.closest('.passenger-birth-field')?.querySelector('.passenger-age');
@@ -1540,6 +1563,10 @@
     $('#bkSumAdults').textContent = String(state.adults);
     $('#bkSumChildren').textContent = String(state.children);
     $('#bkSumPax').textContent = String(state.travelers);
+    $('#bkSumEmail').textContent = state.holder.email;
+    $('#bkSumPhone').textContent = state.holder.phone;
+    $('#bkSumPickupRow').hidden = !state.pickupAddress;
+    $('#bkSumPickup').textContent = state.pickupAddress || '—';
     if (PRODUCT.tiers.length) {
       const tier = getTier();
       $('#bkSumTier').textContent = tierOptionLabel(tier);
@@ -1625,6 +1652,46 @@
     } finally { if (timer) clearTimeout(timer); }
   }
 
+  // Envío directo a Apps Script sin CORS: formulario oculto + confirmación
+  // mediante consulta JSONP de un identificador aleatorio. No se leen datos personales por JSONP.
+  async function submitEmailOnly(data) {
+    if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/i.test(CONFIG.endpoint || '')) {
+      throw new Error('Configura la URL /exec pública de Google Apps Script antes de recibir solicitudes.');
+    }
+    const id = `latam_booking_${data.requestKey.slice(0,20)}`;
+    const iframe = document.createElement('iframe');
+    iframe.name = id; iframe.hidden = true; iframe.setAttribute('aria-hidden','true');
+    const form = document.createElement('form');
+    form.hidden = true; form.method = 'POST'; form.target = id; form.action = CONFIG.endpoint;
+    for (const [name,value] of Object.entries({ action:'registerPayOnTour', payload:JSON.stringify(data) })) {
+      const field = document.createElement('input');field.type='hidden';field.name=name;field.value=value;form.appendChild(field);
+    }
+    document.body.append(iframe,form);
+    const cleanup = () => { setTimeout(() => { iframe.remove();form.remove(); }, 4000); };
+    const checkStatus = () => new Promise((resolve) => {
+      const callback = `__latamReceipt_${data.requestKey.slice(0,20)}`;
+      const script = document.createElement('script');
+      let done = false;
+      const finish = (value) => { if(done)return; done=true; clearTimeout(timeout); delete window[callback]; script.remove(); resolve(value); };
+      window[callback] = finish;
+      const timeout=setTimeout(() => finish(null), 2800);
+      script.onerror=()=>finish(null);
+      const params = new URLSearchParams({ action:'status', requestKey:data.requestKey, callback, cache:Date.now().toString() });
+      script.src=`${CONFIG.endpoint.split('?')[0]}?${params.toString()}`;
+      document.head.appendChild(script);
+    });
+    try {
+      form.submit();
+      for(let attempt=0;attempt<14;attempt++) {
+        await new Promise(resolve=>setTimeout(resolve,1300));
+        const result=await checkStatus();
+        if(result?.ok && result?.emailSent) return result;
+        if(result?.error) throw new Error(result.error);
+      }
+      throw new Error('No pudimos verificar la recepción del correo. Antes de volver a enviar la solicitud, revisa el buzón contact@latamexpeditions.com para evitar duplicados.');
+    } finally { cleanup(); }
+  }
+
   function loadPayPal() {
     if (window.paypal) return Promise.resolve(window.paypal);
     return new Promise((resolve, reject) => {
@@ -1703,7 +1770,76 @@
     try { user = JSON.parse(localStorage.getItem('latamExpeditionsUser') || 'null'); } catch (_) {}
     if (!user) return;
     if (!$('#bkEmail').value && user.email) $('#bkEmail').value = user.email;
-    if (!$('#bkPhone').value && user.phone) $('#bkPhone').value = user.phone;
+    if (!$('#bkPhone').value && user.phone) {
+      const stored = String(user.phone).trim();
+      const digits = stored.replace(/\D/g, '');
+      const codes = [...new Set(PHONE_COUNTRIES.map(([, dial]) => dial))].sort((a,b) => b.length - a.length);
+      const match = stored.startsWith('+') ? codes.find((dial) => digits.startsWith(dial.slice(1))) : null;
+      if (match) {
+        $('#bkPhoneDial').value = match;
+        $('#bkPhone').value = digits.slice(match.length - 1);
+      } else $('#bkPhone').value = digits;
+    }
+  }
+
+  function setupPassengerBirthCalendar(input) {
+    const field = input.closest('[data-birth-calendar]');
+    const trigger = field.querySelector('[data-birth-trigger]');
+    const calendar = field.querySelector('.booking-birth-calendar');
+    const grid = field.querySelector('[data-birth-grid]');
+    const display = field.querySelector('[data-birth-display]');
+    const monthTitle = field.querySelector('[data-birth-month]');
+    const monthSelect = field.querySelector('[data-birth-month-select]');
+    const yearSelect = field.querySelector('[data-birth-year-select]');
+    const prev = field.querySelector('[data-birth-prev]');
+    const next = field.querySelector('[data-birth-next]');
+    const today = new Date(); today.setHours(12,0,0,0);
+    // Año y mes desplegables: no es necesario retroceder decenas de años clic a clic.
+    const monthFormatter = new Intl.DateTimeFormat(bookingLocale(), { month:'long' });
+    monthSelect.innerHTML = Array.from({length:12}, (_,i) => `<option value="${i}">${monthFormatter.format(new Date(2020,i,1))}</option>`).join('');
+    yearSelect.innerHTML = Array.from({length:today.getFullYear()-1899}, (_,i) => `<option value="${today.getFullYear()-i}">${today.getFullYear()-i}</option>`).join('');
+    let view = new Date(today.getFullYear()-25, today.getMonth(), 1);
+    const hide = () => { calendar.hidden=true; trigger.setAttribute('aria-expanded', 'false'); };
+    const render = () => {
+      const monthText = new Intl.DateTimeFormat(bookingLocale(), {month:'long',year:'numeric'}).format(view);
+      monthTitle.textContent = monthText.charAt(0).toUpperCase()+monthText.slice(1);
+      monthSelect.value = String(view.getMonth()); yearSelect.value = String(view.getFullYear());
+      const first = new Date(view.getFullYear(),view.getMonth(),1);
+      const mondayOffset=(first.getDay()+6)%7;
+      const start=new Date(first);start.setDate(1-mondayOffset);
+      grid.innerHTML = Array.from({length:42},(_,i)=>{
+        const day=new Date(start);day.setDate(start.getDate()+i);
+        const value=isoDate(day);const outside=day.getMonth()!==view.getMonth();
+        const disabled=day>today || day.getFullYear()<1900;
+        return `<button type="button" data-birth-date="${value}" class="booking-calendar__day${outside ? ' is-outside' : ''}${value===input.value ? ' is-selected' : ''}" ${disabled ? 'disabled' : ''} aria-label="${escapeHTML(formatBookingDate(value))}">${day.getDate()}</button>`;
+      }).join('');
+      prev.disabled=view.getFullYear()===1900 && view.getMonth()===0;
+      next.disabled=view.getFullYear()===today.getFullYear() && view.getMonth()===today.getMonth();
+    };
+    trigger.addEventListener('click', () => {
+      if (!calendar.hidden) {hide();return;}
+      document.querySelectorAll('.booking-calendar:not([hidden])').forEach((node) => {node.hidden=true;node.closest('.form-field')?.querySelector('[aria-expanded]')?.setAttribute('aria-expanded','false');});
+      const selected=parseISODate(input.value);
+      if(selected)view=new Date(selected.getFullYear(),selected.getMonth(),1);
+      render();calendar.hidden=false;trigger.setAttribute('aria-expanded','true');
+    });
+    prev.addEventListener('click',()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);render();});
+    next.addEventListener('click',()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);render();});
+    const jump=()=>{view=new Date(Number(yearSelect.value),Number(monthSelect.value),1);render();};
+    monthSelect.addEventListener('change',jump);yearSelect.addEventListener('change',jump);
+    grid.addEventListener('click',(event)=>{
+      const button=event.target.closest('[data-birth-date]');
+      if(!button || button.disabled)return;
+      input.value=button.dataset.birthDate;
+      display.textContent=formatBookingDate(input.value);
+      field.classList.remove('has-error');
+      hide();input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));
+    });
+    document.addEventListener('click', function closeOutside(event) {
+      if (!field.isConnected) {document.removeEventListener('click',closeOutside);return;}
+      if (!calendar.hidden && !field.contains(event.target))hide();
+    });
+    field.addEventListener('keydown',(event)=>{if(event.key==='Escape' && !calendar.hidden){hide();trigger.focus();}});
   }
 
   function setupBookingCalendar(minDate) {
@@ -1806,10 +1942,28 @@
     minDate.setHours(12, 0, 0, 0);
     minDate.setDate(minDate.getDate() + CONFIG.minLeadDays);
     setupBookingCalendar(minDate);
+    const refreshCounters = () => {
+      const currentTotal = Number($('#bkAdults').value) + Number($('#bkChildren').value);
+      $$('.booking-counter button').forEach((button) => {
+        const input = document.getElementById(button.dataset.counter);
+        const delta = Number(button.dataset.change);
+        const nextValue = Number(input.value) + delta;
+        button.disabled = nextValue < Number(input.min) || nextValue > Number(input.max) || (delta > 0 && currentTotal >= Number(CONFIG.maxTravelers || 12));
+      });
+    };
+    $$('.booking-counter button').forEach((button) => button.addEventListener('click', () => {
+      const input = document.getElementById(button.dataset.counter);
+      if (!input || button.disabled) return;
+      const nextValue = Math.max(Number(input.min), Math.min(Number(input.max), Number(input.value) + Number(button.dataset.change)));
+      if (nextValue === Number(input.value)) return;
+      input.value = String(nextValue);
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }));
     ['#bkAdults','#bkChildren','#bkTier','#bkOccupancy'].forEach((selector) => $(selector)?.addEventListener('change', () => {
       state.adults = Number($('#bkAdults').value); state.children = Number($('#bkChildren').value);
-      state.tier = $('#bkTier')?.value || state.tier; state.occupancy = $('#bkOccupancy')?.value || state.occupancy; recalculate();
+      state.tier = $('#bkTier')?.value || state.tier; state.occupancy = $('#bkOccupancy')?.value || state.occupancy; recalculate(); refreshCounters();
     }));
+    refreshCounters();
 
     $('#bkNext').addEventListener('click', async () => {
       if (step === 1) {
@@ -1839,7 +1993,7 @@
       $('#bkSubmitCash').textContent = 'Enviando solicitud…';
       try {
         state.paymentMethod = 'pay_on_tour';
-        const response = await callBackend('registerPayOnTour', payload());
+        const response = await submitEmailOnly(payload());
         showConfirmation(response);
       } catch (error) {
         showError(error.message || 'No pudimos registrar tu solicitud. Inténtalo nuevamente.');

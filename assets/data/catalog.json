@@ -9511,7 +9511,7 @@
     "depositMax": 500,
     "currency": "USD",
     "maxTravelers": 12,
-    "minLeadDays": 3,
+    "minLeadDays": 1,
     "paypalClientId": "PEGAR_AQUI_TU_CLIENT_ID_DE_PAYPAL",
     "paypalEnvironment": "sandbox",
     "endpoint": "PEGAR_AQUI_LA_URL_DE_TU_APPS_SCRIPT",
