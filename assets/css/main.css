@@ -1778,3 +1778,12 @@ details.detail-card summary::marker{color:var(--latam-gold);}
 .booking-success--unverified .booking-success__reference { background:#fffaf0;border-color:#ebdfc2; }
 .booking-success--unverified .booking-success__reference strong { color:#8b621a; }
 #bkCheckReceipt:not([hidden]) { margin:16px 8px 0 0; }
+
+/* Marca corporativa transparente en confirmaciones (normal y por verificar).
+   Se utiliza la misma imagen en PC y móvil sin sustituirla por ? o ✓. */
+.booking-success__mark { background:#fff; border-color:#dbe6dc; }
+.booking-success__brand-mark { display:block; height:54px; max-width:56px; width:auto; object-fit:contain; }
+.booking-success--unverified .booking-success__mark { background:#fff; border-color:#ead7a8; }
+@media (max-width:600px) {
+  .booking-success__brand-mark { height:50px; max-width:50px; }
+}

@@ -1433,7 +1433,7 @@
           </section>
 
           <section class="booking-step booking-success" data-step="4" role="status" aria-live="polite">
-            <div class="booking-success__mark" aria-hidden="true">✓</div>
+            <div class="booking-success__mark" aria-hidden="true"><img class="booking-success__brand-mark" src="${escapeHTML(assetURL('assets/img/isotipo-latam-expeditions.png'))}" alt="" loading="eager"></div>
             <span class="booking-success__eyebrow">LATAM EXPEDITIONS · RESERVAS</span>
             <h2 id="bkSuccessTitle">¡Tus datos se enviaron correctamente!</h2>
             <p id="bkSuccessText"></p>
@@ -1615,6 +1615,14 @@
   function requestKey() {
     if (crypto?.randomUUID) return crypto.randomUUID().replace(/-/g, '');
     return `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`.slice(0, 64);
+  }
+
+  // Código de seguimiento calculado a partir del ID que se envía a Apps Script.
+  // Existe antes de la confirmación y NO implica que el correo haya sido recibido.
+  // Mantener el mismo algoritmo en backend/ReservasSoloCorreo.gs.
+  function bookingCodeFromKey(key) {
+    const id = String(key || '').replace(/[^A-Za-z0-9]/g, '');
+    return id.length >= 16 ? `LE-${id.slice(0, 12).toUpperCase()}` : '';
   }
 
   function payload() {
@@ -1808,10 +1816,9 @@
 
   function showUnverifiedConfirmation() {
     $('.booking-success').classList.add('booking-success--unverified');
-    $('.booking-success__mark').textContent = '?';
-    $('#bkSuccessTitle').textContent = 'Solicitud enviada · Verificación pendiente';
-    $('#bkSuccessText').textContent = 'Tus datos fueron enviados desde el formulario, pero Google Apps Script no devolvió un comprobante al navegador. Es posible que nuestro equipo ya los haya recibido. No envíes nuevamente la solicitud: revisa primero si recibiste la copia en tu correo y, si lo necesitas, consúltanos por WhatsApp.';
-    $('#bkCode').textContent = 'Pendiente de verificar';
+    $('#bkSuccessTitle').textContent = 'Solicitud enviada · Recepción por verificar';
+    $('#bkSuccessText').textContent = 'Tu solicitud fue enviada desde esta página. La confirmación automática de recepción aún no está disponible. Conserva el número de solicitud y revisa si recibiste nuestra copia por correo. Para evitar duplicados, no completes otro envío mientras verificamos su recepción.';
+    $('#bkCode').textContent = bookingCodeFromKey(state.requestKey) || '—';
     $('#bkSuccessMethod').textContent = 'Forma de pago: Pago en efectivo al iniciar el tour (pendiente).';
     $('#bkDoneBalance').textContent = `Pago pendiente: ${money(state.total)}.`;
     $('#bkDoneEmail').textContent = `Correo indicado: ${state.holder.email}. La copia al cliente tampoco puede verificarse desde esta pantalla.`;
@@ -1871,9 +1878,8 @@
 
   function showConfirmation(response) {
     $('.booking-success').classList.remove('booking-success--unverified');
-    $('.booking-success__mark').textContent = '✓';
     $('#bkCheckReceipt').hidden = true;
-    $('#bkCode').textContent = response.bookingCode || '—';
+    $('#bkCode').textContent = response.bookingCode || bookingCodeFromKey(state.requestKey) || '—';
     $('#bkDoneEmail').textContent = state.paymentMethod === 'pay_on_tour' ? (response.clientEmailSent ? `Enviamos una copia a ${state.holder.email}.` : `Recibimos tu solicitud, pero no pudimos enviar la copia automática a ${state.holder.email}. Nuestro equipo se pondrá en contacto.`) : state.holder.email;
     const cash = state.paymentMethod === 'pay_on_tour';
     $('#bkSuccessTitle').textContent = cash ? '¡Tus datos se enviaron correctamente!' : 'Reserva confirmada';
