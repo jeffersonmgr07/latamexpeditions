@@ -9514,7 +9514,7 @@
     "minLeadDays": 1,
     "paypalClientId": "PEGAR_AQUI_TU_CLIENT_ID_DE_PAYPAL",
     "paypalEnvironment": "sandbox",
-    "endpoint": "PEGAR_AQUI_LA_URL_DE_TU_APPS_SCRIPT",
+    "endpoint": "https://script.google.com/macros/s/AKfycbyskPa7iRuzuH9Kr6oF0i9bA8kuWWT2Z10yazJT0Qsig6z5KgpuNg_lLmusoa5eJDg74w/exec",
     "documentTypes": [
       "Pasaporte",
       "DNI / Cédula de identidad / ID",
