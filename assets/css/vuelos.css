@@ -81,3 +81,21 @@
   .flight-results { padding:17px; }
   .flight-whatsapp { width:100%; }
 }
+
+/* Tarjetas de tarifas observadas — fase 2 */
+.flight-live-offers { display:grid; gap:10px; margin:14px 0; }
+.flight-offers-heading { margin:0 0 4px !important; max-width:none !important; font-weight:800 !important; font-size:14px !important; line-height:1.5 !important; color:#154730 !important; }
+.flight-offer { display:flex; align-items:center; justify-content:space-between; gap:16px; background:#f8fbf9; padding:15px 17px; border:1px solid #d8e7dd; border-radius:12px; }
+.flight-offer>div { display:grid; gap:6px; min-width:0; }
+.flight-offer b { font-size:14px; color:#143f2d; }
+.flight-offer span { color:#456254; font-size:12px; line-height:1.4; }
+.flight-offer small { font-size:11px; color:#658174; }
+.flight-offer__price { white-space:nowrap; color:#0a593e; font-family:Montserrat,Inter,sans-serif; font-size:clamp(17px,2.2vw,24px); }
+.hero--flights .flight-offers-source { max-width:none; margin:7px 0 0; font-weight:500; font-size:11px; line-height:1.5; color:#657e70; }
+.flight-submit[disabled] { opacity:.75; cursor:progress; transform:none; }
+@media(max-width:520px) {
+  .flight-offer { padding:12px; gap:8px; }
+  .flight-offer b { font-size:12px; }
+  .flight-offer span { font-size:11px; }
+  .flight-offer__price { font-size:17px; }
+}
