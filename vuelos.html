@@ -124,22 +124,38 @@
               <div class="flight-field">
                 <label for="flightOrigin"><i class="fa-solid fa-plane-departure" aria-hidden="true"></i> Origen</label>
                 <select id="flightOrigin" name="origin" required>
-                  <option value="LIM">Lima, Perú (LIM)</option><option value="CUZ">Cusco, Perú (CUZ)</option><option value="AQP">Arequipa, Perú (AQP)</option>
-                  <option value="MDE">Medellín, Colombia (MDE)</option><option value="BOG">Bogotá, Colombia (BOG)</option><option value="CTG">Cartagena, Colombia (CTG)</option>
-                  <option value="SCL">Santiago, Chile (SCL)</option><option value="EZE">Buenos Aires, Argentina (EZE)</option><option value="GRU">São Paulo, Brasil (GRU)</option>
-                  <option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún, México (CUN)</option><option value="PTY">Ciudad de Panamá (PTY)</option>
-                  <option value="CCS">Caracas, Venezuela (CCS)</option><option value="BLA">Barcelona, Venezuela (BLA)</option>
+                  <optgroup label="Perú"><option value="LIM" selected>Lima (LIM)</option><option value="CUZ">Cusco (CUZ)</option><option value="AQP">Arequipa (AQP)</option><option value="JUL">Juliaca (JUL)</option><option value="PIU">Piura (PIU)</option><option value="TRU">Trujillo (TRU)</option><option value="IQT">Iquitos (IQT)</option><option value="TPP">Tarapoto (TPP)</option><option value="CIX">Chiclayo (CIX)</option><option value="PEM">Puerto Maldonado (PEM)</option></optgroup>
+                  <optgroup label="Colombia"><option value="BOG">Bogotá (BOG)</option><option value="MDE">Medellín (MDE)</option><option value="CTG">Cartagena (CTG)</option><option value="CLO">Cali (CLO)</option><option value="SMR">Santa Marta (SMR)</option><option value="ADZ">San Andrés (ADZ)</option><option value="PEI">Pereira (PEI)</option><option value="LET">Leticia (LET)</option></optgroup>
+                  <optgroup label="Ecuador"><option value="UIO">Quito (UIO)</option><option value="GYE">Guayaquil (GYE)</option></optgroup>
+                  <optgroup label="Chile"><option value="SCL">Santiago (SCL)</option><option value="ANF">Antofagasta (ANF)</option></optgroup>
+                  <optgroup label="Argentina"><option value="EZE">Buenos Aires (Ezeiza) (EZE)</option><option value="AEP">Buenos Aires (Aeroparque) (AEP)</option><option value="COR">Córdoba (COR)</option><option value="MDZ">Mendoza (MDZ)</option></optgroup>
+                  <optgroup label="Brasil"><option value="GRU">São Paulo (GRU)</option><option value="GIG">Río de Janeiro (GIG)</option><option value="BSB">Brasilia (BSB)</option></optgroup>
+                  <optgroup label="Bolivia"><option value="LPB">La Paz (LPB)</option><option value="VVI">Santa Cruz (VVI)</option></optgroup>
+                  <optgroup label="México"><option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún (CUN)</option><option value="GDL">Guadalajara (GDL)</option></optgroup>
+                  <optgroup label="Centroamérica"><option value="PTY">Ciudad de Panamá (PTY)</option><option value="SJO">San José, Costa Rica (SJO)</option></optgroup>
+                  <optgroup label="Uruguay"><option value="MVD">Montevideo (MVD)</option></optgroup>
+                  <optgroup label="Venezuela"><option value="CCS">Caracas (CCS)</option><option value="BLA">Barcelona (BLA)</option><option value="MAR">Maracaibo (MAR)</option></optgroup>
+                  <optgroup label="Estados Unidos"><option value="MIA">Miami (MIA)</option><option value="MCO">Orlando (MCO)</option><option value="JFK">Nueva York (JFK) (JFK)</option><option value="LAX">Los Ángeles (LAX)</option></optgroup>
+                  <optgroup label="Europa"><option value="MAD">Madrid (MAD)</option><option value="BCN">Barcelona, España (BCN)</option></optgroup>
                 </select>
               </div>
               <button type="button" id="swapFlights" class="flight-swap" aria-label="Intercambiar origen y destino" title="Intercambiar ciudades"><i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i></button>
               <div class="flight-field">
                 <label for="flightDestination"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Destino</label>
                 <select id="flightDestination" name="destination" required>
-                  <option value="MDE">Medellín, Colombia (MDE)</option><option value="LIM">Lima, Perú (LIM)</option><option value="CUZ">Cusco, Perú (CUZ)</option><option value="AQP">Arequipa, Perú (AQP)</option>
-                  <option value="BOG">Bogotá, Colombia (BOG)</option><option value="CTG">Cartagena, Colombia (CTG)</option><option value="SCL">Santiago, Chile (SCL)</option>
-                  <option value="EZE">Buenos Aires, Argentina (EZE)</option><option value="GRU">São Paulo, Brasil (GRU)</option><option value="MEX">Ciudad de México (MEX)</option>
-                  <option value="CUN">Cancún, México (CUN)</option><option value="PTY">Ciudad de Panamá (PTY)</option><option value="CCS">Caracas, Venezuela (CCS)</option>
-                  <option value="BLA">Barcelona, Venezuela (BLA)</option>
+                  <optgroup label="Perú"><option value="LIM">Lima (LIM)</option><option value="CUZ">Cusco (CUZ)</option><option value="AQP">Arequipa (AQP)</option><option value="JUL">Juliaca (JUL)</option><option value="PIU">Piura (PIU)</option><option value="TRU">Trujillo (TRU)</option><option value="IQT">Iquitos (IQT)</option><option value="TPP">Tarapoto (TPP)</option><option value="CIX">Chiclayo (CIX)</option><option value="PEM">Puerto Maldonado (PEM)</option></optgroup>
+                  <optgroup label="Colombia"><option value="BOG">Bogotá (BOG)</option><option value="MDE" selected>Medellín (MDE)</option><option value="CTG">Cartagena (CTG)</option><option value="CLO">Cali (CLO)</option><option value="SMR">Santa Marta (SMR)</option><option value="ADZ">San Andrés (ADZ)</option><option value="PEI">Pereira (PEI)</option><option value="LET">Leticia (LET)</option></optgroup>
+                  <optgroup label="Ecuador"><option value="UIO">Quito (UIO)</option><option value="GYE">Guayaquil (GYE)</option></optgroup>
+                  <optgroup label="Chile"><option value="SCL">Santiago (SCL)</option><option value="ANF">Antofagasta (ANF)</option></optgroup>
+                  <optgroup label="Argentina"><option value="EZE">Buenos Aires (Ezeiza) (EZE)</option><option value="AEP">Buenos Aires (Aeroparque) (AEP)</option><option value="COR">Córdoba (COR)</option><option value="MDZ">Mendoza (MDZ)</option></optgroup>
+                  <optgroup label="Brasil"><option value="GRU">São Paulo (GRU)</option><option value="GIG">Río de Janeiro (GIG)</option><option value="BSB">Brasilia (BSB)</option></optgroup>
+                  <optgroup label="Bolivia"><option value="LPB">La Paz (LPB)</option><option value="VVI">Santa Cruz (VVI)</option></optgroup>
+                  <optgroup label="México"><option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún (CUN)</option><option value="GDL">Guadalajara (GDL)</option></optgroup>
+                  <optgroup label="Centroamérica"><option value="PTY">Ciudad de Panamá (PTY)</option><option value="SJO">San José, Costa Rica (SJO)</option></optgroup>
+                  <optgroup label="Uruguay"><option value="MVD">Montevideo (MVD)</option></optgroup>
+                  <optgroup label="Venezuela"><option value="CCS">Caracas (CCS)</option><option value="BLA">Barcelona (BLA)</option><option value="MAR">Maracaibo (MAR)</option></optgroup>
+                  <optgroup label="Estados Unidos"><option value="MIA">Miami (MIA)</option><option value="MCO">Orlando (MCO)</option><option value="JFK">Nueva York (JFK) (JFK)</option><option value="LAX">Los Ángeles (LAX)</option></optgroup>
+                  <optgroup label="Europa"><option value="MAD">Madrid (MAD)</option><option value="BCN">Barcelona, España (BCN)</option></optgroup>
                 </select>
               </div>
             </div>
