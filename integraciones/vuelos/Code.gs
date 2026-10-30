@@ -11,8 +11,7 @@
  * Data is cached airfare observations, NOT live bookable inventory.
  */
 var FLIGHT_AIRPORTS = [
-  "LIM","CUZ","AQP","MDE","BOG","CTG","SCL","EZE",
-  "GRU","MEX","CUN","PTY","CCS","BLA"
+  "LIM","CUZ","AQP","JUL","PIU","TRU","IQT","TPP","CIX","PEM","BOG","MDE","CTG","CLO","SMR","ADZ","PEI","LET","UIO","GYE","SCL","ANF","EZE","AEP","COR","MDZ","GRU","GIG","BSB","LPB","VVI","MEX","CUN","GDL","PTY","SJO","MVD","CCS","BLA","MAR","MIA","MCO","JFK","LAX","MAD","BCN"
 ];
 var API_ROOT = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates";
 var CACHE_SECONDS = 900;
@@ -82,7 +81,7 @@ function fetchFlightData_(p) {
   var result = {
     ok:true, source:"Aviasales Data API / Travelpayouts",
     currency:"USD", type:"cached_fares", live:false, quoted_at:new Date().toISOString(),
-    exact:exact.length > 0, offers:(exact.length ? exact : nearby).slice(0,8)
+    exact:exact.length > 0, offers:(exact.length ? exact : nearby).slice(0,24)
   };
   // No quota wasted for repeated identical routes/dates.
   cache.put(key,JSON.stringify(result),CACHE_SECONDS);
@@ -136,10 +135,17 @@ function normalizeOffers_(data,origin,destination,trip,departure,ret,onlyExact) 
     out.push({
       price:Math.round(price * 100) / 100, currency:"USD",
       origin:origin, destination:destination,
+      originAirport:/^[A-Z]{3}$/.test(String(f.origin_airport || "")) ? f.origin_airport : origin,
+      destinationAirport:/^[A-Z]{3}$/.test(String(f.destination_airport || "")) ? f.destination_airport : destination,
       departure:day, returnDate:trip === "roundtrip" ? retDay : "",
+      departureAt:/^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(String(f.departure_at || "")) ? String(f.departure_at).slice(0,35) : "",
+      returnAt:trip === "roundtrip" && /^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(String(f.return_at || "")) ? String(f.return_at).slice(0,35) : "",
       airline:/^[A-Z0-9]{2,3}$/.test(String(f.airline || "").toUpperCase()) ? String(f.airline).toUpperCase() : "",
-      stops:typeof f.transfers === "number" ? f.transfers : null,
-      returnStops:typeof f.return_transfers === "number" ? f.return_transfers : null,
+      flightNumber:/^[A-Za-z0-9]{1,8}$/.test(String(f.flight_number || "")) ? String(f.flight_number) : "",
+      stops:typeof f.transfers === "number" && f.transfers >= 0 ? f.transfers : null,
+      returnStops:typeof f.return_transfers === "number" && f.return_transfers >= 0 ? f.return_transfers : null,
+      durationTo:typeof f.duration_to === "number" && f.duration_to > 0 ? f.duration_to : (trip === "oneway" && typeof f.duration === "number" && f.duration > 0 ? f.duration : null),
+      durationBack:trip === "roundtrip" && typeof f.duration_back === "number" && f.duration_back > 0 ? f.duration_back : null,
       sameDates:same
     });
   });
@@ -147,11 +153,11 @@ function normalizeOffers_(data,origin,destination,trip,departure,ret,onlyExact) 
   out.sort(function(a,b) { return a.price - b.price; });
   var unique = {};
   return out.filter(function(f) {
-    var id = [f.airline,f.departure,f.returnDate,f.stops].join("|");
+    var id = [f.airline,f.flightNumber,f.departureAt,f.returnAt,f.stops,f.returnStops].join("|");
     if (unique[id]) return false;
     unique[id] = true;
     return true;
-  }).slice(0,8);
+  }).slice(0,24);
 }
 
 function validFutureDate_(v) {
