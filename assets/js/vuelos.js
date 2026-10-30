@@ -104,7 +104,57 @@
     });
     return found;
   }
-  const money = value => 'US$ ' + Math.round(value).toLocaleString('en-US');
+  const money = value => 'US$ ' + Number(value).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const submitButton = form.querySelector('button[type="submit"]');
+  const offerContainer = el('flightLiveOffers');
+  let currentSearch = 0;
+  const airlineNames = {
+    LA:'LATAM Airlines', JA:'JetSMART', AV:'Avianca', H2:'Sky Airline',
+    CM:'Copa Airlines', AR:'Aerolíneas Argentinas', IB:'Iberia',
+    AM:'Aeroméxico', G3:'GOL', AD:'Azul', AA:'American Airlines',
+    UA:'United Airlines', DL:'Delta Air Lines', 2K:'Avianca Ecuador'
+  };
+  function setBusy(busy) {
+    submitButton.disabled = busy;
+    submitButton.setAttribute('aria-busy', String(busy));
+    submitButton.querySelector('span')?.remove();
+    submitButton.textContent = busy ? 'Consultando tarifas…' : 'Consultar vuelos';
+  }
+  function renderOffer(offer) {
+    const card = document.createElement('article');
+    card.className = 'flight-offer';
+    const content = document.createElement('div');
+    const price = document.createElement('strong');
+    price.className = 'flight-offer__price';
+    price.textContent = money(offer.price);
+    const operator = document.createElement('b');
+    operator.textContent = airlineNames[offer.airline] || (offer.airline ? 'Aerolínea ' + offer.airline : 'Aerolínea por confirmar');
+    const dates = document.createElement('span');
+    dates.textContent = 'Salida ' + offer.departure + (offer.returnDate ? ' · Regreso ' + offer.returnDate : '');
+    const stops = document.createElement('small');
+    stops.textContent = offer.stops === 0 ? 'Directo a la ida' : (Number.isInteger(offer.stops) ? offer.stops + ' escala(s) a la ida' : 'Escalas no informadas');
+    content.append(operator, dates, stops);
+    card.append(content, price);
+    return card;
+  }
+  function showLiveOffers(answer) {
+    offerContainer.replaceChildren();
+    if (!Array.isArray(answer.offers) || !answer.offers.length) return false;
+    const head = document.createElement('p');
+    head.className = 'flight-offers-heading';
+    head.textContent = answer.exact
+      ? 'Precios observados para tus fechas · por adulto, clase económica'
+      : 'Precios observados en fechas cercanas · por adulto, clase económica';
+    offerContainer.append(head);
+    answer.offers.forEach(offer => {
+      if (Number.isFinite(offer.price) && offer.price > 0) offerContainer.append(renderOffer(offer));
+    });
+    const source = document.createElement('p');
+    source.className = 'flight-offers-source';
+    source.textContent = 'Fuente: Aviasales Data API (Travelpayouts). Son precios vistos en búsquedas recientes; no equivalen a plazas disponibles, ni incluyen un precio familiar confirmado. El momento de consulta no es el momento de emisión.';
+    offerContainer.append(source);
+    return true;
+  }
   function showEstimate(records) {
     const values = records.map(v => v.price).sort((a, b) => a - b);
     const n = values.length;
@@ -114,9 +164,40 @@
     const high = values[Math.ceil((n - 1) * 0.8)];
     el('flightPriceRange').textContent = money(low) + ' – ' + money(high);
     const lastSeen = records.map(v => v.observed_at).sort().pop();
-    el('flightSampleInfo').textContent = n + ' observaciones verificadas · Mediana ' + money(median) + ' · Última observación ' + lastSeen;
+    el('flightSampleInfo').textContent = n + ' observaciones históricas · Mediana ' + money(median) + ' · Última observación ' + lastSeen;
     el('flightPriceBox').hidden = false;
     return true;
+  }
+  // Apps Script ContentService uses a different origin. JSONP bypasses CORS without
+  // exposing the API token. The backend validates the callback and returns data only.
+  function getLivePrices(query) {
+    const endpoint = String(window.LATAM_FLIGHTS_API_URL || '').trim();
+    if (!/^https:\/\/script\.google\.com\/macros\/s\/[a-zA-Z0-9_-]+\/exec$/.test(endpoint)) {
+      return Promise.reject(new Error('not_configured'));
+    }
+    return new Promise((resolve,reject) => {
+      const cb = 'latamFlightCb_' + String(Date.now()) + String(Math.floor(Math.random() * 100000));
+      const url = new URL(endpoint);
+      const params = { callback:cb, origin:query.origin, destination:query.destination,
+        trip:query.trip, departure:query.departure, returnDate:query.returnDate, cabin:query.cabin };
+      Object.keys(params).forEach(k => url.searchParams.set(k, params[k]));
+      const script = document.createElement('script');
+      let closed = false;
+      let timeout;
+      function finish(result, err) {
+        if (closed) return;
+        closed = true;
+        clearTimeout(timeout);
+        script.remove();
+        delete window[cb];
+        if (err) reject(err); else resolve(result);
+      }
+      window[cb] = result => finish(result, null);
+      script.onerror = () => finish(null, new Error('network_error'));
+      timeout = setTimeout(() => finish(null, new Error('timeout')), 18000);
+      script.src = url.toString();
+      document.head.appendChild(script);
+    });
   }
 
   form.addEventListener('submit', async event => {
@@ -141,16 +222,33 @@
       (query.returnDate ? ' · Regreso ' + query.returnDate : '') +
       ' · ' + query.adults + ' adulto(s), ' + query.children + ' niño(s) · ' + labelCabin;
     el('flightPriceBox').hidden = true;
-    let message = 'Aún no contamos con suficientes precios históricos verificados para esta búsqueda. Puedes solicitar una cotización actualizada con nuestro equipo.';
+    offerContainer.replaceChildren();
+    panel.hidden = false;
+    el('flightResultMessage').textContent = 'Buscando precios registrados en la fuente de tarifas…';
+    const searchId = ++currentSearch;
+    setBusy(true);
+    let message = '';
     try {
-      const records = await getObservedPrices(query);
-      if (showEstimate(records)) {
-        message = 'Este rango resume tarifas observadas en fechas cercanas, no es una oferta vigente ni garantiza equipaje, disponibilidad o precio final. Solicita una confirmación antes de pagar.';
+      const live = await getLivePrices(query);
+      if (searchId !== currentSearch) return;
+      if (live.ok && showLiveOffers(live)) {
+        message = live.exact
+          ? 'Estos precios fueron observados para las fechas solicitadas. Son orientativos: pueden variar o dejar de estar disponibles. Solicita la confirmación antes de pagar.'
+          : 'No hubo registros para tus fechas exactas. Estos resultados corresponden a otras fechas, indicadas en cada tarjeta. Solicita una confirmación antes de pagar.';
+      } else if (live.ok) {
+        message = 'No se encontraron tarifas en la caché del proveedor para esta ruta y período. Esto no significa que no existan vuelos. Solicita una cotización confirmada.';
+      } else {
+        message = live.message || 'No fue posible consultar tarifas. Solicita una cotización confirmada.';
       }
     } catch (err) {
-      // Sin conexión al historial: no se inventan ni se mantienen resultados anteriores.
-      message = 'No fue posible consultar el historial de tarifas. Puedes solicitar una cotización directamente con nuestro equipo.';
+      if (searchId !== currentSearch) return;
+      message = err.message === 'not_configured'
+        ? 'El buscador está preparado, pero aún falta activar la conexión con la fuente de tarifas. Solicita una cotización personalizada.'
+        : 'La consulta de tarifas no respondió. Intenta nuevamente o solicita una cotización personalizada.';
+    } finally {
+      if (searchId === currentSearch) setBusy(false);
     }
+    if (searchId !== currentSearch) return;
     el('flightResultMessage').textContent = message;
     const request = [
       'Hola, Latam Expeditions. Quiero cotizar un vuelo.',
