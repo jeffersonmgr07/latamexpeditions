@@ -86,3 +86,32 @@ Para análisis estadístico, guardar cada consulta exitosa en Google Sheets con:
 - Se usa caché de Apps Script 15 minutos por consulta para reducir consumo.
 - La página **no** realiza pagos ni emite boletos.
 - Antes de cualquier venta, verificar tarifa, equipaje, disponibilidad y reglas tarifarias con el proveedor de emisión.
+
+## Fase 2.1 — Resultados tipo OTA (actualización de octubre de 2026)
+
+Esta actualización conserva el diseño principal de Latam Expeditions y presenta los resultados **debajo del hero**, con filtros funcionales de escalas de ida, límite de precio y aerolíneas; ordenación por precio, escalas o duración (cuando el proveedor la informa), y tarjetas separando IDA y VUELTA.
+
+Se incorporaron campos de Aviasales v3 que antes se descartaban: `departure_at`, `return_at`, `duration_to`, `duration_back`, `return_transfers`, aeropuertos de salida/destino y número de vuelo reportado. La interfaz muestra la hora de **salida** cuando está informada, no inventa horas de llegada ni aeropuertos de escalas. La aerolínea identificada en un registro no garantiza que opere todos los segmentos.
+
+### Acción necesaria después de fusionar los cambios en GitHub
+
+**Muy importante:** actualizar un archivo `Code.gs` en GitHub NO actualiza automáticamente la aplicación de Google Apps Script que ya está implementada.
+
+1. Entra al proyecto **LATAM Flights API** en https://script.google.com/.
+2. Abre el archivo `integraciones/vuelos/Code.gs` de la rama principal de GitHub después de la fusión.
+3. Reemplaza todo el contenido de `Código.gs` por esa versión actualizada y guarda.
+4. En Apps Script abre **Implementar → Gestionar implementaciones**.
+5. Selecciona tu implementación actual, pulsa editar (ícono de lápiz) y en **Versión** elige **Nueva versión**.
+6. Pulsa **Implementar**. Si se conserva la implementación existente, su URL pública terminada en `/exec` seguirá siendo la misma.
+7. Recarga la página de vuelos sin caché y consulta ida y vuelta.
+
+El token privado **TP_API_TOKEN** permanece guardado en las propiedades del script y no tienes que volver a publicarlo.
+
+### Limitaciones importantes
+
+- Esta API ofrece precios históricos/observados (caché), no vuelos con disponibilidad confirmada.
+- Los horarios que aparecen son de **salida**; no ofrece itinerarios completos por segmentos, aeropuertos de escala ni equipaje.
+- En una búsqueda sin registros no significa que no exista la ruta. La disponibilidad depende de búsquedas previas en Aviasales, fechas, mercado y filtros.
+- Los filtros y la clasificación afectan solo a los registros que devuelve la API. **No compara todo el mercado como MyTrip**.
+- La web ofrece un botón **Solicitar esta tarifa**, no uno de venta o pago; antes de prometer o cobrar un pasaje debe existir un proveedor de emisión.
+- Para autenticar un vuelo con llegada, conexión, equipaje y pago, hará falta Search API aprobada u otro proveedor de inventario y emisión. No se pueden deducir esos datos de esta API.

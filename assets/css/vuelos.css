@@ -99,3 +99,111 @@
   .flight-offer span { font-size:11px; }
   .flight-offer__price { font-size:17px; }
 }
+
+
+/* Resultados tipo OTA — Aviasales Data API, sin inventar segmentos */
+.flight-marketplace { background:#f3f6f4; padding:38px 20px 58px; color:#13372b; }
+.flight-marketplace[hidden] { display:none !important; }
+.flight-marketplace__inner { width:min(100%,1290px); margin:0 auto; }
+.flight-marketplace__heading { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:14px; }
+.flight-marketplace__eyebrow { color:#25634a; font-weight:800; font-size:11px; letter-spacing:.13em; }
+.flight-marketplace__heading h2 { margin:7px 0 5px; font:800 clamp(20px,3vw,29px)/1.2 Montserrat,Inter,sans-serif; color:#103d2b; letter-spacing:-.04em; }
+.flight-marketplace .flight-route-details { font-size:13px; color:#617368; margin:0; line-height:1.5; }
+.flight-modify-btn { background:white; color:#15523c; border:1px solid #d1e1d6; border-radius:11px; font:700 12px Inter,system-ui,sans-serif; padding:11px 15px; cursor:pointer; }
+.flight-modify-btn:hover { background:#e9f3ed; }
+.flight-marketplace__notice { background:#e7f2ea; color:#32614c; border:1px solid #d4e7dc; border-radius:11px; padding:12px 15px; font-size:12px; line-height:1.6; font-weight:600; margin:0 0 18px; }
+.flight-marketplace__notice i { margin-right:7px; color:#147346; }
+.flight-marketplace__workspace { display:grid; grid-template-columns:260px minmax(0,1fr); gap:22px; align-items:start; }
+.flight-filters { background:white; border-radius:15px; border:1px solid #e5ebe7; padding:21px; box-shadow:0 3px 14px rgba(8,48,33,.03); }
+.flight-filters__top { display:flex; justify-content:space-between; align-items:center; gap:10px; padding-bottom:17px; border-bottom:1px solid #e8efe9; }
+.flight-filters__top h3 { font:800 14px Inter,system-ui,sans-serif; color:#183c2b; margin:0; }
+.flight-filters__top button { border:0; background:none; font:700 11px Inter,sans-serif; color:#137554; text-decoration:underline; cursor:pointer; padding:5px 0; }
+.flight-filter-group { border:0; margin:0; padding:20px 0; border-bottom:1px solid #e8efe9; min-width:0; display:flex; flex-direction:column; gap:13px; }
+.flight-filter-group legend,.flight-filter-title { font-size:13px; font-weight:800; color:#1b4633; padding:0; margin-bottom:15px; }
+.flight-filter-group label:not(.flight-filter-title) { display:flex; align-items:center; gap:9px; font-size:12px; color:#3e594b; cursor:pointer; }
+.flight-filter-group input[type="checkbox"],.flight-filter-group input[type="radio"] { accent-color:#11704d; width:16px; height:16px; flex-shrink:0; }
+.flight-filter-group input[type="range"] { width:100%; accent-color:#177752; cursor:pointer; }
+.flight-filter-group input[type="range"]:disabled { opacity:.45; cursor:default; }
+.flight-range-values { display:flex; justify-content:space-between; align-items:center; gap:10px; font-size:11px; color:#587565; }
+.flight-range-values strong { color:#14563e; }
+.flight-airline-checks { display:flex; flex-direction:column; gap:11px; }
+.flight-filter-empty { color:#87978b; font-size:11px; }
+.flight-filters__hint { font-size:11px; line-height:1.55; color:#7a8a7e; padding-top:14px; margin:0; }
+.flight-marketplace__main { min-width:0; }
+.flight-sortbar { display:flex; align-items:stretch; justify-content:space-between; gap:15px; padding:16px 19px; background:white; border:1px solid #e4ebe5; border-radius:15px; margin-bottom:15px; flex-wrap:wrap; }
+.flight-sortbar__header { display:flex; flex-direction:column; gap:5px; padding-right:10px; }
+.flight-sortbar__header strong { font:800 13px Inter,sans-serif; color:#183d2c; }
+.flight-sortbar__header span { font-size:11px; color:#718579; }
+.flight-sortbar__buttons { display:flex; gap:5px; flex-wrap:wrap; }
+.flight-sortbar__buttons button { background:#f7faf8; border:1px solid #e3ebe6; border-radius:9px; padding:9px 11px; color:#4b6458; font:700 11px Inter,sans-serif; cursor:pointer; }
+.flight-sortbar__buttons button[aria-pressed="true"] { color:#0b593c; background:#e3f1e8; border-color:#b8d5c2; }
+.flight-sortbar__buttons button:disabled { opacity:.4; cursor:not-allowed; }
+.flight-marketplace .flight-live-offers { margin:0; display:grid; gap:15px; }
+.flight-marketplace .flight-offer--detailed { background:#fff; border:1px solid #e4ebe5; border-radius:16px; padding:0; overflow:hidden; display:grid; grid-template-columns:minmax(0,1fr) 190px; align-items:stretch; box-shadow:0 4px 16px rgba(5,45,28,.04); }
+.flight-marketplace .flight-offer__body { padding:19px 22px; min-width:0; display:grid; gap:12px; }
+.flight-offer__carrier { display:flex; align-items:center; flex-wrap:wrap; gap:8px; color:#123a29; font-size:13px; }
+.flight-offer__airline-icon { display:grid; place-items:center; width:29px; height:29px; background:#e6f1ea; border-radius:8px; color:#0f704c; font-size:16px; }
+.flight-offer__datebadge { background:#fff4d8; color:#886020; border:1px solid #f0dfa9; border-radius:6px; padding:4px 6px; font:700 10px Inter,sans-serif; }
+.flight-leg { border-top:1px solid #edf1ed; padding-top:11px; }
+.flight-leg__label { color:#567364; font:800 11px Inter,sans-serif; text-transform:uppercase; letter-spacing:.04em; margin-bottom:10px; }
+.flight-leg__timeline { display:grid; grid-template-columns:minmax(60px,1fr) minmax(105px,1.7fr) minmax(60px,1fr); gap:12px; align-items:center; }
+.flight-leg__endpoint { display:flex; flex-direction:column; gap:4px; color:#153a2a; }
+.flight-leg__endpoint--end { text-align:right; }
+.flight-leg__time { font:800 clamp(15px,2vw,20px) Montserrat,Inter,sans-serif; white-space:nowrap; }
+.flight-leg__endpoint--end .flight-leg__time { font-size:12px; color:#819184; }
+.flight-leg__endpoint small { font:700 11px Inter,sans-serif; color:#667e6e; }
+.flight-leg__middle { text-align:center; color:#607b6a; display:flex; align-items:center; flex-direction:column; gap:3px; font-size:11px; }
+.flight-leg__middle span:nth-child(2) { color:#27956a; letter-spacing:.12em; font-weight:800; font-size:12px; white-space:nowrap; }
+.flight-leg__middle small { color:#718577; font-size:10px; }
+.flight-offer__disclosure { border-top:1px dashed #e2eae3; margin-top:2px; padding-top:10px; color:#61786a; font-size:11px; line-height:1.55; }
+.flight-offer__disclosure summary { cursor:pointer; color:#1a7151; font-weight:800; }
+.flight-offer__disclosure p { margin:8px 0 0; }
+.flight-marketplace .flight-offer__price-panel { border-left:1px solid #e8ede8; padding:20px 14px; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:8px; background:#fcfdfc; text-align:center; }
+.flight-offer__price-kicker { color:#60796b; font-size:11px; font-weight:700; }
+.flight-marketplace .flight-offer__price { color:#0c6746; font:800 clamp(19px,2vw,26px)/1.1 Montserrat,Inter,sans-serif; }
+.flight-offer__passenger { color:#3c5b4a; font-size:11px; font-weight:750; }
+.flight-offer__fineprint { font-size:10px; line-height:1.4; color:#839286; }
+.flight-offer__button { text-align:center; width:100%; background:#0b6144; color:white; border-radius:10px; text-decoration:none; padding:12px 8px; font:800 11px Inter,sans-serif; transition:background .2s; margin-top:8px; }
+.flight-offer__button:hover { background:#06472f; color:white; }
+.flight-offer__empty { background:white; border:1px solid #e2ebe3; padding:28px 20px; border-radius:14px; color:#507363; font-size:13px; }
+.flight-marketplace .flight-result-message { margin:18px 0; font-size:12px; line-height:1.65; color:#527566; max-width:none; }
+.flight-marketplace__help { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:20px; background:white; border:1px solid #dce9df; border-radius:14px; flex-wrap:wrap; }
+.flight-marketplace__help strong { font-size:14px; color:#14452f; }
+.flight-marketplace__help p { font-size:12px; color:#6d8374; line-height:1.6; margin:6px 0 0; }
+.flight-marketplace__help .flight-whatsapp { background:#0d7853; white-space:nowrap; }
+.flight-marketplace .flight-result-price[hidden] { display:none; }
+.flight-marketplace :is(button,input,a,summary):focus-visible { outline:3px solid #ddb960; outline-offset:2px; }
+@media(max-width:1020px) {
+ .flight-marketplace__workspace { grid-template-columns:210px minmax(0,1fr); gap:15px; }
+ .flight-filters { padding:15px; }
+ .flight-marketplace .flight-offer--detailed { grid-template-columns:minmax(0,1fr) 165px; }
+ .flight-marketplace .flight-offer__body { padding:16px; }
+}
+@media(max-width:770px) {
+ .flight-marketplace { padding:23px 12px 40px; }
+ .flight-marketplace__workspace { grid-template-columns:1fr; }
+ .flight-filters { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 20px; }
+ .flight-filters__top,.flight-filters__hint { grid-column:1/-1; }
+ .flight-filter-group { padding:12px 0; }
+ .flight-sortbar { padding:12px; }
+ .flight-marketplace .flight-offer--detailed { grid-template-columns:minmax(0,1fr) 160px; }
+}
+@media(max-width:540px) {
+ .flight-marketplace__heading { align-items:flex-start; }
+ .flight-sortbar__buttons { width:100%; }
+ .flight-sortbar__buttons button { flex:1; font-size:10px; padding:9px 5px; }
+ .flight-sortbar__buttons button i { display:none; }
+ .flight-filters { grid-template-columns:1fr 1fr; padding:13px; gap:5px 10px; }
+ .flight-filters__top,.flight-filters__hint { grid-column:1/-1; }
+ .flight-filter-group:last-of-type { grid-column:1/-1; }
+ .flight-marketplace .flight-offer--detailed { grid-template-columns:1fr; }
+ .flight-marketplace .flight-offer__body { padding:15px; }
+ .flight-marketplace .flight-offer__price-panel { border-left:0; border-top:1px solid #e6ede7; display:grid; grid-template-columns:1fr 1fr; gap:5px 8px; text-align:left; padding:15px; justify-items:start; }
+ .flight-offer__price-kicker,.flight-offer__fineprint { grid-column:1; }
+ .flight-marketplace .flight-offer__price { grid-row:2; grid-column:1; }
+ .flight-offer__passenger { grid-column:1; }
+ .flight-offer__button { grid-column:2; grid-row:1/5; align-self:center; margin:0; }
+ .flight-leg__timeline { gap:7px; grid-template-columns:minmax(60px,1fr) minmax(85px,1.3fr) minmax(65px,1fr); }
+ .flight-leg__middle span:nth-child(2) { letter-spacing:0; font-size:10px; }
+ .flight-marketplace__help .flight-whatsapp { width:100%; white-space:normal; }
+}

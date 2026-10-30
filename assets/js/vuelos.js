@@ -104,70 +104,207 @@
     });
     return found;
   }
-  const money = value => 'US$ ' + Number(value).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+  const money = value => 'US$' + Number(value).toLocaleString('en-US', { minimumFractionDigits:2, maximumFractionDigits:2 });
   const submitButton = form.querySelector('button[type="submit"]');
   const offerContainer = el('flightLiveOffers');
-  let currentSearch = 0;
+  const count = el('flightResultCount');
+  const priceSlider = el('flightMaxPrice');
+  const airlineFilters = el('flightAirlineFilters');
   const airlineNames = {
-    LA:'LATAM Airlines', JA:'JetSMART', AV:'Avianca', H2:'Sky Airline',
+    LA:'LATAM Airlines', JA:'JetSMART', AV:'Avianca', H2:'SKY Airline',
     CM:'Copa Airlines', AR:'Aerolíneas Argentinas', IB:'Iberia',
     AM:'Aeroméxico', G3:'GOL', AD:'Azul', AA:'American Airlines',
-    UA:'United Airlines', DL:'Delta Air Lines', '2K':'Avianca Ecuador'
+    UA:'United Airlines', DL:'Delta Air Lines', '2K':'Avianca Ecuador',
+    P5:'Wingo', W4:'Wizz Air Malta', '4C':'LATAM Colombia',
+    '5Q':'Euroairlines', VB:'Viva Aerobus', Y4:'Volaris', '9R':'SATENA'
   };
+  let currentSearch = 0, allOffers = [], activeSort = 'price', currentQuery = null;
   function setBusy(busy) {
     submitButton.disabled = busy;
     submitButton.setAttribute('aria-busy', String(busy));
-    submitButton.querySelector('span')?.remove();
     submitButton.textContent = busy ? 'Consultando tarifas…' : 'Consultar vuelos';
   }
+  function airlineName(code) {
+    return airlineNames[code] || (code ? 'Aerolínea ' + code : 'Aerolínea no informada');
+  }
+  function stopLabel(n) {
+    if (!Number.isInteger(n)) return 'Escalas no informadas';
+    return n === 0 ? 'Vuelo directo' : n === 1 ? '1 escala' : n + ' escalas';
+  }
+  function durationLabel(minutes) {
+    if (!Number.isFinite(minutes) || minutes <= 0) return 'Duración no informada';
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return (h ? h + ' h ' : '') + (m ? m + ' min' : '');
+  }
+  function dateLabel(isoDate) {
+    if (!isoDate || !/^\d{4}-\d\d-\d\d/.test(isoDate)) return 'Fecha no informada';
+    return new Intl.DateTimeFormat('es-PE', {day:'2-digit', month:'short', year:'numeric'})
+      .format(new Date(isoDate.slice(0,10) + 'T12:00:00'));
+  }
+  function departureTime(timestamp) {
+    return /^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(timestamp || '')
+      ? timestamp.slice(11,16) : '—';
+  }
+  function node(tag, cls, content) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (content !== undefined) n.textContent = String(content);
+    return n;
+  }
+  function tripRow(label, from, to, timestamp, date, duration, stops) {
+    const line = node('div','flight-leg');
+    const heading = node('div','flight-leg__label', label + ' · ' + dateLabel(date));
+    const timeline = node('div','flight-leg__timeline');
+    const left = node('div','flight-leg__endpoint');
+    left.append(node('b','flight-leg__time', departureTime(timestamp)), node('small','',from));
+    const mid = node('div','flight-leg__middle');
+    mid.append(node('span','',durationLabel(duration)),node('span','flight-leg__arrow','━━━━ ✈ ━━━━'),node('small','',stopLabel(stops)));
+    const right = node('div','flight-leg__endpoint flight-leg__endpoint--end');
+    right.append(node('b','flight-leg__time','Llegada: —'), node('small','',to));
+    timeline.append(left,mid,right);
+    line.append(heading,timeline);
+    return line;
+  }
+  function whatsappUrlForOffer(offer) {
+    const q = currentQuery || {};
+    const text = [
+      'Hola, Latam Expeditions. Quiero confirmar una tarifa de vuelo.',
+      'Ruta: ' + q.origin + ' → ' + q.destination,
+      'Tipo: ' + (q.trip === 'roundtrip' ? 'ida y vuelta' : 'solo ida'),
+      'Fechas de la tarifa: ' + offer.departure + (offer.returnDate ? ' / ' + offer.returnDate : ''),
+      'Precio observado por adulto: ' + money(offer.price),
+      'Aerolínea informada: ' + airlineName(offer.airline),
+      'Escalas ida: ' + stopLabel(offer.stops),
+      q.trip === 'roundtrip' ? 'Escalas vuelta: ' + stopLabel(offer.returnStops) : '',
+      'Pasajeros: ' + q.adults + ' adulto(s), ' + q.children + ' niño(s)',
+      '¿Me confirman horarios completos, equipaje, disponibilidad y tarifa final?'
+    ].filter(Boolean).join('\n');
+    return 'https://wa.me/51900608980?text=' + encodeURIComponent(text);
+  }
   function renderOffer(offer) {
-    const card = document.createElement('article');
-    card.className = 'flight-offer';
-    const content = document.createElement('div');
-    const price = document.createElement('strong');
-    price.className = 'flight-offer__price';
-    price.textContent = money(offer.price);
-    const operator = document.createElement('b');
-    operator.textContent = airlineNames[offer.airline] || (offer.airline ? 'Aerolínea ' + offer.airline : 'Aerolínea por confirmar');
-    const dates = document.createElement('span');
-    dates.textContent = 'Salida ' + offer.departure + (offer.returnDate ? ' · Regreso ' + offer.returnDate : '');
-    const stops = document.createElement('small');
-    stops.textContent = offer.stops === 0 ? 'Directo a la ida' : (Number.isInteger(offer.stops) ? offer.stops + ' escala(s) a la ida' : 'Escalas no informadas');
-    content.append(operator, dates, stops);
-    card.append(content, price);
+    const card = node('article','flight-offer flight-offer--detailed');
+    const body = node('div','flight-offer__body');
+    const carrier = node('div','flight-offer__carrier');
+    carrier.append(node('span','flight-offer__airline-icon','✈'),node('strong','',airlineName(offer.airline)));
+    if (!offer.sameDates) carrier.append(node('span','flight-offer__datebadge','Otras fechas'));
+    body.append(carrier);
+    body.append(tripRow('IDA',offer.originAirport || offer.origin || currentQuery.origin,
+      offer.destinationAirport || offer.destination || currentQuery.destination,
+      offer.departureAt,offer.departure,offer.durationTo,offer.stops));
+    if (currentQuery.trip === 'roundtrip' && offer.returnDate) {
+      body.append(tripRow('VUELTA',offer.destinationAirport || offer.destination || currentQuery.destination,
+        offer.originAirport || offer.origin || currentQuery.origin,
+        offer.returnAt,offer.returnDate,offer.durationBack,offer.returnStops));
+    }
+    const disclosure = node('details','flight-offer__disclosure');
+    disclosure.append(node('summary','', 'Información de esta referencia de precio'));
+    disclosure.append(node('p','',
+      'La fuente identifica horarios de salida, duración total y cantidad de escalas cuando están disponibles. No proporciona aeropuertos de conexión, tiempos de espera, horarios completos de llegada, equipaje o disponibilidad confirmada. La aerolínea indicada puede no operar todos los tramos.'));
+    if (offer.flightNumber) disclosure.append(node('p','','Número de vuelo informado: ' + offer.flightNumber + ' (no identifica necesariamente todos los segmentos).'));
+    body.append(disclosure);
+    const priceBlock = node('div','flight-offer__price-panel');
+    priceBlock.append(node('span','flight-offer__price-kicker','Tarifa observada'),
+      node('strong','flight-offer__price',money(offer.price)),
+      node('small','flight-offer__passenger','Por adulto · ' + (currentQuery.trip === 'roundtrip' ? 'ida y vuelta' : 'solo ida')),
+      node('small','flight-offer__fineprint','No garantiza disponibilidad ni incluye un total familiar calculado'));
+    const action = node('a','flight-offer__button','Solicitar esta tarifa');
+    action.href=whatsappUrlForOffer(offer);
+    action.target='_blank'; action.rel='noopener noreferrer';
+    priceBlock.append(action);
+    card.append(body,priceBlock);
     return card;
   }
-  function showLiveOffers(answer) {
+  function stopRank(o) {
+    return (Number.isInteger(o.stops) ? o.stops : 99) +
+       (currentQuery?.trip === 'roundtrip' ? (Number.isInteger(o.returnStops) ? o.returnStops : 99) : 0);
+  }
+  function durationRank(o) {
+    const outward=Number.isFinite(o.durationTo)?o.durationTo:Infinity;
+    const back=currentQuery?.trip==='roundtrip'?(Number.isFinite(o.durationBack)?o.durationBack:Infinity):0;
+    return outward+back;
+  }
+  function renderFilteredOffers() {
     offerContainer.replaceChildren();
-    if (!Array.isArray(answer.offers) || !answer.offers.length) return false;
-    const head = document.createElement('p');
-    head.className = 'flight-offers-heading';
-    head.textContent = answer.exact
-      ? 'Precios observados para tus fechas · por adulto, clase económica'
-      : 'Precios observados en fechas cercanas · por adulto, clase económica';
-    offerContainer.append(head);
-    answer.offers.forEach(offer => {
-      if (Number.isFinite(offer.price) && offer.price > 0) offerContainer.append(renderOffer(offer));
+    const selectedAirlines = new Set(
+      Array.from(airlineFilters.querySelectorAll('input[type="checkbox"]:checked')).map(input => input.value)
+    );
+    const filter = document.querySelector('[name="flightStopFilter"]:checked')?.value || 'all';
+    const max = Number(priceSlider.value);
+    const filtered = allOffers.filter(o => {
+      if (!selectedAirlines.has(o.airline || '??') || o.price > max) return false;
+      if (filter === 'direct' && o.stops !== 0) return false;
+      if (filter === 'one' && (!Number.isInteger(o.stops) || o.stops > 1)) return false;
+      return true;
     });
-    const source = document.createElement('p');
-    source.className = 'flight-offers-source';
-    source.textContent = 'Fuente: Aviasales Data API (Travelpayouts). Son precios vistos en búsquedas recientes; no equivalen a plazas disponibles, ni incluyen un precio familiar confirmado. El momento de consulta no es el momento de emisión.';
-    offerContainer.append(source);
-    return true;
+    filtered.sort((a,b)=>{
+      if (activeSort==='stops') return stopRank(a)-stopRank(b) || a.price-b.price;
+      if (activeSort==='duration') return durationRank(a)-durationRank(b) || a.price-b.price;
+      return a.price-b.price;
+    });
+    count.textContent = 'Mostrando ' + filtered.length + ' de ' + allOffers.length + ' tarifas observadas';
+    if (!filtered.length) {
+      offerContainer.append(node('div','flight-offer__empty','No hay tarifas que cumplan estos filtros. Restablece los filtros o solicita una cotización personalizada.'));
+    }
+    filtered.forEach(o=>offerContainer.append(renderOffer(o)));
+    return filtered.length;
   }
-  function showEstimate(records) {
-    const values = records.map(v => v.price).sort((a, b) => a - b);
-    const n = values.length;
-    if (n < 3) return false;
-    const median = n % 2 ? values[Math.floor(n / 2)] : (values[n / 2 - 1] + values[n / 2]) / 2;
-    const low = values[Math.floor((n - 1) * 0.2)];
-    const high = values[Math.ceil((n - 1) * 0.8)];
-    el('flightPriceRange').textContent = money(low) + ' – ' + money(high);
-    const lastSeen = records.map(v => v.observed_at).sort().pop();
-    el('flightSampleInfo').textContent = n + ' observaciones históricas · Mediana ' + money(median) + ' · Última observación ' + lastSeen;
-    el('flightPriceBox').hidden = false;
-    return true;
+  function resetFilters() {
+    document.querySelector('[name="flightStopFilter"][value="all"]').checked=true;
+    airlineFilters.querySelectorAll('input').forEach(input => input.checked=true);
+    priceSlider.value=priceSlider.max;
+    el('flightPriceMaximum').textContent=money(priceSlider.value);
+    activeSort='price';
+    document.querySelectorAll('[data-flight-sort]').forEach(button => {
+      button.setAttribute('aria-pressed',String(button.dataset.flightSort === 'price'));
+    });
+    if (allOffers.length) renderFilteredOffers();
   }
+  function setupFilters(offers) {
+    allOffers=offers.filter(o=>Number.isFinite(o.price)&&o.price>0);
+    airlineFilters.replaceChildren();
+    const names=[...new Set(allOffers.map(o=>o.airline||'??'))].sort((a,b)=>airlineName(a).localeCompare(airlineName(b)));
+    names.forEach(code => {
+      const label=node('label','flight-airline-option');
+      const box=node('input');
+      box.type='checkbox';box.value=code;box.checked=true;
+      box.addEventListener('change',renderFilteredOffers);
+      label.append(box,node('span','',airlineName(code)));
+      airlineFilters.append(label);
+    });
+    const prices=allOffers.map(o=>o.price);
+    const min=prices.length?Math.floor(Math.min(...prices)):0;
+    const max=prices.length?Math.ceil(Math.max(...prices)):0;
+    priceSlider.min=String(min);
+    priceSlider.max=String(max || 1);
+    priceSlider.step='1';
+    priceSlider.value=String(max || 1);
+    priceSlider.disabled=!prices.length || min===max;
+    el('flightPriceMinimum').textContent=prices.length?money(min):'—';
+    el('flightPriceMaximum').textContent=prices.length?money(max):'—';
+    document.querySelector('[data-flight-sort="duration"]').disabled=!allOffers.some(o=>Number.isFinite(durationRank(o)));
+    resetFilters();
+  }
+  function showLiveOffers(answer) {
+    if (!Array.isArray(answer.offers) || !answer.offers.length) { setupFilters([]); return false; }
+    setupFilters(answer.offers);
+    renderFilteredOffers();
+    return allOffers.length > 0;
+  }
+  document.querySelectorAll('[name="flightStopFilter"]').forEach(e=>e.addEventListener('change',renderFilteredOffers));
+  document.querySelectorAll('[data-flight-sort]').forEach(button=>button.addEventListener('click',()=>{
+    if (button.disabled) return;
+    activeSort=button.dataset.flightSort;
+    document.querySelectorAll('[data-flight-sort]').forEach(btn=>btn.setAttribute('aria-pressed',String(btn===button)));
+    renderFilteredOffers();
+  }));
+  priceSlider.addEventListener('input',()=>{
+    el('flightPriceMaximum').textContent=money(priceSlider.value);
+    renderFilteredOffers();
+  });
+  el('flightClearFilters').addEventListener('click',resetFilters);
+  el('flightModifySearch').addEventListener('click',()=>form.scrollIntoView({behavior:'smooth',block:'center'}));
   // Apps Script ContentService uses a different origin. JSONP bypasses CORS without
   // exposing the API token. The backend validates the callback and returns data only.
   function getLivePrices(query) {
@@ -223,6 +360,9 @@
       ' · ' + query.adults + ' adulto(s), ' + query.children + ' niño(s) · ' + labelCabin;
     el('flightPriceBox').hidden = true;
     offerContainer.replaceChildren();
+    allOffers = [];
+    currentQuery = query;
+    count.textContent = 'Buscando tarifas…';
     panel.hidden = false;
     el('flightResultMessage').textContent = 'Buscando precios registrados en la fuente de tarifas…';
     const searchId = ++currentSearch;
@@ -236,7 +376,9 @@
           ? 'Estos precios fueron observados para las fechas solicitadas. Son orientativos: pueden variar o dejar de estar disponibles. Solicita la confirmación antes de pagar.'
           : 'No hubo registros para tus fechas exactas. Estos resultados corresponden a otras fechas, indicadas en cada tarjeta. Solicita una confirmación antes de pagar.';
       } else if (live.ok) {
-        message = 'No se encontraron tarifas en la caché del proveedor para esta ruta y período. Esto no significa que no existan vuelos. Solicita una cotización confirmada.';
+        setupFilters([]);
+        count.textContent = 'Sin tarifas observadas para esta búsqueda';
+        message = 'No se encontraron tarifas en la caché del proveedor para esta ruta y período. Esto no significa que no existan vuelos. Prueba fechas más flexibles o solicita una cotización confirmada.';
       } else {
         message = live.message || 'No fue posible consultar tarifas. Solicita una cotización confirmada.';
       }

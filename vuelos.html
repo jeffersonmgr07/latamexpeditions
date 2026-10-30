@@ -107,12 +107,12 @@
       <div class="hero__content">
         <span class="eyebrow"><i class="fa-solid fa-plane-departure" aria-hidden="true"></i> LATAM EXPEDITIONS · VUELOS</span>
         <h1 id="heroTitle">Encuentra tu próximo vuelo</h1>
-        <p>Compara fechas y solicita una cotización de vuelos por Latinoamérica. Estamos construyendo nuestro propio historial de tarifas para ofrecerte referencias útiles.</p>
+        <p>Busca rutas aéreas por Latinoamérica, compara precios observados y solicita una cotización confirmada con nuestro equipo.</p>
 
         <div class="flight-search-shell">
           <div class="flight-search-head">
             <div class="flight-search-heading"><i class="fa-solid fa-plane" aria-hidden="true"></i><strong>Buscar vuelos</strong></div>
-            <span class="flight-beta"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Cotización asistida · Versión inicial</span>
+            <span class="flight-beta"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Cotización asistida · Precios de referencia</span>
           </div>
           <form id="flightsForm" class="flights-form" role="search" aria-label="Cotizador de vuelos">
             <fieldset class="flight-types">
@@ -124,22 +124,38 @@
               <div class="flight-field">
                 <label for="flightOrigin"><i class="fa-solid fa-plane-departure" aria-hidden="true"></i> Origen</label>
                 <select id="flightOrigin" name="origin" required>
-                  <option value="LIM">Lima, Perú (LIM)</option><option value="CUZ">Cusco, Perú (CUZ)</option><option value="AQP">Arequipa, Perú (AQP)</option>
-                  <option value="MDE">Medellín, Colombia (MDE)</option><option value="BOG">Bogotá, Colombia (BOG)</option><option value="CTG">Cartagena, Colombia (CTG)</option>
-                  <option value="SCL">Santiago, Chile (SCL)</option><option value="EZE">Buenos Aires, Argentina (EZE)</option><option value="GRU">São Paulo, Brasil (GRU)</option>
-                  <option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún, México (CUN)</option><option value="PTY">Ciudad de Panamá (PTY)</option>
-                  <option value="CCS">Caracas, Venezuela (CCS)</option><option value="BLA">Barcelona, Venezuela (BLA)</option>
+                  <optgroup label="Perú"><option value="LIM" selected>Lima (LIM)</option><option value="CUZ">Cusco (CUZ)</option><option value="AQP">Arequipa (AQP)</option><option value="JUL">Juliaca (JUL)</option><option value="PIU">Piura (PIU)</option><option value="TRU">Trujillo (TRU)</option><option value="IQT">Iquitos (IQT)</option><option value="TPP">Tarapoto (TPP)</option><option value="CIX">Chiclayo (CIX)</option><option value="PEM">Puerto Maldonado (PEM)</option></optgroup>
+                  <optgroup label="Colombia"><option value="BOG">Bogotá (BOG)</option><option value="MDE">Medellín (MDE)</option><option value="CTG">Cartagena (CTG)</option><option value="CLO">Cali (CLO)</option><option value="SMR">Santa Marta (SMR)</option><option value="ADZ">San Andrés (ADZ)</option><option value="PEI">Pereira (PEI)</option><option value="LET">Leticia (LET)</option></optgroup>
+                  <optgroup label="Ecuador"><option value="UIO">Quito (UIO)</option><option value="GYE">Guayaquil (GYE)</option></optgroup>
+                  <optgroup label="Chile"><option value="SCL">Santiago (SCL)</option><option value="ANF">Antofagasta (ANF)</option></optgroup>
+                  <optgroup label="Argentina"><option value="EZE">Buenos Aires (Ezeiza) (EZE)</option><option value="AEP">Buenos Aires (Aeroparque) (AEP)</option><option value="COR">Córdoba (COR)</option><option value="MDZ">Mendoza (MDZ)</option></optgroup>
+                  <optgroup label="Brasil"><option value="GRU">São Paulo (GRU)</option><option value="GIG">Río de Janeiro (GIG)</option><option value="BSB">Brasilia (BSB)</option></optgroup>
+                  <optgroup label="Bolivia"><option value="LPB">La Paz (LPB)</option><option value="VVI">Santa Cruz (VVI)</option></optgroup>
+                  <optgroup label="México"><option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún (CUN)</option><option value="GDL">Guadalajara (GDL)</option></optgroup>
+                  <optgroup label="Centroamérica"><option value="PTY">Ciudad de Panamá (PTY)</option><option value="SJO">San José, Costa Rica (SJO)</option></optgroup>
+                  <optgroup label="Uruguay"><option value="MVD">Montevideo (MVD)</option></optgroup>
+                  <optgroup label="Venezuela"><option value="CCS">Caracas (CCS)</option><option value="BLA">Barcelona (BLA)</option><option value="MAR">Maracaibo (MAR)</option></optgroup>
+                  <optgroup label="Estados Unidos"><option value="MIA">Miami (MIA)</option><option value="MCO">Orlando (MCO)</option><option value="JFK">Nueva York (JFK) (JFK)</option><option value="LAX">Los Ángeles (LAX)</option></optgroup>
+                  <optgroup label="Europa"><option value="MAD">Madrid (MAD)</option><option value="BCN">Barcelona, España (BCN)</option></optgroup>
                 </select>
               </div>
               <button type="button" id="swapFlights" class="flight-swap" aria-label="Intercambiar origen y destino" title="Intercambiar ciudades"><i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i></button>
               <div class="flight-field">
                 <label for="flightDestination"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Destino</label>
                 <select id="flightDestination" name="destination" required>
-                  <option value="MDE">Medellín, Colombia (MDE)</option><option value="LIM">Lima, Perú (LIM)</option><option value="CUZ">Cusco, Perú (CUZ)</option><option value="AQP">Arequipa, Perú (AQP)</option>
-                  <option value="BOG">Bogotá, Colombia (BOG)</option><option value="CTG">Cartagena, Colombia (CTG)</option><option value="SCL">Santiago, Chile (SCL)</option>
-                  <option value="EZE">Buenos Aires, Argentina (EZE)</option><option value="GRU">São Paulo, Brasil (GRU)</option><option value="MEX">Ciudad de México (MEX)</option>
-                  <option value="CUN">Cancún, México (CUN)</option><option value="PTY">Ciudad de Panamá (PTY)</option><option value="CCS">Caracas, Venezuela (CCS)</option>
-                  <option value="BLA">Barcelona, Venezuela (BLA)</option>
+                  <optgroup label="Perú"><option value="LIM">Lima (LIM)</option><option value="CUZ">Cusco (CUZ)</option><option value="AQP">Arequipa (AQP)</option><option value="JUL">Juliaca (JUL)</option><option value="PIU">Piura (PIU)</option><option value="TRU">Trujillo (TRU)</option><option value="IQT">Iquitos (IQT)</option><option value="TPP">Tarapoto (TPP)</option><option value="CIX">Chiclayo (CIX)</option><option value="PEM">Puerto Maldonado (PEM)</option></optgroup>
+                  <optgroup label="Colombia"><option value="BOG">Bogotá (BOG)</option><option value="MDE" selected>Medellín (MDE)</option><option value="CTG">Cartagena (CTG)</option><option value="CLO">Cali (CLO)</option><option value="SMR">Santa Marta (SMR)</option><option value="ADZ">San Andrés (ADZ)</option><option value="PEI">Pereira (PEI)</option><option value="LET">Leticia (LET)</option></optgroup>
+                  <optgroup label="Ecuador"><option value="UIO">Quito (UIO)</option><option value="GYE">Guayaquil (GYE)</option></optgroup>
+                  <optgroup label="Chile"><option value="SCL">Santiago (SCL)</option><option value="ANF">Antofagasta (ANF)</option></optgroup>
+                  <optgroup label="Argentina"><option value="EZE">Buenos Aires (Ezeiza) (EZE)</option><option value="AEP">Buenos Aires (Aeroparque) (AEP)</option><option value="COR">Córdoba (COR)</option><option value="MDZ">Mendoza (MDZ)</option></optgroup>
+                  <optgroup label="Brasil"><option value="GRU">São Paulo (GRU)</option><option value="GIG">Río de Janeiro (GIG)</option><option value="BSB">Brasilia (BSB)</option></optgroup>
+                  <optgroup label="Bolivia"><option value="LPB">La Paz (LPB)</option><option value="VVI">Santa Cruz (VVI)</option></optgroup>
+                  <optgroup label="México"><option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún (CUN)</option><option value="GDL">Guadalajara (GDL)</option></optgroup>
+                  <optgroup label="Centroamérica"><option value="PTY">Ciudad de Panamá (PTY)</option><option value="SJO">San José, Costa Rica (SJO)</option></optgroup>
+                  <optgroup label="Uruguay"><option value="MVD">Montevideo (MVD)</option></optgroup>
+                  <optgroup label="Venezuela"><option value="CCS">Caracas (CCS)</option><option value="BLA">Barcelona (BLA)</option><option value="MAR">Maracaibo (MAR)</option></optgroup>
+                  <optgroup label="Estados Unidos"><option value="MIA">Miami (MIA)</option><option value="MCO">Orlando (MCO)</option><option value="JFK">Nueva York (JFK) (JFK)</option><option value="LAX">Los Ángeles (LAX)</option></optgroup>
+                  <optgroup label="Europa"><option value="MAD">Madrid (MAD)</option><option value="BCN">Barcelona, España (BCN)</option></optgroup>
                 </select>
               </div>
             </div>
@@ -152,22 +168,59 @@
             </div>
             <p class="flight-form-error" id="flightError" role="alert" hidden></p>
             <button type="submit" class="flight-submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Consultar vuelos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
-            <p class="flight-disclaimer">Las tarifas son orientativas y estarán disponibles cuando existan observaciones verificadas. La búsqueda no reserva ni emite boletos.</p>
+            <p class="flight-disclaimer">Los precios provienen de búsquedas anteriores y pueden cambiar. La consulta no reserva ni emite boletos.</p>
           </form>
         </div>
-        <div id="flightResults" class="flight-results" aria-live="polite" aria-atomic="true" hidden>
-          <div class="flight-results-top"><span class="flight-results-kicker">Tu consulta</span><strong id="flightRouteTitle"></strong></div>
-          <p id="flightRouteDetails" class="flight-route-details"></p>
-          <div class="flight-result-price" id="flightPriceBox" hidden>
-            <span>Rango histórico estimado por adulto (USD)</span>
-            <strong id="flightPriceRange"></strong>
-            <small id="flightSampleInfo"></small>
-          </div>
-          <div id="flightLiveOffers" class="flight-live-offers" aria-live="polite"></div>
-          <p id="flightResultMessage" class="flight-result-message"></p>
-          <a id="flightWhatsapp" class="flight-whatsapp" href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Solicitar cotización confirmada</a>
-        </div>
         <p class="flight-hero-note"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Asesoría personalizada · Tarifas sujetas a confirmación</p>
+      </div>
+    </section>
+
+    <section id="flightResults" class="flight-marketplace" aria-labelledby="flightRouteTitle" hidden>
+      <div class="flight-marketplace__inner">
+        <div class="flight-marketplace__heading">
+          <div>
+            <span class="flight-marketplace__eyebrow"><i class="fa-solid fa-plane" aria-hidden="true"></i> LATAM EXPEDITIONS · RESULTADOS</span>
+            <h2 id="flightRouteTitle">Resultados de vuelos</h2>
+            <p id="flightRouteDetails" class="flight-route-details"></p>
+          </div>
+          <button type="button" id="flightModifySearch" class="flight-modify-btn"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Modificar búsqueda</button>
+        </div>
+        <p class="flight-marketplace__notice"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Tarifas históricas de referencia, no reservas confirmadas. Los precios y horarios deben verificarse antes de comprar.</p>
+        <div class="flight-marketplace__workspace">
+          <aside class="flight-filters" aria-label="Filtros de vuelos">
+            <div class="flight-filters__top"><h3><i class="fa-solid fa-filter" aria-hidden="true"></i> Filtrar resultados</h3><button type="button" id="flightClearFilters">Restablecer</button></div>
+            <fieldset class="flight-filter-group">
+              <legend>Escalas a la ida</legend>
+              <label><input type="radio" name="flightStopFilter" value="all" checked> Todas las opciones</label>
+              <label><input type="radio" name="flightStopFilter" value="direct"> Solo directos</label>
+              <label><input type="radio" name="flightStopFilter" value="one"> Máximo 1 escala</label>
+            </fieldset>
+            <div class="flight-filter-group">
+              <label for="flightMaxPrice" class="flight-filter-title">Precio máximo (USD)</label>
+              <input id="flightMaxPrice" type="range" min="0" max="1000" step="10" value="1000" disabled>
+              <div class="flight-range-values"><span id="flightPriceMinimum">—</span><strong id="flightPriceMaximum">—</strong></div>
+            </div>
+            <fieldset class="flight-filter-group">
+              <legend>Aerolíneas reportadas</legend>
+              <div id="flightAirlineFilters" class="flight-airline-checks"><span class="flight-filter-empty">Aparecerán al consultar tarifas</span></div>
+            </fieldset>
+            <p class="flight-filters__hint">Los filtros se aplican únicamente a las tarifas observadas que devuelve el proveedor, no a todos los vuelos existentes.</p>
+          </aside>
+          <div class="flight-marketplace__main">
+            <div class="flight-sortbar">
+              <div class="flight-sortbar__header"><strong id="flightResultCount">Buscando tarifas…</strong><span>Precio observado por adulto</span></div>
+              <div class="flight-sortbar__buttons" role="group" aria-label="Ordenar resultados">
+                <button type="button" data-flight-sort="price" aria-pressed="true"><i class="fa-solid fa-coins" aria-hidden="true"></i> Más barato</button>
+                <button type="button" data-flight-sort="stops" aria-pressed="false"><i class="fa-solid fa-route" aria-hidden="true"></i> Menos escalas</button>
+                <button type="button" data-flight-sort="duration" aria-pressed="false"><i class="fa-regular fa-clock" aria-hidden="true"></i> Menor duración</button>
+              </div>
+            </div>
+            <div id="flightLiveOffers" class="flight-live-offers" aria-live="polite"></div>
+            <p id="flightResultMessage" class="flight-result-message" role="status"></p>
+            <div class="flight-marketplace__help"><div><strong>¿Quieres asegurar el mejor itinerario disponible?</strong><p>Un asesor verificará precios, equipaje, escalas y tiempos antes de confirmar.</p></div><a id="flightWhatsapp" class="flight-whatsapp" href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Solicitar cotización confirmada</a></div>
+            <div class="flight-result-price" id="flightPriceBox" hidden><span>Rango histórico estimado por adulto (USD)</span><strong id="flightPriceRange"></strong><small id="flightSampleInfo"></small></div>
+          </div>
+        </div>
       </div>
     </section>
 
