@@ -112,7 +112,7 @@
     LA:'LATAM Airlines', JA:'JetSMART', AV:'Avianca', H2:'Sky Airline',
     CM:'Copa Airlines', AR:'Aerolíneas Argentinas', IB:'Iberia',
     AM:'Aeroméxico', G3:'GOL', AD:'Azul', AA:'American Airlines',
-    UA:'United Airlines', DL:'Delta Air Lines', 2K:'Avianca Ecuador'
+    UA:'United Airlines', DL:'Delta Air Lines', '2K':'Avianca Ecuador'
   };
   function setBusy(busy) {
     submitButton.disabled = busy;
