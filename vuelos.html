@@ -187,7 +187,7 @@
         </div>
         
         <div class="flight-marketplace__workspace">
-          <aside class="flight-filters" aria-label="Filtros de vuelos">
+          <aside id="flightFilterSidebar" class="flight-filters" aria-label="Filtros de vuelos" hidden>
             <div class="flight-filters__top"><h3><i class="fa-solid fa-filter" aria-hidden="true"></i> Filtrar resultados</h3><button type="button" id="flightClearFilters">Restablecer</button></div>
             <fieldset class="flight-filter-group">
               <legend>Escalas a la ida</legend>
@@ -207,7 +207,7 @@
             
           </aside>
           <div class="flight-marketplace__main">
-            <div class="flight-sortbar">
+            <div id="flightSortbar" class="flight-sortbar" hidden>
               <div class="flight-sortbar__header"><strong id="flightResultCount">Buscando tarifas…</strong><span>Precio por adulto</span></div>
               <div class="flight-sortbar__buttons" role="group" aria-label="Ordenar resultados">
                 <button type="button" data-flight-sort="price" aria-pressed="true"><i class="fa-solid fa-coins" aria-hidden="true"></i> Más barato</button>
