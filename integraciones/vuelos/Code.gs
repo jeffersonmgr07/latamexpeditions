@@ -18,6 +18,11 @@ var CACHE_SECONDS = 900;
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
+  if (p.mode === "request") {
+    return HtmlService.createHtmlOutputFromFile("FlightRequest")
+      .setTitle("Solicitud de cotización | Latam Expeditions")
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
   var cb = String(p.callback || "");
   if (!/^latamFlightCb_[a-zA-Z0-9]{5,50}$/.test(cb)) {
     return ContentService.createTextOutput("/* Invalid callback */")
@@ -48,6 +53,11 @@ function fetchFlightData_(p) {
       !validFutureDate_(departure) ||
       (trip === "roundtrip" && (!validFutureDate_(ret) || ret < departure))) {
     return { ok:false, error:"invalid_query", message:"Ruta o fechas no válidas." };
+  }
+  var googleKey = PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
+  if (googleKey) {
+    return searchGoogleFlights_(googleKey, origin, destination, departure,
+      trip === "roundtrip" ? ret : "", trip, cabin);
   }
   if (cabin !== "economy") {
     return { ok:false, error:"cabin_unsupported", message:"Las tarifas automáticas por ahora son de clase económica. Solicita una cotización para otras cabinas." };
@@ -172,4 +182,202 @@ function validFutureDate_(v) {
 function toUtcDay_(v) {
   var a = String(v).split("-");
   return Date.UTC(Number(a[0]),Number(a[1])-1,Number(a[2]));
+}
+
+
+/**
+ * OPTIONAL on-demand Google Flights data adapter through SerpApi.
+ * We do not bypass Google's anti-bot protections or scrape directly.
+ * Set SERPAPI_KEY only after confirming provider's commercial permissions.
+ * Round-trip search = one outbound search + at most 2 return selections
+ * (up to 3 provider API requests per user query). No ticketing/PNR.
+ */
+function serpSearch_(key,params) {
+  params.engine="google_flights";
+  params.api_key=key;
+  params.currency="USD";
+  params.hl="es";
+  params.gl="pe";
+  var query=Object.keys(params).map(function(k){
+    return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);
+  }).join("&");
+  var res=UrlFetchApp.fetch("https://serpapi.com/search.json?"+query,{
+    muteHttpExceptions:true,method:"get",followRedirects:true
+  });
+  if(res.getResponseCode()!==200) throw new Error("SerpApi HTTP "+res.getResponseCode());
+  var json=JSON.parse(res.getContentText());
+  if(json.error) throw new Error("SerpApi search error: "+String(json.error).slice(0,100));
+  return json;
+}
+function serpOptions_(json) {
+  return [].concat(Array.isArray(json.best_flights)?json.best_flights:[],
+    Array.isArray(json.other_flights)?json.other_flights:[]);
+}
+function normalizeSegment_(s) {
+  function airport_(a) {
+    return {code:String(a&&a.id||"").slice(0,3),
+      name:String(a&&a.name||"").slice(0,100),time:String(a&&a.time||"").slice(0,25)};
+  }
+  return {
+    airline:String(s.airline||"").slice(0,65),
+    flightNumber:String(s.flight_number||"").slice(0,24),
+    from:airport_(s.departure_airport),to:airport_(s.arrival_airport),
+    duration:typeof s.duration==="number"?s.duration:null,
+    airplane:String(s.airplane||"").slice(0,70)
+  };
+}
+function normalizeTrip_(item) {
+  return {
+    segments:(Array.isArray(item.flights)?item.flights:[]).slice(0,8).map(normalizeSegment_),
+    layovers:(Array.isArray(item.layovers)?item.layovers:[]).slice(0,7).map(function(l){
+      return {airport:String(l.id||"").slice(0,3),
+        name:String(l.name||"").slice(0,100),
+        duration:typeof l.duration==="number"?l.duration:null};
+    }),
+    duration:typeof item.total_duration==="number"?item.total_duration:null
+  };
+}
+function searchGoogleFlights_(key,origin,destination,departure,ret,trip,cabin) {
+  var travelClass={"economy":"1","premium_economy":"2","business":"3"}[cabin]||"1";
+  var p={type:trip==="roundtrip"?"1":"2",departure_id:origin,arrival_id:destination,
+    outbound_date:departure,travel_class:travelClass,adults:"1",children:"0"};
+  if(trip==="roundtrip") p.return_date=ret;
+  var base=serpSearch_(key,p);
+  var outs=serpOptions_(base).filter(function(o){
+    return Array.isArray(o.flights)&&o.flights.length;
+  });
+  var results=[];
+  if(trip==="oneway") {
+    outs.slice(0,10).forEach(function(o){
+      if(!(Number(o.price)>0))return;
+      var outbound=normalizeTrip_(o);
+      results.push({
+        price:Number(o.price),currency:"USD",origin:origin,destination:destination,
+        departure:departure,returnDate:"",airline:o.flights[0].airline||"",
+        stops:outbound.segments.length-1,returnStops:null,
+        durationTo:outbound.duration,durationBack:null,
+        outbound:outbound, inbound:null, sameDates:true,
+        priceContext:"one_way_observed"
+      });
+    });
+  } else {
+    // Each outbound selection consumes another provider request.
+    outs.filter(function(o){return !!o.departure_token;}).slice(0,2).forEach(function(o){
+      var selected={type:"1",departure_id:origin,arrival_id:destination,
+        outbound_date:departure,return_date:ret,travel_class:travelClass,
+        adults:"1",children:"0",departure_token:o.departure_token};
+      var returns=serpOptions_(serpSearch_(key,selected));
+      returns.slice(0,3).forEach(function(back){
+        // Without a complete price for selected outbound+return do not quote.
+        if(!(Number(back.price)>0) || !Array.isArray(back.flights) || !back.flights.length) return;
+        var outward=normalizeTrip_(o),inward=normalizeTrip_(back);
+        results.push({
+          price:Number(back.price),currency:"USD",origin:origin,destination:destination,
+          departure:departure,returnDate:ret,airline:o.flights[0].airline||"",
+          stops:outward.segments.length-1,returnStops:inward.segments.length-1,
+          durationTo:outward.duration,durationBack:inward.duration,
+          outbound:outward,inbound:inward,sameDates:true,
+          priceContext:"round_trip_observed"
+        });
+      });
+    });
+  }
+  results.sort(function(a,b){return a.price-b.price;});
+  return {ok:true,source:"Google Flights via SerpApi",currency:"USD",
+    type:"on_demand_prices",live:false,quoted_at:new Date().toISOString(),
+    exact:true,offers:results.slice(0,12)};
+}
+
+/**
+ * Private quote request registration. No payment captured, no airline booking.
+ * IMPORTANT: requires calling initFlightRequestsSheet() once in the editor.
+ * Only invoked from Apps Script HtmlService (google.script.run).
+ */
+function initFlightRequestsSheet() {
+  var prop=PropertiesService.getScriptProperties();
+  var id=prop.getProperty("FLIGHT_REQUEST_SHEET_ID");
+  if(id) return id;
+  var book=SpreadsheetApp.create("Latam Expeditions - Solicitudes de vuelos");
+  var sheet=book.getSheets()[0];
+  sheet.setName("Solicitudes");
+  sheet.appendRow(["Fecha","Código interno","Estado","Ruta","Fechas viaje",
+    "Adultos","Niños","Tarifa ref. USD","Ajuste sugerido","Precio preliminar USD",
+    "Nombre contacto","Email","Teléfono","Pasajeros (JSON privado)","Aceptación"]);
+  sheet.setFrozenRows(1);
+  prop.setProperty("FLIGHT_REQUEST_SHEET_ID",book.getId());
+  return book.getId();
+}
+function submitFlightRequest(p) {
+  if(!p || p.honeypot) throw new Error("Solicitud inválida.");
+  var allowedTypes=["DNI","CE","PASSPORT","OTHER"];
+  var legs=["oneway","roundtrip"];
+  var origin=String(p.origin||"").toUpperCase(),destination=String(p.destination||"").toUpperCase();
+  var departure=String(p.departure||""),ret=String(p.returnDate||"");
+  var trip=String(p.trip||"");
+  var adults=Number(p.adults),children=Number(p.children);
+  if(FLIGHT_AIRPORTS.indexOf(origin)<0 || FLIGHT_AIRPORTS.indexOf(destination)<0 ||
+    origin===destination || legs.indexOf(trip)<0 ||
+    !validFutureDate_(departure) ||
+    trip==="roundtrip" && (!validFutureDate_(ret)||ret<departure) ||
+    !Number.isInteger(adults)||adults<1||adults>9||
+    !Number.isInteger(children)||children<0||children>6||adults+children>9) {
+    throw new Error("Revisa las fechas, rutas y número de viajeros.");
+  }
+  // Strictly no next-day departures without an actual flight departure time:
+  // a departure tomorrow may be less than 24h away.
+  var dayUTC=Date.UTC(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate());
+  if(toUtcDay_(departure)-dayUTC<2*86400000) throw new Error("Por ahora solo aceptamos solicitudes desde pasado mañana.");
+  if(p.accepted!==true) throw new Error("Debes aceptar las condiciones de la solicitud.");
+  var email=String(p.email||"").trim().slice(0,150);
+  var contact=String(p.contact||"").trim().slice(0,150);
+  var phone=String(p.phone||"").replace(/[^\d+\s()-]/g,"").slice(0,30);
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || contact.length<3) {
+    throw new Error("Nombre y correo no válidos.");
+  }
+  var passengers=p.passengers;
+  if(!Array.isArray(passengers)||passengers.length!==adults+children) {
+    throw new Error("Completa los datos de todos los pasajeros.");
+  }
+  var sanitized=passengers.map(function(t){
+    var fn=String(t.firstName||"").trim().slice(0,100),
+      ln=String(t.lastName||"").trim().slice(0,100),
+      type=String(t.docType||"").toUpperCase(),
+      number=String(t.docNumber||"").trim().slice(0,35),
+      dob=String(t.birthDate||"");
+    if(fn.length<2||ln.length<2||allowedTypes.indexOf(type)<0||
+       !/^[A-Za-z0-9 .-]{4,35}$/.test(number)||
+       !/^\d{4}-\d\d-\d\d$/.test(dob) || !Number.isFinite(toUtcDay_(dob))||
+       toUtcDay_(dob)>=Date.now()) throw new Error("Verifica datos de los pasajeros.");
+    return {firstName:fn,lastName:ln,docType:type,docNumber:number,birthDate:dob};
+  });
+  var bookId=PropertiesService.getScriptProperties().getProperty("FLIGHT_REQUEST_SHEET_ID");
+  if(!bookId) throw new Error("El registro privado aún no está activado. Contacta con Latam Expeditions.");
+  var lock=LockService.getScriptLock();
+  if(!lock.tryLock(10000)) throw new Error("Servidor ocupado. Intenta nuevamente.");
+  try {
+    var cache=CacheService.getScriptCache();
+    var digest=Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,email.toLowerCase());
+    var key="rq_"+Utilities.base64EncodeWebSafe(digest).slice(0,35);
+    if(cache.get(key)) throw new Error("Ya recibimos una solicitud reciente de este correo. Contacta a nuestro equipo para evitar duplicados.");
+    var internalCode="LXQ-"+Utilities.formatDate(new Date(),"Etc/UTC","yyyyMMdd")+"-"+
+      Utilities.getUuid().replace(/-/g,"").slice(0,8).toUpperCase();
+    // Values from client are UNVERIFIED and never constitute a price agreement.
+    var observed=Number(p.observedPrice);
+    var dayLead=Math.round((toUtcDay_(departure)-dayUTC)/86400000);
+    var rate=dayLead<=44?0.10:dayLead<=60?0.05:dayLead<=90?0:
+      dayLead<=180?-0.05:dayLead<=270?-0.10:-0.15;
+    var estimated=Number.isFinite(observed)&&observed>0&&observed<100000?
+      Math.round(observed*(1+rate)*100)/100:"NO VERIFICADO";
+    var row=[new Date(),internalCode,"SOLICITUD SIN RESERVA NI BILLETE",
+      origin+"-"+destination,departure+(ret?" / "+ret:""),adults,children,
+      Number.isFinite(observed)&&observed>0&&observed<100000?observed:"NO VERIFICADO",
+      (rate*100)+"%",estimated,contact,email,phone,JSON.stringify(sanitized),
+      "Acepta solicitud sin billete y tratamiento de datos"];
+    // Avoid spreadsheet formulas injected via user-provided input.
+    row=row.map(function(value){return typeof value==="string" && /^[=+\-@]/.test(value)? "'"+value:value;});
+    SpreadsheetApp.openById(bookId).getSheetByName("Solicitudes").appendRow(row);
+    cache.put(key,internalCode,600);
+    return {ok:true,reference:internalCode,status:"SOLICITUD_RECIBIDA",
+      message:"Tu solicitud fue registrada. Aún NO existe reserva aérea, PNR ni boleto emitido. Nuestro equipo validará precio y disponibilidad antes de ofrecerte pagar."};
+  } finally {lock.releaseLock();}
 }
