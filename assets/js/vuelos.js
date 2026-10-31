@@ -244,7 +244,7 @@
     }
     body.append(disclosure);
     const priceBlock = node('div','flight-offer__price-panel');
-    const days = leadDays(currentQuery.departure);
+    const days = leadDays(offer.departure || currentQuery.departure);
     const pct = commercialAdjustment(days);
     const quote = Math.round(offer.price * (1+pct)*100)/100;
     priceBlock.append(node('span','flight-offer__price-kicker','Precio consultado'),
