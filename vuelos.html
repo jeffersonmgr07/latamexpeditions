@@ -1111,9 +1111,32 @@
     <i class="fab fa-whatsapp" aria-hidden="true"></i>
   </a>
 
+  <div class="flight-modal" id="flightQuoteModal" role="dialog" aria-modal="true" aria-labelledby="flightModalTitle" hidden>
+    <div class="flight-modal__scrim" data-flight-modal-close></div>
+    <div class="flight-modal__panel">
+      <div class="flight-modal__header">
+        <div>
+          <span class="flight-marketplace__eyebrow">LATAM EXPEDITIONS · SOLICITUD PRIVADA</span>
+          <h2 id="flightModalTitle">Solicitar una cotización de vuelo</h2>
+          <p>Esta gestión aún no constituye una reserva confirmada por la aerolínea ni un boleto aéreo.</p>
+        </div>
+        <button type="button" class="flight-modal__close" data-flight-modal-close aria-label="Cerrar formulario"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </div>
+      <div id="flightModalNotReady" class="flight-modal__placeholder">
+        <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+        <strong>El formulario seguro de pasajeros estará disponible después de activar la integración.</strong>
+        <p>Por ahora puedes solicitar una cotización a nuestro equipo, sin enviar documentos personales por este canal.</p>
+        <a href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
+      </div>
+      <iframe id="flightRequestFrame" title="Formulario privado de pasajeros" loading="lazy" referrerpolicy="no-referrer" hidden></iframe>
+      <p class="flight-modal__footer">El comprobante posterior será una constancia interna de solicitud, no un PNR, billete electrónico ni tarjeta de embarque.</p>
+    </div>
+  </div>
+
   <script src="assets/js/main.js" defer></script>
   <script src="assets/js/cuentas.js" defer></script>
   <script src="assets/js/vuelos-config.js" defer></script>
   <script src="assets/js/vuelos.js" defer></script>
+  <script src="assets/js/vuelos-solicitudes.js" defer></script>
 </body>
 </html>
