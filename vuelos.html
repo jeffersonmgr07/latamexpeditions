@@ -107,12 +107,12 @@
       <div class="hero__content">
         <span class="eyebrow"><i class="fa-solid fa-plane-departure" aria-hidden="true"></i> LATAM EXPEDITIONS · VUELOS</span>
         <h1 id="heroTitle">Encuentra tu próximo vuelo</h1>
-        <p>Busca rutas aéreas por Latinoamérica, compara precios observados y solicita una cotización confirmada con nuestro equipo.</p>
+        <p>Busca y compara vuelos a los mejores destinos de Latinoamérica.</p>
 
         <div class="flight-search-shell">
           <div class="flight-search-head">
             <div class="flight-search-heading"><i class="fa-solid fa-plane" aria-hidden="true"></i><strong>Buscar vuelos</strong></div>
-            <span class="flight-beta"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Cotización asistida · Precios de referencia</span>
+            
           </div>
           <form id="flightsForm" class="flights-form" role="search" aria-label="Cotizador de vuelos">
             <fieldset class="flight-types">
@@ -168,7 +168,7 @@
             </div>
             <p class="flight-form-error" id="flightError" role="alert" hidden></p>
             <button type="submit" class="flight-submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Consultar vuelos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
-            <p class="flight-disclaimer">Los precios provienen de búsquedas anteriores y pueden cambiar. La consulta no reserva ni emite boletos.</p>
+            <p class="flight-disclaimer">Tarifas sujetas a disponibilidad y confirmación antes del pago.</p>
           </form>
         </div>
         <p class="flight-hero-note"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Asesoría personalizada · Tarifas sujetas a confirmación</p>
@@ -185,7 +185,7 @@
           </div>
           <button type="button" id="flightModifySearch" class="flight-modify-btn"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Modificar búsqueda</button>
         </div>
-        <p class="flight-marketplace__notice"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Tarifas externas de referencia, no reservas confirmadas. El cálculo comercial es preliminar: antes de comprar deben verificarse precio final, horarios, escalas, equipaje y disponibilidad.</p>
+        
         <div class="flight-marketplace__workspace">
           <aside class="flight-filters" aria-label="Filtros de vuelos">
             <div class="flight-filters__top"><h3><i class="fa-solid fa-filter" aria-hidden="true"></i> Filtrar resultados</h3><button type="button" id="flightClearFilters">Restablecer</button></div>
@@ -201,14 +201,14 @@
               <div class="flight-range-values"><span id="flightPriceMinimum">—</span><strong id="flightPriceMaximum">—</strong></div>
             </div>
             <fieldset class="flight-filter-group">
-              <legend>Aerolíneas reportadas</legend>
+              <legend>Aerolíneas</legend>
               <div id="flightAirlineFilters" class="flight-airline-checks"><span class="flight-filter-empty">Aparecerán al consultar tarifas</span></div>
             </fieldset>
-            <p class="flight-filters__hint">Los filtros se aplican únicamente a las tarifas observadas que devuelve el proveedor, no a todos los vuelos existentes.</p>
+            
           </aside>
           <div class="flight-marketplace__main">
             <div class="flight-sortbar">
-              <div class="flight-sortbar__header"><strong id="flightResultCount">Buscando tarifas…</strong><span>Precio observado por adulto</span></div>
+              <div class="flight-sortbar__header"><strong id="flightResultCount">Buscando tarifas…</strong><span>Precio por adulto</span></div>
               <div class="flight-sortbar__buttons" role="group" aria-label="Ordenar resultados">
                 <button type="button" data-flight-sort="price" aria-pressed="true"><i class="fa-solid fa-coins" aria-hidden="true"></i> Más barato</button>
                 <button type="button" data-flight-sort="stops" aria-pressed="false"><i class="fa-solid fa-route" aria-hidden="true"></i> Menos escalas</button>
@@ -217,7 +217,7 @@
             </div>
             <div id="flightLiveOffers" class="flight-live-offers" aria-live="polite"></div>
             <p id="flightResultMessage" class="flight-result-message" role="status"></p>
-            <div class="flight-marketplace__help"><div><strong>¿Quieres asegurar el mejor itinerario disponible?</strong><p>Un asesor verificará precios, equipaje, escalas y tiempos antes de confirmar.</p></div><a id="flightWhatsapp" class="flight-whatsapp" href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Solicitar cotización confirmada</a></div>
+            <div class="flight-marketplace__help"><div><strong>¿Necesitas ayuda con tu vuelo?</strong><p>Un asesor puede ayudarte a elegir tu itinerario y confirmar las condiciones.</p></div><a id="flightWhatsapp" class="flight-whatsapp" href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> Hablar con un asesor</a></div>
             <div class="flight-result-price" id="flightPriceBox" hidden><span>Rango histórico estimado por adulto (USD)</span><strong id="flightPriceRange"></strong><small id="flightSampleInfo"></small></div>
           </div>
         </div>
@@ -1117,19 +1117,19 @@
       <div class="flight-modal__header">
         <div>
           <span class="flight-marketplace__eyebrow">LATAM EXPEDITIONS · SOLICITUD PRIVADA</span>
-          <h2 id="flightModalTitle">Solicitar una cotización de vuelo</h2>
-          <p>Esta gestión aún no constituye una reserva confirmada por la aerolínea ni un boleto aéreo.</p>
+          <h2 id="flightModalTitle">Datos de pasajeros</h2>
+          <p>Completa los datos de los pasajeros para continuar con tu solicitud.</p>
         </div>
         <button type="button" class="flight-modal__close" data-flight-modal-close aria-label="Cerrar formulario"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       </div>
       <div id="flightModalNotReady" class="flight-modal__placeholder">
         <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
-        <strong>El formulario seguro de pasajeros estará disponible después de activar la integración.</strong>
-        <p>Por ahora puedes solicitar una cotización a nuestro equipo, sin enviar documentos personales por este canal.</p>
+        <strong>Estamos habilitando este formulario. Mientras tanto, nuestro equipo puede ayudarte con tu reserva.</strong>
+        <p></p>
         <a href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
       </div>
       <iframe id="flightRequestFrame" title="Formulario privado de pasajeros" loading="lazy" referrerpolicy="no-referrer" hidden></iframe>
-      <p class="flight-modal__footer">El comprobante posterior será una constancia interna de solicitud, no un PNR, billete electrónico ni tarjeta de embarque.</p>
+      <p class="flight-modal__footer">Recibirás un número de solicitud para hacer seguimiento. El boleto electrónico se entrega después de su emisión.</p>
     </div>
   </div>
 
