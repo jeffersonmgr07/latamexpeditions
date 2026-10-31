@@ -39,10 +39,10 @@
 </head>
 <body>
   <main class="panel">
-    <div class="label">LATAM EXPEDITIONS · SOLICITUD</div>
-    <h1>Datos para solicitar tu vuelo</h1>
+    <div class="label">LATAM EXPEDITIONS · VUELOS</div>
+    <h1>Datos de los pasajeros</h1>
     <p id="routeDisplay">Preparando solicitud…</p>
-    <div class="notice"><b>Importante:</b> este formulario registra una solicitud de cotización. No reserva asientos, no emite boletos ni confirma el precio. No se efectuará ningún cobro. Un asesor deberá validar disponibilidad, tarifa y condiciones antes de ofrecerte una compra.</div>
+    <div class="notice">Completa los datos para continuar. Nuestro equipo confirmará la tarifa final y la disponibilidad antes del pago.</div>
     <form id="requestForm">
       <h2>Contacto</h2>
       <div class="grid">
@@ -51,37 +51,33 @@
         <div class="field"><label for="phone">Teléfono con código de país</label><input id="phone" type="tel" maxlength="30" autocomplete="tel"></div>
       </div>
       <h2>Pasajeros</h2>
-      <p>Escribe los datos tal como aparecen en el documento de viaje. Los datos se almacenarán únicamente en la hoja privada de solicitudes de Latam Expeditions.</p>
+      <p>Completa los datos tal como aparecen en el documento de viaje.</p>
       <div id="passengers"></div>
       <input name="website" id="website" tabindex="-1" autocomplete="off" style="display:none" aria-hidden="true">
       <div class="consent">
         <input type="checkbox" id="accepted" required>
-        <label for="accepted">Confirmo que los datos son correctos, que cuento con autorización para proporcionar los datos de los pasajeros y que he leído la <a href="https://latamexpeditions.com/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a>. Entiendo que esto <b>NO es una reserva aérea ni un boleto</b> y que no existe aún un precio garantizado.</label>
+        <label for="accepted">Confirmo que la información es correcta, autorizo su uso para gestionar esta solicitud y he leído la <a href="https://latamexpeditions.com/politica-privacidad.html" target="_blank" rel="noopener">política de privacidad</a>. Entiendo que la reserva y la tarifa quedan sujetas a confirmación antes del pago.</label>
       </div>
       <p id="error" class="error" hidden></p>
-      <button class="primary" id="submit" type="submit">Enviar solicitud sin realizar pago</button>
+      <button class="primary" id="submit" type="submit">Continuar con mi reserva</button>
     </form>
     <section class="receipt" id="receipt" hidden>
-      <div class="label">CONSTANCIA INTERNA DE SOLICITUD</div>
+      <div class="label">CONFIRMACIÓN DE RECEPCIÓN</div>
       <h2>Solicitud recibida</h2>
       <div class="code" id="reference"></div>
       <p id="receiptSummary"></p>
-      <p><strong>NO ES UN BOLETO AÉREO NI UNA RESERVA CONFIRMADA.</strong></p>
-      <p>Latam Expeditions revisará precio, disponibilidad, equipaje, condiciones y datos. Solo una confirmación posterior y la emisión efectiva por la aerolínea podrán generar un PNR y número de e-ticket. El check-in y boarding pass dependerán de las reglas de la aerolínea, después de la emisión.</p>
-      <p class="muted">Guarda este código para consultas con Latam Expeditions. No es un localizador de aerolínea.</p>
-      <button class="print" type="button" onclick="window.print()">Imprimir constancia</button>
+      <p><strong>Solicitud registrada correctamente.</strong> Guardamos tu información para verificar el vuelo y confirmar los próximos pasos.</p>
+      <p>Recibirás la confirmación de la tarifa y de la disponibilidad antes de efectuar el pago. Una vez emitido tu boleto electrónico, te enviaremos el localizador y los detalles para gestionar tu viaje con la aerolínea.</p>
+      <p class="muted">Este es tu número de solicitud de Latam Expeditions, no un localizador de aerolínea ni un boleto electrónico. Consérvalo para hacer seguimiento.</p>
+      <button class="print" type="button" onclick="window.print()">Imprimir comprobante</button>
     </section>
   </main>
   <script>
     (() => {
       'use strict';
       const $=id=>document.getElementById(id);
-      // Apps Script web apps run in a sandboxed iframe; google.script.url is the
-      // documented reliable way to access original /exec URL query parameters.
-      let initialized=false;
-      function initialize(params) {
-      if(initialized) return;
-      initialized=true;
+      // Search parameters were sanitized by doGet and inserted by HtmlTemplate.
+      const params=new URLSearchParams(<?!= flightRequestQuery ?>);
       const code=k=>/^[A-Z]{3}$/.test(params.get(k)||'')?params.get(k):'';
       const date=k=>/^\d{4}-\d\d-\d\d$/.test(params.get(k)||'')?params.get(k):'';
       const adults=Math.min(9,Math.max(1,Number(params.get('adults'))||1));
@@ -162,19 +158,6 @@
           $('error').hidden=false;
         }).submitFlightRequest(payload);
       });
-      }
-      if(window.google && google.script && google.script.url &&
-          typeof google.script.url.getLocation === 'function') {
-        google.script.url.getLocation(function(loc) {
-          const query=new URLSearchParams();
-          const values=(loc && loc.parameter) || {};
-          Object.keys(values).forEach(k=>query.set(k,String(values[k])));
-          initialize(query);
-        });
-      } else {
-        // Local preview fallback only.
-        initialize(new URLSearchParams(location.search));
-      }
     })();
   </script>
 </body>
