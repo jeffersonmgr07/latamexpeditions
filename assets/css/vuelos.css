@@ -237,3 +237,22 @@ body.flight-modal-open {overflow:hidden}
  .flight-modal__header{padding:12px}
  #flightRequestFrame{height:75vh}
 }
+/* Results when the provider has no exact-date offers */
+.flight-filters[hidden], .flight-sortbar[hidden] { display:none !important; }
+.flight-marketplace--empty .flight-marketplace__workspace { grid-template-columns:minmax(0,1fr); }
+.flight-marketplace--empty .flight-marketplace__main { width:100%; }
+.flight-empty-state {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:12px; text-align:center; background:#fff; border:1px solid #e2ebe5;
+  border-radius:16px; padding:clamp(24px,5vw,48px) 18px;
+  box-shadow:0 3px 15px rgba(9,56,33,.035); color:#184932;
+}
+.flight-empty-state__icon {
+  display:grid;place-items:center;width:58px;height:58px;border-radius:18px;
+  background:#eaf4ed;color:#17664a;font-size:22px;
+}
+.flight-empty-state h3 { margin:4px 0 0;font:800 clamp(16px,2vw,20px) Montserrat,Inter,sans-serif;color:#18432d; }
+.flight-empty-state p { margin:0; max-width:530px;font:400 13px/1.6 Inter,sans-serif;color:#627b6b; }
+.flight-empty-state__edit { margin-top:8px;background:#eff6f1;color:#17583d;border:1px solid #cde2d2;
+  border-radius:10px;padding:12px 19px;font:750 12px Inter,sans-serif;cursor:pointer; }
+.flight-empty-state__edit:hover { background:#e4f2e8; }
