@@ -251,7 +251,9 @@
     priceBlock.append(
       node('span','flight-offer__price-kicker','Precio'),
       node('strong','flight-offer__price',money(quotedPrice(offer))),
-      node('small','flight-offer__passenger','Por adulto · ' + (currentQuery.trip === 'roundtrip' ? 'ida y vuelta' : 'solo ida'))
+      node('small','flight-offer__passenger',(offer.priceBasis==='party'
+        ? 'Total · '+currentQuery.adults+' adulto(s)'+(currentQuery.children?' y '+currentQuery.children+' niño(s)':'')
+        : 'Por adulto')+' · '+(currentQuery.trip==='roundtrip'?'ida y vuelta':'solo ida'))
     );
     const action = node('a','flight-offer__button','Reservar');
     // Visible contact request is separate from any airline booking.
@@ -260,6 +262,7 @@
     action.dataset.price=String(offer.price);
     action.dataset.outbound=offer.departure;
     action.dataset.inbound=offer.returnDate || '';
+    action.dataset.priceBasis=offer.priceBasis||'adult';
     priceBlock.append(action);
     card.append(body,priceBlock);
     return card;
@@ -368,7 +371,8 @@
       const cb = 'latamFlightCb_' + String(Date.now()) + String(Math.floor(Math.random() * 100000));
       const url = new URL(endpoint);
       const params = { callback:cb, origin:query.origin, destination:query.destination,
-        trip:query.trip, departure:query.departure, returnDate:query.returnDate, cabin:query.cabin };
+        trip:query.trip, departure:query.departure, returnDate:query.returnDate, cabin:query.cabin,
+        adults:String(query.adults), children:String(query.children) };
       Object.keys(params).forEach(k => url.searchParams.set(k, params[k]));
       const script = document.createElement('script');
       let closed = false;
