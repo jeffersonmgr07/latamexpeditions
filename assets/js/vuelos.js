@@ -380,7 +380,7 @@
       }
       window[cb] = result => finish(result, null);
       script.onerror = () => finish(null, new Error('network_error'));
-      timeout = setTimeout(() => finish(null, new Error('timeout')), 18000);
+      timeout = setTimeout(() => finish(null, new Error('timeout')), 65000);
       script.src = url.toString();
       document.head.appendChild(script);
     });
@@ -422,9 +422,12 @@
       const live = await getLivePrices(query);
       if (searchId !== currentSearch) return;
       if (live.ok && showLiveOffers(live)) {
-        message = live.exact
-          ? 'Estos precios fueron observados para las fechas solicitadas. Son orientativos: pueden variar o dejar de estar disponibles. Solicita la confirmación antes de pagar.'
-          : 'No hubo registros para tus fechas exactas. Estos resultados corresponden a otras fechas, indicadas en cada tarjeta. Solicita una confirmación antes de pagar.';
+        const isOnDemand=live.type==='on_demand_prices';
+        message = isOnDemand
+          ? 'Consulta bajo demanda: '+(live.source||'proveedor')+'. Los precios se obtuvieron de resultados externos, pero no garantizan disponibilidad ni compran boletos. El importe calculado por Latam Expeditions es preliminar.'
+          : live.exact
+            ? 'Estos precios fueron observados para las fechas solicitadas en una caché. Pueden variar o dejar de estar disponibles. Solicita confirmación antes de pagar.'
+            : 'No hubo registros para tus fechas exactas. Estas tarifas provienen de fechas cercanas y no garantizan disponibilidad.';
       } else if (live.ok) {
         setupFilters([]);
         count.textContent = 'Sin tarifas observadas para esta búsqueda';
