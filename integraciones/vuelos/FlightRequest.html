@@ -76,7 +76,12 @@
     (() => {
       'use strict';
       const $=id=>document.getElementById(id);
-      const params=new URLSearchParams(location.search);
+      // Apps Script web apps run in a sandboxed iframe; google.script.url is the
+      // documented reliable way to access original /exec URL query parameters.
+      let initialized=false;
+      function initialize(params) {
+      if(initialized) return;
+      initialized=true;
       const code=k=>/^[A-Z]{3}$/.test(params.get(k)||'')?params.get(k):'';
       const date=k=>/^\d{4}-\d\d-\d\d$/.test(params.get(k)||'')?params.get(k):'';
       const adults=Math.min(9,Math.max(1,Number(params.get('adults'))||1));
@@ -157,6 +162,19 @@
           $('error').hidden=false;
         }).submitFlightRequest(payload);
       });
+      }
+      if(window.google && google.script && google.script.url &&
+          typeof google.script.url.getLocation === 'function') {
+        google.script.url.getLocation(function(loc) {
+          const query=new URLSearchParams();
+          const values=(loc && loc.parameter) || {};
+          Object.keys(values).forEach(k=>query.set(k,String(values[k])));
+          initialize(query);
+        });
+      } else {
+        // Local preview fallback only.
+        initialize(new URLSearchParams(location.search));
+      }
     })();
   </script>
 </body>
