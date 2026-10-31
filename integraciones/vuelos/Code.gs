@@ -32,7 +32,7 @@ function doGet(e) {
     });
     clean.adults=/^[1-9]$/.test(clean.adults)?clean.adults:"1";
     clean.children=/^[0-6]$/.test(clean.children)?clean.children:"0";
-    clean.observedPrice=/^\d{1,5}(\\.\d{1,2})?$/.test(clean.observedPrice)?clean.observedPrice:"";
+    clean.observedPrice=/^\d{1,5}(\.\d{1,2})?$/.test(clean.observedPrice)?clean.observedPrice:"";
     var query=keys.map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(clean[k]);}).join("&");
     var template=HtmlService.createTemplateFromFile("FlightRequest");
     template.flightRequestQuery=JSON.stringify(query);
