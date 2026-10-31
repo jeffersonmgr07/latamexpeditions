@@ -111,6 +111,28 @@
   const submitButton = form.querySelector('button[type="submit"]');
   const offerContainer = el('flightLiveOffers');
   const count = el('flightResultCount');
+  const filterSidebar = el('flightFilterSidebar');
+  const sortBar = el('flightSortbar');
+  function setAvailability(available) {
+    filterSidebar.hidden = !available;
+    sortBar.hidden = !available;
+    panel.classList.toggle('flight-marketplace--empty', !available);
+  }
+  function showEmptyState() {
+    offerContainer.replaceChildren();
+    const empty = node('div', 'flight-empty-state');
+    const graphic = node('span','flight-empty-state__icon');
+    graphic.setAttribute('aria-hidden','true');
+    const icon = node('i','fa-solid fa-plane-circle-xmark');
+    graphic.append(icon);
+    const title = node('h3','', 'No encontramos vuelos para estas fechas');
+    const detail = node('p','', 'Prueba otra fecha de viaje o pide ayuda a nuestro equipo para encontrar la mejor opción.');
+    const btn = node('button','flight-empty-state__edit','Cambiar fechas');
+    btn.type = 'button';
+    btn.addEventListener('click', () => form.scrollIntoView({behavior:'smooth',block:'center'}));
+    empty.append(graphic,title,detail,btn);
+    offerContainer.append(empty);
+  }
   const priceSlider = el('flightMaxPrice');
   const airlineFilters = el('flightAirlineFilters');
   const airlineNames = {
@@ -348,9 +370,16 @@
       (currentQuery.trip!=='roundtrip' || o.returnDate===currentQuery.returnDate) &&
       o.sameDates!==false
     );
+    if (!exact.length) {
+      allOffers = [];
+      setAvailability(false);
+      showEmptyState();
+      return false;
+    }
     setupFilters(exact);
+    setAvailability(true);
     renderFilteredOffers();
-    return allOffers.length>0;
+    return allOffers.length > 0;
   }
   document.querySelectorAll('[name="flightStopFilter"]').forEach(e=>e.addEventListener('change',renderFilteredOffers));
   document.querySelectorAll('[data-flight-sort]').forEach(button=>button.addEventListener('click',()=>{
@@ -424,6 +453,7 @@
     offerContainer.replaceChildren();
     allOffers = [];
     currentQuery = query;
+    setAvailability(false);
     count.textContent = 'Buscando tarifas…';
     panel.hidden = false;
     el('flightResultMessage').textContent = 'Buscando vuelos para tus fechas…';
@@ -436,14 +466,17 @@
       if (live.ok && showLiveOffers(live)) {
         message = 'Tarifas sujetas a disponibilidad y confirmación antes del pago.';
       } else if (live.ok) {
-        setupFilters([]);
-        count.textContent = 'No encontramos opciones para estas fechas';
-        message = 'Prueba otras fechas o consulta con nuestro equipo para encontrar tu vuelo.';
+        showEmptyState();
+        message = 'Las opciones y precios están sujetos a disponibilidad.';
       } else {
-        message = 'No pudimos completar la búsqueda. Inténtalo de nuevo o habla con nuestro equipo.';
+        setAvailability(false);
+        showEmptyState();
+        message = 'No pudimos completar la consulta. Inténtalo nuevamente o habla con nuestro equipo.';
       }
     } catch (err) {
       if (searchId !== currentSearch) return;
+      setAvailability(false);
+      showEmptyState();
       message = 'La búsqueda no está disponible en este momento. Intenta de nuevo o habla con nuestro equipo.';
     } finally {
       if (searchId === currentSearch) setBusy(false);
