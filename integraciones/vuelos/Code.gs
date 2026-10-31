@@ -64,6 +64,12 @@ function fetchFlightData_(p) {
   var departure = String(p.departure || "");
   var ret = String(p.returnDate || "");
   var cabin = String(p.cabin || "economy");
+  var adults = Number(p.adults || 1);
+  var children = Number(p.children || 0);
+  if (!Number.isInteger(adults) || adults<1 || adults>9 ||
+      !Number.isInteger(children) || children<0 || children>6 || adults+children>9) {
+    return {ok:false,error:"passengers_invalid",message:"Revisa la cantidad de pasajeros."};
+  }
 
   if (FLIGHT_AIRPORTS.indexOf(origin) < 0 || FLIGHT_AIRPORTS.indexOf(destination) < 0 ||
       origin === destination || ["roundtrip","oneway"].indexOf(trip) < 0 ||
@@ -74,7 +80,7 @@ function fetchFlightData_(p) {
   var googleKey = PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
   if (googleKey) {
     return searchGoogleFlights_(googleKey, origin, destination, departure,
-      trip === "roundtrip" ? ret : "", trip, cabin);
+      trip === "roundtrip" ? ret : "", trip, cabin, adults, children);
   }
   if (cabin !== "economy") {
     return { ok:false, error:"cabin_unsupported", message:"Las tarifas automáticas por ahora son de clase económica. Solicita una cotización para otras cabinas." };
@@ -95,20 +101,11 @@ function fetchFlightData_(p) {
     one_way:trip === "oneway" ? "true" : "false"
   });
   var exact = normalizeOffers_(exactData, origin, destination, trip, departure, ret, true);
-  var nearby = [];
-  if (!exact.length) {
-    // Only as a clearly labeled alternative. Never treat nearby dates as exact.
-    var monthData = queryAviasales_(token, {
-      origin:origin, destination:destination, departure_at:departure.slice(0,7),
-      return_at:trip === "roundtrip" ? ret.slice(0,7) : "",
-      one_way:trip === "oneway" ? "true" : "false"
-    });
-    nearby = normalizeOffers_(monthData,origin,destination,trip,departure,ret,false);
-  }
+  // Only show fares for the selected dates, never substitutes for other days.
   var result = {
     ok:true, source:"Aviasales Data API / Travelpayouts",
     currency:"USD", type:"cached_fares", live:false, quoted_at:new Date().toISOString(),
-    exact:exact.length > 0, offers:(exact.length ? exact : nearby).slice(0,24)
+    exact:true, offers:exact.slice(0,24).map(function(o){o.priceBasis="adult";return o;})
   };
   // No quota wasted for repeated identical routes/dates.
   cache.put(key,JSON.stringify(result),CACHE_SECONDS);
@@ -265,10 +262,10 @@ function normalizeTrip_(item) {
     duration:typeof item.total_duration==="number"?item.total_duration:null
   };
 }
-function searchGoogleFlights_(key,origin,destination,departure,ret,trip,cabin) {
+function searchGoogleFlights_(key,origin,destination,departure,ret,trip,cabin,adults,children) {
   var travelClass={"economy":"1","premium_economy":"2","business":"3"}[cabin]||"1";
   var p={type:trip==="roundtrip"?"1":"2",departure_id:origin,arrival_id:destination,
-    outbound_date:departure,travel_class:travelClass,adults:"1",children:"0"};
+    outbound_date:departure,travel_class:travelClass,adults:String(adults),children:String(children)};
   if(trip==="roundtrip") p.return_date=ret;
   var base=serpSearch_(key,p);
   var outs=serpOptions_(base).filter(function(o){
@@ -276,11 +273,12 @@ function searchGoogleFlights_(key,origin,destination,departure,ret,trip,cabin) {
   });
   var results=[];
   if(trip==="oneway") {
-    outs.slice(0,10).forEach(function(o){
+    outs.slice(0,30).forEach(function(o){
       if(!(Number(o.price)>0))return;
       var outbound=normalizeTrip_(o);
       results.push({
-        price:Number(o.price),currency:"USD",origin:origin,destination:destination,
+        price:Number(o.price),priceBasis:"party",partyAdults:adults,partyChildren:children,
+        currency:"USD",origin:origin,destination:destination,
         departure:departure,returnDate:"",airline:o.flights[0].airline||"",
         stops:outbound.segments.length-1,returnStops:null,
         durationTo:outbound.duration,durationBack:null,
@@ -290,17 +288,18 @@ function searchGoogleFlights_(key,origin,destination,departure,ret,trip,cabin) {
     });
   } else {
     // Each outbound selection consumes another provider request.
-    outs.filter(function(o){return !!o.departure_token;}).slice(0,2).forEach(function(o){
+    outs.filter(function(o){return !!o.departure_token;}).slice(0,3).forEach(function(o){
       var selected={type:"1",departure_id:origin,arrival_id:destination,
         outbound_date:departure,return_date:ret,travel_class:travelClass,
-        adults:"1",children:"0",departure_token:o.departure_token};
+        adults:String(adults),children:String(children),departure_token:o.departure_token};
       var returns=serpOptions_(serpSearch_(key,selected));
-      returns.slice(0,3).forEach(function(back){
+      returns.slice(0,5).forEach(function(back){
         // Without a complete price for selected outbound+return do not quote.
         if(!(Number(back.price)>0) || !Array.isArray(back.flights) || !back.flights.length) return;
         var outward=normalizeTrip_(o),inward=normalizeTrip_(back);
         results.push({
-          price:Number(back.price),currency:"USD",origin:origin,destination:destination,
+          price:Number(back.price),priceBasis:"party",partyAdults:adults,partyChildren:children,
+          currency:"USD",origin:origin,destination:destination,
           departure:departure,returnDate:ret,airline:o.flights[0].airline||"",
           stops:outward.segments.length-1,returnStops:inward.segments.length-1,
           durationTo:outward.duration,durationBack:inward.duration,
@@ -313,7 +312,7 @@ function searchGoogleFlights_(key,origin,destination,departure,ret,trip,cabin) {
   results.sort(function(a,b){return a.price-b.price;});
   return {ok:true,source:"Google Flights via SerpApi",currency:"USD",
     type:"on_demand_prices",live:false,quoted_at:new Date().toISOString(),
-    exact:true,offers:results.slice(0,12)};
+    exact:true,offers:results.slice(0,30)};
 }
 
 /**
