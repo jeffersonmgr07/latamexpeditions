@@ -148,7 +148,7 @@
       .format(new Date(isoDate.slice(0,10) + 'T12:00:00'));
   }
   function departureTime(timestamp) {
-    return /^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(timestamp || '')
+    return /^\d{4}-\d\d-\d\d[T ]\d\d:\d\d/.test(timestamp || '')
       ? timestamp.slice(11,16) : '—';
   }
   function node(tag, cls, content) {
