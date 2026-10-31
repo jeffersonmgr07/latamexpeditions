@@ -193,6 +193,15 @@ function toUtcDay_(v) {
  * (up to 3 provider API requests per user query). No ticketing/PNR.
  */
 function serpSearch_(key,params) {
+  // Cache on-demand searches to conserve quota, but never present cached
+  // flight data as an airline reservation.
+  var preKey=JSON.stringify(params);
+  var hash=Utilities.base64EncodeWebSafe(
+    Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,preKey));
+  var cacheKey="serp_"+hash.slice(0,54);
+  var cache=CacheService.getScriptCache();
+  var cached=cache.get(cacheKey);
+  if(cached) return JSON.parse(cached);
   params.engine="google_flights";
   params.api_key=key;
   params.currency="USD";
@@ -207,6 +216,8 @@ function serpSearch_(key,params) {
   if(res.getResponseCode()!==200) throw new Error("SerpApi HTTP "+res.getResponseCode());
   var json=JSON.parse(res.getContentText());
   if(json.error) throw new Error("SerpApi search error: "+String(json.error).slice(0,100));
+  // Cache may reject oversized responses; failure to cache must not block results.
+  try {cache.put(cacheKey,JSON.stringify(json),600);} catch(ex) {}
   return json;
 }
 function serpOptions_(json) {
@@ -377,6 +388,16 @@ function submitFlightRequest(p) {
     row=row.map(function(value){return typeof value==="string" && /^[=+\-@]/.test(value)? "'"+value:value;});
     SpreadsheetApp.openById(bookId).getSheetByName("Solicitudes").appendRow(row);
     cache.put(key,internalCode,600);
+    var notify=PropertiesService.getScriptProperties().getProperty("FLIGHT_REQUEST_NOTIFY_EMAIL");
+    if(notify && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(notify)) {
+      try {
+        MailApp.sendEmail(notify,"Nueva solicitud de vuelos "+internalCode,
+          "Se recibió una solicitud de tarifa NO EMITIDA: "+internalCode+
+          "\nRuta: "+origin+"-"+destination+"\nSalida: "+departure+
+          "\nLos datos personales están disponibles exclusivamente en la hoja privada. "+
+          "No hay boleto ni pago.");
+      } catch(ex) {console.error("Flight request notification unavailable");}
+    }
     return {ok:true,reference:internalCode,status:"SOLICITUD_RECIBIDA",
       message:"Tu solicitud fue registrada. Aún NO existe reserva aérea, PNR ni boleto emitido. Nuestro equipo validará precio y disponibilidad antes de ofrecerte pagar."};
   } finally {lock.releaseLock();}
