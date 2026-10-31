@@ -10,15 +10,15 @@
   const api=String(window.LATAM_FLIGHTS_API_URL||'');
   const apiIsValid=/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(api);
   const enabled=window.LATAM_FLIGHTS_REQUESTS_ENABLED===true;
-  function quoteUrl(price,departure,returnDate){
+  function quoteUrl(offerBtn,price,departure,returnDate){
     const query={
       mode:'request',
-      origin:form.querySelector('#flightOrigin').value,
-      destination:form.querySelector('#flightDestination').value,
-      trip:form.elements.tripType.value,
+      origin:offerBtn.dataset.origin,
+      destination:offerBtn.dataset.destination,
+      trip:offerBtn.dataset.trip,
       departure,returnDate,
-      adults:form.querySelector('#flightAdults').value,
-      children:form.querySelector('#flightChildren').value,
+      adults:offerBtn.dataset.adults,
+      children:offerBtn.dataset.children,
       observedPrice:String(price)
     };
     const u=new URL(api);
@@ -36,7 +36,7 @@
       /^\d{4}-\d\d-\d\d$/.test(departure||'');
     placeholder.hidden=canLoad;
     frame.hidden=!canLoad;
-    if(canLoad) frame.src=quoteUrl(base,departure,returnDate);
+    if(canLoad) frame.src=quoteUrl(offerBtn,base,departure,returnDate);
     modal.querySelector('.flight-modal__close').focus();
   }
   function close() {
