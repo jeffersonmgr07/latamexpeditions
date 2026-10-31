@@ -19,8 +19,25 @@ var CACHE_SECONDS = 900;
 function doGet(e) {
   var p = (e && e.parameter) || {};
   if (p.mode === "request") {
-    return HtmlService.createHtmlOutputFromFile("FlightRequest")
-      .setTitle("Solicitud de cotización | Latam Expeditions")
+    // Pass the original search context from the server to the iframe. This
+    // avoids account-switching and redirect issues with Apps Script URLs.
+    var keys=["origin","destination","trip","departure","returnDate","adults","children","observedPrice"];
+    var clean={};
+    keys.forEach(function(k){clean[k]=String(p[k]||"").slice(0,36);});
+    clean.origin=/^[A-Z]{3}$/.test(clean.origin)?clean.origin:"";
+    clean.destination=/^[A-Z]{3}$/.test(clean.destination)?clean.destination:"";
+    clean.trip=["oneway","roundtrip"].indexOf(clean.trip)>=0?clean.trip:"";
+    ["departure","returnDate"].forEach(function(k){
+      if(!/^\d{4}-\d\d-\d\d$/.test(clean[k]))clean[k]="";
+    });
+    clean.adults=/^[1-9]$/.test(clean.adults)?clean.adults:"1";
+    clean.children=/^[0-6]$/.test(clean.children)?clean.children:"0";
+    clean.observedPrice=/^\d{1,5}(\\.\d{1,2})?$/.test(clean.observedPrice)?clean.observedPrice:"";
+    var query=keys.map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(clean[k]);}).join("&");
+    var template=HtmlService.createTemplateFromFile("FlightRequest");
+    template.flightRequestQuery=JSON.stringify(query);
+    return template.evaluate()
+      .setTitle("Datos de pasajeros | Latam Expeditions")
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   }
   var cb = String(p.callback || "");
