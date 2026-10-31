@@ -49,6 +49,8 @@
   }
   const today = new Date();
   departure.min = iso(today);
+  departure.max = addDays(today,365);
+  returnDate.max = departure.max;
   departure.value = addDays(today, 14);
   returnDate.value = addDays(today, 20);
   syncDates();
