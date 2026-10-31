@@ -440,13 +440,11 @@
         count.textContent = 'No encontramos opciones para estas fechas';
         message = 'Prueba otras fechas o consulta con nuestro equipo para encontrar tu vuelo.';
       } else {
-        message = live.message || 'No fue posible consultar tarifas. Solicita una cotización confirmada.';
+        message = 'No pudimos completar la búsqueda. Inténtalo de nuevo o habla con nuestro equipo.';
       }
     } catch (err) {
       if (searchId !== currentSearch) return;
-      message = err.message === 'not_configured'
-        ? 'El buscador está preparado, pero aún falta activar la conexión con la fuente de tarifas. Solicita una cotización personalizada.'
-        : 'La consulta de tarifas no respondió. Intenta nuevamente o solicita una cotización personalizada.';
+      message = 'La búsqueda no está disponible en este momento. Intenta de nuevo o habla con nuestro equipo.';
     } finally {
       if (searchId === currentSearch) setBusy(false);
     }
