@@ -263,6 +263,11 @@
     action.dataset.outbound=offer.departure;
     action.dataset.inbound=offer.returnDate || '';
     action.dataset.priceBasis=offer.priceBasis||'adult';
+    action.dataset.origin=currentQuery.origin;
+    action.dataset.destination=currentQuery.destination;
+    action.dataset.trip=currentQuery.trip;
+    action.dataset.adults=String(currentQuery.adults);
+    action.dataset.children=String(currentQuery.children);
     priceBlock.append(action);
     card.append(body,priceBlock);
     return card;
