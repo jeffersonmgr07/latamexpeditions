@@ -126,7 +126,9 @@
     submitButton.textContent = busy ? 'Consultando tarifas…' : 'Consultar vuelos';
   }
   function airlineName(code) {
-    return airlineNames[code] || (code ? 'Aerolínea ' + code : 'Aerolínea no informada');
+    if (airlineNames[code]) return airlineNames[code];
+    if (typeof code === 'string' && code.length > 3) return code;
+    return code ? 'Aerolínea ' + code : 'Aerolínea no informada';
   }
   function stopLabel(n) {
     if (!Number.isInteger(n)) return 'Escalas no informadas';
@@ -153,7 +155,7 @@
     if (content !== undefined) n.textContent = String(content);
     return n;
   }
-  function tripRow(label, from, to, timestamp, date, duration, stops) {
+  function tripRow(label, from, to, timestamp, date, duration, stops, arrivalTime) {
     const line = node('div','flight-leg');
     const heading = node('div','flight-leg__label', label + ' · ' + dateLabel(date));
     const timeline = node('div','flight-leg__timeline');
@@ -162,7 +164,7 @@
     const mid = node('div','flight-leg__middle');
     mid.append(node('span','',durationLabel(duration)),node('span','flight-leg__arrow','━━━━ ✈ ━━━━'),node('small','',stopLabel(stops)));
     const right = node('div','flight-leg__endpoint flight-leg__endpoint--end');
-    right.append(node('b','flight-leg__time','Llegada: —'), node('small','',to));
+    right.append(node('b','flight-leg__time',departureTime(arrivalTime)==='—'?'Llegada: —':departureTime(arrivalTime)), node('small','',to));
     timeline.append(left,mid,right);
     line.append(heading,timeline);
     return line;
@@ -183,6 +185,35 @@
     ].filter(Boolean).join('\n');
     return 'https://wa.me/51900608980?text=' + encodeURIComponent(text);
   }
+  function leadDays(dateString) {
+    const d = new Date(dateString + 'T12:00:00');
+    const start = new Date(); start.setHours(12,0,0,0);
+    return Math.round((d.getTime()-start.getTime())/86400000);
+  }
+  function commercialAdjustment(days) {
+    if (days <= 44) return 0.10;
+    if (days <= 60) return 0.05;
+    if (days <= 90) return 0;
+    if (days <= 180) return -0.05;
+    if (days <= 270) return -0.10;
+    return -0.15;
+  }
+  function addSegments(parent, title, trip) {
+    if (!trip || !Array.isArray(trip.segments)) return;
+    parent.append(node('h4','flight-segments__heading',title));
+    trip.segments.forEach((seg,i)=>{
+      const line=node('p','flight-segment-line');
+      const airline=seg.airline||'Aerolínea no informada';
+      line.textContent=(i+1)+'. '+(seg.from?.code||'?')+' '+(seg.from?.time||'—')+
+        ' → '+(seg.to?.code||'?')+' '+(seg.to?.time||'—')+
+        ' · '+airline+(seg.flightNumber?' ('+seg.flightNumber+')':'');
+      parent.append(line);
+      const lay=trip.layovers?.[i];
+      if (lay) parent.append(node('p','flight-segment-layover',
+        'Escala en '+(lay.airport||lay.name||'aeropuerto por confirmar')+
+        (Number.isFinite(lay.duration)?' · '+durationLabel(lay.duration):'')));
+    });
+  }
   function renderOffer(offer) {
     const card = node('article','flight-offer flight-offer--detailed');
     const body = node('div','flight-offer__body');
@@ -192,26 +223,42 @@
     body.append(carrier);
     body.append(tripRow('IDA',offer.originAirport || offer.origin || currentQuery.origin,
       offer.destinationAirport || offer.destination || currentQuery.destination,
-      offer.departureAt,offer.departure,offer.durationTo,offer.stops));
+      offer.departureAt || offer.outbound?.segments?.[0]?.from?.time,offer.departure,offer.durationTo,offer.stops,
+      offer.outbound?.segments?.at(-1)?.to?.time));
     if (currentQuery.trip === 'roundtrip' && offer.returnDate) {
       body.append(tripRow('VUELTA',offer.destinationAirport || offer.destination || currentQuery.destination,
         offer.originAirport || offer.origin || currentQuery.origin,
-        offer.returnAt,offer.returnDate,offer.durationBack,offer.returnStops));
+        offer.returnAt || offer.inbound?.segments?.[0]?.from?.time,offer.returnDate,offer.durationBack,offer.returnStops,
+        offer.inbound?.segments?.at(-1)?.to?.time));
     }
     const disclosure = node('details','flight-offer__disclosure');
     disclosure.append(node('summary','', 'Información de esta referencia de precio'));
     disclosure.append(node('p','',
       'La fuente identifica horarios de salida, duración total y cantidad de escalas cuando están disponibles. No proporciona aeropuertos de conexión, tiempos de espera, horarios completos de llegada, equipaje o disponibilidad confirmada. La aerolínea indicada puede no operar todos los tramos.'));
     if (offer.flightNumber) disclosure.append(node('p','','Número de vuelo informado: ' + offer.flightNumber + ' (no identifica necesariamente todos los segmentos).'));
+    if (offer.outbound?.segments?.length) {
+      addSegments(disclosure,'Tramos de ida',offer.outbound);
+      addSegments(disclosure,'Tramos de vuelta',offer.inbound);
+    }
     body.append(disclosure);
     const priceBlock = node('div','flight-offer__price-panel');
-    priceBlock.append(node('span','flight-offer__price-kicker','Tarifa observada'),
-      node('strong','flight-offer__price',money(offer.price)),
+    const days = leadDays(currentQuery.departure);
+    const pct = commercialAdjustment(days);
+    const quote = Math.round(offer.price * (1+pct)*100)/100;
+    priceBlock.append(node('span','flight-offer__price-kicker','Precio consultado'),
+      node('span','flight-offer__base',money(offer.price)),
+      node('span','flight-offer__price-kicker','Cotización preliminar'),
+      node('strong','flight-offer__price',money(quote)),
+      node('small','flight-offer__policy',(pct>=0?'+':'')+(pct*100).toFixed(0)+'% por anticipación ('+days+' días)'),
       node('small','flight-offer__passenger','Por adulto · ' + (currentQuery.trip === 'roundtrip' ? 'ida y vuelta' : 'solo ida')),
-      node('small','flight-offer__fineprint','No garantiza disponibilidad ni incluye un total familiar calculado'));
-    const action = node('a','flight-offer__button','Solicitar esta tarifa');
-    action.href=whatsappUrlForOffer(offer);
-    action.target='_blank'; action.rel='noopener noreferrer';
+      node('small','flight-offer__fineprint','No es precio garantizado ni incluye el total familiar'));
+    const action = node('a','flight-offer__button','Solicitar reserva');
+    // Visible contact request is separate from any airline booking.
+    action.href='#flightQuoteModal';
+    action.dataset.flightRequest='1';
+    action.dataset.price=String(offer.price);
+    action.dataset.outbound=offer.departure;
+    action.dataset.inbound=offer.returnDate || '';
     priceBlock.append(action);
     card.append(body,priceBlock);
     return card;
@@ -349,6 +396,7 @@
     };
     if (query.origin === query.destination) { setError('El origen y el destino deben ser distintos.'); return; }
     if (!query.departure || query.departure < iso(new Date())) { setError('Selecciona una fecha de salida válida.'); return; }
+    if (leadDays(query.departure) < 2) { setError('Para evitar vuelos a menos de 24 horas, por ahora aceptamos salidas desde pasado mañana.'); return; }
     if (trip === 'roundtrip' && (!query.returnDate || query.returnDate < query.departure)) { setError('La fecha de regreso no puede ser anterior a la salida.'); return; }
     if (query.adults + query.children > 9) { setError('Para grupos de más de 9 pasajeros, solicita una cotización personalizada.'); return; }
 
