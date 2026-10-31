@@ -216,12 +216,16 @@
         (Number.isFinite(lay.duration)?' · '+durationLabel(lay.duration):'')));
     });
   }
+  function quotedPrice(offer) {
+    const days=leadDays(offer.departure || currentQuery.departure);
+    return Math.round(offer.price*(1+commercialAdjustment(days))*100)/100;
+  }
   function renderOffer(offer) {
     const card = node('article','flight-offer flight-offer--detailed');
     const body = node('div','flight-offer__body');
     const carrier = node('div','flight-offer__carrier');
     carrier.append(node('span','flight-offer__airline-icon','✈'),node('strong','',airlineName(offer.airline)));
-    if (!offer.sameDates) carrier.append(node('span','flight-offer__datebadge','Otras fechas'));
+    // Las propuestas para otras fechas no se mezclan con las solicitadas.
     body.append(carrier);
     body.append(tripRow('IDA',offer.originAirport || offer.origin || currentQuery.origin,
       offer.destinationAirport || offer.destination || currentQuery.destination,
@@ -234,33 +238,36 @@
         offer.inbound?.segments?.at(-1)?.to?.time));
     }
     const disclosure = node('details','flight-offer__disclosure');
-    disclosure.append(node('summary','', 'Información de esta referencia de precio'));
-    disclosure.append(node('p','',
-      'La fuente identifica horarios de salida, duración total y cantidad de escalas cuando están disponibles. No proporciona aeropuertos de conexión, tiempos de espera, horarios completos de llegada, equipaje o disponibilidad confirmada. La aerolínea indicada puede no operar todos los tramos.'));
-    if (offer.flightNumber) disclosure.append(node('p','','Número de vuelo informado: ' + offer.flightNumber + ' (no identifica necesariamente todos los segmentos).'));
+    disclosure.append(node('summary','', 'Detalles del itinerario'));
+    if (!offer.outbound?.segments?.length)
+      disclosure.append(node('p','', 'Los horarios de conexión, equipaje y condiciones se confirman al reservar.'));
+    if (offer.flightNumber) disclosure.append(node('p','','Vuelo: ' + offer.flightNumber));
     if (offer.outbound?.segments?.length) {
       addSegments(disclosure,'Tramos de ida',offer.outbound);
       addSegments(disclosure,'Tramos de vuelta',offer.inbound);
     }
     body.append(disclosure);
     const priceBlock = node('div','flight-offer__price-panel');
-    const days = leadDays(offer.departure || currentQuery.departure);
-    const pct = commercialAdjustment(days);
-    const quote = Math.round(offer.price * (1+pct)*100)/100;
-    priceBlock.append(node('span','flight-offer__price-kicker','Precio consultado'),
-      node('span','flight-offer__base',money(offer.price)),
-      node('span','flight-offer__price-kicker','Cotización preliminar'),
-      node('strong','flight-offer__price',money(quote)),
-      node('small','flight-offer__policy',(pct>=0?'+':'')+(pct*100).toFixed(0)+'% por anticipación ('+days+' días)'),
-      node('small','flight-offer__passenger','Por adulto · ' + (currentQuery.trip === 'roundtrip' ? 'ida y vuelta' : 'solo ida')),
-      node('small','flight-offer__fineprint','No es precio garantizado ni incluye el total familiar'));
-    const action = node('a','flight-offer__button','Solicitar reserva');
+    priceBlock.append(
+      node('span','flight-offer__price-kicker','Precio'),
+      node('strong','flight-offer__price',money(quotedPrice(offer))),
+      node('small','flight-offer__passenger',(offer.priceBasis==='party'
+        ? 'Total · '+currentQuery.adults+' adulto(s)'+(currentQuery.children?' y '+currentQuery.children+' niño(s)':'')
+        : 'Por adulto')+' · '+(currentQuery.trip==='roundtrip'?'ida y vuelta':'solo ida'))
+    );
+    const action = node('a','flight-offer__button','Reservar');
     // Visible contact request is separate from any airline booking.
     action.href='#flightQuoteModal';
     action.dataset.flightRequest='1';
     action.dataset.price=String(offer.price);
     action.dataset.outbound=offer.departure;
     action.dataset.inbound=offer.returnDate || '';
+    action.dataset.priceBasis=offer.priceBasis||'adult';
+    action.dataset.origin=currentQuery.origin;
+    action.dataset.destination=currentQuery.destination;
+    action.dataset.trip=currentQuery.trip;
+    action.dataset.adults=String(currentQuery.adults);
+    action.dataset.children=String(currentQuery.children);
     priceBlock.append(action);
     card.append(body,priceBlock);
     return card;
@@ -282,17 +289,17 @@
     const filter = document.querySelector('[name="flightStopFilter"]:checked')?.value || 'all';
     const max = Number(priceSlider.value);
     const filtered = allOffers.filter(o => {
-      if (!selectedAirlines.has(o.airline || '??') || o.price > max) return false;
+      if (!selectedAirlines.has(o.airline || '??') || quotedPrice(o) > max) return false;
       if (filter === 'direct' && o.stops !== 0) return false;
       if (filter === 'one' && (!Number.isInteger(o.stops) || o.stops > 1)) return false;
       return true;
     });
     filtered.sort((a,b)=>{
-      if (activeSort==='stops') return stopRank(a)-stopRank(b) || a.price-b.price;
-      if (activeSort==='duration') return durationRank(a)-durationRank(b) || a.price-b.price;
-      return a.price-b.price;
+      if (activeSort==='stops') return stopRank(a)-stopRank(b) || quotedPrice(a)-quotedPrice(b);
+      if (activeSort==='duration') return durationRank(a)-durationRank(b) || quotedPrice(a)-quotedPrice(b);
+      return quotedPrice(a)-quotedPrice(b);
     });
-    count.textContent = 'Mostrando ' + filtered.length + ' de ' + allOffers.length + ' tarifas observadas';
+    count.textContent = filtered.length + ' de ' + allOffers.length + ' opciones';
     if (!filtered.length) {
       offerContainer.append(node('div','flight-offer__empty','No hay tarifas que cumplan estos filtros. Restablece los filtros o solicita una cotización personalizada.'));
     }
@@ -322,7 +329,7 @@
       label.append(box,node('span','',airlineName(code)));
       airlineFilters.append(label);
     });
-    const prices=allOffers.map(o=>o.price);
+    const prices=allOffers.map(quotedPrice);
     const min=prices.length?Math.floor(Math.min(...prices)):0;
     const max=prices.length?Math.ceil(Math.max(...prices)):0;
     priceSlider.min=String(min);
@@ -336,10 +343,14 @@
     resetFilters();
   }
   function showLiveOffers(answer) {
-    if (!Array.isArray(answer.offers) || !answer.offers.length) { setupFilters([]); return false; }
-    setupFilters(answer.offers);
+    const exact=(Array.isArray(answer.offers)?answer.offers:[]).filter(o=>
+      o && o.departure===currentQuery.departure &&
+      (currentQuery.trip!=='roundtrip' || o.returnDate===currentQuery.returnDate) &&
+      o.sameDates!==false
+    );
+    setupFilters(exact);
     renderFilteredOffers();
-    return allOffers.length > 0;
+    return allOffers.length>0;
   }
   document.querySelectorAll('[name="flightStopFilter"]').forEach(e=>e.addEventListener('change',renderFilteredOffers));
   document.querySelectorAll('[data-flight-sort]').forEach(button=>button.addEventListener('click',()=>{
@@ -365,7 +376,8 @@
       const cb = 'latamFlightCb_' + String(Date.now()) + String(Math.floor(Math.random() * 100000));
       const url = new URL(endpoint);
       const params = { callback:cb, origin:query.origin, destination:query.destination,
-        trip:query.trip, departure:query.departure, returnDate:query.returnDate, cabin:query.cabin };
+        trip:query.trip, departure:query.departure, returnDate:query.returnDate, cabin:query.cabin,
+        adults:String(query.adults), children:String(query.children) };
       Object.keys(params).forEach(k => url.searchParams.set(k, params[k]));
       const script = document.createElement('script');
       let closed = false;
@@ -414,7 +426,7 @@
     currentQuery = query;
     count.textContent = 'Buscando tarifas…';
     panel.hidden = false;
-    el('flightResultMessage').textContent = 'Buscando precios registrados en la fuente de tarifas…';
+    el('flightResultMessage').textContent = 'Buscando vuelos para tus fechas…';
     const searchId = ++currentSearch;
     setBusy(true);
     let message = '';
@@ -422,24 +434,17 @@
       const live = await getLivePrices(query);
       if (searchId !== currentSearch) return;
       if (live.ok && showLiveOffers(live)) {
-        const isOnDemand=live.type==='on_demand_prices';
-        message = isOnDemand
-          ? 'Consulta bajo demanda: '+(live.source||'proveedor')+'. Los precios se obtuvieron de resultados externos, pero no garantizan disponibilidad ni compran boletos. El importe calculado por Latam Expeditions es preliminar.'
-          : live.exact
-            ? 'Estos precios fueron observados para las fechas solicitadas en una caché. Pueden variar o dejar de estar disponibles. Solicita confirmación antes de pagar.'
-            : 'No hubo registros para tus fechas exactas. Estas tarifas provienen de fechas cercanas y no garantizan disponibilidad.';
+        message = 'Tarifas sujetas a disponibilidad y confirmación antes del pago.';
       } else if (live.ok) {
         setupFilters([]);
-        count.textContent = 'Sin tarifas observadas para esta búsqueda';
-        message = 'No se encontraron tarifas en la caché del proveedor para esta ruta y período. Esto no significa que no existan vuelos. Prueba fechas más flexibles o solicita una cotización confirmada.';
+        count.textContent = 'No encontramos opciones para estas fechas';
+        message = 'Prueba otras fechas o consulta con nuestro equipo para encontrar tu vuelo.';
       } else {
-        message = live.message || 'No fue posible consultar tarifas. Solicita una cotización confirmada.';
+        message = 'No pudimos completar la búsqueda. Inténtalo de nuevo o habla con nuestro equipo.';
       }
     } catch (err) {
       if (searchId !== currentSearch) return;
-      message = err.message === 'not_configured'
-        ? 'El buscador está preparado, pero aún falta activar la conexión con la fuente de tarifas. Solicita una cotización personalizada.'
-        : 'La consulta de tarifas no respondió. Intenta nuevamente o solicita una cotización personalizada.';
+      message = 'La búsqueda no está disponible en este momento. Intenta de nuevo o habla con nuestro equipo.';
     } finally {
       if (searchId === currentSearch) setBusy(false);
     }
