@@ -47,3 +47,58 @@ function diagnosticarSerpApi() {
     console.error("Comprueba la clave, el saldo de búsquedas, la autorización y los registros de ejecuciones.");
   }
 }
+
+
+/**
+ * Diagnóstico del /exec PÚBLICO que utiliza latamexpeditions.com.
+ * La ejecución anterior puede funcionar mientras la versión desplegada
+ * sigue siendo antigua. Esta función confirma la fuente real de la API web.
+ * Utiliza una sola consulta de SOLO IDA de prueba. No imprime credenciales.
+ */
+function diagnosticarEndpointPublicado() {
+  var base="https://script.google.com/macros/s/AKfycbwA7TxLqYvFW_Eo-2V9R60TBs_Y-sW_rZ3Q-RIuYv1kISU_d4lsL-vS4ioZjNcXG7F9/exec";
+  var cb="latamFlightCb_TestPublic2026";
+  var d=new Date(Date.now()+21*86400000);
+  var departure=Utilities.formatDate(d,"Etc/UTC","yyyy-MM-dd");
+  var params={callback:cb,origin:"LIM",destination:"CUZ",
+    trip:"oneway",departure:departure,adults:"1",children:"0",cabin:"economy"};
+  var qs=Object.keys(params).map(function(k){
+    return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);
+  }).join("&");
+  console.log("DIAGNÓSTICO API PÚBLICA | LIM-CUZ | "+departure);
+  try {
+    var res=UrlFetchApp.fetch(base+"?"+qs,{
+      method:"get",followRedirects:true,muteHttpExceptions:true
+    });
+    console.log("HTTP: "+res.getResponseCode());
+    var body=res.getContentText();
+    var prefix=cb+"(";
+    if(body.indexOf(prefix)!==0 || body.slice(-2)!==");") {
+      console.log("El endpoint no entregó la respuesta JSONP esperada.");
+      console.log("Tipo de contenido: "+String(res.getHeaders()["Content-Type"]||"desconocido").slice(0,80));
+      console.log("Respuesta posiblemente una página de acceso, error o despliegue anterior; no se muestra su contenido.");
+      return;
+    }
+    var data=JSON.parse(body.slice(prefix.length,-2));
+    console.log("Backend publicó: "+String(data.source||"NO INFORMADO").slice(0,70));
+    console.log("Tipo de datos: "+String(data.type||"NO INFORMADO").slice(0,50));
+    console.log("API ok: "+String(data.ok));
+    console.log("Cantidad de tarifas: "+(Array.isArray(data.offers)?data.offers.length:"NO INFORMADO"));
+    if(data.ok===false) {
+      console.log("Código de error: "+String(data.error||"desconocido").slice(0,80));
+    }
+    if(data.ok && Array.isArray(data.offers) && data.offers.length) {
+      var first=data.offers[0];
+      console.log("Primera tarifa: "+String(first.price)+" USD | fecha "+String(first.departure));
+      console.log("Resultado: la API pública devuelve vuelos; si la web sigue vacía, revisaremos la presentación.");
+    } else if(data.source && data.source.indexOf("Aviasales")>=0) {
+      console.log("RESULTADO: La web usa un despliegue de Travelpayouts; actualizar la MISMA implementación con Nueva versión.");
+    } else if(data.ok && Array.isArray(data.offers) && !data.offers.length) {
+      console.log("RESULTADO: La API pública responde pero devuelve cero vuelos. Comprobar fecha, fuente y registros de ejecución.");
+    } else {
+      console.log("RESULTADO: La API pública no pudo completar la consulta; revisar registros de Apps Script.");
+    }
+  } catch(err) {
+    console.error("Error al consultar /exec: "+String(err&&err.message||err).slice(0,160));
+  }
+}
