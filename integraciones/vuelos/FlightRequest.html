@@ -87,9 +87,10 @@
       const quote={
         origin:code('origin'),destination:code('destination'),trip,
         departure:date('departure'),returnDate:trip==='roundtrip'?date('returnDate'):'',
-        adults,children,observedPrice:Number(params.get('observedPrice'))||0
+        adults,children,observedPrice:Number(params.get('observedPrice'))||0,
+        package:params.get('package')==='medellin-esencial'?'medellin-esencial':''
       };
-      $('routeDisplay').textContent=[quote.origin+' → '+quote.destination,quote.departure,
+      $('routeDisplay').textContent=[quote.package?'Paquete Medellín Esencial 4D/3N':'',quote.origin+' → '+quote.destination,quote.departure,
         quote.returnDate?'Regreso '+quote.returnDate:'Solo ida',
         adults+' adulto(s)',children+' niño(s)'].join(' · ');
       if(!quote.origin||!quote.destination||!quote.departure) {
