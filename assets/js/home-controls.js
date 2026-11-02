@@ -31,7 +31,15 @@
    const text=create('span'),chevron=create('i','fa-solid fa-chevron-down');
    chevron.setAttribute('aria-hidden','true');trigger.append(text,chevron);
    const label=document.querySelector('label[for="'+input.id+'"]');
-   if(label){trigger.setAttribute('aria-label',label.textContent.trim());}
+   trigger.id=input.id+'StyledPicker';
+   if(label){
+     trigger.setAttribute('aria-label',label.textContent.trim());
+     // Clicking the label must focus our control, not invoke the browser picker.
+     label.htmlFor=trigger.id;
+   }
+   if(input.type==='month'||input.type==='date'){
+     chevron.className='fa-regular fa-calendar-days';
+   }
    const panel=create('div','lx-picker-popover');panel.hidden=true;
    panel.setAttribute('role','dialog');panel.setAttribute('aria-label',label?.textContent.trim()||'Seleccionar');
    host.append(trigger,panel);
