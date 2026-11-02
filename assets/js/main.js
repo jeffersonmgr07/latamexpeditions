@@ -364,47 +364,71 @@
   // Las rutas se resuelven con data-base para conservar enlaces existentes.
   function applyModernNavigation() {
     const items=[
-      {label:'Paquetes',href:'paquetes.html',kind:'paquetes'},
-      {label:'Ofertas',href:'index.html?tab=ofertas#explorar',kind:'ofertas'},
-      {label:'Vuelos',href:'vuelos.html',kind:'vuelos'},
-      {label:'Hoteles',href:'index.html?tab=hoteles#explorar',kind:'hoteles'}
+      ['Paquetes','paquetes.html','fa-suitcase-rolling'],['Ofertas','index.html?tab=ofertas#explorar','fa-tags'],
+      ['Vuelos','vuelos.html','fa-plane'],['Hoteles','index.html?tab=hoteles#explorar','fa-bed']
     ];
-    const nav=document.querySelector('header .nav');
-    const current=location.pathname.toLowerCase();
-    const active=current.endsWith('/vuelos.html')?'vuelos':
-      /\/paquetes(?:\/|\.html)/.test(current)?'paquetes':'';
-    if(nav) {
-      nav.replaceChildren();
-      items.forEach(item=>{
-        const a=document.createElement('a');
-        a.href=base+item.href;a.textContent=item.label;
-        if(active===item.kind)a.setAttribute('aria-current','page');
-        nav.append(a);
+    const header=document.querySelector('header.topbar');
+    const nav=header?.querySelector('.nav');
+    if(header&&nav){
+      const tools=document.createElement('div');tools.className='header-utility';
+      [
+        ['Para ventas: +51 906 472 060','tel:+51906472060','fa-phone'],
+        ['Contáctanos','mailto:contact@latamexpedition.com','fa-envelope'],
+        ['Agentes de viajes',base+'agencias.html','fa-handshake']
+      ].forEach(([label,href,icon])=>{
+        const a=document.createElement('a');a.className='header-utility__link';
+        a.href=href;const i=document.createElement('i');i.className='fa-solid '+icon;
+        i.setAttribute('aria-hidden','true');a.append(i,document.createTextNode(label));tools.append(a);
       });
+      nav.replaceWith(tools);
+      // La portada ya posee pestañas funcionales; las páginas interiores solo enlaces.
+      if(!document.querySelector('.home-product-nav')) {
+        const bar=document.createElement('nav');bar.className='home-product-nav home-product-nav--links';
+        bar.setAttribute('aria-label','Servicios de viaje');
+        const inner=document.createElement('div');inner.className='home-product-nav__inner';
+        items.forEach(([label,href,icon])=>{
+          const a=document.createElement('a');a.href=base+href;a.className='home-product-tab';
+          const i=document.createElement('i');i.className='fa-solid '+icon;i.setAttribute('aria-hidden','true');
+          a.append(i,document.createTextNode(label));
+          if(location.pathname.endsWith('/'+href)){a.classList.add('is-active');a.setAttribute('aria-current','page');}
+          inner.append(a);
+        });
+        bar.append(inner);header.after(bar);
+      }
     }
-    const mobile=document.querySelector('#mobileNav .mobile-nav__panel');
-    const head=mobile?.querySelector('.mobile-nav__head');
-    if(mobile&&head) {
-      mobile.querySelectorAll('a[data-i18n^="nav."]:not(.mobile-nav__cta)').forEach(a=>a.remove());
-      let last=head;
-      items.concat([
-        {label:'Experiencias',href:'experiencias.html',kind:'experiencias'},
-        {label:'Contacto',href:'contacto.html',kind:'contacto'}
-      ]).forEach(item=>{
-        const a=document.createElement('a');
-        a.href=base+item.href;a.textContent=item.label;a.setAttribute('data-close-nav','');
-        last.insertAdjacentElement('afterend',a);last=a;
-      });
+    const panel=document.querySelector('#mobileNav .mobile-nav__panel'),head=panel?.querySelector('.mobile-nav__head');
+    if(panel&&head){
+      panel.querySelectorAll('a[data-i18n^="nav."]:not(.mobile-nav__cta)').forEach(a=>a.remove());
+      let anchor=head;
+      items.concat([['Experiencias','experiencias.html'],['Agentes de viajes','agencias.html'],['Contacto','contacto.html']])
+        .forEach(([label,href])=>{
+          const a=document.createElement('a');a.href=base+href;a.textContent=label;a.setAttribute('data-close-nav','');
+          anchor.after(a);anchor=a;
+        });
     }
     const logoIcon=base+'assets/img/isotipo-latam-expeditions.png?v=2';
     document.querySelectorAll('link[rel="icon"],link[rel="apple-touch-icon"]').forEach(icon=>{
-      icon.href=logoIcon;
-      if(icon.rel==='icon') icon.type='image/png';
+      icon.href=logoIcon;if(icon.rel==='icon')icon.type='image/png';
     });
+  }
+  function syncBrandContact(){
+    const old='51900608980',number='51906472060',email='contact@latamexpedition.com';
+    document.querySelectorAll('a[href]').forEach(a=>{
+      const h=a.getAttribute('href');
+      if(h.includes(old))a.setAttribute('href',h.split(old).join(number));
+      if(/^mailto:(?:contact|reservas)@latamexpeditions\.com/i.test(h))a.setAttribute('href','mailto:'+email);
+    });
+    const walk=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+    while((n=walk.nextNode())){
+      if(n.parentElement&&/^(SCRIPT|STYLE|TEXTAREA|OPTION)$/.test(n.parentElement.tagName))continue;
+      n.nodeValue=n.nodeValue.replace(/(?:\+?51\s*)?900\s*608\s*980|(?:\+?51\s*)?906\s*089\s*80/g,'+51 906 472 060')
+       .replace(/\b(?:contact|reservas)@latamexpeditions\.com\b/gi,email);
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     applyModernNavigation();
+    syncBrandContact();
     setupExperienceHeroImage();
     setupNavigation();
     setupCountrySelector();
