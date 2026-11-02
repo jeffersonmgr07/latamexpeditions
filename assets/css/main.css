@@ -2077,7 +2077,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible {
  .home-product-nav .home-product-tab {min-width:0;flex:1 1 auto;font-size:12px;padding:13px 8px;}
  .home-hero h1 {font-size:clamp(24px,6.4vw,35px);font-weight:560;}
  #experiencias .section-heading h2,#paquetes .section-heading h2,#estilos .section-heading h2{
-   font-size:clamp(14px,3.75vw,21px);letter-spacing:-.038em;
+   font-size:clamp(12px,3.4vw,19px);letter-spacing:-.038em;
  }
  .footer-payments .payment-grid span {font-size:11px;}
 }
