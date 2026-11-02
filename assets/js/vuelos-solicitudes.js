@@ -19,7 +19,7 @@
       departure,returnDate,
       adults:offerBtn.dataset.adults,
       children:offerBtn.dataset.children,
-      observedPrice:String(price)
+      observedPrice:String(price),package:offerBtn.dataset.package||''
     };
     const u=new URL(api);
     Object.entries(query).forEach(([k,v])=>u.searchParams.set(k,v));
