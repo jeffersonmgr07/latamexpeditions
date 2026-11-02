@@ -360,7 +360,51 @@
     else if (desktopQuery.addListener) desktopQuery.addListener(loadPanorama);
   }
 
+  // Navegación coherente en todas las páginas (incluidas fichas anidadas).
+  // Las rutas se resuelven con data-base para conservar enlaces existentes.
+  function applyModernNavigation() {
+    const items=[
+      {label:'Paquetes',href:'paquetes.html',kind:'paquetes'},
+      {label:'Ofertas',href:'index.html?tab=ofertas#explorar',kind:'ofertas'},
+      {label:'Vuelos',href:'vuelos.html',kind:'vuelos'},
+      {label:'Hoteles',href:'index.html?tab=hoteles#explorar',kind:'hoteles'}
+    ];
+    const nav=document.querySelector('header .nav');
+    const current=location.pathname.toLowerCase();
+    const active=current.endsWith('/vuelos.html')?'vuelos':
+      /\/paquetes(?:\/|\.html)/.test(current)?'paquetes':'';
+    if(nav) {
+      nav.replaceChildren();
+      items.forEach(item=>{
+        const a=document.createElement('a');
+        a.href=base+item.href;a.textContent=item.label;
+        if(active===item.kind)a.setAttribute('aria-current','page');
+        nav.append(a);
+      });
+    }
+    const mobile=document.querySelector('#mobileNav .mobile-nav__panel');
+    const head=mobile?.querySelector('.mobile-nav__head');
+    if(mobile&&head) {
+      mobile.querySelectorAll('a[data-i18n^="nav."]:not(.mobile-nav__cta)').forEach(a=>a.remove());
+      let last=head;
+      items.concat([
+        {label:'Experiencias',href:'experiencias.html',kind:'experiencias'},
+        {label:'Contacto',href:'contacto.html',kind:'contacto'}
+      ]).forEach(item=>{
+        const a=document.createElement('a');
+        a.href=base+item.href;a.textContent=item.label;a.setAttribute('data-close-nav','');
+        last.insertAdjacentElement('afterend',a);last=a;
+      });
+    }
+    const logoIcon=base+'assets/img/isotipo-latam-expeditions.png?v=2';
+    document.querySelectorAll('link[rel="icon"],link[rel="apple-touch-icon"]').forEach(icon=>{
+      icon.href=logoIcon;
+      if(icon.rel==='icon') icon.type='image/png';
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    applyModernNavigation();
     setupExperienceHeroImage();
     setupNavigation();
     setupCountrySelector();
