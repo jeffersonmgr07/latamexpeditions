@@ -2028,3 +2028,108 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible {
 .package-flights-hint{font-size:11px;line-height:1.55;color:#657b6d;margin:12px 0;}
 .package-flights-box .btn-primary{width:100%;font-size:12px;padding:12px;}
 @media(max-width:450px){.package-flights-fields{grid-template-columns:1fr;}}
+
+/* ======================================================================
+   AJUSTES DE ESTILO · NOVIEMBRE 2026
+   CTA verde marca, cabecera limpia, controles desplegables propios.
+   ====================================================================== */
+:root {--latam-purple:#07873e;--latam-gold:#07873e;--latam-gold-deep:#056a31;}
+/* Preferir verde de marca tanto para tarjetas como para botones de reserva. */
+.card-btn,.trip-card .card-btn,.btn-primary,.btn-gold,.search-btn,
+.home-main-cta,.home-main-cta--search,.btn-book,.flight-offer__button {
+  background:#07873e!important;color:#fff!important;border-color:#07873e!important;
+}
+.card-btn:hover,.trip-card .card-btn:hover,.btn-primary:hover,.btn-gold:hover,
+.search-btn:hover,.home-main-cta:hover,.btn-book:hover,.flight-offer__button:hover {
+  background:#056a31!important;color:#fff!important;border-color:#056a31!important;
+}
+.topbar__inner {padding-top:11px;padding-bottom:11px;}
+.brand {width:207px;min-width:207px;height:44px;transform:none;}
+.brand::before {width:207px;height:44px;transform:none;background-size:contain;}
+.header-utility {gap:12px;}
+.header-utility__link {color:#15243e;font-size:12px;}
+.header-utility__link i {color:#07873e;}
+.home-product-nav__inner,.home-product-nav--links .home-product-nav__inner {justify-content:center;}
+.home-product-nav .home-product-tab {min-width:125px;}
+.home-hero h1 {font-weight:570;letter-spacing:-.028em;line-height:1.22;max-width:780px;}
+.home-search-shell__heading {display:block;margin-bottom:16px;}
+.home-search-shell__eyebrow {display:block;color:#056831;font-size:11px;letter-spacing:.12em;font-weight:800;}
+/* Títulos en una sola línea en escritorio y tipografía adaptativa en móvil. */
+#experiencias .section-heading,#paquetes .section-heading,#estilos .section-heading {display:block;}
+#experiencias .section-heading h2,#paquetes .section-heading h2,#estilos .section-heading h2 {
+  font-size:clamp(20px,2.45vw,33px);line-height:1.2;letter-spacing:-.034em;
+  white-space:nowrap;max-width:none;
+}
+#estilos .section-heading>p {max-width:none;margin-top:12px;line-height:1.5;}
+.footer-accordion summary {font-weight:800;opacity:1;color:#fff;letter-spacing:.055em;}
+.footer-contact-box h3 {font-weight:800;color:#fff;}
+.footer-payments .payment-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px;}
+.footer-payments .payment-grid span {font-size:12px;white-space:nowrap;gap:7px;}
+.footer-payments .payment-grid i {font-size:16px;}
+@media(max-width:980px){
+ .brand{width:168px;min-width:168px;height:38px;}
+ .brand::before{width:168px;height:38px;}
+}
+@media(max-width:600px){
+ .brand{width:137px;min-width:137px;height:35px;}
+ .brand::before{width:137px;height:35px;}
+ .home-product-nav__inner {justify-content:center;gap:2px;}
+ .home-product-nav .home-product-tab {min-width:0;flex:1 1 auto;font-size:12px;padding:13px 8px;}
+ .home-hero h1 {font-size:clamp(24px,6.4vw,35px);font-weight:560;}
+ #experiencias .section-heading h2,#paquetes .section-heading h2,#estilos .section-heading h2{
+   font-size:clamp(14px,3.75vw,21px);letter-spacing:-.038em;
+ }
+ .footer-payments .payment-grid span {font-size:11px;}
+}
+/* Dropdowns y calendarios independientes de la interfaz nativa. */
+.lx-control-host{position:relative;min-width:0;width:100%;}
+.lx-original-control{
+ position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;
+ padding:0!important;margin:0!important;clip-path:inset(50%)!important;
+ opacity:0!important;pointer-events:none!important;border:0!important;
+}
+.lx-picker-trigger{
+ width:100%;min-height:31px;padding:4px 3px;display:flex;align-items:center;
+ justify-content:space-between;gap:8px;border:0;background:transparent;color:#15243e;
+ text-align:left;cursor:pointer;font:650 13px Inter,Arial,sans-serif;
+}
+.lx-picker-trigger span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lx-picker-trigger.is-placeholder span{color:#708192;font-weight:500;}
+.lx-picker-trigger i{color:#07873e;font-size:13px;flex:0 0 auto;}
+.lx-control-host:focus-within{outline:2px solid rgba(7,135,62,.22);outline-offset:2px;border-radius:8px;}
+.lx-picker-popover{
+ position:absolute;top:calc(100% + 11px);left:-10px;z-index:1002;
+ width:min(355px,calc(100vw - 40px));max-height:355px;overflow:auto;
+ padding:12px;background:#fff;border:1px solid #d8e8df;border-radius:15px;
+ box-shadow:0 17px 45px rgba(12,45,45,.18);color:#15243e;
+}
+.lx-picker-popover[hidden]{display:none!important;}
+.lx-picker-search{width:100%;padding:10px 12px;border:1px solid #dce7e2;border-radius:9px;
+ margin-bottom:8px;font:500 13px Inter,Arial,sans-serif;outline-color:#07873e;}
+.lx-option-group{color:#688576;font-size:10px;text-transform:uppercase;font-weight:800;
+ letter-spacing:.08em;padding:10px 8px 4px;}
+.lx-option{width:100%;text-align:left;display:block;background:none;border:0;border-radius:8px;
+ padding:10px 12px;font:600 12px Inter,Arial,sans-serif;color:#183e2c;cursor:pointer;}
+.lx-option:hover,.lx-option:focus-visible,.lx-option[aria-selected="true"]{background:#e9f6ee;color:#086a35;}
+.lx-calendar-header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-bottom:11px;}
+.lx-calendar-header strong{font-size:13px;color:#15243e;text-transform:capitalize;}
+.lx-calendar-nav{width:32px;height:32px;border:1px solid #e0e9e3;border-radius:9px;background:#fff;
+ color:#075e36;font-size:14px;cursor:pointer;}
+.lx-calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;}
+.lx-calendar-weekday{text-align:center;font-size:10px;color:#7b8c82;font-weight:800;padding:5px 0;}
+.lx-calendar-day{min-height:37px;border:0;border-radius:9px;background:#fff;color:#15243e;
+ cursor:pointer;font:600 12px Inter,Arial,sans-serif;}
+.lx-calendar-day:hover:not(:disabled),.lx-calendar-day:focus-visible{background:#e8f5ed;}
+.lx-calendar-day.is-selected{background:#07873e!important;color:#fff!important;}
+.lx-calendar-day:disabled,.lx-calendar-month:disabled{opacity:.27;cursor:not-allowed;}
+.lx-calendar-months{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;}
+.lx-calendar-month{min-height:46px;border:1px solid #dfebe4;border-radius:10px;background:#fff;
+ color:#15243e;font:700 12px Inter,Arial,sans-serif;cursor:pointer;}
+.lx-calendar-month:hover:not(:disabled),.lx-calendar-month:focus-visible{background:#e8f5ed;}
+.lx-calendar-month.is-selected{background:#07873e;color:#fff;border-color:#07873e;}
+.lx-calendar-today{display:block;margin-top:9px;padding:9px 4px;background:none;border:0;
+ color:#087843;font-weight:700;font-size:12px;cursor:pointer;}
+@media(max-width:450px){
+ .lx-picker-popover{width:min(330px,calc(100vw - 38px));left:-7px;padding:10px;}
+ .lx-calendar-day{min-height:35px;}
+}
