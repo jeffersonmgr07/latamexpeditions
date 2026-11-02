@@ -222,21 +222,84 @@
     if (days <= 270) return -0.10;
     return -0.15;
   }
-  function addSegments(parent, title, trip) {
-    if (!trip || !Array.isArray(trip.segments)) return;
-    parent.append(node('h4','flight-segments__heading',title));
+  // Los logos vienen de Google Flights / SerpApi, nunca de URLs arbitrarias.
+  function airlineLogoUrl(seg,airline) {
+    const url=String(seg?.airlineLogo||'');
+    if(/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/70px\/[A-Za-z0-9_-]+\.png$/.test(url)) return url;
+    const name=String(airline||'').toLowerCase();
+    const known=[
+      ['jetsmart','JA'],['latam','LA'],['avianca','AV'],['sky airline','H2'],
+      ['copa','CM'],['aeroméxico','AM'],['american airlines','AA'],['united','UA'],
+      ['iberia','IB'],['gol','G3'],['azul','AD'],['aerolíneas argentinas','AR']
+    ];
+    const code=known.find(([key])=>name.includes(key))?.[1];
+    return code?'https://www.gstatic.com/flights/airline_logos/70px/'+code+'.png':'';
+  }
+  function logoNode(seg,airline){
+    const url=airlineLogoUrl(seg,airline);
+    const holder=node('span','flight-offer__airline-icon','✈');
+    if(url){
+      const img=document.createElement('img');img.src=url;img.loading='lazy';
+      img.alt='';img.width=29;img.height=29;
+      img.addEventListener('load',()=>{holder.replaceChildren(img)});
+    }
+    return holder;
+  }
+  function simpleTime(value) {
+    const text=String(value||'');
+    const match=text.match(/(\d\d:\d\d)(?!.*\d\d:\d\d)/);
+    return match?match[1]:'—';
+  }
+  const itineraryDialog=document.createElement('dialog');
+  itineraryDialog.id='flightDetailsDialog';
+  itineraryDialog.className='flight-details-dialog';
+  itineraryDialog.setAttribute('aria-labelledby','flightDetailsTitle');
+  itineraryDialog.innerHTML='<div class="flight-details-dialog__head"><h2 id="flightDetailsTitle">Detalles del vuelo</h2><button class="flight-details-dialog__close" type="button" aria-label="Cerrar detalles">×</button></div><div class="flight-details-dialog__body"></div><div class="flight-details-dialog__footer"><button type="button">Cerrar</button></div>';
+  document.body.append(itineraryDialog);
+  itineraryDialog.querySelector('.flight-details-dialog__close').addEventListener('click',()=>itineraryDialog.close());
+  itineraryDialog.querySelector('.flight-details-dialog__footer button').addEventListener('click',()=>itineraryDialog.close());
+  itineraryDialog.addEventListener('click',event=>{if(event.target===itineraryDialog)itineraryDialog.close();});
+  function addSegments(parent,title,trip){
+    if(!trip||!Array.isArray(trip.segments)||!trip.segments.length)return;
+    const panel=node('section','flight-detail-group');
+    const h=node('h3','',title);panel.append(h);
+    const meta=node('div','flight-detail-group__meta');
+    meta.append(node('span','flight-detail-group__stop',stopLabel(trip.segments.length-1)),
+      node('span','', 'Duración total: '+durationLabel(trip.duration)));
+    panel.append(meta);
+    const line=node('div','flight-detail-timeline');
     trip.segments.forEach((seg,i)=>{
-      const line=node('p','flight-segment-line');
-      const airline=seg.airline||'Aerolínea no informada';
-      line.textContent=(i+1)+'. '+(seg.from?.code||'?')+' '+(seg.from?.time||'—')+
-        ' → '+(seg.to?.code||'?')+' '+(seg.to?.time||'—')+
-        ' · '+airline+(seg.flightNumber?' ('+seg.flightNumber+')':'');
-      parent.append(line);
+      const from=node('div','flight-detail-point');
+      const fromRow=node('div','flight-detail-point__row');
+      fromRow.append(node('strong','',simpleTime(seg.from?.time)+' · '+(seg.from?.code||'—')));
+      from.append(fromRow,node('small','',seg.from?.name||'Aeropuerto de salida'));line.append(from);
+      const flight=node('div','flight-detail-airline');
+      const logo=logoNode(seg,seg.airline);
+      const label=node('div','');
+      label.append(node('b','',seg.airline||'Aerolínea no informada'));
+      if(seg.flightNumber)label.append(node('div','','Vuelo '+seg.flightNumber));
+      if(seg.airplane)label.append(node('div','',seg.airplane));
+      if(Number.isFinite(seg.duration))label.append(node('div','',durationLabel(seg.duration)+' de vuelo'));
+      flight.append(logo,label);line.append(flight);
+      const to=node('div','flight-detail-point');
+      to.append(node('strong','',simpleTime(seg.to?.time)+' · '+(seg.to?.code||'—')),
+        node('small','',seg.to?.name||'Aeropuerto de llegada'));line.append(to);
       const lay=trip.layovers?.[i];
-      if (lay) parent.append(node('p','flight-segment-layover',
-        'Escala en '+(lay.airport||lay.name||'aeropuerto por confirmar')+
-        (Number.isFinite(lay.duration)?' · '+durationLabel(lay.duration):'')));
+      if(lay && i<trip.segments.length-1){
+        line.append(node('div','flight-detail-layover','Conexión en '+(lay.name||lay.airport||seg.to?.name||'aeropuerto')+
+          (Number.isFinite(lay.duration)?' · Espera de '+durationLabel(lay.duration):' · Duración por confirmar')));
+      }
     });
+    panel.append(line);parent.append(panel);
+  }
+  function openFlightDetails(offer){
+    const body=itineraryDialog.querySelector('.flight-details-dialog__body');
+    body.replaceChildren();
+    addSegments(body,'Ida · '+(offer.departure||currentQuery.departure),offer.outbound);
+    if(currentQuery.trip==='roundtrip')
+      addSegments(body,'Regreso · '+(offer.returnDate||currentQuery.returnDate),offer.inbound);
+    if(!body.children.length)body.append(node('p','', 'Detalles por confirmar con la aerolínea.'));
+    itineraryDialog.showModal();
   }
   function quotedPrice(offer) {
     const days=leadDays(offer.departure || currentQuery.departure);
@@ -246,7 +309,7 @@
     const card = node('article','flight-offer flight-offer--detailed');
     const body = node('div','flight-offer__body');
     const carrier = node('div','flight-offer__carrier');
-    carrier.append(node('span','flight-offer__airline-icon','✈'),node('strong','',airlineName(offer.airline)));
+    carrier.append(logoNode(offer.outbound?.segments?.[0],offer.airline),node('strong','',airlineName(offer.airline)));
     // Las propuestas para otras fechas no se mezclan con las solicitadas.
     body.append(carrier);
     body.append(tripRow('IDA',offer.originAirport || offer.origin || currentQuery.origin,
@@ -259,16 +322,10 @@
         offer.returnAt || offer.inbound?.segments?.[0]?.from?.time,offer.returnDate,offer.durationBack,offer.returnStops,
         offer.inbound?.segments?.at(-1)?.to?.time));
     }
-    const disclosure = node('details','flight-offer__disclosure');
-    disclosure.append(node('summary','', 'Detalles del itinerario'));
-    if (!offer.outbound?.segments?.length)
-      disclosure.append(node('p','', 'Los horarios de conexión, equipaje y condiciones se confirman al reservar.'));
-    if (offer.flightNumber) disclosure.append(node('p','','Vuelo: ' + offer.flightNumber));
-    if (offer.outbound?.segments?.length) {
-      addSegments(disclosure,'Tramos de ida',offer.outbound);
-      addSegments(disclosure,'Tramos de vuelta',offer.inbound);
-    }
-    body.append(disclosure);
+    const more=node('button','flight-detail-trigger','Ver detalles del vuelo y escalas');
+    more.type='button';
+    more.addEventListener('click',()=>openFlightDetails(offer));
+    body.append(more);
     const priceBlock = node('div','flight-offer__price-panel');
     priceBlock.append(
       node('span','flight-offer__price-kicker','Precio'),
