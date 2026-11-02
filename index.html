@@ -15,7 +15,7 @@
 </script>
   <meta name="description" content="Diseñamos viajes por Perú, Colombia, Chile, Argentina, Brasil, México y toda Latinoamérica: experiencias seleccionadas, paquetes flexibles y asesoría local especializada." />
   <link rel="canonical" href="https://latamexpeditions.com/index.html" />
-  <meta name="theme-color" content="#0a3d2c" />
+  <meta name="theme-color" content="#07833c" />
   <meta name="author" content="Latam Expeditions" />
 
   <meta property="og:site_name" content="Latam Expeditions" />
@@ -32,8 +32,8 @@
   <meta name="twitter:description" content="Diseñamos viajes por Perú, Colombia, Chile, Argentina, Brasil, México y toda Latinoamérica: experiencias seleccionadas, paquetes flexibles y asesoría local especializada." />
   <meta name="twitter:image" content="https://latamexpeditions.com/assets/img/latam-hero-01.jpg" />
 
-  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg" />
-  <link rel="apple-touch-icon" href="assets/img/favicon.svg" />
+  <link rel="icon" type="image/png" href="assets/img/isotipo-latam-expeditions.png?v=2" />
+  <link rel="apple-touch-icon" href="assets/img/isotipo-latam-expeditions.png?v=2" />
   <link rel="manifest" href="site.webmanifest" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -110,13 +110,26 @@
     </div>
   </div>
   <main id="contenido">
-    <section class="hero" aria-labelledby="heroTitle">
+    <nav class="home-product-nav" aria-label="Qué quieres reservar">
+      <div class="home-product-nav__inner" role="tablist" aria-label="Servicios turísticos">
+        <button type="button" class="home-product-tab is-active" role="tab" aria-selected="true" aria-controls="homePanelPackages" id="homeTabPackages" data-service-tab="paquetes"><i class="fa-solid fa-suitcase-rolling" aria-hidden="true"></i> Paquetes</button>
+        <button type="button" class="home-product-tab" role="tab" aria-selected="false" aria-controls="homePanelOffers" id="homeTabOffers" data-service-tab="ofertas" tabindex="-1"><i class="fa-solid fa-tags" aria-hidden="true"></i> Ofertas</button>
+        <button type="button" class="home-product-tab" role="tab" aria-selected="false" aria-controls="homePanelFlights" id="homeTabFlights" data-service-tab="vuelos" tabindex="-1"><i class="fa-solid fa-plane" aria-hidden="true"></i> Vuelos</button>
+        <button type="button" class="home-product-tab" role="tab" aria-selected="false" aria-controls="homePanelHotels" id="homeTabHotels" data-service-tab="hoteles" tabindex="-1"><i class="fa-solid fa-bed" aria-hidden="true"></i> Hoteles</button>
+      </div>
+    </nav>
+    <section class="hero home-hero" aria-labelledby="heroTitle">
       <div class="hero__content">
-        <span class="eyebrow" data-i18n="hero.eyebrow">Descubre Latinoamérica con expertos locales</span>
-        <h1 id="heroTitle" data-i18n="hero.title">Viajes memorables por Latinoamérica, diseñados para ti</h1>
-        <p data-i18n="hero.subtitle">Explora destinos icónicos, culturas vivas y paisajes únicos con itinerarios que se ajustan a tu ritmo, tu presupuesto y tu forma de viajar.</p>
-
-        <form class="search-card" id="tripSearchForm" role="search" aria-label="Buscador de viajes">
+        <h1 id="heroTitle" data-i18n="hero.eyebrow">Descubre Latinoamérica con expertos locales</h1>
+      </div>
+    </section>
+    <section class="home-search-shell" id="explorar" aria-label="Encuentra tu próximo viaje">
+      <div class="home-search-shell__heading">
+        <span class="home-search-shell__eyebrow">TU PRÓXIMO VIAJE EMPIEZA AQUÍ</span>
+        <h2>Elige cómo quieres viajar</h2>
+      </div>
+      <div class="home-service-panel" role="tabpanel" id="homePanelPackages" aria-labelledby="homeTabPackages" data-service-panel="paquetes">
+                <form class="search-card home-travel-form" id="tripSearchForm" role="search" aria-label="Buscador de viajes">
           <div class="search-field">
             <label for="searchDestination" data-i18n="search.destination">¿A dónde quieres viajar?</label>
             <select id="searchDestination" name="destination"><option value="">Selecciona un destino</option><optgroup label="Países"><option value="peru">Perú</option><option value="chile">Chile</option><option value="ecuador">Ecuador</option><option value="colombia">Colombia</option><option value="argentina">Argentina</option><option value="brasil">Brasil</option><option value="bolivia">Bolivia</option><option value="mexico">México</option><option value="costa-rica">Costa Rica</option><option value="uruguay">Uruguay</option><option value="venezuela">Venezuela</option></optgroup><optgroup label="Destinos de Colombia"><option value="amazonas-leticia">Colombia · Amazonas / Leticia</option><option value="bahia-solano-nuqui">Colombia · Bahía Solano / Nuquí</option><option value="bogota">Colombia · Bogotá</option><option value="bogota-boyaca">Colombia · Bogotá / Boyacá</option><option value="bogota-cundinamarca">Colombia · Bogotá / Cundinamarca</option><option value="bogota-zipaquira">Colombia · Bogotá / Zipaquirá</option><option value="bogota-y-boyaca">Colombia · Bogotá y Boyacá</option><option value="bogota-y-medellin">Colombia · Bogotá y Medellín</option><option value="bogota-medellin-y-cartagena">Colombia · Bogotá, Medellín y Cartagena</option><option value="cali">Colombia · Cali</option><option value="cali-valle-del-cauca">Colombia · Cali / Valle del Cauca</option><option value="cali-y-eje-cafetero">Colombia · Cali y Eje Cafetero</option><option value="cali-y-valle-del-cauca">Colombia · Cali y Valle del Cauca</option><option value="cartagena">Colombia · Cartagena</option><option value="cartagena-baru">Colombia · Cartagena / Barú</option><option value="cartagena-islas-del-rosario">Colombia · Cartagena / Islas del Rosario</option><option value="cartagena-santa-catalina">Colombia · Cartagena / Santa Catalina</option><option value="cartagena-de-indias">Colombia · Cartagena de Indias</option><option value="cartagena-y-santa-marta">Colombia · Cartagena y Santa Marta</option><option value="choco-bahia-solano">Colombia · Chocó / Bahía Solano</option><option value="choco-nuqui">Colombia · Chocó / Nuquí</option><option value="eje-cafetero">Colombia · Eje Cafetero</option><option value="eje-cafetero-quindio">Colombia · Eje Cafetero / Quindío</option><option value="eje-cafetero-risaralda">Colombia · Eje Cafetero / Risaralda</option><option value="huila-san-agustin">Colombia · Huila / San Agustín</option><option value="huila-villavieja">Colombia · Huila / Villavieja</option><option value="medellin">Colombia · Medellín</option><option value="medellin-y-antioquia">Colombia · Medellín y Antioquia</option><option value="medellin-y-cartagena">Colombia · Medellín y Cartagena</option><option value="medellin-y-eje-cafetero">Colombia · Medellín y Eje Cafetero</option><option value="meta-la-macarena">Colombia · Meta / La Macarena</option><option value="san-andres">Colombia · San Andrés</option><option value="san-gil-santander">Colombia · San Gil / Santander</option><option value="santa-marta">Colombia · Santa Marta</option><option value="santa-marta-sierra-nevada">Colombia · Santa Marta / Sierra Nevada</option><option value="santa-marta-tayrona">Colombia · Santa Marta / Tayrona</option><option value="santander">Colombia · Santander</option><option value="sierra-nevada-de-santa-marta">Colombia · Sierra Nevada de Santa Marta</option></optgroup></select>
@@ -136,7 +149,76 @@
             <span>Buscar viajes</span>
           </button>
         </form>
-        <p class="hero-note" data-i18n="hero.note">Rutas personalizadas según tu país, temporada y estilo de viaje</p>
+      </div>
+      <div class="home-service-panel" role="tabpanel" id="homePanelOffers" aria-labelledby="homeTabOffers" data-service-panel="ofertas" hidden>
+        <div class="home-featured-quick">
+          <div><span class="home-form-label">Lo mejor de Latinoamérica</span><strong>Experiencias, escapadas y paquetes seleccionados.</strong></div>
+          <a class="home-main-cta" href="#ofertas"><i class="fa-solid fa-tags" aria-hidden="true"></i> Explorar propuestas</a>
+        </div>
+      </div>
+      <div class="home-service-panel" role="tabpanel" id="homePanelFlights" aria-labelledby="homeTabFlights" data-service-panel="vuelos" hidden>
+        <form id="homeFlightSearch" class="home-flight-form" aria-label="Buscar vuelos">
+          <div class="home-search-trip">
+            <label><input type="radio" name="trip" value="roundtrip" checked> Ida y vuelta</label>
+            <label><input type="radio" name="trip" value="oneway"> Solo ida</label>
+          </div>
+          <div class="home-search-fields">
+            <div class="home-search-control"><label for="homeFlightOrigin"><i class="fa-solid fa-plane-departure" aria-hidden="true"></i> Origen</label><select id="homeFlightOrigin" name="origin" required>
+                  <optgroup label="Perú"><option value="LIM" selected>Lima (LIM)</option><option value="CUZ">Cusco (CUZ)</option><option value="AQP">Arequipa (AQP)</option><option value="JUL">Juliaca (JUL)</option><option value="PIU">Piura (PIU)</option><option value="TRU">Trujillo (TRU)</option><option value="IQT">Iquitos (IQT)</option><option value="TPP">Tarapoto (TPP)</option><option value="CIX">Chiclayo (CIX)</option><option value="PEM">Puerto Maldonado (PEM)</option></optgroup>
+                  <optgroup label="Colombia"><option value="BOG">Bogotá (BOG)</option><option value="MDE">Medellín (MDE)</option><option value="CTG">Cartagena (CTG)</option><option value="CLO">Cali (CLO)</option><option value="SMR">Santa Marta (SMR)</option><option value="ADZ">San Andrés (ADZ)</option><option value="PEI">Pereira (PEI)</option><option value="LET">Leticia (LET)</option></optgroup>
+                  <optgroup label="Ecuador"><option value="UIO">Quito (UIO)</option><option value="GYE">Guayaquil (GYE)</option></optgroup>
+                  <optgroup label="Chile"><option value="SCL">Santiago (SCL)</option><option value="ANF">Antofagasta (ANF)</option></optgroup>
+                  <optgroup label="Argentina"><option value="EZE">Buenos Aires (Ezeiza) (EZE)</option><option value="AEP">Buenos Aires (Aeroparque) (AEP)</option><option value="COR">Córdoba (COR)</option><option value="MDZ">Mendoza (MDZ)</option></optgroup>
+                  <optgroup label="Brasil"><option value="GRU">São Paulo (GRU)</option><option value="GIG">Río de Janeiro (GIG)</option><option value="BSB">Brasilia (BSB)</option></optgroup>
+                  <optgroup label="Bolivia"><option value="LPB">La Paz (LPB)</option><option value="VVI">Santa Cruz (VVI)</option></optgroup>
+                  <optgroup label="México"><option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún (CUN)</option><option value="GDL">Guadalajara (GDL)</option></optgroup>
+                  <optgroup label="Centroamérica"><option value="PTY">Ciudad de Panamá (PTY)</option><option value="SJO">San José, Costa Rica (SJO)</option></optgroup>
+                  <optgroup label="Uruguay"><option value="MVD">Montevideo (MVD)</option></optgroup>
+                  <optgroup label="Venezuela"><option value="CCS">Caracas (CCS)</option><option value="BLA">Barcelona (BLA)</option><option value="MAR">Maracaibo (MAR)</option></optgroup>
+                  <optgroup label="Estados Unidos"><option value="MIA">Miami (MIA)</option><option value="MCO">Orlando (MCO)</option><option value="JFK">Nueva York (JFK) (JFK)</option><option value="LAX">Los Ángeles (LAX)</option></optgroup>
+                  <optgroup label="Europa"><option value="MAD">Madrid (MAD)</option><option value="BCN">Barcelona, España (BCN)</option></optgroup>
+                </select></div>
+            <button type="button" class="home-swap" id="homeFlightSwap" aria-label="Intercambiar origen y destino"><i class="fa-solid fa-arrow-right-arrow-left" aria-hidden="true"></i></button>
+            <div class="home-search-control"><label for="homeFlightDestination"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Destino</label><select id="homeFlightDestination" name="destination" required>
+                  <optgroup label="Perú"><option value="LIM">Lima (LIM)</option><option value="CUZ" selected>Cusco (CUZ)</option><option value="AQP">Arequipa (AQP)</option><option value="JUL">Juliaca (JUL)</option><option value="PIU">Piura (PIU)</option><option value="TRU">Trujillo (TRU)</option><option value="IQT">Iquitos (IQT)</option><option value="TPP">Tarapoto (TPP)</option><option value="CIX">Chiclayo (CIX)</option><option value="PEM">Puerto Maldonado (PEM)</option></optgroup>
+                  <optgroup label="Colombia"><option value="BOG">Bogotá (BOG)</option><option value="MDE">Medellín (MDE)</option><option value="CTG">Cartagena (CTG)</option><option value="CLO">Cali (CLO)</option><option value="SMR">Santa Marta (SMR)</option><option value="ADZ">San Andrés (ADZ)</option><option value="PEI">Pereira (PEI)</option><option value="LET">Leticia (LET)</option></optgroup>
+                  <optgroup label="Ecuador"><option value="UIO">Quito (UIO)</option><option value="GYE">Guayaquil (GYE)</option></optgroup>
+                  <optgroup label="Chile"><option value="SCL">Santiago (SCL)</option><option value="ANF">Antofagasta (ANF)</option></optgroup>
+                  <optgroup label="Argentina"><option value="EZE">Buenos Aires (Ezeiza) (EZE)</option><option value="AEP">Buenos Aires (Aeroparque) (AEP)</option><option value="COR">Córdoba (COR)</option><option value="MDZ">Mendoza (MDZ)</option></optgroup>
+                  <optgroup label="Brasil"><option value="GRU">São Paulo (GRU)</option><option value="GIG">Río de Janeiro (GIG)</option><option value="BSB">Brasilia (BSB)</option></optgroup>
+                  <optgroup label="Bolivia"><option value="LPB">La Paz (LPB)</option><option value="VVI">Santa Cruz (VVI)</option></optgroup>
+                  <optgroup label="México"><option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún (CUN)</option><option value="GDL">Guadalajara (GDL)</option></optgroup>
+                  <optgroup label="Centroamérica"><option value="PTY">Ciudad de Panamá (PTY)</option><option value="SJO">San José, Costa Rica (SJO)</option></optgroup>
+                  <optgroup label="Uruguay"><option value="MVD">Montevideo (MVD)</option></optgroup>
+                  <optgroup label="Venezuela"><option value="CCS">Caracas (CCS)</option><option value="BLA">Barcelona (BLA)</option><option value="MAR">Maracaibo (MAR)</option></optgroup>
+                  <optgroup label="Estados Unidos"><option value="MIA">Miami (MIA)</option><option value="MCO">Orlando (MCO)</option><option value="JFK">Nueva York (JFK) (JFK)</option><option value="LAX">Los Ángeles (LAX)</option></optgroup>
+                  <optgroup label="Europa"><option value="MAD">Madrid (MAD)</option><option value="BCN">Barcelona, España (BCN)</option></optgroup>
+                </select></div>
+            <div class="home-search-control"><label for="homeFlightDeparture">Salida</label><input type="date" id="homeFlightDeparture" name="departure" required></div>
+            <div class="home-search-control" id="homeReturnControl"><label for="homeFlightReturn">Regreso</label><input type="date" id="homeFlightReturn" name="returnDate" required></div>
+            <div class="home-search-control home-search-control--small"><label for="homeFlightAdults">Adultos</label><select id="homeFlightAdults" name="adults"><option value="1" selected>1 adulto</option><option value="2">2 adultos</option><option value="3">3 adultos</option><option value="4">4 adultos</option><option value="5">5 adultos</option><option value="6">6 adultos</option><option value="7">7 adultos</option><option value="8">8 adultos</option><option value="9">9 adultos</option></select></div>
+            <button class="home-main-cta home-main-cta--search" type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Buscar vuelos</button>
+          </div>
+          <p id="homeFlightError" class="home-search-error" role="alert" hidden></p>
+        </form>
+      </div>
+      <div class="home-service-panel" role="tabpanel" id="homePanelHotels" aria-labelledby="homeTabHotels" data-service-panel="hoteles" hidden>
+        <form id="homeHotelsInquiry" class="home-hotel-form" aria-label="Consultar alojamiento">
+          <div class="home-search-control"><label for="homeHotelDestination"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Destino</label><input id="homeHotelDestination" name="destination" placeholder="Ciudad o destino" required maxlength="80"></div>
+          <div class="home-search-control"><label for="homeHotelCheckin">Entrada</label><input type="date" id="homeHotelCheckin" name="checkin" required></div>
+          <div class="home-search-control"><label for="homeHotelCheckout">Salida</label><input type="date" id="homeHotelCheckout" name="checkout" required></div>
+          <div class="home-search-control home-search-control--small"><label for="homeHotelGuests">Huéspedes</label><select id="homeHotelGuests" name="guests"><option value="1">1 huésped</option><option value="2" selected>2 huéspedes</option><option value="3">3 huéspedes</option><option value="4">4 huéspedes</option><option value="5">5 huéspedes</option><option value="6">6 huéspedes</option></select></div>
+          <button class="home-main-cta" type="submit"><i class="fa-solid fa-headset" aria-hidden="true"></i> Consultar hotel</button>
+        </form>
+        <p class="home-hotel-note">Un especialista te ayudará a confirmar las opciones y tarifas de alojamiento.</p>
+      </div>
+    </section>
+    <section class="home-showcase" id="ofertas" aria-labelledby="offersTitle">
+      <div class="home-showcase__head"><div><p class="home-kicker">PARA INSPIRAR TU PRÓXIMO VIAJE</p><h2 id="offersTitle">Ideas para descubrir Latinoamérica</h2></div><a href="paquetes.html" class="home-secondary-link">Ver todos los paquetes <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></div>
+      <div class="home-showcase__grid">
+        <a class="home-showcase-card" href="paquetes/peru-cusco-4d3n.html"><img loading="lazy" src="assets/img/paquete-peru-4d3n-01.jpg" alt="Machu Picchu en Cusco"><div><span>PERÚ · CULTURA</span><strong>Cusco y Machu Picchu</strong><small>Descubrir paquete <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></small></div></a>
+        <a class="home-showcase-card" href="paquetes/medellin-esencial.html"><img loading="lazy" src="assets/img/colombia-paquete-medellin-esencial.jpg" alt="Medellín, Colombia"><div><span>COLOMBIA · CIUDAD</span><strong>Medellín esencial</strong><small>Descubrir paquete <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></small></div></a>
+        <a class="home-showcase-card" href="paquetes/rio-esencial.html"><img loading="lazy" src="assets/img/brasil-rio-01.jpg" alt="Río de Janeiro, Brasil"><div><span>BRASIL · EXPERIENCIAS</span><strong>Río de Janeiro</strong><small>Descubrir paquete <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></small></div></a>
       </div>
     </section>
 
@@ -1028,6 +1110,7 @@
   </a>
 
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/inicio-redesign.js" defer></script>
   <script src="assets/js/cuentas.js" defer></script>
 </body>
 </html>
