@@ -39,7 +39,11 @@
     const type=$('searchType')?.value||'';
     const month=$('searchDate')?.value||'';
     const qs=new URLSearchParams();
-    if(destination)qs.set('destino',destination);
+    const selected=$('searchDestination')?.selectedOptions?.[0];
+    const countryValues=new Set(['peru','chile','ecuador','colombia','argentina','brasil','bolivia','mexico','costa-rica','uruguay','venezuela']);
+    const country=countryValues.has(destination)?destination:
+      selected?.parentElement?.label==='Destinos de Colombia'?'colombia':'';
+    if(country)qs.set('destino',country);
     if(type)qs.set('estilo',type);
     if(month)qs.set('fecha',month);
     location.href='paquetes.html'+(qs.size?'?'+qs.toString():'');
