@@ -21,7 +21,7 @@ function doGet(e) {
   if (p.mode === "request") {
     // Pass the original search context from the server to the iframe. This
     // avoids account-switching and redirect issues with Apps Script URLs.
-    var keys=["origin","destination","trip","departure","returnDate","adults","children","observedPrice"];
+    var keys=["origin","destination","trip","departure","returnDate","adults","children","observedPrice","package"];
     var clean={};
     keys.forEach(function(k){clean[k]=String(p[k]||"").slice(0,36);});
     clean.origin=/^[A-Z]{3}$/.test(clean.origin)?clean.origin:"";
@@ -31,6 +31,7 @@ function doGet(e) {
       if(!/^\d{4}-\d\d-\d\d$/.test(clean[k]))clean[k]="";
     });
     clean.adults=/^[1-9]$/.test(clean.adults)?clean.adults:"1";
+    clean.package=clean.package==="medellin-esencial"?clean.package:"";
     clean.children=/^[0-6]$/.test(clean.children)?clean.children:"0";
     clean.observedPrice=/^\d{1,5}(\.\d{1,2})?$/.test(clean.observedPrice)?clean.observedPrice:"";
     var query=keys.map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(clean[k]);}).join("&");
@@ -248,7 +249,8 @@ function normalizeSegment_(s) {
     flightNumber:String(s.flight_number||"").slice(0,24),
     from:airport_(s.departure_airport),to:airport_(s.arrival_airport),
     duration:typeof s.duration==="number"?s.duration:null,
-    airplane:String(s.airplane||"").slice(0,70)
+    airplane:String(s.airplane||"").slice(0,70),
+    airlineLogo:/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/70px\/[A-Za-z0-9_-]+\.png$/.test(String(s.airline_logo||""))?String(s.airline_logo):""
   };
 }
 function normalizeTrip_(item) {
@@ -341,6 +343,7 @@ function submitFlightRequest(p) {
   var origin=String(p.origin||"").toUpperCase(),destination=String(p.destination||"").toUpperCase();
   var departure=String(p.departure||""),ret=String(p.returnDate||"");
   var trip=String(p.trip||"");
+  var packageCode=String(p.package||"")==="medellin-esencial"?"medellin-esencial":"";
   var adults=Number(p.adults),children=Number(p.children);
   if(FLIGHT_AIRPORTS.indexOf(origin)<0 || FLIGHT_AIRPORTS.indexOf(destination)<0 ||
     origin===destination || legs.indexOf(trip)<0 ||
@@ -370,12 +373,14 @@ function submitFlightRequest(p) {
       ln=String(t.lastName||"").trim().slice(0,100),
       type=String(t.docType||"").toUpperCase(),
       number=String(t.docNumber||"").trim().slice(0,35),
-      dob=String(t.birthDate||"");
+      dob=String(t.birthDate||""),
+      baggage=String(t.baggagePreference||"standard");
     if(fn.length<2||ln.length<2||allowedTypes.indexOf(type)<0||
        !/^[A-Za-z0-9 .-]{4,35}$/.test(number)||
        !/^\d{4}-\d\d-\d\d$/.test(dob) || !Number.isFinite(toUtcDay_(dob))||
        toUtcDay_(dob)>=Date.now()) throw new Error("Verifica datos de los pasajeros.");
-    return {firstName:fn,lastName:ln,docType:type,docNumber:number,birthDate:dob};
+    if(["standard","carry_on","checked_23","both"].indexOf(baggage)<0) baggage="standard";
+    return {firstName:fn,lastName:ln,docType:type,docNumber:number,birthDate:dob,baggagePreference:baggage};
   });
   var bookId=PropertiesService.getScriptProperties().getProperty("FLIGHT_REQUEST_SHEET_ID");
   if(!bookId) throw new Error("El registro privado aún no está activado. Contacta con Latam Expeditions.");
@@ -396,7 +401,7 @@ function submitFlightRequest(p) {
     var estimated=Number.isFinite(observed)&&observed>0&&observed<100000?
       Math.round(observed*(1+rate)*100)/100:"NO VERIFICADO";
     var row=[new Date(),internalCode,"SOLICITUD SIN RESERVA NI BILLETE",
-      origin+"-"+destination,departure+(ret?" / "+ret:""),adults,children,
+      origin+"-"+destination+(packageCode?" | PAQUETE: Medellín Esencial 4D/3N":""),departure+(ret?" / "+ret:""),adults,children,
       Number.isFinite(observed)&&observed>0&&observed<100000?observed:"NO VERIFICADO",
       (rate*100)+"%",estimated,contact,email,phone,JSON.stringify(sanitized),
       "Acepta solicitud sin billete y tratamiento de datos"];
