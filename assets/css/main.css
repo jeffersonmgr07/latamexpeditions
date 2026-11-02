@@ -1787,3 +1787,209 @@ details.detail-card summary::marker{color:var(--latam-gold);}
 @media (max-width:600px) {
   .booking-success__brand-mark { height:50px; max-width:50px; }
 }
+
+
+/* =========================================================================
+   LATAM EXPEDITIONS · IDENTIDAD VIBRANTE 2026
+   Verde vivo Groupon-inspired, azul noche y violeta eléctrico. Diseño propio.
+   ======================================================================= */
+:root {
+  --latam-green:#07873e;
+  --latam-green-2:#006e35;
+  --latam-green-3:#16a660;
+  --latam-green-soft:#e8f7ed;
+  --latam-yellow:#a531e8;
+  --latam-gold:#a531e8;
+  --latam-gold-deep:#7526ba;
+  --latam-gold-soft:#f1e6fb;
+  --latam-purple:#a531e8;
+  --latam-navy:#15243e;
+  --latam-ink:#16253b;
+  --latam-muted:#627183;
+  --latam-border:#dee7e3;
+  --latam-border-soft:#edf1f0;
+  --latam-cream:#f6faf7;
+  --latam-bg:#ffffff;
+  --latam-bg-alt:#f5f9f7;
+  --radius-xl:18px;
+  --radius-lg:12px;
+  --radius-sm:10px;
+  --shadow-soft:0 2px 6px rgba(15,37,45,.035),0 14px 34px rgba(15,37,45,.055);
+}
+body { background:var(--latam-bg);color:var(--latam-ink); }
+.topbar { background:#fff;border-bottom:1px solid #e5eee8;box-shadow:0 3px 20px rgba(17,36,58,.045); }
+.nav {color:var(--latam-navy);font-weight:650;gap:clamp(16px,2vw,30px);}
+.nav a:hover,.nav a[aria-current="page"] {color:var(--latam-green);border-bottom-color:var(--latam-green);}
+.country-pill,.language-select,.login-toggle {color:var(--latam-navy);border-color:#dfe8e6;border-radius:11px;}
+.country-pill:hover,.login-toggle:hover {color:var(--latam-green);border-color:var(--latam-green);}
+.section-kicker,.booking-success__eyebrow {color:var(--latam-green);}
+.section h2,.page-hero h1,.detail-card h2 {color:var(--latam-navy);}
+.page-hero {background:linear-gradient(180deg,#f5fbf7 0%,#ffffff 100%);border-bottom-color:#e2efe7;}
+.page-hero::after {background:linear-gradient(90deg,var(--latam-green),#7bdcb0,transparent);}
+.detail-card h2::after {background:var(--latam-green);}
+.builder-band h2 span,.section--dark .accent,.section--black .accent {color:#adf3ce;}
+.btn-primary,.btn-gold,.search-btn,.card-btn,.home-main-cta {
+  background:var(--latam-purple);color:#fff;box-shadow:none;border-color:transparent;
+}
+.btn-primary:hover,.btn-gold:hover,.search-btn:hover,.card-btn:hover,.home-main-cta:hover {
+  background:#8327c5;color:#fff;filter:none;
+}
+.btn-outline {border-color:#b9c9df;color:var(--latam-navy);}
+.btn-outline:hover {border-color:var(--latam-navy);background:#f1f4f9;color:var(--latam-navy);}
+.trip-card {border-radius:16px;}
+.trip-card:hover {border-color:#c3e8d0;}
+.tag {border:1px solid #e6f2ea;color:var(--latam-green);}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible {
+  outline:3px solid rgba(165,49,232,.65);outline-offset:3px;
+}
+
+/* ---- Navegación de productos, debajo de la cabecera en la home. ---- */
+.home-product-nav {background:#fff;border-bottom:1px solid #e7eeec;position:relative;z-index:3;}
+.home-product-nav__inner {max-width:1170px;margin:auto;display:flex;align-items:stretch;gap:clamp(10px,2.8vw,40px);padding:0 22px;}
+.home-product-tab {
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;white-space:nowrap;
+  padding:17px clamp(13px,1.3vw,24px);font:750 14px Inter,Arial,sans-serif;
+  border:0;border-bottom:3px solid transparent;background:transparent;color:#516276;
+  cursor:pointer;transition:color .18s,border-color .18s;
+}
+.home-product-tab:hover {color:var(--latam-green);}
+.home-product-tab.is-active {color:var(--latam-green);border-bottom-color:var(--latam-green);}
+.home-product-tab i {font-size:15px;}
+
+/* ---- Hero original de Corcovado, ahora luminoso y sin textos de relleno. ---- */
+.home-hero {min-height:clamp(265px,29vw,410px);display:flex;align-items:center;justify-content:center;}
+.home-hero::before {
+  background:linear-gradient(95deg,rgba(11,28,54,.68),rgba(5,74,46,.31) 60%,rgba(12,27,45,.16)),
+    url("../img/latam-hero-01.jpg") center 48%/cover no-repeat;
+  transform:scale(1);
+}
+.home-hero .hero__content {width:min(100% - 40px,1160px);padding:28px 8px 85px;text-align:left;}
+.home-hero h1 {
+  margin:0;max-width:750px;color:#fff;font-size:clamp(31px,4.5vw,60px);
+  font-family:Montserrat,Inter,sans-serif;font-weight:850;line-height:1.13;
+  letter-spacing:-.048em;text-shadow:0 4px 28px rgba(0,20,30,.32);
+}
+
+/* ---- Search bar de 4 servicios: escritorio y móvil ---- */
+.home-search-shell {
+  position:relative;z-index:4;max-width:1200px;margin:-55px auto 0;
+  padding:26px 29px 22px;background:#fff;border:1px solid #e5eeea;border-radius:20px;
+  box-shadow:0 16px 50px rgba(17,43,44,.13);
+}
+.home-search-shell__heading {display:flex;gap:14px;align-items:baseline;justify-content:space-between;margin-bottom:18px;}
+.home-search-shell__eyebrow,.home-kicker {font-size:10px;font-weight:850;letter-spacing:.14em;color:var(--latam-green);}
+.home-search-shell__heading h2 {font:800 clamp(17px,2.2vw,23px) Montserrat,Inter,sans-serif;color:var(--latam-navy);margin:0;}
+.home-service-panel[hidden] {display:none!important;}
+.home-travel-form {width:100%;grid-template-columns:minmax(180px,1.25fr) minmax(160px,.8fr) minmax(165px,.8fr) auto;
+  box-shadow:none;overflow:visible;border:1px solid var(--latam-border);border-radius:12px;}
+.home-travel-form .search-field {padding:12px 18px;}
+.home-travel-form .search-field label {font-size:11px;color:var(--latam-navy);}
+.home-travel-form .search-field input,.home-travel-form .search-field select {font-size:13px;color:#364b60;max-width:100%;}
+.home-travel-form .search-btn {margin:7px;border-radius:9px;min-height:52px;font-size:13px;padding:0 17px;white-space:nowrap;}
+.home-featured-quick {display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 16px;border:1px solid var(--latam-border);border-radius:13px;}
+.home-featured-quick>div {display:grid;gap:4px;}
+.home-featured-quick strong {font-size:17px;color:var(--latam-navy);}
+.home-form-label {font-size:11px;font-weight:750;color:var(--latam-green);}
+.home-main-cta {
+  flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:49px;padding:12px 20px;border:0;border-radius:11px;
+  font-size:13px;font-weight:800;cursor:pointer;text-decoration:none;white-space:nowrap;
+  background:var(--latam-purple);color:#fff;
+}
+.home-flight-form {display:grid;gap:12px;}
+.home-search-trip {display:flex;gap:22px;align-items:center;font-size:12px;font-weight:700;color:var(--latam-navy);}
+.home-search-trip label {display:flex;align-items:center;gap:7px;cursor:pointer;}
+.home-search-trip input {accent-color:var(--latam-green);width:16px;height:16px;}
+.home-search-fields {display:grid;grid-template-columns:minmax(120px,1.2fr) 38px minmax(120px,1.2fr) minmax(135px,.8fr) minmax(135px,.8fr) minmax(112px,.65fr) auto;gap:8px;align-items:stretch;}
+.home-search-control {min-width:0;border:1px solid var(--latam-border);border-radius:10px;padding:7px 11px;background:#fff;}
+.home-search-control label {font-size:10px;font-weight:750;color:#607487;display:block;margin-bottom:5px;}
+.home-search-control label i {color:var(--latam-green);}
+.home-search-control select,.home-search-control input {
+  width:100%;min-height:23px;border:0;padding:0;background:#fff;outline:0;
+  color:var(--latam-navy);font:700 12px Inter,Arial,sans-serif;min-width:0;
+}
+.home-search-control input[type="date"] {font-size:11px;}
+.home-swap {align-self:center;justify-self:center;width:35px;height:35px;display:grid;place-items:center;
+  border:1px solid #cce6d4;color:var(--latam-green);border-radius:50%;background:#f2faf5;cursor:pointer;}
+.home-main-cta--search {padding:9px 13px;}
+.home-search-error {margin:0;color:#9a263e;font-size:12px;font-weight:650;}
+.home-hotel-form {display:grid;grid-template-columns:minmax(175px,1.5fr) repeat(2,minmax(140px,1fr)) minmax(105px,.7fr) auto;gap:9px;align-items:stretch;}
+.home-hotel-note {margin:10px 2px 0;color:var(--latam-muted);font-size:11px;}
+
+/* ---- Featured cards; offers are suggestions, NOT fabricated discounts. ---- */
+.home-showcase {max-width:1210px;margin:0 auto;padding:78px 24px 24px;}
+.home-showcase__head {display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:25px;}
+.home-showcase__head h2 {color:var(--latam-navy);font:800 clamp(25px,3.1vw,37px) Montserrat,Inter,sans-serif;letter-spacing:-.038em;margin:8px 0 0;}
+.home-kicker {margin:0;}
+.home-secondary-link {color:var(--latam-navy);font-size:13px;font-weight:800;white-space:nowrap;}
+.home-secondary-link:hover {color:var(--latam-purple);}
+.home-showcase__grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px;}
+.home-showcase-card {display:block;overflow:hidden;border:1px solid var(--latam-border);border-radius:17px;background:#fff;
+  box-shadow:0 4px 24px rgba(16,38,45,.045);transition:transform .2s,box-shadow .2s;}
+.home-showcase-card:hover {transform:translateY(-4px);box-shadow:0 12px 32px rgba(16,38,45,.12);}
+.home-showcase-card img {width:100%;aspect-ratio:1.55;object-fit:cover;}
+.home-showcase-card>div {display:grid;gap:7px;padding:17px 19px 19px;}
+.home-showcase-card span {color:var(--latam-green);font-size:10px;font-weight:850;letter-spacing:.11em;}
+.home-showcase-card strong {color:var(--latam-navy);font:800 18px Montserrat,Inter,sans-serif;}
+.home-showcase-card small {font-size:12px;font-weight:700;color:var(--latam-purple);}
+.home-showcase+.trust-bar {margin-top:42px;}
+
+@media(max-width:1180px) {
+  .home-search-shell {margin-left:20px;margin-right:20px;}
+  .home-search-fields {grid-template-columns:minmax(150px,1fr) 34px minmax(150px,1fr) minmax(130px,.8fr) minmax(130px,.8fr);}
+  .home-search-control--small {grid-column:span 2;}
+  .home-main-cta--search {grid-column:span 3;}
+  .home-hotel-form {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .home-hotel-form .home-main-cta {grid-column:span 2;}
+}
+@media(max-width:800px) {
+  .home-product-nav__inner {justify-content:space-between;gap:0;padding:0 13px;}
+  .home-product-tab {font-size:12px;padding:14px 11px;}
+  .home-hero {min-height:290px;}
+  .home-hero .hero__content {padding-bottom:70px;}
+  .home-search-shell {margin-top:-42px;padding:22px 18px;}
+  .home-search-shell__heading {display:block;}
+  .home-search-shell__heading h2 {margin:6px 0 0;}
+  .home-travel-form {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .home-travel-form .search-field {border-bottom:1px solid var(--latam-border-soft);}
+  .home-travel-form .search-field:nth-of-type(2) {border-right:0;}
+  .home-travel-form .search-btn {width:calc(100% - 14px);margin:7px;justify-content:center;grid-column:span 2;}
+  .home-showcase {padding-top:58px;}
+}
+@media(max-width:600px) {
+  .home-product-nav__inner {overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-width:none;gap:8px;padding:0 10px;}
+  .home-product-nav__inner::-webkit-scrollbar{display:none;}
+  .home-product-tab {flex:1 0 auto;padding:12px 9px;font-size:12px;gap:6px;}
+  .home-product-tab i {font-size:13px;}
+  .home-hero {min-height:235px;}
+  .home-hero::before {background-position:55% center;}
+  .home-hero .hero__content {width:calc(100% - 34px);padding:25px 0 53px;}
+  .home-hero h1 {font-size:clamp(30px,8vw,40px);max-width:440px;}
+  .home-search-shell {margin:-25px 12px 0;padding:17px 14px;border-radius:16px;}
+  .home-search-shell__eyebrow {font-size:9px;}
+  .home-travel-form {grid-template-columns:1fr;border:0;gap:8px;}
+  .home-travel-form .search-field {border:1px solid var(--latam-border);border-radius:10px;padding:12px;}
+  .home-travel-form .search-btn {grid-column:auto;width:100%;margin:0;}
+  .home-featured-quick {display:grid;gap:15px;}
+  .home-featured-quick .home-main-cta {width:100%;}
+  .home-search-fields {grid-template-columns:minmax(0,1fr) 35px minmax(0,1fr);gap:8px;}
+  .home-search-fields .home-search-control:nth-of-type(n+3) {grid-column:auto;}
+  .home-search-fields .home-search-control:nth-of-type(3) {grid-column:span 1;}
+  .home-search-fields #homeReturnControl {grid-column:auto;}
+  .home-search-fields .home-search-control--small {grid-column:span 3;}
+  .home-search-fields .home-main-cta--search {grid-column:span 3;}
+  .home-search-control select,.home-search-control input {font-size:12px;}
+  .home-hotel-form {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .home-hotel-form>div:first-child {grid-column:span 2;}
+  .home-hotel-form .home-search-control--small {grid-column:span 2;}
+  .home-hotel-form .home-main-cta {width:100%;grid-column:span 2;}
+  .home-showcase {padding:45px 16px 10px;}
+  .home-showcase__head {display:block;}
+  .home-showcase__head h2 {font-size:27px;margin-bottom:10px;}
+  .home-showcase__grid {grid-template-columns:1fr;gap:14px;}
+  .home-showcase-card img {aspect-ratio:1.75;}
+}
+@media(max-width:390px) {
+  .home-product-tab {font-size:11px;padding:12px 7px;}
+  .home-product-tab i {display:none;}
+}

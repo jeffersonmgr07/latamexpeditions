@@ -4,14 +4,13 @@
   "description": "Agencia de viajes especializada en Latinoamérica: experiencias, paquetes flexibles y viajes a medida con asesoría local.",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#fbfdfb",
-  "theme_color": "#0a3d2c",
+  "background_color": "#f5faf7",
+  "theme_color": "#07873e",
   "lang": "es",
   "icons": [
     {
-      "src": "/assets/img/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "/assets/img/isotipo-latam-expeditions.png",
+      "type": "image/png"
     }
   ]
 }

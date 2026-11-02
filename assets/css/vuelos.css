@@ -256,3 +256,17 @@ body.flight-modal-open {overflow:hidden}
 .flight-empty-state__edit { margin-top:8px;background:#eff6f1;color:#17583d;border:1px solid #cde2d2;
   border-radius:10px;padding:12px 19px;font:750 12px Inter,sans-serif;cursor:pointer; }
 .flight-empty-state__edit:hover { background:#e4f2e8; }
+
+/* Latam Expeditions · 2026: armonizar el comparador con verde vibrante,
+   azul noche y CTA violeta (sin alterar cálculos ni API). */
+.hero--flights::before {background:linear-gradient(100deg,rgba(10,34,61,.78),rgba(2,115,68,.70)),
+  url("../img/latam-hero-01.jpg") center/cover no-repeat;}
+.flight-submit,.flight-offer__button,.flight-modal__placeholder a {
+  background:#a531e8!important;color:#fff!important;border-color:#a531e8!important;
+}
+.flight-submit:hover,.flight-offer__button:hover,.flight-modal__placeholder a:hover {background:#8327c5!important;}
+.flight-marketplace__title,.flight-marketplace h2,.flight-offer__price {color:#15243e;}
+.flight-marketplace__eyebrow,.flight-offer__datebadge {color:#07873e;}
+.flight-field:focus-within {border-color:#07873e;}
+.flight-offer {border-color:#e1eae6;}
+.flight-sort-button.is-active,.flight-filter-check:checked {accent-color:#07873e;}
