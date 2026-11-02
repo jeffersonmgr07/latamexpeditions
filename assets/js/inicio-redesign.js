@@ -98,7 +98,7 @@
     outDate.setCustomValidity('');
     const content='Hola, Latam Expeditions. Quisiera consultar un hotel en '+$('homeHotelDestination').value.trim()+
       ', del '+inDate.value+' al '+outDate.value+', para '+$('homeHotelGuests').value+' huésped(es).';
-    window.open('https://wa.me/51900608980?text='+encodeURIComponent(content),'_blank','noopener');
+    window.open('https://wa.me/51906472060?text='+encodeURIComponent(content),'_blank','noopener');
   });
   window.addEventListener('pageshow',()=>{if(flightError)flightError.hidden=true});
 })();
