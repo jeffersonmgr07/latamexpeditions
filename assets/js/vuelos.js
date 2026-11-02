@@ -575,4 +575,10 @@
     panel.hidden = false;
     panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
+  // Cuando llega desde un paquete con fechas completas, consultar automáticamente
+  // sin obligar al cliente a pulsar Buscar una segunda vez.
+  if(selectedPackage&&saved.get('origin')&&saved.get('destination')&&saved.get('departure')
+     &&saved.get('return')){
+    window.setTimeout(()=>form.requestSubmit(),0);
+  }
 })();
