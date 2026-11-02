@@ -65,6 +65,9 @@
 
   // Permite compartir búsquedas mediante la URL; no almacena datos personales.
   const saved = new URLSearchParams(window.location.search);
+  const selectedPackage=saved.get('package')==='medellin-esencial'?
+    {code:'medellin-esencial',name:'Medellín Esencial 4D/3N',pricePerAdult:299}:null;
+
   const validAirport = (select, val) => Array.from(select.options).some(opt => opt.value === val);
   if (validAirport(origin, saved.get('origin'))) origin.value = saved.get('origin');
   if (validAirport(destination, saved.get('destination'))) destination.value = saved.get('destination');
@@ -334,6 +337,16 @@
         ? 'Total · '+currentQuery.adults+' adulto(s)'+(currentQuery.children?' y '+currentQuery.children+' niño(s)':'')
         : 'Por adulto')+' · '+(currentQuery.trip==='roundtrip'?'ida y vuelta':'solo ida'))
     );
+    if(selectedPackage){
+      const pax=currentQuery.adults;
+      const packageBase=selectedPackage.pricePerAdult*pax;
+      const bundle=node('div','flight-package-total');
+      bundle.append(node('span','','Paquete desde: '+money(packageBase)),
+        node('span','','Vuelos consultados: '+money(quotedPrice(offer))),
+        node('strong','',currentQuery.children===0?
+          'Paquete + vuelos: '+money(packageBase+quotedPrice(offer)):'Paquete + vuelos: consultar importe infantil'));
+      priceBlock.append(bundle);
+    }
     const action = node('a','flight-offer__button','Reservar');
     // Visible contact request is separate from any airline booking.
     action.href='#flightQuoteModal';
@@ -347,6 +360,7 @@
     action.dataset.trip=currentQuery.trip;
     action.dataset.adults=String(currentQuery.adults);
     action.dataset.children=String(currentQuery.children);
+    if(selectedPackage)action.dataset.package=selectedPackage.code;
     priceBlock.append(action);
     card.append(body,priceBlock);
     return card;
@@ -503,7 +517,7 @@
     el('flightRouteTitle').textContent = parseLabel(origin) + '  →  ' + parseLabel(destination);
     const tripText = trip === 'roundtrip' ? 'Ida y vuelta' : 'Solo ida';
     const labelCabin = cabin.options[cabin.selectedIndex].textContent;
-    el('flightRouteDetails').textContent = tripText + ' · Salida ' + query.departure +
+    el('flightRouteDetails').textContent = (selectedPackage?selectedPackage.name+' · ':'') + tripText + ' · Salida ' + query.departure +
       (query.returnDate ? ' · Regreso ' + query.returnDate : '') +
       ' · ' + query.adults + ' adulto(s), ' + query.children + ' niño(s) · ' + labelCabin;
     el('flightPriceBox').hidden = true;
@@ -554,6 +568,7 @@
     el('flightWhatsapp').href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(request);
     const qp = new URLSearchParams({ origin: query.origin, destination: query.destination, trip: query.trip, departure: query.departure, adults: String(query.adults), children: String(query.children), cabin: query.cabin });
     if (query.returnDate) qp.set('return', query.returnDate);
+    if(selectedPackage)qp.set('package',selectedPackage.code);
     window.history.replaceState(null, '', window.location.pathname + '?' + qp.toString());
     panel.hidden = false;
     panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
