@@ -371,12 +371,14 @@ function submitFlightRequest(p) {
       ln=String(t.lastName||"").trim().slice(0,100),
       type=String(t.docType||"").toUpperCase(),
       number=String(t.docNumber||"").trim().slice(0,35),
-      dob=String(t.birthDate||"");
+      dob=String(t.birthDate||""),
+      baggage=String(t.baggagePreference||"standard");
     if(fn.length<2||ln.length<2||allowedTypes.indexOf(type)<0||
        !/^[A-Za-z0-9 .-]{4,35}$/.test(number)||
        !/^\d{4}-\d\d-\d\d$/.test(dob) || !Number.isFinite(toUtcDay_(dob))||
        toUtcDay_(dob)>=Date.now()) throw new Error("Verifica datos de los pasajeros.");
-    return {firstName:fn,lastName:ln,docType:type,docNumber:number,birthDate:dob};
+    if(["standard","carry_on","checked_23","both"].indexOf(baggage)<0) baggage="standard";
+    return {firstName:fn,lastName:ln,docType:type,docNumber:number,birthDate:dob,baggagePreference:baggage};
   });
   var bookId=PropertiesService.getScriptProperties().getProperty("FLIGHT_REQUEST_SHEET_ID");
   if(!bookId) throw new Error("El registro privado aún no está activado. Contacta con Latam Expeditions.");
