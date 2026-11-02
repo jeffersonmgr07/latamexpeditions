@@ -36,7 +36,9 @@
       /^\d{4}-\d\d-\d\d$/.test(departure||'');
     placeholder.hidden=canLoad;
     frame.hidden=!canLoad;
-    if(canLoad) frame.src=quoteUrl(offerBtn,base,departure,returnDate);
+    if(canLoad) {
+      frame.src=quoteUrl(offerBtn,base,departure,returnDate);
+    }
     modal.querySelector('.flight-modal__close').focus();
   }
   function close() {
@@ -45,6 +47,14 @@
     document.body.classList.remove('flight-modal-open');
     if(restoreFocus&&restoreFocus.focus)restoreFocus.focus();
   }
+  window.addEventListener('message',event=>{
+    if(event.origin!=='https://script.google.com'&&event.origin!=='https://latamexpeditions.com'
+      &&!/^https:\/\/[a-z0-9-]+\.googleusercontent\.com$/.test(event.origin))return;
+    if(event.data?.type==='latam-quote-request-submitted'&&event.data.status==='received'){
+      modal.querySelector('.flight-modal__header p').textContent=
+        'Solicitud registrada. Recibirás una referencia interna para dar seguimiento.';
+    }
+  });
   document.addEventListener('click',event=>{
     const a=event.target.closest('[data-flight-request]');
     if(a){event.preventDefault();open(a);return;}
