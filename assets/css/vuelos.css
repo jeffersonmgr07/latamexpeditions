@@ -307,3 +307,11 @@ body.flight-modal-open {overflow:hidden}
 .flight-package-total{display:grid;gap:7px;padding:12px;margin-top:10px;background:#eef8f1;border:1px solid #cce7d7;border-radius:11px;text-align:center;}
 .flight-package-total span{font-size:11px;font-weight:650;color:#4d6e5c;}
 .flight-package-total strong{font-size:12px;line-height:1.5;font-weight:850;color:#075d3a;}
+
+/* Brand CTA green (matches experiences and booking actions across the site). */
+.flight-offer__button,.flight-submit,.flight-modal__placeholder a,
+.flight-details-dialog__footer button,.flight-offer__price-panel .flight-offer__button{
+  background:#07873e!important;border-color:#07873e!important;color:white!important;
+}
+.flight-offer__button:hover,.flight-submit:hover,.flight-modal__placeholder a:hover,
+.flight-details-dialog__footer button:hover{background:#056a31!important;border-color:#056a31!important;}
