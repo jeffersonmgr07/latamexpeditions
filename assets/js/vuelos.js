@@ -14,7 +14,7 @@
   const cabin = el('flightCabin');
   const error = el('flightError');
   const panel = el('flightResults');
-  const WHATSAPP = '51900608980';
+  const WHATSAPP = '51906472060';
   const DAY = 24 * 60 * 60 * 1000;
 
   function iso(date) {
@@ -207,7 +207,7 @@
       'Pasajeros: ' + q.adults + ' adulto(s), ' + q.children + ' niño(s)',
       '¿Me confirman horarios completos, equipaje, disponibilidad y tarifa final?'
     ].filter(Boolean).join('\n');
-    return 'https://wa.me/51900608980?text=' + encodeURIComponent(text);
+    return 'https://wa.me/51906472060?text=' + encodeURIComponent(text);
   }
   function leadDays(dateString) {
     const d = new Date(dateString + 'T12:00:00');
