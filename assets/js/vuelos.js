@@ -339,12 +339,14 @@
     );
     if(selectedPackage){
       const pax=currentQuery.adults;
-      const packageBase=selectedPackage.pricePerAdult*pax;
+      const occupancyRate=({1:419,2:299,3:289,4:279})[pax]||299;
+      const packageBase=occupancyRate*pax;
       const bundle=node('div','flight-package-total');
-      bundle.append(node('span','','Paquete desde: '+money(packageBase)),
+      bundle.append(node('span','','Paquete según ocupación: '+money(packageBase)),
         node('span','','Vuelos consultados: '+money(quotedPrice(offer))),
         node('strong','',currentQuery.children===0?
           'Paquete + vuelos: '+money(packageBase+quotedPrice(offer)):'Paquete + vuelos: consultar importe infantil'));
+      bundle.append(node('small','','Importe preliminar sujeto a ocupación, tarifa y disponibilidad.'));
       priceBlock.append(bundle);
     }
     const action = node('a','flight-offer__button','Reservar');
