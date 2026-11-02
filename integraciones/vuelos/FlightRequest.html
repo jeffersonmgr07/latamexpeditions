@@ -22,6 +22,7 @@
     input:focus,select:focus {outline:2px solid #71a788;outline-offset:1px}
     .passenger {border:1px solid #e0e9df;border-radius:12px;padding:12px;margin:12px 0;background:#fafdFA}
     .passenger h3 {font-size:13px;color:#134b35;margin:0 0 12px}
+    .passenger>.field{margin-top:12px;padding-top:12px;border-top:1px solid #e3ede7}
     .consent {display:flex;align-items:flex-start;gap:9px;line-height:1.5;padding:13px 0}
     .consent input {width:17px;min-height:17px;flex-shrink:0;margin-top:2px;accent-color:#0d6a47}
     .consent label {font-weight:500}
@@ -128,7 +129,18 @@
         grid.append(getField('Número de documento','text','docNumber','Número o código'));
         const b=getField('Fecha de nacimiento','date','birthDate');
         b.querySelector('input').max=new Date().toISOString().slice(0,10);
-        grid.append(b);wrap.append(title,grid);container.append(wrap);
+        grid.append(b);
+        const bag=document.createElement('div');bag.className='field';
+        const bl=document.createElement('label');bl.textContent='Equipaje que deseas cotizar';
+        const bs=document.createElement('select');bs.dataset.field='baggagePreference';bs.required=true;
+        [['standard','Equipaje de la tarifa elegida'],['carry_on','Añadir equipaje de cabina'],['checked_23','Añadir maleta facturada de hasta 23 kg'],['both','Cabina y maleta facturada']].forEach(a=>{
+          const option=document.createElement('option');option.value=a[0];option.textContent=a[1];bs.append(option);
+        });
+        bl.append(bs);bag.append(bl);
+        wrap.append(title,grid,bag);
+        const info=document.createElement('p');info.className='muted';
+        info.textContent='El equipaje incluido y el costo de extras se confirmarán con la aerolínea antes del pago.';
+        wrap.append(info);container.append(wrap);
       }
       $('requestForm').addEventListener('submit',e=>{
         e.preventDefault();$('error').hidden=true;
