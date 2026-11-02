@@ -2017,3 +2017,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible {
  .home-product-nav--links .home-product-nav__inner {overflow-x:auto;justify-content:space-around;}
 }
 @media(max-width:540px) {.home-product-nav--links .home-product-tab{font-size:12px;padding:12px 9px;}}
+
+/* Paquete + vuelos: primer paso integrado en Medellín Esencial. */
+.package-flights-box {padding:19px;margin:16px 0;border:1px solid #cfe6d8;border-radius:15px;background:#f5fbf7;}
+.package-flights-box h3 {margin:0 0 7px;font:800 17px Montserrat,Inter,sans-serif;color:#125137;}
+.package-flights-box>p {font-size:12px;color:#5a7365;line-height:1.5;}
+.package-flights-fields {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.package-flights-fields label{display:grid;gap:5px;font-size:11px;font-weight:700;color:#345947;}
+.package-flights-fields select,.package-flights-fields input{width:100%;min-width:0;border:1px solid #d0e2d7;border-radius:9px;background:white;padding:10px;color:#132d23;font-size:12px;}
+.package-flights-hint{font-size:11px;line-height:1.55;color:#657b6d;margin:12px 0;}
+.package-flights-box .btn-primary{width:100%;font-size:12px;padding:12px;}
+@media(max-width:450px){.package-flights-fields{grid-template-columns:1fr;}}
