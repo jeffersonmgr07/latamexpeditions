@@ -262,11 +262,44 @@ body.flight-modal-open {overflow:hidden}
 .hero--flights::before {background:linear-gradient(100deg,rgba(10,34,61,.78),rgba(2,115,68,.70)),
   url("../img/latam-hero-01.jpg") center/cover no-repeat;}
 .flight-submit,.flight-offer__button,.flight-modal__placeholder a {
-  background:#a531e8!important;color:#fff!important;border-color:#a531e8!important;
+  background:#075d3a!important;color:#fff!important;border-color:#075d3a!important;
 }
-.flight-submit:hover,.flight-offer__button:hover,.flight-modal__placeholder a:hover {background:#8327c5!important;}
+.flight-submit:hover,.flight-offer__button:hover,.flight-modal__placeholder a:hover {background:#03442a!important;}
 .flight-marketplace__title,.flight-marketplace h2,.flight-offer__price {color:#15243e;}
 .flight-marketplace__eyebrow,.flight-offer__datebadge {color:#07873e;}
 .flight-field:focus-within {border-color:#07873e;}
 .flight-offer {border-color:#e1eae6;}
 .flight-sort-button.is-active,.flight-filter-check:checked {accent-color:#07873e;}
+
+/* Itinerarios al estilo cronología aérea; tarjetas con lectura clara. */
+.flight-details-dialog {border:0;padding:0;width:min(100vw,660px);max-width:100%;max-height:100dvh;
+  height:100dvh;margin:0 0 0 auto;box-shadow:-22px 0 70px rgba(15,36,44,.22);
+  background:#f6f8f9;color:#16253b;overflow:auto;}
+.flight-details-dialog::backdrop{background:rgba(13,29,43,.62);backdrop-filter:blur(3px);}
+.flight-details-dialog__head {display:flex;align-items:center;justify-content:space-between;gap:20px;
+ background:white;padding:21px 25px;border-bottom:1px solid #e1e7e9;position:sticky;top:0;z-index:5;}
+.flight-details-dialog__head h2{font:800 22px Montserrat,Inter,sans-serif;margin:0;color:#15243e;}
+.flight-details-dialog__close{width:40px;height:40px;border:1px solid #dce6e2;background:#fff;border-radius:11px;font-size:23px;cursor:pointer;color:#15243e;}
+.flight-details-dialog__body {padding:22px;}
+.flight-detail-group{background:#fff;border:1px solid #e1e9e8;border-radius:16px;padding:22px;margin-bottom:16px;}
+.flight-detail-group h3{font:800 18px Montserrat,Inter,sans-serif;color:#15243e;margin:0 0 7px;}
+.flight-detail-group__meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;color:#627185;font-size:13px;margin-bottom:24px;}
+.flight-detail-group__stop{color:#075d3a;background:#e4f5ed;padding:5px 11px;border-radius:9px;font-size:12px;font-weight:800;}
+.flight-detail-timeline{position:relative;margin-left:5px;border-left:2px solid #b8c6ca;padding-left:25px;}
+.flight-detail-point{position:relative;margin-bottom:6px;}
+.flight-detail-point::before{content:'';position:absolute;left:-32px;top:7px;width:10px;height:10px;border-radius:50%;background:#324b58;border:2px solid #fff;box-shadow:0 0 0 2px #b8c6ca;}
+.flight-detail-point__row{display:flex;justify-content:space-between;gap:12px;}
+.flight-detail-point strong{font-size:16px;color:#15243e;}
+.flight-detail-point small{font-size:12px;color:#6b7887;display:block;margin-top:4px;}
+.flight-detail-airline{color:#425669;font-size:13px;line-height:1.65;padding:14px 0;display:flex;gap:12px;align-items:center;}
+.flight-detail-airline b{color:#15243e;}
+.flight-detail-airline img{width:38px;height:38px;object-fit:contain;background:white;border:1px solid #e1e9e8;border-radius:8px;}
+.flight-detail-layover{border-left:2px dashed #c0c9d3;margin:13px 0 13px -27px;padding:15px 14px 15px 26px;
+ background:#eff4f6;border-radius:0 11px 11px 0;color:#46586b;font-weight:750;font-size:13px;}
+.flight-detail-disclosure {border-top:1px solid #e5eceb;padding-top:12px;margin-top:12px;}
+.flight-detail-trigger {border:0;background:transparent;color:#15243e;font-weight:800;cursor:pointer;text-decoration:underline;
+ text-decoration-color:#91aaa7;text-underline-offset:4px;font-size:12px;padding:10px 0;}
+.flight-offer__airline-icon img{width:29px;height:29px;object-fit:contain;}
+.flight-details-dialog__footer{position:sticky;bottom:0;background:white;border-top:1px solid #e1e7e9;padding:14px 22px;text-align:right;}
+.flight-details-dialog__footer button{border:0;border-radius:12px;background:#075d3a;color:#fff;padding:12px 26px;font-weight:800;cursor:pointer;}
+@media(max-width:600px){.flight-details-dialog{width:100vw;}.flight-details-dialog__head{padding:16px;}.flight-details-dialog__body{padding:12px;}.flight-detail-group{padding:17px;}}
