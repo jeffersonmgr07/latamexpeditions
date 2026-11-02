@@ -60,7 +60,7 @@
   const minDate=format(tomorrow);
   departure.min=minDate;ret.min=minDate;
   departure.addEventListener('change',()=>{
-    if(ret.value&&ret.value<departure.value)ret.value='';
+    if(ret.value&&ret.value<departure.value){ret.value='';ret.dispatchEvent(new Event('change',{bubbles:true}));}
     ret.min=departure.value||minDate;
   });
   flightForm?.querySelectorAll('[name="trip"]').forEach(input=>input.addEventListener('change',()=>{
@@ -69,6 +69,8 @@
   }));
   $('homeFlightSwap')?.addEventListener('click',()=>{
     const value=origin.value;origin.value=dest.value;dest.value=value;
+    origin.dispatchEvent(new Event('change',{bubbles:true}));
+    dest.dispatchEvent(new Event('change',{bubbles:true}));
   });
   flightForm?.addEventListener('submit',e=>{
     e.preventDefault();
@@ -92,11 +94,21 @@
     inDate.addEventListener('change',()=>{outDate.min=inDate.value||format(today);
       if(outDate.value<outDate.min)outDate.value='';});
   }
+  const hotelError=document.createElement('p');
+  hotelError.className='home-search-error';
+  hotelError.setAttribute('role','alert');
+  hotelError.hidden=true;hotels?.append(hotelError);
   hotels?.addEventListener('submit',e=>{
     e.preventDefault();
-    if(outDate.value<=inDate.value){outDate.setCustomValidity('La salida debe ser posterior a la entrada.');outDate.reportValidity();return;}
-    outDate.setCustomValidity('');
-    const content='Hola, Latam Expeditions. Quisiera consultar un hotel en '+$('homeHotelDestination').value.trim()+
+    const city=$('homeHotelDestination').value.trim();
+    const invalid=!city||!inDate.value||!outDate.value||outDate.value<=inDate.value;
+    hotelError.hidden=!invalid;
+    if(invalid){
+      hotelError.textContent='Selecciona un destino y unas fechas válidas de entrada y salida.';
+      (city?hotels.querySelector('.lx-picker-trigger'): $('homeHotelDestination'))?.focus();
+      return;
+    }
+    const content='Hola, Latam Expeditions. Quisiera consultar un hotel en '+city+
       ', del '+inDate.value+' al '+outDate.value+', para '+$('homeHotelGuests').value+' huésped(es).';
     window.open('https://wa.me/51906472060?text='+encodeURIComponent(content),'_blank','noopener');
   });

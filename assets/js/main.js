@@ -372,12 +372,10 @@
     if(header&&nav){
       const tools=document.createElement('div');tools.className='header-utility';
       [
-        ['Para ventas: +51 906 472 060','tel:+51906472060','fa-phone'],
-        ['Contáctanos','mailto:contact@latamexpedition.com','fa-envelope'],
-        ['Agentes de viajes',base+'agencias.html','fa-handshake']
+        ['Para ventas: +51 906 472 060','https://wa.me/51906472060','fa-brands fa-whatsapp']
       ].forEach(([label,href,icon])=>{
         const a=document.createElement('a');a.className='header-utility__link';
-        a.href=href;const i=document.createElement('i');i.className='fa-solid '+icon;
+        a.href=href;a.target='_blank';a.rel='noopener noreferrer';const i=document.createElement('i');i.className=icon;
         i.setAttribute('aria-hidden','true');a.append(i,document.createTextNode(label));tools.append(a);
       });
       nav.replaceWith(tools);
@@ -400,7 +398,7 @@
     if(panel&&head){
       panel.querySelectorAll('a[data-i18n^="nav."]:not(.mobile-nav__cta)').forEach(a=>a.remove());
       let anchor=head;
-      items.concat([['Experiencias','experiencias.html'],['Agentes de viajes','agencias.html'],['Contacto','contacto.html']])
+      items.concat([['Experiencias','experiencias.html']])
         .forEach(([label,href])=>{
           const a=document.createElement('a');a.href=base+href;a.textContent=label;a.setAttribute('data-close-nav','');
           anchor.after(a);anchor=a;
@@ -412,17 +410,17 @@
     });
   }
   function syncBrandContact(){
-    const old='51900608980',number='51906472060',email='contact@latamexpedition.com';
+    const old='51900608980',number='51906472060',email='contact@latamexpeditions.com';
     document.querySelectorAll('a[href]').forEach(a=>{
       const h=a.getAttribute('href');
       if(h.includes(old))a.setAttribute('href',h.split(old).join(number));
-      if(/^mailto:(?:contact|reservas)@latamexpeditions\.com/i.test(h))a.setAttribute('href','mailto:'+email);
+      if(/^mailto:(?:contact|reservas)@latamexpedition(?:s)?\.com/i.test(h))a.setAttribute('href','mailto:'+email);
     });
     const walk=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
     while((n=walk.nextNode())){
       if(n.parentElement&&/^(SCRIPT|STYLE|TEXTAREA|OPTION)$/.test(n.parentElement.tagName))continue;
       n.nodeValue=n.nodeValue.replace(/(?:\+?51\s*)?900\s*608\s*980|(?:\+?51\s*)?906\s*089\s*80/g,'+51 906 472 060')
-       .replace(/\b(?:contact|reservas)@latamexpeditions\.com\b/gi,email);
+       .replace(/\b(?:contact|reservas)@latamexpedition(?:s)?\.com\b/gi,email);
     }
   }
 
