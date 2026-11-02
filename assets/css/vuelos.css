@@ -303,3 +303,7 @@ body.flight-modal-open {overflow:hidden}
 .flight-details-dialog__footer{position:sticky;bottom:0;background:white;border-top:1px solid #e1e7e9;padding:14px 22px;text-align:right;}
 .flight-details-dialog__footer button{border:0;border-radius:12px;background:#075d3a;color:#fff;padding:12px 26px;font-weight:800;cursor:pointer;}
 @media(max-width:600px){.flight-details-dialog{width:100vw;}.flight-details-dialog__head{padding:16px;}.flight-details-dialog__body{padding:12px;}.flight-detail-group{padding:17px;}}
+
+.flight-package-total{display:grid;gap:7px;padding:12px;margin-top:10px;background:#eef8f1;border:1px solid #cce7d7;border-radius:11px;text-align:center;}
+.flight-package-total span{font-size:11px;font-weight:650;color:#4d6e5c;}
+.flight-package-total strong{font-size:12px;line-height:1.5;font-weight:850;color:#075d3a;}
