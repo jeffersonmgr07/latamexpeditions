@@ -1427,7 +1427,7 @@
               <div class="booking-pay__amount"><span id="bkPayLabel">Pagas ahora</span><strong id="bkPayAmount">—</strong></div>
               <p class="booking-pay__note" id="bkPayNote"></p>
               <div id="paypalButtons"></div>
-              <div class="booking-fallback" id="bkFallback" hidden>No hemos podido cargar la pasarela de pago. <a href="https://wa.me/51900608980" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a>.</div>
+              <div class="booking-fallback" id="bkFallback" hidden>No hemos podido cargar la pasarela de pago. <a href="https://wa.me/51906472060" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a>.</div>
               </div>
             </div>
           </section>
