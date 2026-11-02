@@ -248,7 +248,8 @@ function normalizeSegment_(s) {
     flightNumber:String(s.flight_number||"").slice(0,24),
     from:airport_(s.departure_airport),to:airport_(s.arrival_airport),
     duration:typeof s.duration==="number"?s.duration:null,
-    airplane:String(s.airplane||"").slice(0,70)
+    airplane:String(s.airplane||"").slice(0,70),
+    airlineLogo:/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/70px\/[A-Za-z0-9_-]+\.png$/.test(String(s.airline_logo||""))?String(s.airline_logo):""
   };
 }
 function normalizeTrip_(item) {
