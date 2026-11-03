@@ -497,7 +497,7 @@
 
     const promo=document.createElement('div');
     promo.className='latam-promo';
-    promo.innerHTML='<span class="latam-promo__message">Próximamente: <strong>10% de descuento</strong></span><span class="latam-promo__code" title="Código pendiente de activación">LATAM10</span>';
+    promo.innerHTML='<span class="latam-promo__message">Aprovecha este <strong>10% de descuento por tiempo limitado</strong></span><span class="latam-promo__code" title="Código promocional">LATAM</span>';
     utilityInner.append(promo);
 
     const locale=document.createElement('div');
