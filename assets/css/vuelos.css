@@ -315,3 +315,111 @@ body.flight-modal-open {overflow:hidden}
 }
 .flight-offer__button:hover,.flight-submit:hover,.flight-modal__placeholder a:hover,
 .flight-details-dialog__footer button:hover{background:#056a31!important;border-color:#056a31!important;}
+
+/* === PERU NATURE THEME — VUELOS === */
+.hero--flights {
+  min-height: 680px;
+  padding: 54px 0 86px;
+  background: #071a12;
+}
+.hero--flights::before {
+  background:
+    linear-gradient(90deg,rgba(5,18,12,.94),rgba(5,18,12,.62),rgba(5,18,12,.82)),
+    radial-gradient(circle at 76% 24%,rgba(126,217,87,.18),transparent 34%);
+  transform: none;
+}
+.hero--flights::after { opacity: .08; }
+.hero--flights .eyebrow { color: #7ed957; }
+.hero--flights h1 {
+  font-weight: 600;
+  letter-spacing: -.045em;
+}
+.flight-search-shell {
+  border-radius: 28px;
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 24px 70px rgba(0,0,0,.28);
+}
+.flight-search-head {
+  background: #fbfcf8;
+  border-bottom-color: rgba(11,61,46,.10);
+}
+.flight-search-heading i,
+.flight-field label i,
+.flight-result-price strong,
+.flight-offers-heading,
+.flight-offer b,
+.flight-offer__price,
+.flight-marketplace__heading h2,
+.flight-filters__top h3,
+.flight-filter-group legend,
+.flight-filter-title,
+.flight-sortbar__header strong {
+  color: #0b3d2e !important;
+}
+.flight-beta {
+  background: rgba(126,217,87,.18);
+  color: #0b3d2e;
+}
+.flight-types input,
+.flight-filter-group input[type="checkbox"],
+.flight-filter-group input[type="radio"],
+.flight-filter-group input[type="range"] { accent-color: #2f7d4a; }
+.flight-field {
+  border-color: rgba(11,61,46,.12);
+  border-radius: 17px;
+  background: #fbfcf8;
+}
+.flight-field:focus-within {
+  border-color: #2f7d4a;
+  box-shadow: 0 0 0 4px rgba(126,217,87,.15);
+}
+.flight-swap {
+  border-color: rgba(126,217,87,.5);
+  background: rgba(126,217,87,.16);
+  color: #0b3d2e;
+}
+.flight-swap:hover { background: rgba(126,217,87,.28); }
+.flight-submit {
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg,#7ed957,#4caf50);
+  box-shadow: 0 12px 28px rgba(76,175,80,.22);
+}
+.flight-swap:focus-visible,
+.flight-submit:focus-visible,
+.flight-whatsapp:focus-visible { outline-color: #7ed957; }
+.flight-results,
+.flight-filters,
+.flight-sortbar,
+.flight-card,
+.flight-offer {
+  border-color: rgba(11,61,46,.12);
+  border-radius: 18px;
+}
+.flight-result-price,
+.flight-marketplace__notice {
+  background: rgba(126,217,87,.12);
+  border-color: rgba(126,217,87,.28);
+}
+.flight-whatsapp {
+  border-radius: 999px;
+  background: #0b3d2e;
+}
+.flight-whatsapp:hover { background: #1f5c3f; }
+.flight-marketplace {
+  background: #f5f7ef;
+  color: #17231d;
+}
+.flight-modify-btn {
+  border-color: rgba(11,61,46,.12);
+  border-radius: 999px;
+  color: #0b3d2e;
+}
+.flight-modify-btn:hover { background: rgba(126,217,87,.14); }
+.flight-filters,
+.flight-sortbar { box-shadow: 0 12px 30px rgba(11,61,46,.05); }
+@media(max-width:620px) {
+  .hero--flights { padding-top: 34px; }
+  .flight-search-shell { border-radius: 22px; }
+  .flight-submit { border-radius: 999px; }
+}
