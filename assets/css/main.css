@@ -3051,3 +3051,10 @@ body .country-box {
   body .country-modal { padding: 16px 10px !important; }
   body .country-box { max-height: calc(100dvh - 32px); }
 }
+
+/* Header promotional gutters and single-line destination heading — Nov 3 */
+.latam-utilitybar__inner { width: min(1160px, calc(100% - 96px)) !important; max-width: 1160px !important; }
+#destTitle.latam-destination-title { white-space: nowrap; font-size: clamp(23px, 3.2vw, 42px); letter-spacing: -.045em; }
+#destinos .section-heading { grid-template-columns: minmax(0,1fr); }
+@media(max-width:760px) { .latam-utilitybar__inner { width: calc(100% - 32px) !important; } #destTitle.latam-destination-title { font-size: clamp(18px,4.9vw,31px); white-space: nowrap; } }
+@media(max-width:390px) { #destTitle.latam-destination-title { font-size: clamp(16px,4.65vw,20px); } }
