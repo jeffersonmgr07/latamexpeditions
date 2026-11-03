@@ -497,7 +497,7 @@
 
     const promo=document.createElement('div');
     promo.className='latam-promo';
-    promo.innerHTML='<span class="latam-promo__message">Promoción especial · <strong>10% de descuento</strong></span><span class="latam-promo__code" title="Código promocional">LATAM10</span>';
+    promo.innerHTML='<span class="latam-promo__message">Próximamente: <strong>10% de descuento</strong></span><span class="latam-promo__code" title="Código pendiente de activación">LATAM10</span>';
     utilityInner.append(promo);
 
     const locale=document.createElement('div');
@@ -555,7 +555,7 @@
     const panel=document.querySelector('#mobileNav .mobile-nav__panel');
     const head=panel?.querySelector('.mobile-nav__head');
     if (panel && head) {
-      panel.querySelectorAll('.mobile-service-links')?.forEach?.(e=>e.remove());
+      panel.querySelectorAll('.mobile-service-links').forEach(e=>e.remove());
       const block=document.createElement('div');
       block.className='mobile-service-links';
       block.innerHTML=items.map(([label,href,key])=>
