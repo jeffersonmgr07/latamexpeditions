@@ -449,3 +449,116 @@
     else { lang = DEFAULT; store('latam_lang', DEFAULT); }
   });
 })();
+
+/* === PERU NATURE HEADER ADAPTER FOR LATAM EXPEDITIONS === */
+(() => {
+  const initPeruNatureHeader = () => {
+    const header = document.querySelector("header.topbar");
+    if (!header || header.dataset.pnHeaderReady === "1") return;
+    header.dataset.pnHeaderReady = "1";
+    document.body.classList.add("has-pn-header");
+
+    const inner = header.querySelector(".topbar__inner");
+    const brand = inner?.querySelector(".brand");
+    const actions = inner?.querySelector(".header-actions");
+    if (!inner || !brand || !actions) return;
+
+    const root = document.documentElement.getAttribute("data-base") || "./";
+    const resolve = (path) => root + path;
+
+    /* Franja superior: país + ventas. Los nodos existentes se mueven para
+       conservar listeners y lógica del selector de país. */
+    let utility = document.querySelector(".latam-utilitybar");
+    if (!utility) {
+      utility = document.createElement("div");
+      utility.className = "latam-utilitybar";
+      const utilityInner = document.createElement("div");
+      utilityInner.className = "latam-utilitybar__inner";
+      utility.appendChild(utilityInner);
+      header.parentNode.insertBefore(utility, header);
+    }
+    const utilityInner = utility.querySelector(".latam-utilitybar__inner");
+
+    const country = header.querySelector(".country-pill");
+    if (country && utilityInner && country.parentElement !== utilityInner) {
+      utilityInner.appendChild(country);
+    }
+
+    let salesGroup = header.querySelector(".header-utility");
+    if (salesGroup && utilityInner) {
+      utilityInner.appendChild(salesGroup);
+    } else if (utilityInner && !utilityInner.querySelector(".latam-utilitybar__sales")) {
+      const sales = document.createElement("a");
+      sales.className = "latam-utilitybar__sales";
+      sales.href = "https://wa.me/51906472060";
+      sales.target = "_blank";
+      sales.rel = "noopener noreferrer";
+      sales.innerHTML = '<i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>Para ventas: +51 906 472 060</span>';
+      utilityInner.appendChild(sales);
+    }
+
+    /* Navegación principal dentro de la cápsula. */
+    let nav = header.querySelector(".nav, .latam-main-nav");
+    if (!nav) {
+      nav = document.createElement("nav");
+      actions.before(nav);
+    }
+    nav.className = "nav latam-main-nav";
+    nav.setAttribute("aria-label", "Servicios principales");
+    const items = [
+      ["Paquetes", "paquetes.html", "paquetes"],
+      ["Ofertas", "index.html?tab=ofertas#explorar", "ofertas"],
+      ["Vuelos", "vuelos.html", "vuelos"],
+      ["Hoteles", "index.html?tab=hoteles#explorar", "hoteles"]
+    ];
+    nav.innerHTML = items.map(([label, href, key]) =>
+      '<a href="' + resolve(href) + '" data-header-service="' + key + '">' + label + '</a>'
+    ).join("");
+
+    const path = location.pathname.toLowerCase();
+    nav.querySelectorAll("a").forEach((a) => {
+      const key = a.dataset.headerService;
+      const params = new URLSearchParams(location.search);
+      if (
+        (key === "paquetes" && path.endsWith("/paquetes.html")) ||
+        (key === "vuelos" && path.endsWith("/vuelos.html")) ||
+        (key === "ofertas" && params.get("tab") === "ofertas") ||
+        (key === "hoteles" && params.get("tab") === "hoteles")
+      ) a.classList.add("is-active");
+    });
+
+    /* Menú móvil coherente con el header principal. */
+    const panel = document.querySelector("#mobileNav .mobile-nav__panel");
+    const head = panel?.querySelector(".mobile-nav__head");
+    if (panel && head) {
+      panel.querySelector(".mobile-service-links")?.remove();
+      const block = document.createElement("div");
+      block.className = "mobile-service-links";
+      block.innerHTML = items.map(([label, href, key]) =>
+        '<a href="' + resolve(href) + '" data-close-nav data-header-service="' + key + '">' + label + '</a>'
+      ).join("");
+      head.after(block);
+      panel.querySelectorAll(":scope > a").forEach((a) => {
+        if (/^(Destinos|Experiencias|Paquetes|Estilos de viaje|Contacto)$/i.test(a.textContent.trim())) {
+          a.style.display = "none";
+        }
+      });
+    }
+
+    /* Si se llega a la portada con ?tab=..., activa la pestaña funcional
+       original para no perder la lógica de los buscadores. */
+    const activateRequestedTab = () => {
+      const tab = new URLSearchParams(location.search).get("tab");
+      if (!tab) return;
+      const trigger = document.querySelector('[data-service-tab="' + tab + '"]');
+      if (trigger && typeof trigger.click === "function") trigger.click();
+    };
+    setTimeout(activateRequestedTab, 0);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPeruNatureHeader, { once: true });
+  } else {
+    initPeruNatureHeader();
+  }
+})();
