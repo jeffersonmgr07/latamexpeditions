@@ -3058,3 +3058,31 @@ body .country-box {
 #destinos .section-heading { grid-template-columns: minmax(0,1fr); }
 @media(max-width:760px) { .latam-utilitybar__inner { width: calc(100% - 32px) !important; } #destTitle.latam-destination-title { font-size: clamp(18px,4.9vw,31px); white-space: nowrap; } }
 @media(max-width:390px) { #destTitle.latam-destination-title { font-size: clamp(16px,4.65vw,20px); } }
+
+
+/* User-provided LATAM logo: transparent PNG, no color inversion. */
+body.has-pn-header .topbar .latam-brand-light::before,
+body.has-pn-header .topbar .brand::before {
+  content: "" !important;
+  display: block !important;
+  background-image: url("../img/logo-header-latam.png?v=20261103") !important;
+  background-position: left center !important;
+  background-repeat: no-repeat !important;
+  background-size: contain !important;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+  transform: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  width: 204px;
+  height: 55px;
+}
+@media(max-width:1080px) {
+  body.has-pn-header .topbar .latam-brand-light::before,
+  body.has-pn-header .topbar .brand::before { width:166px; height:47px; }
+}
+@media(max-width:760px) {
+  body.has-pn-header .topbar .latam-brand-light::before,
+  body.has-pn-header .topbar .brand::before { width:144px; height:40px; }
+}
