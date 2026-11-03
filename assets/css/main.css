@@ -2133,3 +2133,675 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible {
  .lx-picker-popover{width:min(330px,calc(100vw - 38px));left:-7px;padding:10px;}
  .lx-calendar-day{min-height:35px;}
 }
+
+/* === PERU NATURE VISUAL SYSTEM FOR LATAM EXPEDITIONS === */
+/* Capa visual inspirada en Peru Nature. Mantiene estructura, contenido y lógica
+   del proyecto LATAM; solo redefine presentación y navegación compartida. */
+:root {
+  --latam-green: #0b3d2e;
+  --latam-green-2: #1f5c3f;
+  --latam-green-3: #2f7d4a;
+  --latam-yellow: #7ed957;
+  --latam-cream: #f5f7ef;
+  --latam-ink: #17231d;
+  --latam-muted: #65736b;
+  --latam-border: rgba(11, 61, 46, .12);
+  --latam-border-soft: rgba(11, 61, 46, .08);
+  --latam-bg: #f5f7ef;
+  --latam-bg-alt: #fbfcf8;
+  --latam-navy: #102414;
+  --latam-purple: #0b3d2e;
+  --latam-gold: #7ed957;
+  --latam-gold-soft: rgba(126, 217, 87, .18);
+  --latam-gold-deep: #2f7d4a;
+  --shadow-soft: 0 18px 45px rgba(11, 61, 46, .08);
+  --shadow-card: 0 16px 36px rgba(0, 0, 0, .08);
+  --shadow-hover: 0 22px 55px rgba(0, 0, 0, .12);
+  --radius-xl: 22px;
+  --radius-lg: 18px;
+  --radius-sm: 12px;
+}
+
+html, body { background: var(--latam-bg); }
+body {
+  color: var(--latam-ink);
+  font-family: "Open Sans", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+body.has-pn-header { padding-top: 122px; }
+h1, h2, h3, h4, .section h2, .page-hero h1, .detail-hero h1 {
+  font-family: Montserrat, Inter, sans-serif;
+}
+.container { width: min(1180px, calc(100% - 48px)); max-width: 1180px; padding: 0; }
+
+/* ---------- franja superior ---------- */
+.latam-utilitybar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 1003;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  background: #071a12;
+  color: rgba(255,255,255,.8);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.latam-utilitybar__inner {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  min-width: 0;
+}
+.latam-utilitybar .country-pill {
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(255,255,255,.82);
+  font-size: 12px;
+  font-weight: 700;
+}
+.latam-utilitybar .country-pill:hover { color: #fff; }
+.latam-utilitybar .country-pill span:first-of-type { max-width: 130px; }
+.latam-utilitybar .header-utility {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.latam-utilitybar .header-utility__link,
+.latam-utilitybar__sales {
+  color: rgba(255,255,255,.82);
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.latam-utilitybar .header-utility__link:hover,
+.latam-utilitybar__sales:hover { color: var(--latam-yellow); }
+
+/* ---------- header flotante estilo Peru Nature ---------- */
+.topbar {
+  position: fixed;
+  top: 34px;
+  left: 0;
+  right: 0;
+  z-index: 1002;
+  padding-top: 12px;
+  background: transparent;
+  border: 0;
+  pointer-events: none;
+}
+.topbar__inner {
+  pointer-events: auto;
+  width: min(1180px, calc(100% - 48px));
+  max-width: 1180px;
+  min-height: 72px;
+  margin: 0 auto;
+  padding: 0 22px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  border-radius: 999px;
+  background: rgba(7, 26, 18, .82);
+  border: 1px solid rgba(255,255,255,.13);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 18px 50px rgba(0,0,0,.22);
+}
+.brand {
+  width: 184px;
+  min-width: 184px;
+  height: 46px;
+  transform: none;
+}
+.brand::before {
+  width: 184px;
+  height: 46px;
+  background-image: url("../img/logo-blanco.png");
+  background-position: left center;
+  background-size: contain;
+  transform: none;
+}
+.topbar .nav,
+.topbar .latam-main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  color: rgba(255,255,255,.72);
+  font-size: 13.5px;
+  font-weight: 750;
+}
+.topbar .nav a,
+.topbar .latam-main-nav a {
+  color: rgba(255,255,255,.74);
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: .2s ease;
+}
+.topbar .nav a:hover,
+.topbar .nav a.is-active,
+.topbar .latam-main-nav a:hover,
+.topbar .latam-main-nav a.is-active {
+  color: #fff;
+  background: rgba(255,255,255,.09);
+}
+.topbar .header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.topbar .language-select,
+.topbar .login-toggle,
+.topbar .nav-toggle {
+  min-height: 40px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  font-weight: 800;
+}
+.topbar .language-select {
+  min-width: 62px;
+  padding: 0 12px;
+  color-scheme: dark;
+}
+.topbar .login-toggle {
+  padding: 0 14px;
+  white-space: nowrap;
+}
+.topbar .login-toggle:hover,
+.topbar .nav-toggle:hover {
+  border-color: rgba(126,217,87,.55);
+  background: rgba(126,217,87,.14);
+}
+.topbar .login-dropdown {
+  top: calc(100% + 12px);
+  min-width: 205px;
+  border-radius: 18px;
+  border: 1px solid rgba(11,61,46,.12);
+  box-shadow: 0 22px 50px rgba(0,0,0,.2);
+}
+.topbar .login-dropdown a { border-radius: 13px; color: #102414; }
+.topbar .login-dropdown a:hover { background: rgba(126,217,87,.18); color: var(--latam-green); }
+.topbar .header-utility { display: none; }
+.country-bar { z-index: 1000; }
+
+/* El menú de servicios ahora vive dentro del header. Se conserva su HTML y
+   lógica en la home, pero no ocupa una segunda barra visual. */
+.home-product-nav { display: none !important; }
+
+/* ---------- hero de portada ---------- */
+.home-hero {
+  min-height: clamp(500px, 72vh, 760px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #071a12;
+}
+.home-hero::before {
+  background:
+    linear-gradient(90deg, rgba(5,18,12,.92), rgba(5,18,12,.55) 56%, rgba(5,18,12,.76)),
+    radial-gradient(circle at 74% 28%, rgba(126,217,87,.20), transparent 34%),
+    url("../img/latam-hero-01.jpg") center 48% / cover no-repeat;
+  transform: scale(1.02);
+}
+.home-hero .hero__content {
+  width: min(1180px, calc(100% - 48px));
+  padding: 72px 0 190px;
+  text-align: left;
+}
+.home-hero h1 {
+  max-width: 780px;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(42px, 5.2vw, 76px);
+  line-height: 1.03;
+  letter-spacing: -.055em;
+  font-weight: 560;
+  text-shadow: 0 4px 28px rgba(0,0,0,.24);
+}
+
+/* ---------- buscador principal tipo glass ---------- */
+.home-search-shell {
+  z-index: 5;
+  width: min(1050px, calc(100% - 48px));
+  max-width: 1050px;
+  margin: -158px auto 0;
+  padding: 20px;
+  border-radius: 28px;
+  background: rgba(7,26,18,.72);
+  border: 1px solid rgba(255,255,255,.16);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 24px 70px rgba(0,0,0,.26);
+}
+.home-search-shell__heading { margin: 0 4px 14px; }
+.home-search-shell__eyebrow,
+.home-kicker {
+  color: var(--latam-yellow);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .10em;
+}
+.home-service-panel { color: #102414; }
+.home-travel-form {
+  width: 100%;
+  grid-template-columns: 1.3fr .85fr .85fr auto;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 23px;
+  background: rgba(255,255,255,.08);
+  box-shadow: none;
+}
+.home-travel-form .search-field,
+.home-search-control {
+  border: 0;
+  border-radius: 17px;
+  background: rgba(255,255,255,.94);
+  padding: 11px 15px;
+}
+.home-travel-form .search-field label,
+.home-search-control label {
+  color: #244326;
+  font-size: 10.5px;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.home-travel-form .search-field input,
+.home-travel-form .search-field select,
+.home-search-control input,
+.home-search-control select {
+  color: #14251a;
+  font-weight: 750;
+}
+.search-btn,
+.home-main-cta,
+.home-main-cta--search {
+  border: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #7ed957, #4caf50);
+  color: #fff;
+  font-weight: 900;
+  box-shadow: 0 12px 28px rgba(76,175,80,.24);
+}
+.search-btn:hover,
+.home-main-cta:hover { filter: brightness(1.04); transform: translateY(-1px); }
+.home-featured-quick,
+.home-hotel-form {
+  border-radius: 20px;
+}
+.home-featured-quick {
+  padding: 14px;
+  background: rgba(255,255,255,.94);
+  border: 0;
+}
+.home-search-trip { color: rgba(255,255,255,.9); padding-left: 4px; }
+.home-search-trip input { accent-color: var(--latam-yellow); }
+.home-swap {
+  border-color: rgba(126,217,87,.55);
+  color: var(--latam-green);
+  background: #eaf7e4;
+}
+
+/* ---------- secciones, títulos y tarjetas ---------- */
+.section,
+.home-showcase,
+.trips-section {
+  background: var(--latam-bg);
+}
+.section h2,
+.home-showcase__head h2,
+.page-copy h2,
+.product-detail-section h2,
+.detail-card h2 {
+  color: var(--latam-green);
+}
+.section-kicker,
+.home-kicker { color: var(--latam-green-3); }
+.trip-card,
+.home-showcase-card,
+.dest-card,
+.style-card,
+.advisor-card,
+.lookup-card,
+.form-card,
+.auth-card,
+.detail-card,
+.product-detail-section,
+.product-booking-card,
+.tour-booking-card,
+.passenger-card,
+.pax-card,
+.booking-hotel-preview {
+  background: #fff;
+  border: 1px solid var(--latam-border);
+  border-radius: 22px;
+  box-shadow: 0 12px 30px rgba(11,61,46,.05);
+}
+.trip-card,
+.home-showcase-card,
+.dest-card {
+  overflow: hidden;
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.trip-card:hover,
+.home-showcase-card:hover,
+.dest-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 22px 55px rgba(0,0,0,.12);
+  border-color: rgba(126,217,87,.42);
+}
+.trip-card__media { aspect-ratio: 3 / 2; }
+.trip-card__media img,
+.home-showcase-card img,
+.dest-card img { transition: transform .4s ease; }
+.trip-card:hover .trip-card__media img,
+.home-showcase-card:hover img,
+.dest-card:hover img { transform: scale(1.05); }
+.trip-card__body { padding: 22px; }
+.trip-card h3,
+.dest-card h3,
+.style-card h3 { color: var(--latam-green); }
+.tag,
+.tour-status,
+.booking-hotel-preview__badge {
+  border: 1px solid rgba(126,217,87,.38);
+  background: rgba(126,217,87,.18);
+  color: var(--latam-green);
+  border-radius: 999px;
+}
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-top: 1px solid var(--latam-border);
+  padding-top: 18px;
+}
+.price strong,
+.price-block strong { color: var(--latam-green); }
+.card-btn {
+  min-height: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--latam-green);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 10px 22px rgba(11,61,46,.14);
+}
+.card-btn:hover {
+  background: var(--latam-yellow);
+  color: #102414;
+  border-color: transparent;
+}
+
+/* Destinos con tratamiento fotográfico tipo Peru Nature */
+.destination-large,
+.destination-stack article,
+.dest-card__media {
+  border-radius: 28px;
+  overflow: hidden;
+}
+.destination-large::after,
+.destination-stack article::after {
+  background: linear-gradient(to top, rgba(7,26,18,.86), rgba(7,26,18,.08));
+}
+
+/* ---------- páginas internas / fichas ---------- */
+.page-hero,
+.detail-hero,
+.experience-hero-clean,
+.product-hero-clean {
+  background-color: #071a12;
+}
+.page-hero::before,
+.detail-hero__overlay {
+  background: linear-gradient(90deg, rgba(5,18,12,.88), rgba(5,18,12,.44), rgba(5,18,12,.72));
+}
+.detail-grid,
+.detail-grid--master { gap: 28px; }
+.detail-card,
+.product-detail-section { padding: 28px; }
+.tour-fact,
+.tour-language-grid > div,
+.tour-faq,
+.highlight-item,
+.includes-card,
+.itinerary-item {
+  border-color: var(--latam-border);
+  background: #fbfcf8;
+  border-radius: 18px;
+}
+.tour-fact > i,
+.detail-icon,
+.itinerary-number {
+  background: rgba(126,217,87,.18);
+  color: var(--latam-green);
+}
+.tour-timeline__time,
+.itinerary-time-pill {
+  background: var(--latam-green);
+  color: #fff;
+  border-radius: 999px;
+}
+.tour-timeline__time::before { color: var(--latam-yellow); }
+.tour-booking-card,
+.product-booking-card {
+  top: 138px;
+  border-radius: 22px;
+  box-shadow: 0 18px 45px rgba(11,61,46,.08);
+}
+.tour-note {
+  border-left-color: var(--latam-yellow);
+  background: rgba(126,217,87,.14);
+  color: #405444 !important;
+}
+.tour-table thead th { background: var(--latam-green); }
+.tour-faq[open] { border-color: rgba(126,217,87,.72); }
+.tour-faq summary::after { color: var(--latam-green-3); }
+
+/* ---------- formularios y modales ---------- */
+.form-field input,
+.form-field select,
+.form-field textarea,
+.booking-form-grid input,
+.booking-form-grid select,
+.booking-form-grid textarea,
+.booking-date-trigger,
+.booking-counter,
+.lookup-card input,
+.lookup-card select {
+  border-color: var(--latam-border);
+  border-radius: 14px;
+  background: #fbfcf8;
+}
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus,
+.booking-form-grid input:focus,
+.booking-form-grid select:focus,
+.booking-form-grid textarea:focus {
+  border-color: var(--latam-green-3);
+  box-shadow: 0 0 0 4px rgba(126,217,87,.14);
+}
+.country-modal,
+.booking-modal {
+  background: rgba(4,18,12,.66);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.country-box,
+.booking-box {
+  border: 1px solid rgba(11,61,46,.12);
+  border-radius: 28px;
+  box-shadow: 0 28px 70px rgba(0,0,0,.24);
+}
+.country-option {
+  border-radius: 16px;
+  border-color: var(--latam-border);
+}
+.country-option:hover {
+  border-color: rgba(126,217,87,.7);
+  background: rgba(126,217,87,.10);
+}
+.close-modal {
+  border-radius: 999px;
+}
+.booking-head,
+.country-box__head {
+  border-bottom-color: var(--latam-border);
+}
+.booking-actions button,
+.form-card button[type="submit"],
+.booking-pay,
+.booking-done a,
+.booking-done button {
+  border-radius: 999px;
+}
+
+/* ---------- footer ---------- */
+.footer-incarail,
+.site-footer,
+.footer {
+  background: #071a12;
+  color: #fff;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.footer-incarail { padding-top: 72px; }
+.footer-top-grid { grid-template-columns: minmax(260px,.95fr) minmax(0,2.05fr); gap: 42px; }
+.footer-tagline { color: rgba(255,255,255,.72); }
+.footer-contact-box {
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 24px;
+  background: rgba(255,255,255,.045);
+}
+.footer-pill {
+  border-radius: 999px;
+  background: rgba(255,255,255,.07);
+  border-color: rgba(255,255,255,.08);
+}
+.footer-pill i,
+.payment-grid i { color: var(--latam-yellow); }
+.footer h3,
+.footer h4,
+.site-footer h3,
+.site-footer h4,
+.footer-incarail h3,
+.footer-incarail h4 { color: #fff; }
+.footer-link-col a:hover { color: var(--latam-yellow); }
+.footer-bottom { border-top-color: rgba(255,255,255,.08); }
+
+/* ---------- navegación móvil ---------- */
+.mobile-nav { background: rgba(4,18,12,.68); backdrop-filter: blur(9px); }
+.mobile-nav__panel {
+  background: #071a12;
+  color: #fff;
+  border-left: 1px solid rgba(255,255,255,.10);
+}
+.mobile-nav__panel a {
+  color: rgba(255,255,255,.82);
+  border-radius: 12px;
+}
+.mobile-nav__panel a:hover { background: rgba(255,255,255,.08); color: #fff; }
+.mobile-nav__panel .mobile-nav__cta {
+  background: linear-gradient(135deg,#7ed957,#4caf50);
+  color: #fff;
+  border-radius: 999px;
+}
+.mobile-service-links { display: grid; gap: 5px; margin: 8px 0 12px; }
+.mobile-service-links a { display: flex; align-items: center; gap: 10px; padding: 12px 13px; font-weight: 800; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 980px) {
+  body.has-pn-header { padding-top: 108px; }
+  .latam-utilitybar { height: 32px; }
+  .latam-utilitybar__inner { width: min(100% - 24px,1180px); gap: 12px; }
+  .topbar { top: 32px; padding-top: 10px; }
+  .topbar__inner {
+    width: min(100% - 24px,1180px);
+    min-height: 64px;
+    padding: 0 16px;
+    border-radius: 28px;
+    grid-template-columns: 1fr auto;
+  }
+  .topbar .nav,
+  .topbar .latam-main-nav { display: none; }
+  .topbar .nav-toggle { display: inline-flex; }
+  .brand { width: 150px; min-width: 150px; height: 42px; }
+  .brand::before { width: 150px; height: 42px; }
+  .topbar .login-menu { display: none; }
+  .home-hero { min-height: 560px; }
+  .home-hero .hero__content {
+    width: min(100% - 32px,1180px);
+    padding-bottom: 200px;
+  }
+  .home-search-shell {
+    width: min(100% - 28px,1050px);
+    margin-top: -176px;
+  }
+  .home-travel-form,
+  .home-search-fields,
+  .home-hotel-form { grid-template-columns: 1fr; }
+  .home-swap { margin: 2px auto; transform: rotate(90deg); }
+  .footer-top-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  body.has-pn-header { padding-top: 104px; }
+  .latam-utilitybar__inner { justify-content: space-between; }
+  .latam-utilitybar .country-pill span:first-of-type { max-width: 95px; }
+  .latam-utilitybar .header-utility__link,
+  .latam-utilitybar__sales { font-size: 11px; }
+  .latam-utilitybar .header-utility__link i,
+  .latam-utilitybar__sales i { font-size: 13px; }
+  .topbar__inner { min-height: 60px; }
+  .topbar .language-select { display: none; }
+  .brand { width: 138px; min-width: 138px; height: 38px; }
+  .brand::before { width: 138px; height: 38px; }
+  .home-hero { min-height: 520px; }
+  .home-hero .hero__content {
+    width: min(100% - 32px,1180px);
+    padding: 54px 0 190px;
+  }
+  .home-hero h1 { font-size: clamp(36px,11vw,52px); }
+  .home-search-shell {
+    margin-top: -160px;
+    padding: 14px;
+    border-radius: 24px;
+  }
+  .home-search-shell__heading { margin-bottom: 12px; }
+  .home-travel-form { padding: 8px; border-radius: 20px; }
+  .section { padding-left: 16px; padding-right: 16px; }
+  .footer-links-grid { grid-template-columns: 1fr; }
+  .price-row {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+  .card-btn {
+    width: auto !important;
+    justify-content: center;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 390px) {
+  .latam-utilitybar .header-utility__link span { display: none; }
+  .latam-utilitybar__sales { font-size: 0; }
+  .latam-utilitybar__sales i { font-size: 14px; }
+  .brand { width: 124px; min-width: 124px; }
+  .brand::before { width: 124px; }
+  .price strong { font-size: 19px; }
+}
