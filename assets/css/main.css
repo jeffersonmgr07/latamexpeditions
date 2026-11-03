@@ -2805,3 +2805,249 @@ h1, h2, h3, h4, .section h2, .page-hero h1, .detail-hero h1 {
   .brand::before { width: 124px; }
   .price strong { font-size: 19px; }
 }
+
+
+/* === HEADER VISIBILITY / OVERLAY FIX 2026-11-03 === */
+:root { --latam-header-utility-height: 38px; }
+
+/* Home hero begins directly behind header: no empty cream/white gap. */
+body.has-pn-header:has(.home-hero) { padding-top: 0 !important; background: #071a12; }
+body.has-pn-header:has(.home-hero) main { padding-top: 0 !important; }
+body.has-pn-header:not(:has(.home-hero)) { background: #071a12; }
+body.has-pn-header:not(:has(.home-hero)) main { background: #f5f7ef; }
+.home-product-nav { display: none !important; }
+body.has-pn-header .home-hero { margin-top: 0 !important; }
+
+/* Utility bar: promotion on left, locale/language/phone on right. */
+.latam-utilitybar {
+  z-index: 1200;
+  height: var(--latam-header-utility-height);
+  background: #071a12;
+}
+.latam-utilitybar__inner {
+  width: min(1280px, calc(100% - 44px));
+  max-width: 1280px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+}
+.latam-promo {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  gap: 9px;
+  min-width: 0;
+  font-size: 11.5px;
+  font-weight: 650;
+  color: rgba(255,255,255,.84);
+  white-space: nowrap;
+}
+.latam-promo__message strong { color: #a8f07a; font-weight: 800; }
+.latam-promo__code {
+  display: inline-flex;
+  align-items: center;
+  border: 1px dashed rgba(168,240,122,.7);
+  border-radius: 999px;
+  background: rgba(126,217,87,.12);
+  color: #ccffb8;
+  padding: 4px 10px;
+  font-size: 10px;
+  letter-spacing: .08em;
+  font-weight: 850;
+}
+.latam-locale {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+  margin-left: auto;
+  flex: 0 0 auto;
+}
+.latam-utilitybar .country-pill {
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  color: rgba(255,255,255,.91);
+  padding: 0 4px;
+  gap: 5px;
+  font-size: 12px;
+}
+.latam-utilitybar .country-pill span:first-of-type { max-width: 135px; }
+.latam-utilitybar .latam-locale__language {
+  display: inline-block !important;
+  appearance: auto;
+  width: auto;
+  min-width: 57px;
+  min-height: 27px;
+  border: 1px solid rgba(255,255,255,.17);
+  background: rgba(255,255,255,.08);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0 6px;
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 750;
+  color-scheme: dark;
+}
+.latam-utilitybar .latam-utilitybar__sales {
+  display: inline-flex;
+  flex: 0 0 auto;
+  margin: 0;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Header navigation always appears at desktop widths. */
+body.has-pn-header .topbar {
+  z-index: 1190;
+  top: var(--latam-header-utility-height);
+  background: transparent !important;
+  border: none !important;
+  padding-top: 10px;
+}
+body.has-pn-header .topbar__inner {
+  width: min(1280px, calc(100% - 44px));
+  max-width: 1280px;
+  min-height: 76px;
+  grid-template-columns: 220px minmax(0, 1fr) auto;
+  gap: 14px;
+  padding: 0 24px;
+  background: rgba(7,26,18,.85);
+  border-radius: 999px;
+  backdrop-filter: blur(18px);
+}
+body.has-pn-header .topbar .latam-brand-light,
+body.has-pn-header .topbar .brand {
+  display: flex !important;
+  position: relative;
+  z-index: 2;
+  width: 204px;
+  min-width: 204px;
+  height: 55px;
+  overflow: visible;
+  transform: none;
+}
+body.has-pn-header .topbar .latam-brand-light::before {
+  display: block !important;
+  content: "" !important;
+  width: 204px;
+  height: 55px;
+  background-image: url("../img/logo-latam-expeditions.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: left center !important;
+  background-size: contain !important;
+  filter: brightness(0) invert(1);
+  opacity: 1 !important;
+  transform: none !important;
+}
+body.has-pn-header .topbar .latam-main-nav {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  min-width: 0;
+}
+body.has-pn-header .topbar .latam-main-nav a {
+  display: inline-flex !important;
+  align-items: center;
+  visibility: visible !important;
+  opacity: 1 !important;
+  white-space: nowrap;
+  color: #f9fff9 !important;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: .01em;
+  padding: 13px 16px;
+  border-radius: 999px;
+}
+body.has-pn-header .topbar .latam-main-nav a:hover,
+body.has-pn-header .topbar .latam-main-nav a.is-active {
+  background: rgba(126,217,87,.17);
+  color: #d4ffc4 !important;
+}
+body.has-pn-header .topbar .header-actions {
+  display: flex !important;
+  justify-content: flex-end;
+}
+body.has-pn-header .topbar .login-toggle {
+  min-width: 152px;
+  justify-content: center;
+}
+body.has-pn-header .topbar .language-select { display: none !important; }
+body.has-pn-header .topbar .header-actions .country-pill { display: none !important; }
+
+/* Modal stays above utility, floating header and hero; no clipping. */
+body .country-modal,
+body #countryModal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+  background: rgba(3,16,10,.72) !important;
+  padding: 32px 20px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow-y: auto;
+  isolation: isolate;
+}
+body .country-modal.is-open,
+body #countryModal.is-open { display: flex !important; }
+body .country-modal:not(.is-open),
+body #countryModal:not(.is-open) { display: none !important; }
+body .country-box {
+  position: relative;
+  z-index: 1;
+  width: min(100%,880px);
+  max-height: calc(100dvh - 64px);
+  margin: auto;
+  overflow-y: auto;
+}
+
+/* Mobile layout: keep badge unobtrusive but keep selectors visible. */
+@media(max-width: 1080px) {
+  body.has-pn-header .topbar__inner {
+    grid-template-columns: minmax(145px,1fr) auto;
+    min-height: 66px;
+  }
+  body.has-pn-header .topbar .latam-main-nav { display: none !important; }
+  body.has-pn-header .topbar .nav-toggle { display: inline-flex !important; }
+  body.has-pn-header .topbar .login-menu { display: none !important; }
+  body.has-pn-header .topbar .brand,
+  body.has-pn-header .topbar .latam-brand-light { width: 166px; min-width: 166px; height: 47px; }
+  body.has-pn-header .topbar .latam-brand-light::before { width: 166px; height: 47px; }
+}
+@media(max-width: 760px) {
+  :root { --latam-header-utility-height: 36px; }
+  .latam-utilitybar__inner { width: calc(100% - 20px); gap: 7px; }
+  .latam-promo { font-size: 0; gap: 0; }
+  .latam-promo__message { display: none; }
+  .latam-promo__code { font-size: 9px; padding: 5px 7px; }
+  .latam-locale { gap: 3px; margin-left: auto; }
+  .latam-utilitybar .country-pill { font-size: 11px; }
+  .latam-utilitybar .country-pill span:first-of-type { max-width: 72px; }
+  .latam-utilitybar .latam-locale__language { min-width: 50px; font-size: 10px; }
+  .latam-utilitybar .latam-utilitybar__sales { font-size: 0; }
+  .latam-utilitybar .latam-utilitybar__sales i { font-size: 14px; }
+  body.has-pn-header .topbar__inner {
+    width: calc(100% - 20px);
+    min-height: 61px;
+    padding: 0 13px;
+  }
+  body.has-pn-header .topbar .brand,
+  body.has-pn-header .topbar .latam-brand-light { width: 144px; min-width: 144px; height: 40px; }
+  body.has-pn-header .topbar .latam-brand-light::before { width: 144px; height: 40px; }
+  body .country-modal { padding: 16px 10px !important; }
+  body .country-box { max-height: calc(100dvh - 32px); }
+}
