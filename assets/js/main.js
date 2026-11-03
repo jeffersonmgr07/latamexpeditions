@@ -548,9 +548,20 @@
           (key==='hoteles' && tab==='hoteles')) a.classList.add('is-active');
     });
 
-    // El logo blanco antiguo no está en este repositorio. La marca original
-    // se renderiza en blanco por CSS sin cambiar su archivo.
-    brand.classList.add('latam-brand-light');
+    // Mostrar el PNG transparente proporcionado por el usuario como imagen real.
+    // No usar pseudoelementos ni filtros CSS que conviertan el logo en un bloque.
+    brand.classList.add('latam-brand-light', 'latam-brand-image');
+    let logoImage = brand.querySelector('img.latam-header-logo');
+    if (!logoImage) {
+      logoImage = document.createElement('img');
+      logoImage.className = 'latam-header-logo';
+      logoImage.alt = 'LATAM Expeditions';
+      logoImage.width = 610;
+      logoImage.height = 184;
+      logoImage.decoding = 'async';
+      brand.prepend(logoImage);
+    }
+    logoImage.src = base + 'assets/img/logo-header-latam.png?v=20261103-2';
 
     const panel=document.querySelector('#mobileNav .mobile-nav__panel');
     const head=panel?.querySelector('.mobile-nav__head');
