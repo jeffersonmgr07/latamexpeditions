@@ -3133,3 +3133,128 @@ body.has-pn-header .topbar .brand.latam-brand-image .latam-header-logo {
     height: 40px !important;
   }
 }
+
+
+
+/* === HOME REFINEMENTS 2026-11-03 === */
+/* Promo desktop and compact mobile badge. */
+.latam-promo__mobile { display: none; }
+.latam-promo__code { white-space: nowrap; }
+
+/* Less distance between utility strip and rounded navigation. */
+body.has-pn-header .topbar { padding-top: 5px !important; }
+body.has-pn-header .topbar__inner { box-shadow: 0 12px 32px rgba(0,0,0,.20); }
+
+/* Centered and lighter hero copy, lowered within the photograph. */
+body.has-pn-header .home-hero {
+  min-height: clamp(520px, 72vh, 730px);
+}
+body.has-pn-header .home-hero .hero__content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center !important;
+  padding: 160px 12px 210px !important;
+  width: min(100% - 48px, 1120px);
+}
+body.has-pn-header .home-hero h1 {
+  margin: 0 auto !important;
+  max-width: 800px;
+  text-align: center !important;
+  font-size: clamp(31px, 4.3vw, 53px) !important;
+  font-weight: 450 !important;
+  line-height: 1.16;
+  letter-spacing: -.035em;
+}
+
+/* Both featured panels have light cream backgrounds and curved edges. */
+body.has-pn-header .home-showcase,
+body.has-pn-header #experiencias {
+  background: #f5f7ef;
+  width: min(1240px, calc(100% - 36px));
+  max-width: 1240px;
+  margin: 24px auto 0 !important;
+  padding: 40px 30px 54px !important;
+  border-radius: 28px;
+}
+body.has-pn-header .home-showcase { margin-top: 34px !important; }
+body.has-pn-header #experiencias { margin-top: 24px !important; }
+body.has-pn-header #experiencias .section-heading { margin-bottom: 25px !important; }
+body.has-pn-header #experiencias .section-heading h2 { margin-top: 4px; }
+body.has-pn-header .home-showcase__head { margin-bottom: 23px; }
+body.has-pn-header #estilos {
+  padding-top: 58px;
+}
+body.has-pn-header .home-showcase + #experiencias { margin-top: 20px !important; }
+
+/* Mobile drawer opens below the navigation, above page content. */
+@media(max-width:1080px) {
+  body.has-pn-header .mobile-nav {
+    position: fixed !important;
+    top: calc(var(--latam-header-utility-height) + 5px + 66px) !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1250 !important;
+    height: auto !important;
+    padding: 0 !important;
+    background: rgba(3,20,12,.67) !important;
+    backdrop-filter: blur(4px);
+  }
+  body.has-pn-header .mobile-nav__panel {
+    top: 0 !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    width: min(90%, 360px);
+    border-radius: 18px 0 0 0;
+    padding-top: 18px;
+    box-shadow: -14px 14px 40px rgba(0,0,0,.22);
+  }
+  body.has-pn-header .mobile-nav__panel .mobile-nav__head { color: white; }
+}
+@media(max-width:760px) {
+  body.has-pn-header .mobile-nav {
+    top: calc(var(--latam-header-utility-height) + 5px + 61px) !important;
+  }
+  .latam-promo { gap: 5px; font-size: 11px; }
+  .latam-promo__mobile {
+    display: inline;
+    color: #a8f07a;
+    font-size: 10px;
+    font-weight: 850;
+    white-space: nowrap;
+  }
+  .latam-promo__code {
+    display: inline-flex !important;
+    font-size: 9px !important;
+    padding: 4px 6px !important;
+    letter-spacing: 0 !important;
+  }
+  .latam-promo__message { display: none !important; }
+  body.has-pn-header .home-hero .hero__content {
+    width: min(100% - 28px, 620px);
+    padding: 145px 4px 205px !important;
+    text-align: center !important;
+  }
+  body.has-pn-header .home-hero h1 {
+    max-width: 360px;
+    font-size: clamp(26px, 8vw, 38px) !important;
+    font-weight: 420 !important;
+    line-height: 1.18;
+  }
+  body.has-pn-header .home-showcase,
+  body.has-pn-header #experiencias {
+    width: calc(100% - 24px);
+    padding: 28px 17px 36px !important;
+    border-radius: 22px;
+  }
+  body.has-pn-header .home-showcase { margin-top: 18px !important; }
+  body.has-pn-header #experiencias { margin-top: 15px !important; }
+  body.has-pn-header #experiencias .section-heading { margin-bottom: 20px !important; }
+}
+@media(max-width:390px) {
+  .latam-promo__mobile { font-size: 9px; }
+  .latam-promo__code { font-size: 8px !important; padding: 4px !important; }
+}
