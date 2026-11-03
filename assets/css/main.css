@@ -3258,3 +3258,9 @@ body.has-pn-header .home-showcase + #experiencias { margin-top: 20px !important;
   .latam-promo__mobile { font-size: 9px; }
   .latam-promo__code { font-size: 8px !important; padding: 4px !important; }
 }
+
+
+/* Header country selector supersedes the obsolete location notice; prevent white strip */
+body.has-pn-header #countryBar, body.has-pn-header .country-bar, body.has-pn-header .country-bar.is-visible { display: none !important; height: 0 !important; padding: 0 !important; margin: 0 !important; border: 0 !important; }
+body.has-pn-header .latam-utilitybar { border-bottom: 0 !important; }
+body.has-pn-header .topbar { border: 0 !important; }
