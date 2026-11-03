@@ -3086,3 +3086,50 @@ body.has-pn-header .topbar .brand::before {
   body.has-pn-header .topbar .latam-brand-light::before,
   body.has-pn-header .topbar .brand::before { width:144px; height:40px; }
 }
+
+
+/* Definitive transparent brand image fix: bypass legacy pseudo-element. */
+body.has-pn-header .topbar .brand.latam-brand-image::before,
+body.has-pn-header .topbar .latam-brand-light.latam-brand-image::before {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+body.has-pn-header .topbar .brand.latam-brand-image,
+body.has-pn-header .topbar .latam-brand-image {
+  background: transparent !important;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+body.has-pn-header .topbar .brand.latam-brand-image .latam-header-logo {
+  display: block !important;
+  width: 204px !important;
+  height: 55px !important;
+  object-fit: contain !important;
+  object-position: left center !important;
+  max-width: 100%;
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  opacity: 1 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+@media (max-width: 1080px) {
+  body.has-pn-header .topbar .brand.latam-brand-image .latam-header-logo {
+    width: 166px !important;
+    height: 47px !important;
+  }
+}
+@media (max-width: 760px) {
+  body.has-pn-header .topbar .brand.latam-brand-image .latam-header-logo {
+    width: 144px !important;
+    height: 40px !important;
+  }
+}
