@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es"><head><base target="_top"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Datos de pasajeros · Latam Expeditions</title>
+<style>
+:root{--green:#07873e;--ink:#172f42;--border:#dfe8e3}
+*{box-sizing:border-box}body{margin:0;font:13px/1.6 Arial,Helvetica,sans-serif;background:#fff;color:var(--ink);padding:20px}
+h1{font-size:20px;margin:2px 0 5px}h2{font-size:15px;margin:18px 0 9px}h3{font-size:14px;margin:0 0 13px;color:#0c6039}
+small,.muted{font-size:11px;color:#6b8172}.eyebrow{font-weight:800;color:var(--green);letter-spacing:1.5px;font-size:10px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field label{display:block;font-size:11px;font-weight:800;color:#426451;margin-bottom:5px}
+.field input,.field select{width:100%;min-width:0;min-height:43px;border:1px solid var(--border);border-radius:9px;padding:9px 11px;color:#172b3f;background:#fff}
+.passenger{background:#f8faf9;border:1px solid var(--border);border-radius:13px;padding:17px;margin:13px 0}
+.notice{background:#f0f8f3;border:1px solid #cce4d5;border-radius:10px;padding:12px;margin:15px 0;font-size:11px;color:#355b45}
+.check{display:flex;align-items:flex-start;gap:10px;font-size:11px;color:#4e6b5c;margin:17px 0}
+.check input{flex:0 0 auto;margin-top:3px;accent-color:var(--green)}
+button{border:0;border-radius:9px;background:var(--green);color:white;min-height:47px;width:100%;font-size:13px;font-weight:800;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+[hidden]{display:none!important}
+.error{padding:11px;border:1px solid #ecb8ba;background:#fff5f5;color:#982c34;border-radius:10px;margin-top:13px}
+.success{padding:20px;border-radius:13px;border:1px solid #b7dec8;background:#edf8f1;text-align:center}
+.success strong{display:block;font-size:19px;color:#076239;margin:7px 0}
+@media(max-width:600px){body{padding:12px}.form-grid{grid-template-columns:1fr}.passenger{padding:13px}}
+</style>
+</head><body>
+<main>
+<div class="eyebrow">LATAM EXPEDITIONS · SOLICITUD PRIVADA</div>
+<h1>Datos de los viajeros</h1>
+<p class="muted">Completa los datos tal como aparecen en sus documentos. Guardaremos la solicitud en nuestra hoja privada y te enviaremos un código de seguimiento.</p>
+<div class="notice" id="tripInfo"></div>
+<form id="tripForm">
+  <h2>Datos de contacto</h2>
+  <div class="form-grid">
+    <div class="field"><label for="contact">Nombre de contacto *</label><input id="contact" autocomplete="name" maxlength="150" required></div>
+    <div class="field"><label for="email">Correo electrónico *</label><input id="email" type="email" autocomplete="email" maxlength="150" required></div>
+    <div class="field"><label for="phone">WhatsApp con código de país *</label><input id="phone" type="tel" autocomplete="tel" placeholder="+51 906 472 060" maxlength="30" required></div>
+  </div>
+  <h2>Pasajeros</h2>
+  <div id="people"></div>
+  <label class="check"><input type="checkbox" id="accept" required>
+    <span>Confirmo que los datos son correctos y acepto que Latam Expeditions los utilice exclusivamente para gestionar esta solicitud. Entiendo que todavía no he pagado y que el código interno no equivale a un boleto aéreo ni a una reserva hotelera confirmada.</span></label>
+  <input id="company" name="company" style="position:absolute;left:-9999px" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <button type="submit" id="submit">Enviar solicitud de mi viaje</button>
+  <p class="error" id="error" role="alert" hidden></p>
+</form>
+<div id="success" class="success" hidden role="status"></div>
+</main>
+<script>
+(() => {
+ 'use strict';
+ const $=id=>document.getElementById(id);
+ const bundle=JSON.parse(decodeURIComponent(<?!= bundleContext ?>));
+ const total=bundle.adults+bundle.children;
+ const city='Medellín, Colombia';
+ $('tripInfo').textContent='Medellín Esencial 4D/3N · '+bundle.arrival+' al '+bundle.checkout+
+   ' · '+bundle.adults+' adulto(s) · '+bundle.children+' niño(s) · '+city+
+   (bundle.flight?' · vuelos incluidos en la solicitud':' · sin vuelos seleccionados');
+ function input(type,key,label,placeholder){
+  const item=document.createElement('div');item.className='field';
+  const l=document.createElement('label');l.textContent=label;
+  const x=document.createElement('input');x.type=type;x.dataset.field=key;x.required=true;
+  x.maxLength=type==='text'?100:35;
+  if(placeholder)x.placeholder=placeholder;
+  l.append(x);item.append(l);return item;
+ }
+ for(let i=0;i<total;i++){
+  const passenger=document.createElement('section');passenger.className='passenger';
+  const title=document.createElement('h3');title.textContent='Pasajero '+(i+1)+' · '+(i<bundle.adults?'Adulto':'Niño');
+  const grid=document.createElement('div');grid.className='form-grid';
+  grid.append(input('text','firstName','Nombres *','Según documento'),
+   input('text','lastName','Apellidos *','Según documento'));
+  const doc=document.createElement('div');doc.className='field';
+  const label=document.createElement('label');label.textContent='Tipo de documento *';
+  const select=document.createElement('select');select.dataset.field='docType';select.required=true;
+  [['PASSPORT','Pasaporte'],['DNI','DNI'],['CE','Carné de extranjería'],['OTHER','Otro documento']].forEach(a=>{
+   const o=document.createElement('option');o.value=a[0];o.textContent=a[1];select.append(o);
+  });
+  label.append(select);doc.append(label);
+  grid.append(doc,input('text','docNumber','Número de documento *'));
+  const dob=input('date','birthDate','Fecha de nacimiento *');dob.querySelector('input').max=
+   new Date().toISOString().slice(0,10);
+  grid.append(dob);
+  const baggage=document.createElement('div');baggage.className='field';
+  const baggageLabel=document.createElement('label');baggageLabel.textContent='Equipaje a consultar';
+  const bagSelect=document.createElement('select');bagSelect.dataset.field='baggagePreference';
+  [['standard','Equipaje de tarifa seleccionada'],['carry_on','Solicitar equipaje de cabina'],['checked_23','Solicitar maleta facturada 23 kg'],['both','Solicitar ambos']].forEach(a=>{
+   const o=document.createElement('option');o.value=a[0];o.textContent=a[1];bagSelect.append(o);
+  });
+  baggageLabel.append(bagSelect);baggage.append(baggageLabel);grid.append(baggage);
+  const note=document.createElement('p');note.className='muted';note.textContent='El equipaje y su costo se confirmarán según la tarifa real de la aerolínea.';
+  passenger.append(title,grid,note);$('people').append(passenger);
+ }
+ $('tripForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  $('error').hidden=true;
+  const passengers=[...document.querySelectorAll('.passenger')].map(node=>{
+   const d={};node.querySelectorAll('[data-field]').forEach(el=>d[el.dataset.field]=el.value.trim());return d;
+  });
+  const payload={bundle,passengers,contact:$('contact').value.trim(),
+   email:$('email').value.trim(),phone:$('phone').value.trim(),
+   honeypot:$('company').value,accepted:$('accept').checked};
+  if(!payload.accepted||passengers.some(p=>!p.firstName||!p.lastName||!p.docNumber||!p.birthDate)){
+   $('error').textContent='Completa los datos de todos los viajeros y acepta las condiciones.';
+   $('error').hidden=false;return;
+  }
+  if(!globalThis.google?.script?.run){
+   $('error').textContent='La conexión con Google Apps Script no está disponible. Abre este formulario desde Latam Expeditions.';
+   $('error').hidden=false;return;
+  }
+  const btn=$('submit');btn.disabled=true;btn.textContent='Registrando solicitud…';
+  google.script.run.withSuccessHandler(response=>{
+   btn.disabled=false;btn.textContent='Enviar solicitud de mi viaje';
+   if(!response?.ok){$('error').textContent='No pudimos guardar la solicitud. Intenta nuevamente.';$('error').hidden=false;return}
+   $('tripForm').hidden=true;
+   const title=document.createElement('h2');title.textContent='Solicitud registrada';
+   const code=document.createElement('strong');code.textContent=response.reference;
+   const desc=document.createElement('p');desc.textContent=response.message;
+   const back=document.createElement('p');back.textContent='Guarda tu código para hacer seguimiento con nuestro equipo.';
+   $('success').replaceChildren(title,code,desc,back);$('success').hidden=false;
+  }).withFailureHandler(err=>{
+   btn.disabled=false;btn.textContent='Enviar solicitud de mi viaje';
+   $('error').textContent=String(err?.message||'Error al registrar la solicitud.').slice(0,200);
+   $('error').hidden=false;
+  }).submitTripRequest(payload);
+ });
+})();
+</script>
+</body></html>
