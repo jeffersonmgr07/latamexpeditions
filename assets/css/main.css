@@ -3264,3 +3264,75 @@ body.has-pn-header .home-showcase + #experiencias { margin-top: 20px !important;
 body.has-pn-header #countryBar, body.has-pn-header .country-bar, body.has-pn-header .country-bar.is-visible { display: none !important; height: 0 !important; padding: 0 !important; margin: 0 !important; border: 0 !important; }
 body.has-pn-header .latam-utilitybar { border-bottom: 0 !important; }
 body.has-pn-header .topbar { border: 0 !important; }
+
+
+/* Buscador de paquetes 2026: único por destino / ciudad, reutiliza el estilo actual */
+body.has-pn-header #tripSearchForm.home-travel-form,
+#tripSearchForm.home-travel-form{
+ display:grid;grid-template-columns:1.28fr 1fr .95fr;gap:10px;
+ padding:12px;border-radius:19px;overflow:visible;align-items:stretch
+}
+#tripSearchForm .search-field{min-width:0;position:relative;overflow:visible;border-radius:12px}
+#tripSearchForm .search-field label{display:block;font-weight:750;font-size:11px;margin-bottom:6px}
+#tripSearchForm .search-field label span{font-weight:450;opacity:.7;text-transform:none}
+#tripSearchForm .lx-destination-combo{position:relative}
+#tripSearchForm #lxDestinationQuery{
+ display:block!important;width:100%;min-height:35px;padding:6px 28px 7px 0;
+ background:transparent;border:0;outline:none;box-shadow:none;
+ color:#143a24;font-size:13px;font-weight:700
+}
+#tripSearchForm #lxDestinationQuery:focus-visible{outline:2px solid rgba(7,135,62,.3);outline-offset:3px;border-radius:5px}
+#tripSearchForm #lxDestinationQuery::-webkit-search-cancel-button{cursor:pointer}
+#tripSearchForm .lx-destination-results{
+ position:absolute;left:-13px;right:-13px;top:calc(100% + 12px);
+ z-index:2500;max-height:325px;overflow-y:auto;background:#fff;border:1px solid #d8e6dc;
+ border-radius:13px;box-shadow:0 20px 40px rgba(7,45,24,.18);padding:6px
+}
+#tripSearchForm .lx-destination-option{
+ display:flex;align-items:center;gap:11px;width:100%;padding:10px 9px;border:0;
+ border-radius:8px;background:transparent;color:#17412e;text-align:left;cursor:pointer
+}
+#tripSearchForm .lx-destination-option i{color:#07873e;width:18px;text-align:center}
+#tripSearchForm .lx-destination-option span{display:grid;gap:1px;min-width:0}
+#tripSearchForm .lx-destination-option strong{font-size:12px;font-weight:750}
+#tripSearchForm .lx-destination-option small{font-size:10px;color:#718579}
+#tripSearchForm .lx-destination-option:is(:hover,[aria-selected="true"]){background:#e7f6ed}
+#tripSearchForm .lx-dest-empty{font-size:12px;color:#6c8172;padding:10px}
+#tripSearchForm .lx-guest-trigger{
+ display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:38px;
+ padding:7px 0;background:transparent;border:0;color:#143a24;font-weight:750;font-size:13px;text-align:left
+}
+#tripSearchForm .lx-guest-trigger i{font-size:11px;color:#07873e}
+#tripSearchForm .lx-guests-panel{
+ position:absolute;z-index:2500;right:0;top:calc(100% + 7px);min-width:270px;
+ padding:18px;background:#fff;border:1px solid #d4e7d9;border-radius:14px;
+ box-shadow:0 16px 35px rgba(8,38,21,.16)
+}
+#tripSearchForm .lx-counter-line{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:15px}
+#tripSearchForm .lx-counter-line>div:first-child{display:grid}
+#tripSearchForm .lx-counter-line strong{font-size:12px;color:#173c27}
+#tripSearchForm .lx-counter-line small{font-size:10px;color:#728679}
+#tripSearchForm .lx-counter{display:flex;gap:11px;align-items:center}
+#tripSearchForm .lx-counter button{
+ display:grid;place-items:center;width:30px;height:30px;border-radius:9px;
+ background:#f0f8f3;border:1px solid #b9d6c3;color:#07873e;font-size:19px;font-weight:700
+}
+#tripSearchForm .lx-counter strong{min-width:14px;text-align:center}
+#tripSearchForm .lx-guests-panel p{font-size:10px;color:#687d70;line-height:1.5;margin:0 0 13px}
+#tripSearchForm .lx-guest-done{
+ display:block;width:100%;background:#07873e;color:#fff;border:0;padding:9px 12px;border-radius:9px;font-weight:700
+}
+#tripSearchForm .search-btn{
+ min-height:54px;grid-column:3;align-self:center;margin:0;border-radius:12px;
+ background:#07873e!important;color:#fff!important;box-shadow:none!important
+}
+#tripSearchForm .search-btn:hover{background:#056831!important}
+@media(max-width:900px){
+ body.has-pn-header #tripSearchForm.home-travel-form,#tripSearchForm.home-travel-form{grid-template-columns:1fr 1fr}
+ #tripSearchForm .search-btn{grid-column:span 2}
+}
+@media(max-width:600px){
+ body.has-pn-header #tripSearchForm.home-travel-form,#tripSearchForm.home-travel-form{grid-template-columns:minmax(0,1fr)}
+ #tripSearchForm .search-btn{grid-column:auto;width:100%}
+ #tripSearchForm .lx-guests-panel{left:0;right:0;min-width:0}
+}
