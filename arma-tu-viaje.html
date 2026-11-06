@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arma tu viaje | Paquetes personalizables | Latam Expeditions</title>
+<meta name="description" content="Personaliza tu paquete con vuelos, hotel y experiencias. Revisa tu viaje completo y solicita tu reserva con Latam Expeditions.">
+<link rel="canonical" href="https://latamexpeditions.com/arma-tu-viaje.html">
+<link rel="icon" type="image/png" href="assets/img/isotipo-latam-expeditions.png">
+<meta name="theme-color" content="#07873E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="assets/css/armar-viaje.css">
+<script src="assets/js/vuelos-config.js" defer></script>
+<script src="assets/js/armar-viaje.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#tripBuilder">Saltar al configurador</a>
+<header class="lx-header">
+  <a class="lx-logo" href="index.html" aria-label="Latam Expeditions - Inicio">
+    <img src="assets/img/logo-latam-expeditions.png" alt="Latam Expeditions">
+  </a>
+  <nav aria-label="Productos"><a href="paquetes.html" aria-current="page">Paquetes</a><a href="index.html?tab=ofertas#explorar">Ofertas</a><a href="vuelos.html">Vuelos</a><a href="index.html?tab=hoteles#explorar">Hoteles</a></nav>
+  <a class="lx-support" href="https://wa.me/51906472060" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i><span>¿Necesitas ayuda?</span></a>
+</header>
+<main id="tripBuilder" class="lx-layout">
+  <div class="lx-breadcrumb"><a href="paquetes.html">Paquetes</a><span>›</span><a href="paquetes/medellin-esencial.html">Medellín Esencial</a><span>›</span><strong>Arma tu viaje</strong></div>
+  <header class="lx-intro"><span class="lx-kicker">LATAM EXPEDITIONS · VIAJA A TU MANERA</span>
+    <h1>Arma tu viaje a Medellín</h1>
+    <p>Elige fechas, añade vuelos, selecciona el hotel y personaliza tus experiencias. Conservamos tus elecciones en un solo resumen.</p>
+  </header>
+  <div class="lx-steps" role="list" aria-label="Pasos para personalizar el viaje">
+    <div class="lx-step is-active" role="listitem" data-step-indicator="0"><span>1</span><strong>Tu paquete</strong></div>
+    <div class="lx-step" role="listitem" data-step-indicator="1"><span>2</span><strong>Vuelos</strong></div>
+    <div class="lx-step" role="listitem" data-step-indicator="2"><span>3</span><strong>Hotel</strong></div>
+    <div class="lx-step" role="listitem" data-step-indicator="3"><span>4</span><strong>Actividades</strong></div>
+    <div class="lx-step" role="listitem" data-step-indicator="4"><span>5</span><strong>Resumen</strong></div>
+  </div>
+  <div class="lx-columns">
+    <section class="lx-main-column" aria-label="Opciones de viaje">
+      <section class="lx-screen" id="lxStep0" aria-labelledby="lxStepTitle0">
+        <div class="lx-card"><div class="lx-section-head"><span class="lx-icon"><i class="fa-solid fa-suitcase-rolling"></i></span>
+          <div><h2 id="lxStepTitle0">Tu paquete y fechas</h2><p>Medellín Esencial · 4 días y 3 noches</p></div></div>
+          <div class="lx-fields">
+            <label class="lx-field">Ciudad de salida
+              <select id="lxOrigin" autocomplete="off">
+                <optgroup label="Perú"><option value="LIM">Lima (LIM)</option><option value="CUZ">Cusco (CUZ)</option><option value="AQP">Arequipa (AQP)</option></optgroup>
+                <optgroup label="Colombia"><option value="BOG">Bogotá (BOG)</option><option value="CLO">Cali (CLO)</option><option value="CTG">Cartagena (CTG)</option></optgroup>
+                <optgroup label="Argentina"><option value="EZE">Buenos Aires (EZE)</option><option value="AEP">Aeroparque (AEP)</option></optgroup>
+                <optgroup label="Chile"><option value="SCL">Santiago (SCL)</option></optgroup>
+                <optgroup label="México"><option value="MEX">Ciudad de México (MEX)</option></optgroup>
+                <optgroup label="Brasil"><option value="GRU">São Paulo (GRU)</option><option value="GIG">Río de Janeiro (GIG)</option></optgroup>
+                <optgroup label="Otros"><option value="UIO">Quito (UIO)</option><option value="PTY">Panamá (PTY)</option><option value="MIA">Miami (MIA)</option></optgroup>
+              </select>
+              <small>Aeropuerto sugerido según el país seleccionado; puedes cambiarlo.</small>
+            </label>
+            <label class="lx-field">Llegada prevista a Medellín
+              <input id="lxArrival" type="date" required>
+              <small>Fecha de inicio del paquete.</small>
+            </label>
+            <label class="lx-field">Salida del hotel (automática)
+              <input id="lxCheckout" type="date" readonly aria-readonly="true">
+              <small>Después de tres noches de alojamiento.</small>
+            </label>
+            <label class="lx-field">Adultos
+              <select id="lxAdults"><option value="1">1 adulto</option><option value="2" selected>2 adultos</option><option value="3">3 adultos</option><option value="4">4 adultos</option></select>
+            </label>
+            <label class="lx-field">Niños (2–11 años)
+              <select id="lxChildren"><option value="0">Sin niños</option><option value="1">1 niño</option><option value="2">2 niños</option></select>
+              <small>Máximo cuatro huéspedes por habitación. Tarifa infantil referencial: 70%.</small>
+            </label>
+          </div>
+          <div class="lx-included"><strong>Incluido en el programa:</strong><div id="lxIncluded"></div></div>
+          <p class="lx-note">El alojamiento, traslados y excursiones del programa están incluidos. Los vuelos son opcionales y no forman parte del precio base.</p>
+        </div>
+      </section>
+      <section class="lx-screen" id="lxStep1" hidden aria-labelledby="lxStepTitle1">
+        <div class="lx-card"><div class="lx-section-head"><span class="lx-icon"><i class="fa-solid fa-plane"></i></span>
+          <div><h2 id="lxStepTitle1">Añade tus vuelos</h2><p>Consulta opciones de ida y vuelta desde tu aeropuerto de origen.</p></div></div>
+          <div class="lx-flight-actions">
+            <label class="lx-toggle"><input type="checkbox" id="lxFlightsEnabled" checked><span>Quiero añadir vuelos al paquete</span></label>
+          </div>
+          <div id="lxFlightPicker">
+            <div class="lx-fields">
+              <label class="lx-field">Fecha de salida de tu ciudad
+                <input id="lxFlightOutDate" type="date">
+                <small>Para vuelos nocturnos, prueba también el día anterior a tu llegada.</small>
+              </label>
+              <label class="lx-field">Fecha de regreso
+                <input id="lxFlightBackDate" type="date">
+                <small>Se propone el día de salida del hotel; puedes cambiarla.</small>
+              </label>
+            </div>
+            <button id="lxSearchFlights" class="lx-btn lx-btn-secondary" type="button"><i class="fa-solid fa-magnifying-glass"></i> Buscar vuelos con Google Flights</button>
+            <p class="lx-note">Los resultados provienen de Google Flights mediante SerpApi. No se efectúa ninguna reserva de asiento.</p>
+            <div id="lxFlightStatus" class="lx-inline-status" aria-live="polite"></div>
+            <div id="lxOutOptions" class="lx-options" aria-label="Opciones de vuelo de ida"></div>
+            <div id="lxReturnOptions" class="lx-options" aria-label="Opciones de regreso"></div>
+          </div>
+        </div>
+      </section>
+      <section class="lx-screen" id="lxStep2" hidden aria-labelledby="lxStepTitle2">
+        <div class="lx-card"><div class="lx-section-head"><span class="lx-icon"><i class="fa-solid fa-bed"></i></span>
+          <div><h2 id="lxStepTitle2">Elige tu alojamiento</h2><p>El paquete ya incluye hotel y desayuno; puedes cambiar de categoría.</p></div></div>
+          <div class="lx-options lx-hotel-options" id="lxHotelOptions"></div>
+          <p class="lx-note">Hotel previsto o similar. Los suplementos usan las tarifas referenciales del catálogo de Latam Expeditions y dependen de disponibilidad.</p>
+          <details class="lx-more-hotels"><summary>Explorar otros hoteles de Medellín <span>Google Hotels</span></summary>
+            <div class="lx-more-inner">
+              <p>Podemos consultar fotografías, calificaciones y precios indicativos de otros hoteles. Al no existir una tarifa contractual de sustitución, cualquier cambio adicional requerirá cotización personalizada.</p>
+              <button id="lxExploreHotels" class="lx-btn lx-btn-secondary" type="button">Buscar alternativas</button>
+              <div id="lxHotelStatus" aria-live="polite"></div>
+              <div class="lx-options" id="lxMarketHotels"></div>
+            </div>
+          </details>
+        </div>
+      </section>
+      <section class="lx-screen" id="lxStep3" hidden aria-labelledby="lxStepTitle3">
+        <div class="lx-card"><div class="lx-section-head"><span class="lx-icon"><i class="fa-solid fa-ticket"></i></span>
+          <div><h2 id="lxStepTitle3">Personaliza tus experiencias</h2><p>City tour, Comuna 13 y Guatapé ya están incluidos. Agrega solamente experiencias nuevas.</p></div></div>
+          <div class="lx-options lx-activity-options" id="lxActivities"></div>
+          <div class="lx-note">El equipo revisará la compatibilidad de los horarios con tus vuelos y excursiones incluidas.</div>
+        </div>
+      </section>
+      <section class="lx-screen" id="lxStep4" hidden aria-labelledby="lxStepTitle4">
+        <div class="lx-card"><div class="lx-section-head"><span class="lx-icon"><i class="fa-solid fa-receipt"></i></span>
+          <div><h2 id="lxStepTitle4">Revisa tu viaje</h2><p>Una sola solicitud con todos los servicios seleccionados.</p></div></div>
+          <div class="lx-review" id="lxReview"></div>
+          <div id="lxReviewWarnings" class="lx-note" role="status"></div>
+          <label class="lx-accept"><input type="checkbox" id="lxAccept"><span>Entiendo que el precio es preliminar y que Latam Expeditions verificará disponibilidad y condiciones antes de confirmar el pago. El código interno no constituye un boleto aéreo ni una reserva hotelera confirmada.</span></label>
+          <button id="lxContinueRequest" class="lx-btn lx-btn-primary lx-wide" type="button" disabled>Continuar con datos de pasajeros</button>
+          <div id="lxRequestHolder" hidden>
+            <div id="lxRequestStatus" class="lx-inline-status" aria-live="polite"></div>
+            <iframe id="lxRequestFrame" title="Datos privados de pasajeros y solicitud de viaje" loading="lazy" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>
+          </div>
+        </div>
+      </section>
+      <div class="lx-nav-actions">
+        <button class="lx-btn lx-btn-light" id="lxPrev" type="button" hidden><i class="fa-solid fa-arrow-left"></i> Atrás</button>
+        <button class="lx-btn lx-btn-primary" id="lxNext" type="button">Continuar <i class="fa-solid fa-arrow-right"></i></button>
+      </div>
+    </section>
+    <aside class="lx-sidebar" aria-label="Resumen actualizado del viaje">
+      <div class="lx-summary-card">
+        <img class="lx-summary-photo" src="assets/img/colombia-paquete-medellin-esencial.jpg" alt="Vista de Medellín, Colombia">
+        <div class="lx-summary-inner">
+          <span class="lx-kicker">TU VIAJE</span><h2>Medellín Esencial</h2>
+          <div class="lx-summary-sub">4 días · 3 noches · Colombia</div>
+          <div id="lxSummaryDetails" class="lx-summary-meta"></div>
+          <div id="lxSummaryLines" class="lx-summary-lines"></div>
+          <div class="lx-total"><span>Subtotal orientativo</span><strong id="lxTotal">—</strong></div>
+          <div class="lx-person" id="lxPerPerson"></div>
+          <p class="lx-legal">No incluye suplementos pendientes de cotización ni constituye una reserva. El pago se habilitará después de validar los servicios.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+<footer class="lx-footer"><span>© Latam Expeditions</span><a href="mailto:contact@latamexpeditions.com">contact@latamexpeditions.com</a><a href="https://wa.me/51906472060" target="_blank" rel="noopener noreferrer">WhatsApp +51 906 472 060</a></footer>
+</body>
+</html>

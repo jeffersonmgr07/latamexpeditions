@@ -46,6 +46,12 @@
     if(country)qs.set('destino',country);
     if(type)qs.set('estilo',type);
     if(month)qs.set('fecha',month);
+    const origins={'Perú':'LIM','Colombia':'BOG','Argentina':'EZE','Chile':'SCL','México':'MEX',
+      'Brasil':'GRU','Ecuador':'UIO'};
+    let selectedCountry='';
+    try{selectedCountry=localStorage.getItem('latam_country')||''}catch(_){}
+    qs.set('origen',origins[selectedCountry]||'LIM');
+    if(destination==='medellin')qs.set('ciudad','medellin');
     location.href='paquetes.html'+(qs.size?'?'+qs.toString():'');
   });
 

@@ -193,9 +193,9 @@
             <div class="fact-row"><span data-en="Flights">Vuelos</span><strong data-en="Quoted separately unless indicated">Cotizables aparte salvo indicación</strong></div>
 
             <section class="package-flights-box" aria-labelledby="packageFlightsTitle">
-              <h3 id="packageFlightsTitle"><i class="fa-solid fa-plane" aria-hidden="true"></i> Añade vuelos a tu paquete</h3>
+              <h3 id="packageFlightsTitle"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Arma tu viaje completo</h3>
               <p>Medellín Esencial · 4 días / 3 noches · desde US$299 por persona en habitación doble. Consulta el viaje completo.</p>
-              <form id="packageFlightBundle" action="../vuelos.html" method="get">
+              <form id="packageFlightBundle" action="../arma-tu-viaje.html" method="get">
                 <div class="package-flights-fields">
                   <label>Ciudad de salida
                     <select name="origin" required>
@@ -207,7 +207,7 @@
                     </select>
                   </label>
                   <label>Fecha de llegada prevista
-                    <input name="departure" type="date" id="packageArrivalDate" required>
+                    <input name="arrival" type="date" id="packageArrivalDate" required>
                   </label>
                   <label>Regreso estimado
                     <input id="packageCalculatedReturn" type="date" readonly aria-label="Fecha de regreso calculada">
@@ -222,8 +222,8 @@
                 <input type="hidden" name="children" value="0">
                 <input type="hidden" name="cabin" value="economy">
                 <input type="hidden" name="package" value="medellin-esencial">
-                <p class="package-flights-hint">La hora de llegada y el alojamiento se confirmarán al seleccionar los vuelos. El total es orientativo hasta verificar disponibilidad.</p>
-                <button class="btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Consultar paquete + vuelos</button>
+                <p class="package-flights-hint">Puedes mantener el paquete tal como está o añadir vuelos, cambiar de categoría de hotel y agregar actividades. Validaremos el precio antes del pago.</p>
+                <button class="btn-primary" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Personalizar paquete, vuelos y hotel</button>
               </form>
             </section>
             <div class="cta-stack">

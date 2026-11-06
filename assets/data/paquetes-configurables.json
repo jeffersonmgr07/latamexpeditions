@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "packages": [
+    {
+      "id": "medellin-esencial",
+      "slug": "medellin-esencial",
+      "name": "Medellín Esencial 4D/3N",
+      "city": "Medellín",
+      "country": "Colombia",
+      "destinationAirport": "MDE",
+      "nights": 3,
+      "days": 4,
+      "image": "assets/img/colombia-paquete-medellin-esencial.jpg",
+      "page": "paquetes/medellin-esencial.html",
+      "minBookingDays": 2,
+      "maxGuests": 4,
+      "hotelTiers": [
+        {
+          "id": "standard",
+          "name": "Turista · 3 estrellas",
+          "property": "ibis Medellín",
+          "description": "Hotel previsto o similar · desayuno",
+          "rates": [
+            419,
+            299,
+            289,
+            279
+          ]
+        },
+        {
+          "id": "superior",
+          "name": "Primera · 4 estrellas",
+          "property": "Sites Hotel Medellín",
+          "description": "Hotel previsto o similar · desayuno",
+          "rates": [
+            589,
+            419,
+            399,
+            389
+          ]
+        },
+        {
+          "id": "luxury",
+          "name": "Lujo · 5 estrellas",
+          "property": "Medellín Marriott Hotel",
+          "description": "Hotel previsto o similar · desayuno",
+          "rates": [
+            909,
+            649,
+            619,
+            599
+          ]
+        }
+      ],
+      "activities": [
+        {
+          "id": "parapente",
+          "name": "Parapente en Medellín con transporte y GoPro",
+          "pricePerPerson": 99,
+          "image": "assets/img/colombia-experiencia-parapente-medellin.jpg",
+          "page": "experiencias/parapente-medellin.html",
+          "suggestedDay": 1,
+          "description": "Actividad adicional sujeta a condiciones meteorológicas y disponibilidad."
+        },
+        {
+          "id": "medellin-noche",
+          "name": "Medellín nocturno: gastronomía y rooftops",
+          "pricePerPerson": 49,
+          "image": "assets/img/colombia-experiencia-medellin-nocturno-gastronomia-rooftops.jpg",
+          "page": "experiencias/medellin-nocturno-gastronomia-rooftops.html",
+          "suggestedDay": 1,
+          "description": "Actividad nocturna adicional; sujeto a edad, horarios y disponibilidad."
+        }
+      ],
+      "included": [
+        "Traslados programados de llegada y salida",
+        "Alojamiento con desayuno en la categoría elegida",
+        "City tour, Comuna 13 y Metrocable (día 2)",
+        "Guatapé y Piedra del Peñol (día 3)",
+        "Guías locales durante las visitas",
+        "Asistencia de viaje por WhatsApp"
+      ],
+      "notes": [
+        "Los vuelos no están incluidos en el precio base.",
+        "El hotel previsto o similar se confirmará antes del pago.",
+        "Los precios son referenciales y dependen de fechas, ocupación y proveedores."
+      ]
+    }
+  ]
+}
