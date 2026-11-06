@@ -608,12 +608,14 @@ function submitTripRequest(p){
       last=String(t.lastName||"").trim().slice(0,100),
       type=String(t.docType||"").toUpperCase(),
       doc=String(t.docNumber||"").trim().slice(0,35),
-      dob=String(t.birthDate||"");
+      dob=String(t.birthDate||""),
+      baggage=String(t.baggagePreference||"standard");
     if(first.length<2||last.length<2||approvedTypes.indexOf(type)<0||
        !/^[A-Za-z0-9 .-]{4,35}$/.test(doc)||!validFutureDate_(b.arrival)||
        !/^\d{4}-\d\d-\d\d$/.test(dob)||!Number.isFinite(toUtcDay_(dob))||
        toUtcDay_(dob)>=Date.now())throw Error("Revisa los datos de pasajeros.");
-    return {firstName:first,lastName:last,docType:type,docNumber:doc,birthDate:dob};
+    if(["standard","carry_on","checked_23","both"].indexOf(baggage)<0)baggage="standard";
+    return {firstName:first,lastName:last,docType:type,docNumber:doc,birthDate:dob,baggagePreference:baggage};
   });
   var sheetId=PropertiesService.getScriptProperties().getProperty("TRIP_REQUEST_SHEET_ID");
   if(!sheetId)throw Error("La hoja privada de viajes no está inicializada. Contacta con Latam Expeditions.");
@@ -644,6 +646,7 @@ function submitTripRequest(p){
       catch(ex){console.error("Trip email notification failed");}
     }
     return {ok:true,reference:id,status:"PENDIENTE_DE_VALIDACION",
+      estimatedSubtotal:estimate,
       message:"Recibimos tu solicitud. Te enviaremos disponibilidad, condiciones y un enlace de pago después de verificarlas. Este código no es una reserva aérea ni hotelera."};
   }finally{lock.releaseLock();}
 }
