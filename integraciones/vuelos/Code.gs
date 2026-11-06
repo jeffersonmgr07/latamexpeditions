@@ -18,6 +18,20 @@ var CACHE_SECONDS = 900;
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
+  if (p.mode === "bundle") {
+    try {
+      var request=String(p.payload||"");
+      if(request.length>4200)throw new Error("Solicitud demasiado extensa.");
+      var context=sanitizeTripBundle_(JSON.parse(request));
+      var page=HtmlService.createTemplateFromFile("TripRequest");
+      page.bundleContext=JSON.stringify(encodeURIComponent(JSON.stringify(context)));
+      return page.evaluate().setTitle("Datos del viaje | Latam Expeditions")
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+    }catch(err) {
+      return HtmlService.createHtmlOutput("<p>Esta solicitud no es válida. Vuelve a armar tu viaje en Latam Expeditions.</p>")
+        .setTitle("Solicitud no válida");
+    }
+  }
   if (p.mode === "request") {
     // Pass the original search context from the server to the iframe. This
     // avoids account-switching and redirect issues with Apps Script URLs.
@@ -48,7 +62,7 @@ function doGet(e) {
   }
   var output;
   try {
-    output = fetchFlightData_(p);
+    output = p.mode === "hotels" ? searchBundleHotels_(p) : fetchFlightData_(p);
   } catch (err) {
     output = { ok:false, error:"service_error", message:"No pudimos consultar tarifas. Intenta de nuevo o solicita una cotización." };
     console.error("Flight lookup failed: " + String(err && err.message || err).slice(0,200));
@@ -422,4 +436,214 @@ function submitFlightRequest(p) {
     return {ok:true,reference:internalCode,status:"SOLICITUD_RECIBIDA",
       message:"Tu solicitud fue registrada. Aún NO existe reserva aérea, PNR ni boleto emitido. Nuestro equipo validará precio y disponibilidad antes de ofrecerte pagar."};
   } finally {lock.releaseLock();}
+}
+
+
+/**
+ * LATAM EXPEDITIONS — paquetes combinados MVP.
+ * Los precios externos se usan SOLO como referencias; jamás confirma reserva.
+ * App Script: usar propiedad SERPAPI_KEY existente. Para registro privado de
+ * solicitudes ejecutar initTripRequestsSheet() una vez y desplegar NUEVA versión.
+ */
+function searchBundleHotels_(p) {
+  var destination=String(p.destination||"");
+  if(destination!=="Medellín, Colombia")return {ok:false,message:"Por ahora consultamos hoteles en Medellín."};
+  var checkin=String(p.check_in_date||""),checkout=String(p.check_out_date||"");
+  var adults=Number(p.adults||2),children=Number(p.children||0);
+  if(!validFutureDate_(checkin)||!validFutureDate_(checkout)||checkout<=checkin||
+     !Number.isInteger(adults)||adults<1||adults>4||
+     !Number.isInteger(children)||children<0||children>2||adults+children>4||
+     toUtcDay_(checkout)-toUtcDay_(checkin)>30*86400000){
+    return {ok:false,message:"Revisa fechas y ocupación del hotel."};
+  }
+  var key=PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
+  if(!key)return {ok:false,message:"Google Hotels requiere la propiedad SERPAPI_KEY en Apps Script."};
+  var ck="hotels_"+Utilities.base64EncodeWebSafe(
+    Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
+      [destination,checkin,checkout,adults,children].join("|"))).slice(0,50);
+  var cache=CacheService.getScriptCache(),stored=cache.get(ck);
+  if(stored)return JSON.parse(stored);
+  var params={engine:"google_hotels",q:"hoteles en Medellín Colombia",hl:"es",gl:"co",
+    currency:"USD",check_in_date:checkin,check_out_date:checkout,
+    adults:String(adults),children:String(children),api_key:key};
+  if(children>0){
+    var ages=[];for(var i=0;i<children;i++)ages.push("8");
+    // Ages for hotel pricing are NOT assumed: do not query with invented ages.
+    // Until specific children's ages are collected, compare hotels for adults
+    // only and avoid interpreting prices as a family total.
+    delete params.children;
+    params.children="0";
+  }
+  var url="https://serpapi.com/search.json?"+Object.keys(params).map(function(k){
+    return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
+  var res=UrlFetchApp.fetch(url,{muteHttpExceptions:true,followRedirects:true});
+  if(res.getResponseCode()!==200)throw Error("Hotel provider HTTP "+res.getResponseCode());
+  var body=JSON.parse(res.getContentText());
+  if(body.error)return {ok:false,message:"No se pudo completar la búsqueda de hoteles."};
+  function number_(obj){
+    if(typeof obj==="number")return obj>0&&obj<100000?obj:null;
+    if(obj&&typeof obj==="object"){
+      var found=Number(obj.extracted_lowest||obj.extracted_price||obj.extracted_total||0);
+      return found>0&&found<100000?found:null;
+    }
+    return null;
+  }
+  function photo_(item){
+    var candidates=[item.thumbnail,item.image,item.images&&item.images[0]&&
+      (item.images[0].thumbnail||item.images[0].original_image)];
+    return candidates.filter(function(v){return typeof v==="string"&&
+      /^https:\/\/[^<>"'\s]{8,600}$/.test(v);})[0]||"";
+  }
+  var hotels=(Array.isArray(body.properties)?body.properties:[]).filter(function(p){
+    return p&&p.name&&String(p.type||"hotel").toLowerCase()!=="vacation rental";
+  }).slice(0,12).map(function(h){
+    var rating=Number(h.overall_rating||h.rating||0);
+    return {name:String(h.name).slice(0,110),rating:rating>=1&&rating<=5?rating:null,
+      thumbnail:photo_(h),nightlyRate:number_(h.rate_per_night),
+      totalRate:number_(h.total_rate),address:String(h.address||"").slice(0,160),
+      source:"Google Hotels",roomsVerified:false};
+  });
+  var result={ok:true,source:"Google Hotels via SerpApi",pricesVerified:false,
+    occupancyPricedForChildren:children===0,hotels:hotels};
+  try{cache.put(ck,JSON.stringify(result),600)}catch(ignore){}
+  return result;
+}
+function sanitizeTripBundle_(b){
+  if(!b||typeof b!=="object"||b.packageId!=="medellin-esencial")throw Error("Paquete no válido.");
+  var origin=String(b.origin||"").toUpperCase();
+  if(FLIGHT_AIRPORTS.indexOf(origin)<0||origin==="MDE")throw Error("Aeropuerto inválido.");
+  var adults=Number(b.adults),children=Number(b.children);
+  if(!Number.isInteger(adults)||adults<1||adults>4||
+     !Number.isInteger(children)||children<0||children>2||adults+children>4)throw Error("Viajeros no válidos.");
+  var arrival=String(b.arrival||""),checkout=String(b.checkout||"");
+  if(!validFutureDate_(arrival)||!validFutureDate_(checkout)||
+     toUtcDay_(checkout)-toUtcDay_(arrival)!==3*86400000)throw Error("Estadía inválida.");
+  var current=Date.UTC(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate());
+  if(toUtcDay_(arrival)-current<2*86400000)throw Error("Fecha próxima no permitida.");
+  var tier=String(b.hotelTier||"standard");
+  if(["standard","superior","luxury"].indexOf(tier)<0)throw Error("Categoría no válida.");
+  var custom=String(b.customHotel||"").trim().slice(0,110);
+  if(custom&&!/^[\p{L}\p{N} .,'&()\-]{3,110}$/u.test(custom))throw Error("Nombre de hotel no válido.");
+  var rawActs=Array.isArray(b.activities)?b.activities:[];
+  if(rawActs.length>2||rawActs.some(function(a){return ["parapente","medellin-noche"].indexOf(a)<0;}))throw Error("Actividad no válida.");
+  var acts=rawActs.filter(function(a,i){return rawActs.indexOf(a)===i;});
+  var outbound=String(b.flightOut||""),ret=String(b.flightBack||"");
+  var flight=b.flight&&typeof b.flight==="object"?b.flight:null;
+  function segments_(arr){
+    if(!Array.isArray(arr))return [];
+    return arr.slice(0,6).map(function(seg){
+      function airport_(a){return {code:String(a&&a.code||"").slice(0,3),
+        time:String(a&&a.time||"").slice(0,30),name:String(a&&a.name||"").slice(0,65)};}
+      return {airline:String(seg.airline||"").slice(0,65),
+        flightNumber:String(seg.flightNumber||"").slice(0,24),
+        from:airport_(seg.from),to:airport_(seg.to)};
+    });
+  }
+  var cleanFlight=null;
+  if(flight){
+    if(!validFutureDate_(outbound)||!validFutureDate_(ret)||outbound>ret||
+       toUtcDay_(outbound)-current<2*86400000||outbound>checkout||
+       ret<arrival||ret>daysAfterTrip_(checkout,2))throw Error("Fechas aéreas no válidas.");
+    var observed=Number(flight.price);
+    if(!(observed>0&&observed<100000))throw Error("Tarifa no válida.");
+    var out=segments_(flight.outbound),back=segments_(flight.inbound);
+    if(!out.length||!back.length)throw Error("Faltan tramos aéreos.");
+    cleanFlight={priceObserved:observed,currency:"USD",airline:String(flight.airline||"").slice(0,80),
+      flightOut:outbound,flightBack:ret,outbound:out,inbound:back,
+      note:"Datos enviados por navegador; se requiere verificar tarifa y plazas antes del cobro."};
+  }
+  return {packageId:"medellin-esencial",origin:origin,destination:"MDE",arrival:arrival,
+    checkout:checkout,adults:adults,children:children,hotelTier:tier,
+    customHotel:custom,activities:acts,flight:cleanFlight};
+}
+function daysAfterTrip_(date,n){var d=new Date(date+"T12:00:00Z");d.setUTCDate(d.getUTCDate()+n);
+  return Utilities.formatDate(d,"UTC","yyyy-MM-dd");}
+function tripPackageCost_(b){
+  var rates={standard:[419,299,289,279],superior:[589,419,399,389],luxury:[909,649,619,599]};
+  var rate=rates[b.hotelTier][b.adults+b.children-1];
+  return Math.round((rate*b.adults+rate*.7*b.children)*100)/100;
+}
+function tripActivitiesCost_(b){
+  var rates={"parapente":99,"medellin-noche":49};
+  return b.activities.reduce(function(sum,id){return sum+rates[id]*b.adults;},0);
+}
+function tripFlightEstimate_(b){
+  if(!b.flight)return 0;
+  var today=Date.UTC(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate());
+  var n=Math.round((toUtcDay_(b.flight.flightOut)-today)/86400000);
+  var factor=n<=30?1.10:n<=45?1.05:n<=90?1:n<=180?.95:n<=270?.90:.85;
+  return Math.round(b.flight.priceObserved*factor*100)/100;
+}
+/**
+ * Private storage: creates a new Sheet ID in Script Properties.
+ * NEVER publish the Sheet or put passenger documents into a GET URL.
+ */
+function initTripRequestsSheet(){
+  var prop=PropertiesService.getScriptProperties();
+  var current=prop.getProperty("TRIP_REQUEST_SHEET_ID");if(current)return current;
+  var book=SpreadsheetApp.create("Latam Expeditions - Viajes personalizables");
+  var sheet=book.getSheets()[0];sheet.setName("Solicitudes de paquetes");
+  sheet.appendRow(["Fecha","Código interno","Estado","Paquete","Llegada","Salida",
+    "Aeropuerto origen","Adultos","Niños","Hotel categoría","Hotel alternativo",
+    "Actividades","Vuelo (JSON sin pasajeros)","Paquete referencial USD",
+    "Actividades adultos USD","Vuelo referencial USD","Subtotal referencial USD",
+    "Contacto","Email","Teléfono","Pasajeros privados (JSON)","Aceptación"]);
+  sheet.setFrozenRows(1);prop.setProperty("TRIP_REQUEST_SHEET_ID",book.getId());
+  return book.getId();
+}
+function submitTripRequest(p){
+  if(!p||p.honeypot)throw Error("Solicitud inválida.");
+  var b=sanitizeTripBundle_(p.bundle);
+  if(p.accepted!==true)throw Error("Debes aceptar las condiciones de la solicitud.");
+  var email=String(p.email||"").trim().slice(0,150);
+  var contact=String(p.contact||"").trim().slice(0,150);
+  var phone=String(p.phone||"").replace(/[^\d+\s()-]/g,"").slice(0,30);
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||contact.length<3||
+     phone.replace(/\D/g,"").length<7)throw Error("Revisa tus datos de contacto.");
+  var passengers=p.passengers;
+  if(!Array.isArray(passengers)||passengers.length!==b.adults+b.children)throw Error("Completa todos los pasajeros.");
+  var approvedTypes=["DNI","CE","PASSPORT","OTHER"];
+  var people=passengers.map(function(t){
+    var first=String(t.firstName||"").trim().slice(0,100),
+      last=String(t.lastName||"").trim().slice(0,100),
+      type=String(t.docType||"").toUpperCase(),
+      doc=String(t.docNumber||"").trim().slice(0,35),
+      dob=String(t.birthDate||"");
+    if(first.length<2||last.length<2||approvedTypes.indexOf(type)<0||
+       !/^[A-Za-z0-9 .-]{4,35}$/.test(doc)||!validFutureDate_(b.arrival)||
+       !/^\d{4}-\d\d-\d\d$/.test(dob)||!Number.isFinite(toUtcDay_(dob))||
+       toUtcDay_(dob)>=Date.now())throw Error("Revisa los datos de pasajeros.");
+    return {firstName:first,lastName:last,docType:type,docNumber:doc,birthDate:dob};
+  });
+  var sheetId=PropertiesService.getScriptProperties().getProperty("TRIP_REQUEST_SHEET_ID");
+  if(!sheetId)throw Error("La hoja privada de viajes no está inicializada. Contacta con Latam Expeditions.");
+  var lock=LockService.getScriptLock();
+  if(!lock.tryLock(10000))throw Error("El servidor está ocupado.");
+  try{
+    var digest=Utilities.base64EncodeWebSafe(Utilities.computeDigest(
+      Utilities.DigestAlgorithm.SHA_256,email.toLowerCase()+JSON.stringify(b)));
+    var cache=CacheService.getScriptCache(),key="bundle_"+digest.slice(0,48);
+    if(cache.get(key))throw Error("Ya recibimos una solicitud similar. Contacta con nuestro equipo antes de repetirla.");
+    var id="LXP-"+Utilities.formatDate(new Date(),"Etc/UTC","yyyyMMdd")+"-"+
+      Utilities.getUuid().replace(/-/g,"").slice(0,8).toUpperCase();
+    var pkg=tripPackageCost_(b),act=tripActivitiesCost_(b),flight=tripFlightEstimate_(b);
+    var estimate=Math.round((pkg+act+flight)*100)/100;
+    // All values remain NON-BINDING and may contain user-supplied prices.
+    var row=[new Date(),id,"SOLICITUD PENDIENTE SIN COBRO",b.packageId,b.arrival,b.checkout,
+      b.origin,b.adults,b.children,b.hotelTier,b.customHotel,b.activities.join(", "),
+      JSON.stringify(b.flight||{}),pkg,act,flight,estimate,contact,email,phone,
+      JSON.stringify(people),"Acepta validación de disponibilidad y tratamiento de datos"];
+    row=row.map(function(v){return typeof v==="string"&&/^[=+\-@]/.test(v)?"'"+v:v});
+    var sheet=SpreadsheetApp.openById(sheetId).getSheetByName("Solicitudes de paquetes");
+    sheet.appendRow(row);cache.put(key,id,600);
+    var notify=PropertiesService.getScriptProperties().getProperty("TRIP_REQUEST_NOTIFY_EMAIL");
+    if(notify&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(notify)){
+      try{MailApp.sendEmail(notify,"Nueva solicitud combinada "+id,
+        "Nueva solicitud "+id+"\nPaquete: Medellín Esencial\nLlegada: "+b.arrival+
+        "\nRevisa los datos privados en la hoja. Sin cobro ni reservas confirmadas.");}
+      catch(ex){console.error("Trip email notification failed");}
+    }
+    return {ok:true,reference:id,status:"PENDIENTE_DE_VALIDACION",
+      message:"Recibimos tu solicitud. Te enviaremos disponibilidad, condiciones y un enlace de pago después de verificarlas. Este código no es una reserva aérea ni hotelera."};
+  }finally{lock.releaseLock();}
 }
