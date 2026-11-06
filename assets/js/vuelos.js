@@ -218,8 +218,8 @@
     return Math.round((d.getTime()-start.getTime())/86400000);
   }
   function commercialAdjustment(days) {
-    if (days <= 44) return 0.10;
-    if (days <= 60) return 0.05;
+    if (days <= 30) return 0.10;
+    if (days <= 45) return 0.05;
     if (days <= 90) return 0;
     if (days <= 180) return -0.05;
     if (days <= 270) return -0.10;
