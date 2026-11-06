@@ -114,8 +114,24 @@ button:disabled{opacity:.5;cursor:not-allowed}
    const title=document.createElement('h2');title.textContent='Solicitud registrada';
    const code=document.createElement('strong');code.textContent=response.reference;
    const desc=document.createElement('p');desc.textContent=response.message;
-   const back=document.createElement('p');back.textContent='Guarda tu código para hacer seguimiento con nuestro equipo.';
-   $('success').replaceChildren(title,code,desc,back);$('success').hidden=false;
+   const details=document.createElement('p');details.textContent='Paquete: Medellín Esencial 4 días / 3 noches · '+
+     bundle.arrival+' al '+bundle.checkout+' · '+total+' viajeros · '+bundle.origin+' → MDE';
+   const estimate=document.createElement('p');estimate.textContent=
+     'Subtotal orientativo registrado: US
+  }).withFailureHandler(err=>{
+   btn.disabled=false;btn.textContent='Enviar solicitud de mi viaje';
+   $('error').textContent=String(err?.message||'Error al registrar la solicitud.').slice(0,200);
+   $('error').hidden=false;
+  }).submitTripRequest(payload);
+ });
+})();
+</script>
+</body></html>+Number(response.estimatedSubtotal||0).toFixed(2)+
+     '. Pendiente de validar tarifas y servicios.';
+   const back=document.createElement('p');back.textContent='Guarda tu código para dar seguimiento. Este comprobante interno no equivale a un boleto ni a una reserva hotelera.';
+   const print=document.createElement('button');print.type='button';print.textContent='Imprimir comprobante de solicitud';
+   print.addEventListener('click',()=>window.print());
+   $('success').replaceChildren(title,code,details,estimate,desc,back,print);$('success').hidden=false;
   }).withFailureHandler(err=>{
    btn.disabled=false;btn.textContent='Enviar solicitud de mi viaje';
    $('error').textContent=String(err?.message||'Error al registrar la solicitud.').slice(0,200);
