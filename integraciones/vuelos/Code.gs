@@ -410,7 +410,7 @@ function submitFlightRequest(p) {
     // Values from client are UNVERIFIED and never constitute a price agreement.
     var observed=Number(p.observedPrice);
     var dayLead=Math.round((toUtcDay_(departure)-dayUTC)/86400000);
-    var rate=dayLead<=44?0.10:dayLead<=60?0.05:dayLead<=90?0:
+    var rate=dayLead<=30?0.10:dayLead<=45?0.05:dayLead<=90?0:
       dayLead<=180?-0.05:dayLead<=270?-0.10:-0.15;
     var estimated=Number.isFinite(observed)&&observed>0&&observed<100000?
       Math.round(observed*(1+rate)*100)/100:"NO VERIFICADO";
