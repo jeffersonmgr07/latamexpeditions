@@ -3,6 +3,12 @@
 (() => {
  const form=document.getElementById('packageFlightBundle');
  if(!form)return;
+ const origins={'Perú':'LIM','Colombia':'BOG','Argentina':'EZE','Chile':'SCL','México':'MEX','Brasil':'GRU','Ecuador':'UIO'};
+ let country='';try{country=localStorage.getItem('latam_country')||''}catch(_){}
+ if(origins[country]&&[...form.elements.origin.options].some(o=>o.value===origins[country]))form.elements.origin.value=origins[country];
+ const params=new URLSearchParams(location.search);
+ if([...form.elements.origin.options].some(o=>o.value===params.get('origen')))form.elements.origin.value=params.get('origen');
+ if(/^\d{4}-\d{2}-\d{2}$/.test(params.get('fecha')||''))form.elements.arrival.value=params.get('fecha');
  const arrival=document.getElementById('packageArrivalDate');
  const back=document.getElementById('packageCalculatedReturn');
  const hidden=document.getElementById('packageFlightReturn');
@@ -18,6 +24,7 @@
    back.value=hidden.value=iso(d);
  }
  arrival.addEventListener('change',update);
+ update();
  form.addEventListener('submit',e=>{
    update();
    if(!hidden.value||arrival.value<arrival.min){e.preventDefault();arrival.setCustomValidity('Selecciona una llegada válida.');arrival.reportValidity();}
