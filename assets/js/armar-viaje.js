@@ -62,7 +62,9 @@
    .reduce((sum,a)=>sum+a.pricePerPerson*state.adults,0);
  }
  function grandTotal(){return Math.round((packageCost()+flightCost()+activitiesCost())*100)/100}
- function needsQuote(){return !!state.customHotel||state.activities.length>0&&state.children>0}
+ function needsQuote(){return !!state.customHotel||
+  (state.activities.length>0&&state.children>0)||
+  (state.withFlights&&state.selectedFlight&&state.flightBack>days(state.arrival,state.package.nights));}
  function note(parent,title,value){
   const line=div('lx-summary-line');
   line.append(txt('span',title),txt('strong',value));
@@ -235,7 +237,9 @@
    if(!result?.ok)throw Error(result?.message||'No se encontraron tarifas para estas fechas.');
    state.flightOffers=(Array.isArray(result.offers)?result.offers:[]).filter(o=>
     Number(o.price)>0&&o.departure===state.flightOut&&o.returnDate===state.flightBack&&o.outbound&&o.inbound&&
-    Number(o.partyAdults)===state.adults&&Number(o.partyChildren)===state.children).slice(0,30);
+    Number(o.partyAdults)===state.adults&&Number(o.partyChildren)===state.children&&
+    (!dateOK(String(last(o.outbound)?.to?.time||'').slice(0,10))||
+      String(last(o.outbound).to.time).slice(0,10)===state.arrival)).slice(0,30);
    flightSearchKey=q;state.flightSearched=true;
    setStatus('lxFlightStatus',state.flightOffers.length?
     'Encontramos '+state.flightOffers.length+' combinaciones consultadas. Elige ida y regreso.':
@@ -340,7 +344,9 @@
    reviewLine(host,a.name,money(a.pricePerPerson*state.adults),'Para '+state.adults+' adultos'+(state.children?' · Menores pendientes':''))
   );
   reviewLine(host,'SUBTOTAL ORIENTATIVO',money(grandTotal())+(needsQuote()?' + pendientes':''),'No incluye componentes aún sin validar');
-  $('lxReviewWarnings').textContent='Antes de cobrar, confirmaremos vuelos, horarios, habitación y actividades. El resumen es una solicitud, no un boleto ni una reserva definitiva.';
+  $('lxReviewWarnings').textContent='Antes de cobrar, confirmaremos vuelos, horarios, habitación y actividades. El resumen es una solicitud, no un boleto ni una reserva definitiva.'+
+    (state.withFlights&&state.selectedFlight&&state.flightBack>days(state.arrival,state.package.nights)?
+      ' Atención: el vuelo de regreso es posterior a la salida del hotel. Una noche adicional podría ser necesaria y no está incluida.':'');
   $('lxContinueRequest').disabled=!$('lxAccept').checked;
  }
  function requestPayload(){
