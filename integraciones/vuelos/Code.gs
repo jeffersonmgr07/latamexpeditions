@@ -18,6 +18,21 @@ var CACHE_SECONDS = 900;
 
 function doGet(e) {
   var p = (e && e.parameter) || {};
+  if (p.mode === "package_request") {
+    try {
+      var request=String(p.payload||"");
+      if(request.length>4500)throw new Error("Solicitud demasiado larga.");
+      var context=sanitizeUniversalPackage_(JSON.parse(request));
+      var page=HtmlService.createTemplateFromFile("UniversalRequest");
+      page.packageContext=JSON.stringify(encodeURIComponent(JSON.stringify(context)));
+      return page.evaluate().setTitle("Datos de pasajeros | Latam Expeditions")
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+    }catch(ex) {
+      console.error("Invalid universal package request");
+      return HtmlService.createHtmlOutput("<p>La solicitud de paquete no es válida. Regresa al sitio para actualizarla.</p>")
+        .setTitle("Solicitud inválida");
+    }
+  }
   if (p.mode === "bundle") {
     try {
       var request=String(p.payload||"");
@@ -62,7 +77,8 @@ function doGet(e) {
   }
   var output;
   try {
-    output = p.mode === "hotels" ? searchBundleHotels_(p) : fetchFlightData_(p);
+    output = p.mode === "package_hotels" ? searchUniversalHotels_(p) :
+      p.mode === "hotels" ? searchBundleHotels_(p) : fetchFlightData_(p);
   } catch (err) {
     output = { ok:false, error:"service_error", message:"No pudimos consultar tarifas. Intenta de nuevo o solicita una cotización." };
     console.error("Flight lookup failed: " + String(err && err.message || err).slice(0,200));
@@ -648,5 +664,279 @@ function submitTripRequest(p){
     return {ok:true,reference:id,status:"PENDIENTE_DE_VALIDACION",
       estimatedSubtotal:estimate,
       message:"Recibimos tu solicitud. Te enviaremos disponibilidad, condiciones y un enlace de pago después de verificarlas. Este código no es una reserva aérea ni hotelera."};
+  }finally{lock.releaseLock();}
+}
+
+
+/* === Universal package services: catalogue of 37 live site products ===
+ * Catalog is the public, operator-maintained GitHub data, NOT client-supplied prices.
+ * No PNR, hotel booking, ticket or charge is created here.
+ */
+function universalCatalog_(){
+  var cache=CacheService.getScriptCache();
+  // CacheService limit per value 100 KB, so don't cache the complete catalogue.
+  var resp=UrlFetchApp.fetch(
+    "https://raw.githubusercontent.com/jeffersonmgr07/latamexpeditions/main/assets/data/catalog.json",
+    {muteHttpExceptions:true,followRedirects:true});
+  if(resp.getResponseCode()!==200)throw new Error("No fue posible verificar el catálogo de paquetes.");
+  var body=JSON.parse(resp.getContentText());
+  if(!Array.isArray(body.packages))throw new Error("Catálogo inválido.");
+  return body;
+}
+function universalPackage_(slug){
+  if(!/^[a-z0-9-]{3,100}$/.test(String(slug||"")))throw Error("Paquete inválido.");
+  var cache=CacheService.getScriptCache();
+  var key="pkg_catalog_"+slug;
+  var found=cache.get(key);
+  if(found)return JSON.parse(found);
+  var all=universalCatalog_();
+  var p=all.packages.filter(function(x){return x.slug===slug;})[0];
+  if(!p||!Array.isArray(p.hotelTiers)||!p.hotelTiers.length)throw Error("Paquete no encontrado.");
+  var item={package:p,experiences:all.experiences||[]};
+  try{cache.put(key,JSON.stringify(item),600)}catch(e){}
+  return item;
+}
+function universalNights_(p){
+  var match=String(p.nights||"").match(/(\d+)D\s*\/\s*(\d+)N/i);
+  if(!match)throw Error("Paquete sin duración verificable.");
+  var n=Number(match[2]);
+  if(n<1||n>30)throw Error("Noches inválidas.");
+  return n;
+}
+function universalExtras_(data,ids){
+  var p=data.package;
+  var region=String(p.region||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+  var allowed=(data.experiences||[]).filter(function(e){
+    if(!e.slug||e.country!==p.country||!(Number(e.priceFrom)>0))return false;
+    var r=String(e.region||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+    if(!r||region.indexOf(r)<0)return false;
+    var included=[p.title].concat(p.includes||[],p.itinerary||[]).join(" ").normalize("NFD")
+      .replace(/[\u0300-\u036f]/g,"").toLowerCase();
+    var map={"machu-picchu-full-day":["machu picchu"],"valle-sagrado-clasico":["valle sagrado"],
+      "city-tour-medellin":["city tour"],"comuna-13-medellin":["comuna 13"],
+      "guatape-piedra-penol":["guatape"],"montana-colores":["vinicunca","montana de colores"]};
+    return !(map[e.slug]||[]).some(function(text){return included.indexOf(text)>=0;});
+  }).slice(0,6);
+  if(ids.length>6||ids.some(function(id){return !allowed.some(function(e){return e.slug===id;});})){
+    throw Error("Actividad no válida para el paquete.");
+  }
+  return allowed.filter(function(e){return ids.indexOf(e.slug)>=0;});
+}
+function sanitizeUniversalPackage_(p){
+  if(!p||typeof p!=="object")throw Error("Datos inválidos.");
+  var data=universalPackage_(String(p.packageId||""));
+  var pack=data.package;
+  var nights=universalNights_(pack);
+  var adults=Number(p.adults),children=Number(p.children);
+  var arr=String(p.arrival||""),check=String(p.checkout||"");
+  if(!Number.isInteger(adults)||adults<1||adults>9||
+     !Number.isInteger(children)||children<0||children>6||adults+children>9||
+     !validFutureDate_(arr)||!validFutureDate_(check)||
+     toUtcDay_(check)-toUtcDay_(arr)!==nights*86400000)throw Error("Verifica fechas y viajeros.");
+  var utcToday=Date.UTC(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate());
+  if(toUtcDay_(arr)-utcToday<2*86400000)throw Error("La fecha de llegada debe ser futura.");
+  var origin=String(p.origin||"").toUpperCase(),dest=String(p.destination||"").toUpperCase(),
+    back=String(p.returnAirport||"").toUpperCase();
+  if(FLIGHT_AIRPORTS.indexOf(origin)<0||FLIGHT_AIRPORTS.indexOf(dest)<0||
+     FLIGHT_AIRPORTS.indexOf(back)<0)throw Error("Aeropuerto inválido.");
+  var tier=String(p.hotelTier||"");
+  var chosen=pack.hotelTiers.filter(function(t){return t.code===tier;})[0];
+  if(!chosen)throw Error("Categoría hotelera no válida.");
+  var custom=String(p.hotelAlternative||"").trim().slice(0,100);
+  if(custom&&!/^[\p{L}\p{N} .,'&()\-]{3,100}$/u.test(custom))throw Error("Hotel alternativo inválido.");
+  var ids=Array.isArray(p.activityIds)?p.activityIds.map(String):[];
+  var extras=universalExtras_(data,ids);
+  var bag=String(p.baggage||"default");
+  if(["default","carry","checked","both"].indexOf(bag)<0)bag="default";
+  var flight=null;
+  if(p.flight){
+    var fromDate=String(p.outDate||""),backDate=String(p.backDate||"");
+    if(!validFutureDate_(fromDate)||!validFutureDate_(backDate)||fromDate>backDate||
+       toUtcDay_(fromDate)-utcToday<2*86400000||fromDate>check||
+       backDate<arr||backDate>daysAfterTrip_(check,7))throw Error("Fechas aéreas no válidas.");
+    var price=Number(p.flight.priceObserved);
+    if(!(price>0&&price<1000000))throw Error("Tarifa aérea inválida.");
+    var mode=String(p.flight.mode||"");
+    if(["roundtrip","openjaw"].indexOf(mode)<0)throw Error("Tipo de vuelo no válido.");
+    if(mode==="roundtrip"&&dest!==back)throw Error("Ruta de vuelos inconsistente.");
+    function segments(a){
+      if(!Array.isArray(a)||!a.length||a.length>5)throw Error("Tramos aéreos incompletos.");
+      return a.map(function(s){
+        return {airline:String(s.airline||"").slice(0,55),
+          flightNumber:String(s.flightNumber||"").slice(0,20),
+          from:{code:String(s.from&&s.from.code||"").slice(0,3),
+            time:String(s.from&&s.from.time||"").slice(0,26)},
+          to:{code:String(s.to&&s.to.code||"").slice(0,3),
+            time:String(s.to&&s.to.time||"").slice(0,26)}};
+      });
+    }
+    var outward=segments(p.flight.outbound),inward=segments(p.flight.inbound);
+    if(outward[0].from.code!==origin||outward[outward.length-1].to.code!==dest||
+       inward[0].from.code!==back||inward[inward.length-1].to.code!==origin){
+      throw Error("Las rutas aéreas no coinciden.");
+    }
+    flight={priceObserved:price,mode:mode,fromDate:fromDate,backDate:backDate,
+      outbound:outward,inbound:inward,
+      verification:"Tarifa no comprobada en origen servidor. Verificar antes de cobrar."};
+  }
+  // Never use price, rate or delta supplied from the browser to compute a binding quote.
+  return {packageId:pack.slug,packageName:pack.title,country:pack.country,region:pack.region,
+    nights:nights,origin:origin,destination:dest,returnAirport:back,
+    arrival:arr,checkout:check,adults:adults,children:children,
+    hotelTier:tier,hotelAlternative:custom,
+    activities:extras.map(function(e){return {id:e.slug,name:e.title,rate:Number(e.priceFrom)};}),
+    flight:flight,baggage:bag,unverified:true};
+}
+function universalRate_(pack,tier,travellers){
+  var field=travellers===1?"single":travellers===2?"double":travellers===3?"triple":"family";
+  var rate=Number(tier.occupancyPrices&&tier.occupancyPrices[field]||tier.pricePerPerson||pack.priceFrom);
+  if(!(rate>0&&rate<100000))throw Error("Tarifa base no válida.");
+  return rate;
+}
+function universalPrice_(quote){
+  var pack=universalPackage_(quote.packageId).package;
+  var tier=pack.hotelTiers.filter(function(t){return t.code===quote.hotelTier;})[0];
+  var base=Math.round(universalRate_(pack,tier,quote.adults+quote.children)*quote.adults*100)/100;
+  var extras=quote.activities.reduce(function(s,e){return s+e.rate*quote.adults;},0);
+  var flight=0;
+  if(quote.flight){
+    var today=Date.UTC(new Date().getUTCFullYear(),new Date().getUTCMonth(),new Date().getUTCDate());
+    var days=Math.round((toUtcDay_(quote.flight.fromDate)-today)/86400000);
+    var factor=days<=30?1.10:days<=45?1.05:days<=90?1:days<=180?.95:days<=270?.90:.85;
+    flight=Math.round(quote.flight.priceObserved*factor*100)/100;
+  }
+  return {base:base,activities:Math.round(extras*100)/100,flight:flight,
+    subtotal:Math.round((base+extras+flight)*100)/100,
+    pendingExtras:quote.children>0||!!quote.hotelAlternative||quote.baggage!=="default"};
+}
+function normalizeHotelResult_(item){
+  function val(p){
+    if(typeof p==="number")return p>0&&p<100000?p:null;
+    var n=Number(p&&p.extracted_lowest||p&&p.extracted_total||p&&p.extracted_price||0);
+    return n>0&&n<100000?n:null;
+  }
+  var images=[item.thumbnail,item.image,
+    item.images&&item.images[0]&&(item.images[0].thumbnail||item.images[0].original_image)];
+  var picture=images.filter(function(u){return typeof u==="string"&&
+    /^https:\/\/[^<>"'\s]{8,600}$/.test(u);})[0]||"";
+  var stars=Number(item.overall_rating||item.rating||0);
+  return {name:String(item.name||"").slice(0,100),
+    rating:stars>=1&&stars<=5?stars:null,
+    thumbnail:picture,totalRate:val(item.total_rate),nightlyRate:val(item.rate_per_night)};
+}
+function queryUniversalHotels_(search,dates,adults,key){
+  var p={engine:"google_hotels",q:search,hl:"es",gl:"pe",currency:"USD",
+    check_in_date:dates[0],check_out_date:dates[1],adults:String(adults),api_key:key};
+  var qs=Object.keys(p).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(p[k]);}).join("&");
+  var response=UrlFetchApp.fetch("https://serpapi.com/search.json?"+qs,
+    {muteHttpExceptions:true,followRedirects:true});
+  if(response.getResponseCode()!==200)throw Error("Servicio hotelero HTTP "+response.getResponseCode());
+  var body=JSON.parse(response.getContentText());
+  if(body.error)throw Error("El proveedor hotelero no devolvió tarifas.");
+  return (Array.isArray(body.properties)?body.properties:[]).filter(function(h){return h&&h.name;})
+    .map(normalizeHotelResult_);
+}
+function searchUniversalHotels_(p){
+  var slug=String(p.package||"");
+  var data=universalPackage_(slug),pack=data.package;
+  var arr=String(p.arrival||""),checkout=String(p.checkout||"");
+  var adults=Number(p.adults),children=Number(p.children);
+  if(!validFutureDate_(arr)||!validFutureDate_(checkout)||
+     toUtcDay_(checkout)-toUtcDay_(arr)!==universalNights_(pack)*86400000||
+     !Number.isInteger(adults)||adults<1||adults>9||
+     !Number.isInteger(children)||children<0||children>6||adults+children>9){
+    return {ok:false,message:"Fechas y ocupación hotelera inválidas."};
+  }
+  var key=PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
+  if(!key)return {ok:false,message:"La cuenta de SerpApi no está configurada."};
+  var region=String(pack.region||pack.country).split(/\s+\/\s+|\s+y\s+|,/)[0].trim();
+  var multicity=/\s\/\s|\sy\s/i.test(pack.region||"")&&
+    !/medellín y antioquia|cali y valle del cauca|bogotá y boyacá/i.test(String(pack.region||""));
+  if(multicity)return {ok:false,message:"Este itinerario tiene varios destinos; cotiza cada noche por separado."};
+  var search=region+", "+pack.country;
+  var baseHotels=pack.hotelTiers.reduce(function(out,t){return out.concat(t.hotels||[]);},[]);
+  var wanted=String(p.baseHotel||"");
+  if(baseHotels.indexOf(wanted)<0)wanted=String(pack.hotelTiers[0].hotels&&pack.hotelTiers[0].hotels[0]||"");
+  var ck="unihotel_"+Utilities.base64EncodeWebSafe(Utilities.computeDigest(
+    Utilities.DigestAlgorithm.SHA_256,[slug,arr,checkout,adults,children,wanted].join("|"))).slice(0,48);
+  var cache=CacheService.getScriptCache(),stored=cache.get(ck);
+  if(stored)return JSON.parse(stored);
+  var hotels=queryUniversalHotels_("hoteles en "+search,[arr,checkout],adults,key).slice(0,15);
+  function equalName_(a,b){
+    var clean=function(t){return String(t||"").toLowerCase().normalize("NFD")
+      .replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]/g,"");};
+    return clean(a)===clean(b);
+  }
+  var base=hotels.filter(function(h){return equalName_(h.name,wanted);})[0];
+  if(!base||!base.totalRate){
+    var baselineResults=queryUniversalHotels_(wanted+" "+search,[arr,checkout],adults,key);
+    base=baselineResults.filter(function(h){return equalName_(h.name,wanted);})[0]||null;
+  }
+  var baseline=base&&base.totalRate?base.totalRate:null;
+  var result={ok:true,source:"Google Hotels vía SerpApi",currency:"USD",
+    comparable:children===0&&adults<=2&&!!baseline,
+    baselineTotal:baseline,baseHotel:wanted,roomsVerified:false,
+    hotels:hotels.slice(0,12)};
+  try{cache.put(ck,JSON.stringify(result),600)}catch(e){}
+  return result;
+}
+function submitUniversalPackageRequest(p){
+  if(!p||p.honeypot)throw Error("Solicitud inválida.");
+  if(p.accepted!==true)throw Error("Debes aceptar el uso de datos para gestionar la solicitud.");
+  var quote=sanitizeUniversalPackage_(p.bundle);
+  var contact=String(p.contact||"").trim().slice(0,150),
+    email=String(p.email||"").trim().slice(0,150),
+    phone=String(p.phone||"").replace(/[^\d+\s()-]/g,"").slice(0,30);
+  if(contact.length<3||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||
+     phone.replace(/\D/g,"").length<7)throw Error("Contacto inválido.");
+  var travellers=p.passengers;
+  if(!Array.isArray(travellers)||travellers.length!==quote.adults+quote.children){
+    throw Error("Faltan datos de pasajeros.");
+  }
+  var docs=["PASSPORT","DNI","CE","OTHER"];
+  var people=travellers.map(function(t){
+    var a=String(t.firstName||"").trim().slice(0,100),
+      b=String(t.lastName||"").trim().slice(0,100),
+      type=String(t.docType||"").toUpperCase(),
+      number=String(t.docNumber||"").trim().slice(0,35),
+      born=String(t.birthDate||"");
+    if(a.length<2||b.length<2||docs.indexOf(type)<0||
+       !/^[A-Za-z0-9 .-]{4,35}$/.test(number)||
+       !/^\d{4}-\d\d-\d\d$/.test(born)||!Number.isFinite(toUtcDay_(born))||
+       toUtcDay_(born)>=Date.now())throw Error("Verifica los datos de cada pasajero.");
+    return {firstName:a,lastName:b,docType:type,docNumber:number,birthDate:born};
+  });
+  var sheetId=PropertiesService.getScriptProperties().getProperty("TRIP_REQUEST_SHEET_ID");
+  if(!sheetId)throw Error("Ejecuta initTripRequestsSheet una vez en Apps Script.");
+  var lock=LockService.getScriptLock();
+  if(!lock.tryLock(10000))throw Error("Intenta de nuevo, el servidor está ocupado.");
+  try {
+    var digest=Utilities.base64EncodeWebSafe(Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
+      quote.packageId+"|"+quote.arrival+"|"+email.toLowerCase()));
+    var cache=CacheService.getScriptCache(),idKey="unirequest_"+digest.slice(0,40);
+    if(cache.get(idKey))throw Error("Se recibió una solicitud similar de este correo recientemente.");
+    var price=universalPrice_(quote);
+    var code="LXP-"+Utilities.formatDate(new Date(),"Etc/UTC","yyyyMMdd")+"-"+
+      Utilities.getUuid().replace(/-/g,"").slice(0,8).toUpperCase();
+    var row=[new Date(),code,"SOLICITUD SIN PAGO NI BILLETE",quote.packageName+" ("+quote.packageId+")",
+      quote.arrival,quote.checkout,quote.origin,quote.adults,quote.children,quote.hotelTier,
+      quote.hotelAlternative,quote.activities.map(function(e){return e.name;}).join(" / "),
+      JSON.stringify(quote.flight||{}),price.base,price.activities,price.flight,price.subtotal,
+      contact,email,phone,JSON.stringify(people),
+      "Permiso de tratamiento y aceptación de solicitud pendiente"];
+    row=row.map(function(v){return typeof v==="string"&&/^[=+\-@]/.test(v)?"'"+v:v});
+    SpreadsheetApp.openById(sheetId).getSheetByName("Solicitudes de paquetes").appendRow(row);
+    cache.put(idKey,code,600);
+    var notify=PropertiesService.getScriptProperties().getProperty("TRIP_REQUEST_NOTIFY_EMAIL");
+    if(notify&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(notify)){
+      try{MailApp.sendEmail(notify,"Nuevo paquete "+code,
+        "Solicitud "+code+"\nPaquete: "+quote.packageName+"\nLlegada: "+quote.arrival+
+        "\nConsultar pasajeros en hoja privada. Sin cobro ni ticket confirmado.");}
+      catch(e){console.error("No notification email");}
+    }
+    return {ok:true,reference:code,status:"PENDIENTE",
+      packageName:quote.packageName,estimatedSubtotal:price.subtotal,
+      pending:price.pendingExtras,
+      message:"Solicitud recibida. Nuestro equipo confirmará los servicios y te informará cómo pagar. No es un boleto ni una reserva emitida."};
   }finally{lock.releaseLock();}
 }
