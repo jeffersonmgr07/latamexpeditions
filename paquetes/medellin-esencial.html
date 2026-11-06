@@ -192,40 +192,6 @@
             <div class="fact-row"><span data-en="Hotels">Hoteles</span><strong data-en="3 categories to choose from">3 categorías a elegir</strong></div>
             <div class="fact-row"><span data-en="Flights">Vuelos</span><strong data-en="Quoted separately unless indicated">Cotizables aparte salvo indicación</strong></div>
 
-            <section class="package-flights-box" aria-labelledby="packageFlightsTitle">
-              <h3 id="packageFlightsTitle"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Arma tu viaje completo</h3>
-              <p>Medellín Esencial · 4 días / 3 noches · desde US$299 por persona en habitación doble. Consulta el viaje completo.</p>
-              <form id="packageFlightBundle" action="../arma-tu-viaje.html" method="get">
-                <div class="package-flights-fields">
-                  <label>Ciudad de salida
-                    <select name="origin" required>
-                      <option value="LIM" selected>Lima (LIM)</option><option value="CUZ">Cusco (CUZ)</option>
-                      <option value="AQP">Arequipa (AQP)</option><option value="BOG">Bogotá (BOG)</option>
-                      <option value="CLO">Cali (CLO)</option><option value="CTG">Cartagena (CTG)</option>
-                      <option value="UIO">Quito (UIO)</option><option value="SCL">Santiago (SCL)</option>
-                      <option value="MEX">Ciudad de México (MEX)</option>
-                    </select>
-                  </label>
-                  <label>Fecha de llegada prevista
-                    <input name="arrival" type="date" id="packageArrivalDate" required>
-                  </label>
-                  <label>Regreso estimado
-                    <input id="packageCalculatedReturn" type="date" readonly aria-label="Fecha de regreso calculada">
-                  </label>
-                  <label>Adultos
-                    <select name="adults"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option></select>
-                  </label>
-                </div>
-                <input type="hidden" name="destination" value="MDE">
-                <input type="hidden" name="trip" value="roundtrip">
-                <input type="hidden" name="return" id="packageFlightReturn">
-                <input type="hidden" name="children" value="0">
-                <input type="hidden" name="cabin" value="economy">
-                <input type="hidden" name="package" value="medellin-esencial">
-                <p class="package-flights-hint">Puedes mantener el paquete tal como está o añadir vuelos, cambiar de categoría de hotel y agregar actividades. Validaremos el precio antes del pago.</p>
-                <button class="btn-primary" type="submit"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Personalizar paquete, vuelos y hotel</button>
-              </form>
-            </section>
             <div class="cta-stack">
               <button type="button" class="btn-primary btn-book" data-book="medellin-esencial" data-book-kind="package" data-book-title="Medellín Esencial" data-book-price="299" data-book-country="Colombia" data-book-duration="4D/3N" data-book-tiers="[{&quot;code&quot;: &quot;3e&quot;, &quot;stars&quot;: &quot;3★&quot;, &quot;name&quot;: &quot;Turista&quot;, &quot;nameEn&quot;: &quot;Standard&quot;, &quot;pricePerPerson&quot;: 299, &quot;hotels&quot;: [&quot;ibis Medellín&quot;], &quot;occupancyPrices&quot;: {&quot;single&quot;: 419, &quot;double&quot;: 299, &quot;matrimonial&quot;: 299, &quot;triple&quot;: 289, &quot;family&quot;: 279}}, {&quot;code&quot;: &quot;4e&quot;, &quot;stars&quot;: &quot;4★&quot;, &quot;name&quot;: &quot;Primera&quot;, &quot;nameEn&quot;: &quot;Superior&quot;, &quot;pricePerPerson&quot;: 419, &quot;hotels&quot;: [&quot;Sites Hotel Medellín&quot;], &quot;occupancyPrices&quot;: {&quot;single&quot;: 589, &quot;double&quot;: 419, &quot;matrimonial&quot;: 419, &quot;triple&quot;: 399, &quot;family&quot;: 389}}, {&quot;code&quot;: &quot;5e&quot;, &quot;stars&quot;: &quot;5★&quot;, &quot;name&quot;: &quot;Lujo&quot;, &quot;nameEn&quot;: &quot;Luxury&quot;, &quot;pricePerPerson&quot;: 649, &quot;hotels&quot;: [&quot;Medellín Marriott Hotel&quot;], &quot;occupancyPrices&quot;: {&quot;single&quot;: 909, &quot;double&quot;: 649, &quot;matrimonial&quot;: 649, &quot;triple&quot;: 619, &quot;family&quot;: 599}}]" data-book-child-factor="0.70">Reservar ahora</button>
               <a class="btn-outline" href="https://wa.me/51906472060?text=Hola, quiero información sobre el paquete Medellín Esencial" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp" aria-hidden="true"></i> <span data-en="Ask on WhatsApp">Consultar por WhatsApp</span></a>
@@ -342,6 +308,5 @@
   <script src="../assets/js/main.js" defer></script>
   <script src="../assets/js/cuentas.js" defer></script>
 <script src="../assets/js/booking.js" defer></script>
-<script src="../assets/js/paquete-vuelos.js" defer></script>
 </body>
 </html>
