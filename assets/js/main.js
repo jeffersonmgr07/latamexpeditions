@@ -693,10 +693,19 @@
     link.href = '../assets/css/paquetes-personalizador.css';
     link.dataset.lxPersonalizerLoaded = '1';
     document.head.appendChild(link);
-    const script = document.createElement('script');
-    script.src = '../assets/js/paquetes-personalizador.js';
-    script.defer = true;
-    document.body.appendChild(script);
+    const src = document.createElement('script');
+    src.src = '../assets/js/vuelos-config.js';
+    src.onload = () => {
+      const sources = document.createElement('script');
+      sources.src = '../assets/js/paquetes-sources.js';
+      sources.onload = () => {
+        const app = document.createElement('script');
+        app.src = '../assets/js/paquetes-personalizador.js';
+        document.body.appendChild(app);
+      };
+      document.body.appendChild(sources);
+    };
+    document.body.appendChild(src);
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load, {once:true});
   else load();
