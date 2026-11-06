@@ -678,3 +678,26 @@
     document.addEventListener('DOMContentLoaded',initPeruNatureHeader,{once:true});
   }else initPeruNatureHeader();
 })();
+
+
+/* Carga la personalización integrada SOLO en fichas de paquetes.
+ * Mantiene cabecera, footer, estructura, idiomas y estilos actuales.
+ * No crea un cotizador externo ni modifica las páginas de experiencias.
+ */
+(() => {
+  if (!/\/paquetes\/[^/]+\.html$/i.test(location.pathname)) return;
+  const load = () => {
+    if (document.querySelector('[data-lx-personalizer-loaded]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '../assets/css/paquetes-personalizador.css';
+    link.dataset.lxPersonalizerLoaded = '1';
+    document.head.appendChild(link);
+    const script = document.createElement('script');
+    script.src = '../assets/js/paquetes-personalizador.js';
+    script.defer = true;
+    document.body.appendChild(script);
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load, {once:true});
+  else load();
+})();
