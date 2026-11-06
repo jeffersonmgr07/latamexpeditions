@@ -1,0 +1,102 @@
+<div class="lx-pkg-top">
+  <div class="lx-pkg-topbar">
+    <div class="lx-pkg-brand"><img src="../assets/img/logo-latam-expeditions.png" alt="Latam Expeditions"><span>Diseña tu viaje</span></div>
+    <button id="lxPkgClose" type="button" class="lx-pkg-close" aria-label="Cerrar">✕ Cerrar</button>
+  </div>
+  <div class="lx-pkg-steps" aria-label="Etapas del paquete">
+    <span data-step="1">Paquete</span>
+    <span data-step="2">Hotel</span>
+    <span data-step="3">Actividades</span>
+    <span data-step="4">Vuelos</span>
+    <span data-step="5">Resumen</span>
+  </div>
+</div>
+<div class="lx-pkg-inner">
+  <div class="lx-pkg-title"><h2 id="lxPkgTitle">Personaliza tu paquete</h2><p>Un solo viaje, todas tus elecciones.</p></div>
+  <div class="lx-pkg-columns">
+    <div class="lx-pkg-main">
+      <section class="lx-pkg-section lx-pkg-card" id="lxPkgSection0">
+        <h3>Tu paquete y fecha de salida</h3>
+        <p class="lx-pkg-help">Elige la llegada al destino. La fecha de regreso se calcula según el número de noches del paquete.</p>
+        <div class="lx-pkg-fields">
+          <label class="lx-pkg-field">Ciudad de partida <select id="lxPkgOrigin" required></select></label>
+          <label class="lx-pkg-field">Llegada al destino <input type="date" id="lxPkgArrival" required></label>
+          <label class="lx-pkg-field">Regreso calculado <input type="date" id="lxPkgCheckout" readonly></label>
+          <label class="lx-pkg-field">Adultos <select id="lxPkgAdults"></select></label>
+          <label class="lx-pkg-field">Niños (2 a 11 años) <select id="lxPkgChildren"></select></label>
+        </div>
+        <div id="lxPkgIncludes" class="lx-pkg-option-include"></div>
+        <p class="lx-pkg-progress" id="lxPkgBasicStatus" aria-live="polite"></p>
+      </section>
+      <section class="lx-pkg-section lx-pkg-card" id="lxPkgSection1" hidden>
+        <h3>Elige o mejora tu hotel</h3>
+        <p class="lx-pkg-help">El paquete incluye hotel en su categoría original. Selecciona otra categoría para ver la diferencia publicada.</p>
+        <div id="lxPkgHotelTiers" class="lx-pkg-options"></div>
+        <div class="lx-pkg-option-include">
+          <strong>Otros hoteles · Google Hotels</strong>
+          <p>Consulta fotos, calificaciones y precios referenciales. Si encontramos tarifas comparables del hotel incluido y el alternativo, mostraremos una diferencia estimada.</p>
+          <button id="lxPkgSearchHotels" type="button" class="lx-pkg-btn lx-pkg-btn--light">Buscar otros hoteles</button>
+          <p class="lx-pkg-progress" id="lxPkgHotelStatus" aria-live="polite"></p>
+          <div id="lxPkgHotelAlternatives" class="lx-pkg-options"></div>
+        </div>
+      </section>
+      <section class="lx-pkg-section lx-pkg-card" id="lxPkgSection2" hidden>
+        <h3>Actividades y mejoras</h3>
+        <p class="lx-pkg-help">Las excursiones que forman parte del itinerario no se cobran de nuevo. Selecciona experiencias adicionales compatibles.</p>
+        <div id="lxPkgExtras"></div>
+        <p class="lx-pkg-help">Upgrades no tarifados (por ejemplo, tren panorámico o cambio especial de habitación) se cotizarán antes de agregarse al pago.</p>
+      </section>
+      <section class="lx-pkg-section lx-pkg-card" id="lxPkgSection3" hidden>
+        <h3>Agrega vuelos si lo deseas</h3>
+        <label class="lx-pkg-switch"><input type="checkbox" id="lxPkgWantFlights"> Quiero agregar vuelos a mi paquete</label>
+        <div id="lxPkgFlightInterface" hidden>
+          <div class="lx-pkg-fields">
+            <label class="lx-pkg-field">Aeropuerto de llegada <select id="lxPkgFlightDestination"></select></label>
+            <label class="lx-pkg-field">Aeropuerto desde el que regresas <select id="lxPkgFlightReturnOrigin"></select><small>Puede ser distinto si visitas varias ciudades.</small></label>
+            <label class="lx-pkg-field">Fecha de vuelo de ida <input id="lxPkgOutDate" type="date"></label>
+            <label class="lx-pkg-field">Fecha de vuelo de regreso <input id="lxPkgBackDate" type="date"></label>
+            <label class="lx-pkg-field">Equipaje <select id="lxPkgBag">
+              <option value="default">El de la tarifa consultada (por verificar)</option>
+              <option value="carry">Solicitar equipaje de cabina</option>
+              <option value="checked">Solicitar maleta facturada</option>
+              <option value="both">Cabina y maleta facturada</option>
+            </select><small>Si solicitas maletas adicionales, su costo se cotizará aparte.</small></label>
+          </div>
+          <p class="lx-pkg-help">Vuelos con escala, horarios y aerolínea se toman de Google Flights vía SerpApi. No se reservan asientos durante la consulta.</p>
+          <button id="lxPkgFindFlights" class="lx-pkg-btn lx-pkg-btn--light" type="button">Buscar vuelos para estas fechas</button>
+          <p id="lxPkgFlightStatus" class="lx-pkg-progress" aria-live="polite"></p>
+          <div id="lxPkgFlightOptions" class="lx-pkg-options"></div>
+          <div id="lxPkgFlightReturns" class="lx-pkg-options"></div>
+        </div>
+      </section>
+      <section class="lx-pkg-section lx-pkg-card" id="lxPkgSection4" hidden>
+        <h3>Resumen de tu viaje</h3>
+        <p class="lx-pkg-help">Todos los precios son orientativos y deben verificarse antes de ofrecerte el cobro. Ningún billete ni reserva hotelera ha sido emitido.</p>
+        <div id="lxPkgReview" class="lx-pkg-summary-table"></div>
+        <div id="lxPkgWarnings" class="lx-pkg-option-include"></div>
+        <label class="lx-pkg-check"><input id="lxPkgAccept" type="checkbox"> Entiendo que se trata de una solicitud de reserva, no de un billete emitido. Acepto enviar mis datos exclusivamente para gestionar esta solicitud y su cotización final.</label>
+        <button id="lxPkgPassengers" class="lx-pkg-btn lx-pkg-btn--primary" type="button" disabled>Continuar con datos de pasajeros</button>
+        <div id="lxPkgRequestBlock" hidden>
+          <p id="lxPkgRequestStatus" class="lx-pkg-progress" aria-live="polite"></p>
+          <iframe id="lxPkgRequestFrame" class="lx-pkg-frame" title="Registro privado de viajeros" referrerpolicy="no-referrer"></iframe>
+        </div>
+      </section>
+      <div class="lx-pkg-nextbar">
+        <button id="lxPkgPrev" class="lx-pkg-btn lx-pkg-btn--light" type="button" hidden>← Atrás</button>
+        <button id="lxPkgNext" class="lx-pkg-btn lx-pkg-btn--primary lx-pkg-next" type="button">Continuar →</button>
+      </div>
+    </div>
+    <aside class="lx-pkg-summary" aria-label="Resumen del paquete">
+      <img id="lxPkgPhoto" alt="">
+      <div class="lx-pkg-summary__body">
+        <small id="lxPkgCurrent"></small>
+        <h3 id="lxPkgSummaryTitle"></h3>
+        <p id="lxPkgSummaryDetails" class="lx-pkg-summary__detail"></p>
+        <div id="lxPkgSummaryLines"></div>
+        <div class="lx-pkg-total"><small>Subtotal preliminar</small><strong id="lxPkgTotal">—</strong></div>
+        <p id="lxPkgPer" class="lx-pkg-warn"></p>
+        <p class="lx-pkg-warn">Tarifas y disponibilidad sujetas a confirmación. Los suplementos pendientes no se cobran automáticamente.</p>
+      </div>
+    </aside>
+  </div>
+</div>
