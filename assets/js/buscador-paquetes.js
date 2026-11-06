@@ -24,7 +24,7 @@
   ['Riviera Maya','México',['riviera maya','cancun']]
  ];
  const airports={'Perú':'LIM','Colombia':'BOG','Argentina':'EZE','Brasil':'GRU','Chile':'SCL','Ecuador':'UIO','México':'MEX','Bolivia':'LPB'};
- let packageData=[],destinationData=[],highlight=0,visible=[],userChoseOrigin=false,adults=2,children=0;
+ let packageData=[],destinationData=[],highlight=0,visible=[],userChoseOrigin=false,updatingOrigin=false,adults=2,children=0;
  const destinationText=p=>qnorm([p.title,p.region,p.excerpt].join(' '));
  const matchesCity=(p,c)=>p.country===c[1]&&c[2].some(k=>destinationText(p).includes(k));
  const dateISO=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
@@ -76,8 +76,10 @@
   let country='';try{country=localStorage.getItem('latam_country')||localStorage.getItem('latam_auto_country')||''}catch(_){}
   country=country||document.documentElement.dataset.country||'';
   if(!userChoseOrigin&&airports[country]&&[...origin.options].some(o=>o.value===airports[country])){
+    updatingOrigin=true;
     origin.value=airports[country];
     origin.dispatchEvent(new Event('change',{bubbles:true}));
+    updatingOrigin=false;
   }
  }
  async function load(){
@@ -118,7 +120,7 @@
   else children=Math.max(0,Math.min(6,9-adults,children+delta));
   syncGuests();
  }));
- origin.addEventListener('change',e=>{if(e.isTrusted)userChoseOrigin=true});
+ origin.addEventListener('change',()=>{if(!updatingOrigin)userChoseOrigin=true});
  document.addEventListener('latam:countrychange',suggestion);
  document.addEventListener('keydown',e=>{if(e.key==='Escape')setGuestsPanel(false)});
  document.addEventListener('pointerdown',e=>{if(!e.target.closest('.lx-guest-field'))setGuestsPanel(false)});
@@ -127,7 +129,7 @@
   let selection=destinationData.find(d=>d.id===value.value);
   if(!selection){const exact=qnorm(query.value);selection=destinationData.find(d=>qnorm(d.name)===exact||qnorm(d.name+', '+d.country)===exact)}
   if(!selection){query.setCustomValidity('Selecciona un destino de la lista.');query.reportValidity();render(query.value);return}
-  if(!date.value||date.value<date.min){date.setCustomValidity('Selecciona una fecha futura válida.');document.querySelector('#searchDateStyledPicker')?.focus();return}
+  if(!date.value||date.value<date.min){date.setCustomValidity('Selecciona una fecha futura válida.');document.querySelector('#searchDateStyledPicker')?.focus();alert('Selecciona la fecha exacta de inicio del viaje.');return}
   date.setCustomValidity('');
   const params=new URLSearchParams();
   params.set('destino',countries[selection.country]);
