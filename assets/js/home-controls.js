@@ -3,7 +3,7 @@
  * los formularios y sus enlaces, pero nunca se invoca un picker nativo. */
 (() => {
  'use strict';
- const targets=['searchDestination','searchType','searchDate','homeFlightOrigin',
+ const targets=['searchOrigin','searchType','searchDate','homeFlightOrigin',
   'homeFlightDestination','homeFlightDeparture','homeFlightReturn',
   'homeFlightAdults','homeHotelDestination','homeHotelCheckin',
   'homeHotelCheckout','homeHotelGuests'];
