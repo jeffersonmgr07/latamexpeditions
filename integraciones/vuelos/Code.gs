@@ -692,7 +692,10 @@ function universalPackage_(slug){
   var all=universalCatalog_();
   var p=all.packages.filter(function(x){return x.slug===slug;})[0];
   if(!p||!Array.isArray(p.hotelTiers)||!p.hotelTiers.length)throw Error("Paquete no encontrado.");
-  var item={package:p,experiences:all.experiences||[]};
+  // Cache only experiences from the same country to fit Apps Script limits.
+  var item={package:p,experiences:(all.experiences||[]).filter(function(e){
+    return e.country===p.country;
+  })};
   try{cache.put(key,JSON.stringify(item),600)}catch(e){}
   return item;
 }
