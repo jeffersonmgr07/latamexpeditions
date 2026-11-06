@@ -291,7 +291,7 @@
     if(validSrc(h.thumbnail)){const image=document.createElement('img');image.src=h.thumbnail;image.alt='Fotografía de '+h.name;image.loading='lazy';image.referrerPolicy='no-referrer';picture.append(image)}
     else picture.append(txt('span','Sin fotografía','lx-muted'));
     const copy=div();copy.append(txt('strong',h.name),txt('p',h.rating?'Calificación '+h.rating:'Calificación no informada','lx-muted'));
-    const lower=h.totalRate?'Referencia total de hotel: '+money(h.totalRate):
+    const lower=h.totalRate?'Referencia total de hotel'+(state.children?' (adultos, niños por cotizar)':'')+': '+money(h.totalRate):
       h.nightlyRate?'Desde '+money(h.nightlyRate)+' / noche (referencia)':'Tarifa a consultar';
     copy.append(txt('p',lower,'lx-muted'),txt('span','Sustitución del hotel incluida en cotización personalizada','lx-pill'));
     flex.append(picture,copy);card.append(flex);
@@ -345,7 +345,7 @@
  }
  function requestPayload(){
   const tier=category();
-  const selected=state.selectedFlight;
+  const selected=state.withFlights?state.selectedFlight:null;
   const act=state.package.activities.filter(a=>state.activities.includes(a.id));
   return {
    version:1,packageId:state.package.id,origin:state.origin,destination:state.package.destinationAirport,
