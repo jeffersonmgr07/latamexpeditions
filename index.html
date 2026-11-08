@@ -42,6 +42,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="assets/css/main.css?v=featured-20261103-2" />
+  <link rel="stylesheet" href="assets/css/search-results-20261108.css?v=1" />
   <link rel="preload" as="image" href="assets/img/latam-hero-01.jpg" fetchpriority="high" />
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TravelAgency", "name": "Latam Expeditions", "url": "https://latamexpeditions.com", "description": "Agencia de viajes especializada en Latinoamérica: experiencias, paquetes flexibles y viajes a medida con asesoría local.", "email": "contact@latamexpeditions.com", "telephone": "+51906472060", "image": "https://latamexpeditions.com/assets/img/latam-hero-01.jpg", "areaServed": ["Perú", "Chile", "Ecuador", "Colombia", "Argentina", "Brasil", "Bolivia", "México", "Costa Rica", "Uruguay", "Venezuela"], "sameAs": []}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Latam Expeditions", "url": "https://latamexpeditions.com", "inLanguage": "es", "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://latamexpeditions.com/experiencias.html?destino={search_term_string}"}, "query-input": "required name=search_term_string"}}</script>
@@ -130,25 +131,67 @@
     <section class="home-search-shell" id="explorar" aria-label="Encuentra tu próximo viaje">
       <div class="home-search-shell__heading"><span class="home-search-shell__eyebrow">TU PRÓXIMO VIAJE EMPIEZA AQUÍ</span></div>
       <div class="home-service-panel" role="tabpanel" id="homePanelPackages" aria-labelledby="homeTabPackages" data-service-panel="paquetes">
-                <form class="search-card home-travel-form" id="tripSearchForm" role="search" aria-label="Buscador de viajes">
-          <div class="search-field">
-            <label for="searchDestination" >¿A dónde quieres viajar?</label>
-            <select id="searchDestination" name="destination"><option value="">Selecciona un destino</option><optgroup label="Países"><option value="peru">Perú</option><option value="chile">Chile</option><option value="ecuador">Ecuador</option><option value="colombia">Colombia</option><option value="argentina">Argentina</option><option value="brasil">Brasil</option><option value="bolivia">Bolivia</option><option value="mexico">México</option><option value="costa-rica">Costa Rica</option><option value="uruguay">Uruguay</option><option value="venezuela">Venezuela</option></optgroup><optgroup label="Destinos de Colombia"><option value="amazonas-leticia">Colombia · Amazonas / Leticia</option><option value="bahia-solano-nuqui">Colombia · Bahía Solano / Nuquí</option><option value="bogota">Colombia · Bogotá</option><option value="bogota-boyaca">Colombia · Bogotá / Boyacá</option><option value="bogota-cundinamarca">Colombia · Bogotá / Cundinamarca</option><option value="bogota-zipaquira">Colombia · Bogotá / Zipaquirá</option><option value="bogota-y-boyaca">Colombia · Bogotá y Boyacá</option><option value="bogota-y-medellin">Colombia · Bogotá y Medellín</option><option value="bogota-medellin-y-cartagena">Colombia · Bogotá, Medellín y Cartagena</option><option value="cali">Colombia · Cali</option><option value="cali-valle-del-cauca">Colombia · Cali / Valle del Cauca</option><option value="cali-y-eje-cafetero">Colombia · Cali y Eje Cafetero</option><option value="cali-y-valle-del-cauca">Colombia · Cali y Valle del Cauca</option><option value="cartagena">Colombia · Cartagena</option><option value="cartagena-baru">Colombia · Cartagena / Barú</option><option value="cartagena-islas-del-rosario">Colombia · Cartagena / Islas del Rosario</option><option value="cartagena-santa-catalina">Colombia · Cartagena / Santa Catalina</option><option value="cartagena-de-indias">Colombia · Cartagena de Indias</option><option value="cartagena-y-santa-marta">Colombia · Cartagena y Santa Marta</option><option value="choco-bahia-solano">Colombia · Chocó / Bahía Solano</option><option value="choco-nuqui">Colombia · Chocó / Nuquí</option><option value="eje-cafetero">Colombia · Eje Cafetero</option><option value="eje-cafetero-quindio">Colombia · Eje Cafetero / Quindío</option><option value="eje-cafetero-risaralda">Colombia · Eje Cafetero / Risaralda</option><option value="huila-san-agustin">Colombia · Huila / San Agustín</option><option value="huila-villavieja">Colombia · Huila / Villavieja</option><option value="medellin">Colombia · Medellín</option><option value="medellin-y-antioquia">Colombia · Medellín y Antioquia</option><option value="medellin-y-cartagena">Colombia · Medellín y Cartagena</option><option value="medellin-y-eje-cafetero">Colombia · Medellín y Eje Cafetero</option><option value="meta-la-macarena">Colombia · Meta / La Macarena</option><option value="san-andres">Colombia · San Andrés</option><option value="san-gil-santander">Colombia · San Gil / Santander</option><option value="santa-marta">Colombia · Santa Marta</option><option value="santa-marta-sierra-nevada">Colombia · Santa Marta / Sierra Nevada</option><option value="santa-marta-tayrona">Colombia · Santa Marta / Tayrona</option><option value="santander">Colombia · Santander</option><option value="sierra-nevada-de-santa-marta">Colombia · Sierra Nevada de Santa Marta</option></optgroup></select>
-          </div>
-          <div class="search-field">
-            <label for="searchType" data-i18n="search.type">Estilo de viaje</label>
-            <select id="searchType" name="travelType">
-              <option value="">Cualquier estilo</option><option value="aventura">Aventura</option><option value="playa">Playa y verano</option><option value="familia">En familia</option><option value="romantico">Romántico</option><option value="cultura">Cultura viva</option><option value="naturaleza">Naturaleza</option><option value="gastronomia">Gastronomía</option><option value="lujo">Lujo flexible</option>
+                <form class="search-card home-travel-form" id="tripSearchForm" role="search" aria-label="Buscar paquetes de viaje" novalidate>
+          <div class="search-field search-field--origin">
+            <label for="searchOrigin">Salida desde</label>
+            <select id="searchOrigin" name="origin" aria-label="Ciudad de salida">
+              <option value="LIM">Lima (LIM)</option>
+              <option value="BOG">Bogotá (BOG)</option>
+              <option value="MDE">Medellín (MDE)</option>
+              <option value="CUZ">Cusco (CUZ)</option>
+              <option value="EZE">Buenos Aires (EZE)</option>
+              <option value="SCL">Santiago (SCL)</option>
+              <option value="MEX">Ciudad de México (MEX)</option>
+              <option value="GRU">São Paulo (GRU)</option>
+              <option value="UIO">Quito (UIO)</option>
+              <option value="LPB">La Paz (LPB)</option>
+              <option value="CCS">Caracas (CCS)</option>
+              <option value="MVD">Montevideo (MVD)</option>
+              <option value="SJO">San José (SJO)</option>
+              <option value="">Sin definir</option>
             </select>
           </div>
-          <div class="search-field">
-            <label for="searchDate" >Fecha estimada</label>
-            <input type="date" id="searchDate" name="date" aria-label="Elige una fecha estimada" />
+          <div class="search-field search-field--destination">
+            <label for="searchDestination"><span class="lx-desktop-label">¿A dónde quieres viajar?</span><span class="lx-mobile-label">Destino</span></label>
+            <input type="search" id="searchDestination" name="destination" list="lxDestinationList" placeholder="Ciudad o país" autocomplete="off" required aria-label="Ciudad, destino o país" />
+            <datalist id="lxDestinationList"></datalist>
+          </div>
+          <div class="search-field search-field--date">
+            <label for="searchDate"><span class="lx-desktop-label">Fecha de llegada</span><span class="lx-mobile-label">Llegada</span></label>
+            <input type="date" id="searchDate" name="date" required aria-label="Fecha de llegada" />
+          </div>
+          <div class="search-field search-field--travelers">
+            <label id="searchTravelersLabel">Viajeros</label>
+            <button class="lx-traveler-trigger" type="button" id="searchTravelersTrigger" aria-labelledby="searchTravelersLabel searchTravelersSummary" aria-expanded="false" aria-controls="searchTravelersPanel">
+              <span id="searchTravelersSummary">2 adultos</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+            <div class="lx-traveler-panel" id="searchTravelersPanel" role="dialog" aria-label="Número de adultos y niños" hidden>
+              <div class="lx-traveler-row">
+                <div><strong>Adultos</strong><small>12 años o más</small></div>
+                <div class="lx-traveler-counter">
+                  <button type="button" data-guest-type="adults" data-guest-step="-1" aria-label="Quitar adulto">−</button>
+                  <output id="searchAdultsCount">2</output>
+                  <button type="button" data-guest-type="adults" data-guest-step="1" aria-label="Agregar adulto">+</button>
+                </div>
+              </div>
+              <div class="lx-traveler-row">
+                <div><strong>Niños</strong><small>Menores de 12 años</small></div>
+                <div class="lx-traveler-counter">
+                  <button type="button" data-guest-type="children" data-guest-step="-1" aria-label="Quitar niño">−</button>
+                  <output id="searchChildrenCount">0</output>
+                  <button type="button" data-guest-type="children" data-guest-step="1" aria-label="Agregar niño">+</button>
+                </div>
+              </div>
+              <button type="button" class="lx-traveler-apply" id="searchTravelersApply">Aplicar</button>
+            </div>
+            <input type="hidden" id="searchAdults" name="adults" value="2" />
+            <input type="hidden" id="searchChildren" name="children" value="0" />
           </div>
           <button class="search-btn" type="submit">
             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-            <span>Buscar viajes</span>
+            <span>Buscar</span>
           </button>
+          <p class="lx-search-error" id="lxPackageSearchError" role="alert" hidden></p>
         </form>
       </div>
       <div class="home-service-panel" role="tabpanel" id="homePanelOffers" aria-labelledby="homeTabOffers" data-service-panel="ofertas" hidden>
@@ -882,8 +925,8 @@
   </a>
 
   <script src="assets/js/main.js?v=home-tune-20261103" defer></script>
-  <script src="assets/js/inicio-redesign.js" defer></script>
-  <script src="assets/js/home-controls.js" defer></script>
+  <script src="assets/js/inicio-redesign.js?v=20261108" defer></script>
+  <script src="assets/js/home-controls.js?v=20261108" defer></script>
   <script src="assets/js/cuentas.js" defer></script>
 </body>
 </html>
