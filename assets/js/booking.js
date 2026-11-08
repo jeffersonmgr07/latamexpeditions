@@ -1120,7 +1120,7 @@
     date: '', departureTime: PRODUCT.departures[0] || '', adults: 2, children: 0,
     travelers: 2, tier: PRODUCT.tiers[0]?.code || null, occupancy: 'double',
     holder: {}, passengers: [], adultUnit: PRODUCT.price, childUnit: round2(PRODUCT.price * PRODUCT.childFactor),
-    total: 0, due: 0, mode: 'deposito', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour'
+    total: 0, due: 0, mode: 'deposito', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: ''
   };
 
   // Zona informativa, no una validación automática de cobertura.
@@ -1207,7 +1207,14 @@
     state.travelers = state.adults + state.children;
     state.adultUnit = round2(selectedAdultPrice());
     state.childUnit = round2(state.adultUnit * PRODUCT.childFactor);
-    state.total = round2(state.adults * state.adultUnit + state.children * state.childUnit);
+    // Los vuelos solo se incorporan como cotización no cobrada; nunca como tarifa aérea confirmada.
+    const validFlight = state.flightQuote && state.date &&
+      state.flightQuote.adults === state.adults &&
+      state.flightQuote.children === state.children &&
+      state.flightQuote.arrival === state.date;
+    if (!validFlight) state.flightQuote = null;
+    state.total = round2(state.adults * state.adultUnit + state.children * state.childUnit +
+      (validFlight ? Number(state.flightQuote.displayedPrice || 0) : 0));
     const charge = calculateCharge(state.total);
     state.due = charge.due;
     state.mode = charge.mode;
@@ -1414,7 +1421,8 @@
               <div class="fact-row" ${PRODUCT.tiers.length ? '' : 'hidden'}><span>Acomodación</span><strong id="bkSumOccupancy">—</strong></div>
               <div class="fact-row"><span>Tarifa adulto</span><strong id="bkSumAdultUnit">—</strong></div>
               <div class="fact-row" id="bkChildPriceRow"><span>Tarifa niño</span><strong id="bkSumChildUnit">—</strong></div>
-              <div class="booking-total"><span>Total del tour</span><strong id="bkSumTotal">—</strong></div>
+              <p id="bkExtraTravelSummary" class="form-note" hidden></p>
+              <div class="booking-total"><span>Total del viaje</span><strong id="bkSumTotal">—</strong></div>
             </div>
             <div class="booking-pay">
               <h3>¿Cómo deseas pagar?</h3>
@@ -1482,6 +1490,17 @@
     state.holder = { email: $('#bkEmail').value.trim(), phone: `${dialCode}${nationalNumber}`, phoneCountryCode: dialCode, phoneNational: nationalNumber, notes: $('#bkNotes').value.trim() };
     state.pickupAddress = $('#bkPickup').value.trim();
     state.pickupStatus = 'pending_validation';
+    if(state.flightQuote){
+      state.holder.notes += (state.holder.notes?'\n':'')+
+        'Solicitud con vuelos: '+state.flightQuote.airline+' '+state.flightQuote.origin+'-'+
+        state.flightQuote.destination+', ida '+state.flightQuote.departure+
+        ', regreso '+state.flightQuote.returnDate+
+        ', tarifa observada '+money(state.flightQuote.displayedPrice)+
+        (state.flightQuote.baggage==='checked'?' (equipaje facturado por cotizar)':'')+
+        '. Sujeto a confirmación antes del pago.';
+    }
+    if(state.customHotel)state.holder.notes+=(state.holder.notes?'\n':'')+
+      'Solicita hotel alternativo: '+state.customHotel+' (suplemento por confirmar).';
     recalculate();
   }
 
@@ -1583,6 +1602,15 @@
     $('#bkSumAdultUnit').textContent = money(state.adultUnit);
     $('#bkSumChildUnit').textContent = money(state.childUnit);
     $('#bkChildPriceRow').hidden = state.children === 0;
+    const addonSummary = $('#bkExtraTravelSummary');
+    if (addonSummary) {
+      const details = [];
+      if (state.flightQuote) details.push('Vuelos ida y regreso · '+money(state.flightQuote.displayedPrice)+
+        (state.flightQuote.baggage === 'checked' ? ' · maleta facturada por cotizar' : ''));
+      if (state.customHotel) details.push('Hotel alternativo: '+state.customHotel+' · suplemento por confirmar');
+      addonSummary.textContent = details.join('  |  ');
+      addonSummary.hidden = !details.length;
+    }
     $('#bkSumTotal').textContent = money(state.total);
     $('#bkPayAmount').textContent = money(state.due);
     const isEnglish = document.documentElement.lang === 'en';
@@ -1648,6 +1676,15 @@
       quotedDue: state.due,
       mode: state.mode,
       currency: CONFIG.currency,
+      // Campos adicionales no constituyen emisión; el importe exige revisión del proveedor.
+      flightSelection: state.flightQuote ? {
+        origin: state.flightQuote.origin, destination: state.flightQuote.destination,
+        departure: state.flightQuote.departure, returnDate: state.flightQuote.returnDate,
+        airline: state.flightQuote.airline, outbound: state.flightQuote.outbound,
+        inbound: state.flightQuote.inbound, observedPrice: state.flightQuote.observedPrice,
+        displayedPrice: state.flightQuote.displayedPrice, baggage: state.flightQuote.baggage
+      } : null,
+      alternateHotel: state.customHotel || '',
       language: document.documentElement.lang || 'es'
     };
   }
@@ -2065,8 +2102,48 @@
     $('#bkLeadDays').textContent = String(CONFIG.minLeadDays);
     let lastFocused = null;
 
+    function syncPackageSelection() {
+      if (PRODUCT.kind !== 'package') return;
+      const params = new URLSearchParams(location.search);
+      const info = window.LatamPackageDetails?.getSelection?.();
+      const source = info?.slug === PRODUCT.slug ? info : {
+        date: params.get('fecha') || '', adults: Number(params.get('adults') || params.get('viajeros')),
+        children: Number(params.get('children')), tier: null, occupancy: 'double', customHotel: '', flight: null
+      };
+      const minValue = $('#bkDate')?.dataset.min || '';
+      const date = String(source.date || '');
+      if (parseISODate(date) && (!minValue || date >= minValue)) {
+        state.date = date; $('#bkDate').value = date;
+        $('#bkDateDisplay').textContent = formatBookingDate(date, {weekday:'short',day:'2-digit',month:'long',year:'numeric'});
+      }
+      if (Number(source.adults)>=1 && Number(source.children)>=0 &&
+          Number(source.adults)+Number(source.children) <= Number(CONFIG.maxTravelers||12)) {
+        state.adults=Number(source.adults);state.children=Number(source.children);
+        $('#bkAdults').value=String(state.adults);$('#bkChildren').value=String(state.children);
+      }
+      if (source.tier && PRODUCT.tiers.some(t=>t.code===source.tier)) {
+        state.tier=source.tier;if($('#bkTier'))$('#bkTier').value=state.tier;
+      }
+      if (source.occupancy && ['single','double','matrimonial','triple','family'].includes(source.occupancy)) {
+        state.occupancy=source.occupancy;if($('#bkOccupancy'))$('#bkOccupancy').value=state.occupancy;
+      }
+      state.customHotel=String(source.customHotel||'').slice(0,100);
+      const flight=source.flight;
+      const compatible=flight&&Number.isFinite(Number(flight.displayedPrice))&&
+        Number(flight.displayedPrice)>0&&date===state.date&&state.adults===Number(source.adults)&&
+        state.children===Number(source.children);
+      state.flightQuote=compatible?{...flight,arrival:date,adults:state.adults,children:state.children}:null;
+      const online=$('input[name="bkPaymentMethod"][value="online"]');
+      const cash=$('input[name="bkPaymentMethod"][value="pay_on_tour"]');
+      if(online){
+        // No cobrar servicios con disponibilidad/costo todavía pendientes de validación.
+        online.disabled=!onlineConfigured()||Boolean(state.flightQuote)||Boolean(state.customHotel);
+        if(online.disabled&&online.checked&&cash){cash.checked=true;state.paymentMethod='pay_on_tour'}
+      }
+    }
     const open = () => {
       lastFocused = document.activeElement;
+      syncPackageSelection();
       recalculate(); prefillAccount();
       modal.classList.add('is-open'); document.body.style.overflow='hidden'; $('#bkDateTrigger').focus();
     };
@@ -2174,6 +2251,23 @@
       if (step === 4 && state.confirmation) showConfirmation(state.confirmation);
     });
     recalculate();
+    if(PRODUCT.kind==='package' && document.querySelector('.product-booking-card')){
+      // La misma mejora visual y datos heredados se utiliza en todas las fichas de paquetes.
+      if(!document.querySelector('link[href*="package-product-20261108.css"]')){
+        const css=document.createElement('link');css.rel='stylesheet';
+        css.href=BASE+'assets/css/package-product-20261108.css?v=1';document.head.append(css);
+      }
+      const addUI=()=>{
+        if(document.querySelector('script[data-lx-package-ui]'))return;
+        const script=document.createElement('script');script.dataset.lxPackageUi='true';
+        script.src=BASE+'assets/js/package-product-20261108.js?v=1';document.head.append(script);
+      };
+      if(window.LATAM_FLIGHTS_API_URL)addUI();
+      else {
+        const config=document.createElement('script');config.src=BASE+'assets/js/vuelos-config.js';
+        config.onload=addUI;config.onerror=addUI;document.head.append(config);
+      }
+    }
   }
 
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', init) : init();
