@@ -419,19 +419,56 @@ function showTierQuote(){
    ' → '+flightTime(b.to?.time)+' '+(b.to?.code||'')+' · '+(s.length<=1?'Directo':(s.length-1)+' escala(s)');}
  function signature(leg){return JSON.stringify((leg?.segments||[]).map(s=>
    [s.airline,s.flightNumber,s.from?.code,s.from?.time,s.to?.code,s.to?.time]))}
- function flightCard(leg,price,selected,action){
- const seg=leg?.segments||[],a=seg[0]||{},b=seg[seg.length-1]||{};
- const card=el('button','lx-flight-choice'+(selected?' is-selected':''));card.type='button';
- card.setAttribute('aria-pressed',String(selected));card.append(el('span','lx-choice-radio',''));
+ function flightCard(leg,price,selected,action,phase,partyCount,offer){
+ const seg=leg?.segments||[],first=seg[0]||{},last=seg[seg.length-1]||{};
+ const count=Math.max(1,Number(partyCount)||1);
+ const perPerson=Math.round(Number(price)/count*100)/100;
+ // Solo mostrar precio por tramo si el backend devuelve importes por tramo independientes.
+ const legFare=Number(phase==='outbound'?offer?.outboundPricePerPerson:offer?.inboundPricePerPerson);
+ const hasLegFare=Number.isFinite(legFare)&&legFare>0;
+ const card=el('article','lx-flight-choice'+(selected?' is-selected':''));
+ const select=el('button','lx-flight-choice-select');select.type='button';
+ select.setAttribute('aria-pressed',String(selected));
+ select.setAttribute('aria-label','Seleccionar vuelo '+(phase==='outbound'?'de ida':'de regreso'));
+ select.append(el('span','lx-choice-radio',''));
  const body=el('span','lx-flight-choice-content'),brand=el('span','lx-flight-choice-brand');
- brand.append(el('span','lx-flight-airline-mark','✈'),el('strong','',a.airline||'Aerolínea'));
+ const airline=String(first.airline||leg?.airline||'Aerolínea');
+ const brandIcon=el('span','lx-flight-airline-mark','✈');
+ const codeByAirline={'avianca':'AV','latam':'LA','latam airlines':'LA','jetsmart':'JA','jetsmart airlines':'JA',
+  'copa airlines':'CM','copa':'CM','sky airline':'H2','wingo':'P5',
+  'aerolíneas argentinas':'AR','aerolineas argentinas':'AR','gol':'G3','azul':'AD'};
+ const logoProvided=String(first.airlineLogo||first.logoUrl||leg?.airlineLogo||leg?.logoUrl||offer?.airlineLogo||'');
+ const iata=codeByAirline[airline.toLowerCase().trim()]||'';
+ const logo=/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/[0-9]+px\/[A-Za-z0-9_-]+\.png$/.test(logoProvided)?
+  logoProvided:(iata?'https://www.gstatic.com/flights/airline_logos/70px/'+iata+'.png':'');
+ if(logo){const img=el('img');img.alt='';img.loading='lazy';img.src=logo;
+  img.onerror=()=>{img.remove();brandIcon.textContent='✈'};
+  brandIcon.textContent='';brandIcon.append(img);}
+ brand.append(brandIcon,el('strong','',airline));
  const route=el('span','lx-flight-route'),depart=el('span','lx-flight-stop'),arrive=el('span','lx-flight-stop');
- depart.append(el('strong','',flightTime(a.from?.time)),el('small','',a.from?.code||'Origen'));
- arrive.append(el('strong','',flightTime(b.to?.time)),el('small','',b.to?.code||'Destino'));
- route.append(depart,el('span','lx-flight-route-middle',seg.length<=1?'Directo':(seg.length-1)+' escala(s)'),arrive);
+ depart.append(el('strong','',flightTime(first.from?.time)),el('small','',first.from?.code||'Origen'));
+ arrive.append(el('strong','',flightTime(last.to?.time)),el('small','',last.to?.code||'Destino'));
+ const nStops=Math.max(0,seg.length-1);
+ route.append(depart,el('span','lx-flight-route-middle',!nStops?'Directo':nStops+' escala(s)'),arrive);
  body.append(brand,route);
- const cost=el('span','lx-flight-choice-price');cost.append(el('strong','',fmt(price)),el('small','','Ida y vuelta · grupo'));
- card.append(body,cost);card.addEventListener('click',action);return card;
+ const cost=el('span','lx-flight-choice-price');
+ cost.append(el('strong','',fmt(hasLegFare?legFare:perPerson)),
+  el('small','',hasLegFare?(phase==='outbound'?'Ida · por persona':'Regreso · por persona'):'Ida y vuelta · por persona'));
+ select.append(body,cost);select.addEventListener('click',action);card.append(select);
+ if(nStops){
+  const details=el('details','lx-flight-layovers'),summary=el('summary','','Ver '+nStops+' escala(s) y conexiones');
+  const list=el('ol','lx-flight-layover-list');
+  for(let i=0;i<nStops;i++){
+   const layover=leg?.layovers?.[i]||{},airport=layover.id||seg[i]?.to?.code||'Aeropuerto';
+   const mins=Number(layover.duration);
+   const duration=Number.isFinite(mins)&&mins>0?Math.floor(mins/60)+' h '+String(mins%60).padStart(2,'0')+' min':
+    'Tiempo de conexión por confirmar';
+   list.append(el('li','',airport+' · '+(layover.name||'Conexión')+' · '+duration+
+      (layover.overnight?' · Conexión nocturna':'')));
+  }
+  details.append(summary,list);card.append(details);
+ }
+ return card;
 }
  function renderFlightOffers(){
  const departures=$('lxFlightDepartures'),returns=$('lxFlightReturns');
