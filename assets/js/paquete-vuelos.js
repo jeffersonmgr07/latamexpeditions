@@ -9,6 +9,17 @@
  const params=new URLSearchParams(location.search);
  if([...form.elements.origin.options].some(o=>o.value===params.get('origen')))form.elements.origin.value=params.get('origen');
  if(/^\d{4}-\d{2}-\d{2}$/.test(params.get('fecha')||''))form.elements.arrival.value=params.get('fecha');
+ const adults=Number(params.get('adults')||0),children=Number(params.get('children')||0);
+ const total=adults+children;
+ if(adults>=1&&adults<=4)form.elements.adults.value=String(adults);
+ if(children>=0&&children<=2&&total<=4&&total>=1)form.elements.children.value=String(children);
+ if(total>4||children>2){
+   const warning=document.createElement('p');
+   warning.className='package-flights-hint';
+   warning.textContent='Tu búsqueda tiene '+total+' viajeros. El configurador automático de este paquete admite máximo 4; para grupos mayores solicita una cotización personalizada.';
+   form.querySelector('.package-flights-hint')?.after(warning);
+ }
+
  const arrival=document.getElementById('packageArrivalDate');
  const back=document.getElementById('packageCalculatedReturn');
  const hidden=document.getElementById('packageFlightReturn');
