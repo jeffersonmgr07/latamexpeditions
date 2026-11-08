@@ -2264,7 +2264,7 @@
       const addUI=()=>{
         if(document.querySelector('script[data-lx-package-ui]'))return;
         const script=document.createElement('script');script.dataset.lxPackageUi='true';
-        script.src=BASE+'assets/js/package-product-20261108.js?v=3';document.head.append(script);
+        script.src=BASE+'assets/js/package-product-20261108.js?v=4';document.head.append(script);
       };
       if(window.LATAM_FLIGHTS_API_URL)addUI();
       else {
