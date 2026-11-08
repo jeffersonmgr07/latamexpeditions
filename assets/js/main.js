@@ -697,3 +697,105 @@
     document.addEventListener('DOMContentLoaded',initPeruNatureHeader,{once:true});
   }else initPeruNatureHeader();
 })();
+
+/* LATAM Product Template: adapta fichas históricas al diseño compartido sin borrar itinerarios. */
+(function(){
+  'use strict';
+  function unifyProductPage(){
+    const main=document.querySelector('main#contenido');
+    const trigger=main?.querySelector('[data-book][data-book-kind]');
+    const grid=main?.querySelector('.detail-layout,.detail-grid');
+    if(!trigger||!grid)return;
+    if(grid.dataset.unifiedProduct==='1')return;
+    grid.dataset.unifiedProduct='1';
+    document.body.classList.add('lx-unified-product');
+    const kind=trigger.dataset.bookKind==='package'?'package':'experience';
+    const aside=[...grid.children].find(node=>node.matches('.detail-aside,aside'));
+    const content=[...grid.children].find(node=>node!==aside);
+    if(!aside||!content)return;
+    grid.classList.add('detail-layout','detail-layout--aligned');
+    content.classList.add('detail-main');
+    aside.classList.add('tour-booking-aside');
+    const sideCard=aside.querySelector('.detail-card');
+    if(sideCard)sideCard.classList.add('tour-booking-card','product-booking-card');
+    const outer=grid.closest('section.section');
+    outer?.classList.add('product-detail-section');
+    const hero=main.querySelector('.product-hero-clean,.detail-hero,.page-hero');
+    if(hero){
+      hero.classList.add('product-hero-clean','lx-unified-hero');
+      const inner=hero.querySelector('.page-hero__inner');
+      inner?.classList.add('container');
+      const oldImage=hero.style.getPropertyValue('--detail-image');
+      if(oldImage&&!hero.style.getPropertyValue('--lx-hero-img'))
+        hero.style.setProperty('--lx-hero-img',oldImage);
+      const og=document.querySelector('meta[property="og:image"]')?.content||'';
+      const sideImage=sideCard?.querySelector('img[src]')?.getAttribute('src')||'';
+      const source=sideImage||og;
+      if(!hero.style.getPropertyValue('--lx-hero-img')&&source&&source.indexOf('"')<0)
+        hero.style.setProperty('--lx-hero-img','url("'+source+'")');
+    }
+    if(sideCard){
+      const price=sideCard.querySelector('.price-block');
+      if(price&&!price.querySelector('span')){
+        const span=document.createElement('span');span.textContent='por persona';price.append(span);
+      }
+      if(!sideCard.querySelector('img[src]')){
+        const og=document.querySelector('meta[property="og:image"]')?.content||'';
+        const oldImage=hero?.style.getPropertyValue('--detail-image')||'';
+        const match=oldImage.match(/url\(['"]?([^'")]+)['"]?\)/);
+        const source=match?.[1]||og;
+        if(source&&/^https?:\/\/|^\.\.\//.test(source)){
+          const img=document.createElement('img');
+          img.src=source;img.alt='Imagen representativa de '+(trigger.dataset.bookTitle||'la experiencia');
+          img.loading='lazy';img.decoding='async';
+          sideCard.prepend(img);
+        }
+      }
+    }
+    // Conservar íntegro el contenido editorial de cada experiencia.
+    content.querySelectorAll('h2').forEach(h=>{
+      if(/^Itinerario d[ií]a a d[ií]a$/i.test(h.textContent.trim()))
+        h.textContent='Itinerario detallado';
+    });
+    if(!content.querySelector('.lx-product-info, .product-facts')){
+      const first=content.querySelector(':scope > .detail-card');
+      const title=first?.querySelector('h2')?.textContent||'';
+      if(!/^(informaci[oó]n (esencial|del paquete)|datos b[aá]sicos)/i.test(title)){
+        const rowLabel=(pattern)=>{
+          const rows=sideCard?.querySelectorAll('.fact-row')||[];
+          const row=[...rows].find(r=>pattern.test(r.querySelector('span')?.textContent||''));
+          return row?.querySelector('strong')?.textContent.trim()||'';
+        };
+        const facts=[
+          ['Duración',trigger.dataset.bookDuration||rowLabel(/duraci[oó]n/i)||'Por confirmar'],
+          ['Destino',rowLabel(/destino|ubicaci[oó]n|ciudad/i)||trigger.dataset.bookCountry||'Por confirmar'],
+          ['Idiomas',rowLabel(/idioma/i)||'Español · Inglés']
+        ];
+        const info=document.createElement('section');info.className='detail-card lx-product-info';
+        const h=document.createElement('h2');h.textContent=kind==='package'?'Información del paquete':'Información de la experiencia';
+        const dl=document.createElement('div');dl.className='lx-unified-facts';
+        facts.forEach(([label,value])=>{
+          const div=document.createElement('div'),small=document.createElement('span'),strong=document.createElement('strong');
+          small.textContent=label;strong.textContent=value;div.append(small,strong);dl.append(div);
+        });
+        info.append(h,dl);content.prepend(info);
+      }
+    }
+    // Vuelos de nuevas fichas: el código de aeropuerto es dato editorial explícito.
+    // Para fichas históricas, habilitar únicamente destinos únicos conocidos.
+    if(kind==='package'&&!trigger.dataset.bookDestination){
+      const slug=String(trigger.dataset.book||'');
+      const known=[
+        [/^medellin-esencial$/, 'MDE','Medellín, Colombia'],
+        [/^peru-cusco-4d3n$/, 'CUZ','Cusco, Perú'],
+        [/^brasil-rio-4d3n$/, 'GIG','Río de Janeiro, Brasil'],
+        [/^bogota-esencial$/, 'BOG','Bogotá, Colombia'],
+        [/^cartagena-esencial$/, 'CTG','Cartagena, Colombia']
+      ];
+      const item=known.find(([pattern])=>pattern.test(slug));
+      if(item){trigger.dataset.bookDestination=item[1];trigger.dataset.bookDestinationLabel=item[2];}
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',unifyProductPage,{once:true});
+  else unifyProductPage();
+})();
