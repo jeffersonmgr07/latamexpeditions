@@ -1,0 +1,116 @@
+/* LATAM Expeditions · Buscador compacto y resultados directos · 2026-11-08
+   Hoja limitada a portada y catálogo: no modifica fichas ni el motor de vuelos. */
+
+/* La barra de paquetes tiene cinco elementos en una sola fila en escritorio. */
+.home-search-shell { max-width:1240px; }
+#tripSearchForm.home-travel-form {
+  width:100%; max-width:none; display:grid;
+  grid-template-columns:minmax(130px,.98fr) minmax(180px,1.42fr) minmax(137px,.92fr) minmax(130px,.85fr) minmax(115px,auto);
+  gap:0; align-items:stretch; overflow:visible; border-radius:16px;
+}
+#tripSearchForm .search-field { min-width:0; padding:11px 14px; border-right:1px solid #e2eae4; border-bottom:0; }
+#tripSearchForm .search-field label { display:block; margin:0 0 5px; color:#52665d; font-size:11px; font-weight:700; }
+#tripSearchForm .search-field input,
+#tripSearchForm .search-field select {
+  min-width:0; width:100%; max-width:100%; font-size:13px; line-height:1.45;
+  color:#143525; font-weight:650;
+}
+#tripSearchForm .search-field input[type="search"] { text-overflow:ellipsis; }
+#tripSearchForm .search-field select { padding:0; cursor:pointer; }
+#tripSearchForm .search-btn {
+  width:auto; min-width:112px; margin:7px; min-height:50px;
+  padding:0 16px; background:#07873e; color:white; border-radius:11px;
+  justify-content:center; white-space:nowrap; font-size:13px;
+}
+#tripSearchForm .search-btn:hover { background:#056a32; }
+#tripSearchForm .search-field--travelers { position:relative; border-right:0; }
+#tripSearchForm .lx-mobile-label { display:none; }
+#tripSearchForm .lx-traveler-trigger {
+  width:100%; min-width:0; border:0; background:transparent; color:#143525;
+  padding:0; display:flex; align-items:center; justify-content:space-between;
+  gap:6px; text-align:left; font:650 13px Inter,Arial,sans-serif; cursor:pointer;
+}
+#tripSearchForm .lx-traveler-trigger span { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+#tripSearchForm .lx-traveler-trigger i { font-size:11px; color:#557566; flex:none; }
+#tripSearchForm .lx-traveler-panel {
+  position:absolute; right:0; top:calc(100% + 8px); z-index:1100; width:290px;
+  max-width:min(90vw,320px); padding:18px; border-radius:16px;
+  background:#fff; border:1px solid #dbe9df; box-shadow:0 16px 38px rgba(7,32,19,.18);
+}
+#tripSearchForm .lx-traveler-panel[hidden] { display:none!important; }
+#tripSearchForm .lx-traveler-row {
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:10px 0; border-bottom:1px solid #eff3ef;
+}
+#tripSearchForm .lx-traveler-row strong { display:block; font-size:14px; color:#143525; }
+#tripSearchForm .lx-traveler-row small { display:block; margin-top:2px; font-size:11px; color:#68786f; }
+#tripSearchForm .lx-traveler-counter { display:flex; gap:10px; align-items:center; }
+#tripSearchForm .lx-traveler-counter button {
+  width:34px; height:34px; border:1px solid #cde4d4; border-radius:50%;
+  color:#07873e; background:#f5fbf7; cursor:pointer; font-size:20px; line-height:1;
+}
+#tripSearchForm .lx-traveler-counter button:disabled { opacity:.35; cursor:not-allowed; }
+#tripSearchForm .lx-traveler-counter output { min-width:14px; text-align:center; font-weight:800; color:#152e21; }
+#tripSearchForm .lx-traveler-apply {
+  width:100%; margin-top:13px; border:0; border-radius:10px; padding:11px 13px;
+  font-weight:750; color:#fff; background:#07873e; cursor:pointer;
+}
+#tripSearchForm .lx-search-error {
+  grid-column:1/-1; margin:0; padding:8px 14px 12px; color:#a22332;
+  font-size:12px; font-weight:650;
+}
+#tripSearchForm .lx-search-error[hidden] { display:none!important; }
+#tripSearchForm .search-field .lx-control-host { width:100%; min-width:0; }
+#tripSearchForm .search-field .lx-picker-trigger { width:100%; min-width:0; justify-content:space-between; }
+#tripSearchForm .search-field .lx-picker-trigger span { max-width:calc(100% - 18px); overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+
+/* El resultado prioriza fotos y tarjetas, no títulos, separadores ni filtros repetidos. */
+.lx-results-intro { background:#f5f7ef; padding:19px 20px 4px; }
+.lx-results-intro__inner {
+  max-width:1200px; margin:0 auto; display:flex; justify-content:space-between;
+  align-items:center; gap:14px; flex-wrap:wrap;
+}
+.lx-results-intro__heading { min-width:0; }
+.lx-results-intro__kicker { display:block; font-size:10px; letter-spacing:.12em; color:#07873e; font-weight:800; text-transform:uppercase; }
+.lx-results-intro h1 { margin:3px 0 3px; font:750 clamp(21px,2.8vw,30px)/1.18 Montserrat,Inter,sans-serif; letter-spacing:-.03em; color:#123222; }
+.lx-results-intro p { margin:0; font-size:12px; line-height:1.5; color:#5b7064; }
+.lx-results-intro__edit { padding:9px 12px; border:1px solid #bedcca; border-radius:11px; text-decoration:none; font-size:12px; font-weight:750; color:#086b39; background:#fff; white-space:nowrap; }
+.lx-results-intro__edit:hover { background:#e8f5ec; }
+.lx-results-catalog.section { padding-top:9px; }
+.lx-results-catalog .results-bar { margin:0 0 13px; }
+.lx-results-catalog .results-count { margin:0; font-size:12px; font-weight:650; color:#607369; }
+.lx-results-catalog .cards-grid { margin-top:0; }
+.lx-results-catalog .trip-card[hidden] { display:none!important; }
+.lx-results-empty {
+  padding:27px 23px; margin:12px 0 20px; border:1px solid #dce8e0;
+  border-radius:18px; background:#fff; color:#20382a;
+}
+.lx-results-empty[hidden] { display:none!important; }
+.lx-results-empty h2 { margin:0 0 5px; font-size:19px; }
+.lx-results-empty p { margin:0 0 14px; font-size:13px; color:#607369; }
+.lx-results-empty a { color:#07873e; font-weight:750; }
+
+@media (max-width: 899px) {
+  #tripSearchForm.home-travel-form { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  #tripSearchForm .search-field { border-bottom:1px solid #e2eae4; }
+  #tripSearchForm .search-field:nth-of-type(even) { border-right:0; }
+  #tripSearchForm .search-btn { grid-column:1/-1; width:calc(100% - 14px); }
+}
+@media (max-width: 620px) {
+  .home-search-shell { padding:13px!important; }
+  .home-search-shell__heading { margin-bottom:10px; }
+  #tripSearchForm.home-travel-form { grid-template-columns:repeat(2,minmax(0,1fr)); border-radius:13px; }
+  #tripSearchForm .search-field { padding:10px 11px; }
+  #tripSearchForm .lx-desktop-label { display:none; }
+  #tripSearchForm .lx-mobile-label { display:inline; }
+  #tripSearchForm .search-field label { font-size:10.5px; }
+  #tripSearchForm .search-field input,
+  #tripSearchForm .search-field select,
+  #tripSearchForm .lx-traveler-trigger { font-size:12px; }
+  #tripSearchForm .search-btn { min-height:45px; }
+  .lx-results-intro { padding:14px 16px 3px; }
+  .lx-results-intro h1 { font-size:23px; }
+  .lx-results-intro__edit { padding:8px 10px; }
+  .lx-results-catalog.section { padding:10px 16px 34px; }
+  #tripSearchForm .lx-traveler-panel { right:-7px; width:280px; }
+}
