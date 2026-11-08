@@ -1123,30 +1123,49 @@
     total: 0, due: 0, mode: 'deposito', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', roomPlan: '', hotelQuotePending: false
   };
 
-  // Zona informativa, no una validación automática de cobertura.
-  function pickupZone() {
-    const search = `${PRODUCT.slug} ${PRODUCT.title} ${PRODUCT.country}`.toLowerCase();
-    const zones = [
-      { match:/medell[ií]n|guatap[eé]|comuna-13|antioquia|jardin-antioquia|santa-fe-antioquia|hacienda-napoles/, city:'Medellín', center:'El Poblado', lat:6.2108, lon:-75.5704 },
-      { match:/cusco|machu.picchu|ollantaytambo|valle.sagrado|humantay|montana.colores/, city:'Cusco', center:'Plaza de Armas', lat:-13.5163, lon:-71.9780 },
-      { match:/cartagena|bar[uú]|rosario|cholon|totumo/, city:'Cartagena', center:'Centro Histórico', lat:10.4236, lon:-75.5510 },
-      { match:/bogot[aá]|zipaquir[aá]|guatavita|villa.de.leyva/, city:'Bogotá', center:'Plaza de Bolívar', lat:4.5981, lon:-74.0760 },
-      { match:/lima|paracas|ballestas/, city:'Lima', center:'Plaza Mayor', lat:-12.0453, lon:-77.0308 },
-      { match:/santa.marta|tayrona|m[aá]gica|mindo/, city:'Santa Marta', center:'Centro Histórico', lat:11.2408, lon:-74.1990 },
-      { match:/san.andr[eé]s/, city:'San Andrés', center:'Centro', lat:12.5847, lon:-81.7006 }
-    ];
-    return zones.find(z => z.match.test(search)) || null;
+  // El punto de recojo de experiencias se indica ahora en la ficha y no en el modal.
+  const pickupNotice='La dirección solicitada o punto de encuentro debe ser confirmado por el operador. No garantiza cobertura ni traslado incluido.';
+
+  let experiencePickupPanel=null;
+  function setupExperiencePickup(){
+    if(PRODUCT.kind!=='experience')return;
+    const aside=trigger.closest('.product-booking-card,.tour-booking-card')||trigger.parentElement;
+    const anchor=trigger.closest('.cta-stack')||trigger;
+    if(!aside||!anchor||document.getElementById('lxExperiencePickup'))return;
+    const wrapper=document.createElement('section');
+    wrapper.id='lxExperiencePickup';wrapper.className='lx-experience-pickup';
+    wrapper.innerHTML='<h3>¿Dónde prefieres el recojo?</h3>'+
+     '<label for="lxExperiencePickupInput">Hotel, Airbnb o dirección completa</label>'+
+     '<textarea id="lxExperiencePickupInput" rows="2" maxlength="400" placeholder="Escribe el alojamiento y su dirección"></textarea>'+
+     '<label class="lx-experience-pickup-meeting"><input id="lxExperienceMeeting" type="checkbox"> Prefiero el punto de encuentro del tour</label>'+
+     '<small>Confirmaremos si el servicio dispone de recojo en tu zona; si no, te indicaremos el punto de encuentro.</small>'+
+     '<p id="lxExperiencePickupError" role="alert" hidden>Indica tu dirección o marca que prefieres el punto de encuentro.</p>';
+    anchor.before(wrapper);experiencePickupPanel=wrapper;
+    const input=wrapper.querySelector('#lxExperiencePickupInput'),check=wrapper.querySelector('#lxExperienceMeeting');
+    const error=wrapper.querySelector('#lxExperiencePickupError');
+    input.addEventListener('input',()=>{if(input.value.trim())error.hidden=true});
+    check.addEventListener('change',()=>{
+      input.disabled=check.checked;error.hidden=true;
+      if(!check.checked)input.focus();
+    });
   }
-  function pickupMapHTML() {
-    const z = pickupZone();
-    if (!z) return '<p class="form-note">La zona de recojo y el punto de encuentro se confirmarán después de revisar tu dirección.</p>';
-    const deltaLat = 1 / 111.1, deltaLon = 1 / (111.1 * Math.cos(z.lat * Math.PI / 180));
-    const bbox = [z.lon-deltaLon,z.lat-deltaLat,z.lon+deltaLon,z.lat+deltaLat].join('%2C');
-    const src = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${z.lat}%2C${z.lon}`;
-    return `<p class="form-note">Zona de referencia: ${escapeHTML(z.center)}, ${escapeHTML(z.city)} (aprox. 1 km alrededor). <strong>Mapa orientativo: no garantiza recojo.</strong></p><iframe class="booking-pickup-map" title="Mapa orientativo de recojo en ${escapeHTML(z.city)}" loading="lazy" referrerpolicy="no-referrer" src="${src}"></iframe>`;
+  function pickupFromPage(){
+    if(PRODUCT.kind!=='experience')return '';
+    const panel=experiencePickupPanel||document.getElementById('lxExperiencePickup');
+    if(!panel)return '';
+    if(panel.querySelector('#lxExperienceMeeting')?.checked)return 'Punto de encuentro indicado por el operador (por confirmar)';
+    return String(panel.querySelector('#lxExperiencePickupInput')?.value||'').trim().slice(0,400);
   }
-  const pickupNotice = 'Al enviar la solicitud, nuestro equipo revisará si tu alojamiento se encuentra en la ruta de recojo. Te comunicaremos por correo o WhatsApp la hora de recojo o el punto de encuentro, según corresponda. La ubicación del mapa es solo orientativa.';
-  // Backend actual: solo correo. No habilitar PayPal por error al añadir un Client ID.
+  function validatePickupOnPage(){
+    if(PRODUCT.kind!=='experience')return true;
+    const panel=experiencePickupPanel||document.getElementById('lxExperiencePickup');
+    if(!panel)return true;
+    if(pickupFromPage())return true;
+    const error=panel.querySelector('#lxExperiencePickupError');if(error)error.hidden=false;
+    panel.scrollIntoView({behavior:'smooth',block:'center'});
+    panel.querySelector('#lxExperiencePickupInput')?.focus();return false;
+  }
+    // Backend actual: solo correo. No habilitar PayPal por error al añadir un Client ID.
   const onlineConfigured = () => false; // Habilitar solo con un backend que implemente createOrder y captureOrder.
 
   // Prefijos internacionales, con países y territorios. +51 seleccionado por defecto.
@@ -1347,7 +1366,7 @@
           <button type="button" class="close-modal" data-close-booking aria-label="Cerrar reserva">&times;</button>
         </div>
         <ol class="booking-steps">
-          <li data-step-label="1" aria-current="step"><span>1</span><b>Fecha y viajeros</b></li>
+          <li data-step-label="1" aria-current="step"><span>1</span><b>${PRODUCT.kind==='package'?'Contacto':'Fecha y viajeros'}</b></li>
           <li data-step-label="2"><span>2</span><b>Datos de pasajeros</b></li>
           <li data-step-label="3"><span>3</span><b>Pago</b></li>
         </ol>
@@ -1355,7 +1374,13 @@
           <div class="booking-error" id="bookingError" role="alert"></div>
 
           <section class="booking-step is-active" data-step="1">
-            <div class="booking-form-grid booking-form-grid--2">
+            <div id="bkPackageSelection" class="booking-package-selection" hidden>
+              <span>Tu viaje seleccionado</span>
+              <strong id="bkPackageSelectionMain">—</strong>
+              <small id="bkPackageSelectionDetail">—</small>
+              <p>Las fechas, viajeros, alojamiento y vuelos se toman de la ficha del paquete.</p>
+            </div>
+            <div class="booking-form-grid booking-form-grid--2 booking-initial-fields">
               <div class="form-field booking-date-field" id="bkDateField">
                 <label id="bkDateLabelText">Fecha del tour</label>
                 <button type="button" class="booking-date-trigger" id="bkDateTrigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="bkCalendar">
@@ -1377,7 +1402,7 @@
               </div>
               ${departure || '<div class="form-field booking-field-placeholder" aria-hidden="true"></div>'}
             </div>
-            <div class="booking-subsection">
+            <div class="booking-subsection booking-initial-travelers">
               <h3>Viajeros</h3>
               <div class="booking-form-grid booking-form-grid--3 travelers-grid">
                 <div class="form-field"><label for="bkAdults">Adultos</label><div class="booking-counter" role="group" aria-label="Número de adultos"><button type="button" data-counter="bkAdults" data-change="-1" aria-label="Quitar un adulto">−</button><input type="number" id="bkAdults" min="1" max="12" value="${state.adults}" readonly aria-label="Adultos"><button type="button" data-counter="bkAdults" data-change="1" aria-label="Añadir un adulto">+</button></div></div>
@@ -1394,12 +1419,7 @@
               </div>
               <div class="form-field"><label for="bkNotes">Comentarios o solicitudes (opcional)</label><textarea id="bkNotes" rows="3" maxlength="1200"></textarea></div>
             </div>
-            <div class="booking-subsection booking-pickup">
-              <h3>Dirección de recojo (opcional)</h3>
-              <div class="form-field"><label for="bkPickup">Hotel / Airbnb / Dirección de recojo</label><textarea id="bkPickup" rows="2" maxlength="400" placeholder="Ingresa el nombre y dirección completa de tu hotel o Airbnb"></textarea></div>
-              <div id="bkPickupMap">${pickupMapHTML()}</div>
-              <p class="booking-pickup-notice" id="bkPickupNotice" hidden></p>
-            </div>
+            
           </section>
 
           <section class="booking-step" data-step="2">
@@ -1489,7 +1509,7 @@
     const dialCode = $('#bkPhoneDial').value;
     const nationalNumber = $('#bkPhone').value.replace(/\D/g, '');
     state.holder = { email: $('#bkEmail').value.trim(), phone: `${dialCode}${nationalNumber}`, phoneCountryCode: dialCode, phoneNational: nationalNumber, notes: $('#bkNotes').value.trim() };
-    state.pickupAddress = $('#bkPickup').value.trim();
+    state.pickupAddress = pickupFromPage();
     state.pickupStatus = 'pending_validation';
     if(state.flightQuote){
       state.holder.notes += (state.holder.notes?'\n':'')+
@@ -1587,8 +1607,6 @@
   function paintSummary() {
     const formattedDate = new Intl.DateTimeFormat(document.documentElement.lang === 'en' ? 'en-US' : 'es-PE', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${state.date}T12:00:00Z`));
     $('#bkSumDate').textContent = formattedDate;
-    $('#bkPickupNotice').hidden = !state.pickupAddress;
-    $('#bkPickupNotice').textContent = pickupNotice;
     if ($('#bkSumDeparture')) $('#bkSumDeparture').textContent = state.departureTime || '—';
     $('#bkSumAdults').textContent = String(state.adults);
     $('#bkSumChildren').textContent = String(state.children);
@@ -2103,6 +2121,8 @@
     state.adults = Number(CONFIG.defaultAdults || 2);
     state.children = Number(CONFIG.defaultChildren || 0);
     const modal = buildModal();
+    if(PRODUCT.kind==='package')modal.classList.add('booking-modal--package');
+    else setupExperiencePickup();
     $('#bkLeadDays').textContent = String(CONFIG.minLeadDays);
     let lastFocused = null;
 
@@ -2227,10 +2247,6 @@
         $('#bkSubmitCash').disabled = false;
         $('#bkSubmitCash').textContent = 'Enviar solicitud de reserva';
       }
-    });
-    $('#bkPickup').addEventListener('input', () => {
-      $('#bkPickupNotice').hidden = !$('#bkPickup').value.trim();
-      $('#bkPickupNotice').textContent = pickupNotice;
     });
     $('#bkCheckReceipt').addEventListener('click', async () => {
       const button = $('#bkCheckReceipt');
