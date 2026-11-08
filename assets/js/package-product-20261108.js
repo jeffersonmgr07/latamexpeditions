@@ -257,7 +257,7 @@
  function callApi(params){
   if(!endpointOK())return Promise.reject(Error('La consulta no está disponible en este momento.'));
   return new Promise((resolve,reject)=>{
-   const cb='lxProductQuote_'+Date.now()+Math.random().toString(36).slice(2,9);
+   const cb='latamFlightCb_'+Date.now()+Math.random().toString(36).slice(2,9);
    const url=new URL(endpoint());Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,String(v)));url.searchParams.set('callback',cb);
    const script=el('script');let done=false;
    const timer=setTimeout(()=>finish(Error('La consulta tardó demasiado. Vuelve a intentarlo.')),65000);
