@@ -81,6 +81,13 @@
 .lx-results-catalog .results-count { margin:0; font-size:12px; font-weight:650; color:#607369; }
 .lx-results-catalog .cards-grid { margin-top:0; }
 .lx-results-catalog .trip-card[hidden] { display:none!important; }
+.lx-results-catalog .lx-build-link {
+  display:block; margin-top:11px; padding:10px 12px; border:1px solid #bfe2cb;
+  border-radius:10px; background:#edf8f1; text-align:center; color:#08743b;
+  font-size:12px; font-weight:800; text-decoration:none;
+}
+.lx-results-catalog .lx-build-link:hover { background:#dff2e6; }
+
 .lx-results-empty {
   padding:27px 23px; margin:12px 0 20px; border:1px solid #dce8e0;
   border-radius:18px; background:#fff; color:#20382a;
