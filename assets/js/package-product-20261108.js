@@ -126,7 +126,7 @@
  }
  const flights=modal('lxProductFlightsModal','Elige tus vuelos');
  flights.body.innerHTML=
- '<div class="lx-flight-search-context"><div><small>Itinerario del paquete</small><strong id="lxFlightSearchSummary">Preparando búsqueda…</strong></div>'+
+ '<div class="lx-flight-search-context"><div class="lx-flight-context-heading"><small>Itinerario de vuelos</small><div id="lxFlightSearchSummary" class="lx-flight-search-summary" role="group" aria-label="Resumen del itinerario de vuelos">Preparando búsqueda…</div></div>'+
  '<button type="button" id="lxFlightEditBtn" aria-expanded="false" aria-controls="lxFlightSearchPanel">Editar búsqueda</button></div>'+
  '<div id="lxFlightSearchPanel" class="lx-flight-search-panel" hidden><div class="lx-package-modal-fields">'+
  '<label>Salida desde<select id="lxFlightOrigin">'+
@@ -185,15 +185,38 @@ function syncFlightForm(){
  renderFlightSearchSummary();
 }
 function renderFlightSearchSummary(){
- const q=currentFlightQuery();
- $('lxFlightSearchSummary').textContent=q.origin+' → '+(q.destination||'Destino')+
-  ' · Llegada '+(q.arrival||'por definir')+' · Regreso '+(q.returnDate||'por definir')+
-  ' · '+(q.adults+q.children)+' viajero(s)';
+ const query=currentFlightQuery();
+ const en=(document.documentElement.lang||'es').toLowerCase().startsWith('en');
+ const months=en?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']:
+  ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+ const shortDate=value=>{
+  const m=String(value||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m&&Number(m[2])>=1&&Number(m[2])<=12?
+   Number(m[3])+' '+months[Number(m[2])-1]+' '+m[1]:(en?'To be defined':'Por definir');
+ };
+ const airports={MDE:'Medellín',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',CLO:'Cali',
+  CTG:'Cartagena',AQP:'Arequipa',EZE:'Buenos Aires',SCL:'Santiago',MEX:'Ciudad de México',
+  UIO:'Quito',GRU:'São Paulo',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
+ const origin=$('lxFlightOrigin').selectedOptions[0]?.textContent.replace(/\s*\([A-Z]{3}\)\s*$/,'')||
+  airports[query.origin]||query.origin;
+ const destination=airports[query.destination]||query.destination||(en?'Destination':'Destino');
+ const count=query.adults+query.children;
+ const summary=$('lxFlightSearchSummary');summary.replaceChildren();
+ const items=[
+  [en?'Route':'Ruta',origin+' – '+destination],
+  [en?'Arrival':'Llegada',shortDate(query.arrival)],
+  [en?'Return':'Retorno',shortDate(query.returnDate)],
+  [en?'Travelers':'Viajeros',count+' '+(count===1?(en?'traveler':'viajero'):(en?'travelers':'viajeros'))]
+ ];
+ items.forEach(([label,value])=>{
+  const item=el('span','lx-flight-summary-item');
+  item.append(el('small','',label),el('strong','',value));summary.append(item);
+ });
 }
 function toggleFlightEditor(open){
  $('lxFlightSearchPanel').hidden=!open;
  $('lxFlightEditBtn').setAttribute('aria-expanded',String(open));
- $('lxFlightEditBtn').textContent=open?'Cerrar edición':'Editar búsqueda';
+ $('lxFlightEditBtn').textContent='Editar búsqueda';
 }
 $('lxFlightEditBtn').addEventListener('click',()=>toggleFlightEditor($('lxFlightSearchPanel').hidden));
  function invalidateFlight(){
@@ -464,6 +487,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   state.date=arrival;state.adults=adults;state.children=children;state.origin=airport;
   state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];
   invalidateFlight();clearHotelLookup();update();
+  renderFlightSearchSummary();toggleFlightEditor(false);
   setStatus(flightStatus,'Buscando combinaciones de ida y regreso…');
   try{
    const result=await callApi({origin:airport,destination:params.destination,departure:out,returnDate:ret,
@@ -480,7 +504,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
     state.offers.length+' combinaciones encontradas. Primero elige el vuelo de ida.':
     'No encontramos combinaciones que lleguen en la fecha de inicio del paquete.',!state.offers.length);
    renderFlightOffers();
-  }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true);toggleFlightEditor(true)}
+  }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
   finally{$('lxProductSearchFlights').disabled=false}
  });
  $('lxFlightApply').addEventListener('click',()=>{

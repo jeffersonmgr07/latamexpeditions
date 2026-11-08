@@ -212,3 +212,19 @@
  .lx-flight-modal-bottom #lxFlightNextStep,
  .lx-flight-modal-bottom #lxFlightApply{grid-column:2;grid-row:2}
 }
+
+/* Resumen de vuelos: ruta y fechas legibles, sin el texto comprimido en una sola línea. */
+.lx-flight-search-context .lx-flight-context-heading{display:grid;gap:9px;min-width:0;flex:1}
+.lx-flight-search-summary{display:grid;grid-template-columns:minmax(125px,1.7fr) repeat(3,minmax(85px,1fr));gap:9px;width:100%}
+.lx-flight-summary-item{display:grid;align-content:start;gap:3px;padding:8px 10px;background:#fff;border:1px solid #dfebe2;border-radius:9px;min-width:0}
+.lx-flight-search-context .lx-flight-summary-item small{font-size:10px;color:#6b8573;text-transform:none;letter-spacing:0}
+.lx-flight-search-context .lx-flight-summary-item strong{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+@media(max-width:850px){
+ .lx-flight-search-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+ .lx-flight-search-context{display:grid;grid-template-columns:minmax(0,1fr)}
+ .lx-flight-search-context button{justify-self:start}
+ .lx-flight-search-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .lx-flight-summary-item{padding:7px 9px}
+}
