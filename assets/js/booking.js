@@ -1247,18 +1247,19 @@
     const caption = $('#bkHotelCaption');
     const hotels = tierHotels(tier, english);
     const noAccommodation = Boolean(tier.noAccommodation || tier.code === 'sin-hotel');
-    const selectedName = noAccommodation
+    const selectedName = state.customHotel || (noAccommodation
       ? (english ? 'Tour only, no accommodation' : 'Solo tour, sin alojamiento')
-      : (hotels.join(' / ') || (english ? (tier.nameEn || tier.name) : tier.name));
+      : (hotels.join(' / ') || (english ? (tier.nameEn || tier.name) : tier.name)));
 
     preview.hidden = false;
     badge.textContent = english ? (tier.starsEn || tier.stars || 'Hotel') : (tier.stars || 'Hotel');
     name.textContent = selectedName;
-    caption.textContent = noAccommodation
-      ? (english ? 'This option does not include a hotel night.' : 'Esta opción no incluye noche de hotel.')
-      : (english ? 'Reference photo of the selected accommodation.' : 'Foto referencial del alojamiento seleccionado.');
+    caption.textContent = state.customHotel ?
+      (english ? 'Alternative hotel requested. Price pending.' : 'Hotel alternativo solicitado; suplemento pendiente.') :
+      noAccommodation ? (english ? 'This option does not include a hotel night.' : 'Esta opción no incluye noche de hotel.') :
+      (english ? 'Photo of the planned accommodation.' : 'Imagen del hotel previsto.');
 
-    const imagePath = tier.image || '';
+    const imagePath = state.customHotel ? '' : (tier.image || '');
     const showPlaceholder = (text) => {
       image.hidden = true;
       image.removeAttribute('src');
