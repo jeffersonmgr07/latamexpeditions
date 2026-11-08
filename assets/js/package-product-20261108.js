@@ -23,6 +23,7 @@
   childFactor:Number(book.dataset.bookChildFactor||.7)};
  let tiers=[];try{tiers=JSON.parse(book.dataset.bookTiers||'[]')}catch(_){}
  const firstTier=tiers[0]||null;
+ const hasHotelIncluded=Boolean(firstTier&&!firstTier.noAccommodation&&firstTier.code!=='sin-hotel');
  const maxHotelOccupancy=4;
  const defaults={'Perú':'LIM','Colombia':'BOG','Argentina':'EZE','Chile':'SCL','México':'MEX',
   'Brasil':'GRU','Ecuador':'UIO','Bolivia':'LPB','Venezuela':'CCS','Costa Rica':'SJO','Uruguay':'MVD'};
@@ -181,14 +182,15 @@
   const tier=tiers.find(x=>x.code===$('lxHotelTier').value)||firstTier;
   const occ=$('lxHotelOccupancy').value;
   const amount=Number(tier?.occupancyPrices?.[occ]??tier?.pricePerPerson??params.base);
-  $('lxHotelCurrentSummary').textContent=(tier?.hotels||[]).join(' / ')+
+  $('lxHotelCurrentSummary').textContent=!hasHotelIncluded?'No añade alojamiento a tu paquete. Puedes solicitar una opción de hotel.':(tier?.hotels||[]).join(' / ')+
     ' · '+fmt(amount)+' por adulto en '+(occ==='single'?'simple':occ==='double'?'doble':occ==='matrimonial'?'matrimonial':occ==='triple'?'triple':'familiar')+
     ' · '+fmt(Math.round((state.adults+state.children*params.childFactor)*amount*100)/100)+' para tu grupo';
   $('lxHotelExtraStatus').textContent='El precio de otra categoría se calcula con la tarifa publicada del paquete.';
  }
  function renderHotelPhoto(){
-  const name=(currentTier()?.hotels||[])[0]||'';
+  const name=hasHotelIncluded?((currentTier()?.hotels||[])[0]||''):'';
   const slot=$('lxProductHotelPhoto');slot.replaceChildren();
+  if(!hasHotelIncluded){slot.append(el('span','','Hotel no incluido'));return}
   const photo=state.hotelPhotos[name.toLowerCase()];
   if(validSrc(photo)){const image=el('img');image.src=photo;image.alt='Imagen de '+name;image.loading='lazy';image.referrerPolicy='no-referrer';slot.append(image)}
   else slot.append(el('span','', 'Foto del hotel al consultar opciones'));
@@ -213,11 +215,15 @@
   flightPrice.hidden=!state.flight;
   if(state.flight)flightPrice.textContent='Vuelos seleccionados: '+fmt(priceFlight())+
     ' para el grupo'+(state.baggage==='checked'?' · Maleta por cotizar':'');
-  $('lxProductHotelName').textContent=state.customHotel||((currentTier()?.hotels||[]).join(' / ')||'Alojamiento incluido');
+  $('lxProductHotelName').textContent=state.customHotel||(!hasHotelIncluded?'Sin alojamiento':((currentTier()?.hotels||[]).join(' / ')||'Hotel incluido'));
+
   $('lxProductHotelCategory').textContent=state.customHotel?'Hotel alternativo solicitado':
-    (currentTier()?.stars||'Hotel')+' · '+(currentTier()?.name||'Categoría prevista');
+    (!hasHotelIncluded?'Puedes solicitar un hotel adicional':
+      (currentTier()?.stars||'Hotel')+' · '+(currentTier()?.name||'Categoría prevista'));
+
   $('lxProductHotelStatus').textContent=state.customHotel?
     'Sujeto a disponibilidad y cotización del cambio':
+    !hasHotelIncluded?'Este paquete no incluye noches de hotel.':
     'Alojamiento incluido · '+(state.occupancy==='double'?'habitación doble':state.occupancy==='single'?'habitación simple':state.occupancy==='matrimonial'?'habitación matrimonial':state.occupancy==='triple'?'habitación triple':'habitación familiar');
   const flightText=$('lxProductSelectedFlight');
   flightText.textContent=state.flight?state.flight.airline+
@@ -293,7 +299,7 @@
   const arrival=$('lxFlightArrival').value;
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
   if(adults+children>9){setStatus(flightStatus,'Máximo 9 viajeros en esta consulta.',true);return}
-  if(!dateOK(arrival)||arrival<minDate||!dateOK(out)||out<minDate||!dateOK(ret)||ret<out||out>arrival){
+  if(!dateOK(arrival)||arrival<minDate||!dateOK(out)||out<minDate||!dateOK(ret)||ret<arrival||out>arrival){
    setStatus(flightStatus,'Elige una llegada y fechas válidas de ida y regreso.',true);return}
   if(airport===params.destination){setStatus(flightStatus,'La ciudad de salida y el destino deben ser diferentes.',true);return}
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
