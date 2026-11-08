@@ -1200,7 +1200,7 @@
   };
   const ageOnTravelDate = (birthValue) => {
     const birth = parseISODate(birthValue);
-    const travel = parseISODate(state.date);
+    const travel = parseISODate($('#bkDate')?.value || state.date);
     if (!birth || !travel || birth > travel) return null;
     let age = travel.getFullYear() - birth.getFullYear();
     const beforeBirthday = travel.getMonth() < birth.getMonth() || (travel.getMonth() === birth.getMonth() && travel.getDate() < birth.getDate());
