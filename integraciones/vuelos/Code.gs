@@ -450,6 +450,11 @@ function searchBundleHotels_(p) {
   if(destination!=="Medellín, Colombia")return {ok:false,message:"Por ahora consultamos hoteles en Medellín."};
   var checkin=String(p.check_in_date||""),checkout=String(p.check_out_date||"");
   var adults=Number(p.adults||2),children=Number(p.children||0);
+  var ages=String(p.children_ages||"").split(",").filter(function(x){return x!==""});
+  if(children===0)ages=[];
+  if(children>0&&(ages.length!==children||ages.some(function(x){
+    return !/^\\d{1,2}$/.test(x)||Number(x)<1||Number(x)>17;
+  })))return {ok:false,message:"Indica la edad de cada niño para cotizar hoteles."};
   if(!validFutureDate_(checkin)||!validFutureDate_(checkout)||checkout<=checkin||
      !Number.isInteger(adults)||adults<1||adults>4||
      !Number.isInteger(children)||children<0||children>2||adults+children>4||
@@ -460,20 +465,13 @@ function searchBundleHotels_(p) {
   if(!key)return {ok:false,message:"Google Hotels requiere la propiedad SERPAPI_KEY en Apps Script."};
   var ck="hotels_"+Utilities.base64EncodeWebSafe(
     Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
-      [destination,checkin,checkout,adults,children].join("|"))).slice(0,50);
+      [destination,checkin,checkout,adults,children,ages.join(",")].join("|"))).slice(0,50);
   var cache=CacheService.getScriptCache(),stored=cache.get(ck);
   if(stored)return JSON.parse(stored);
   var params={engine:"google_hotels",q:"hoteles en Medellín Colombia",hl:"es",gl:"co",
     currency:"USD",check_in_date:checkin,check_out_date:checkout,
     adults:String(adults),children:String(children),api_key:key};
-  if(children>0){
-    var ages=[];for(var i=0;i<children;i++)ages.push("8");
-    // Ages for hotel pricing are NOT assumed: do not query with invented ages.
-    // Until specific children's ages are collected, compare hotels for adults
-    // only and avoid interpreting prices as a family total.
-    delete params.children;
-    params.children="0";
-  }
+  if(children>0)params.children_ages=ages.join(",");
   var url="https://serpapi.com/search.json?"+Object.keys(params).map(function(k){
     return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
   var res=UrlFetchApp.fetch(url,{muteHttpExceptions:true,followRedirects:true});
