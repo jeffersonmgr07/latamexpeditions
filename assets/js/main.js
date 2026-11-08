@@ -265,11 +265,20 @@
       const empty = root.querySelector('#emptyState');
       const reset = root.querySelector('#filterReset');
       const active = {};
+      const searchParams = new URLSearchParams(location.search);
+      const requestedCity = norm(searchParams.get('ciudad') || '').replace(/-/g, ' ');
+      const requestedStyle = norm(searchParams.get('estilo') || '');
       const apply = () => {
         let visible = 0;
         cards.forEach((card) => {
           const tags = (card.dataset.tags || '').split(/\s+/).filter(Boolean);
-          const ok = Object.values(active).every((value) => !value || tags.includes(value));
+          const text = norm((card.querySelector('h3')?.textContent || '') + ' ' +
+            (card.querySelector('.meta')?.textContent || '')).replace(/-/g, ' ');
+          const cityMatch = !requestedCity || text.includes(requestedCity) ||
+            (requestedCity === 'machu picchu' && text.includes('cusco'));
+          const styleMatch = !requestedStyle || tags.includes(requestedStyle);
+          const ok = cityMatch && styleMatch &&
+            Object.values(active).every((value) => !value || tags.includes(value));
           card.hidden = !ok;
           if (ok) visible += 1;
         });
