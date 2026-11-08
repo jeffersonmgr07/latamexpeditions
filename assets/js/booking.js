@@ -1326,7 +1326,7 @@
           </figcaption>
         </figure>
         <div class="booking-live-quote"><span>Precio por adulto / niño</span><strong id="bkLiveUnit">—</strong><span>Total referencial</span><strong id="bkLivePrice">—</strong></div>
-        <p class="form-note" data-en="The child price is calculated at ${Math.round(PRODUCT.childFactor * 100)}% of the selected adult fare. The final hotel or an equivalent property is confirmed before payment.">El precio infantil se calcula al ${Math.round(PRODUCT.childFactor * 100)}% de la tarifa adulta seleccionada. El hotel final o uno equivalente se confirma antes del pago.</p>
+        <p class="form-note">El total se actualiza al cambiar la categoría y la acomodación.</p>
       </div>` : '';
 
     const modal = document.createElement('div');
@@ -1427,7 +1427,7 @@
             <div class="booking-pay">
               <h3>¿Cómo deseas pagar?</h3>
               <div class="booking-payment-options" role="radiogroup" aria-label="Forma de pago">
-                <label><input type="radio" name="bkPaymentMethod" value="pay_on_tour" checked><span><strong>Pagar en efectivo al iniciar el tour</strong><small>Pago pendiente hasta el inicio de la experiencia</small></span></label>
+                <label><input type="radio" name="bkPaymentMethod" value="pay_on_tour" checked><span><strong>${PRODUCT.kind === 'package' ? 'Solicitar reserva y coordinar el pago' : 'Pagar en efectivo al iniciar el tour'}</strong><small>${PRODUCT.kind === 'package' ? 'Sin cobro ahora: confirmaremos tus servicios y condiciones' : 'Pago pendiente hasta el inicio de la experiencia'}</small></span></label>
                 <label><input type="radio" name="bkPaymentMethod" value="online" ${onlineConfigured() ? '' : 'disabled'}><span><strong>Pagar online ahora</strong><small>${onlineConfigured() ? 'Paga de forma segura con PayPal' : 'Próximamente · pasarela por configurar'}</small></span></label>
               </div>
               <div id="bkPayOnTour"><p class="form-note">Tu registro se enviará a nuestro equipo. La reserva no estará pagada y la disponibilidad debe ser confirmada.</p><button type="button" class="btn-primary" id="bkSubmitCash">Enviar solicitud de reserva</button></div>
@@ -1924,7 +1924,7 @@
     $('#bkSuccessMethod').textContent = cash ? 'Forma de pago: Pago en efectivo al iniciar el tour (pendiente).' : ''; 
     const balance = Number(response.balance || 0);
     const isEnglish = document.documentElement.lang === 'en';
-    $('#bkDoneBalance').textContent = cash ? `Pago pendiente: ${money(state.total)}.` : balance > 0
+    $('#bkDoneBalance').textContent = cash ? `Importe solicitado: ${money(state.total)} (pendiente de confirmación).` : balance > 0
       ? `${isEnglish ? 'Outstanding balance' : 'Saldo pendiente'}: ${money(balance)}.`
       : (isEnglish ? 'The booking has been paid in full.' : 'La reserva quedó pagada por completo.');
     let user = null;
@@ -2175,6 +2175,9 @@
       input.dispatchEvent(new Event('change', { bubbles: true }));
     }));
     ['#bkAdults','#bkChildren','#bkTier','#bkOccupancy'].forEach((selector) => $(selector)?.addEventListener('change', () => {
+      const hasChangedHotel = state.tier !== ($('#bkTier')?.value || state.tier) ||
+        state.occupancy !== ($('#bkOccupancy')?.value || state.occupancy);
+      if(hasChangedHotel)state.customHotel='';
       state.adults = Number($('#bkAdults').value); state.children = Number($('#bkChildren').value);
       state.tier = $('#bkTier')?.value || state.tier; state.occupancy = $('#bkOccupancy')?.value || state.occupancy; recalculate(); refreshCounters();
     }));
