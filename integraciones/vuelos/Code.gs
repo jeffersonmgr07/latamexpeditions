@@ -453,7 +453,7 @@ function searchBundleHotels_(p) {
   var ages=String(p.children_ages||"").split(",").filter(function(x){return x!==""});
   if(children===0)ages=[];
   if(children>0&&(ages.length!==children||ages.some(function(x){
-    return !/^\\d{1,2}$/.test(x)||Number(x)<1||Number(x)>17;
+    return !/^[0-9]{1,2}$/.test(x)||Number(x)<1||Number(x)>17;
   })))return {ok:false,message:"Indica la edad de cada niño para cotizar hoteles."};
   if(!validFutureDate_(checkin)||!validFutureDate_(checkout)||checkout<=checkin||
      !Number.isInteger(adults)||adults<1||adults>4||
