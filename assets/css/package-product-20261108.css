@@ -106,3 +106,78 @@
   .lx-package-hotel-item{grid-template-columns:75px 1fr}
   .lx-package-hotel-photo{width:75px;height:77px}
 }
+
+
+/* Ajustes de fichas Medellín y selectores · 08-11-2026 */
+.product-detail-section .detail-layout--aligned>.tour-booking-aside{align-self:start;margin-top:0!important;transform:none!important}
+.product-detail-section .detail-main>.detail-card:first-child{margin-top:0!important}
+.product-hero-clean.package-hero-clean{
+ background-color:#0b4b30;
+ background-image:linear-gradient(90deg,rgba(5,53,33,.95) 0%,rgba(7,70,39,.81) 48%,rgba(6,61,38,.63) 100%),var(--lx-hero-img);
+ background-size:cover;background-position:center;min-height:190px;
+ padding-top:clamp(50px,6vw,76px);padding-bottom:clamp(45px,6vw,72px);
+}
+.lx-modal-lead{font-size:13px;line-height:1.55;color:#526e5b;margin:0 0 16px}
+.lx-hotel-cards{display:grid;gap:14px;margin:12px 0}
+.lx-hotel-option-card{display:grid;grid-template-columns:185px minmax(0,1fr);border:1px solid #dbe8df;
+ border-radius:16px;overflow:hidden;box-shadow:0 3px 14px rgba(12,55,27,.06);background:#fff}
+.lx-hotel-card-media{display:flex;flex-direction:column;align-items:center;justify-content:center;
+ text-align:center;gap:7px;background:#f0f6f2;color:#738779;padding:10px;min-height:160px;font-size:11px}
+.lx-hotel-card-media img{width:100%;height:100%;min-height:145px;object-fit:cover;border-radius:9px}
+.lx-hotel-placeholder{font-size:54px;color:#b5cdbd;line-height:1}
+.lx-hotel-card-details{padding:15px;min-width:0}
+.lx-hotel-card-name{display:block;color:#17452c;font-size:16px;font-weight:800}
+.lx-hotel-card-category{display:block;color:#728778;font-size:11px;margin-top:4px}
+.lx-hotel-room-title{font-size:12px!important;margin:13px 0 8px!important;color:#597463!important}
+.lx-hotel-room-options{display:grid;gap:6px}
+.lx-hotel-room-choice{display:grid;grid-template-columns:18px minmax(0,1fr) auto;align-items:center;gap:8px;
+ width:100%;border:1px solid #dbe8df;background:#fff;text-align:left;border-radius:9px;padding:10px;cursor:pointer;color:#19452c}
+.lx-hotel-room-choice.is-selected,.lx-flight-choice.is-selected{border-color:#07873e;background:#f0faf3;box-shadow:inset 0 0 0 1px #07873e}
+.lx-hotel-room-choice strong{font-size:11.5px;color:#07873e;white-space:nowrap}
+.lx-room-copy{font-size:12px;font-weight:700}
+.lx-choice-radio{height:17px;width:17px;border:2px solid #a9c4b0;border-radius:50%;display:grid;place-items:center}
+.is-selected>.lx-choice-radio{border-color:#07873e}
+.is-selected>.lx-choice-radio:after{content:"";height:7px;width:7px;border-radius:50%;background:#07873e}
+.lx-hotel-age-box{padding:13px;border:1px solid #dbe8df;border-radius:11px;background:#f8fbf9;margin:12px 0}
+.lx-hotel-age-box[hidden]{display:none}
+.lx-hotel-age-box strong{color:#234a32;font-size:12px}
+.lx-hotel-age-grid{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.lx-hotel-age-grid label{display:grid;gap:5px;color:#4c6b55;font-size:12px}
+.lx-hotel-age-grid select{min-height:37px;border:1px solid #b9d3c2;border-radius:8px;padding:7px;background:white}
+.lx-hotel-age-box small{font-size:10px;color:#728477}
+.lx-hotel-live-card{align-items:center}
+.lx-flight-choice{display:grid;grid-template-columns:19px minmax(0,1fr) auto;align-items:center;gap:13px;
+ width:100%;text-align:left;padding:15px;border-radius:12px;border:1px solid #dbe8df;background:#fff;cursor:pointer;color:#19452c}
+.lx-flight-choice-content{display:grid;gap:10px;min-width:0}
+.lx-flight-choice-brand{display:flex;align-items:center;gap:8px;font-size:13px}
+.lx-flight-airline-mark{display:grid;place-items:center;width:29px;height:29px;color:#07873e;background:#e5f5ea;border-radius:8px}
+.lx-flight-route{display:grid;grid-template-columns:minmax(65px,1fr) minmax(65px,1fr) minmax(65px,1fr);
+ align-items:center;gap:9px}
+.lx-flight-stop{display:grid;gap:3px}
+.lx-flight-stop strong{font-size:19px;color:#17452c}
+.lx-flight-stop small{font-size:11px;color:#718477}
+.lx-flight-route-middle{text-align:center;color:#7e8e82;font-size:10px}
+.lx-flight-route-middle:before{content:"";height:1px;background:#bdd7c3;display:block;margin-bottom:6px}
+.lx-flight-choice-price{display:grid;text-align:right;gap:5px}
+.lx-flight-choice-price strong{color:#07873e;font-size:15px;white-space:nowrap}
+.lx-flight-choice-price small{font-size:10px;color:#718477}
+.lx-package-modal-bottom{position:sticky;bottom:0;z-index:2;background:#fff;margin-top:14px;padding:13px 0}
+@media(max-width:740px){
+ .lx-hotel-option-card{grid-template-columns:120px minmax(0,1fr)}
+ .lx-hotel-card-media{padding:7px;min-height:135px}
+ .lx-hotel-card-media img{min-height:125px}
+ .lx-hotel-card-details{padding:10px}
+ .lx-hotel-room-choice{grid-template-columns:15px minmax(0,1fr)}
+ .lx-hotel-room-choice strong{grid-column:2;white-space:normal}
+ .lx-flight-choice{grid-template-columns:18px minmax(0,1fr);padding:12px}
+ .lx-flight-choice-price{grid-column:2;text-align:left}
+}
+@media(max-width:420px){
+ .lx-hotel-option-card{grid-template-columns:1fr}
+ .lx-hotel-card-media{min-height:80px}
+ .lx-hotel-card-media img{height:100px;min-height:100px}
+ .lx-hotel-room-choice{grid-template-columns:15px minmax(0,1fr) auto}
+ .lx-hotel-room-choice strong{grid-column:auto}
+ .lx-flight-stop strong{font-size:17px}
+ .lx-flight-route{gap:5px}
+}
