@@ -3309,3 +3309,38 @@ body.has-pn-header .topbar { border: 0 !important; }
  .home-travel-form{gap:12px}
  .home-travel-form .search-field{border-right:0}
 }
+
+/* LATAM Booking: pasajeros primero, contacto integrado y dos pasos coherentes */
+.booking-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+.booking-steps li[data-step-label="1"]>b::after,
+.booking-steps li[data-step-label="3"]>b::after{content:none}
+.booking-passenger-help{margin:0 0 15px}
+.booking-passenger-fields[hidden],.passenger-age[hidden]{display:none!important}
+.booking-passenger-contact{border-top:1px solid #dce9e0;padding-top:17px;margin-top:16px}
+.booking-passenger-contact h4{margin:0 0 13px;color:#16442d;font:800 14px Montserrat,Inter,Arial,sans-serif}
+.booking-defer{display:flex;gap:8px;align-items:center;padding:10px 12px;margin:0 0 12px;
+ border-radius:10px;background:#f0f7f1;color:#305e43;font-size:12px;font-weight:700;cursor:pointer}
+.booking-defer input{width:17px;height:17px;accent-color:#07873e;flex:none}
+.booking-passenger-contact .booking-phone-combined{min-width:0}
+.booking-passenger-contact #bkPhoneDial{min-width:150px;max-width:52%}
+.booking-passenger-contact #bkPhone{min-width:0}
+.booking-passenger-contact #bkTourLanguage{width:100%}
+.booking-modal--package .booking-passenger-help{margin-bottom:14px}
+.booking-modal--package .booking-initial-fields,
+.booking-modal--package .booking-initial-travelers,
+.booking-modal--package .booking-subsection--hotel{display:none!important}
+@media(max-width:700px){
+ .booking-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .booking-steps li[data-step-label="1"]>b::after{content:"Pasajeros"}
+ .booking-steps li[data-step-label="3"]>b::after{content:"Pago"}
+}
+@media(max-width:520px){
+ .booking-passenger-contact #bkPhoneDial{min-width:120px;max-width:45%;font-size:11px}
+ .booking-passenger-contact #bkPhone{font-size:12px}
+}
+/* Imagen del destino con velo verde corporativo en la cabecera de cada ficha */
+.product-hero-clean{
+ background-image:linear-gradient(90deg,rgba(0,39,24,.94) 0%,rgba(0,63,37,.86) 50%,rgba(0,54,32,.60) 100%),var(--lx-hero-img,none);
+ background-position:center,center 52%;background-size:cover;background-repeat:no-repeat
+}
+.product-hero-clean .container{position:relative;z-index:1}
