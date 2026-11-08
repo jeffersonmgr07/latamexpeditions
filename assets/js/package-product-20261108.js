@@ -34,7 +34,7 @@
   children:Math.max(0,Math.min(8,Number(q.get('children'))||0)),
   origin:(q.get('origen')||defaults[country]||'LIM').toUpperCase(),
   tier:firstTier?.code||'',occupancy:'double',hotelPicked:false,customHotel:'',
-  hotelPhotos:{},flight:null,baggage:'none',offers:[],outboundKey:'',choice:null
+  hotelPhotos:{},roomPlan:'',hotelQuotePending:false,childrenAges:[],flight:null,baggage:'none',offers:[],outboundKey:'',choice:null
  };
  if(state.adults+state.children>9)state.children=Math.max(0,9-state.adults);
  function defaultRoom(){
@@ -56,7 +56,7 @@
   return n<=30?.1:n<=45?.05:n<=90?0:n<=180?-.05:n<=270?-.1:-.15;
  }
  function getSelection(){return {slug:params.slug,date:state.date,adults:state.adults,children:state.children,
-  tier:state.tier,occupancy:state.occupancy,customHotel:state.customHotel,
+  tier:state.tier,occupancy:state.occupancy,customHotel:state.customHotel,roomPlan:state.roomPlan,hotelQuotePending:state.hotelQuotePending,
   flight:state.flight?{...state.flight,baggage:state.baggage}:null,
   totalEstimate:total(),packageEstimate:pricePackage(),origin:state.origin};}
  window.LatamPackageDetails={getSelection};
@@ -91,7 +91,7 @@
  panel.querySelectorAll('[data-pax]').forEach(b=>b.addEventListener('click',()=>{
   const type=b.dataset.pax,delta=Number(b.dataset.dir),next=state[type]+delta;
   if(next<(type==='adults'?1:0)||next>9||(delta>0&&state.adults+state.children>=9))return;
-  state[type]=next;if(!state.hotelPicked)state.occupancy=defaultRoom();invalidateFlight();update();
+  state[type]=next;state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];invalidateFlight();update();
  }));
  const sectionAt=cards.find(x=>/^Itinerario/i.test(x.querySelector('h2')?.textContent||''))||
    main.querySelector('.package-itinerary')?.closest('section.detail-card');
@@ -135,7 +135,7 @@
  '<label>Salida de tu ciudad<input type="date" id="lxFlightDeparture"></label>'+
  '<label>Regreso<input type="date" id="lxFlightReturn"></label>'+
  '<label>Adultos<select id="lxFlightAdults">'+Array.from({length:9},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'</option>').join('')+'</select></label>'+
- '<label>Niños<select id="lxFlightChildren">'+Array.from({length:9},(_,i)=>'<option value="'+i+'">'+i+'</option>').join('')+'</select></label>'+
+ '<label>Niños<select id="lxFlightChildren">'+Array.from({length:7},(_,i)=>'<option value="'+i+'">'+i+'</option>').join('')+'</select></label>'+
  '</div><button type="button" class="lx-package-search" id="lxProductSearchFlights">Consultar vuelos</button>'+
  '<div id="lxFlightSearchStatus" role="status" class="lx-package-status"></div>'+
  '<div id="lxFlightDepartures" class="lx-package-offers"></div><div id="lxFlightReturns" class="lx-package-offers"></div>'+
@@ -262,7 +262,7 @@
    const script=el('script');let done=false;
    const timer=setTimeout(()=>finish(Error('La consulta tardó demasiado. Vuelve a intentarlo.')),65000);
    function finish(error,data){if(done)return;done=true;clearTimeout(timer);delete window[cb];script.remove();error?reject(error):resolve(data)}
-   window[cb]=data=>finish(null,data);script.onerror=()=>finish(Error('No se pudo conectar al buscador.'));
+   window[cb]=data=>finish(null,data);script.onerror=()=>finish(Error('El servicio no respondió. Comprueba el despliegue público de Apps Script.'));
    script.src=url.href;document.head.append(script);
   });
  }
@@ -273,12 +273,19 @@
  function signature(leg){return JSON.stringify((leg?.segments||[]).map(s=>
    [s.airline,s.flightNumber,s.from?.code,s.from?.time,s.to?.code,s.to?.time]))}
  function flightCard(leg,price,selected,action){
-  const card=el('button','lx-package-offer'+(selected?' is-selected':''));card.type='button';
-  const copy=el('span'),title=el('b','',legSummary(leg)),extra=el('small','','');
-  extra.textContent='Tarifa combinada de ida y regreso · '+state.adults+' adulto(s), '+state.children+' niño(s)';
-  copy.append(title,extra);card.append(copy,el('strong','',fmt(price)));
-  card.addEventListener('click',action);return card;
- }
+ const seg=leg?.segments||[],a=seg[0]||{},b=seg[seg.length-1]||{};
+ const card=el('button','lx-flight-choice'+(selected?' is-selected':''));card.type='button';
+ card.setAttribute('aria-pressed',String(selected));card.append(el('span','lx-choice-radio',''));
+ const body=el('span','lx-flight-choice-content'),brand=el('span','lx-flight-choice-brand');
+ brand.append(el('span','lx-flight-airline-mark','✈'),el('strong','',a.airline||'Aerolínea'));
+ const route=el('span','lx-flight-route'),depart=el('span','lx-flight-stop'),arrive=el('span','lx-flight-stop');
+ depart.append(el('strong','',flightTime(a.from?.time)),el('small','',a.from?.code||'Origen'));
+ arrive.append(el('strong','',flightTime(b.to?.time)),el('small','',b.to?.code||'Destino'));
+ route.append(depart,el('span','lx-flight-route-middle',seg.length<=1?'Directo':(seg.length-1)+' escala(s)'),arrive);
+ body.append(brand,route);
+ const cost=el('span','lx-flight-choice-price');cost.append(el('strong','',fmt(price)),el('small','','Ida y vuelta · grupo'));
+ card.append(body,cost);card.addEventListener('click',action);return card;
+}
  function renderFlightOffers(){
   const departures=$('lxFlightDepartures'),returns=$('lxFlightReturns');
   departures.replaceChildren();returns.replaceChildren();
@@ -314,7 +321,7 @@
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
   $('lxProductSearchFlights').disabled=true;
   state.date=arrival;state.adults=adults;state.children=children;state.origin=airport;
-  if(!state.hotelPicked)state.occupancy=defaultRoom();
+  state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];
   invalidateFlight();update();
   setStatus(flightStatus,'Buscando combinaciones de ida y regreso…');
   try{
@@ -353,12 +360,16 @@
   if(!state.date){setStatus(hotelStatus,'Elige primero la fecha de llegada.',true);return}
   if(!params.destination){setStatus(hotelStatus,'Este destino todavía no dispone de búsqueda hotelera.',true);return}
   if(state.adults+state.children>4){setStatus(hotelStatus,'Para más de 4 huéspedes, solicita una distribución de habitaciones personalizada.',true);return}
-  if(state.children){setStatus(hotelStatus,'Para comparar alojamientos con menores, consulta las edades y condiciones con nuestro equipo.',true);return}
+  if(state.children>2){setStatus(hotelStatus,'La búsqueda admite máximo 2 niños por habitación.',true);return}
+  const ages=state.children?[...$('lxHotelAgesBox').querySelectorAll('[data-child-age]')].map(x=>Number(x.value)):[];
+  if(state.children&&(ages.length!==state.children||ages.some(a=>!Number.isInteger(a)||a<1||a>17))){
+   setStatus(hotelStatus,'Indica la edad de cada niño para obtener tarifas correctas.',true);return}
+  state.childrenAges=ages;
   const btn=$('lxProductLookupHotels');btn.disabled=true;setStatus(hotelStatus,'Buscando opciones de hoteles…');
   try{
    const result=await callApi({mode:'hotels',destination:'Medellín, Colombia',
     check_in_date:state.date,check_out_date:addDays(state.date,params.nights),
-    adults:state.adults,children:state.children});
+    adults:state.adults,children:state.children,children_ages:ages.join(',')});
    if(!result?.ok)throw Error(result?.message||'No hay opciones para estas fechas.');
    const list=$('lxHotelLookupOptions');list.replaceChildren();
    const options=(Array.isArray(result.hotels)?result.hotels:[]).slice(0,12);
@@ -366,7 +377,7 @@
    setStatus(hotelStatus,'Elige un hotel alternativo. Confirmaremos su suplemento antes de finalizar la reserva.');
    options.forEach(h=>{
     if(!h?.name)return;
-    const card=el('button','lx-package-offer');card.type='button';
+    const card=el('button','lx-package-offer lx-hotel-live-card');card.type='button';
     const left=el('span');
     if(validSrc(h.thumbnail)){const img=el('img');img.src=h.thumbnail;img.alt='';img.loading='lazy';img.referrerPolicy='no-referrer';left.append(img);
      state.hotelPhotos[String(h.name).toLowerCase()]=h.thumbnail;}
