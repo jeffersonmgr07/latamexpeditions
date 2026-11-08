@@ -481,7 +481,7 @@ function searchBundleHotels_(p) {
   function number_(obj){
     if(typeof obj==="number")return obj>0&&obj<100000?obj:null;
     if(obj&&typeof obj==="object"){
-      var found=Number(obj.extracted_lowest||obj.extracted_price||obj.extracted_total||0);
+      var found=Number(obj.extracted_display_price||obj.extracted_after_taxes_fees||obj.extracted_lowest||obj.extracted_price||obj.extracted_total||0);
       return found>0&&found<100000?found:null;
     }
     return null;
