@@ -31,6 +31,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" referrerpolicy="no-referrer" rel="stylesheet"/>
 <link href="assets/css/main.css" rel="stylesheet"/>
+<link href="assets/css/search-results-20261108.css?v=1" rel="stylesheet"/>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ItemList", "name": "Paquetes de viaje por Latinoamérica", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Cusco y Machu Picchu", "url": "https://latamexpeditions.com/paquetes/peru-cusco-4d3n.html"}, {"@type": "ListItem", "position": 2, "name": "Perú imperial: Cusco, Puno y Arequipa", "url": "https://latamexpeditions.com/paquetes/peru-sur-7d6n.html"}, {"@type": "ListItem", "position": 3, "name": "Cartagena esencial", "url": "https://latamexpeditions.com/paquetes/cartagena-esencial.html"}, {"@type": "ListItem", "position": 4, "name": "Colombia esencial: Bogotá, Medellín y Cartagena", "url": "https://latamexpeditions.com/paquetes/bogota-medellin-y-cartagena.html"}, {"@type": "ListItem", "position": 5, "name": "Buenos Aires e Iguazú", "url": "https://latamexpeditions.com/paquetes/argentina-ba-iguazu-5d4n.html"}, {"@type": "ListItem", "position": 6, "name": "Argentina y Patagonia", "url": "https://latamexpeditions.com/paquetes/argentina-patagonia-7d6n.html"}, {"@type": "ListItem", "position": 7, "name": "La Paz y Salar de Uyuni", "url": "https://latamexpeditions.com/paquetes/bolivia-uyuni-4d3n.html"}, {"@type": "ListItem", "position": 8, "name": "Santiago y Atacama", "url": "https://latamexpeditions.com/paquetes/chile-atacama-5d4n.html"}, {"@type": "ListItem", "position": 9, "name": "Patagonia y Torres del Paine", "url": "https://latamexpeditions.com/paquetes/chile-patagonia-6d5n.html"}, {"@type": "ListItem", "position": 10, "name": "Quito y Galápagos", "url": "https://latamexpeditions.com/paquetes/ecuador-galapagos-5d4n.html"}, {"@type": "ListItem", "position": 11, "name": "Río de Janeiro esencial", "url": "https://latamexpeditions.com/paquetes/brasil-rio-4d3n.html"}, {"@type": "ListItem", "position": 12, "name": "Río de Janeiro e Iguazú", "url": "https://latamexpeditions.com/paquetes/brasil-rio-iguazu-6d5n.html"}, {"@type": "ListItem", "position": 13, "name": "Riviera Maya y mundo maya", "url": "https://latamexpeditions.com/paquetes/mexico-riviera-5d4n.html"}]}</script>
 </head>
 <body>
@@ -90,28 +91,23 @@
 </div>
 </div>
 <main id="contenido">
-<section class="page-hero">
-<div class="page-hero__inner">
-<nav aria-label="Ruta de navegación" class="breadcrumb"><ol><li><a href="index.html">Inicio</a></li><li><span aria-current="page">Paquetes</span></li></ol></nav>
-<h1>Paquetes de viaje</h1>
-<p>Itinerarios completos de varios días con traslados, guías y actividades incluidas. Eliges la categoría de hotel, las fechas y el ritmo del viaje.</p>
-</div>
+<section class="lx-results-intro" aria-label="Resultados de búsqueda">
+  <div class="lx-results-intro__inner">
+    <div class="lx-results-intro__heading">
+      <span class="lx-results-intro__kicker">Resultados de búsqueda</span>
+      <h1 id="lxResultsHeading">Destinos disponibles</h1>
+      <p id="lxResultsSummary">Elige el paquete que más te guste.</p>
+    </div>
+    <a class="lx-results-intro__edit" href="index.html#explorar">Modificar búsqueda</a>
+  </div>
 </section>
-<section class="section" data-filterable="">
-<div class="filters">
-<div class="filter-row">
-<span class="filter-row__label">País</span>
-<div aria-label="Filtrar por país" class="filter-row__opts" data-filter-group="pais" data-filter-param="destino" role="group"><button aria-pressed="false" class="filter-btn" data-filter="argentina" type="button">Argentina</button><button aria-pressed="false" class="filter-btn" data-filter="bolivia" type="button">Bolivia</button><button aria-pressed="false" class="filter-btn" data-filter="brasil" type="button">Brasil</button><button aria-pressed="false" class="filter-btn" data-filter="chile" type="button">Chile</button><button aria-pressed="false" class="filter-btn" data-filter="colombia" type="button">Colombia</button><button aria-pressed="false" class="filter-btn" data-filter="ecuador" type="button">Ecuador</button><button aria-pressed="false" class="filter-btn" data-filter="mexico" type="button">México</button><button aria-pressed="false" class="filter-btn" data-filter="peru" type="button">Perú</button></div>
-</div>
-<div class="filter-row">
-<span class="filter-row__label">Duración</span>
-<div aria-label="Filtrar por duración" class="filter-row__opts" data-filter-group="dias" data-filter-param="dias" role="group"><button aria-pressed="false" class="filter-btn" data-filter="d4" type="button">4D/3N</button><button aria-pressed="false" class="filter-btn" data-filter="d5" type="button">5D/4N</button><button aria-pressed="false" class="filter-btn" data-filter="d6" type="button">6D/5N</button><button aria-pressed="false" class="filter-btn" data-filter="d7" type="button">7D/6N</button><button aria-pressed="false" class="filter-btn" data-filter="d8" type="button">8D/7N</button></div>
-</div>
-</div>
-<div class="results-bar">
-<p class="results-count" id="resultsCount" role="status"></p>
-<button class="filter-clear" hidden="" id="filterReset" type="button">Quitar filtros</button>
-</div>
+<section class="section lx-results-catalog" data-filterable>
+  <div class="results-bar"><p class="results-count" id="resultsCount" role="status"></p></div>
+  <div id="emptyState" class="lx-results-empty" hidden>
+    <h2>Sin paquetes disponibles en este destino</h2>
+    <p>Prueba con otra ciudad o consulta un viaje personalizado.</p>
+    <a href="index.html#explorar">Buscar otro destino</a>
+  </div>
 <div class="cards-grid">
 <article class="trip-card" data-tags="peru d4">
 <div class="trip-card__media">
@@ -771,8 +767,8 @@
 <a aria-label="Escribir por WhatsApp a un asesor" class="wa-float" href="https://wa.me/51900608980" rel="noopener noreferrer" target="_blank">
 <i aria-hidden="true" class="fab fa-whatsapp"></i>
 </a>
-<script defer="" src="assets/js/main.js"></script>
-<script defer src="assets/js/catalog-search-bridge.js"></script>
+<script defer="" src="assets/js/main.js?v=20261108"></script>
+<script defer src="assets/js/catalog-search-bridge.js?v=20261108"></script>
 <script defer="" src="assets/js/cuentas.js"></script>
 </body>
 </html>
