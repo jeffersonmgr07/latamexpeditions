@@ -88,11 +88,11 @@
   '<p class="lx-package-addons-note" id="lxProductQuoteNote">Elige la fecha y los viajeros para continuar.</p>';
  side.querySelector('.price-block')?.after(panel);
  $('lxProductDate').min=minDate;$('lxProductDate').value=state.date;
- $('lxProductDate').addEventListener('change',()=>{state.date=$('lxProductDate').value;invalidateFlight();update()});
+ $('lxProductDate').addEventListener('change',()=>{state.date=$('lxProductDate').value;state.customHotel='';state.hotelQuotePending=false;invalidateFlight();clearHotelLookup();update()});
  panel.querySelectorAll('[data-pax]').forEach(b=>b.addEventListener('click',()=>{
   const type=b.dataset.pax,delta=Number(b.dataset.dir),next=state[type]+delta;
   if(next<(type==='adults'?1:0)||next>9||(delta>0&&state.adults+state.children>=9))return;
-  state[type]=next;state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];invalidateFlight();update();
+  state[type]=next;state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];invalidateFlight();clearHotelLookup();update();
  }));
  const sectionAt=cards.find(x=>/^Itinerario/i.test(x.querySelector('h2')?.textContent||''))||
    main.querySelector('.package-itinerary')?.closest('section.detail-card');
@@ -336,6 +336,7 @@ function showTierQuote(){
    script.src=url.href;document.head.append(script);
   });
  }
+ function clearHotelLookup(){const box=$('lxHotelLookupOptions');if(box)box.replaceChildren();const status=$('lxHotelLookupStatus');if(status)setStatus(status,'')}
  function flightTime(s){const found=String(s||'').match(/\d\d:\d\d/);return found?found[0]:'—'}
  function legSummary(leg){const s=leg?.segments||[],a=s[0]||{},b=s[s.length-1]||{};
   return (a.airline||'Aerolínea')+' · '+flightTime(a.from?.time)+' '+(a.from?.code||'')+
@@ -392,7 +393,7 @@ function showTierQuote(){
   $('lxProductSearchFlights').disabled=true;
   state.date=arrival;state.adults=adults;state.children=children;state.origin=airport;
   state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];
-  invalidateFlight();update();
+  invalidateFlight();clearHotelLookup();update();
   setStatus(flightStatus,'Buscando combinaciones de ida y regreso…');
   try{
    const result=await callApi({origin:airport,destination:params.destination,departure:out,returnDate:ret,
