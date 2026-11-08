@@ -502,7 +502,7 @@ function searchBundleHotels_(p) {
       source:"Google Hotels",roomsVerified:false};
   });
   var result={ok:true,source:"Google Hotels via SerpApi",pricesVerified:false,
-    occupancyPricedForChildren:children===0,hotels:hotels};
+    occupancyPricedForChildren:children===0||ages.length===children,hotels:hotels};
   try{cache.put(ck,JSON.stringify(result),600)}catch(ignore){}
   return result;
 }
