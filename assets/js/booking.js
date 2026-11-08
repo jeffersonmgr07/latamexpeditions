@@ -2181,6 +2181,9 @@
         const extras=[hotel,
           state.roomPlan||occupancyLabel(state.occupancy),
           state.flightQuote?'Vuelos seleccionados desde '+state.flightQuote.origin:'Vuelos no añadidos'];
+        const estimated=Number(source.totalEstimate);
+        if(Number.isFinite(estimated)&&estimated>0)
+          extras.push((state.hotelQuotePending?'Total desde ':'Total referencial ')+money(estimated));
         $('#bkPackageSelectionDetail').textContent=extras.filter(Boolean).join(' · ');
       }
       return dateValid&&paxValid;
