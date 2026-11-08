@@ -18,7 +18,8 @@
  const minDate=addDays(localISO(new Date()),2);
  const params={slug:book.dataset.book||'',nights:Number((book.dataset.bookDuration||'').match(/(\d+)N/)?.[1])||3,
   // No inferir MDE para toda Colombia: solo las fichas de Medellín.
-  destination:/^medellin-/.test(book.dataset.book||'')?'MDE':'',
+  destination:String(book.dataset.bookDestination||(/^medellin-/.test(book.dataset.book||'')?'MDE':'')).toUpperCase(),
+  destinationPlace:String(book.dataset.bookDestinationLabel||(/^medellin-/.test(book.dataset.book||'')?'Medellín, Colombia':'')),
   title:book.dataset.bookTitle||'',base:Number(book.dataset.bookPrice)||0,
   childFactor:Number(book.dataset.bookChildFactor||.7)};
  let tiers=[];try{tiers=JSON.parse(book.dataset.bookTiers||'[]')}catch(_){}
@@ -131,7 +132,7 @@
  '<div id="lxFlightSearchPanel" class="lx-flight-search-panel" hidden><div class="lx-package-modal-fields">'+
  '<label>Salida desde<select id="lxFlightOrigin">'+
  ['LIM|Lima','BOG|Bogotá','CUZ|Cusco','MDE|Medellín','CLO|Cali','CTG|Cartagena',
- 'AQP|Arequipa','EZE|Buenos Aires','SCL|Santiago','MEX|Ciudad de México',
+ 'AQP|Arequipa','EZE|Buenos Aires','AEP|Buenos Aires (Aeroparque)','GIG|Río de Janeiro','SCL|Santiago','MEX|Ciudad de México',
  'UIO|Quito','GRU|São Paulo','PTY|Ciudad de Panamá','MIA|Miami','CCS|Caracas'].map(s=>{
  const [code,label]=s.split('|');return '<option value="'+code+'">'+label+' ('+code+')</option>';
  }).join('')+'</select></label>'+
@@ -196,7 +197,7 @@ function renderFlightSearchSummary(){
  };
  const airports={MDE:'Medellín',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',CLO:'Cali',
   CTG:'Cartagena',AQP:'Arequipa',EZE:'Buenos Aires',SCL:'Santiago',MEX:'Ciudad de México',
-  UIO:'Quito',GRU:'São Paulo',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
+  UIO:'Quito',GRU:'São Paulo',GIG:'Río de Janeiro',AEP:'Buenos Aires',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
  const origin=$('lxFlightOrigin').selectedOptions[0]?.textContent.replace(/\s*\([A-Z]{3}\)\s*$/,'')||
   airports[query.origin]||query.origin;
  const destination=airports[query.destination]||query.destination||(en?'Destination':'Destino');
@@ -562,7 +563,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  });
  $('lxProductLookupHotels').addEventListener('click',async ()=>{
   if(!state.date){setStatus(hotelStatus,'Elige primero la fecha de llegada.',true);return}
-  if(!params.destination){setStatus(hotelStatus,'Este destino todavía no dispone de búsqueda hotelera.',true);return}
+  if(!params.destinationPlace){setStatus(hotelStatus,'Este destino todavía no dispone de búsqueda hotelera.',true);return}
   if(state.adults+state.children>4){setStatus(hotelStatus,'Para más de 4 huéspedes, solicita una distribución de habitaciones personalizada.',true);return}
   if(state.children>2){setStatus(hotelStatus,'La búsqueda admite máximo 2 niños por habitación.',true);return}
   const ages=state.children?[...$('lxHotelAgesBox').querySelectorAll('[data-child-age]')].map(x=>Number(x.value)):[];
@@ -571,7 +572,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   state.childrenAges=ages;
   const btn=$('lxProductLookupHotels');btn.disabled=true;setStatus(hotelStatus,'Buscando opciones de hoteles…');
   try{
-   const result=await callApi({mode:'hotels',destination:'Medellín, Colombia',
+   const result=await callApi({mode:'hotels',destination:params.destinationPlace,
     check_in_date:state.date,check_out_date:addDays(state.date,params.nights),
     adults:state.adults,children:state.children,children_ages:ages.join(',')});
    if(!result?.ok)throw Error(result?.message||'No hay opciones para estas fechas.');
