@@ -266,22 +266,32 @@
       const reset = root.querySelector('#filterReset');
       const active = {};
       const searchParams = new URLSearchParams(location.search);
-      const requestedCity = norm(searchParams.get('ciudad') || '').replace(/-/g, ' ');
-      const requestedStyle = norm(searchParams.get('estilo') || '');
+      const isPackageCatalog = root.classList.contains('lx-results-catalog');
+      const requestedCountry = isPackageCatalog ? norm(searchParams.get('destino') || '') : '';
+      const requestedCity = isPackageCatalog ? norm(searchParams.get('ciudad') || '') : '';
+      // Legacy URLs can include ?estilo=romantico, but that filter is no longer
+      // part of the package search and must never hide otherwise valid trips.
+      const requestedStyle = isPackageCatalog ? '' : norm(searchParams.get('estilo') || '');
+      const cardText = card => norm((card.querySelector('h3')?.textContent || '') + ' ' +
+        (card.querySelector('.meta')?.textContent || '') + ' ' +
+        (card.querySelector('p')?.textContent || ''));
+      const countryOK = card => !requestedCountry ||
+        (card.dataset.tags || '').split(/\s+/).includes(requestedCountry);
+      const cityOK = card => !requestedCity || cardText(card).includes(requestedCity) ||
+        (requestedCity === 'machu-picchu' && cardText(card).includes('cusco'));
+      const exactCityExists = !requestedCity || cards.some(card => countryOK(card) && cityOK(card));
       const apply = () => {
         let visible = 0;
         cards.forEach((card) => {
           const tags = (card.dataset.tags || '').split(/\s+/).filter(Boolean);
-          const text = norm((card.querySelector('h3')?.textContent || '') + ' ' +
-            (card.querySelector('.meta')?.textContent || '')).replace(/-/g, ' ');
-          const cityMatch = !requestedCity || text.includes(requestedCity) ||
-            (requestedCity === 'machu picchu' && text.includes('cusco'));
-          const styleMatch = !requestedStyle || tags.includes(requestedStyle);
-          const ok = cityMatch && styleMatch &&
-            Object.values(active).every((value) => !value || tags.includes(value));
+          const matchCity = !requestedCity || !exactCityExists || cityOK(card);
+          const matchStyle = !requestedStyle || tags.includes(requestedStyle);
+          const ok = countryOK(card) && matchCity && matchStyle &&
+            Object.values(active).every(value => !value || tags.includes(value));
           card.hidden = !ok;
           if (ok) visible += 1;
         });
+        if(isPackageCatalog) root.dataset.searchFallback = requestedCity && !exactCityExists ? 'true' : 'false';
         if (count) count.textContent = `${visible} ${document.documentElement.lang === 'en' ? 'results' : 'resultados'}`;
         if (empty) empty.hidden = visible > 0;
         if (reset) reset.hidden = !Object.values(active).some(Boolean);
