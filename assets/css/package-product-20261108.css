@@ -181,3 +181,34 @@
  .lx-flight-stop strong{font-size:17px}
  .lx-flight-route{gap:5px}
 }
+
+
+/* Modal de vuelos heredado: resultados primero, edición opcional. */
+.lx-package-modal [hidden],.lx-package-offers[hidden],.lx-baggage-select[hidden],
+.lx-flight-search-panel[hidden],.lx-flight-modal-bottom button[hidden]{display:none!important}
+.lx-flight-search-context{display:flex;justify-content:space-between;align-items:center;
+ gap:14px;padding:13px 15px;border:1px solid #d7e9dc;background:#f3faf5;border-radius:14px;margin:0 0 16px}
+.lx-flight-search-context>div{display:grid;gap:5px;min-width:0}
+.lx-flight-search-context small{color:#6b8573;font-size:10px;letter-spacing:.04em;font-weight:750;text-transform:uppercase}
+.lx-flight-search-context strong{font-size:13px;font-weight:800;color:#15452a;overflow-wrap:anywhere}
+.lx-flight-search-context button{flex:none;border:1px solid #07873e;background:white;color:#087d3b;
+ border-radius:9px;padding:10px 12px;font-size:12px;font-weight:800;cursor:pointer}
+.lx-flight-search-context button:hover{background:#e5f4e9}
+.lx-flight-search-panel{border:1px solid #dce9e0;border-radius:13px;padding:15px;
+ background:#f9fcfa;margin:0 0 14px}
+.lx-flight-search-panel .lx-package-modal-fields{margin-bottom:12px}
+.lx-flight-modal-bottom{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px}
+.lx-flight-modal-bottom strong{text-align:right;font-size:13px;color:#236a43}
+.lx-flight-modal-bottom .lx-flight-back{background:#fff;color:#147943;border:1px solid #b4d7c1}
+.lx-flight-choice[aria-pressed="true"]{outline-offset:1px}
+.lx-hotel-live-card:hover,.lx-flight-choice:hover,.lx-hotel-room-choice:hover{border-color:#a5cfb1}
+@media(max-width:670px){
+ .lx-flight-search-context{align-items:flex-start;padding:12px;gap:9px}
+ .lx-flight-search-context button{font-size:11px;padding:9px;white-space:nowrap}
+ .lx-flight-search-context strong{font-size:12px}
+ .lx-flight-modal-bottom{grid-template-columns:1fr auto}
+ .lx-flight-modal-bottom strong{grid-column:1;grid-row:1;text-align:left}
+ .lx-flight-modal-bottom #lxFlightBackStep{grid-column:1;grid-row:2;justify-self:start}
+ .lx-flight-modal-bottom #lxFlightNextStep,
+ .lx-flight-modal-bottom #lxFlightApply{grid-column:2;grid-row:2}
+}
