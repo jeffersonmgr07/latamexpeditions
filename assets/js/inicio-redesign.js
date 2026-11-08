@@ -127,6 +127,21 @@
     document.addEventListener('keydown',event=>{
       if(event.key==='Escape'&&!guestsPanel.hidden)openGuests(false);
     });
+    // Restaurar los valores al regresar desde «Modificar búsqueda».
+    const previous=new URLSearchParams(location.search);
+    const previousSlug=previous.get('ciudad')||previous.get('destino')||'';
+    const previousDestination=destinationList.find(item=>item[0]===previousSlug);
+    if(previousDestination)input.value=previousDestination[1];
+    if(/^\d{4}-\d{2}-\d{2}$/.test(previous.get('fecha')||'')&&
+      previous.get('fecha')>=arrival.min)arrival.value=previous.get('fecha');
+    if(previous.get('origen')&&[...origin.options].some(option=>option.value===previous.get('origen'))){
+      origin.value=previous.get('origen');origin.dataset.userEdited='true';
+    }
+    const previousAdults=Number(previous.get('adults')),previousChildren=Number(previous.get('children'));
+    if(previousAdults>=1&&previousAdults<=9&&previousChildren>=0&&
+      previousAdults+previousChildren<=MAX_TRAVELERS){
+      adultsInput.value=String(previousAdults);childrenInput.value=String(previousChildren);
+    }
     updateGuests();
     function showError(message,element){
       error.textContent=message;error.hidden=false;element?.focus?.();
@@ -138,7 +153,7 @@
       const selected=destinationList.find(([slug,label])=>
         normalize(label)===typed||slugText(slug)===typed);
       if(!selected){showError('Selecciona una ciudad, destino o país de las sugerencias.',input);return;}
-      if(!arrival.value||!/^\\d{4}-\\d{2}-\\d{2}$/.test(arrival.value)||arrival.value<arrival.min){
+      if(!arrival.value||!/^\d{4}-\d{2}-\d{2}$/.test(arrival.value)||arrival.value<arrival.min){
         showError('Selecciona una fecha de llegada válida.',$('searchDateStyledPicker')||arrival);return;
       }
       const [slug,,country]=selected;
