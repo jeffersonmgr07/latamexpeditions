@@ -206,7 +206,9 @@
   });
   $('lxProductGroupPrice').textContent=state.adults+state.children>maxHotelOccupancy?'Cotización para el grupo':fmt(total());
   $('lxProductQuoteNote').textContent=state.adults+state.children>maxHotelOccupancy?
-    'Para más de 4 viajeros, confirmaremos las habitaciones y el precio del grupo.':state.customHotel?
+    'Para más de 4 viajeros, confirmaremos las habitaciones y el precio del grupo.':
+    state.flight&&state.date&&state.flight.returnDate>addDays(state.date,params.nights)?
+    'El regreso es posterior a la salida del hotel; consultaremos noches adicionales.':state.customHotel?
     'Cambio de hotel solicitado; el suplemento se confirmará antes del pago.':
     state.flight&&state.baggage==='checked'?
     'El suplemento de equipaje facturado se confirmará antes del pago.':
@@ -226,10 +228,17 @@
     !hasHotelIncluded?'Este paquete no incluye noches de hotel.':
     'Alojamiento incluido · '+(state.occupancy==='double'?'habitación doble':state.occupancy==='single'?'habitación simple':state.occupancy==='matrimonial'?'habitación matrimonial':state.occupancy==='triple'?'habitación triple':'habitación familiar');
   const flightText=$('lxProductSelectedFlight');
-  flightText.textContent=state.flight?state.flight.airline+
-    ' · '+state.flight.origin+' → '+state.flight.destination+' · '+fmt(priceFlight())+
-    (state.baggage==='checked'?' · Equipaje facturado por cotizar':''):
-    'Vuelos no incluidos';
+  const selected=state.flight;
+  if(selected){
+    const firstOut=selected.outbound?.[0],lastOut=selected.outbound?.at(-1);
+    const firstBack=selected.inbound?.[0],lastBack=selected.inbound?.at(-1);
+    const lateReturn=state.date&&selected.returnDate>addDays(state.date,params.nights);
+    flightText.textContent=selected.airline+' · Ida '+flightTime(firstOut?.from?.time)+
+      ' a '+flightTime(lastOut?.to?.time)+', regreso '+flightTime(firstBack?.from?.time)+
+      ' a '+flightTime(lastBack?.to?.time)+' · '+fmt(priceFlight())+
+      (state.baggage==='checked'?' · Equipaje facturado por cotizar':'')+
+      (lateReturn?' · Noche adicional por cotizar':'');
+  }else flightText.textContent='Vuelos no incluidos';
   $('lxProductOpenFlights').textContent=state.flight?'Cambiar vuelos':'Buscar vuelos';
   renderHotelPhoto();
   window.dispatchEvent(new CustomEvent('latam:packagequotechange',{detail:getSelection()}));
@@ -299,7 +308,7 @@
   const arrival=$('lxFlightArrival').value;
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
   if(adults+children>9){setStatus(flightStatus,'Máximo 9 viajeros en esta consulta.',true);return}
-  if(!dateOK(arrival)||arrival<minDate||!dateOK(out)||out<minDate||!dateOK(ret)||ret<arrival||out>arrival){
+  if(!dateOK(arrival)||arrival<minDate||!dateOK(out)||out<minDate||!dateOK(ret)||ret<addDays(arrival,params.nights)||out>arrival){
    setStatus(flightStatus,'Elige una llegada y fechas válidas de ida y regreso.',true);return}
   if(airport===params.destination){setStatus(flightStatus,'La ciudad de salida y el destino deben ser diferentes.',true);return}
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
