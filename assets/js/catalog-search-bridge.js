@@ -5,15 +5,13 @@
  const city=params.get('ciudad')||'';
  const arrival=params.get('fecha')||'';
  const origin=params.get('origen')||'';
+ const travelers=Math.min(9,Math.max(1,Number(params.get('viajeros'))||2));
  const cards=[...document.querySelectorAll('.trip-card')];
  const normalize=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  const cityFilter=city==='medellin';
  const count=document.getElementById('resultsCount');
  let selected=0;
  if(cityFilter){
-  const css=document.createElement('style');
-  css.textContent='body.lx-city-medellin .trip-card:not(.lx-city-result){display:none!important}';
-  document.head.append(css);document.body.classList.add('lx-city-medellin');
   const info=document.createElement('p');info.className='lx-catalog-context';
   info.textContent='Paquetes en Medellín'+(arrival?' · Llegada prevista: '+arrival:'')+
     ' · Puedes añadir vuelos, elegir hotel y experiencias en los paquetes compatibles.';
@@ -30,6 +28,7 @@
    const url=new URL(link.getAttribute('href'),location.href);
    if(arrival&&/^\d{4}-\d{2}-\d{2}$/.test(arrival))url.searchParams.set('fecha',arrival);
    if(/^[A-Z]{3}$/.test(origin))url.searchParams.set('origen',origin);
+   url.searchParams.set('viajeros',String(travelers));
    link.href=url.pathname.split('/').slice(-2).join('/')+url.search;
   });
   if(title==='medellin esencial'){
@@ -39,6 +38,7 @@
    to.searchParams.set('package','medellin-esencial');
    if(arrival&&/^\d{4}-\d{2}-\d{2}$/.test(arrival))to.searchParams.set('arrival',arrival);
    if(/^[A-Z]{3}$/.test(origin))to.searchParams.set('origin',origin);
+   to.searchParams.set('adults',String(Math.min(4,travelers)));
    link.href=to.pathname.split('/').pop()+to.search;
    (card.querySelector('.trip-card__body')||card).append(link);
   }
