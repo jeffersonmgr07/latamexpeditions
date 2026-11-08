@@ -1536,8 +1536,24 @@
     return valid;
   }
 
+  const tourLanguages = () => {
+    const configured=Array.isArray(PRODUCT.languages)&&PRODUCT.languages.length?PRODUCT.languages:null;
+    const country=PRODUCT.country.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    const codes=configured||['es','en',...(country.includes('brasil')?['pt']:[]),...(country.includes('italia')?['it']:[])];
+    const labels={es:'Español',en:'Inglés',pt:'Portugués',it:'Italiano',fr:'Francés',de:'Alemán'};
+    return [...new Set(codes.map(code=>String(code).toLowerCase()))].filter(code=>labels[code])
+      .map(code=>'<option value="'+code+'">'+labels[code]+'</option>').join('');
+  };
+
   function buildPassengers() {
     const list = $('#bkPaxList');
+    const previous=[...list.querySelectorAll('.passenger-card')].map(card=>({
+      type:card.dataset.passengerType,
+      fields:[...card.querySelectorAll('input,select,textarea')].filter(node=>node.id).map(node=>({
+        id:node.id,value:node.value
+      })),
+      deferred:!!card.querySelector('[data-defer-passenger]:checked')
+    }));
     const passengerTypes = [...Array(state.adults).fill('adult'), ...Array(state.children).fill('child')];
     const documentTypes = Array.isArray(CONFIG.documentTypes) && CONFIG.documentTypes.length
       ? CONFIG.documentTypes
@@ -1546,8 +1562,11 @@
     list.innerHTML = passengerTypes.map((type, index) => `
       <fieldset class="passenger-card" data-pax="${index}" data-passenger-type="${type}">
         <legend>${index === 0 ? 'Titular de la reserva' : `Pasajero ${index + 1}`} <small>· ${type === 'adult' ? 'Adulto' : 'Niño'}</small></legend>
+        ${PRODUCT.kind==='experience' && index>0 ? `<label class="booking-defer"><input type="checkbox" data-defer-passenger> Completaré los datos de este pasajero después</label>` : ''}
+        <div class="booking-passenger-fields" data-passenger-fields>
         <div class="booking-form-grid booking-form-grid--2">
-          <div class="form-field"><label for="paxName${index}">Nombres y apellidos</label><input id="paxName${index}" data-pax-field="name" autocomplete="name" minlength="3" required><span class="form-error">Completa el nombre.</span></div>
+          <div class="form-field"><label for="paxName${index}">Nombres</label><input id="paxName${index}" data-pax-field="firstName" autocomplete="${index===0?'given-name':'off'}" minlength="2" required><span class="form-error">Completa los nombres.</span></div>
+          <div class="form-field"><label for="paxLast${index}">Apellidos</label><input id="paxLast${index}" data-pax-field="lastName" autocomplete="${index===0?'family-name':'off'}" minlength="2" required><span class="form-error">Completa los apellidos.</span></div>
           <div class="form-field"><label for="paxNationality${index}">Nacionalidad</label><select id="paxNationality${index}" data-pax-field="nationality" required>${nationalityOptions()}</select><span class="form-error">Selecciona una nacionalidad.</span></div>
           <div class="form-field"><label for="paxDocType${index}">Tipo de documento</label><select id="paxDocType${index}" data-pax-field="docType" required>${documentTypes.map((typeName) => `<option value="${escapeHTML(typeName)}" ${typeName === defaultDocument ? 'selected' : ''}>${escapeHTML(typeName)}</option>`).join('')}</select></div>
           <div class="form-field"><label for="paxDoc${index}">Número de documento</label><input id="paxDoc${index}" data-pax-field="docNumber" required maxlength="50"><span class="form-error">Completa el documento.</span></div>
@@ -1560,19 +1579,44 @@
               <div class="booking-calendar__weekdays" aria-hidden="true"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
               <div class="booking-calendar__grid" data-birth-grid></div>
             </div>
-            <span class="passenger-age" id="paxAge${index}" aria-live="polite">Edad: —</span><span class="form-error">Completa una fecha válida.</span>
+            <span class="passenger-age" id="paxAge${index}" aria-live="polite" hidden></span><span class="form-error">Completa una fecha válida.</span>
           </div>
         </div>
+        </div>
+        ${index===0 ? `
+          <section class="booking-passenger-contact" aria-label="Datos de contacto del titular">
+            <h4>Contacto e idioma del tour</h4>
+            <div class="booking-form-grid booking-form-grid--2">
+              <div class="form-field"><label for="bkEmail">Correo electrónico</label><input type="email" id="bkEmail" autocomplete="email" required><span class="form-error">Introduce un correo válido.</span></div>
+              <div class="form-field booking-phone-field"><label for="bkPhone">WhatsApp</label><div class="booking-phone-combined"><label class="visually-hidden" for="bkPhoneDial">Código de país</label><select id="bkPhoneDial" required aria-label="Código de país">${phoneCodeOptions()}</select><input type="tel" id="bkPhone" inputmode="tel" autocomplete="tel-national" placeholder="Número de WhatsApp" pattern="[0-9 ()\\-]{6,25}" minlength="6" maxlength="25" required aria-label="Número de WhatsApp"></div><span class="form-error">Introduce un WhatsApp válido.</span></div>
+              <div class="form-field"><label for="bkTourLanguage">Idioma deseado para el tour</label><select id="bkTourLanguage" required>${tourLanguages()}</select></div>
+            </div>
+          </section>`:''}
       </fieldset>`).join('');
+    list.querySelectorAll('.passenger-card').forEach((card,index)=>{
+      if(previous[index]?.type===card.dataset.passengerType){
+        previous[index].fields.forEach(({id,value})=>{const node=document.getElementById(id);if(node)node.value=value;});
+      }
+      const deferred=card.querySelector('[data-defer-passenger]');
+      if(deferred){
+        deferred.checked=!!previous[index]?.deferred;
+        const sync=()=>{
+          card.querySelector('[data-passenger-fields]').hidden=deferred.checked;
+          card.querySelectorAll('[data-pax-field]').forEach(node=>{node.disabled=deferred.checked;});
+        };
+        deferred.addEventListener('change',sync);sync();
+      }
+    });
     list.querySelectorAll('[data-pax-field="birth"]').forEach((input) => {
       setupPassengerBirthCalendar(input);
       const updateAge = () => {
         const age = ageOnTravelDate(input.value);
         const output = input.closest('.passenger-birth-field')?.querySelector('.passenger-age');
-        if (output) output.textContent = age === null ? 'Edad: —' : `${age} ${age === 1 ? 'año' : 'años'}`;
+        if (output) {output.hidden=age===null;output.textContent=age===null?'':`${age} ${age === 1 ? 'año' : 'años'}`;}
       };
       input.addEventListener('input', updateAge);
       input.addEventListener('change', updateAge);
+      $('#bkDate')?.addEventListener('change',updateAge);
       updateAge();
     });
     applyI18n(list);
@@ -1580,7 +1624,7 @@
   }
 
   function validateStep2() {
-    const inputs = $$('[data-pax-field]', $('#bkPaxList'));
+    const inputs = $('[data-pax-field]', $('#bkPaxList')).filter(input=>!input.disabled);
     const valid = inputs.every(fieldValid);
     if (!valid) showError('Completa los datos de todos los pasajeros.');
     return valid;
@@ -1588,8 +1632,13 @@
 
   function saveStep2() {
     state.passengers = $$('.passenger-card').map((card) => {
-      const value = (field) => card.querySelector(`[data-pax-field="${field}"]`).value.trim();
-      return { name: value('name'), nationality: value('nationality'), docType: value('docType'), docNumber: value('docNumber'), birth: value('birth'), passengerType: card.dataset.passengerType };
+      const pendingDetails=!!card.querySelector('[data-defer-passenger]:checked');
+      const value=field=>pendingDetails?'':(card.querySelector('[data-pax-field="'+field+'"]')?.value.trim()||'');
+      const firstName=value('firstName'),lastName=value('lastName');
+      return {firstName,lastName,name:[firstName,lastName].filter(Boolean).join(' '),
+        nationality:value('nationality'),docType:value('docType'),
+        docNumber:value('docNumber'),birth:value('birth'),
+        passengerType:card.dataset.passengerType,pendingDetails};
     });
   }
 
