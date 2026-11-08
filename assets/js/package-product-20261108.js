@@ -44,7 +44,8 @@
  state.occupancy=defaultRoom();
  if(!/^[A-Z]{3}$/.test(state.origin))state.origin='LIM';
  const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);return e};
- const validSrc=s=>/^https:\/\/[^<>"'\s]+$/.test(s||'');
+ const normalizeHotelName=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  const validSrc=s=>/^https:\/\/[^<>"'\s]+$/.test(s||'');
  function currentTier(){return tiers.find(x=>x.code===state.tier)||firstTier}
  function pricePackage(){const tier=currentTier();const rate=tier?Number(tier.occupancyPrices?.[state.occupancy]??tier.pricePerPerson??params.base):params.base;
   return Math.round((state.adults*rate+state.children*rate*params.childFactor)*100)/100;
@@ -216,7 +217,7 @@ function renderHotelCards(){
   if(!t?.code)return;
   const card=el('article','lx-hotel-option-card'),media=el('div','lx-hotel-card-media');
   const name=(t.hotels||[]).join(' / ')||t.name||'Hotel previsto';
-  const photo=state.hotelPhotos[String((t.hotels||[])[0]||'').toLowerCase()];
+  const photo=state.hotelPhotos[normalizeHotelName((t.hotels||[])[0])];
   if(validSrc(photo)){const img=el('img');img.src=photo;img.alt=name;img.loading='lazy';img.referrerPolicy='no-referrer';media.append(img)}
   else media.append(el('span','lx-hotel-placeholder','⌂'),el('small','','Foto por confirmar'));
   const details=el('div','lx-hotel-card-details');
@@ -258,7 +259,7 @@ function showTierQuote(){
   const name=state.customHotel||(hasHotelIncluded?((currentTier()?.hotels||[])[0]||''):'');
   const slot=$('lxProductHotelPhoto');slot.replaceChildren();
   if(!hasHotelIncluded&&!state.customHotel){slot.append(el('span','','Hotel no incluido'));return}
-  const photo=state.hotelPhotos[name.toLowerCase()];
+  const photo=state.hotelPhotos[normalizeHotelName(name)];
   if(validSrc(photo)){const image=el('img');image.src=photo;image.alt='Imagen de '+name;image.loading='lazy';image.referrerPolicy='no-referrer';slot.append(image)}
   else slot.append(el('span','', 'Foto del hotel al consultar opciones'));
  }
@@ -449,7 +450,7 @@ function showTierQuote(){
     const card=el('button','lx-package-offer lx-hotel-live-card');card.type='button';
     const left=el('span');
     if(validSrc(h.thumbnail)){const img=el('img');img.src=h.thumbnail;img.alt='';img.loading='lazy';img.referrerPolicy='no-referrer';left.append(img);
-     state.hotelPhotos[String(h.name).toLowerCase()]=h.thumbnail;}
+     state.hotelPhotos[normalizeHotelName(h.name)]=h.thumbnail;}
     left.append(el('b','',h.name),
      el('small','',h.nightlyRate?fmt(h.nightlyRate)+' / noche · tarifa del proveedor, no suplemento': 'Suplemento por confirmar'));
     card.append(left,el('strong','','Consultar'));
@@ -461,7 +462,7 @@ function showTierQuote(){
     });
     list.append(card);
    });
-   renderHotelCards();renderHotelPhoto();
+   renderHotelCards();renderHotelCards();renderHotelPhoto();
   }catch(err){setStatus(hotelStatus,err?.message||'No se pudo consultar hoteles.',true)}
   finally{btn.disabled=false}
  });
