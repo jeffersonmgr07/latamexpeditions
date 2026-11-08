@@ -411,36 +411,53 @@ function showTierQuote(){
  card.append(body,cost);card.addEventListener('click',action);return card;
 }
  function renderFlightOffers(){
-  const departures=$('lxFlightDepartures'),returns=$('lxFlightReturns');
-  departures.replaceChildren();returns.replaceChildren();
-  if(!state.offers.length)return;
-  const groups=new Map();
-  state.offers.forEach(o=>{const key=signature(o.outbound);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(o)});
-  departures.append(el('h3','lx-package-options-title','1. Selecciona tu vuelo de ida'));
+ const departures=$('lxFlightDepartures'),returns=$('lxFlightReturns');
+ departures.replaceChildren();returns.replaceChildren();
+ const returning=state.flightStage==='return';
+ departures.hidden=returning;returns.hidden=!returning;
+ const next=$('lxFlightNextStep'),back=$('lxFlightBackStep'),apply=$('lxFlightApply');
+ next.hidden=returning;back.hidden=!returning;apply.hidden=!returning;
+ $('lxFlightBaggageRow').hidden=!returning;
+ if(!state.offers.length){next.disabled=true;apply.disabled=true;
+   $('lxFlightConfirmedTotal').textContent='No hay vuelos seleccionados';return}
+ const groups=new Map();
+ state.offers.forEach(o=>{const key=signature(o.outbound);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(o)});
+ if(!returning){
+  departures.append(el('h3','lx-package-options-title','Paso 1 · Selecciona tu vuelo de ida'));
   groups.forEach((options,key)=>{
-   const cheapest=options.reduce((best,o)=>o.price<best.price?o:best,options[0]);
-   departures.append(flightCard(cheapest.outbound,Math.round(Number(cheapest.price)*(1+flightMarkup(cheapest.departure))*100)/100,
-    key===state.outboundKey,()=>{state.outboundKey=key;state.choice=null;renderFlightOffers()}));
+   const cheapest=options.reduce((a,o)=>Number(o.price)<Number(a.price)?o:a,options[0]);
+   const amount=Math.round(Number(cheapest.price)*(1+flightMarkup(cheapest.departure))*100)/100;
+   departures.append(flightCard(cheapest.outbound,amount,key===state.outboundKey,()=>{
+     state.outboundKey=key;state.choice=null;renderFlightOffers();
+   }));
   });
-  if(state.outboundKey){
-   returns.append(el('h3','lx-package-options-title','2. Selecciona tu vuelo de regreso'));
-   (groups.get(state.outboundKey)||[]).forEach(offer=>{
-    const adjusted=Math.round(Number(offer.price)*(1+flightMarkup(offer.departure))*100)/100;
-    returns.append(flightCard(offer.inbound,adjusted,state.choice===offer,()=>{
-      state.choice=offer;renderFlightOffers();$('lxFlightConfirmedTotal').textContent=fmt(adjusted)+' · Grupo completo';
-      $('lxFlightApply').disabled=false;
-    }));
-   });
-  }else returns.append(el('p','lx-package-status','El precio corresponde a ida + regreso; elige primero la ida.'));
-  if(!state.choice){$('lxFlightConfirmedTotal').textContent='Selecciona ida y regreso';$('lxFlightApply').disabled=true}
+  next.disabled=!state.outboundKey;
+  $('lxFlightConfirmedTotal').textContent=state.outboundKey?'Vuelo de ida elegido':'Selecciona un vuelo de ida';
+ }else{
+  returns.append(el('h3','lx-package-options-title','Paso 2 · Selecciona tu vuelo de regreso'));
+  (groups.get(state.outboundKey)||[]).forEach(offer=>{
+   const price=Math.round(Number(offer.price)*(1+flightMarkup(offer.departure))*100)/100;
+   returns.append(flightCard(offer.inbound,price,state.choice===offer,()=>{
+     state.choice=offer;renderFlightOffers();
+   }));
+  });
+  apply.disabled=!state.choice;
+  const amount=state.choice?Math.round(Number(state.choice.price)*(1+flightMarkup(state.choice.departure))*100)/100:0;
+  $('lxFlightConfirmedTotal').textContent=state.choice?fmt(amount)+' · grupo completo':'Selecciona un vuelo de regreso';
  }
+}
+$('lxFlightNextStep').addEventListener('click',()=>{
+ if(!state.outboundKey)return;state.flightStage='return';renderFlightOffers();
+ $('lxFlightReturns').scrollIntoView({block:'nearest'});
+});
+$('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound';renderFlightOffers()});
  $('lxProductSearchFlights').addEventListener('click',async ()=>{
   const airport=$('lxFlightOrigin').value,out=$('lxFlightDeparture').value,ret=$('lxFlightReturn').value;
   const arrival=$('lxFlightArrival').value;
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
-  if(adults+children>9){setStatus(flightStatus,'Máximo 9 viajeros en esta consulta.',true);return}
+  if(adults+children>9||children>6){setStatus(flightStatus,'Máximo 9 viajeros y hasta 6 niños por consulta.',true);toggleFlightEditor(true);return}
   if(!dateOK(arrival)||arrival<minDate||!dateOK(out)||out<minDate||!dateOK(ret)||ret<addDays(arrival,params.nights)||out>arrival){
-   setStatus(flightStatus,'Elige una llegada y fechas válidas de ida y regreso.',true);return}
+   setStatus(flightStatus,'Verifica la llegada, salida desde origen y regreso.',true);toggleFlightEditor(true);return}
   if(airport===params.destination){setStatus(flightStatus,'La ciudad de salida y el destino deben ser diferentes.',true);return}
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
   $('lxProductSearchFlights').disabled=true;
@@ -452,16 +469,18 @@ function showTierQuote(){
    const result=await callApi({origin:airport,destination:params.destination,departure:out,returnDate:ret,
     trip:'roundtrip',adults,children,cabin:'economy'});
    if(!result?.ok)throw Error(result?.message||'No hay vuelos disponibles para esta búsqueda.');
-   state.offers=(Array.isArray(result.offers)?result.offers:[]).filter(o=>
+   state.flightSearch={origin:airport,departure:out,returnDate:ret,arrival,adults,children};
+    state.flightStage='outbound';renderFlightSearchSummary();toggleFlightEditor(false);
+    state.offers=(Array.isArray(result.offers)?result.offers:[]).filter(o=>
      Number(o.price)>0&&o.outbound?.segments?.length&&o.inbound?.segments?.length&&
      o.departure===out&&o.returnDate===ret&&Number(o.partyAdults)===adults&&Number(o.partyChildren)===children&&
      (!dateOK(String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10))||
        String(o.outbound.segments.at(-1).to.time).slice(0,10)===state.date)).slice(0,30);
    setStatus(flightStatus,state.offers.length?
-    state.offers.length+' combinaciones encontradas. Elige ida y regreso.':
+    state.offers.length+' combinaciones encontradas. Primero elige el vuelo de ida.':
     'No encontramos combinaciones que lleguen en la fecha de inicio del paquete.',!state.offers.length);
    renderFlightOffers();
-  }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
+  }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true);toggleFlightEditor(true)}
   finally{$('lxProductSearchFlights').disabled=false}
  });
  $('lxFlightApply').addEventListener('click',()=>{
@@ -516,7 +535,7 @@ function showTierQuote(){
     });
     list.append(card);
    });
-   renderHotelCards();renderHotelCards();renderHotelPhoto();
+   renderHotelCards();renderHotelPhoto();
   }catch(err){setStatus(hotelStatus,err?.message||'No se pudo consultar hoteles.',true)}
   finally{btn.disabled=false}
  });
