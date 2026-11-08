@@ -3264,3 +3264,48 @@ body.has-pn-header .home-showcase + #experiencias { margin-top: 20px !important;
 body.has-pn-header #countryBar, body.has-pn-header .country-bar, body.has-pn-header .country-bar.is-visible { display: none !important; height: 0 !important; padding: 0 !important; margin: 0 !important; border: 0 !important; }
 body.has-pn-header .latam-utilitybar { border-bottom: 0 !important; }
 body.has-pn-header .topbar { border: 0 !important; }
+
+
+/* Reservas de paquetes: información preseleccionada y contacto directo */
+.booking-package-selection{display:grid;gap:7px;margin:0 0 17px;padding:16px;border-radius:15px;
+ background:#f2faf5;border:1px solid #d6eadc}
+.booking-package-selection[hidden]{display:none!important}
+.booking-package-selection>span{font-size:11px;font-weight:850;color:#07873e;letter-spacing:.07em;text-transform:uppercase}
+.booking-package-selection>strong{font-size:16px;color:#19442b;line-height:1.4}
+.booking-package-selection>small{font-size:12px;color:#51705d;line-height:1.6}
+.booking-package-selection>p{font-size:11px;color:#6c8274;margin:0;line-height:1.5}
+.booking-modal--package .booking-initial-fields,
+.booking-modal--package .booking-initial-travelers,
+.booking-modal--package .booking-subsection--hotel{display:none!important}
+@media(max-width:700px){
+ .booking-modal--package .booking-steps li[data-step-label="1"]>b::after{content:"Contacto"}
+ .booking-modal--package .booking-steps li[data-step-label="2"]>b::after{content:"Pasajeros"}
+}
+/* Experiencias: dirección o punto de encuentro en la ficha antes de reservar */
+.lx-experience-pickup{display:grid;gap:8px;padding:14px;margin:15px 0;
+ border-radius:13px;border:1px solid #d6e8dc;background:#f8fbf9;min-width:0}
+.lx-experience-pickup h3{font-size:14px;margin:0;color:#19482b;font-weight:800}
+.lx-experience-pickup>label:not(.lx-experience-pickup-meeting){font-size:11px;color:#597465;font-weight:750}
+.lx-experience-pickup textarea{display:block;width:100%;max-width:100%;min-height:62px;resize:vertical;
+ border:1px solid #c9ddcf;border-radius:10px;padding:10px 12px;box-sizing:border-box;
+ font:500 12px Inter,Arial,sans-serif;background:#fff;color:#19432b}
+.lx-experience-pickup textarea:disabled{opacity:.65}
+.lx-experience-pickup-meeting{display:flex;align-items:center;gap:8px;font-size:11px;line-height:1.4;
+ color:#345742;font-weight:750;cursor:pointer}
+.lx-experience-pickup-meeting input{accent-color:#07873e;flex:none}
+.lx-experience-pickup>small{font-size:10px;line-height:1.6;color:#6c8274}
+#lxExperiencePickupError{font-size:11px;color:#ae3a3a;font-weight:750;margin:0}
+#lxExperiencePickupError[hidden]{display:none!important}
+/* Inicio: separación homogénea de los cuatro campos y el botón. */
+@media(min-width:981px){
+ .home-search-shell{width:min(1120px,calc(100% - 48px));max-width:1120px}
+ .home-travel-form{width:100%;max-width:100%;display:grid;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,1.15fr) minmax(0,.92fr) minmax(0,.82fr) minmax(120px,auto);
+  gap:15px;padding:12px;overflow:visible;box-sizing:border-box}
+ .home-travel-form .search-field{border-right:0;padding:12px 15px;min-width:0}
+ .home-travel-form .search-btn{margin:0;align-self:stretch;padding:0 15px;min-width:120px}
+}
+@media(max-width:980px){
+ .home-travel-form{gap:12px}
+ .home-travel-form .search-field{border-right:0}
+}
