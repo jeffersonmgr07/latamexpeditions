@@ -23,6 +23,7 @@
   childFactor:Number(book.dataset.bookChildFactor||.7)};
  let tiers=[];try{tiers=JSON.parse(book.dataset.bookTiers||'[]')}catch(_){}
  const firstTier=tiers[0]||null;
+ const maxHotelOccupancy=4;
  const defaults={'Perú':'LIM','Colombia':'BOG','Argentina':'EZE','Chile':'SCL','México':'MEX',
   'Brasil':'GRU','Ecuador':'UIO','Bolivia':'LPB','Venezuela':'CCS','Costa Rica':'SJO','Uruguay':'MVD'};
  let country='';try{country=localStorage.getItem('latam_country')||''}catch(_){}
@@ -31,10 +32,15 @@
   adults:Math.max(1,Math.min(9,Number(q.get('adults'))||Number(q.get('viajeros'))||2)),
   children:Math.max(0,Math.min(8,Number(q.get('children'))||0)),
   origin:(q.get('origen')||defaults[country]||'LIM').toUpperCase(),
-  tier:firstTier?.code||'',occupancy:'double',customHotel:'',
+  tier:firstTier?.code||'',occupancy:'double',hotelPicked:false,customHotel:'',
   hotelPhotos:{},flight:null,baggage:'none',offers:[],outboundKey:'',choice:null
  };
  if(state.adults+state.children>9)state.children=Math.max(0,9-state.adults);
+ function defaultRoom(){
+   const n=state.adults+state.children;
+   return n===1?'single':n===3?'triple':n===4?'family':'double';
+ }
+ state.occupancy=defaultRoom();
  if(!/^[A-Z]{3}$/.test(state.origin))state.origin='LIM';
  const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);return e};
  const validSrc=s=>/^https:\/\/[^<>"'\s]+$/.test(s||'');
@@ -84,7 +90,7 @@
  panel.querySelectorAll('[data-pax]').forEach(b=>b.addEventListener('click',()=>{
   const type=b.dataset.pax,delta=Number(b.dataset.dir),next=state[type]+delta;
   if(next<(type==='adults'?1:0)||next>9||(delta>0&&state.adults+state.children>=9))return;
-  state[type]=next;invalidateFlight();update();
+  state[type]=next;if(!state.hotelPicked)state.occupancy=defaultRoom();invalidateFlight();update();
  }));
  const sectionAt=cards.find(x=>/^Itinerario/i.test(x.querySelector('h2')?.textContent||''))||
    main.querySelector('.package-itinerary')?.closest('section.detail-card');
@@ -196,8 +202,9 @@
    b.disabled=next<(b.dataset.pax==='adults'?1:0)||
     (Number(b.dataset.dir)>0&&state.adults+state.children>=9);
   });
-  $('lxProductGroupPrice').textContent=fmt(total());
-  $('lxProductQuoteNote').textContent=state.customHotel?
+  $('lxProductGroupPrice').textContent=state.adults+state.children>maxHotelOccupancy?'Cotización para el grupo':fmt(total());
+  $('lxProductQuoteNote').textContent=state.adults+state.children>maxHotelOccupancy?
+    'Para más de 4 viajeros, confirmaremos las habitaciones y el precio del grupo.':state.customHotel?
     'Cambio de hotel solicitado; el suplemento se confirmará antes del pago.':
     state.flight&&state.baggage==='checked'?
     'El suplemento de equipaje facturado se confirmará antes del pago.':
@@ -228,7 +235,7 @@
  let hotelsPendingName=state.customHotel;
  $('lxHotelApply').addEventListener('click',()=>{
   state.tier=$('lxHotelTier').value;state.occupancy=$('lxHotelOccupancy').value;
-  state.customHotel=hotelsPendingName;update();hotels.hide();
+  state.hotelPicked=true;state.customHotel=hotelsPendingName;update();hotels.hide();
  });
  const endpoint=()=>String(window.LATAM_FLIGHTS_API_URL||'');
  const endpointOK=()=>/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint());
@@ -292,6 +299,7 @@
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
   $('lxProductSearchFlights').disabled=true;
   state.date=arrival;state.adults=adults;state.children=children;state.origin=airport;
+  if(!state.hotelPicked)state.occupancy=defaultRoom();
   invalidateFlight();update();
   setStatus(flightStatus,'Buscando combinaciones de ida y regreso…');
   try{
@@ -315,7 +323,9 @@
   const d=$('lxFlightDeparture').value,returnDate=$('lxFlightReturn').value;
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
   state.origin=$('lxFlightOrigin').value;
-  state.adults=adults;state.children=children;state.baggage=$('lxFlightCheckedBag').checked?'checked':'none';
+  state.adults=adults;state.children=children;
+  if(!state.hotelPicked)state.occupancy=defaultRoom();
+  state.baggage=$('lxFlightCheckedBag').checked?'checked':'none';
   state.flight={observedPrice:Number(offer.price),
    displayedPrice:Math.round(Number(offer.price)*(1+flightMarkup(d))*100)/100,
    origin:state.origin,destination:params.destination,departure:d,returnDate,
@@ -327,6 +337,7 @@
  $('lxProductLookupHotels').addEventListener('click',async ()=>{
   if(!state.date){setStatus(hotelStatus,'Elige primero la fecha de llegada.',true);return}
   if(!params.destination){setStatus(hotelStatus,'Este destino todavía no dispone de búsqueda hotelera.',true);return}
+  if(state.adults+state.children>4){setStatus(hotelStatus,'Para más de 4 huéspedes, solicita una distribución de habitaciones personalizada.',true);return}
   if(state.children){setStatus(hotelStatus,'Para comparar alojamientos con menores, consulta las edades y condiciones con nuestro equipo.',true);return}
   const btn=$('lxProductLookupHotels');btn.disabled=true;setStatus(hotelStatus,'Buscando opciones de hoteles…');
   try{
@@ -362,6 +373,20 @@
  // Al cambiar el tipo de categoría oficial se cancela la sustitución externa.
  $('lxHotelTier').addEventListener('change',()=>{hotelsPendingName=''});
  $('lxHotelOccupancy').addEventListener('change',()=>{hotelsPendingName=''});
+ // Para más de cuatro viajeros, no presentar como un precio listo para cobrarse.
+ book.addEventListener('click',event=>{
+  if(state.adults+state.children<=maxHotelOccupancy)return;
+  event.preventDefault();event.stopImmediatePropagation();
+  const note=$('lxProductQuoteNote');
+  note.textContent='Para este grupo necesitamos confirmar la distribución hotelera. '+
+    'Escríbenos para una cotización completa antes de reservar.';
+  const link=el('a','','Solicitar cotización por WhatsApp');
+  link.href='https://wa.me/51906472060?text='+encodeURIComponent(
+   'Hola, quiero cotizar '+params.title+' para '+passengerText()+
+   (state.date?', llegada '+state.date:'')+'.');
+  link.target='_blank';link.rel='noopener noreferrer';link.style.display='block';link.style.marginTop='8px';
+  note.append(link);note.scrollIntoView({behavior:'smooth',block:'center'});
+ },true);
  update();
  // Mantener fechas y viajeros en enlace al volver a buscar en el catálogo.
  const findPage=document.querySelector('a[href*="paquetes.html"]');
