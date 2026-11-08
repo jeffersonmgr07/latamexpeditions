@@ -1618,7 +1618,7 @@
     if (PRODUCT.tiers.length) {
       const tier = getTier();
       $('#bkSumTier').textContent = tierOptionLabel(tier);
-      $('#bkSumOccupancy').textContent = occupancyLabel(state.occupancy);
+      $('#bkSumOccupancy').textContent = state.roomPlan || occupancyLabel(state.occupancy);
     }
     $('#bkSumAdultUnit').textContent = money(state.adultUnit);
     $('#bkSumChildUnit').textContent = money(state.childUnit);
@@ -2136,12 +2136,15 @@
       };
       const minValue = $('#bkDate')?.dataset.min || '';
       const date = String(source.date || '');
-      if (parseISODate(date) && (!minValue || date >= minValue)) {
-        state.date = date; $('#bkDate').value = date;
-        $('#bkDateDisplay').textContent = formatBookingDate(date, {weekday:'short',day:'2-digit',month:'long',year:'numeric'});
-      }
-      if (Number(source.adults)>=1 && Number(source.children)>=0 &&
-          Number(source.adults)+Number(source.children) <= Number(CONFIG.maxTravelers||12)) {
+      const dateValid=Boolean(parseISODate(date))&&(!minValue||date>=minValue);
+      if(dateValid){
+        state.date=date;$('#bkDate').value=date;
+        $('#bkDateDisplay').textContent=formatBookingDate(date,{weekday:'short',day:'2-digit',month:'long',year:'numeric'});
+      }else{state.date='';$('#bkDate').value='';}
+      const paxValid=Number.isInteger(Number(source.adults))&&Number.isInteger(Number(source.children))&&
+        Number(source.adults)>=1&&Number(source.children)>=0&&
+        Number(source.adults)+Number(source.children)<=Math.min(Number(CONFIG.maxTravelers||12),9);
+      if(paxValid){
         state.adults=Number(source.adults);state.children=Number(source.children);
         $('#bkAdults').value=String(state.adults);$('#bkChildren').value=String(state.children);
       }
@@ -2162,16 +2165,37 @@
       const online=$('input[name="bkPaymentMethod"][value="online"]');
       const cash=$('input[name="bkPaymentMethod"][value="pay_on_tour"]');
       if(online){
-        // No cobrar servicios con disponibilidad/costo todavía pendientes de validación.
+        // Los vuelos y las distribuciones no verificadas siguen sin cobro online.
         online.disabled=!onlineConfigured()||Boolean(state.flightQuote)||Boolean(state.customHotel)||state.hotelQuotePending;
         if(online.disabled&&online.checked&&cash){cash.checked=true;state.paymentMethod='pay_on_tour'}
       }
+      const summary=$('#bkPackageSelection');
+      if(summary){
+        summary.hidden=false;
+        $('#bkPackageSelectionMain').textContent=
+          (dateValid?formatBookingDate(date,{weekday:'short',day:'2-digit',month:'long',year:'numeric'}):'Fecha pendiente')+
+          ' · '+(state.adults+state.children)+' viajero(s)';
+        const hotel=state.customHotel||tierOptionLabel(getTier());
+        const extras=[hotel,
+          state.roomPlan||occupancyLabel(state.occupancy),
+          state.flightQuote?'Vuelos seleccionados desde '+state.flightQuote.origin:'Vuelos no añadidos'];
+        $('#bkPackageSelectionDetail').textContent=extras.filter(Boolean).join(' · ');
+      }
+      return dateValid&&paxValid;
     }
     const open = () => {
-      lastFocused = document.activeElement;
-      syncPackageSelection();
-      recalculate(); prefillAccount();
-      modal.classList.add('is-open'); document.body.style.overflow='hidden'; $('#bkDateTrigger').focus();
+      lastFocused=document.activeElement;
+      if(!validatePickupOnPage())return;
+      if(PRODUCT.kind==='package'&&!syncPackageSelection()){
+        const field=document.getElementById('lxProductDate'),note=document.getElementById('lxProductQuoteNote');
+        if(note)note.textContent='Selecciona una fecha de llegada y viajeros válidos en la ficha para reservar.';
+        if(field){field.scrollIntoView({behavior:'smooth',block:'center'});field.focus();}
+        else alert('Selecciona la fecha y viajeros en la ficha antes de reservar.');
+        return;
+      }
+      recalculate();prefillAccount();goToStep(1);
+      modal.classList.add('is-open');document.body.style.overflow='hidden';
+      (PRODUCT.kind==='package'?$('#bkEmail'):$('#bkDateTrigger'))?.focus();
     };
     const close = () => { modal.classList.remove('is-open'); document.body.style.overflow=''; lastFocused?.focus?.(); };
     trigger.addEventListener('click', open);
