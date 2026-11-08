@@ -228,3 +228,36 @@
  .lx-flight-search-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
  .lx-flight-summary-item{padding:7px 9px}
 }
+
+/* Correcciones ficha: summary lateral sin espacio superior y alineación con Información del paquete */
+.product-detail-section .detail-layout--aligned>.tour-booking-aside{
+ margin-top:0!important;padding-top:0!important;top:auto;align-self:start;position:relative
+}
+.product-detail-section .tour-booking-card.product-booking-card{
+ position:relative!important;top:0!important;margin-top:0!important
+}
+/* Contexto de vuelos: el botón acompaña al centro de las tarjetas */
+.lx-flight-search-context #lxFlightEditBtn{align-self:center;margin-top:14px}
+.lx-flight-search-context .lx-flight-context-heading{flex:1;min-width:0}
+/* Los controles de selección y el desglose de escalas son independientes y accesibles */
+.lx-flight-choice{display:block;padding:0;overflow:hidden}
+.lx-flight-choice-select{
+ display:grid;grid-template-columns:19px minmax(0,1fr) auto;align-items:center;gap:13px;
+ width:100%;min-width:0;padding:14px 15px;border:0;background:transparent;
+ font:inherit;color:inherit;text-align:left;cursor:pointer
+}
+.lx-flight-choice-select:focus-visible{outline:3px solid #07873e;outline-offset:-3px}
+.lx-flight-choice-select .lx-flight-choice-content,
+.lx-flight-choice-select .lx-flight-choice-price{min-width:0}
+.lx-flight-choice-select .lx-flight-choice-brand strong{font-size:13px}
+.lx-flight-airline-mark img{display:block;width:27px;height:27px;object-fit:contain}
+.lx-flight-layovers{border-top:1px solid #dce9e0;background:#f8fbf8;padding:0 14px}
+.lx-flight-layovers summary{color:#15783e;cursor:pointer;padding:10px 0;font-size:12px;font-weight:750}
+.lx-flight-layover-list{margin:0;padding:0 0 12px 19px;color:#4c6e58;font-size:11.5px;line-height:1.7}
+.lx-flight-layovers[open] summary{border-bottom:1px solid #e4ede7;margin-bottom:8px}
+.lx-flight-choice.is-selected{background:#f0faf3}
+@media(max-width:700px){
+ .lx-flight-choice-select{grid-template-columns:19px minmax(0,1fr);gap:9px;padding:12px}
+ .lx-flight-choice-select .lx-flight-choice-price{grid-column:2;text-align:left}
+ .lx-flight-search-context #lxFlightEditBtn{margin-top:6px}
+}
