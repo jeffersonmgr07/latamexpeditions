@@ -121,3 +121,11 @@
   .lx-results-catalog.section { padding:10px 16px 34px; }
   #tripSearchForm .lx-traveler-panel { right:-7px; width:280px; }
 }
+
+/* PC: aire entre campos sin aumentar el ancho total del buscador. */
+@media (min-width:900px) {
+  #tripSearchForm.home-travel-form { column-gap:6px; padding:5px; }
+  #tripSearchForm .search-field { padding:8px 9px; border-right:0; border-radius:11px; background:#fff; }
+  #tripSearchForm .search-field:not(:last-of-type) { box-shadow:1px 0 0 #e2eae4; }
+  #tripSearchForm .search-btn { margin:3px 2px; padding:0 12px; min-width:104px; }
+}
