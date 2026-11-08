@@ -1502,7 +1502,19 @@
     state.occupancy = $('#bkOccupancy')?.value || 'double';
     const dialCode = $('#bkPhoneDial').value;
     const nationalNumber = $('#bkPhone').value.replace(/\D/g, '');
-    state.holder = { email: $('#bkEmail').value.trim(), phone: `${dialCode}${nationalNumber}`, phoneCountryCode: dialCode, phoneNational: nationalNumber, notes: $('#bkNotes').value.trim() };
+    const mainPassenger=state.passengers[0]||{};
+    const tourLanguage=$('#bkTourLanguage').value;
+    state.holder={
+      name:mainPassenger.name||'',firstName:mainPassenger.firstName||'',lastName:mainPassenger.lastName||'',
+      nationality:mainPassenger.nationality||'',docType:mainPassenger.docType||'',
+      docNumber:mainPassenger.docNumber||'',birth:mainPassenger.birth||'',
+      email:$('#bkEmail').value.trim(), phone:`${dialCode}${nationalNumber}`,
+      phoneCountryCode:dialCode,phoneNational:nationalNumber,tourLanguage,
+      notes:$('#bkNotes').value.trim()
+    };
+    state.holder.notes+=(state.holder.notes?'\n':'')+'Idioma solicitado: '+tourLanguage.toUpperCase();
+    const deferredCount=state.passengers.filter(p=>p.pendingDetails).length;
+    if(deferredCount)state.holder.notes+='\nDatos pendientes para '+deferredCount+' pasajero(s) adicional(es).';
     state.pickupAddress = pickupFromPage();
     state.pickupStatus = 'pending_validation';
     if(state.flightQuote){
@@ -1522,7 +1534,7 @@
   }
 
   function validateStep1() {
-    const inputs = ['#bkDeparture','#bkEmail','#bkPhoneDial','#bkPhone'].map((selector) => $(selector)).filter(Boolean);
+    const inputs = ['#bkDeparture','#bkEmail','#bkPhoneDial','#bkPhone','#bkTourLanguage'].map((selector) => $(selector)).filter(Boolean);
     let valid = inputs.every(fieldValid);
     const dateValue = $('#bkDate')?.value || '';
     const minValue = $('#bkDate')?.dataset.min || '';
@@ -1737,6 +1749,7 @@
       paymentMethod: state.paymentMethod,
       paymentStatus: state.paymentMethod === 'pay_on_tour' ? 'pending' : 'awaiting_payment',
       passengers: state.passengers,
+      tourLanguage:state.holder.tourLanguage||'es',
       quotedTotal: state.total,
       quotedDue: state.due,
       mode: state.mode,
