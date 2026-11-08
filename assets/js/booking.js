@@ -1112,6 +1112,8 @@
     childMinAge: Number(trigger.dataset.bookChildMinAge || 0)
   };
 
+  const isSingleDayExperience=PRODUCT.kind==='experience' &&
+    !/\b(?:[2-9]|[1-9][0-9]+)\s*(?:d[ií]as?|d(?:\/\d+n)?)(?=\b|\/)/i.test(PRODUCT.duration);
   let CONFIG = null;
   let step = 1;
   let paypalButtons = null;
@@ -1128,7 +1130,7 @@
 
   let experiencePickupPanel=null;
   function setupExperiencePickup(){
-    if(PRODUCT.kind!=='experience')return;
+    if(!isSingleDayExperience)return;
     const aside=trigger.closest('.product-booking-card,.tour-booking-card')||trigger.parentElement;
     const anchor=trigger.closest('.cta-stack')||trigger;
     if(!aside||!anchor||document.getElementById('lxExperiencePickup'))return;
@@ -1150,14 +1152,14 @@
     });
   }
   function pickupFromPage(){
-    if(PRODUCT.kind!=='experience')return '';
+    if(!isSingleDayExperience)return '';
     const panel=experiencePickupPanel||document.getElementById('lxExperiencePickup');
     if(!panel)return '';
     if(panel.querySelector('#lxExperienceMeeting')?.checked)return 'Punto de encuentro indicado por el operador (por confirmar)';
     return String(panel.querySelector('#lxExperiencePickupInput')?.value||'').trim().slice(0,400);
   }
   function validatePickupOnPage(){
-    if(PRODUCT.kind!=='experience')return true;
+    if(!isSingleDayExperience)return true;
     const panel=experiencePickupPanel||document.getElementById('lxExperiencePickup');
     if(!panel)return true;
     if(pickupFromPage())return true;
