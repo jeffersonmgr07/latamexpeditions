@@ -32,10 +32,10 @@
     });
   });
 
-  // Package search: distinct destinations, not duplicate package titles.
+  // Paquetes: una selección por destino, fecha exacta y viajeros.
   const packageForm=$('tripSearchForm');
   if(packageForm){
-    const select=$('searchDestination');
+    packageForm.noValidate=true; // La fecha tiene un calendario visual; validamos antes de enviar.
     const destinationList=[
       ['peru','Perú',''],['cusco','Cusco, Perú','peru'],['machu-picchu','Machu Picchu, Perú','peru'],
       ['arequipa','Arequipa, Perú','peru'],['puno','Puno, Perú','peru'],['lima','Lima, Perú','peru'],
@@ -52,65 +52,107 @@
       ['bolivia','Bolivia',''],['la-paz','La Paz, Bolivia','bolivia'],['uyuni','Salar de Uyuni, Bolivia','bolivia'],
       ['costa-rica','Costa Rica',''],['uruguay','Uruguay',''],['venezuela','Venezuela','']
     ];
-    const normalize=value=>(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-    const countries=new Set(destinationList.filter(item=>!item[2]).map(item=>item[0]));
-    // Use an accessible native suggestion list; do not expose every tour as a suggestion.
-    const input=document.createElement('input');
-    input.id='searchDestination'; input.name='destination'; input.type='search';
-    input.placeholder='Ciudad, destino o país';input.autocomplete='off';
-    input.setAttribute('aria-label','Ciudad, destino o país'); input.setAttribute('list','lxDestinationList');
-    input.setAttribute('required','');input.style.width='100%';
-    const datalist=document.createElement('datalist');datalist.id='lxDestinationList';
-    select.replaceWith(input);input.after(datalist);
-    const rebuild=()=>{
-      const query=normalize(input.value);
-      const matching=destinationList.filter(([slug,label,country])=>{
-        if(!query)return true;
-        return normalize(label).includes(query)||normalize(slug).includes(query)||
-          (country&&normalize(country)===query);
-      });
-      datalist.replaceChildren(...matching.map(([slug,label])=>{
-        const option=document.createElement('option');option.value=label;option.dataset.slug=slug;return option;
+    const input=$('searchDestination');
+    const suggestions=$('lxDestinationList');
+    const origin=$('searchOrigin');
+    const arrival=$('searchDate');
+    const adultsInput=$('searchAdults'),childrenInput=$('searchChildren');
+    const guestsButton=$('searchTravelersTrigger'),guestsPanel=$('searchTravelersPanel');
+    const error=$('lxPackageSearchError');
+    const normalize=s=>(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+    const slugText=s=>normalize(s).replace(/-/g,' ');
+    const countrySlugs=new Set(destinationList.filter(x=>!x[2]).map(x=>x[0]));
+    const airports={'Perú':'LIM','Colombia':'BOG','Argentina':'EZE','Chile':'SCL',
+      'México':'MEX','Brasil':'GRU','Ecuador':'UIO','Bolivia':'LPB',
+      'Venezuela':'CCS','Uruguay':'MVD','Costa Rica':'SJO'};
+    function currentCountry(){
+      try{return localStorage.getItem('latam_country')||document.documentElement.dataset.country||'Perú'}
+      catch(_){return document.documentElement.dataset.country||'Perú'}
+    }
+    function setDefaultOrigin(country){
+      if(origin.dataset.userEdited==='true')return;
+      origin.value=airports[country]||'LIM';
+    }
+    setDefaultOrigin(currentCountry());
+    origin.addEventListener('change',()=>{origin.dataset.userEdited='true'});
+    document.addEventListener('latam:countrychange',event=>{
+      if(origin.dataset.userEdited!=='true')setDefaultOrigin(event.detail?.country||currentCountry());
+    });
+    function updateSuggestions(){
+      const q=normalize(input.value);
+      const matches=destinationList.filter(([slug,label,country])=>
+        !q||normalize(label).includes(q)||slugText(slug).includes(q)||normalize(country)===q);
+      suggestions.replaceChildren(...matches.slice(0,45).map(([,label])=>{
+        const option=document.createElement('option');option.value=label;return option;
       }));
-    };
-    input.addEventListener('input',rebuild);input.addEventListener('focus',rebuild);rebuild();
-    // Keep original form styling; extra choices are optional.
-    const addField=(id,label,element)=>{
-      const div=document.createElement('div');div.className='search-field';
-      const lab=document.createElement('label');lab.htmlFor=id;lab.textContent=label;
-      element.id=id;element.style.width='100%';
-      div.append(lab,element);
-      packageForm.insertBefore(div,packageForm.querySelector('button[type="submit"]'));
-      return element;
-    };
-    const guests=document.createElement('input');guests.type='number';guests.min='1';guests.max='9';guests.step='1';guests.value='2';
-    addField('searchGuests','Viajeros',guests);
-    const origin=document.createElement('select');
-    [['','Sin vuelos por ahora'],['LIM','Lima (LIM)'],['CUZ','Cusco (CUZ)'],['BOG','Bogotá (BOG)'],
-     ['MDE','Medellín (MDE)'],['EZE','Buenos Aires (EZE)'],['SCL','Santiago (SCL)'],
-     ['MEX','Ciudad de México (MEX)'],['GRU','São Paulo (GRU)']].forEach(([value,label])=>{
-       const opt=document.createElement('option');opt.value=value;opt.textContent=label;origin.append(opt);
-     });
-    addField('searchOrigin','Salida / aeropuerto (opcional)',origin);
-    const date=$('searchDate');if(date){date.required=true;date.previousElementSibling&&(date.previousElementSibling.textContent='Fecha de llegada');date.min=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);}
-    packageForm.addEventListener('submit',e=>{
-      e.preventDefault();
+    }
+    input.addEventListener('input',()=>{updateSuggestions();error.hidden=true});
+    input.addEventListener('focus',updateSuggestions);updateSuggestions();
+    const today=new Date();
+    const localDay=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
+    arrival.min=localDay(today);
+    const MAX_TRAVELERS=9;
+    function travelerCount(){return {adults:Number(adultsInput.value)||1,children:Number(childrenInput.value)||0}}
+    function updateGuests(){
+      const {adults,children}=travelerCount();
+      $('searchAdultsCount').textContent=String(adults);
+      $('searchChildrenCount').textContent=String(children);
+      $('searchTravelersSummary').textContent=adults+(adults===1?' adulto':' adultos')+
+        (children?', '+children+(children===1?' niño':' niños'):'');
+      guestsPanel.querySelectorAll('[data-guest-type]').forEach(button=>{
+        const type=button.dataset.guestType,step=Number(button.dataset.guestStep);
+        button.disabled=(step<0?(type==='adults'?adults<=1:children<=0):adults+children>=MAX_TRAVELERS);
+      });
+    }
+    function openGuests(open){
+      guestsPanel.hidden=!open;guestsButton.setAttribute('aria-expanded',String(open));
+      if(open)guestsPanel.querySelector('button:not(:disabled)')?.focus();
+      else guestsButton.focus();
+    }
+    guestsButton.addEventListener('click',()=>openGuests(guestsPanel.hidden));
+    guestsPanel.querySelectorAll('[data-guest-type]').forEach(button=>button.addEventListener('click',()=>{
+      const type=button.dataset.guestType;
+      const values=travelerCount();
+      const count=values.adults+values.children;
+      const next=values[type]+Number(button.dataset.guestStep);
+      if(next<(type==='adults'?1:0)||next>MAX_TRAVELERS||
+        (Number(button.dataset.guestStep)>0&&count>=MAX_TRAVELERS))return;
+      (type==='adults'?adultsInput:childrenInput).value=String(next);updateGuests();
+    }));
+    $('searchTravelersApply').addEventListener('click',()=>openGuests(false));
+    document.addEventListener('pointerdown',event=>{
+      if(!guestsPanel.hidden&&!guestsPanel.contains(event.target)&&!guestsButton.contains(event.target))
+        openGuests(false);
+    });
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&!guestsPanel.hidden)openGuests(false);
+    });
+    updateGuests();
+    function showError(message,element){
+      error.textContent=message;error.hidden=false;element?.focus?.();
+    }
+    packageForm.addEventListener('submit',event=>{
+      event.preventDefault();
+      error.hidden=true;
       const typed=normalize(input.value);
-      const selected=destinationList.find(([slug,label])=>normalize(label)===typed||normalize(slug)===typed);
-      if(!selected){input.setCustomValidity('Selecciona un destino de la lista.');input.reportValidity();return;}
-      input.setCustomValidity('');
+      const selected=destinationList.find(([slug,label])=>
+        normalize(label)===typed||slugText(slug)===typed);
+      if(!selected){showError('Selecciona una ciudad, destino o país de las sugerencias.',input);return;}
+      if(!arrival.value||!/^\\d{4}-\\d{2}-\\d{2}$/.test(arrival.value)||arrival.value<arrival.min){
+        showError('Selecciona una fecha de llegada válida.',$('searchDateStyledPicker')||arrival);return;
+      }
       const [slug,,country]=selected;
+      const guests=travelerCount();
       const qs=new URLSearchParams();
-      if(countries.has(slug))qs.set('destino',slug);
+      if(countrySlugs.has(slug))qs.set('destino',slug);
       else{qs.set('ciudad',slug);qs.set('destino',country);}
-      const type=$('searchType')?.value;
-      if(type)qs.set('estilo',type);
-      if(date?.value)qs.set('fecha',date.value);
-      qs.set('viajeros',String(Math.min(9,Math.max(1,Number(guests.value)||2))));
+      qs.set('fecha',arrival.value);
+      qs.set('adults',String(guests.adults));
+      qs.set('children',String(guests.children));
+      qs.set('viajeros',String(guests.adults+guests.children));
       if(origin.value)qs.set('origen',origin.value);
       location.href='paquetes.html?'+qs.toString();
     });
-    input.addEventListener('input',()=>input.setCustomValidity(''));
   }
 
   const flightForm=$('homeFlightSearch');
