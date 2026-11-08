@@ -181,7 +181,7 @@ function syncFlightForm(){
  $('lxFlightArrival').value=state.date||'';
  $('lxFlightDeparture').value=reuse?old.departure:(state.date||'');
  $('lxFlightReturn').value=reuse?old.returnDate:(state.date?addDays(state.date,params.nights):'');
- $('lxFlightCheckedBag').checked=state.baggage==='checked';
+ $('lxFlightCheckedBag').checked=false;
  renderFlightSearchSummary();
 }
 function renderFlightSearchSummary(){
@@ -477,7 +477,7 @@ function showTierQuote(){
  departures.hidden=returning;returns.hidden=!returning;
  const next=$('lxFlightNextStep'),back=$('lxFlightBackStep'),apply=$('lxFlightApply');
  next.hidden=returning;back.hidden=!returning;apply.hidden=!returning;
- $('lxFlightBaggageRow').hidden=!returning;
+ $('lxFlightBaggageRow').hidden=true; // Sin tarifa de maleta verificada; no ofrecer recargo falso.
  if(!state.offers.length){next.disabled=true;apply.disabled=true;
    $('lxFlightConfirmedTotal').textContent='No hay vuelos seleccionados';return}
  const groups=new Map();
@@ -489,7 +489,7 @@ function showTierQuote(){
    const amount=Math.round(Number(cheapest.price)*(1+flightMarkup(cheapest.departure))*100)/100;
    departures.append(flightCard(cheapest.outbound,amount,key===state.outboundKey,()=>{
      state.outboundKey=key;state.choice=null;renderFlightOffers();
-   }));
+   },'outbound',state.adults+state.children,cheapest));
   });
   next.disabled=!state.outboundKey;
   $('lxFlightConfirmedTotal').textContent=state.outboundKey?'Vuelo de ida elegido':'Selecciona un vuelo de ida';
@@ -499,11 +499,11 @@ function showTierQuote(){
    const price=Math.round(Number(offer.price)*(1+flightMarkup(offer.departure))*100)/100;
    returns.append(flightCard(offer.inbound,price,state.choice===offer,()=>{
      state.choice=offer;renderFlightOffers();
-   }));
+   },'return',state.adults+state.children,offer));
   });
   apply.disabled=!state.choice;
   const amount=state.choice?Math.round(Number(state.choice.price)*(1+flightMarkup(state.choice.departure))*100)/100:0;
-  $('lxFlightConfirmedTotal').textContent=state.choice?fmt(amount)+' · grupo completo':'Selecciona un vuelo de regreso';
+  $('lxFlightConfirmedTotal').textContent=state.choice?fmt(amount)+' total · '+fmt(amount/Math.max(1,state.adults+state.children))+' por persona (ida y vuelta)':'Selecciona un vuelo de regreso';
  }
 }
 $('lxFlightNextStep').addEventListener('click',()=>{
@@ -538,7 +538,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
      (!dateOK(String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10))||
        String(o.outbound.segments.at(-1).to.time).slice(0,10)===state.date)).slice(0,30);
    setStatus(flightStatus,state.offers.length?
-    state.offers.length+' combinaciones encontradas. Primero elige el vuelo de ida.':
+    state.offers.length+' combinaciones encontradas. Tarifas combinadas de ida y vuelta por persona; el importe no se cobra dos veces. Elige la ida.':
     'No encontramos combinaciones que lleguen en la fecha de inicio del paquete.',!state.offers.length);
    renderFlightOffers();
   }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
@@ -551,7 +551,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   state.origin=$('lxFlightOrigin').value;
   state.adults=adults;state.children=children;
   if(!state.hotelPicked)state.occupancy=defaultRoom();
-  state.baggage=$('lxFlightCheckedBag').checked?'checked':'none';
+  state.baggage='none';
   state.flight={observedPrice:Number(offer.price),
    displayedPrice:Math.round(Number(offer.price)*(1+flightMarkup(d))*100)/100,
    origin:state.origin,destination:params.destination,departure:d,returnDate,
