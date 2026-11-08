@@ -241,7 +241,7 @@ function renderHotelAges(){
  box.append(group,el('small','','Para bebés menores de un año, la fuente de hoteles requiere indicar 1 año.'));
 }
 function renderHotelCards(){
- const box=$('lxHotelTierCards');box.replaceChildren(),n=state.adults+state.children;
+ const box=$('lxHotelTierCards'),n=state.adults+state.children;box.replaceChildren();
  tiers.forEach(t=>{
   if(!t?.code)return;
   const card=el('article','lx-hotel-option-card'),media=el('div','lx-hotel-card-media');
