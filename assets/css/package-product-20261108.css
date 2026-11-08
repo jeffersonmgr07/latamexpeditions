@@ -1,0 +1,108 @@
+/* LATAM · Diseño de fichas de paquetes y selección opcional · 2026-11-08 */
+.product-detail-section {padding-top:22px!important}
+.product-detail-section .detail-layout--aligned {align-items:start;gap:22px}
+.product-detail-section .detail-main {min-width:0}
+.product-detail-section .detail-main > .detail-card:first-child {margin-top:0!important}
+.product-detail-section .detail-main > .detail-card:first-child h2 {margin-top:0;margin-bottom:13px;font-size:19px}
+.product-detail-section .tour-facts.product-facts {
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0;
+}
+.product-detail-section .tour-facts.product-facts > div {
+  padding:10px 11px;gap:4px;border:1px solid #e0eae2;border-radius:11px;
+  background:#f7faf7;box-shadow:none;min-width:0
+}
+.product-detail-section .tour-facts.product-facts > div > span {
+  border:0;background:none;color:#62796c;border-radius:0;padding:0;
+  text-transform:none;letter-spacing:0;font-size:10px;font-weight:700
+}
+.product-detail-section .tour-facts.product-facts > div > strong {
+  font-size:12px;line-height:1.35;font-weight:730;color:#153d28;
+}
+.product-detail-section .tour-facts.product-facts > div:nth-child(n+4){display:none}
+.product-detail-section .tour-booking-aside {align-self:start}
+.product-detail-section .tour-booking-card.product-booking-card {
+  top:118px;position:sticky;padding:14px;border-radius:19px;
+  box-shadow:0 12px 33px rgba(12,62,40,.08)
+}
+.product-detail-section .product-booking-card > img {width:100%;margin-bottom:12px;border-radius:13px;aspect-ratio:16/9;object-fit:cover}
+.product-detail-section .product-booking-card .price-block {margin:0 0 10px}
+.product-detail-section .product-booking-card .fact-row,
+.product-detail-section .product-booking-card .tour-booking-note,
+.product-detail-section .product-booking-card .dynamic-rate-note,
+.product-detail-section .product-booking-card .package-flights-box {display:none!important}
+.product-detail-section .product-booking-card .cta-stack {margin-top:11px;display:grid;gap:8px}
+.product-detail-section .product-booking-card .cta-stack .btn-outline {text-align:center}
+.lx-package-quick {background:#f8fbf8;border:1px solid #dfede3;border-radius:12px;padding:12px;margin:12px 0}
+.lx-package-quick label {display:grid;gap:5px;font-weight:700;color:#567163;font-size:11px}
+.lx-package-quick input[type=date] {width:100%;min-width:0;min-height:40px;padding:6px 9px;border:1px solid #ccddd3;border-radius:9px;background:white;color:#173f28;font:650 12px Inter,Arial,sans-serif}
+.lx-package-quick-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:9px}
+.lx-package-count{display:flex;align-items:center;justify-content:space-between;gap:5px;border:1px solid #ccddd3;background:white;border-radius:9px;min-height:40px;padding:2px 5px}
+.lx-package-count button{border:0;border-radius:7px;background:#e8f4eb;color:#07873e;width:28px;height:28px;font-size:17px;cursor:pointer}
+.lx-package-count button:disabled{opacity:.35;cursor:not-allowed}
+.lx-package-count output{text-align:center;font-size:12px;color:#173e27;font-weight:750;min-width:11px}
+.lx-package-guests{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:9px}
+.lx-package-quick-total{margin-top:11px;padding-top:10px;border-top:1px solid #e0eadf;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lx-package-quick-total small{color:#5c7265;font-size:11px}
+.lx-package-quick-total strong{color:#07873e;font-size:18px}
+.lx-package-flight-price{padding:8px 10px;background:#e9f7ed;border:1px solid #ceead8;border-radius:10px;font-size:12px;color:#1a5935;margin:7px 0}
+.lx-package-flight-price[hidden]{display:none}
+.lx-package-addon{border:1px solid #dae8df;background:#fff;border-radius:17px;margin:17px 0;padding:18px;box-shadow:0 4px 24px rgba(8,46,27,.04)}
+.lx-package-addon h2{font:780 20px Montserrat,Inter,sans-serif;margin:0 0 7px;color:#103a23}
+.lx-package-addon p{color:#526e5b;line-height:1.55;font-size:13px;margin:6px 0 12px}
+.lx-package-addon .lx-addon-row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.lx-package-addon button, .lx-package-action {
+  border:1px solid #07873e;background:#07873e;color:white;padding:11px 15px;
+  border-radius:11px;font:750 12px Inter,Arial,sans-serif;cursor:pointer
+}
+.lx-package-addon button:hover{background:#086b37}
+.lx-package-hotel-item{display:grid;grid-template-columns:94px 1fr;gap:14px;align-items:center}
+.lx-package-hotel-photo{width:94px;height:88px;display:grid;place-items:center;text-align:center;background:#eff6f0;border-radius:11px;overflow:hidden;color:#547564;font-size:10px}
+.lx-package-hotel-photo img{width:100%;height:100%;object-fit:cover}
+.lx-package-hotel-item strong{display:block;font-weight:800;color:#183c27}
+.lx-package-hotel-item small{display:block;color:#697f71;font-size:11px;margin:5px 0}
+.lx-package-addons-note{font-size:11px!important;color:#607a67!important;margin:8px 0 0!important}
+.lx-package-modal{position:fixed;inset:0;z-index:5000;background:rgba(2,20,10,.75);backdrop-filter:blur(5px);padding:18px;display:none;align-items:center;justify-content:center}
+.lx-package-modal.is-open{display:flex}
+.lx-package-dialog{width:min(810px,100%);max-height:min(90dvh,850px);overflow:auto;overscroll-behavior:contain;background:#fff;border-radius:20px;box-shadow:0 20px 60px #001c1280}
+.lx-package-modal-head{position:sticky;top:0;z-index:4;background:#fff;border-bottom:1px solid #e0eae3;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.lx-package-modal-head h2{font:800 20px Montserrat,Inter,sans-serif;color:#163e29;margin:0}
+.lx-package-close{background:#f1f5f2!important;color:#183e28!important;border:0!important;width:34px;height:34px;padding:0!important;font-size:19px!important;border-radius:50%!important}
+.lx-package-modal-body{padding:18px 22px 23px}
+.lx-package-modal-fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:0 0 16px}
+.lx-package-modal-fields label{display:grid;gap:6px;color:#4e6758;font-size:11px;font-weight:750;min-width:0}
+.lx-package-modal-fields input,.lx-package-modal-fields select{width:100%;min-width:0;background:#fff;border:1px solid #d1e2d7;border-radius:9px;padding:10px 8px;color:#173f2c;font-size:13px}
+.lx-package-search{border:0;border-radius:10px;background:#07873e;color:white;font-size:13px;font-weight:800;padding:12px 17px;cursor:pointer}
+.lx-package-status{margin:12px 0;font-size:12px;color:#567564}
+.lx-package-status.is-error{color:#a2383b}
+.lx-package-offers{display:grid;gap:8px;margin:12px 0 17px}
+.lx-package-options-title{color:#284a35;font-size:14px;margin:16px 0 7px}
+.lx-package-offer{border:1px solid #dde8df;background:#fff;text-align:left;border-radius:11px;padding:12px;color:#1a3d29;display:flex;justify-content:space-between;gap:14px;cursor:pointer}
+.lx-package-offer.is-selected{border-color:#07873e;background:#f0faf3;box-shadow:inset 0 0 0 1px #07873e}
+.lx-package-offer b{font-size:14px}
+.lx-package-offer small{display:block;margin-top:4px;font-size:11px;color:#718477}
+.lx-package-offer strong{white-space:nowrap;font-size:13px;color:#07873e}
+.lx-package-offer img{width:90px;height:66px;object-fit:cover;border-radius:7px}
+.lx-package-modal-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-top:12px;border-top:1px solid #edf1ee}
+.lx-package-modal-bottom strong{color:#0b6937;font-size:17px}
+.lx-package-modal-bottom button{border:0;background:#07873e;color:#fff;padding:12px 17px;border-radius:10px;font-weight:800;cursor:pointer}
+.lx-package-modal-bottom button:disabled{opacity:.5;cursor:not-allowed}
+.lx-baggage-select{font-size:12px;color:#4d6557;display:flex;align-items:center;gap:7px;margin:12px 0}
+.lx-baggage-select input{accent-color:#07873e}
+.lx-package-quotes-extra{margin-top:7px;color:#5f7868;font-size:11px}
+@media(max-width:900px){.product-detail-section .tour-booking-card.product-booking-card{position:static}}
+@media(max-width:700px){
+  .product-detail-section .tour-facts.product-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lx-package-modal{padding:6px}
+  .lx-package-dialog{width:100%;max-height:calc(100dvh - 12px);border-radius:15px}
+  .lx-package-modal-head{padding:13px 15px}
+  .lx-package-modal-body{padding:14px}
+  .lx-package-modal-fields{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lx-package-quick-grid{grid-template-columns:1fr 1fr}
+  .lx-package-addon{padding:14px}
+}
+@media(max-width:410px){
+  .product-detail-section .tour-facts.product-facts{grid-template-columns:1fr}
+  .lx-package-modal-fields{grid-template-columns:1fr}
+  .lx-package-hotel-item{grid-template-columns:75px 1fr}
+  .lx-package-hotel-photo{width:75px;height:77px}
+}
