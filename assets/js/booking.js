@@ -1169,7 +1169,11 @@
     panel.querySelector('#lxExperiencePickupInput')?.focus();return false;
   }
     // Backend actual: solo correo. No habilitar PayPal por error al añadir un Client ID.
-  const onlineConfigured = () => false; // Habilitar solo con un backend que implemente createOrder y captureOrder.
+  // El cobro solo se habilita tras pruebas y activación explícita en catalog.json.
+  const onlineConfigured = () => Boolean(CONFIG?.paypalEnabled === true &&
+    CONFIG?.paypalClientId && !String(CONFIG.paypalClientId).startsWith('PEGAR_AQUI') &&
+    /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(CONFIG?.endpoint||'') &&
+    CONFIG.currency==='USD');
 
   // Prefijos internacionales, con países y territorios. +51 seleccionado por defecto.
   const PHONE_COUNTRIES = [["Afganistán","+93","AF"],["Albania","+355","AL"],["Alemania","+49","DE"],["Angola","+244","AO"],["Anguila","+1264","AI"],["Antigua y Barbuda","+1268","AG"],["Arabia Saudí","+966","SA"],["Argelia","+213","DZ"],["Argentina","+54","AR"],["Armenia","+374","AM"],["Aruba","+297","AW"],["Australia","+61","AU"],["Austria","+43","AT"],["Azerbaiyán","+994","AZ"],["Bahamas","+1242","BS"],["Bangladés","+880","BD"],["Barbados","+1246","BB"],["Baréin","+973","BH"],["Belice","+501","BZ"],["Benín","+229","BJ"],["Bermudas","+1441","BM"],["Bielorrusia","+375","BY"],["Bolivia","+591","BO"],["Bosnia y Herzegovina","+387","BA"],["Botsuana","+267","BW"],["Brasil","+55","BR"],["Brunéi","+673","BN"],["Bulgaria","+359","BG"],["Burkina Faso","+226","BF"],["Burundi","+257","BI"],["Bután","+975","BT"],["Bélgica","+32","BE"],["Cabo Verde","+238","CV"],["Camboya","+855","KH"],["Camerún","+237","CM"],["Canadá","+1","CA"],["Catar","+974","QA"],["Chad","+235","TD"],["Chequia","+420","CZ"],["Chile","+56","CL"],["China","+86","CN"],["Chipre","+357","CY"],["Colombia","+57","CO"],["Comoras","+269","KM"],["Congo","+242","CG"],["Corea del Norte","+850","KP"],["Corea del Sur","+82","KR"],["Costa Rica","+506","CR"],["Croacia","+385","HR"],["Cuba","+53","CU"],["Côte d’Ivoire","+225","CI"],["Dinamarca","+45","DK"],["Dominica","+1767","DM"],["Ecuador","+593","EC"],["Egipto","+20","EG"],["El Salvador","+503","SV"],["Emiratos Árabes Unidos","+971","AE"],["Eritrea","+291","ER"],["Eslovaquia","+421","SK"],["Eslovenia","+386","SI"],["España","+34","ES"],["Estados Unidos","+1","US"],["Estonia","+372","EE"],["Esuatini","+268","SZ"],["Etiopía","+251","ET"],["Filipinas","+63","PH"],["Finlandia","+358","FI"],["Fiyi","+679","FJ"],["Francia","+33","FR"],["Gabón","+241","GA"],["Gambia","+220","GM"],["Georgia","+995","GE"],["Ghana","+233","GH"],["Gibraltar","+350","GI"],["Granada","+1473","GD"],["Grecia","+30","GR"],["Groenlandia","+299","GL"],["Guadalupe","+590","GP"],["Guam","+1671","GU"],["Guatemala","+502","GT"],["Guayana Francesa","+594","GF"],["Guernesey","+44","GG"],["Guinea","+224","GN"],["Guinea Ecuatorial","+240","GQ"],["Guinea-Bisáu","+245","GW"],["Guyana","+592","GY"],["Haití","+509","HT"],["Honduras","+504","HN"],["Hungría","+36","HU"],["India","+91","IN"],["Indonesia","+62","ID"],["Irak","+964","IQ"],["Irlanda","+353","IE"],["Irán","+98","IR"],["Isla de Man","+44","IM"],["Isla de Navidad","+61","CX"],["Isla Norfolk","+672","NF"],["Islandia","+354","IS"],["Islas Caimán","+1345","KY"],["Islas Cocos","+61","CC"],["Islas Cook","+682","CK"],["Islas Feroe","+298","FO"],["Islas Georgia del Sur y Sandwich del Sur","+500","GS"],["Islas Malvinas","+500","FK"],["Islas Marianas del Norte","+1670","MP"],["Islas Marshall","+692","MH"],["Islas Pitcairn","+64","PN"],["Islas Salomón","+677","SB"],["Israel","+972","IL"],["Italia","+39","IT"],["Jamaica","+1876","JM"],["Japón","+81","JP"],["Jersey","+44","JE"],["Jordania","+962","JO"],["Kazajistán","+76","KZ"],["Kenia","+254","KE"],["Kirguistán","+996","KG"],["Kiribati","+686","KI"],["Kuwait","+965","KW"],["Laos","+856","LA"],["Lesoto","+266","LS"],["Letonia","+371","LV"],["Liberia","+231","LR"],["Libia","+218","LY"],["Liechtenstein","+423","LI"],["Lituania","+370","LT"],["Luxemburgo","+352","LU"],["Líbano","+961","LB"],["Macedonia del Norte","+389","MK"],["Madagascar","+261","MG"],["Malasia","+60","MY"],["Malaui","+265","MW"],["Maldivas","+960","MV"],["Mali","+223","ML"],["Malta","+356","MT"],["Marruecos","+212","MA"],["Martinica","+596","MQ"],["Mauricio","+230","MU"],["Mauritania","+222","MR"],["Mayotte","+262","YT"],["Micronesia","+691","FM"],["Moldavia","+373","MD"],["Mongolia","+976","MN"],["Montserrat","+1664","MS"],["Mozambique","+258","MZ"],["México","+52","MX"],["Mónaco","+377","MC"],["Namibia","+264","NA"],["Nauru","+674","NR"],["Nepal","+977","NP"],["Nicaragua","+505","NI"],["Nigeria","+234","NG"],["Niue","+683","NU"],["Noruega","+47","NO"],["Nueva Caledonia","+687","NC"],["Nueva Zelanda","+64","NZ"],["Níger","+227","NE"],["Omán","+968","OM"],["Pakistán","+92","PK"],["Palaos","+680","PW"],["Panamá","+507","PA"],["Papúa Nueva Guinea","+675","PG"],["Paraguay","+595","PY"],["Países Bajos","+31","NL"],["Perú","+51","PE"],["Polinesia Francesa","+689","PF"],["Polonia","+48","PL"],["Portugal","+351","PT"],["Puerto Rico","+1787","PR"],["RAE de Hong Kong (China)","+852","HK"],["RAE de Macao (China)","+853","MO"],["Reino Unido","+44","GB"],["República Centroafricana","+236","CF"],["República Democrática del Congo","+243","CD"],["República Dominicana","+1809","DO"],["Reunión","+262","RE"],["Ruanda","+250","RW"],["Rumanía","+40","RO"],["Rusia","+7","RU"],["Samoa","+685","WS"],["Samoa Americana","+1684","AS"],["San Cristóbal y Nieves","+1869","KN"],["San Marino","+378","SM"],["San Pedro y Miquelón","+508","PM"],["San Vicente y las Granadinas","+1784","VC"],["Santa Elena","+290","SH"],["Santa Lucía","+1758","LC"],["Santo Tomé y Príncipe","+239","ST"],["Senegal","+221","SN"],["Serbia","+381","RS"],["Seychelles","+248","SC"],["Sierra Leona","+232","SL"],["Singapur","+65","SG"],["Siria","+963","SY"],["Somalia","+252","SO"],["Sri Lanka","+94","LK"],["Sudáfrica","+27","ZA"],["Sudán","+249","SD"],["Sudán del Sur","+211","SS"],["Suecia","+46","SE"],["Suiza","+41","CH"],["Surinam","+597","SR"],["Svalbard y Jan Mayen","+4779","SJ"],["Sáhara Occidental","+212","EH"],["Tailandia","+66","TH"],["Taiwán","+886","TW"],["Tanzania","+255","TZ"],["Tayikistán","+992","TJ"],["Territorio Británico del Océano Índico","+246","IO"],["Timor-Leste","+670","TL"],["Togo","+228","TG"],["Tokelau","+690","TK"],["Tonga","+676","TO"],["Trinidad y Tobago","+1868","TT"],["Turkmenistán","+993","TM"],["Turquía","+90","TR"],["Tuvalu","+688","TV"],["Túnez","+216","TN"],["Ucrania","+380","UA"],["Uganda","+256","UG"],["Uruguay","+598","UY"],["Uzbekistán","+998","UZ"],["Vanuatu","+678","VU"],["Venezuela","+58","VE"],["Vietnam","+84","VN"],["Wallis y Futuna","+681","WF"],["Yemen","+967","YE"],["Yibuti","+253","DJ"],["Zambia","+260","ZM"],["Zimbabue","+263","ZW"]];
@@ -1869,8 +1873,50 @@
     };
   }
 
+  function callBackendViaFrame(action,data) {
+    return new Promise((resolve,reject)=>{
+      const key=String(data?.requestKey||'');
+      if(!/^[A-Za-z0-9]{16,80}$/.test(key)){
+        reject(new Error('Falta un identificador válido para el pago. Vuelve al paso anterior.'));return;
+      }
+      const iframe=document.createElement('iframe');
+      iframe.name='lx_pay_'+key.slice(0,20)+'_'+Math.random().toString(36).slice(2,8);
+      iframe.hidden=true;iframe.setAttribute('aria-hidden','true');
+      const form=document.createElement('form');form.hidden=true;
+      form.method='POST';form.action=CONFIG.endpoint;form.target=iframe.name;
+      for(const [name,value] of Object.entries({action,payload:JSON.stringify(data)})){
+        const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.append(input);
+      }
+      let finished=false,timer;
+      const finish=(error,result)=>{
+        if(finished)return;finished=true;
+        clearTimeout(timer);window.removeEventListener('message',onMessage);
+        form.remove();setTimeout(()=>iframe.remove(),500);
+        if(error)reject(error);else resolve(result);
+      };
+      const onMessage=(event)=>{
+        const reply=event.data;
+        if(event.source!==iframe.contentWindow||!isGoogleScriptOrigin(event.origin)||
+           !reply||reply.type!=='latam-paypal-response'||reply.action!==action||reply.requestKey!==key)return;
+        if(reply.ok!==true){finish(new Error(reply.error||'El servidor no pudo procesar la operación.'));return;}
+        if(action==='createOrder'&&!reply.orderId){
+          finish(new Error('PayPal no devolvió una orden válida.'));return;
+        }
+        finish(null,reply);
+      };
+      window.addEventListener('message',onMessage);
+      timer=setTimeout(()=>finish(new Error(action==='captureOrder'?
+        'No se pudo verificar la captura. No pagues nuevamente; contacta al equipo con tu referencia.':
+        'La creación de la orden tardó demasiado. Inténtalo nuevamente.')),90000);
+      document.body.append(iframe,form);
+      try{form.submit();}catch(error){finish(error);}
+    });
+  }
+
   async function callBackend(action, data) {
     if (!CONFIG.endpoint || CONFIG.endpoint.startsWith('PEGAR_AQUI')) throw new Error('El sistema de reservas aún no está conectado con Google Apps Script.');
+    if((action==='createOrder'||action==='captureOrder')&&isGoogleScriptOrigin(new URL(CONFIG.endpoint).origin))
+      return callBackendViaFrame(action,data);
     const controller = typeof AbortController === 'function' ? new AbortController() : null;
     const timer = controller ? setTimeout(() => controller.abort(), 60000) : null;
     try {
@@ -1894,7 +1940,8 @@
       return url.protocol === 'https:' && (
         url.hostname === 'script.google.com' ||
         url.hostname === 'script.googleusercontent.com' ||
-        url.hostname.endsWith('.script.googleusercontent.com')
+        url.hostname.endsWith('.script.googleusercontent.com') ||
+        url.hostname.endsWith('-script.googleusercontent.com')
       );
     } catch (_) { return false; }
   };
@@ -2079,7 +2126,7 @@
           paymentInProgress = true;
           $('#bkActions').hidden = true;
           container.innerHTML = `<div class="booking-loading">${T('Confirmando el pago…')}</div>`;
-          try { showConfirmation(await callBackend('captureOrder', { orderId:data.orderID })); }
+          try { showConfirmation(await callBackend('captureOrder', { orderId:data.orderID, requestKey:state.requestKey })); }
           catch (error) { showError(error.message || 'No pudimos confirmar el pago. No vuelvas a pagar.'); container.innerHTML=''; $('#bkFallback').hidden=false; }
           finally { paymentInProgress = false; }
         },
