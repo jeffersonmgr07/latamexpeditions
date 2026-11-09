@@ -81,7 +81,7 @@ const CONFIG = {
   payFullBelow: 60,
   currency: 'USD',
   maxTravelers: 12,
-  minLeadDays: 3,
+  minLeadDays: 1,
 
   agency: {
     name: 'Latam Expeditions',
@@ -1115,12 +1115,22 @@ function doPost(e) {
       throw new Error('La solicitud es demasiado grande.');
     }
 
-    const body = JSON.parse(e.postData.contents);
+    const formRequest = Boolean(e.parameter && e.parameter.action === 'registerPayOnTour' && e.parameter.payload);
+    const body = formRequest
+      ? {action:'registerPayOnTour',data:JSON.parse(String(e.parameter.payload))}
+      : JSON.parse(e.postData.contents);
     const action = String(body.action || '');
     const data = body.data || {};
 
     // --- Reservas y pago (Codigo.gs) ---
-    if (action === 'registerPayOnTour') return json(registrarPagoEnTour(data));
+    if (action === 'registerPayOnTour') {
+      const result = registrarPagoEnTour(data);
+      return formRequest ? lxHtmlAcuse_({
+        type:'latam-booking-receipt',requestKey:String(data.requestKey||''),
+        pending:!result.emailSent,ok:result.ok,bookingCode:result.bookingCode,
+        emailSent:result.emailSent===true,paymentStatus:'pending'
+      }) : json(result);
+    }
     if (action === 'createOrder') return json({ ok: true, orderId: crearOrden(data) });
     if (action === 'captureOrder') return json(capturarOrden(data));
 
@@ -1143,7 +1153,9 @@ function doPost(e) {
   }
 }
 
-function doGet() {
+function doGet(e) {
+  const action=String(e&&e.parameter&&e.parameter.action||'');
+  if(action==='status'||action==='status_html')return lxResponderEstado_(e);
   return ContentService
     .createTextOutput('Latam Expeditions — backend de reservas activo. Usa POST.')
     .setMimeType(ContentService.MimeType.TEXT);
@@ -1279,6 +1291,11 @@ function validarYCalcular(data) {
   limite.setHours(0, 0, 0, 0);
   if (fecha < limite) throw new Error('Fecha demasiado próxima.');
 
+  // Las consultas de vuelos y hoteles NO son inventario emitible. No aceptar un
+  // total añadido por el cliente como autoridad para crear un cobro PayPal.
+  if(data.flightSelection || data.alternateHotel || data.hotelQuotePending){
+    throw new Error('Las tarifas adicionales necesitan validación antes de pagar en línea.');
+  }
   const total = redondear2(tarifas.adulto * adultos + tarifas.nino * ninos);
   const cobro = calcularCobro(total);
 
@@ -1310,6 +1327,10 @@ function validarYCalcular(data) {
     pickupAddress: textoPlano(data.pickupAddress,400),
     pickupStatus: 'pending_validation',
     paymentMethod: 'online',
+    includedHotel: textoPlano(data.includedHotel,140),
+    roomPlan: textoPlano(data.roomPlan,120),
+    tourLanguage: textoPlano(data.tourLanguage||holder.tourLanguage,20),
+    flightSelection: null, alternateHotel: '',
     language: textoPlano(data.language || 'es', 10)
   };
 
