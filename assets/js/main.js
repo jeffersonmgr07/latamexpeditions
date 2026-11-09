@@ -789,6 +789,7 @@
         [/^medellin-esencial$/, 'MDE','Medellín, Colombia'],
         [/^peru-cusco-4d3n$/, 'CUZ','Cusco, Perú'],
         [/^brasil-rio-4d3n$/, 'GIG','Río de Janeiro, Brasil'],
+        [/^chile-patagonia-6d5n$/, 'PUQ','Punta Arenas, Chile'],
         [/^bogota-esencial$/, 'BOG','Bogotá, Colombia'],
         [/^cartagena-esencial$/, 'CTG','Cartagena, Colombia']
       ];
