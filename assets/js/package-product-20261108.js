@@ -396,7 +396,7 @@ function showTierQuote(){
    }
    addLine('Paquete base',baseAmount,false,'('+people+')');
    const adjustment=Math.round((pricePackage()-baseAmount)*100)/100;
-   if(Math.abs(adjustment)>=.01){
+   if(!state.customHotel&&Math.abs(adjustment)>=.01){
      const arrangement=state.roomPlan||roomPlans(state.adults+state.children).find(p=>p.code===state.occupancy)?.label||'';
      addLine(adjustment>0?'Upgrade de hotel':'Ajuste de alojamiento',adjustment,false,
        arrangement?'('+arrangement+')':'');
@@ -406,33 +406,36 @@ function showTierQuote(){
      addLine('Vuelos ida y vuelta · '+(airlines.join(' + ')||state.flight.airline),
        priceFlight(),false,'('+passengerText()+')');
    }
-   if(state.customHotel)addLine((hasHotelIncluded?'Cambio de hotel · ':'Alojamiento · ')+state.customHotel,0,true);
-   else if(state.hotelQuotePending)addLine('Habitación o alojamiento adicional',0,true);
+   if(state.customHotel&&state.hotelAlternative){
+     const alt=state.hotelAlternative;
+     const stay=Number(alt.stayTotal)||0;
+     const info='('+alt.nights+' '+(alt.nights===1?'noche':'noches')+' · tarifa de alojamiento '+fmt(stay)+')';
+     addLine(hasHotelIncluded?'Cambio de hotel · '+alt.name:'Alojamiento · '+alt.name,
+       extraHotelCost(),false,info);
+   }else if(state.hotelQuotePending)addLine('Habitación o alojamiento adicional',0,true);
  }
 
  function update(){
   $('lxProductDate').value=state.date;
   productCalendar.sync();productTravelers.sync();
   renderPriceBreakdown();
-  $('lxProductGroupPrice').textContent=state.adults+state.children>maxHotelOccupancy?'Cotización para el grupo':(state.hotelQuotePending?'Desde '+fmt(total()):fmt(total()));
-  $('lxProductQuoteNote').textContent=state.adults+state.children>maxHotelOccupancy?
-    'Para más de 4 viajeros, confirmaremos las habitaciones y el precio del grupo.':
-    state.hotelQuotePending?'Distribución o cambio de hotel pendiente de cotización.':
+  const needsGroupQuote=state.adults+state.children>maxHotelOccupancy||state.hotelQuotePending;
+  $('lxProductGroupPrice').textContent=needsGroupQuote?'Consultar':fmt(total());
+  // Mostrar avisos solo cuando afectan al itinerario; nunca añadir textos de cotización al importe.
+  const notice=needsGroupQuote?'La distribución de habitaciones requiere una tarifa adicional.':
     state.flight&&state.date&&state.flight.returnDate>addDays(state.date,params.nights)?
-    'El regreso es posterior a la salida del hotel; consultaremos noches adicionales.':state.customHotel?
-    'Cambio de hotel solicitado; el suplemento se confirmará antes del pago.':
-    state.flight&&state.baggage==='checked'?
-    'El suplemento de equipaje facturado se confirmará antes del pago.':
-    'Elige categoría de hotel y habitación al reservar.';
+      'El vuelo de regreso es posterior al final del paquete; verifica las noches adicionales.':
+      state.flight&&state.baggage==='checked'?'El equipaje facturado no está incluido en esta tarifa.':'';
+  const note=$('lxProductQuoteNote');note.textContent=notice;note.hidden=!notice;
   const flightPrice=$('lxProductFlightPrice');flightPrice.hidden=true;
   $('lxProductHotelName').textContent=state.customHotel||(!hasHotelIncluded?'Sin alojamiento':((currentTier()?.hotels||[]).join(' / ')||'Hotel incluido'));
 
-  $('lxProductHotelCategory').textContent=state.customHotel?'Hotel alternativo solicitado':
+  $('lxProductHotelCategory').textContent=state.customHotel?'Hotel seleccionado':
     (!hasHotelIncluded?'Puedes solicitar un hotel adicional':
       (currentTier()?.stars||'Hotel')+' · '+(currentTier()?.name||'Categoría prevista'));
 
-  $('lxProductHotelStatus').textContent=state.customHotel?
-    'Sujeto a disponibilidad y cotización del cambio':
+  $('lxProductHotelStatus').textContent=state.customHotel&&state.hotelAlternative?
+    state.hotelAlternative.nights+' noches · '+fmt(state.hotelAlternative.stayTotal)+' por alojamiento':
     !hasHotelIncluded?'Este paquete no incluye noches de hotel.':
     'Alojamiento incluido · '+(state.roomPlan||(state.occupancy==='double'?'habitación doble':state.occupancy==='single'?'habitación simple':state.occupancy==='matrimonial'?'habitación matrimonial':state.occupancy==='triple'?'habitación triple':'habitación familiar'));
   const flightText=$('lxProductSelectedFlight');
