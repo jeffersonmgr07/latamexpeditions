@@ -431,3 +431,37 @@
 .lx-selected-hotel-total strong{font-size:15px;color:#07873e;white-space:nowrap}
 .lx-selected-hotel-total[hidden]{display:none!important}
 .lx-hotel-choice-meta small{font-size:11px!important}
+
+/* Ficha de paquete · lectura móvil compacta y resumen prioritario */
+.lx-mobile-book-shortcut{display:none}
+@media(max-width:900px){
+ .product-detail-section .detail-main>.lx-package-quick{
+  margin:0 0 7px;padding:14px;border-color:#cfe5d7;box-shadow:0 6px 20px rgba(8,59,34,.05)}
+ .product-detail-section .lx-mobile-book-shortcut{
+  display:block;width:100%;margin-top:12px;border:0;border-radius:11px;
+  padding:12px 15px;background:#07873e;color:white;font:800 13px Inter,Arial,sans-serif}
+}
+@media(max-width:700px){
+ .product-detail-section .detail-main>.detail-card{padding:13px 10px!important}
+ .product-detail-section .detail-main>.detail-card:has(.package-itinerary){padding:13px 7px!important}
+ .product-detail-section .detail-main>.detail-card:has(.package-itinerary)>h2,
+ .product-detail-section .detail-main>.detail-card:has(.package-itinerary)>.tour-note{margin-left:7px;margin-right:7px}
+ .product-detail-section .detail-main>.detail-card:has(.package-itinerary) .package-itinerary{gap:11px}
+ .product-detail-section .package-day{border-radius:11px}
+ .product-detail-section .package-day__head{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;
+  gap:8px!important;align-items:center;padding:10px 9px!important}
+ .product-detail-section .package-day__head>span{justify-self:start;white-space:nowrap;
+  font-size:11px;padding:5px 8px}
+ .product-detail-section .package-day__head h3{font-size:13px!important;line-height:1.35}
+ .product-detail-section .package-day ul{padding:2px 9px 6px}
+ .product-detail-section .package-day__row{grid-template-columns:64px minmax(0,1fr);gap:8px;
+  padding:9px 0;font-size:12px;line-height:1.4}
+ .product-detail-section .package-day__row time{font-size:11px}
+ .product-detail-section .package-day__row span{line-height:1.4}
+ .product-detail-section .detail-main>.detail-card:has(.tour-lead) p{font-size:13px;line-height:1.6}
+ .product-detail-section .detail-main>.detail-card:has(.tour-lead) .tour-lead{font-size:13.5px}
+ .lx-layover-item{gap:10px;padding:10px 3px}
+ .lx-layover-icon{width:30px;height:30px}
+ .lx-layover-copy strong{font-size:12px}
+ .lx-layover-copy span,.lx-layover-copy small{font-size:11px}
+}
