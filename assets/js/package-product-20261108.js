@@ -746,8 +746,18 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    const options=(Array.isArray(result.hotels)?result.hotels:[]).slice(0,12);
    if(!options.length){setStatus(hotelStatus,'No se encontraron hoteles para estas fechas.');return}
    const nights=params.nights;
-   const providerBaseline=Number(result.referenceHotel?.totalRate)||0;
-   const configuredBudget=Number(firstTier?.hotelBudgetPerNight||book.dataset.bookHotelBudgetNightly)||0;
+   // La referencia debe corresponder al hotel realmente incluido en la categoría vigente.
+   // Nunca se inventa un presupuesto ni se toma la tarifa de otro hotel.
+   const includedName=String((currentTier()?.hotels||[])[0]||'');
+   const referenceName=String(result.referenceHotel?.name||result.referenceHotel?.hotelName||'');
+   const referenceTotal=Number(result.referenceHotel?.totalRate)||0;
+   const comparableOption=options.find(h=>normalizeHotelName(h.name)===normalizeHotelName(includedName));
+   const comparableTotal=comparableOption?(Number(comparableOption.totalRate)>0?
+     Number(comparableOption.totalRate):Number(comparableOption.nightlyRate)>0?
+     Math.round(Number(comparableOption.nightlyRate)*nights*100)/100:0):0;
+   const providerBaseline=(referenceTotal>0&&referenceName&&
+     normalizeHotelName(referenceName)===normalizeHotelName(includedName))?referenceTotal:comparableTotal;
+   const configuredBudget=Number(currentTier()?.hotelBudgetPerNight||book.dataset.bookHotelBudgetNightly)||0;
    const budget=hasHotelIncluded?(configuredBudget>0?Math.round(configuredBudget*nights*100)/100:
      providerBaseline>0?providerBaseline:null):0;
    setStatus(hotelStatus,'Tarifas observadas para '+nights+' noches. La disponibilidad y habitación definitiva se verifican al reservar.');
@@ -782,7 +792,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
     list.append(card);
    });
    if(budget===null)setStatus(hotelStatus,
-     'Para calcular el cambio falta una tarifa comparable del hotel incluido. Configura su presupuesto por noche o vuelve a consultar.',true);
+     'No hay una tarifa verificable de '+includedName+' para estas fechas y ocupación. Para permitir el cambio, configura hotelBudgetPerNight en la categoría del paquete (USD por habitación y noche), o consulta otra fecha.',true);
    renderHotelCards();renderHotelPhoto();
   }catch(err){setStatus(hotelStatus,err?.message||'No se pudo consultar hoteles.',true)}
   finally{btn.disabled=false}
