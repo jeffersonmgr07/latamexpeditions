@@ -748,8 +748,8 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    const nights=params.nights;
    const providerBaseline=Number(result.referenceHotel?.totalRate)||0;
    const configuredBudget=Number(firstTier?.hotelBudgetPerNight||book.dataset.bookHotelBudgetNightly)||0;
-   const budget=hasHotelIncluded?(providerBaseline>0?providerBaseline:
-     configuredBudget>0?Math.round(configuredBudget*nights*100)/100:null):0;
+   const budget=hasHotelIncluded?(configuredBudget>0?Math.round(configuredBudget*nights*100)/100:
+     providerBaseline>0?providerBaseline:null):0;
    setStatus(hotelStatus,'Tarifas observadas para '+nights+' noches. La disponibilidad y habitación definitiva se verifican al reservar.');
    options.forEach(h=>{
     if(!h?.name)return;
@@ -774,7 +774,8 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
       hotelsPendingSelection={name:h.name,stayTotal:Math.round(stay*100)/100,
         supplement:difference,baselineTotal:budget,nights,nightlyRate:rate,
         checkIn:state.date,checkOut:addDays(state.date,nights),
-        adults:state.adults,children:state.children,priceSource:'Google Hotels via SerpApi'};
+        adults:state.adults,children:state.children,priceSource:'Google Hotels via SerpApi',
+        baselineSource:configuredBudget>0?'presupuesto configurado':'tarifa del proveedor'};
       list.querySelectorAll('.lx-package-offer').forEach(x=>x.classList.remove('is-selected'));
       card.classList.add('is-selected');renderHotelCards();showTierQuote();
     });
