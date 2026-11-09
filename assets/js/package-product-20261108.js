@@ -52,6 +52,12 @@
  function pricePackage(){const tier=currentTier();const rate=tier?Number(tier.occupancyPrices?.[state.occupancy]??tier.pricePerPerson??params.base):params.base;
   return Math.round((state.adults*rate+state.children*rate*params.childFactor)*100)/100;
  }
+ function resetSelections(){
+  state.tier=firstTier?.code||'';
+  state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;
+  state.hotelPicked=false;state.customHotel='';state.hotelAlternative=null;state.childrenAges=[];
+  state.hotelPhotos={};state.baggage='none';invalidateFlight();clearHotelLookup();
+ }
  function priceFlight(){return state.flight?.displayedPrice||0}
  function extraHotelCost(){return state.customHotel?Number(state.hotelAlternative?.supplement||0):0}
  function total(){return Math.round((pricePackage()+priceFlight()+extraHotelCost())*100)/100}
@@ -97,16 +103,15 @@
  $('lxProductDate').min=minDate;$('lxProductDate').value=state.date;
  const productCalendar=window.LatamProductControls.calendar($('lxProductDate'));
  $('lxProductDate').addEventListener('change',()=>{
-   state.date=$('lxProductDate').value;state.customHotel='';state.hotelAlternative=null;
-   state.hotelQuotePending=false;invalidateFlight();clearHotelLookup();update();
+   const next=$('lxProductDate').value;
+   if(next!==state.date){state.date=next;resetSelections();}update();
  });
  const productTravelers=window.LatamProductControls.travelers(
    $('lxProductTotalPax'),
    ()=>({adults:state.adults,children:state.children}),
    ({adults,children})=>{
-     state.adults=adults;state.children=children;state.hotelPicked=false;
-     state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;
-     state.customHotel='';state.hotelAlternative=null;state.childrenAges=[];invalidateFlight();clearHotelLookup();update();
+     if(adults!==state.adults||children!==state.children){state.adults=adults;state.children=children;resetSelections();}
+     update();
    },
    {max:9,maxChildren:8}
  );
@@ -694,11 +699,10 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   if(airport===params.destination){setStatus(flightStatus,'La ciudad de salida y el destino deben ser diferentes.',true);return}
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
   $('lxProductSearchFlights').disabled=true;
-  state.adults=adults;state.children=children;state.origin=airport;
   const occupancyChanged=state.adults!==adults||state.children!==children;
-  if(occupancyChanged){state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';
-   state.hotelQuotePending=false;state.customHotel='';state.hotelAlternative=null;state.childrenAges=[];clearHotelLookup();}
-  invalidateFlight();update();
+  state.adults=adults;state.children=children;state.origin=airport;
+  if(occupancyChanged)resetSelections();else invalidateFlight();
+  update();
   renderFlightSearchSummary();toggleFlightEditor(false);
   setStatus(flightStatus,'Buscando vuelos de ida y vuelta…',false,true);
   try{
@@ -724,6 +728,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   const d=$('lxFlightDeparture').value,returnDate=$('lxFlightReturn').value;
   const actualArrival=String(offer.outbound?.segments?.at(-1)?.to?.time||'').slice(0,10);
   if(dateOK(actualArrival)){
+    if(state.date&&state.date!==actualArrival)resetSelections();
     state.date=actualArrival;state.flightSearch={...state.flightSearch,arrival:actualArrival};
   }else if(!state.date){
     state.date=d;state.flightSearch={...state.flightSearch,arrival:d};
