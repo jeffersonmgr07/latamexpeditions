@@ -410,3 +410,24 @@
  .lx-hotel-choice-meta{min-width:0}
  .lx-hotel-choice-meta strong{font-size:12px}
 }
+
+/* Selección y visibilidad de vuelos / hoteles · 2026-11-09 */
+.lx-flight-choice.is-selected .lx-flight-choice-select>.lx-choice-radio{
+ border-color:#07873e;background:#fff}
+.lx-flight-choice.is-selected .lx-flight-choice-select>.lx-choice-radio::after{
+ content:"";height:8px;width:8px;border-radius:50%;background:#07873e;display:block}
+.lx-layover-item{list-style:none;display:flex;align-items:flex-start;gap:12px;
+ padding:12px 4px;border-bottom:1px solid #e5eee8}
+.lx-layover-item:last-child{border-bottom:0}
+.lx-layover-icon{display:grid;place-items:center;flex:none;width:34px;height:34px;
+ background:#e5f6e9;color:#07873e;border-radius:50%;font-size:16px}
+.lx-layover-copy{display:grid;gap:4px;min-width:0}
+.lx-layover-copy strong{font-size:13px;color:#16452c}
+.lx-layover-copy span,.lx-layover-copy small{font-size:11px;color:#54715d}
+.lx-flight-layover-list{padding-left:0!important}
+.lx-selected-hotel-total{display:flex;align-items:center;justify-content:space-between;gap:10px;
+ margin-top:10px;border:1px solid #d6e8dc;background:#f0faf3;
+ border-radius:10px;padding:10px 13px;color:#245536;font-size:12px}
+.lx-selected-hotel-total strong{font-size:15px;color:#07873e;white-space:nowrap}
+.lx-selected-hotel-total[hidden]{display:none!important}
+.lx-hotel-choice-meta small{font-size:11px!important}
