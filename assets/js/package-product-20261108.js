@@ -361,7 +361,11 @@ function showTierQuote(){
    addLine('Paquete base · '+people,baseAmount);
    const adjustment=Math.round((pricePackage()-baseAmount)*100)/100;
    if(Math.abs(adjustment)>=.01)addLine(adjustment>0?'Mejora de hotel':'Ajuste de alojamiento',adjustment);
-   if(state.flight)addLine('Vuelos ida y vuelta · '+state.flight.airline+' · '+state.adults+'A'+(state.children?' / '+state.children+'N':''),priceFlight());
+   if(state.flight){
+     const airlines=[...new Set([state.flight.outbound?.[0]?.airline,state.flight.inbound?.[0]?.airline].filter(Boolean))];
+     addLine('Vuelos ida y vuelta · '+(airlines.join(' + ')||state.flight.airline)+' · '+
+       state.adults+'A'+(state.children?' / '+state.children+'N':''),priceFlight());
+   }
    if(state.customHotel)addLine((hasHotelIncluded?'Cambio de hotel · ':'Alojamiento · ')+state.customHotel,0,true);
    else if(state.hotelQuotePending)addLine('Habitación o alojamiento adicional',0,true);
  }
