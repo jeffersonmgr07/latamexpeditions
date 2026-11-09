@@ -52,7 +52,9 @@
  function pricePackage(){const tier=currentTier();const rate=tier?Number(tier.occupancyPrices?.[state.occupancy]??tier.pricePerPerson??params.base):params.base;
   return Math.round((state.adults*rate+state.children*rate*params.childFactor)*100)/100;
  }
+ let quoteRevision=0;
  function resetSelections(){
+  quoteRevision++;
   state.tier=firstTier?.code||'';
   state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;
   state.hotelPicked=false;state.customHotel='';state.hotelAlternative=null;state.childrenAges=[];
@@ -726,9 +728,11 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   update();
   renderFlightSearchSummary();toggleFlightEditor(false);
   setStatus(flightStatus,'Buscando vuelos de ida y vuelta…',false,true);
+  const requestedRevision=quoteRevision;
   try{
    const result=await callApi({origin:airport,destination:params.destination,departure:out,returnDate:ret,
     trip:'roundtrip',adults,children,cabin:'economy'});
+   if(requestedRevision!==quoteRevision)return;
    if(!result?.ok)throw Error(result?.message||'No hay vuelos disponibles para esta búsqueda.');
    state.flightSearch={origin:airport,departure:out,returnDate:ret,arrival:state.date||out,adults,children};
     state.flightStage='outbound';renderFlightSearchSummary();toggleFlightEditor(false);
@@ -741,7 +745,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
     'Encontramos '+state.offers.length+' '+(state.offers.length===1?'opción de vuelo':'opciones de vuelos')+'. Los precios mostrados incluyen ida y vuelta. Elige tu vuelo de ida.':
     'No encontramos vuelos compatibles con las fechas y la duración de este paquete.',!state.offers.length);
    renderFlightOffers();
-  }catch(err){toggleFlightEditor(true);setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
+  }catch(err){if(requestedRevision!==quoteRevision)return;toggleFlightEditor(true);setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
   finally{$('lxProductSearchFlights').disabled=false}
  });
  $('lxFlightApply').addEventListener('click',()=>{
@@ -782,11 +786,13 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    setStatus(hotelStatus,'Indica la edad de cada niño para obtener tarifas correctas.',true);return}
   state.childrenAges=ages;
   const btn=$('lxProductLookupHotels');btn.disabled=true;setStatus(hotelStatus,'Buscando opciones de hoteles…',false,true);
+  const requestedRevision=quoteRevision;
   try{
    const result=await callApi({mode:'hotels',destination:params.destinationPlace,
     check_in_date:state.date,check_out_date:addDays(state.date,params.nights),
     adults:state.adults,children:state.children,children_ages:ages.join(','),
     baseline_hotel:String((currentTier()?.hotels||[])[0]||'')});
+   if(requestedRevision!==quoteRevision)return;
    if(!result?.ok)throw Error(result?.message||'No hay opciones para estas fechas.');
    const list=$('lxHotelLookupOptions');list.replaceChildren();
    const options=(Array.isArray(result.hotels)?result.hotels:[]).slice(0,12);
@@ -840,7 +846,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    if(budget===null)setStatus(hotelStatus,
      'No podemos calcular todavía el suplemento frente al hotel incluido para estas fechas y viajeros. Puedes conservar el alojamiento incluido o consultar otra fecha.',true);
    renderHotelCards();renderHotelPhoto();
-  }catch(err){setStatus(hotelStatus,err?.message||'No se pudo consultar hoteles.',true)}
+  }catch(err){if(requestedRevision!==quoteRevision)return;setStatus(hotelStatus,err?.message||'No se pudo consultar hoteles.',true)}
   finally{btn.disabled=false}
  });
  // Al cambiar el tipo de categoría oficial se cancela la sustitución externa.
