@@ -446,16 +446,47 @@ function showTierQuote(){
     !hasHotelIncluded?'Este paquete no incluye noches de hotel.':
     'Alojamiento incluido · '+(state.roomPlan||(state.occupancy==='double'?'habitación doble':state.occupancy==='single'?'habitación simple':state.occupancy==='matrimonial'?'habitación matrimonial':state.occupancy==='triple'?'habitación triple':'habitación familiar'));
   const flightText=$('lxProductSelectedFlight');
-  const selected=state.flight;
+  const selected=state.flight;flightText.replaceChildren();
   if(selected){
     const firstOut=selected.outbound?.[0],lastOut=selected.outbound?.at(-1);
     const firstBack=selected.inbound?.[0],lastBack=selected.inbound?.at(-1);
-    const lateReturn=state.date&&selected.returnDate>addDays(state.date,params.nights);
-    flightText.textContent=selected.airline+' · Ida '+flightTime(firstOut?.from?.time)+
-      ' a '+flightTime(lastOut?.to?.time)+', regreso '+flightTime(firstBack?.from?.time)+
-      ' a '+flightTime(lastBack?.to?.time)+' · '+fmt(priceFlight())+
-      (state.baggage==='checked'?' · Equipaje facturado por cotizar':'')+
-      (lateReturn?' · Noche adicional por cotizar':'');
+    const outAirline=firstOut?.airline||selected.airline;
+    const backAirline=firstBack?.airline||selected.airline;
+    const codeByAirline={'avianca':'AV','latam':'LA','latam airlines':'LA','jetsmart':'JA',
+      'jetsmart airlines':'JA','copa':'CM','copa airlines':'CM','sky airline':'H2','wingo':'P5',
+      'aerolíneas argentinas':'AR','gol':'G3','azul':'AD'};
+    const logoCode=codeByAirline[String(outAirline||'').trim().toLowerCase()]||'';
+    const supplied=String(selected.airlineLogo||'');
+    const logo=/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/[0-9]+px\/[A-Za-z0-9_-]+\.png$/.test(supplied)?
+      supplied:(logoCode?'https://www.gstatic.com/flights/airline_logos/70px/'+logoCode+'.png':'');
+    const card=el('div','lx-chosen-flight');
+    const brand=el('div','lx-chosen-flight-brand');
+    const mark=el('span','lx-chosen-flight-mark','✈');
+    if(logo){const img=el('img');img.src=logo;img.alt='';img.loading='lazy';
+      img.onerror=()=>{img.remove();mark.textContent='✈'};mark.replaceChildren(img);}
+    brand.append(mark,el('strong','',outAirline===backAirline?outAirline:outAirline+' + '+backAirline));
+    card.append(brand);
+    const shortDate=value=>dateOK(value)?
+      new Intl.DateTimeFormat('es-PE',{day:'numeric',month:'short'}).format(new Date(value+'T12:00:00')):'';
+    const line=(direction,date,first,last,airline)=>{
+      const row=el('div','lx-chosen-flight-leg');
+      const ico=el('i',direction==='Ida'?'fa-solid fa-plane-departure':'fa-solid fa-plane-arrival');ico.setAttribute('aria-hidden','true');
+      const detail=el('span','lx-chosen-flight-leg-detail');
+      detail.append(el('strong','',direction+' · '+shortDate(date)),
+        el('span','',String(first?.from?.code||'')+' '+flightTime(first?.from?.time)+
+          ' → '+String(last?.to?.code||'')+' '+flightTime(last?.to?.time)+
+          (airline!==outAirline?' · '+airline:'')));
+      row.append(ico,detail);return row;
+    };
+    card.append(line('Ida',selected.departure,firstOut,lastOut,outAirline),
+      line('Regreso',selected.returnDate,firstBack,lastBack,backAirline));
+    const price=el('div','lx-chosen-flight-total');
+    price.append(el('span','','Tarifa total de vuelos · '+passengerText()),el('strong','',fmt(priceFlight())));
+    card.append(price);
+    if(state.baggage==='checked')card.append(el('small','','Equipaje facturado no incluido en la tarifa.'));
+    if(state.date&&selected.returnDate>addDays(state.date,params.nights))
+      card.append(el('small','','El regreso es posterior al final del paquete; revisa las noches adicionales.'));
+    flightText.append(card);
   }else flightText.textContent='Vuelos no incluidos';
   $('lxProductOpenFlights').textContent=state.flight?'Cambiar vuelos':'Buscar vuelos';
   renderHotelPhoto();
@@ -690,6 +721,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    displayedPrice:Math.round(Number(offer.price)*(1+flightMarkup(d))*100)/100,
    origin:state.origin,destination:params.destination,departure:d,returnDate,
    airline:String(offer.airline||offer.outbound.segments[0]?.airline||'Aerolínea').slice(0,80),
+   airlineLogo:String(offer.airlineLogo||offer.outbound?.segments?.[0]?.airlineLogo||'').slice(0,180),
    outbound:(offer.outbound.segments||[]).slice(0,6).map(s=>({airline:s.airline,flightNumber:s.flightNumber,from:s.from,to:s.to})),
    inbound:(offer.inbound.segments||[]).slice(0,6).map(s=>({airline:s.airline,flightNumber:s.flightNumber,from:s.from,to:s.to}))};
   update();flights.hide();
