@@ -173,6 +173,14 @@
  '<div class="lx-package-modal-bottom"><span class="lx-package-quotes-extra" id="lxHotelExtraStatus"></span>'+
  '<button type="button" id="lxHotelApply">Confirmar alojamiento</button></div>';
  const flightStatus=$('lxFlightSearchStatus'),hotelStatus=$('lxHotelLookupStatus');
+ const outboundCalendar=window.LatamProductControls.calendar($('lxFlightDeparture'));
+ const inboundCalendar=window.LatamProductControls.calendar($('lxFlightReturn'));
+ const flightTravelers=window.LatamProductControls.travelers(
+  $('lxFlightTravelers'),
+  ()=>({adults:Number($('lxFlightAdults').value)||1,children:Number($('lxFlightChildren').value)||0}),
+  counts=>{$('lxFlightAdults').value=String(counts.adults);$('lxFlightChildren').value=String(counts.children)},
+  {max:9,maxChildren:6}
+ );
  function setStatus(node,message,err=false){node.textContent=message;node.classList.toggle('is-error',err)}
  function currentFlightQuery(){
  return {origin:$('lxFlightOrigin').value,destination:params.destination,departure:$('lxFlightDeparture').value,
@@ -188,11 +196,12 @@ function syncFlightForm(){
  $('lxFlightOrigin').value=state.origin;
  $('lxFlightAdults').value=String(Math.min(state.adults,9));
  $('lxFlightChildren').value=String(Math.min(state.children,6));
- $('lxFlightArrival').min=minDate;$('lxFlightDeparture').min=minDate;$('lxFlightReturn').min=minDate;
+ $('lxFlightDeparture').min=minDate;$('lxFlightReturn').min=minDate;
  $('lxFlightArrival').value=state.date||'';
  $('lxFlightDeparture').value=reuse?old.departure:(state.date||'');
  $('lxFlightReturn').value=reuse?old.returnDate:(state.date?addDays(state.date,params.nights):'');
  $('lxFlightCheckedBag').checked=false;
+ outboundCalendar.sync();inboundCalendar.sync();flightTravelers.sync();
  renderFlightSearchSummary();
 }
 function renderFlightSearchSummary(){
@@ -205,7 +214,7 @@ function renderFlightSearchSummary(){
   return m&&Number(m[2])>=1&&Number(m[2])<=12?
    Number(m[3])+' '+months[Number(m[2])-1]+' '+m[1]:(en?'To be defined':'Por definir');
  };
- const airports={MDE:'Medellín',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',CLO:'Cali',
+ const airports={MDE:'Medellín',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',PUQ:'Punta Arenas',CLO:'Cali',
   CTG:'Cartagena',AQP:'Arequipa',EZE:'Buenos Aires',SCL:'Santiago',MEX:'Ciudad de México',
   UIO:'Quito',GRU:'São Paulo',GIG:'Río de Janeiro',AEP:'Buenos Aires',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
  const origin=$('lxFlightOrigin').selectedOptions[0]?.textContent.replace(/\s*\([A-Z]{3}\)\s*$/,'')||
@@ -215,8 +224,8 @@ function renderFlightSearchSummary(){
  const summary=$('lxFlightSearchSummary');summary.replaceChildren();
  const items=[
   [en?'Route':'Ruta',origin+' – '+destination],
-  [en?'Arrival':'Llegada',shortDate(query.arrival)],
-  [en?'Return':'Retorno',shortDate(query.returnDate)],
+  [en?'Outbound':'Vuelo de ida',shortDate(query.departure)],
+  [en?'Inbound':'Vuelo de regreso',shortDate(query.returnDate)],
   [en?'Travelers':'Viajeros',count+' '+(count===1?(en?'traveler':'viajero'):(en?'travelers':'viajeros'))]
  ];
  items.forEach(([label,value])=>{
@@ -226,10 +235,11 @@ function renderFlightSearchSummary(){
 }
 function toggleFlightEditor(open){
  $('lxFlightSearchPanel').hidden=!open;
+ flights.body.querySelector('.lx-flight-search-context').hidden=open;
  $('lxFlightEditBtn').setAttribute('aria-expanded',String(open));
- $('lxFlightEditBtn').textContent='Editar búsqueda';
 }
-$('lxFlightEditBtn').addEventListener('click',()=>toggleFlightEditor($('lxFlightSearchPanel').hidden));
+$('lxFlightEditBtn').addEventListener('click',()=>toggleFlightEditor(true));
+$('lxFlightCancelEdit').addEventListener('click',()=>{syncFlightForm();toggleFlightEditor(false)});
  function invalidateFlight(){
   state.flight=null;state.choice=null;state.offers=[];state.outboundKey='';state.flightStage='outbound';state.flightSearch=null;
   if($('lxFlightDepartures'))$('lxFlightDepartures').replaceChildren();
