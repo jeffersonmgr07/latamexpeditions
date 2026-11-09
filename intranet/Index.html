@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>
+:root{--g:#07873e;--dark:#073d25;--mid:#245843;--line:#d8e8dd;--ink:#193629;--muted:#678174;--pale:#eff8f2}
+*{box-sizing:border-box}body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#f3f6f2;color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+header{background:linear-gradient(125deg,#063923,#087943);color:#fff;padding:18px clamp(16px,4vw,36px);display:flex;align-items:center;justify-content:space-between;gap:14px}
+header .brand{display:flex;align-items:center;gap:12px}header .icon{display:grid;place-items:center;width:40px;height:40px;border:1px solid #b5d7c1;border-radius:12px;font-weight:900;font-size:17px}
+header h1{font-size:20px;margin:0;line-height:1.1}header small{color:#d6e9dc}
+.pill{background:#d8f4df22;border:1px solid #c4e2cf66;border-radius:30px;padding:8px 11px;font-size:12px;white-space:nowrap}
+main{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:calc(100vh - 76px)}
+aside{border-right:1px solid var(--line);padding:20px 15px;background:#fff}
+.sidebar-title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+h2{font-size:18px;margin:0}aside p{color:var(--muted);font-size:12px}
+button.primary{background:var(--g);color:#fff;border:0;border-radius:9px;padding:11px 14px;font-weight:750}
+button.secondary{background:#fff;color:var(--dark);border:1px solid #bdd7c4;border-radius:9px;padding:10px 12px;font-weight:700}
+button.ghost{border:0;background:transparent;color:var(--mid);font-weight:750}
+button:disabled{opacity:.5;cursor:not-allowed}
+#products{display:grid;gap:8px;margin-top:15px} .item{text-align:left;border:1px solid #e3ede6;border-radius:11px;padding:11px;background:#fff;display:grid;gap:3px;color:var(--ink)}
+.item.active{background:var(--pale);border-color:var(--g)}.item b{font-size:13px}.item small{color:var(--muted);font-size:11px}
+.workspace{padding:25px clamp(16px,3vw,38px);min-width:0;max-width:1220px;width:100%;margin:auto}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.toolbar h2{font-size:24px}.toolbar .meta{font-size:12px;color:var(--muted)}
+.toolbar-actions{display:flex;gap:8px;flex-wrap:wrap}
+.banner{padding:11px 14px;background:#fff9e8;color:#876023;border:1px solid #e8d9aa;border-radius:10px;margin-bottom:15px;font-size:12px}
+.tabs{display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);padding:0 0 12px;margin-bottom:18px}
+.tabs button{white-space:nowrap;border:0;background:transparent;border-radius:9px;padding:9px 12px;color:var(--muted);font-weight:700}
+.tabs button.active{background:#e2f5e9;color:var(--dark)}
+.panel{display:none}.panel.active{display:block}
+.card{background:white;border:1px solid #e1ebe3;border-radius:16px;padding:20px;margin-bottom:15px;box-shadow:0 4px 15px #12352208}
+.card h3{font-size:16px;margin:0 0 5px}.card p.sub{margin:0 0 16px;color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.field{display:grid;gap:6px;min-width:0}.field.span{grid-column:1/-1}
+.field>label{font-weight:650;color:#294a39;font-size:12px}
+.field input,.field select,.field textarea{background:#fff;border:1px solid #cbded0;border-radius:9px;padding:11px 12px;width:100%;min-width:0;min-height:45px;color:#143925}
+.field textarea{resize:vertical;min-height:95px}.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid #7bc39a;border-color:#07873e}
+.info{font-size:12px;color:var(--muted);margin-top:10px}
+.day{padding:14px;border:1px solid #d4e7da;border-radius:12px;margin:12px 0;background:#fcfffd}
+.dayhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
+.dayhead b{background:var(--dark);color:#fff;padding:6px 10px;border-radius:25px;font-size:12px}
+.quotegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:13px}
+.quote{border:1px solid #d6e7db;border-radius:12px;padding:13px;background:#f9fcfa;min-height:115px}
+.quote b{display:block;font-size:22px}.quote .amount{font-size:19px;color:#07873e;font-weight:800;word-break:break-word}
+.quote small{color:var(--muted)}
+.state{border-radius:30px;padding:4px 8px;font-size:11px;font-weight:800;background:#fff3d5;color:#926000}
+.state.approved{background:#dcf6e4;color:#08743a}
+#message{display:none;margin-bottom:15px;padding:13px;border-radius:10px;background:#e6f4ec;color:#155331;white-space:pre-wrap}
+#message.error{background:#fff0ef;color:#9b322f}
+#message.visible{display:block}
+#publicOutput{font:12px/1.5 ui-monospace,SFMono-Regular,monospace;min-height:240px}
+@media(max-width:950px){main{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line);padding:12px 16px}aside p{display:none}#products{display:flex;overflow-x:auto;margin-top:9px}.item{min-width:175px}.workspace{padding:18px 14px}}
+@media(max-width:600px){header h1{font-size:15px}header .pill{display:none}.toolbar h2{font-size:20px}.grid,.grid.three{grid-template-columns:1fr}.quotegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:14px}.toolbar-actions{width:100%}.toolbar-actions button{flex:1}.day{padding:10px}}
+</style></head>
+<body>
+<header><div class="brand"><span class="icon">L</span><div><h1>LATAM EXPEDITIONS</h1><small>Consola privada · Gestión de experiencias</small></div></div><span class="pill">Borrador → Revisión → Aprobación</span></header>
+<main><aside><div class="sidebar-title"><h2>Experiencias</h2><button class="primary" id="new">+ Nueva</button></div><p>Los datos internos no se publican en el sitio web.</p><div id="products"></div><button class="secondary" id="import" style="width:100%;margin-top:12px">Importar Atacama 5D/4N</button></aside>
+<section class="workspace">
+ <div class="toolbar"><div><h2 id="heading">Nueva experiencia</h2><div class="meta" id="codeInfo">Código correlativo al guardar</div></div><div class="toolbar-actions"><button class="secondary" id="test">Calcular ocupación</button><button class="primary" id="save">Guardar borrador</button></div></div>
+ <div class="banner">Esta consola está separada de GitHub Pages. Guardar un producto no lo publica ni habilita cobros. Los costos privados se almacenan únicamente en Google Sheets con acceso restringido.</div>
+ <div id="message" role="status"></div>
+ <nav class="tabs" id="tabs" aria-label="Secciones de producto">
+  <button class="active" data-tab="general">1. Identificación</button>
+  <button data-tab="content">2. Contenido</button>
+  <button data-tab="itinerary">3. Itinerario</button>
+  <button data-tab="hotel">4. Hotel y precios</button>
+  <button data-tab="operations">5. Operación y SEO</button>
+  <button data-tab="preview">6. Exportación</button>
+ </nav>
+ <div class="panel active" data-panel="general">
+  <div class="card"><h3>Identificación comercial</h3><p class="sub">Campos necesarios para crear el registro y ubicarlo en el catálogo.</p>
+   <div class="grid">
+    <div class="field"><label>Tipo de producto</label><select data-field="identity.type"><option value="package">Paquete / circuito</option><option value="experience">Experiencia / excursión</option></select></div>
+    <div class="field"><label>Estado interno</label><select data-field="status"><option value="BORRADOR">Borrador</option><option value="EN_REVISION">En revisión</option><option value="APROBADO">Aprobado (requiere validación)</option></select></div>
+    <div class="field span"><label>Título comercial</label><input data-field="identity.title" placeholder="Ej. Desierto de Atacama Premium · 5 días / 4 noches"></div>
+    <div class="field"><label>Slug / URL</label><input data-field="identity.slug" placeholder="desierto-atacama-premium-5d4n"></div>
+    <div class="field"><label>Nombre interno</label><input data-field="identity.internalName"></div>
+    <div class="field"><label>País</label><select data-field="identity.country" id="country"><option>Chile</option><option>Perú</option><option>Colombia</option><option>Argentina</option><option>Brasil</option><option>Bolivia</option><option>Ecuador</option><option>México</option><option>Panamá</option><option>Uruguay</option><option>Costa Rica</option><option>Venezuela</option></select></div>
+    <div class="field"><label>Región / departamento / estado</label><input list="regions" data-field="identity.region" placeholder="Antofagasta"><datalist id="regions"></datalist></div>
+    <div class="field"><label>Ciudad / destino</label><input data-field="identity.city" placeholder="San Pedro de Atacama"></div>
+    <div class="field"><label>Destino comercial completo</label><input data-field="identity.destination"></div>
+    <div class="field"><label>Días</label><input data-field="identity.days" type="number" min="1" max="40"></div>
+    <div class="field"><label>Noches</label><input data-field="identity.nights" type="number" min="0" max="39"></div>
+    <div class="field"><label>Categoría</label><input data-field="identity.category" placeholder="Naturaleza, aventura"></div>
+    <div class="field"><label>Modalidad</label><input data-field="identity.modality" placeholder="Compartido"></div>
+    <div class="field"><label>Dificultad</label><input data-field="identity.difficulty"></div>
+    <div class="field"><label>Idioma de excursiones</label><input data-field="identity.language"></div>
+    <div class="field"><label>Edad mínima</label><input data-field="identity.minAge" type="number" min="0" max="99"></div>
+    <div class="field"><label>Máximo de viajeros</label><input data-field="identity.maxTravelers" type="number" min="1" max="40"></div>
+   </div>
+  </div>
+ </div>
+ <div class="panel" data-panel="content">
+  <div class="card"><h3>Presentación comercial</h3><p class="sub">Estos textos se preparan para la ficha pública, sin costos privados.</p>
+   <div class="grid">
+    <div class="field span"><label>Descripción corta</label><textarea data-field="commercial.short" rows="2"></textarea></div>
+    <div class="field span"><label>Descripción general</label><textarea data-field="commercial.description" rows="6"></textarea></div>
+    <div class="field span"><label>Lo más destacado · una línea por ítem</label><textarea data-list="commercial.highlights" rows="5"></textarea></div>
+    <div class="field"><label>Incluye · una línea por ítem</label><textarea data-list="commercial.includes" rows="7"></textarea></div>
+    <div class="field"><label>No incluye · una línea por ítem</label><textarea data-list="commercial.excludes" rows="7"></textarea></div>
+    <div class="field span"><label>Opcionales · una línea por ítem</label><textarea data-list="commercial.optional" rows="3"></textarea></div>
+    <div class="field"><label>Restricciones</label><textarea data-field="commercial.restrictions"></textarea></div>
+    <div class="field"><label>Qué llevar</label><textarea data-field="commercial.recommendations"></textarea></div>
+    <div class="field span"><label>Políticas y cancelación</label><textarea data-field="commercial.policies"></textarea></div>
+   </div>
+  </div>
+ </div>
+ <div class="panel" data-panel="itinerary"><div class="card"><div class="sidebar-title"><div><h3>Itinerario dinámico</h3><p class="sub">Puedes añadir cualquier cantidad de días y completar horas y actividades.</p></div><button class="secondary" id="addDay">+ Añadir día</button></div><div id="days"></div></div></div>
+ <div class="panel" data-panel="hotel"><div class="card"><h3>Alojamiento y tarifas</h3><p class="sub">El paquete se construye siempre sobre dos adultos en doble. Costos netos y presupuesto interno no se exportan al catálogo.</p>
+  <div class="grid">
+    <div class="field span"><label>Hotel principal</label><input data-field="lodging.name"></div>
+    <div class="field"><label>Categoría / estrellas</label><input data-field="lodging.stars" type="number" min="0" max="5"></div>
+    <div class="field"><label>Tipo de habitación base</label><input data-field="lodging.roomType" placeholder="Doble / matrimonial"></div>
+    <div class="field"><label>Habitación de referencia</label><input data-field="lodging.preferredRoom"></div>
+    <div class="field"><label>Noches del hotel</label><input data-field="lodging.nights" type="number" min="0" max="39"></div>
+    <div class="field"><label>Tarifa de venta por adulto en doble (USD)</label><input data-field="pricing.pricePerAdultOnDoubleUSD" type="number" min="0" step="0.01"></div>
+    <div class="field"><label>Costo interno habitación doble por noche (USD)</label><input data-field="lodging.costDoubleRoomNightUSD" type="number" min="0" step="0.01" placeholder="Pendiente de cotización"></div>
+    <div class="field"><label>Costo interno habitación para una persona por noche (USD)</label><input data-field="lodging.costSingleRoomNightUSD" type="number" min="0" step="0.01" placeholder="Pendiente de cotización"></div>
+    <div class="field"><label>Estado de tarifa de venta</label><select data-field="pricing.priceStatus"><option value="REFERENCIAL_NO_PUBLICAR">Referencial · no publicar</option><option value="CONFIRMADA">Confirmada por proveedor</option></select></div>
+   </div>
+   <div class="info">Regla para impar: 1 persona en habitación individual + parejas en habitaciones dobles. El suplemento individual sale de la diferencia real del costo de habitación, no de duplicar el precio del tour.</div>
+  </div>
+  <div class="card"><div class="sidebar-title"><div><h3>Simulador de ocupación</h3><p class="sub">Valores internos; nunca se envían al turista como tarifa confirmada sin validación.</p></div><button class="secondary" id="recalc">Actualizar</button></div><div class="quotegrid" id="quotes"></div></div>
+ </div>
+ <div class="panel" data-panel="operations">
+  <div class="card"><h3>Disponibilidad y operación</h3><div class="grid">
+   <div class="field"><label>Inicio (aeropuerto o punto de encuentro)</label><input data-field="identity.startPoint"></div>
+   <div class="field"><label>Fin</label><input data-field="identity.endPoint"></div>
+   <div class="field"><label>Fecha piloto de llegada</label><input data-field="dates.pilotCheckin" type="date"></div>
+   <div class="field"><label>Fecha piloto de salida</label><input data-field="dates.pilotCheckout" type="date"></div>
+   <div class="field"><label>Anticipación mínima en días</label><input data-field="dates.minLeadDays" type="number"></div>
+   <div class="field"><label>Ruta de vuelos incluidos</label><input data-field="flights.route" placeholder="SCL–CJC–SCL"></div>
+   <div class="field span"><label>Notas de disponibilidad</label><textarea data-field="dates.notes"></textarea></div>
+  </div></div>
+  <div class="card"><h3>SEO e imágenes</h3><div class="grid">
+   <div class="field span"><label>Título SEO</label><input data-field="seo.title"></div>
+   <div class="field span"><label>Meta descripción</label><textarea data-field="seo.description" rows="2"></textarea></div>
+   <div class="field span"><label>URL de imagen principal (solo fotos con derechos)</label><input data-field="seo.heroImage" placeholder="https://..."></div>
+  </div></div>
+ </div>
+ <div class="panel" data-panel="preview">
+  <div class="card"><h3>Proyección para la web</h3><p class="sub">Exportación sin costos netos, datos de proveedores, márgenes ni credenciales. Esta acción no publica el producto.</p>
+    <button class="secondary" id="generate">Generar JSON público de previsualización</button>
+    <button class="secondary" id="download" disabled>Descargar JSON</button>
+    <div class="field" style="margin-top:14px"><label>Vista previa estructurada</label><textarea id="publicOutput" readonly placeholder="Presiona Generar JSON público"></textarea></div>
+    <p class="info">Publicar de verdad requerirá aprobación, fotos con licencia y sincronizar catálogo, HTML, tarifas del backend y sitemap. Ninguna credencial se escribe en este JSON.</p>
+  </div>
+ </div>
+</section></main>
+<script>
+(()=>{'use strict';
+const $=q=>document.querySelector(q),$$=q=>[...document.querySelectorAll(q)];
+const regions={
+"Chile":["Antofagasta","Arica y Parinacota","Atacama","Coquimbo","Valparaíso","Metropolitana de Santiago","Los Lagos","Magallanes"],
+"Perú":["Lima","Cusco","Arequipa","Puno","Ica","Áncash","Loreto","Piura"],
+"Colombia":["Antioquia","Bogotá D.C.","Bolívar","Magdalena","Cundinamarca","Santander"],
+"Brasil":["Río de Janeiro","São Paulo","Bahía","Amazonas"],"Argentina":["Buenos Aires","Mendoza","Santa Cruz","Misiones"]
+};
+let product=null,publicJson=null,dirty=false,loading=false;
+const blank=()=>({schemaVersion:1,id:'',code:'',status:'BORRADOR',version:0,
+ identity:{type:'package',title:'',slug:'',country:'Chile',region:'Antofagasta',city:'',days:5,nights:4,minAge:18,defaultAdults:2,defaultChildren:0,maxTravelers:9},
+ commercial:{short:'',description:'',highlights:[],includes:[],excludes:[],optional:[]},
+ itinerary:[],lodging:{name:'',stars:4,nights:4,roomType:'Doble / matrimonial',preferredRoom:'',costDoubleRoomNightUSD:null,costSingleRoomNightUSD:null},
+ pricing:{currency:'USD',basisOccupancy:2,defaultAdults:2,defaultChildren:0,pricePerAdultOnDoubleUSD:0,priceStatus:'REFERENCIAL_NO_PUBLICAR'},
+ dates:{},flights:{},seo:{},quality:{pricesConfirmed:false,hotelConfirmed:false}});
+const pathGet=(o,path)=>path.split('.').reduce((x,k)=>x&&x[k],o);
+const pathSet=(o,path,value)=>{const keys=path.split('.');let x=o;for(let i=0;i<keys.length-1;i++){x[keys[i]]=x[keys[i]]||{};x=x[keys[i]]}x[keys[keys.length-1]]=value};
+function msg(text,error=false){const el=$('#message');el.textContent=text;el.classList.toggle('error',error);el.classList.add('visible');}
+function busy(b){loading=b;$('#save').disabled=b;$('#import').disabled=b;$('#new').disabled=b;}
+function api(name,...args){
+ return new Promise((resolve,reject)=>{
+  if(!window.google||!google.script||!google.script.run){reject(new Error('Abre esta consola desde una implementación privada de Google Apps Script, no directamente en GitHub Pages.'));return}
+  google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(new Error(e&&e.message||String(e))))[name](...args);
+ });
+}
+function setRegions(){const l=$('#regions');l.replaceChildren();(regions[$('#country').value]||[]).forEach(s=>{const opt=document.createElement('option');opt.value=s;l.append(opt)})}
+function fill(p){
+ product=structuredClone(p||blank());dirty=false;publicJson=null;$('#publicOutput').value='';$('#download').disabled=true;
+ $$('[data-field]').forEach(el=>{const value=pathGet(product,el.dataset.field);el.value=value===undefined||value===null?'':value});
+ $$('[data-list]').forEach(el=>{const value=pathGet(product,el.dataset.list);el.value=Array.isArray(value)?value.join('\n'):''});
+ $('#heading').textContent=product.identity.title||'Nueva experiencia';
+ $('#codeInfo').textContent=(product.code||'Código asignado al guardar')+' · versión '+(product.version||0);
+ $('#save').textContent=product.id?'Guardar cambios':'Guardar borrador';
+ setRegions();renderDays();$('#message').classList.remove('visible');renderQuotes();
+}
+function collect(){
+ if(!product)product=blank();
+ $$('[data-field]').forEach(el=>{let value=el.value;if(el.type==='number')value=value===''?null:Number(value);pathSet(product,el.dataset.field,value)});
+ $$('[data-list]').forEach(el=>pathSet(product,el.dataset.list,el.value.split(/\n/).map(x=>x.trim()).filter(Boolean)));
+ return product;
+}
+function renderDays(){
+ const wrap=$('#days');wrap.replaceChildren();
+ (product.itinerary||[]).forEach((d,i)=>{
+  const el=document.createElement('div');el.className='day';
+  el.innerHTML='<div class="dayhead"><b>Día '+(i+1)+'</b><button type="button" class="ghost">Eliminar día</button></div>'+
+   '<div class="grid"><div class="field span"><label>Título del día</label><input data-key="title"></div>'+
+   '<div class="field span"><label>Introducción</label><textarea data-key="intro" rows="2"></textarea></div>'+
+   '<div class="field span"><label>Actividades: una por línea · Hora | Actividad | Detalle</label><textarea data-key="activities" rows="5"></textarea></div>'+
+   '<div class="field"><label>Comidas</label><input data-key="meals"></div><div class="field"><label>Alojamiento</label><input data-key="lodging"></div>'+
+   '<div class="field span"><label>Nota operativa</label><textarea data-key="operationalNote" rows="2"></textarea></div></div>';
+  el.querySelector('.ghost').onclick=()=>{product.itinerary.splice(i,1);product.itinerary.forEach((x,j)=>x.day=j+1);dirty=true;renderDays()};
+  const vals={title:d.title||'',intro:d.intro||'',activities:(d.activities||[]).map(a=>[a.time||'',a.activity||'',a.detail||''].join(' | ')).join('\n'),
+   meals:d.meals||'',lodging:d.lodging||'',operationalNote:d.operationalNote||''};
+  el.querySelectorAll('[data-key]').forEach(input=>{
+   const key=input.dataset.key;input.value=vals[key];
+   input.addEventListener('input',()=>{
+    if(key==='activities')d.activities=input.value.split('\n').filter(Boolean).map(line=>{
+       const parts=line.split('|').map(x=>x.trim());return {time:parts[0]||'',activity:parts[1]||'',detail:parts.slice(2).join(' | ')||''};
+    });else d[key]=input.value;
+    dirty=true;
+   });
+  });wrap.append(el);
+ });
+}
+async function list(){
+ try{
+  const items=await api('lxListProducts'),wrap=$('#products');wrap.replaceChildren();
+  if(!items.length){const t=document.createElement('p');t.textContent='Todavía no hay productos guardados.';wrap.append(t);}
+  items.forEach(item=>{
+   const b=document.createElement('button');b.className='item'+(product&&product.id===item.id?' active':'');b.type='button';
+   const a=document.createElement('b');a.textContent=item.title;
+   const sub=document.createElement('small');sub.textContent=item.code+' · '+item.status;
+   const place=document.createElement('small');place.textContent=item.city+', '+item.country;b.append(a,sub,place);
+   b.onclick=async()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Abrir otro producto?'))return;
+    try{busy(true);fill(await api('lxGetProduct',item.id));await list()}catch(e){msg(e.message,true)}finally{busy(false)}};
+   wrap.append(b);
+  });
+ }catch(e){msg(e.message,true)}
+}
+async function renderQuotes(){
+ const wrap=$('#quotes');wrap.replaceChildren();
+ for(const n of [1,2,3,4]){
+  const box=document.createElement('div');box.className='quote';
+  box.innerHTML='<b>'+n+'</b><small>adulto'+(n>1?'s':'')+'</small><div class="amount">—</div><small class="note">Calculando…</small>';
+  wrap.append(box);
+  try{
+   const p=await api('lxPricePreview',collect(),n);
+   box.querySelector('.amount').textContent=p.total!==undefined?'USD '+p.total.toFixed(2):'Por cotizar';
+   box.querySelector('.note').textContent=p.message||'';
+  }catch(e){box.querySelector('.note').textContent=e.message}
+ }
+}
+$('#tabs').addEventListener('click',event=>{
+ const b=event.target.closest('button[data-tab]');if(!b)return;
+ $$('#tabs button').forEach(x=>x.classList.toggle('active',x===b));
+ $$('.panel').forEach(x=>x.classList.toggle('active',x.dataset.panel===b.dataset.tab));
+ if(b.dataset.tab==='hotel')renderQuotes();
+});
+$('#new').onclick=()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Crear uno nuevo?'))return;fill(blank());$('#tabs button').click()};
+$('#import').onclick=async()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Importar Atacama?'))return;
+ busy(true);try{fill(await api('lxImportAtacama'));msg('Atacama Premium se importó/abrió como borrador. Terrantai está pendiente de cotización.');await list()}catch(e){msg(e.message,true)}finally{busy(false)}};
+$('#save').onclick=async()=>{busy(true);try{fill(await api('lxSaveProduct',collect()));msg('Producto guardado en tu Google Sheet privado. No se ha publicado en la web.');await list()}
+ catch(e){msg(e.message,true)}finally{busy(false)}};
+$('#addDay').onclick=()=>{product.itinerary=product.itinerary||[];product.itinerary.push({day:product.itinerary.length+1,title:'',intro:'',activities:[]});dirty=true;renderDays()};
+$('#recalc').onclick=renderQuotes;$('#test').onclick=()=>{$('#tabs button[data-tab="hotel"]').click()};
+$('#generate').onclick=async()=>{try{publicJson=await api('lxPublicPreview',collect());$('#publicOutput').value=JSON.stringify(publicJson,null,2);$('#download').disabled=false;
+ msg('JSON público de previsualización generado. Sin costos internos y sin publicación automática.')}catch(e){msg(e.message,true)}};
+$('#download').onclick=()=>{if(!publicJson)return;const data=JSON.stringify(publicJson,null,2);
+ const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download=(product.identity.slug||'experiencia')+'.public-preview.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+document.addEventListener('input',e=>{if(e.target.matches('[data-field],[data-list]'))dirty=true});
+$('#country').addEventListener('change',setRegions);
+fill(blank());list();
+})();
+</script></body></html>
