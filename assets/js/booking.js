@@ -1535,7 +1535,8 @@
         '. Sujeto a confirmación antes del pago.';
     }
     if(state.customHotel)state.holder.notes+=(state.holder.notes?'\n':'')+
-      'Hotel alternativo seleccionado: '+state.customHotel+'; suplemento ofrecido '+money(state.hotelSupplement)+
+      'Hotel alternativo seleccionado: '+state.customHotel+'; suplemento '+
+        (state.hotelQuotePending?'pendiente de cotización':money(state.hotelSupplement))+
       (state.hotelAlternative?' (estancia '+money(state.hotelAlternative.stayTotal)+
         ', '+state.hotelAlternative.nights+' noches, tarifa observada Google Hotels)':'')+
       '. Verificar disponibilidad antes de la confirmación.';
@@ -1778,13 +1779,14 @@
       const details = [];
       if (state.flightQuote) details.push('Vuelos ida y regreso · '+money(state.flightQuote.displayedPrice)+
         (state.flightQuote.baggage === 'checked' ? ' · maleta facturada por cotizar' : ''));
-      if (state.customHotel) details.push('Hotel alternativo: '+state.customHotel+' · adicional '+money(state.hotelSupplement));
+      if (state.customHotel) details.push('Hotel alternativo: '+state.customHotel+' · '+
+        (state.hotelQuotePending?'suplemento por confirmar':'adicional '+money(state.hotelSupplement)));
       if (state.roomPlan) details.push('Acomodación: '+state.roomPlan+(state.hotelQuotePending?' · suplemento por confirmar':''));
       addonSummary.textContent = details.join('  |  ');
       addonSummary.hidden = !details.length;
     }
-    $('#bkSumTotal').textContent = money(state.total);
-    $('#bkPayAmount').textContent = money(state.due);
+    $('#bkSumTotal').textContent = state.hotelQuotePending?'Pendiente de cotización · base '+money(state.total):money(state.total);
+    $('#bkPayAmount').textContent = state.hotelQuotePending?'Por confirmar':money(state.due);
     const isEnglish = document.documentElement.lang === 'en';
     $('#bkPayLabel').textContent = state.mode === 'completo'
       ? (isEnglish ? 'Pay in full now' : 'Pago total ahora')
@@ -1850,6 +1852,9 @@
       mode: state.mode,
       currency: CONFIG.currency,
       // Campos adicionales no constituyen emisión; el importe exige revisión del proveedor.
+      includedHotel: PRODUCT.tiers.length?tierHotels(getTier(),false).join(' / '):'',
+      roomPlan:state.roomPlan,
+      hotelQuotePending:state.hotelQuotePending,
       flightSelection: state.flightQuote ? {
         origin: state.flightQuote.origin, destination: state.flightQuote.destination,
         departure: state.flightQuote.departure, returnDate: state.flightQuote.returnDate,
@@ -2092,14 +2097,17 @@
     $('.booking-success').classList.remove('booking-success--unverified');
     $('#bkCheckReceipt').hidden = true;
     $('#bkCode').textContent = response.bookingCode || bookingCodeFromKey(state.requestKey) || '—';
-    $('#bkDoneEmail').textContent = state.paymentMethod === 'pay_on_tour' ? (response.clientEmailSent ? `Enviamos una copia a ${state.holder.email}.` : `Recibimos tu solicitud, pero no pudimos enviar la copia automática a ${state.holder.email}. Nuestro equipo se pondrá en contacto.`) : state.holder.email;
+    $('#bkDoneEmail').textContent = state.paymentMethod === 'pay_on_tour' ? (response.emailSent ? `Enviamos una copia a ${state.holder.email}.` : `Recibimos tu solicitud, pero no pudimos enviar la copia automática a ${state.holder.email}. Nuestro equipo se pondrá en contacto.`) : state.holder.email;
     const cash = state.paymentMethod === 'pay_on_tour';
-    $('#bkSuccessTitle').textContent = cash ? '¡Tus datos se enviaron correctamente!' : 'Reserva confirmada';
-    $('#bkSuccessText').textContent = cash ? 'Recibimos tu solicitud para el tour ' + PRODUCT.title + '. Nuestro equipo verificará tu dirección de recojo (si fue proporcionada) y te confirmará por correo electrónico o WhatsApp el horario de recojo o el punto de encuentro correspondiente. Este registro está pendiente de confirmación.' : '';
-    $('#bkSuccessMethod').textContent = cash ? 'Forma de pago: Pago en efectivo al iniciar el tour (pendiente).' : ''; 
+    $('#bkSuccessTitle').textContent = cash ? 'Solicitud recibida · pendiente de confirmación' : 'Pago recibido · emisión pendiente';
+    $('#bkSuccessText').textContent = cash ?
+      'Recibimos tu solicitud para '+PRODUCT.title+'. Verificaremos vuelos, alojamiento y servicios con los proveedores. Todavía no has pagado y esta solicitud no constituye una emisión ni una reserva confirmada.' :
+      'Recibimos tu pago. Nuestro equipo gestionará la confirmación de los servicios y, cuando corresponda, la emisión manual.';
+    $('#bkSuccessMethod').textContent = cash ? (PRODUCT.kind==='package'?'No se ha realizado ningún cobro. Coordinaremos disponibilidad y pago.':'Forma de pago: efectivo al iniciar el tour (pendiente).') : ''; 
     const balance = Number(response.balance || 0);
     const isEnglish = document.documentElement.lang === 'en';
-    $('#bkDoneBalance').textContent = cash ? `Importe solicitado: ${money(state.total)} (pendiente de confirmación).` : balance > 0
+    $('#bkDoneBalance').textContent = cash ? (state.hotelQuotePending?'Suplemento del hotel por confirmar; el importe final será comunicado por nuestro equipo.':
+      `Importe mostrado: ${money(state.total)} (sujeto a confirmación de proveedores).`) : balance > 0
       ? `${isEnglish ? 'Outstanding balance' : 'Saldo pendiente'}: ${money(balance)}.`
       : (isEnglish ? 'The booking has been paid in full.' : 'La reserva quedó pagada por completo.');
     let user = null;
@@ -2342,7 +2350,7 @@
           state.flightQuote?'Vuelos seleccionados desde '+state.flightQuote.origin:'Vuelos no añadidos'];
         const estimated=Number(source.totalEstimate);
         if(Number.isFinite(estimated)&&estimated>0)
-          extras.push('Total por reserva '+money(estimated));
+          extras.push(state.hotelQuotePending?'Precio final pendiente de cotización':'Total por reserva '+money(estimated));
         $('#bkPackageSelectionDetail').textContent=extras.filter(Boolean).join(' · ');
       }
       return dateValid&&paxValid;
