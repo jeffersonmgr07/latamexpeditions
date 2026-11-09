@@ -2,6 +2,7 @@
    Importes informativos. Nunca emite billetes ni confirma un hotel. */
 (() => {
  'use strict';
+ const startProductUI = () => {
  const $=(id)=>document.getElementById(id);
  const q=new URLSearchParams(location.search);
  const book=document.querySelector('.product-booking-card [data-book][data-book-kind="package"]');
@@ -68,6 +69,10 @@
    if(useful.length){facts.replaceChildren(...useful)}
   }
   side.querySelectorAll('.fact-row,.dynamic-rate-note,.tour-booking-note,.package-flights-box').forEach(x=>x.remove());
+  // La selección de hotel se hace en el modal: evitar tabla duplicada en la ficha.
+  main.querySelectorAll(':scope > .detail-card').forEach(card=>{
+    if(/^Categor[ií]as? de alojamiento\b/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''))card.remove();
+  });
   main.querySelectorAll('.tour-note').forEach(node=>{
    if(/tarifa infantil se calcula|precio referencial por persona|precios referenciales actualizados/i.test(node.textContent||''))node.remove();
   });
@@ -682,4 +687,14 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  const findPage=document.querySelector('a[href*="paquetes.html"]');
  if(findPage&&state.date){const u=new URL(findPage.href,location.href);u.searchParams.set('fecha',state.date);
   u.searchParams.set('adults',String(state.adults));u.searchParams.set('children',String(state.children));}
+ };
+ // Algunas fichas incluyen este archivo directamente; cargar los controles ANTES de iniciar la UI.
+ if(window.LatamProductControls){startProductUI();return;}
+ if(!document.querySelector('.product-booking-card [data-book-kind="package"]'))return;
+ const activeScript=document.currentScript?.src||document.querySelector('script[src*="package-product-20261108.js"]')?.src||location.href;
+ const controls=document.createElement('script');
+ controls.src=new URL('latam-product-controls.js?v=20261109-product-controls-fix',activeScript).href;
+ controls.onload=()=>{if(window.LatamProductControls)startProductUI();else console.error('[LATAM] Controles de viajeros y calendario no disponibles.');};
+ controls.onerror=()=>console.error('[LATAM] No se pudo cargar latam-product-controls.js.');
+ document.head.append(controls);
 })();
