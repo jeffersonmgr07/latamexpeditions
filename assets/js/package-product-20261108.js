@@ -236,6 +236,14 @@ function renderFlightSearchSummary(){
 function toggleFlightEditor(open){
  $('lxFlightSearchPanel').hidden=!open;
  flights.body.querySelector('.lx-flight-search-context').hidden=open;
+ flights.body.querySelector('.lx-flight-modal-bottom').hidden=open;
+ if(open){
+   $('lxFlightDepartures').hidden=true;$('lxFlightReturns').hidden=true;
+ }else if(state.offers.length){
+   renderFlightOffers();
+ }else{
+   $('lxFlightDepartures').hidden=false;$('lxFlightReturns').hidden=true;
+ }
  $('lxFlightEditBtn').setAttribute('aria-expanded',String(open));
 }
 $('lxFlightEditBtn').addEventListener('click',()=>toggleFlightEditor(true));
