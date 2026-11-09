@@ -78,16 +78,56 @@
     document.addEventListener('latam:countrychange',event=>{
       if(origin.dataset.userEdited!=='true')setDefaultOrigin(event.detail?.country||currentCountry());
     });
+    // Autocompletado propio: no utilizar datalist nativo (queda visible tras elegir).
+    input.removeAttribute('list');
+    suggestions.hidden=true;
+    const results=document.createElement('div');
+    results.className='lx-destination-results';
+    results.id='lxDestinationResults';
+    results.setAttribute('role','listbox');
+    results.setAttribute('aria-label','Destinos disponibles');
+    results.hidden=true;input.insertAdjacentElement('afterend',results);
+    input.setAttribute('role','combobox');
+    input.setAttribute('aria-controls',results.id);
+    input.setAttribute('aria-expanded','false');
+    let chosenDestination=destinationList.find(([,label])=>normalize(label)===normalize(input.value))||null;
+    let activeIndex=-1;
+    const closeSuggestions=()=>{results.hidden=true;input.setAttribute('aria-expanded','false');activeIndex=-1;};
     function updateSuggestions(){
-      const q=normalize(input.value);
+      const q=normalize(input.value),match=destinationList.find(([,label])=>normalize(label)===q);
+      if(chosenDestination&&match&&chosenDestination[0]===match[0]){closeSuggestions();return;}
       const matches=destinationList.filter(([slug,label,country])=>
-        !q||normalize(label).includes(q)||slugText(slug).includes(q)||normalize(country)===q);
-      suggestions.replaceChildren(...matches.slice(0,45).map(([,label])=>{
-        const option=document.createElement('option');option.value=label;return option;
-      }));
+        !q||normalize(label).includes(q)||slugText(slug).includes(q)||normalize(country)===q).slice(0,12);
+      results.replaceChildren();
+      for(const item of matches){
+        const option=document.createElement('button');
+        option.type='button';option.className='lx-destination-option';
+        option.setAttribute('role','option');option.textContent=item[1];
+        option.addEventListener('pointerdown',event=>event.preventDefault());
+        option.addEventListener('click',()=>{input.value=item[1];chosenDestination=item;closeSuggestions();error.hidden=true;});
+        results.append(option);
+      }
+      results.hidden=!matches.length;input.setAttribute('aria-expanded',String(!!matches.length));
+      activeIndex=-1;
     }
-    input.addEventListener('input',()=>{updateSuggestions();error.hidden=true});
-    input.addEventListener('focus',updateSuggestions);updateSuggestions();
+    input.addEventListener('input',()=>{chosenDestination=null;updateSuggestions();error.hidden=true});
+    input.addEventListener('focus',()=>{if(!chosenDestination)updateSuggestions()});
+    input.addEventListener('keydown',event=>{
+      if(event.key==='Escape'){closeSuggestions();return;}
+      const options=[...results.querySelectorAll('.lx-destination-option')];
+      if(event.key==='ArrowDown'||event.key==='ArrowUp'){
+        event.preventDefault();if(results.hidden)updateSuggestions();
+        const items=[...results.querySelectorAll('.lx-destination-option')];
+        if(!items.length)return;
+        activeIndex=(activeIndex+(event.key==='ArrowDown'?1:-1)+items.length)%items.length;
+        items.forEach((option,index)=>option.classList.toggle('is-active',index===activeIndex));
+      }else if(event.key==='Enter'&&!results.hidden&&activeIndex>=0){
+        event.preventDefault();options[activeIndex]?.click();
+      }
+    });
+    document.addEventListener('pointerdown',event=>{
+      if(event.target!==input&&!results.contains(event.target))closeSuggestions();
+    });
     const today=new Date();
     const localDay=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
     arrival.min=localDay(today);
