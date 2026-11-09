@@ -1,4 +1,4 @@
-/** Datos precargados internos del paquete piloto Atacama, desde la ficha Word v1.0. */
+/** Precarga pública SANITIZADA: no incluye costos, proveedores ni márgenes privados. */
 const ATACAMA_PREMIUM_DRAFT = {
   "schemaVersion": 1,
   "id": "",
@@ -305,10 +305,9 @@ const ATACAMA_PREMIUM_DRAFT = {
     "minHotelGuestAge": 14,
     "costDoubleRoomNightUSD": null,
     "costSingleRoomNightUSD": null,
-    "assumedPreviousHotelRoomNightUSD": 220,
     "source": "https://terrantai.com/es/",
     "rateStatus": "PENDIENTE_COTIZACION_FECHAS",
-    "note": "Cotizar 22–26/03/2027 2 adultos en doble; cotizar también uso individual para suplemento single; confirmar impuestos y feriado."
+    "note": "Confirmar disponibilidad y precio de habitación doble y uso individual para 22–26/03/2027."
   },
   "flights": {
     "included": true,
@@ -318,7 +317,6 @@ const ATACAMA_PREMIUM_DRAFT = {
       "SKY",
       "JetSMART"
     ],
-    "estimatedCostPerAdultRoundtripUSD": 220,
     "returnWindow": "2027-03-26 tarde/noche",
     "flightConfirmed": false,
     "originDomesticSCL": true
@@ -337,52 +335,9 @@ const ATACAMA_PREMIUM_DRAFT = {
     "pricePerAdultOnDoubleUSD": 1449.5,
     "baseGroupPriceForTwoUSD": 2899,
     "priceStatus": "REFERENCIAL_NO_PUBLICAR",
-    "soloSupplementRetailFactor": 1,
     "childrenPriceUSD": null,
     "soloRateStatus": "PENDIENTE_TARIFA_SINGLE",
     "costValidationRequired": true
-  },
-  "internal": {
-    "costsForTwoUSD": {
-      "domesticFlights": 440,
-      "hotelPreviousAssumption": 880,
-      "transfers": 70,
-      "toursAndMoon": 613,
-      "entries": 177,
-      "contingency": 150,
-      "paymentFeeEstimate": 156.85,
-      "totalCostEst": 2486.85
-    },
-    "expectedMarginUSD": 412.15,
-    "expectedMarginPercent": 14.22,
-    "notes": "Rentabilidad preliminar basada en un HOTEL NO TERRANTAI (supuesto 220 USD/noche), no usar para venta hasta reemplazar costo real. Vuelo, entradas y tour aún no confirmados.",
-    "suppliers": [
-      {
-        "category": "excursions",
-        "name": "Tours Atacama u operador equivalente",
-        "confirmed": false
-      },
-      {
-        "category": "transfer",
-        "name": "Transfer Pampa u operador equivalente",
-        "confirmed": false
-      },
-      {
-        "category": "astronomy",
-        "name": "Observatorio Alarkapin u operador equivalente",
-        "confirmed": false
-      },
-      {
-        "category": "lodging",
-        "name": "Hotel Terrantai",
-        "confirmed": false
-      },
-      {
-        "category": "flights",
-        "name": "LATAM / SKY / JetSMART",
-        "confirmed": false
-      }
-    ]
   },
   "seo": {
     "title": "Desierto de Atacama Premium 5D/4N | LATAM Expeditions",
@@ -408,6 +363,6 @@ const ATACAMA_PREMIUM_DRAFT = {
     "datesVerified": false,
     "englishApproved": false,
     "bookingTested": false,
-    "notes": "Producto precargado desde ficha maestra de 8/11/2026. No publicar ni ofrecer cobro hasta completar revisión."
+    "notes": "Plantilla de prueba: requiere tarifas hoteleras y validación antes de publicar."
   }
 };
