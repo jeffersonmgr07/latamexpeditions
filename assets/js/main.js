@@ -793,7 +793,7 @@
       };
       layout.append(
         createCard('Solicita una cotización a medida',
-          '¿Quieres adaptar las fechas, el alojamiento o las actividades? Cuéntanos cómo te gustaría organizar tu viaje.',
+          '¿Quieres adaptar este viaje a tu medida? Déjanos tus indicaciones y lo organizamos.',
           custom,'Solicitar cotización a medida'),
         createCard('Consulta por WhatsApp',
           'Si prefieres conversar con un asesor para afinar los detalles, puedes escribirnos directamente.',
