@@ -777,6 +777,7 @@
         const card=document.createElement('article');card.className='detail-card lx-product-help-card';
         const h=document.createElement('h2');h.textContent=heading;
         const p=document.createElement('p');p.textContent=description;
+        link.classList.remove('btn-outline','btn-primary');
         if(link===whatsapp){
           // Conservar el icono y la identidad visual de WhatsApp al reubicar la acción.
           const icon=link.querySelector('i.fa-whatsapp')?.cloneNode(true)||document.createElement('i');
@@ -785,7 +786,7 @@
           link.replaceChildren(icon,caption);
           link.classList.add('lx-product-help-whatsapp');
         }else{
-          link.textContent=label;link.classList.remove('btn-outline','btn-primary');
+          link.textContent=label;
         }
         link.classList.add('lx-product-help-cta');
         card.append(h,p,link);return card;
