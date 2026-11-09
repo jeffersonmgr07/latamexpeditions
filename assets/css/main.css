@@ -3403,13 +3403,13 @@ body.has-pn-header .topbar { border: 0 !important; }
 .booking-modal .booking-phone-combined select{
  padding-right:39px!important;background-position:right 12px center;
 }
-.lx-product-help{padding:22px clamp(18px,5vw,55px) 36px!important}
+.lx-product-help{padding:0!important;margin:0!important;min-width:0;width:100%}
 .lx-product-help-grid{
- display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
- gap:18px;max-width:1200px;margin:0 auto;
+ display:grid;grid-template-columns:minmax(0,1fr);
+ gap:14px;width:100%;max-width:none;margin:0;
 }
 .lx-product-help-card{
- min-width:0;background:#f9fcfa;border:1px solid #d8e9df;
+ min-width:0;width:100%;box-sizing:border-box;background:#fff;border:1px solid #d8e9df;
  border-radius:20px;padding:23px 25px;
  box-shadow:0 10px 30px rgba(0,48,27,.04)
 }
@@ -3422,6 +3422,9 @@ body.has-pn-header .topbar { border: 0 !important; }
  font-weight:800;font-size:12px;transition:background .15s ease
 }
 .lx-product-help-cta:hover{background:#e8f6ec}
+.lx-product-help-cta.lx-product-help-whatsapp{gap:9px;background:#25d366;color:#fff!important;border-color:#25d366}
+.lx-product-help-cta.lx-product-help-whatsapp:hover{background:#1dad53}
+.lx-product-help-whatsapp .fa-whatsapp{font-size:19px;line-height:1}
 @media(max-width:720px){
  .lx-product-help-grid{grid-template-columns:1fr;gap:12px}
  .lx-product-help-card{padding:18px}
