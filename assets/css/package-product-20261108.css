@@ -261,3 +261,91 @@
  .lx-flight-choice-select .lx-flight-choice-price{grid-column:2;text-align:left}
  .lx-flight-search-context #lxFlightEditBtn{margin-top:6px}
 }
+
+/* 2026-11-09: calendario LATAM y selector de viajeros en fichas y vuelos */
+.lx-package-quick .lx-package-quick-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.lx-package-quick .lx-package-quick-grid > label,
+.lx-package-quick .lx-quick-field,
+.lx-travel-field {display:grid;gap:6px;position:relative;min-width:0}
+.lx-travel-field > label,
+.lx-package-quick .lx-package-quick-grid > label {font-size:11px;color:#557261;font-weight:750}
+.lx-date-trigger,.lx-travel-trigger {
+  display:flex!important;align-items:center!important;justify-content:space-between!important;
+  width:100%;min-width:0;min-height:44px;gap:10px;text-align:left;
+  border:1px solid #bfd7c8!important;border-radius:11px!important;
+  color:#183e2d!important;background:#fff!important;
+  padding:11px 14px!important;font:700 12px Inter,Arial,sans-serif!important;
+  box-shadow:none!important;cursor:pointer
+}
+.lx-date-trigger:hover,.lx-travel-trigger:hover{border-color:#07873e!important}
+.lx-date-trigger:focus-visible,.lx-travel-trigger:focus-visible,
+.lx-travel-adjust:focus-visible,.lx-date-day:focus-visible{outline:3px solid rgba(7,135,62,.35);outline-offset:2px}
+.lx-date-icon{font-size:18px;line-height:1;color:#07873e}
+.lx-travel-chevron{font-size:19px;line-height:1;color:#07873e}
+.lx-date-calendar[hidden],.lx-travel-popover[hidden],.lx-flight-search-context[hidden]{display:none!important}
+.lx-custom-date-field{position:relative}
+.lx-date-calendar,.lx-travel-popover{
+  position:absolute;z-index:9500;top:calc(100% + 7px);left:0;
+  width:min(322px,calc(100vw - 48px));max-width:calc(100vw - 48px);
+  background:#fff;border:1px solid #d6e6dc;border-radius:16px;
+  box-shadow:0 20px 46px rgba(0,40,23,.19);padding:13px;color:#1b422d;
+}
+.lx-date-calendar-head{display:flex;align-items:center;justify-content:space-between;gap:9px;margin-bottom:9px}
+.lx-date-month{font-size:14px;color:#153d2a;text-align:center}
+.lx-date-nav{height:33px;width:33px;flex:none;display:grid;place-items:center;background:#eef7f1!important;
+  color:#106f39!important;border:0!important;border-radius:9px!important;font-size:23px!important;padding:0!important;cursor:pointer}
+.lx-date-nav:disabled{opacity:.3;cursor:not-allowed}
+.lx-date-weekdays,.lx-date-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.lx-date-weekdays{font-size:10px;text-align:center;color:#708677;font-weight:800;padding:3px 0 8px}
+.lx-date-day{aspect-ratio:1;display:grid;place-items:center;min-height:32px;
+  color:#254a33!important;background:#fff!important;border:0!important;
+  border-radius:9px!important;font:700 11.5px Inter,Arial,sans-serif!important;
+  padding:0!important;cursor:pointer}
+.lx-date-day:hover:not(:disabled){background:#e6f5eb!important;color:#057d38!important}
+.lx-date-day.is-outside{color:#b2beb5!important}
+.lx-date-day.is-today{box-shadow:inset 0 0 0 1px #88b89a}
+.lx-date-day.is-selected{background:#07873e!important;color:#fff!important}
+.lx-date-day:disabled{opacity:.25;cursor:not-allowed}
+.lx-travel-popover{width:min(300px,calc(100vw - 48px));padding:14px 15px}
+.lx-travel-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0}
+.lx-travel-row + .lx-travel-row{border-top:1px solid #e4eee7}
+.lx-travel-copy{display:grid;gap:4px}
+.lx-travel-copy strong{font:800 13px Inter,Arial,sans-serif;color:#214934}
+.lx-travel-copy small{font:600 10px Inter,Arial,sans-serif;color:#72867b}
+.lx-travel-count{display:flex;align-items:center;gap:11px}
+.lx-travel-count output{min-width:20px;text-align:center;font-size:13px;font-weight:800;color:#16452c}
+.lx-travel-adjust{border:1px solid #a9ceb6!important;border-radius:50%!important;
+  background:#fff!important;color:#07873e!important;display:grid;place-items:center;
+  width:31px!important;height:31px!important;padding:0!important;line-height:1!important;
+  font-size:19px!important;font-weight:700!important;cursor:pointer}
+.lx-travel-adjust:hover:not(:disabled){background:#e6f6eb!important}
+.lx-travel-adjust:disabled{opacity:.32;cursor:not-allowed}
+.lx-flight-editor-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.lx-search-cancel{background:#fff;border:1px solid #c3d9ca;color:#1d673d;
+  border-radius:10px;padding:11px 16px;font-size:12px;font-weight:750;cursor:pointer}
+#lxFlightSearchPanel .lx-package-modal-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#lxFlightSearchPanel .lx-package-modal-fields > label,
+#lxFlightSearchPanel .lx-package-modal-fields > .lx-travel-field{min-width:0}
+#lxFlightSearchPanel .lx-date-calendar,#lxFlightSearchPanel .lx-travel-popover{z-index:9700}
+.lx-package-price-details{display:grid;gap:8px;padding-top:12px;margin-top:10px;border-top:1px solid #d9e9dd}
+.lx-package-cost-line{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;
+  color:#486958;font-size:11px;line-height:1.5;min-width:0}
+.lx-package-cost-line span{min-width:0;overflow-wrap:anywhere}
+.lx-package-cost-line strong{flex:none;color:#1a5635;font-size:11px;font-weight:800;white-space:nowrap}
+.lx-package-cost-line.is-pending strong{color:#9b6933}
+.lx-package-quick-total{margin-top:11px}
+#lxProductFlightPrice{display:none!important}
+/* Espacio interior y flechas de los desplegables */
+.lx-package-modal select{
+ appearance:none;-webkit-appearance:none;
+ background-color:#fff;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%230a6936' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+ background-position:right 14px center;background-repeat:no-repeat;background-size:17px 17px;
+ padding-right:42px!important
+}
+@media(max-width:520px){
+ .lx-package-quick .lx-package-quick-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ #lxFlightSearchPanel .lx-package-modal-fields{grid-template-columns:1fr}
+ .lx-date-calendar,.lx-travel-popover{max-width:min(310px,calc(100vw - 44px))}
+ .lx-package-cost-line{font-size:10.5px}
+}
