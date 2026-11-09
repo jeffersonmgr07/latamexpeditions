@@ -43,10 +43,12 @@ Los precios observados del proveedor no equivalen a emisión. Si no se ha verifi
 1. En https://developer.paypal.com/ abre Apps & Credentials y crea una REST App en Sandbox.
 2. Guarda su Client ID en `booking.paypalClientId` del catálogo; su Secret únicamente en propiedades de Apps Script.
 3. El backend existente implementa `createOrder` y `captureOrder`, pero solo debe aceptar importes que él mismo pueda recalcular con datos confiables.
-4. **No habilites todavía el botón PayPal**: los vuelos y cambios de hotel dinámicos no se verifican aún contra inventario servidor; el frontend de pago también requiere un canal compatible con el navegador para comunicarse con Apps Script (por ejemplo un proxy HTTPS con CORS o una pasarela HTML segura por iframe).
-5. Implementa un presupuesto firmado/congelado por servidor para cualquier vuelo/hotel añadido. El servidor debe verificar importes, divisa, estado de orden, captura y coincidencia de la solicitud; aplicar idempotencia.
-6. Prueba pagos Sandbox: éxito, cancelación, rechazo, doble clic, desconexión al capturar, consulta de orden pagada, pedido con vuelos/hotel y pedido con suplementos pendientes.
-7. Solo entonces habilita PayPal en el frontend y repite en Live. Mantén el estado del alojamiento y de los billetes como **pendiente de confirmación o emisión** hasta que se complete manualmente.
+4. El frontend tiene ahora un canal por formulario/iframe para que el navegador reciba de Apps Script el resultado de `createOrder` y `captureOrder` sin depender de CORS. Está **preparado, pero no probado con credenciales Sandbox reales**. Mantén `booking.paypalEnabled=false` en `assets/data/catalog.json` hasta completar las pruebas.
+5. En una versión de **pruebas**: coloca el Client ID público de Sandbox en `booking.paypalClientId` y habilita `booking.paypalEnabled=true`. La API del servidor debe tener `PAYPAL_ENV=sandbox`. No expongas la pasarela Sandbox al público como si fuera producción.
+6. La lógica actual solo admite cobro online del **precio base verificable**. Si el cliente añade vuelos u otro hotel, el servidor rechazará cobrar importes sin cotización autorizada; el navegador bloquea también esa modalidad mientras existan tales servicios.
+7. Implementa un presupuesto firmado/congelado por servidor para cualquier vuelo/hotel añadido. El servidor debe verificar importes, divisa, estado de orden, captura y coincidencia de la solicitud; aplicar idempotencia.
+8. Prueba pagos Sandbox: éxito, cancelación, rechazo, doble clic, desconexión al capturar, consulta de orden pagada, pedido con vuelos/hotel y pedido con suplementos pendientes.
+9. Solo entonces habilita PayPal en el frontend y repite en Live. Mantén el estado del alojamiento y de los billetes como **pendiente de confirmación o emisión** hasta que se complete manualmente.
 
 ## Protección de datos
 - Los nombres, documentos y fechas de nacimiento son datos personales: acceso solo a operadores autorizados, credenciales privadas, permisos mínimos y política de conservación.
