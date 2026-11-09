@@ -498,7 +498,12 @@ function searchBundleHotels_(p) {
     if(res.getResponseCode()!==200)throw Error("Hotel provider HTTP "+res.getResponseCode());
     var body=JSON.parse(res.getContentText());
     if(body.error)throw Error("No se pudo completar la búsqueda de hoteles.");
-    return Array.isArray(body.properties)?body.properties:[];
+    // Al buscar un hotel concreto, Google Hotels/SerpApi puede devolver
+    // un objeto de propiedad directamente, sin el arreglo "properties".
+    // Antes esto descartaba la tarifa del hotel incluido en el paquete.
+    if(Array.isArray(body.properties))return body.properties;
+    if(body.name && (body.total_rate || body.rate_per_night))return [body];
+    return [];
   }
   var properties=fetchHotels_(location.q);
   function number_(obj){
