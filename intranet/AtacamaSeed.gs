@@ -1,4 +1,4 @@
-/** PRECARGA SANITIZADA: sin tarifas de venta privadas, costos, márgenes ni datos de proveedores. */
+/** PRECARGA SANITIZADA: sin precios internos, costos, márgenes ni datos privados de proveedores. */
 const ATACAMA_PREMIUM_DRAFT = {
   "schemaVersion": 1,
   "id": "",
@@ -338,7 +338,7 @@ const ATACAMA_PREMIUM_DRAFT = {
     "childrenPriceUSD": null,
     "soloRateStatus": "PENDIENTE_TARIFA_SINGLE",
     "costValidationRequired": true,
-    "note": "Cargar USD 1,449.50 por adulto de la ficha Word solo dentro de Google Sheets privado, después de revisar costos de Hotel Terrantai."
+    "note": "Introduce la tarifa de venta referencial desde el documento Word en la consola privada, tras comprobar el costo real de Hotel Terrantai."
   },
   "seo": {
     "title": "Desierto de Atacama Premium 5D/4N | LATAM Expeditions",
