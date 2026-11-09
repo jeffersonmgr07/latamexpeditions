@@ -80,21 +80,28 @@
  panel.setAttribute('aria-label','Fecha y viajeros del paquete');
  panel.innerHTML='<div class="lx-package-quick-grid">'+
   '<label>Fecha de llegada<input type="date" id="lxProductDate" aria-label="Fecha de llegada"></label>'+
-  '<label>Personas<input id="lxProductTotalPax" type="text" readonly aria-label="Total de personas"></label></div>'+
-  '<div class="lx-package-guests">'+
-  '<label>Adultos<div class="lx-package-count"><button type="button" data-pax="adults" data-dir="-1" aria-label="Quitar adulto">−</button><output id="lxProductAdults"></output><button type="button" data-pax="adults" data-dir="1" aria-label="Añadir adulto">+</button></div></label>'+
-  '<label>Niños<div class="lx-package-count"><button type="button" data-pax="children" data-dir="-1" aria-label="Quitar niño">−</button><output id="lxProductChildren"></output><button type="button" data-pax="children" data-dir="1" aria-label="Añadir niño">+</button></div></label></div>'+
+  '<div class="lx-travel-field"><label for="lxProductTotalPax">Viajeros</label><button id="lxProductTotalPax" class="lx-travel-trigger" type="button">2 viajeros</button></div></div>'+
+  '<div id="lxProductPriceDetails" class="lx-package-price-details" aria-live="polite"></div>'+
   '<div class="lx-package-quick-total"><small>Total para el grupo</small><strong id="lxProductGroupPrice"></strong></div>'+
   '<div id="lxProductFlightPrice" class="lx-package-flight-price" hidden></div>'+
   '<p class="lx-package-addons-note" id="lxProductQuoteNote">Elige la fecha y los viajeros para continuar.</p>';
  side.querySelector('.price-block')?.after(panel);
  $('lxProductDate').min=minDate;$('lxProductDate').value=state.date;
- $('lxProductDate').addEventListener('change',()=>{state.date=$('lxProductDate').value;state.customHotel='';state.hotelQuotePending=false;invalidateFlight();clearHotelLookup();update()});
- panel.querySelectorAll('[data-pax]').forEach(b=>b.addEventListener('click',()=>{
-  const type=b.dataset.pax,delta=Number(b.dataset.dir),next=state[type]+delta;
-  if(next<(type==='adults'?1:0)||next>9||(delta>0&&state.adults+state.children>=9))return;
-  state[type]=next;state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];invalidateFlight();clearHotelLookup();update();
- }));
+ const productCalendar=window.LatamProductControls.calendar($('lxProductDate'));
+ $('lxProductDate').addEventListener('change',()=>{
+   state.date=$('lxProductDate').value;state.customHotel='';
+   state.hotelQuotePending=false;invalidateFlight();clearHotelLookup();update();
+ });
+ const productTravelers=window.LatamProductControls.travelers(
+   $('lxProductTotalPax'),
+   ()=>({adults:state.adults,children:state.children}),
+   ({adults,children})=>{
+     state.adults=adults;state.children=children;state.hotelPicked=false;
+     state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;
+     state.customHotel='';state.childrenAges=[];invalidateFlight();clearHotelLookup();update();
+   },
+   {max:9,maxChildren:8}
+ );
  const sectionAt=cards.find(x=>/^Itinerario/i.test(x.querySelector('h2')?.textContent||''))||
    main.querySelector('.package-itinerary')?.closest('section.detail-card');
  const addonFlights=el('section','lx-package-addon');
@@ -127,21 +134,24 @@
  }
  const flights=modal('lxProductFlightsModal','Elige tus vuelos');
  flights.body.innerHTML=
- '<div class="lx-flight-search-context"><div class="lx-flight-context-heading"><small>Itinerario de vuelos</small><div id="lxFlightSearchSummary" class="lx-flight-search-summary" role="group" aria-label="Resumen del itinerario de vuelos">Preparando búsqueda…</div></div>'+
+ '<div class="lx-flight-search-context"><div class="lx-flight-context-heading"><small>Itinerario de vuelos</small><div id="lxFlightSearchSummary" class="lx-flight-search-summary" role="group" aria-label="Resumen de vuelos">Preparando búsqueda…</div></div>'+
  '<button type="button" id="lxFlightEditBtn" aria-expanded="false" aria-controls="lxFlightSearchPanel">Editar búsqueda</button></div>'+
  '<div id="lxFlightSearchPanel" class="lx-flight-search-panel" hidden><div class="lx-package-modal-fields">'+
  '<label>Salida desde<select id="lxFlightOrigin">'+
  ['LIM|Lima','BOG|Bogotá','CUZ|Cusco','MDE|Medellín','CLO|Cali','CTG|Cartagena',
- 'AQP|Arequipa','EZE|Buenos Aires','AEP|Buenos Aires (Aeroparque)','GIG|Río de Janeiro','SCL|Santiago','MEX|Ciudad de México',
- 'UIO|Quito','GRU|São Paulo','PTY|Ciudad de Panamá','MIA|Miami','CCS|Caracas'].map(s=>{
- const [code,label]=s.split('|');return '<option value="'+code+'">'+label+' ('+code+')</option>';
+  'AQP|Arequipa','EZE|Buenos Aires','AEP|Buenos Aires (Aeroparque)','GIG|Río de Janeiro',
+  'PUQ|Punta Arenas','SCL|Santiago','MEX|Ciudad de México','UIO|Quito',
+  'GRU|São Paulo','PTY|Ciudad de Panamá','MIA|Miami','CCS|Caracas'].map(s=>{
+  const [code,label]=s.split('|');return '<option value="'+code+'">'+label+' ('+code+')</option>';
  }).join('')+'</select></label>'+
- '<label>Llegada al destino<input type="date" id="lxFlightArrival"></label>'+
- '<label>Salida de origen<input type="date" id="lxFlightDeparture"></label>'+
- '<label>Regreso<input type="date" id="lxFlightReturn"></label>'+
- '<label>Adultos<select id="lxFlightAdults">'+Array.from({length:9},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'</option>').join('')+'</select></label>'+
- '<label>Niños<select id="lxFlightChildren">'+Array.from({length:7},(_,i)=>'<option value="'+i+'">'+i+'</option>').join('')+'</select></label>'+
- '</div><button type="button" class="lx-package-search" id="lxProductSearchFlights">Actualizar resultados</button></div>'+
+ '<label>Vuelo de ida<input type="date" id="lxFlightDeparture"></label>'+
+ '<label>Vuelo de regreso<input type="date" id="lxFlightReturn"></label>'+
+ '<input type="hidden" id="lxFlightArrival"><input type="hidden" id="lxFlightAdults"><input type="hidden" id="lxFlightChildren">'+
+ '<div class="lx-travel-field"><label for="lxFlightTravelers">Viajeros</label>'+
+ '<button type="button" id="lxFlightTravelers" class="lx-travel-trigger">2 viajeros</button></div>'+
+ '</div><div class="lx-flight-editor-actions">'+
+ '<button type="button" class="lx-package-search" id="lxProductSearchFlights">Realizar búsqueda</button>'+
+ '<button type="button" class="lx-search-cancel" id="lxFlightCancelEdit">Cancelar</button></div></div>'+
  '<div id="lxFlightSearchStatus" role="status" class="lx-package-status" aria-live="polite"></div>'+
  '<div id="lxFlightDepartures" class="lx-package-offers"></div><div id="lxFlightReturns" class="lx-package-offers" hidden></div>'+
  '<label class="lx-baggage-select" id="lxFlightBaggageRow" hidden><input type="checkbox" id="lxFlightCheckedBag"> Añadir equipaje facturado (tarifa por confirmar)</label>'+
@@ -163,6 +173,14 @@
  '<div class="lx-package-modal-bottom"><span class="lx-package-quotes-extra" id="lxHotelExtraStatus"></span>'+
  '<button type="button" id="lxHotelApply">Confirmar alojamiento</button></div>';
  const flightStatus=$('lxFlightSearchStatus'),hotelStatus=$('lxHotelLookupStatus');
+ const outboundCalendar=window.LatamProductControls.calendar($('lxFlightDeparture'));
+ const inboundCalendar=window.LatamProductControls.calendar($('lxFlightReturn'));
+ const flightTravelers=window.LatamProductControls.travelers(
+  $('lxFlightTravelers'),
+  ()=>({adults:Number($('lxFlightAdults').value)||1,children:Number($('lxFlightChildren').value)||0}),
+  counts=>{$('lxFlightAdults').value=String(counts.adults);$('lxFlightChildren').value=String(counts.children)},
+  {max:9,maxChildren:6}
+ );
  function setStatus(node,message,err=false){node.textContent=message;node.classList.toggle('is-error',err)}
  function currentFlightQuery(){
  return {origin:$('lxFlightOrigin').value,destination:params.destination,departure:$('lxFlightDeparture').value,
@@ -178,11 +196,12 @@ function syncFlightForm(){
  $('lxFlightOrigin').value=state.origin;
  $('lxFlightAdults').value=String(Math.min(state.adults,9));
  $('lxFlightChildren').value=String(Math.min(state.children,6));
- $('lxFlightArrival').min=minDate;$('lxFlightDeparture').min=minDate;$('lxFlightReturn').min=minDate;
+ $('lxFlightDeparture').min=minDate;$('lxFlightReturn').min=minDate;
  $('lxFlightArrival').value=state.date||'';
  $('lxFlightDeparture').value=reuse?old.departure:(state.date||'');
  $('lxFlightReturn').value=reuse?old.returnDate:(state.date?addDays(state.date,params.nights):'');
  $('lxFlightCheckedBag').checked=false;
+ outboundCalendar.sync();inboundCalendar.sync();flightTravelers.sync();
  renderFlightSearchSummary();
 }
 function renderFlightSearchSummary(){
@@ -195,7 +214,7 @@ function renderFlightSearchSummary(){
   return m&&Number(m[2])>=1&&Number(m[2])<=12?
    Number(m[3])+' '+months[Number(m[2])-1]+' '+m[1]:(en?'To be defined':'Por definir');
  };
- const airports={MDE:'Medellín',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',CLO:'Cali',
+ const airports={MDE:'Medellín',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',PUQ:'Punta Arenas',CLO:'Cali',
   CTG:'Cartagena',AQP:'Arequipa',EZE:'Buenos Aires',SCL:'Santiago',MEX:'Ciudad de México',
   UIO:'Quito',GRU:'São Paulo',GIG:'Río de Janeiro',AEP:'Buenos Aires',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
  const origin=$('lxFlightOrigin').selectedOptions[0]?.textContent.replace(/\s*\([A-Z]{3}\)\s*$/,'')||
@@ -205,8 +224,8 @@ function renderFlightSearchSummary(){
  const summary=$('lxFlightSearchSummary');summary.replaceChildren();
  const items=[
   [en?'Route':'Ruta',origin+' – '+destination],
-  [en?'Arrival':'Llegada',shortDate(query.arrival)],
-  [en?'Return':'Retorno',shortDate(query.returnDate)],
+  [en?'Outbound':'Vuelo de ida',shortDate(query.departure)],
+  [en?'Inbound':'Vuelo de regreso',shortDate(query.returnDate)],
   [en?'Travelers':'Viajeros',count+' '+(count===1?(en?'traveler':'viajero'):(en?'travelers':'viajeros'))]
  ];
  items.forEach(([label,value])=>{
@@ -216,10 +235,20 @@ function renderFlightSearchSummary(){
 }
 function toggleFlightEditor(open){
  $('lxFlightSearchPanel').hidden=!open;
+ flights.body.querySelector('.lx-flight-search-context').hidden=open;
+ flights.body.querySelector('.lx-flight-modal-bottom').hidden=open;
+ if(open){
+   setStatus(flightStatus,'');
+   $('lxFlightDepartures').hidden=true;$('lxFlightReturns').hidden=true;
+ }else if(state.offers.length){
+   renderFlightOffers();
+ }else{
+   $('lxFlightDepartures').hidden=false;$('lxFlightReturns').hidden=true;
+ }
  $('lxFlightEditBtn').setAttribute('aria-expanded',String(open));
- $('lxFlightEditBtn').textContent='Editar búsqueda';
 }
-$('lxFlightEditBtn').addEventListener('click',()=>toggleFlightEditor($('lxFlightSearchPanel').hidden));
+$('lxFlightEditBtn').addEventListener('click',()=>toggleFlightEditor(true));
+$('lxFlightCancelEdit').addEventListener('click',()=>{syncFlightForm();toggleFlightEditor(false)});
  function invalidateFlight(){
   state.flight=null;state.choice=null;state.offers=[];state.outboundKey='';state.flightStage='outbound';state.flightSearch=null;
   if($('lxFlightDepartures'))$('lxFlightDepartures').replaceChildren();
@@ -316,15 +345,35 @@ function showTierQuote(){
   if(validSrc(photo)){const image=el('img');image.src=photo;image.alt='Imagen de '+name;image.loading='lazy';image.referrerPolicy='no-referrer';slot.append(image)}
   else slot.append(el('span','', 'Foto del hotel al consultar opciones'));
  }
+
+ function renderPriceBreakdown(){
+   const rows=$('lxProductPriceDetails');rows.replaceChildren();
+   const weight=state.adults+state.children*params.childFactor;
+   const baseAmount=Math.round(params.base*weight*100)/100;
+   const people=state.adults+' '+(state.adults===1?'adulto':'adultos')+
+     (state.children?' · '+state.children+' '+(state.children===1?'niño':'niños'):'');
+   function addLine(label,amount,pending=false){
+     const item=el('div','lx-package-cost-line');
+     item.append(el('span','',label),el('strong','',pending?'Por cotizar':fmt(amount)));
+     if(pending)item.classList.add('is-pending');
+     rows.append(item);
+   }
+   addLine('Paquete base · '+people,baseAmount);
+   const adjustment=Math.round((pricePackage()-baseAmount)*100)/100;
+   if(Math.abs(adjustment)>=.01)addLine(adjustment>0?'Mejora de hotel':'Ajuste de alojamiento',adjustment);
+   if(state.flight){
+     const airlines=[...new Set([state.flight.outbound?.[0]?.airline,state.flight.inbound?.[0]?.airline].filter(Boolean))];
+     addLine('Vuelos ida y vuelta · '+(airlines.join(' + ')||state.flight.airline)+' · '+
+       state.adults+'A'+(state.children?' / '+state.children+'N':''),priceFlight());
+   }
+   if(state.customHotel)addLine((hasHotelIncluded?'Cambio de hotel · ':'Alojamiento · ')+state.customHotel,0,true);
+   else if(state.hotelQuotePending)addLine('Habitación o alojamiento adicional',0,true);
+ }
+
  function update(){
   $('lxProductDate').value=state.date;
-  $('lxProductTotalPax').value=String(state.adults+state.children)+' viajeros';
-  $('lxProductAdults').textContent=String(state.adults);$('lxProductChildren').textContent=String(state.children);
-  panel.querySelectorAll('[data-pax]').forEach(b=>{
-   const next=state[b.dataset.pax]+Number(b.dataset.dir);
-   b.disabled=next<(b.dataset.pax==='adults'?1:0)||
-    (Number(b.dataset.dir)>0&&state.adults+state.children>=9);
-  });
+  productCalendar.sync();productTravelers.sync();
+  renderPriceBreakdown();
   $('lxProductGroupPrice').textContent=state.adults+state.children>maxHotelOccupancy?'Cotización para el grupo':(state.hotelQuotePending?'Desde '+fmt(total()):fmt(total()));
   $('lxProductQuoteNote').textContent=state.adults+state.children>maxHotelOccupancy?
     'Para más de 4 viajeros, confirmaremos las habitaciones y el precio del grupo.':
@@ -335,10 +384,7 @@ function showTierQuote(){
     state.flight&&state.baggage==='checked'?
     'El suplemento de equipaje facturado se confirmará antes del pago.':
     'Elige categoría de hotel y habitación al reservar.';
-  const flightPrice=$('lxProductFlightPrice');
-  flightPrice.hidden=!state.flight;
-  if(state.flight)flightPrice.textContent='Vuelos seleccionados: '+fmt(priceFlight())+
-    ' para el grupo'+(state.baggage==='checked'?' · Maleta por cotizar':'');
+  const flightPrice=$('lxProductFlightPrice');flightPrice.hidden=true;
   $('lxProductHotelName').textContent=state.customHotel||(!hasHotelIncluded?'Sin alojamiento':((currentTier()?.hotels||[]).join(' / ')||'Hotel incluido'));
 
   $('lxProductHotelCategory').textContent=state.customHotel?'Hotel alternativo solicitado':
@@ -372,13 +418,17 @@ function showTierQuote(){
   setStatus(flightStatus,'La consulta aérea admite hasta 6 niños. Ajusta la cantidad de viajeros.',true);
   return;
  }
- if(!state.date||!params.destination){
+ if(!params.destination){
   toggleFlightEditor(true);
-  setStatus(flightStatus,!state.date?'Selecciona primero la fecha de llegada en la ficha del paquete.':
-   'El destino no dispone de búsqueda de vuelos.',true);
+  setStatus(flightStatus,'La búsqueda aérea de este paquete todavía no está habilitada.',true);
   return;
  }
- toggleFlightEditor(false);
+ if(!state.date&&!state.flightSearch){
+  toggleFlightEditor(true);
+  setStatus(flightStatus,'Selecciona las fechas de ida y regreso para buscar vuelos.');
+  return;
+ }
+  toggleFlightEditor(false);
  if(state.offers.length&&state.flightSearch){
   state.flightStage='outbound';state.outboundKey='';state.choice=null;renderFlightOffers();
   setStatus(flightStatus,'Elige tu vuelo de ida. Los precios corresponden a ida y regreso.');
@@ -518,12 +568,14 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   const arrival=$('lxFlightArrival').value;
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
   if(adults+children>9||children>6){setStatus(flightStatus,'Máximo 9 viajeros y hasta 6 niños por consulta.',true);toggleFlightEditor(true);return}
-  if(!dateOK(arrival)||arrival<minDate||!dateOK(out)||out<minDate||!dateOK(ret)||ret<addDays(arrival,params.nights)||out>arrival){
-   setStatus(flightStatus,'Verifica la llegada, salida desde origen y regreso.',true);toggleFlightEditor(true);return}
+  if(!dateOK(out)||out<minDate||!dateOK(ret)||ret<addDays(out,params.nights)){
+   setStatus(flightStatus,'Selecciona fechas válidas de ida y regreso. El regreso debe permitir la duración del paquete.',true);
+   toggleFlightEditor(true);return;
+  }
   if(airport===params.destination){setStatus(flightStatus,'La ciudad de salida y el destino deben ser diferentes.',true);return}
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
   $('lxProductSearchFlights').disabled=true;
-  state.date=arrival;state.adults=adults;state.children=children;state.origin=airport;
+  state.adults=adults;state.children=children;state.origin=airport;
   state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];
   invalidateFlight();clearHotelLookup();update();
   renderFlightSearchSummary();toggleFlightEditor(false);
@@ -532,23 +584,29 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    const result=await callApi({origin:airport,destination:params.destination,departure:out,returnDate:ret,
     trip:'roundtrip',adults,children,cabin:'economy'});
    if(!result?.ok)throw Error(result?.message||'No hay vuelos disponibles para esta búsqueda.');
-   state.flightSearch={origin:airport,departure:out,returnDate:ret,arrival,adults,children};
+   state.flightSearch={origin:airport,departure:out,returnDate:ret,arrival:state.date||out,adults,children};
     state.flightStage='outbound';renderFlightSearchSummary();toggleFlightEditor(false);
     state.offers=(Array.isArray(result.offers)?result.offers:[]).filter(o=>
      Number(o.price)>0&&o.outbound?.segments?.length&&o.inbound?.segments?.length&&
      o.departure===out&&o.returnDate===ret&&Number(o.partyAdults)===adults&&Number(o.partyChildren)===children&&
-     (!dateOK(String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10))||
-       String(o.outbound.segments.at(-1).to.time).slice(0,10)===state.date)).slice(0,30);
+     (()=>{const land=String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10);
+       return dateOK(land)&&ret>=addDays(land,params.nights)})()).slice(0,30);
    setStatus(flightStatus,state.offers.length?
     state.offers.length+' combinaciones encontradas. Tarifas combinadas de ida y vuelta por persona; el importe no se cobra dos veces. Elige la ida.':
-    'No encontramos combinaciones que lleguen en la fecha de inicio del paquete.',!state.offers.length);
+    'No encontramos vuelos compatibles con las fechas y la duración de este paquete.',!state.offers.length);
    renderFlightOffers();
-  }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
+  }catch(err){toggleFlightEditor(true);setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
   finally{$('lxProductSearchFlights').disabled=false}
  });
  $('lxFlightApply').addEventListener('click',()=>{
   const offer=state.choice;if(!offer)return;
   const d=$('lxFlightDeparture').value,returnDate=$('lxFlightReturn').value;
+  const actualArrival=String(offer.outbound?.segments?.at(-1)?.to?.time||'').slice(0,10);
+  if(dateOK(actualArrival)){
+    state.date=actualArrival;state.flightSearch={...state.flightSearch,arrival:actualArrival};
+  }else if(!state.date){
+    state.date=d;state.flightSearch={...state.flightSearch,arrival:d};
+  }
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
   state.origin=$('lxFlightOrigin').value;
   state.adults=adults;state.children=children;

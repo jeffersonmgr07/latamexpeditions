@@ -752,6 +752,52 @@
         }
       }
     }
+
+    // Mantener la reserva inmediata como único CTA junto al precio; las consultas van después del contenido.
+    if(!main.querySelector('.lx-product-help')){
+      const slug=String(trigger.dataset.book||''),title=String(trigger.dataset.bookTitle||'este viaje');
+      const stack=sideCard?.querySelector('.cta-stack');
+      const links=[...stack?.querySelectorAll('a[href]')||[]];
+      let custom=links.find(a=>/cotizaci[oó]n|personaliz|a medida|consultar cotizaci[oó]n/i.test(a.textContent||'')||/contacto\.html/.test(a.href));
+      let whatsapp=links.find(a=>/whatsapp|wa\.me/i.test(a.href));
+      if(!custom){
+        custom=document.createElement('a');
+        custom.href='../contacto.html?'+(kind==='package'?'paquete':'experiencia')+'='+encodeURIComponent(slug);
+      }
+      if(!whatsapp){
+        whatsapp=document.createElement('a');
+        whatsapp.href='https://wa.me/51906472060?text='+encodeURIComponent('Hola, quisiera consultar algunos detalles sobre '+title+'.');
+        whatsapp.target='_blank';whatsapp.rel='noopener noreferrer';
+      }
+      const section=document.createElement('section');
+      section.className='lx-product-help section';
+      section.setAttribute('aria-label','Atención personalizada para '+title);
+      const layout=document.createElement('div');layout.className='lx-product-help-grid';
+      const createCard=(heading,description,link,label)=>{
+        const card=document.createElement('article');card.className='lx-product-help-card';
+        const h=document.createElement('h2');h.textContent=heading;
+        const p=document.createElement('p');p.textContent=description;
+        link.textContent=label;link.classList.remove('btn-outline','btn-primary');link.classList.add('lx-product-help-cta');
+        card.append(h,p,link);return card;
+      };
+      layout.append(
+        createCard('Solicita una cotización a medida',
+          '¿Quieres adaptar las fechas, el alojamiento o las actividades? Cuéntanos cómo te gustaría organizar tu viaje.',
+          custom,'Solicitar cotización a medida'),
+        createCard('Consulta por WhatsApp',
+          'Si prefieres conversar con un asesor para afinar los detalles, puedes escribirnos directamente.',
+          whatsapp,'Consultar por WhatsApp')
+      );
+      section.append(layout);
+      // Ubicar las consultas fuera del bloque de reserva, después de la información principal.
+      outer?.after(section);
+      links.forEach(link=>{
+        if(link!==custom&&link!==whatsapp){
+          link.classList.remove('btn-outline','btn-primary');link.classList.add('lx-product-help-cta');
+          layout.firstElementChild.append(link);
+        }
+      });
+    }
     // Conservar íntegro el contenido editorial de cada experiencia.
     content.querySelectorAll('h2').forEach(h=>{
       if(/^Itinerario d[ií]a a d[ií]a$/i.test(h.textContent.trim()))
@@ -789,6 +835,7 @@
         [/^medellin-esencial$/, 'MDE','Medellín, Colombia'],
         [/^peru-cusco-4d3n$/, 'CUZ','Cusco, Perú'],
         [/^brasil-rio-4d3n$/, 'GIG','Río de Janeiro, Brasil'],
+        [/^chile-patagonia-6d5n$/, 'PUQ','Punta Arenas, Chile'],
         [/^bogota-esencial$/, 'BOG','Bogotá, Colombia'],
         [/^cartagena-esencial$/, 'CTG','Cartagena, Colombia']
       ];
