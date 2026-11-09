@@ -1381,9 +1381,7 @@
               <span>Tu viaje seleccionado</span>
               <strong id="bkPackageSelectionMain">—</strong>
               <small id="bkPackageSelectionDetail">—</small>
-              <p>Las fechas, viajeros, alojamiento y vuelos se toman de la ficha del paquete.</p>
             </div>
-            <p class="form-note booking-passenger-help">Introduce los datos de cada viajero. Para tours de un día puedes completar después los datos de los acompañantes.</p>
             <div id="bkPaxList"></div>
             <div class="booking-form-grid booking-form-grid--2 booking-initial-fields">
               <div class="form-field booking-date-field" id="bkDateField">
@@ -1579,9 +1577,9 @@
         <div class="booking-form-grid booking-form-grid--2">
           <div class="form-field"><label for="paxName${index}">Nombres</label><input id="paxName${index}" data-pax-field="firstName" autocomplete="${index===0?'given-name':'off'}" minlength="2" required><span class="form-error">Completa los nombres.</span></div>
           <div class="form-field"><label for="paxLast${index}">Apellidos</label><input id="paxLast${index}" data-pax-field="lastName" autocomplete="${index===0?'family-name':'off'}" minlength="2" required><span class="form-error">Completa los apellidos.</span></div>
-          <div class="form-field"><label for="paxNationality${index}">Nacionalidad</label><select id="paxNationality${index}" data-pax-field="nationality" required>${nationalityOptions()}</select><span class="form-error">Selecciona una nacionalidad.</span></div>
           <div class="form-field"><label for="paxDocType${index}">Tipo de documento</label><select id="paxDocType${index}" data-pax-field="docType" required>${documentTypes.map((typeName) => `<option value="${escapeHTML(typeName)}" ${typeName === defaultDocument ? 'selected' : ''}>${escapeHTML(typeName)}</option>`).join('')}</select></div>
           <div class="form-field"><label for="paxDoc${index}">Número de documento</label><input id="paxDoc${index}" data-pax-field="docNumber" required maxlength="50"><span class="form-error">Completa el documento.</span></div>
+          <div class="form-field"><label for="paxNationality${index}">Nacionalidad</label><select id="paxNationality${index}" data-pax-field="nationality" required>${nationalityOptions()}</select><span class="form-error">Selecciona una nacionalidad.</span></div>
           <div class="form-field passenger-birth-field" data-birth-calendar><label for="paxBirth${index}">Fecha de nacimiento</label>
             <button type="button" class="booking-date-trigger" data-birth-trigger aria-haspopup="dialog" aria-expanded="false" aria-label="Elegir fecha de nacimiento"><span data-birth-display>Selecciona la fecha de nacimiento</span><i class="fa-regular fa-calendar" aria-hidden="true"></i></button>
             <input type="date" class="booking-birth-native" id="paxBirth${index}" data-pax-field="birth" required min="1900-01-01" max="${isoDate(new Date())}" tabindex="-1" aria-label="Fecha de nacimiento seleccionada">
@@ -2195,7 +2193,7 @@
       const dateValid=Boolean(parseISODate(date))&&(!minValue||date>=minValue);
       if(dateValid){
         state.date=date;$('#bkDate').value=date;
-        $('#bkDateDisplay').textContent=formatBookingDate(date,{weekday:'short',day:'2-digit',month:'long',year:'numeric'});
+        $('#bkDateDisplay').textContent=formatBookingDate(date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}).replace(/^./,letter=>letter.toUpperCase());
       }else{state.date='';$('#bkDate').value='';}
       const paxValid=Number.isInteger(Number(source.adults))&&Number.isInteger(Number(source.children))&&
         Number(source.adults)>=1&&Number(source.children)>=0&&
@@ -2229,7 +2227,7 @@
       if(summary){
         summary.hidden=false;
         $('#bkPackageSelectionMain').textContent=
-          (dateValid?formatBookingDate(date,{weekday:'short',day:'2-digit',month:'long',year:'numeric'}):'Fecha pendiente')+
+          (dateValid?formatBookingDate(date,{weekday:'long',day:'numeric',month:'long',year:'numeric'}).replace(/^./,letter=>letter.toUpperCase()):'Fecha pendiente')+
           ' · '+(state.adults+state.children)+' viajero(s)';
         const hotel=state.customHotel||tierOptionLabel(getTier());
         const extras=[hotel,
