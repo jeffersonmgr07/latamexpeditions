@@ -1591,6 +1591,11 @@ function capturarOrden(payload) {
       captureId: captura.id, error: ''
     });
 
+    // La captura ya está confirmada: el registro adicional es operativo,
+    // nunca debe provocar un nuevo cobro si Google Sheets tiene un fallo.
+    try{lxGuardarDetalle_(reserva.code,booking,'PAGADA',orderId,captura.id,Number(calc.total));}
+    catch(err){registrarError(err,'Detalle operativo pagado '+reserva.code);}
+
     try { enviarVoucher(reserva); } catch (err) { registrarError(err, 'enviarVoucher'); }
     try { avisarAgencia(reserva); } catch (err) { registrarError(err, 'avisarAgencia'); }
 
@@ -1905,7 +1910,10 @@ function avisarAgencia(r) {
       pax,
       '',
       'PayPal order:  ' + r.orderId,
-      'PayPal capture:' + r.captureId
+      'PayPal capture:' + r.captureId,
+      lxTextoOperativo_(r.data),
+      '',
+      'IMPORTANTE: emitir los billetes y confirmar hotel/proveedores manualmente.'
     ].join('\n')
   });
 }
