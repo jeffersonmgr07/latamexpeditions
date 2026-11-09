@@ -1230,6 +1230,14 @@
     state.travelers = state.adults + state.children;
     state.adultUnit = round2(selectedAdultPrice());
     state.childUnit = round2(state.adultUnit * PRODUCT.childFactor);
+    // Una oferta hotelera solo es válida para las mismas fechas y la misma ocupación.
+    if(state.customHotel&&state.hotelAlternative&&(
+      state.hotelAlternative.checkIn!==state.date||
+      Number(state.hotelAlternative.adults)!==state.adults||
+      Number(state.hotelAlternative.children)!==state.children)){
+      state.customHotel='';state.hotelAlternative=null;state.hotelSupplement=0;
+      state.roomPlan='';
+    }
     // Los vuelos solo se incorporan como cotización no cobrada; nunca como tarifa aérea confirmada.
     const validFlight = state.flightQuote && state.date &&
       state.flightQuote.adults === state.adults &&
@@ -2220,7 +2228,8 @@
       const hasRate=state.customHotel&&alternative&&alternative.name===state.customHotel&&
         Number.isFinite(Number(alternative.stayTotal))&&Number(alternative.stayTotal)>0&&
         Number.isFinite(Number(alternative.supplement))&&Number(alternative.supplement)>=0&&
-        alternative.checkIn===date&&alternative.nights>0;
+        alternative.checkIn===date&&Number(alternative.adults)===state.adults&&
+        Number(alternative.children)===state.children&&alternative.nights>0;
       state.hotelAlternative=hasRate?{...alternative}:null;
       state.hotelSupplement=hasRate?round2(Number(alternative.supplement)):0;
       state.roomPlan=String(source.roomPlan||'').slice(0,120);
