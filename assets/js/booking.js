@@ -2365,8 +2365,19 @@
       }
       const addUI=()=>{
         if(document.querySelector('script[data-lx-package-ui]'))return;
-        const script=document.createElement('script');script.dataset.lxPackageUi='true';
-        script.src=BASE+'assets/js/package-product-20261108.js?v=5';document.head.append(script);
+        const start=()=>{
+          if(document.querySelector('script[data-lx-package-ui]'))return;
+          const script=document.createElement('script');script.dataset.lxPackageUi='true';
+          script.src=BASE+'assets/js/package-product-20261108.js?v=20261109-controls';document.head.append(script);
+        };
+        if(window.LatamProductControls){start();return}
+        const controls=document.createElement('script');
+        controls.src=BASE+'assets/js/latam-product-controls.js?v=20261109-1';
+        controls.onload=start;
+        controls.onerror=()=>{
+          console.error('[LATAM] No se pudieron cargar los selectores de fecha y viajeros.');
+        };
+        document.head.append(controls);
       };
       if(window.LATAM_FLIGHTS_API_URL)addUI();
       else {
