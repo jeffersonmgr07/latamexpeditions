@@ -18,7 +18,8 @@
  const minDate=addDays(localISO(new Date()),2);
  const params={slug:book.dataset.book||'',nights:Number((book.dataset.bookDuration||'').match(/(\d+)N/)?.[1])||3,
   // No inferir MDE para toda Colombia: solo las fichas de Medellín.
-  destination:/^medellin-/.test(book.dataset.book||'')?'MDE':'',
+  destination:String(book.dataset.bookDestination||(/^medellin-/.test(book.dataset.book||'')?'MDE':'')).toUpperCase(),
+  destinationPlace:String(book.dataset.bookDestinationLabel||(/^medellin-/.test(book.dataset.book||'')?'Medellín, Colombia':'')),
   title:book.dataset.bookTitle||'',base:Number(book.dataset.bookPrice)||0,
   childFactor:Number(book.dataset.bookChildFactor||.7)};
  let tiers=[];try{tiers=JSON.parse(book.dataset.bookTiers||'[]')}catch(_){}
@@ -131,7 +132,7 @@
  '<div id="lxFlightSearchPanel" class="lx-flight-search-panel" hidden><div class="lx-package-modal-fields">'+
  '<label>Salida desde<select id="lxFlightOrigin">'+
  ['LIM|Lima','BOG|Bogotá','CUZ|Cusco','MDE|Medellín','CLO|Cali','CTG|Cartagena',
- 'AQP|Arequipa','EZE|Buenos Aires','SCL|Santiago','MEX|Ciudad de México',
+ 'AQP|Arequipa','EZE|Buenos Aires','AEP|Buenos Aires (Aeroparque)','GIG|Río de Janeiro','SCL|Santiago','MEX|Ciudad de México',
  'UIO|Quito','GRU|São Paulo','PTY|Ciudad de Panamá','MIA|Miami','CCS|Caracas'].map(s=>{
  const [code,label]=s.split('|');return '<option value="'+code+'">'+label+' ('+code+')</option>';
  }).join('')+'</select></label>'+
@@ -181,7 +182,7 @@ function syncFlightForm(){
  $('lxFlightArrival').value=state.date||'';
  $('lxFlightDeparture').value=reuse?old.departure:(state.date||'');
  $('lxFlightReturn').value=reuse?old.returnDate:(state.date?addDays(state.date,params.nights):'');
- $('lxFlightCheckedBag').checked=state.baggage==='checked';
+ $('lxFlightCheckedBag').checked=false;
  renderFlightSearchSummary();
 }
 function renderFlightSearchSummary(){
@@ -196,7 +197,7 @@ function renderFlightSearchSummary(){
  };
  const airports={MDE:'Medellín',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',CLO:'Cali',
   CTG:'Cartagena',AQP:'Arequipa',EZE:'Buenos Aires',SCL:'Santiago',MEX:'Ciudad de México',
-  UIO:'Quito',GRU:'São Paulo',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
+  UIO:'Quito',GRU:'São Paulo',GIG:'Río de Janeiro',AEP:'Buenos Aires',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
  const origin=$('lxFlightOrigin').selectedOptions[0]?.textContent.replace(/\s*\([A-Z]{3}\)\s*$/,'')||
   airports[query.origin]||query.origin;
  const destination=airports[query.destination]||query.destination||(en?'Destination':'Destino');
@@ -419,19 +420,56 @@ function showTierQuote(){
    ' → '+flightTime(b.to?.time)+' '+(b.to?.code||'')+' · '+(s.length<=1?'Directo':(s.length-1)+' escala(s)');}
  function signature(leg){return JSON.stringify((leg?.segments||[]).map(s=>
    [s.airline,s.flightNumber,s.from?.code,s.from?.time,s.to?.code,s.to?.time]))}
- function flightCard(leg,price,selected,action){
- const seg=leg?.segments||[],a=seg[0]||{},b=seg[seg.length-1]||{};
- const card=el('button','lx-flight-choice'+(selected?' is-selected':''));card.type='button';
- card.setAttribute('aria-pressed',String(selected));card.append(el('span','lx-choice-radio',''));
+ function flightCard(leg,price,selected,action,phase,partyCount,offer){
+ const seg=leg?.segments||[],first=seg[0]||{},last=seg[seg.length-1]||{};
+ const count=Math.max(1,Number(partyCount)||1);
+ const perPerson=Math.round(Number(price)/count*100)/100;
+ // Solo mostrar precio por tramo si el backend devuelve importes por tramo independientes.
+ const legFare=Number(phase==='outbound'?offer?.outboundPricePerPerson:offer?.inboundPricePerPerson);
+ const hasLegFare=Number.isFinite(legFare)&&legFare>0;
+ const card=el('article','lx-flight-choice'+(selected?' is-selected':''));
+ const select=el('button','lx-flight-choice-select');select.type='button';
+ select.setAttribute('aria-pressed',String(selected));
+ select.setAttribute('aria-label','Seleccionar vuelo '+(phase==='outbound'?'de ida':'de regreso'));
+ select.append(el('span','lx-choice-radio',''));
  const body=el('span','lx-flight-choice-content'),brand=el('span','lx-flight-choice-brand');
- brand.append(el('span','lx-flight-airline-mark','✈'),el('strong','',a.airline||'Aerolínea'));
+ const airline=String(first.airline||leg?.airline||'Aerolínea');
+ const brandIcon=el('span','lx-flight-airline-mark','✈');
+ const codeByAirline={'avianca':'AV','latam':'LA','latam airlines':'LA','jetsmart':'JA','jetsmart airlines':'JA',
+  'copa airlines':'CM','copa':'CM','sky airline':'H2','wingo':'P5',
+  'aerolíneas argentinas':'AR','aerolineas argentinas':'AR','gol':'G3','azul':'AD'};
+ const logoProvided=String(first.airlineLogo||first.logoUrl||leg?.airlineLogo||leg?.logoUrl||offer?.airlineLogo||'');
+ const iata=codeByAirline[airline.toLowerCase().trim()]||'';
+ const logo=/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/[0-9]+px\/[A-Za-z0-9_-]+\.png$/.test(logoProvided)?
+  logoProvided:(iata?'https://www.gstatic.com/flights/airline_logos/70px/'+iata+'.png':'');
+ if(logo){const img=el('img');img.alt='';img.loading='lazy';img.src=logo;
+  img.onerror=()=>{img.remove();brandIcon.textContent='✈'};
+  brandIcon.textContent='';brandIcon.append(img);}
+ brand.append(brandIcon,el('strong','',airline));
  const route=el('span','lx-flight-route'),depart=el('span','lx-flight-stop'),arrive=el('span','lx-flight-stop');
- depart.append(el('strong','',flightTime(a.from?.time)),el('small','',a.from?.code||'Origen'));
- arrive.append(el('strong','',flightTime(b.to?.time)),el('small','',b.to?.code||'Destino'));
- route.append(depart,el('span','lx-flight-route-middle',seg.length<=1?'Directo':(seg.length-1)+' escala(s)'),arrive);
+ depart.append(el('strong','',flightTime(first.from?.time)),el('small','',first.from?.code||'Origen'));
+ arrive.append(el('strong','',flightTime(last.to?.time)),el('small','',last.to?.code||'Destino'));
+ const nStops=Math.max(0,seg.length-1);
+ route.append(depart,el('span','lx-flight-route-middle',!nStops?'Directo':nStops+' escala(s)'),arrive);
  body.append(brand,route);
- const cost=el('span','lx-flight-choice-price');cost.append(el('strong','',fmt(price)),el('small','','Ida y vuelta · grupo'));
- card.append(body,cost);card.addEventListener('click',action);return card;
+ const cost=el('span','lx-flight-choice-price');
+ cost.append(el('strong','',fmt(hasLegFare?legFare:perPerson)),
+  el('small','',hasLegFare?(phase==='outbound'?'Ida · por persona':'Regreso · por persona'):'Ida y vuelta · promedio por viajero'));
+ select.append(body,cost);select.addEventListener('click',action);card.append(select);
+ if(nStops){
+  const details=el('details','lx-flight-layovers'),summary=el('summary','','Ver '+nStops+' escala(s) y conexiones');
+  const list=el('ol','lx-flight-layover-list');
+  for(let i=0;i<nStops;i++){
+   const layover=leg?.layovers?.[i]||{},airport=layover.id||seg[i]?.to?.code||'Aeropuerto';
+   const mins=Number(layover.duration);
+   const duration=Number.isFinite(mins)&&mins>0?Math.floor(mins/60)+' h '+String(mins%60).padStart(2,'0')+' min':
+    'Tiempo de conexión por confirmar';
+   list.append(el('li','',airport+' · '+(layover.name||'Conexión')+' · '+duration+
+      (layover.overnight?' · Conexión nocturna':'')));
+  }
+  details.append(summary,list);card.append(details);
+ }
+ return card;
 }
  function renderFlightOffers(){
  const departures=$('lxFlightDepartures'),returns=$('lxFlightReturns');
@@ -440,7 +478,7 @@ function showTierQuote(){
  departures.hidden=returning;returns.hidden=!returning;
  const next=$('lxFlightNextStep'),back=$('lxFlightBackStep'),apply=$('lxFlightApply');
  next.hidden=returning;back.hidden=!returning;apply.hidden=!returning;
- $('lxFlightBaggageRow').hidden=!returning;
+ $('lxFlightBaggageRow').hidden=true; // Sin tarifa de maleta verificada; no ofrecer recargo falso.
  if(!state.offers.length){next.disabled=true;apply.disabled=true;
    $('lxFlightConfirmedTotal').textContent='No hay vuelos seleccionados';return}
  const groups=new Map();
@@ -452,7 +490,7 @@ function showTierQuote(){
    const amount=Math.round(Number(cheapest.price)*(1+flightMarkup(cheapest.departure))*100)/100;
    departures.append(flightCard(cheapest.outbound,amount,key===state.outboundKey,()=>{
      state.outboundKey=key;state.choice=null;renderFlightOffers();
-   }));
+   },'outbound',state.adults+state.children,cheapest));
   });
   next.disabled=!state.outboundKey;
   $('lxFlightConfirmedTotal').textContent=state.outboundKey?'Vuelo de ida elegido':'Selecciona un vuelo de ida';
@@ -462,15 +500,16 @@ function showTierQuote(){
    const price=Math.round(Number(offer.price)*(1+flightMarkup(offer.departure))*100)/100;
    returns.append(flightCard(offer.inbound,price,state.choice===offer,()=>{
      state.choice=offer;renderFlightOffers();
-   }));
+   },'return',state.adults+state.children,offer));
   });
   apply.disabled=!state.choice;
   const amount=state.choice?Math.round(Number(state.choice.price)*(1+flightMarkup(state.choice.departure))*100)/100:0;
-  $('lxFlightConfirmedTotal').textContent=state.choice?fmt(amount)+' · grupo completo':'Selecciona un vuelo de regreso';
+  $('lxFlightConfirmedTotal').textContent=state.choice?fmt(amount)+' total · '+fmt(amount/Math.max(1,state.adults+state.children))+' promedio por viajero (ida y vuelta)':'Selecciona un vuelo de regreso';
  }
 }
 $('lxFlightNextStep').addEventListener('click',()=>{
  if(!state.outboundKey)return;state.flightStage='return';renderFlightOffers();
+ setStatus(flightStatus,'Elige el regreso. La cifra mostrada es el total combinado de ida y vuelta; no se suma nuevamente al precio de la ida.');
  $('lxFlightReturns').scrollIntoView({block:'nearest'});
 });
 $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound';renderFlightOffers()});
@@ -501,7 +540,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
      (!dateOK(String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10))||
        String(o.outbound.segments.at(-1).to.time).slice(0,10)===state.date)).slice(0,30);
    setStatus(flightStatus,state.offers.length?
-    state.offers.length+' combinaciones encontradas. Primero elige el vuelo de ida.':
+    state.offers.length+' combinaciones encontradas. Tarifas combinadas de ida y vuelta por persona; el importe no se cobra dos veces. Elige la ida.':
     'No encontramos combinaciones que lleguen en la fecha de inicio del paquete.',!state.offers.length);
    renderFlightOffers();
   }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
@@ -514,7 +553,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   state.origin=$('lxFlightOrigin').value;
   state.adults=adults;state.children=children;
   if(!state.hotelPicked)state.occupancy=defaultRoom();
-  state.baggage=$('lxFlightCheckedBag').checked?'checked':'none';
+  state.baggage='none';
   state.flight={observedPrice:Number(offer.price),
    displayedPrice:Math.round(Number(offer.price)*(1+flightMarkup(d))*100)/100,
    origin:state.origin,destination:params.destination,departure:d,returnDate,
@@ -525,7 +564,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  });
  $('lxProductLookupHotels').addEventListener('click',async ()=>{
   if(!state.date){setStatus(hotelStatus,'Elige primero la fecha de llegada.',true);return}
-  if(!params.destination){setStatus(hotelStatus,'Este destino todavía no dispone de búsqueda hotelera.',true);return}
+  if(!params.destinationPlace){setStatus(hotelStatus,'Este destino todavía no dispone de búsqueda hotelera.',true);return}
   if(state.adults+state.children>4){setStatus(hotelStatus,'Para más de 4 huéspedes, solicita una distribución de habitaciones personalizada.',true);return}
   if(state.children>2){setStatus(hotelStatus,'La búsqueda admite máximo 2 niños por habitación.',true);return}
   const ages=state.children?[...$('lxHotelAgesBox').querySelectorAll('[data-child-age]')].map(x=>Number(x.value)):[];
@@ -534,7 +573,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   state.childrenAges=ages;
   const btn=$('lxProductLookupHotels');btn.disabled=true;setStatus(hotelStatus,'Buscando opciones de hoteles…');
   try{
-   const result=await callApi({mode:'hotels',destination:'Medellín, Colombia',
+   const result=await callApi({mode:'hotels',destination:params.destinationPlace,
     check_in_date:state.date,check_out_date:addDays(state.date,params.nights),
     adults:state.adults,children:state.children,children_ages:ages.join(',')});
    if(!result?.ok)throw Error(result?.message||'No hay opciones para estas fechas.');

@@ -1109,7 +1109,8 @@
     tiers: parseJSON(trigger.dataset.bookTiers, []),
     departures: parseJSON(trigger.dataset.bookDepartures, []),
     childFactor: Number(trigger.dataset.bookChildFactor || (trigger.dataset.bookKind === 'package' ? 0.70 : 0.75)),
-    childMinAge: Number(trigger.dataset.bookChildMinAge || 0)
+    childMinAge: Number(trigger.dataset.bookChildMinAge || 0),
+    languages: parseJSON(trigger.dataset.bookLanguages, null)
   };
 
   const isSingleDayExperience=PRODUCT.kind==='experience' &&
@@ -1172,8 +1173,9 @@
 
   // Prefijos internacionales, con países y territorios. +51 seleccionado por defecto.
   const PHONE_COUNTRIES = [["Afganistán","+93","AF"],["Albania","+355","AL"],["Alemania","+49","DE"],["Angola","+244","AO"],["Anguila","+1264","AI"],["Antigua y Barbuda","+1268","AG"],["Arabia Saudí","+966","SA"],["Argelia","+213","DZ"],["Argentina","+54","AR"],["Armenia","+374","AM"],["Aruba","+297","AW"],["Australia","+61","AU"],["Austria","+43","AT"],["Azerbaiyán","+994","AZ"],["Bahamas","+1242","BS"],["Bangladés","+880","BD"],["Barbados","+1246","BB"],["Baréin","+973","BH"],["Belice","+501","BZ"],["Benín","+229","BJ"],["Bermudas","+1441","BM"],["Bielorrusia","+375","BY"],["Bolivia","+591","BO"],["Bosnia y Herzegovina","+387","BA"],["Botsuana","+267","BW"],["Brasil","+55","BR"],["Brunéi","+673","BN"],["Bulgaria","+359","BG"],["Burkina Faso","+226","BF"],["Burundi","+257","BI"],["Bután","+975","BT"],["Bélgica","+32","BE"],["Cabo Verde","+238","CV"],["Camboya","+855","KH"],["Camerún","+237","CM"],["Canadá","+1","CA"],["Catar","+974","QA"],["Chad","+235","TD"],["Chequia","+420","CZ"],["Chile","+56","CL"],["China","+86","CN"],["Chipre","+357","CY"],["Colombia","+57","CO"],["Comoras","+269","KM"],["Congo","+242","CG"],["Corea del Norte","+850","KP"],["Corea del Sur","+82","KR"],["Costa Rica","+506","CR"],["Croacia","+385","HR"],["Cuba","+53","CU"],["Côte d’Ivoire","+225","CI"],["Dinamarca","+45","DK"],["Dominica","+1767","DM"],["Ecuador","+593","EC"],["Egipto","+20","EG"],["El Salvador","+503","SV"],["Emiratos Árabes Unidos","+971","AE"],["Eritrea","+291","ER"],["Eslovaquia","+421","SK"],["Eslovenia","+386","SI"],["España","+34","ES"],["Estados Unidos","+1","US"],["Estonia","+372","EE"],["Esuatini","+268","SZ"],["Etiopía","+251","ET"],["Filipinas","+63","PH"],["Finlandia","+358","FI"],["Fiyi","+679","FJ"],["Francia","+33","FR"],["Gabón","+241","GA"],["Gambia","+220","GM"],["Georgia","+995","GE"],["Ghana","+233","GH"],["Gibraltar","+350","GI"],["Granada","+1473","GD"],["Grecia","+30","GR"],["Groenlandia","+299","GL"],["Guadalupe","+590","GP"],["Guam","+1671","GU"],["Guatemala","+502","GT"],["Guayana Francesa","+594","GF"],["Guernesey","+44","GG"],["Guinea","+224","GN"],["Guinea Ecuatorial","+240","GQ"],["Guinea-Bisáu","+245","GW"],["Guyana","+592","GY"],["Haití","+509","HT"],["Honduras","+504","HN"],["Hungría","+36","HU"],["India","+91","IN"],["Indonesia","+62","ID"],["Irak","+964","IQ"],["Irlanda","+353","IE"],["Irán","+98","IR"],["Isla de Man","+44","IM"],["Isla de Navidad","+61","CX"],["Isla Norfolk","+672","NF"],["Islandia","+354","IS"],["Islas Caimán","+1345","KY"],["Islas Cocos","+61","CC"],["Islas Cook","+682","CK"],["Islas Feroe","+298","FO"],["Islas Georgia del Sur y Sandwich del Sur","+500","GS"],["Islas Malvinas","+500","FK"],["Islas Marianas del Norte","+1670","MP"],["Islas Marshall","+692","MH"],["Islas Pitcairn","+64","PN"],["Islas Salomón","+677","SB"],["Israel","+972","IL"],["Italia","+39","IT"],["Jamaica","+1876","JM"],["Japón","+81","JP"],["Jersey","+44","JE"],["Jordania","+962","JO"],["Kazajistán","+76","KZ"],["Kenia","+254","KE"],["Kirguistán","+996","KG"],["Kiribati","+686","KI"],["Kuwait","+965","KW"],["Laos","+856","LA"],["Lesoto","+266","LS"],["Letonia","+371","LV"],["Liberia","+231","LR"],["Libia","+218","LY"],["Liechtenstein","+423","LI"],["Lituania","+370","LT"],["Luxemburgo","+352","LU"],["Líbano","+961","LB"],["Macedonia del Norte","+389","MK"],["Madagascar","+261","MG"],["Malasia","+60","MY"],["Malaui","+265","MW"],["Maldivas","+960","MV"],["Mali","+223","ML"],["Malta","+356","MT"],["Marruecos","+212","MA"],["Martinica","+596","MQ"],["Mauricio","+230","MU"],["Mauritania","+222","MR"],["Mayotte","+262","YT"],["Micronesia","+691","FM"],["Moldavia","+373","MD"],["Mongolia","+976","MN"],["Montserrat","+1664","MS"],["Mozambique","+258","MZ"],["México","+52","MX"],["Mónaco","+377","MC"],["Namibia","+264","NA"],["Nauru","+674","NR"],["Nepal","+977","NP"],["Nicaragua","+505","NI"],["Nigeria","+234","NG"],["Niue","+683","NU"],["Noruega","+47","NO"],["Nueva Caledonia","+687","NC"],["Nueva Zelanda","+64","NZ"],["Níger","+227","NE"],["Omán","+968","OM"],["Pakistán","+92","PK"],["Palaos","+680","PW"],["Panamá","+507","PA"],["Papúa Nueva Guinea","+675","PG"],["Paraguay","+595","PY"],["Países Bajos","+31","NL"],["Perú","+51","PE"],["Polinesia Francesa","+689","PF"],["Polonia","+48","PL"],["Portugal","+351","PT"],["Puerto Rico","+1787","PR"],["RAE de Hong Kong (China)","+852","HK"],["RAE de Macao (China)","+853","MO"],["Reino Unido","+44","GB"],["República Centroafricana","+236","CF"],["República Democrática del Congo","+243","CD"],["República Dominicana","+1809","DO"],["Reunión","+262","RE"],["Ruanda","+250","RW"],["Rumanía","+40","RO"],["Rusia","+7","RU"],["Samoa","+685","WS"],["Samoa Americana","+1684","AS"],["San Cristóbal y Nieves","+1869","KN"],["San Marino","+378","SM"],["San Pedro y Miquelón","+508","PM"],["San Vicente y las Granadinas","+1784","VC"],["Santa Elena","+290","SH"],["Santa Lucía","+1758","LC"],["Santo Tomé y Príncipe","+239","ST"],["Senegal","+221","SN"],["Serbia","+381","RS"],["Seychelles","+248","SC"],["Sierra Leona","+232","SL"],["Singapur","+65","SG"],["Siria","+963","SY"],["Somalia","+252","SO"],["Sri Lanka","+94","LK"],["Sudáfrica","+27","ZA"],["Sudán","+249","SD"],["Sudán del Sur","+211","SS"],["Suecia","+46","SE"],["Suiza","+41","CH"],["Surinam","+597","SR"],["Svalbard y Jan Mayen","+4779","SJ"],["Sáhara Occidental","+212","EH"],["Tailandia","+66","TH"],["Taiwán","+886","TW"],["Tanzania","+255","TZ"],["Tayikistán","+992","TJ"],["Territorio Británico del Océano Índico","+246","IO"],["Timor-Leste","+670","TL"],["Togo","+228","TG"],["Tokelau","+690","TK"],["Tonga","+676","TO"],["Trinidad y Tobago","+1868","TT"],["Turkmenistán","+993","TM"],["Turquía","+90","TR"],["Tuvalu","+688","TV"],["Túnez","+216","TN"],["Ucrania","+380","UA"],["Uganda","+256","UG"],["Uruguay","+598","UY"],["Uzbekistán","+998","UZ"],["Vanuatu","+678","VU"],["Venezuela","+58","VE"],["Vietnam","+84","VN"],["Wallis y Futuna","+681","WF"],["Yemen","+967","YE"],["Yibuti","+253","DJ"],["Zambia","+260","ZM"],["Zimbabue","+263","ZW"]];
+  const flagOf = (iso) => /^[A-Z]{2}$/.test(iso) ? [...iso].map(char => String.fromCodePoint(127397 + char.charCodeAt(0))).join('') : '🌐';
   const phoneCodeOptions = () => PHONE_COUNTRIES.map(([country, dial, iso]) =>
-    `<option value="${escapeHTML(dial)}" ${iso === 'PE' ? 'selected' : ''}>${escapeHTML(dial)} · ${escapeHTML(country)}</option>`
+    `<option value="${escapeHTML(dial)}" ${iso === 'PE' ? 'selected' : ''}>${flagOf(iso)} ${escapeHTML(dial)} · ${escapeHTML(country)}</option>`
   ).join('');
 
   const nationalityOptions = () => `<option value="" data-en="Select a nationality">Selecciona una nacionalidad</option>${COUNTRIES.map(([es, en]) => `<option value="${escapeHTML(es)}" data-en="${escapeHTML(en)}">${escapeHTML(es)}</option>`).join('')}`;
@@ -1198,7 +1200,7 @@
   };
   const ageOnTravelDate = (birthValue) => {
     const birth = parseISODate(birthValue);
-    const travel = parseISODate(state.date);
+    const travel = parseISODate($('#bkDate')?.value || state.date);
     if (!birth || !travel || birth > travel) return null;
     let age = travel.getFullYear() - birth.getFullYear();
     const beforeBirthday = travel.getMonth() < birth.getMonth() || (travel.getMonth() === birth.getMonth() && travel.getDate() < birth.getDate());
@@ -1368,9 +1370,8 @@
           <button type="button" class="close-modal" data-close-booking aria-label="Cerrar reserva">&times;</button>
         </div>
         <ol class="booking-steps">
-          <li data-step-label="1" aria-current="step"><span>1</span><b>${PRODUCT.kind==='package'?'Contacto':'Fecha y viajeros'}</b></li>
-          <li data-step-label="2"><span>2</span><b>Datos de pasajeros</b></li>
-          <li data-step-label="3"><span>3</span><b>Pago</b></li>
+          <li data-step-label="1" aria-current="step"><span>1</span><b>Datos de pasajeros</b></li>
+          <li data-step-label="3"><span>2</span><b>Pago</b></li>
         </ol>
         <div class="booking-body">
           <div class="booking-error" id="bookingError" role="alert"></div>
@@ -1382,6 +1383,8 @@
               <small id="bkPackageSelectionDetail">—</small>
               <p>Las fechas, viajeros, alojamiento y vuelos se toman de la ficha del paquete.</p>
             </div>
+            <p class="form-note booking-passenger-help">Introduce los datos de cada viajero. Para tours de un día puedes completar después los datos de los acompañantes.</p>
+            <div id="bkPaxList"></div>
             <div class="booking-form-grid booking-form-grid--2 booking-initial-fields">
               <div class="form-field booking-date-field" id="bkDateField">
                 <label id="bkDateLabelText">Fecha del tour</label>
@@ -1413,23 +1416,12 @@
               </div>
             </div>
             ${tierFields}
-            <div class="booking-subsection">
-              <h3>Contacto del titular</h3>
-              <div class="booking-form-grid booking-form-grid--2">
-                <div class="form-field"><label for="bkEmail">Correo del titular</label><input type="email" id="bkEmail" autocomplete="email" required><span class="form-error">Escribe un correo válido.</span></div>
-                <div class="form-field booking-phone-field"><label for="bkPhone">Teléfono / WhatsApp</label><div class="booking-phone-combined"><label class="visually-hidden" for="bkPhoneDial">Código de país</label><select id="bkPhoneDial" required aria-label="Código de país" title="Selecciona el país">${phoneCodeOptions()}</select><input type="tel" id="bkPhone" inputmode="tel" autocomplete="tel-national" placeholder="Número de WhatsApp" pattern="[0-9 ()\-]{6,25}" minlength="6" maxlength="25" required aria-label="Número de WhatsApp"></div><span class="form-error">Escribe un WhatsApp válido e indica su código de país.</span></div>
-              </div>
-              <div class="form-field"><label for="bkNotes">Comentarios o solicitudes (opcional)</label><textarea id="bkNotes" rows="3" maxlength="1200"></textarea></div>
+            <div class="booking-subsection booking-notes-section">
+              <div class="form-field"><label for="bkNotes">Comentarios o solicitudes (opcional)</label><textarea id="bkNotes" rows="2" maxlength="1200"></textarea></div>
             </div>
-            
           </section>
 
-          <section class="booking-step" data-step="2">
-            <p class="form-note">Los nombres deben coincidir exactamente con el documento de viaje. Completa los datos de cada adulto y niño.</p>
-            <div id="bkPaxList"></div>
-          </section>
-
-          <section class="booking-step" data-step="3">
+                    <section class="booking-step" data-step="3">
             <div class="booking-summary">
               <div class="fact-row"><span>Experiencia</span><strong>${escapeHTML(PRODUCT.title)}</strong></div>
               <div class="fact-row"><span>Fecha</span><strong id="bkSumDate">—</strong></div>
@@ -1510,7 +1502,19 @@
     state.occupancy = $('#bkOccupancy')?.value || 'double';
     const dialCode = $('#bkPhoneDial').value;
     const nationalNumber = $('#bkPhone').value.replace(/\D/g, '');
-    state.holder = { email: $('#bkEmail').value.trim(), phone: `${dialCode}${nationalNumber}`, phoneCountryCode: dialCode, phoneNational: nationalNumber, notes: $('#bkNotes').value.trim() };
+    const mainPassenger=state.passengers[0]||{};
+    const tourLanguage=$('#bkTourLanguage').value;
+    state.holder={
+      name:mainPassenger.name||'',firstName:mainPassenger.firstName||'',lastName:mainPassenger.lastName||'',
+      nationality:mainPassenger.nationality||'',docType:mainPassenger.docType||'',
+      docNumber:mainPassenger.docNumber||'',birth:mainPassenger.birth||'',
+      email:$('#bkEmail').value.trim(), phone:`${dialCode}${nationalNumber}`,
+      phoneCountryCode:dialCode,phoneNational:nationalNumber,tourLanguage,
+      notes:$('#bkNotes').value.trim()
+    };
+    state.holder.notes+=(state.holder.notes?'\n':'')+'Idioma solicitado: '+tourLanguage.toUpperCase();
+    const deferredCount=state.passengers.filter(p=>p.pendingDetails).length;
+    if(deferredCount)state.holder.notes+='\nDatos pendientes para '+deferredCount+' pasajero(s) adicional(es).';
     state.pickupAddress = pickupFromPage();
     state.pickupStatus = 'pending_validation';
     if(state.flightQuote){
@@ -1530,7 +1534,7 @@
   }
 
   function validateStep1() {
-    const inputs = ['#bkDeparture','#bkEmail','#bkPhoneDial','#bkPhone'].map((selector) => $(selector)).filter(Boolean);
+    const inputs = ['#bkDeparture','#bkEmail','#bkPhoneDial','#bkPhone','#bkTourLanguage'].map((selector) => $(selector)).filter(Boolean);
     let valid = inputs.every(fieldValid);
     const dateValue = $('#bkDate')?.value || '';
     const minValue = $('#bkDate')?.dataset.min || '';
@@ -1544,8 +1548,24 @@
     return valid;
   }
 
+  const tourLanguages = () => {
+    const configured=Array.isArray(PRODUCT.languages)&&PRODUCT.languages.length?PRODUCT.languages:null;
+    const country=PRODUCT.country.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    const codes=configured||['es','en',...(country.includes('brasil')?['pt']:[]),...(country.includes('italia')?['it']:[])];
+    const labels={es:'Español',en:'Inglés',pt:'Portugués',it:'Italiano',fr:'Francés',de:'Alemán'};
+    return [...new Set(codes.map(code=>String(code).toLowerCase()))].filter(code=>labels[code])
+      .map(code=>'<option value="'+code+'">'+labels[code]+'</option>').join('');
+  };
+
   function buildPassengers() {
     const list = $('#bkPaxList');
+    const previous=[...list.querySelectorAll('.passenger-card')].map(card=>({
+      type:card.dataset.passengerType,
+      fields:[...card.querySelectorAll('input,select,textarea')].filter(node=>node.id).map(node=>({
+        id:node.id,value:node.value
+      })),
+      deferred:!!card.querySelector('[data-defer-passenger]:checked')
+    }));
     const passengerTypes = [...Array(state.adults).fill('adult'), ...Array(state.children).fill('child')];
     const documentTypes = Array.isArray(CONFIG.documentTypes) && CONFIG.documentTypes.length
       ? CONFIG.documentTypes
@@ -1554,8 +1574,11 @@
     list.innerHTML = passengerTypes.map((type, index) => `
       <fieldset class="passenger-card" data-pax="${index}" data-passenger-type="${type}">
         <legend>${index === 0 ? 'Titular de la reserva' : `Pasajero ${index + 1}`} <small>· ${type === 'adult' ? 'Adulto' : 'Niño'}</small></legend>
+        ${PRODUCT.kind==='experience' && index>0 ? `<label class="booking-defer"><input type="checkbox" data-defer-passenger> Completaré los datos de este pasajero después</label>` : ''}
+        <div class="booking-passenger-fields" data-passenger-fields>
         <div class="booking-form-grid booking-form-grid--2">
-          <div class="form-field"><label for="paxName${index}">Nombres y apellidos</label><input id="paxName${index}" data-pax-field="name" autocomplete="name" minlength="3" required><span class="form-error">Completa el nombre.</span></div>
+          <div class="form-field"><label for="paxName${index}">Nombres</label><input id="paxName${index}" data-pax-field="firstName" autocomplete="${index===0?'given-name':'off'}" minlength="2" required><span class="form-error">Completa los nombres.</span></div>
+          <div class="form-field"><label for="paxLast${index}">Apellidos</label><input id="paxLast${index}" data-pax-field="lastName" autocomplete="${index===0?'family-name':'off'}" minlength="2" required><span class="form-error">Completa los apellidos.</span></div>
           <div class="form-field"><label for="paxNationality${index}">Nacionalidad</label><select id="paxNationality${index}" data-pax-field="nationality" required>${nationalityOptions()}</select><span class="form-error">Selecciona una nacionalidad.</span></div>
           <div class="form-field"><label for="paxDocType${index}">Tipo de documento</label><select id="paxDocType${index}" data-pax-field="docType" required>${documentTypes.map((typeName) => `<option value="${escapeHTML(typeName)}" ${typeName === defaultDocument ? 'selected' : ''}>${escapeHTML(typeName)}</option>`).join('')}</select></div>
           <div class="form-field"><label for="paxDoc${index}">Número de documento</label><input id="paxDoc${index}" data-pax-field="docNumber" required maxlength="50"><span class="form-error">Completa el documento.</span></div>
@@ -1568,19 +1591,44 @@
               <div class="booking-calendar__weekdays" aria-hidden="true"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
               <div class="booking-calendar__grid" data-birth-grid></div>
             </div>
-            <span class="passenger-age" id="paxAge${index}" aria-live="polite">Edad: —</span><span class="form-error">Completa una fecha válida.</span>
+            <span class="passenger-age" id="paxAge${index}" aria-live="polite" hidden></span><span class="form-error">Completa una fecha válida.</span>
           </div>
         </div>
+        </div>
+        ${index===0 ? `
+          <section class="booking-passenger-contact" aria-label="Datos de contacto del titular">
+            <h4>Contacto e idioma del tour</h4>
+            <div class="booking-form-grid booking-form-grid--2">
+              <div class="form-field"><label for="bkEmail">Correo electrónico</label><input type="email" id="bkEmail" autocomplete="email" required><span class="form-error">Introduce un correo válido.</span></div>
+              <div class="form-field booking-phone-field"><label for="bkPhone">WhatsApp</label><div class="booking-phone-combined"><label class="visually-hidden" for="bkPhoneDial">Código de país</label><select id="bkPhoneDial" required aria-label="Código de país">${phoneCodeOptions()}</select><input type="tel" id="bkPhone" inputmode="tel" autocomplete="tel-national" placeholder="Número de WhatsApp" pattern="[0-9 ()\\-]{6,25}" minlength="6" maxlength="25" required aria-label="Número de WhatsApp"></div><span class="form-error">Introduce un WhatsApp válido.</span></div>
+              <div class="form-field"><label for="bkTourLanguage">Idioma deseado para el tour</label><select id="bkTourLanguage" required>${tourLanguages()}</select></div>
+            </div>
+          </section>`:''}
       </fieldset>`).join('');
+    list.querySelectorAll('.passenger-card').forEach((card,index)=>{
+      if(previous[index]?.type===card.dataset.passengerType){
+        previous[index].fields.forEach(({id,value})=>{const node=document.getElementById(id);if(node)node.value=value;});
+      }
+      const deferred=card.querySelector('[data-defer-passenger]');
+      if(deferred){
+        deferred.checked=!!previous[index]?.deferred;
+        const sync=()=>{
+          card.querySelector('[data-passenger-fields]').hidden=deferred.checked;
+          card.querySelectorAll('[data-pax-field]').forEach(node=>{node.disabled=deferred.checked;});
+        };
+        deferred.addEventListener('change',sync);sync();
+      }
+    });
     list.querySelectorAll('[data-pax-field="birth"]').forEach((input) => {
       setupPassengerBirthCalendar(input);
       const updateAge = () => {
         const age = ageOnTravelDate(input.value);
         const output = input.closest('.passenger-birth-field')?.querySelector('.passenger-age');
-        if (output) output.textContent = age === null ? 'Edad: —' : `${age} ${age === 1 ? 'año' : 'años'}`;
+        if (output) {output.hidden=age===null;output.textContent=age===null?'':`${age} ${age === 1 ? 'año' : 'años'}`;}
       };
       input.addEventListener('input', updateAge);
       input.addEventListener('change', updateAge);
+      $('#bkDate')?.addEventListener('change',updateAge);
       updateAge();
     });
     applyI18n(list);
@@ -1588,7 +1636,7 @@
   }
 
   function validateStep2() {
-    const inputs = $$('[data-pax-field]', $('#bkPaxList'));
+    const inputs = $('[data-pax-field]', $('#bkPaxList')).filter(input=>!input.disabled);
     const valid = inputs.every(fieldValid);
     if (!valid) showError('Completa los datos de todos los pasajeros.');
     return valid;
@@ -1596,8 +1644,13 @@
 
   function saveStep2() {
     state.passengers = $$('.passenger-card').map((card) => {
-      const value = (field) => card.querySelector(`[data-pax-field="${field}"]`).value.trim();
-      return { name: value('name'), nationality: value('nationality'), docType: value('docType'), docNumber: value('docNumber'), birth: value('birth'), passengerType: card.dataset.passengerType };
+      const pendingDetails=!!card.querySelector('[data-defer-passenger]:checked');
+      const value=field=>pendingDetails?'':(card.querySelector('[data-pax-field="'+field+'"]')?.value.trim()||'');
+      const firstName=value('firstName'),lastName=value('lastName');
+      return {firstName,lastName,name:[firstName,lastName].filter(Boolean).join(' '),
+        nationality:value('nationality'),docType:value('docType'),
+        docNumber:value('docNumber'),birth:value('birth'),
+        passengerType:card.dataset.passengerType,pendingDetails};
     });
   }
 
@@ -1696,6 +1749,7 @@
       paymentMethod: state.paymentMethod,
       paymentStatus: state.paymentMethod === 'pay_on_tour' ? 'pending' : 'awaiting_payment',
       passengers: state.passengers,
+      tourLanguage:state.holder.tourLanguage||'es',
       quotedTotal: state.total,
       quotedDue: state.due,
       mode: state.mode,
@@ -2198,9 +2252,9 @@
         else alert('Selecciona la fecha y viajeros en la ficha antes de reservar.');
         return;
       }
-      recalculate();prefillAccount();goToStep(1);
+      recalculate();buildPassengers();prefillAccount();goToStep(1);
       modal.classList.add('is-open');document.body.style.overflow='hidden';
-      (PRODUCT.kind==='package'?$('#bkEmail'):$('#bkDateTrigger'))?.focus();
+      $('#paxName0')?.focus();
     };
     const close = () => { modal.classList.remove('is-open'); document.body.style.overflow=''; lastFocused?.focus?.(); };
     trigger.addEventListener('click', open);
@@ -2237,14 +2291,12 @@
       state.tier = $('#bkTier')?.value || state.tier; state.occupancy = $('#bkOccupancy')?.value || state.occupancy; recalculate(); refreshCounters();
     }));
     refreshCounters();
+    ['#bkAdults','#bkChildren'].forEach(selector=>$(selector)?.addEventListener('change',()=>buildPassengers()));
 
     $('#bkNext').addEventListener('click', async () => {
       if (step === 1) {
-        if (!validateStep1()) return;
-        saveStep1(); buildPassengers(); goToStep(2);
-      } else if (step === 2) {
-        if (!validateStep2()) return;
-        saveStep2(); state.requestKey = requestKey(); paintSummary(); goToStep(3); updatePaymentMethod();
+        if (!validateStep1() || !validateStep2()) return;
+        saveStep2(); saveStep1(); state.requestKey=requestKey();paintSummary();goToStep(3);updatePaymentMethod();
       }
     });
     const updatePaymentMethod = () => {
@@ -2293,7 +2345,7 @@
         button.textContent = 'Comprobar recepción';
       }
     });
-    $('#bkBack').addEventListener('click', () => goToStep(Math.max(1, step - 1)));
+    $('#bkBack').addEventListener('click', () => goToStep(1));
     modal.addEventListener('input', (e) => {
       const field = e.target.closest('.form-field');
       if (field?.classList.contains('has-error') && e.target.checkValidity()) { field.classList.remove('has-error'); e.target.setAttribute('aria-invalid','false'); }

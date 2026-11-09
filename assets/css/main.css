@@ -3309,3 +3309,83 @@ body.has-pn-header .topbar { border: 0 !important; }
  .home-travel-form{gap:12px}
  .home-travel-form .search-field{border-right:0}
 }
+
+/* LATAM Booking: pasajeros primero, contacto integrado y dos pasos coherentes */
+.booking-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+.booking-steps li[data-step-label="1"]>b::after,
+.booking-steps li[data-step-label="3"]>b::after{content:none}
+.booking-passenger-help{margin:0 0 15px}
+.booking-passenger-fields[hidden],.passenger-age[hidden]{display:none!important}
+.booking-passenger-contact{border-top:1px solid #dce9e0;padding-top:17px;margin-top:16px}
+.booking-passenger-contact h4{margin:0 0 13px;color:#16442d;font:800 14px Montserrat,Inter,Arial,sans-serif}
+.booking-defer{display:flex;gap:8px;align-items:center;padding:10px 12px;margin:0 0 12px;
+ border-radius:10px;background:#f0f7f1;color:#305e43;font-size:12px;font-weight:700;cursor:pointer}
+.booking-defer input{width:17px;height:17px;accent-color:#07873e;flex:none}
+.booking-passenger-contact .booking-phone-combined{min-width:0}
+.booking-passenger-contact #bkPhoneDial{min-width:150px;max-width:52%}
+.booking-passenger-contact #bkPhone{min-width:0}
+.booking-passenger-contact #bkTourLanguage{width:100%}
+.booking-modal--package .booking-passenger-help{margin-bottom:14px}
+.booking-modal--package .booking-initial-fields,
+.booking-modal--package .booking-initial-travelers,
+.booking-modal--package .booking-subsection--hotel{display:none!important}
+@media(max-width:700px){
+ .booking-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .booking-steps li[data-step-label="1"]>b::after{content:"Pasajeros"}
+ .booking-steps li[data-step-label="3"]>b::after{content:"Pago"}
+}
+@media(max-width:520px){
+ .booking-passenger-contact #bkPhoneDial{min-width:120px;max-width:45%;font-size:11px}
+ .booking-passenger-contact #bkPhone{font-size:12px}
+}
+/* Imagen del destino con velo verde corporativo en la cabecera de cada ficha */
+.product-hero-clean{
+ background-image:linear-gradient(90deg,rgba(0,39,24,.94) 0%,rgba(0,63,37,.86) 50%,rgba(0,54,32,.60) 100%),var(--lx-hero-img,none);
+ background-position:center,center 52%;background-size:cover;background-repeat:no-repeat
+}
+.product-hero-clean .container{position:relative;z-index:1}
+
+/* LATAM unified product detail runtime */
+.lx-unified-product .product-detail-section .detail-layout {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(290px,350px);gap:22px;align-items:start
+}
+.lx-unified-product .product-detail-section .detail-main{display:grid;align-content:start;gap:22px;min-width:0}
+.lx-unified-product .product-detail-section .detail-main>.detail-card{margin:0!important;min-width:0}
+.lx-unified-product .product-detail-section .detail-main>.detail-card:first-child{margin-top:0!important}
+.lx-unified-product .product-detail-section .detail-aside{position:relative;top:0;align-self:start;margin:0;padding:0;min-width:0}
+.lx-unified-product .product-detail-section .tour-booking-card.product-booking-card{
+ position:relative;top:0;margin:0;padding:14px;border-radius:19px;
+ box-shadow:0 12px 33px rgba(12,62,40,.08)
+}
+.lx-unified-product .product-booking-card>img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;margin:0 0 13px;border-radius:13px}
+.lx-unified-product .product-booking-card .price-block{margin-bottom:13px}
+.lx-unified-product .product-detail-section .lx-product-info h2{margin:0 0 14px;color:#14482d;font-size:19px}
+.lx-unified-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.lx-unified-facts>div{display:grid;gap:4px;padding:11px;border:1px solid #dfebe2;border-radius:11px;background:#f7faf7;min-width:0}
+.lx-unified-facts span{color:#63806e;font-size:10px;font-weight:750}
+.lx-unified-facts strong{color:#17412d;font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.lx-unified-hero.page-hero:before,.lx-unified-hero.detail-hero:before{display:none}
+.lx-unified-hero.product-hero-clean{min-height:0;padding:clamp(54px,6vw,84px) 20px clamp(46px,5vw,72px);
+ background-image:linear-gradient(90deg,rgba(0,32,18,.92),rgba(0,55,33,.75),rgba(0,55,33,.54)),var(--lx-hero-img,none);
+ background-position:center,center 52%;background-size:cover}
+.lx-unified-hero .page-hero__inner{padding:0;max-width:1180px;width:100%;margin:0 auto}
+.lx-unified-hero.product-hero-clean h1{color:white;max-width:900px;font-size:clamp(30px,4.4vw,68px)}
+.lx-unified-hero.product-hero-clean p{color:rgba(255,255,255,.92)}
+@media(max-width:980px){
+ .lx-unified-product .product-detail-section .detail-layout{grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:16px}
+ .lx-unified-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:800px){
+ .lx-unified-product .product-detail-section .detail-layout{grid-template-columns:1fr}
+ .lx-unified-product .product-detail-section .detail-aside{position:relative}
+ .lx-unified-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+ .lx-unified-facts{grid-template-columns:1fr}
+ .lx-unified-hero.product-hero-clean{padding:42px 18px}
+ .lx-unified-product .product-detail-section{padding:15px}
+}
+
+/* Keep the reservation overlay above the site navigation */
+.booking-modal{z-index:6500}
+.booking-modal .booking-box{isolation:isolate}
