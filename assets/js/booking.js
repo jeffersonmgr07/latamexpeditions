@@ -2357,9 +2357,14 @@
         else alert('Selecciona la fecha y viajeros en la ficha antes de reservar.');
         return;
       }
-      recalculate();buildPassengers();prefillAccount();goToStep(1);
       modal.classList.add('is-open');document.body.style.overflow='hidden';
-      $('#paxName0')?.focus();
+      try{
+        recalculate();buildPassengers();prefillAccount();goToStep(1);
+        $('#paxName0')?.focus();
+      }catch(error){
+        console.error('[LATAM] Error al abrir los datos de pasajeros:',error);
+        showError('No se pudieron preparar los datos de los pasajeros. Recarga la página e inténtalo nuevamente.');
+      }
     };
     const close = () => { modal.classList.remove('is-open'); document.body.style.overflow=''; lastFocused?.focus?.(); };
     trigger.addEventListener('click', open);
