@@ -80,21 +80,28 @@
  panel.setAttribute('aria-label','Fecha y viajeros del paquete');
  panel.innerHTML='<div class="lx-package-quick-grid">'+
   '<label>Fecha de llegada<input type="date" id="lxProductDate" aria-label="Fecha de llegada"></label>'+
-  '<label>Personas<input id="lxProductTotalPax" type="text" readonly aria-label="Total de personas"></label></div>'+
-  '<div class="lx-package-guests">'+
-  '<label>Adultos<div class="lx-package-count"><button type="button" data-pax="adults" data-dir="-1" aria-label="Quitar adulto">−</button><output id="lxProductAdults"></output><button type="button" data-pax="adults" data-dir="1" aria-label="Añadir adulto">+</button></div></label>'+
-  '<label>Niños<div class="lx-package-count"><button type="button" data-pax="children" data-dir="-1" aria-label="Quitar niño">−</button><output id="lxProductChildren"></output><button type="button" data-pax="children" data-dir="1" aria-label="Añadir niño">+</button></div></label></div>'+
+  '<div class="lx-travel-field"><label for="lxProductTotalPax">Viajeros</label><button id="lxProductTotalPax" class="lx-travel-trigger" type="button">2 viajeros</button></div></div>'+
+  '<div id="lxProductPriceDetails" class="lx-package-price-details" aria-live="polite"></div>'+
   '<div class="lx-package-quick-total"><small>Total para el grupo</small><strong id="lxProductGroupPrice"></strong></div>'+
   '<div id="lxProductFlightPrice" class="lx-package-flight-price" hidden></div>'+
   '<p class="lx-package-addons-note" id="lxProductQuoteNote">Elige la fecha y los viajeros para continuar.</p>';
  side.querySelector('.price-block')?.after(panel);
  $('lxProductDate').min=minDate;$('lxProductDate').value=state.date;
- $('lxProductDate').addEventListener('change',()=>{state.date=$('lxProductDate').value;state.customHotel='';state.hotelQuotePending=false;invalidateFlight();clearHotelLookup();update()});
- panel.querySelectorAll('[data-pax]').forEach(b=>b.addEventListener('click',()=>{
-  const type=b.dataset.pax,delta=Number(b.dataset.dir),next=state[type]+delta;
-  if(next<(type==='adults'?1:0)||next>9||(delta>0&&state.adults+state.children>=9))return;
-  state[type]=next;state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];invalidateFlight();clearHotelLookup();update();
- }));
+ const productCalendar=window.LatamProductControls.calendar($('lxProductDate'));
+ $('lxProductDate').addEventListener('change',()=>{
+   state.date=$('lxProductDate').value;state.customHotel='';
+   state.hotelQuotePending=false;invalidateFlight();clearHotelLookup();update();
+ });
+ const productTravelers=window.LatamProductControls.travelers(
+   $('lxProductTotalPax'),
+   ()=>({adults:state.adults,children:state.children}),
+   ({adults,children})=>{
+     state.adults=adults;state.children=children;state.hotelPicked=false;
+     state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;
+     state.customHotel='';state.childrenAges=[];invalidateFlight();clearHotelLookup();update();
+   },
+   {max:9,maxChildren:8}
+ );
  const sectionAt=cards.find(x=>/^Itinerario/i.test(x.querySelector('h2')?.textContent||''))||
    main.querySelector('.package-itinerary')?.closest('section.detail-card');
  const addonFlights=el('section','lx-package-addon');
@@ -316,15 +323,31 @@ function showTierQuote(){
   if(validSrc(photo)){const image=el('img');image.src=photo;image.alt='Imagen de '+name;image.loading='lazy';image.referrerPolicy='no-referrer';slot.append(image)}
   else slot.append(el('span','', 'Foto del hotel al consultar opciones'));
  }
+
+ function renderPriceBreakdown(){
+   const rows=$('lxProductPriceDetails');rows.replaceChildren();
+   const weight=state.adults+state.children*params.childFactor;
+   const baseAmount=Math.round(params.base*weight*100)/100;
+   const people=state.adults+' '+(state.adults===1?'adulto':'adultos')+
+     (state.children?' · '+state.children+' '+(state.children===1?'niño':'niños'):'');
+   function addLine(label,amount,pending=false){
+     const item=el('div','lx-package-cost-line');
+     item.append(el('span','',label),el('strong','',pending?'Por cotizar':fmt(amount)));
+     if(pending)item.classList.add('is-pending');
+     rows.append(item);
+   }
+   addLine('Paquete base · '+people,baseAmount);
+   const adjustment=Math.round((pricePackage()-baseAmount)*100)/100;
+   if(Math.abs(adjustment)>=.01)addLine(adjustment>0?'Mejora de hotel':'Ajuste de alojamiento',adjustment);
+   if(state.flight)addLine('Vuelos ida y vuelta · '+state.flight.airline+' · '+state.adults+'A'+(state.children?' / '+state.children+'N':''),priceFlight());
+   if(state.customHotel)addLine((hasHotelIncluded?'Cambio de hotel · ':'Alojamiento · ')+state.customHotel,0,true);
+   else if(state.hotelQuotePending)addLine('Habitación o alojamiento adicional',0,true);
+ }
+
  function update(){
   $('lxProductDate').value=state.date;
-  $('lxProductTotalPax').value=String(state.adults+state.children)+' viajeros';
-  $('lxProductAdults').textContent=String(state.adults);$('lxProductChildren').textContent=String(state.children);
-  panel.querySelectorAll('[data-pax]').forEach(b=>{
-   const next=state[b.dataset.pax]+Number(b.dataset.dir);
-   b.disabled=next<(b.dataset.pax==='adults'?1:0)||
-    (Number(b.dataset.dir)>0&&state.adults+state.children>=9);
-  });
+  productCalendar.sync();productTravelers.sync();
+  renderPriceBreakdown();
   $('lxProductGroupPrice').textContent=state.adults+state.children>maxHotelOccupancy?'Cotización para el grupo':(state.hotelQuotePending?'Desde '+fmt(total()):fmt(total()));
   $('lxProductQuoteNote').textContent=state.adults+state.children>maxHotelOccupancy?
     'Para más de 4 viajeros, confirmaremos las habitaciones y el precio del grupo.':
@@ -335,10 +358,7 @@ function showTierQuote(){
     state.flight&&state.baggage==='checked'?
     'El suplemento de equipaje facturado se confirmará antes del pago.':
     'Elige categoría de hotel y habitación al reservar.';
-  const flightPrice=$('lxProductFlightPrice');
-  flightPrice.hidden=!state.flight;
-  if(state.flight)flightPrice.textContent='Vuelos seleccionados: '+fmt(priceFlight())+
-    ' para el grupo'+(state.baggage==='checked'?' · Maleta por cotizar':'');
+  const flightPrice=$('lxProductFlightPrice');flightPrice.hidden=true;
   $('lxProductHotelName').textContent=state.customHotel||(!hasHotelIncluded?'Sin alojamiento':((currentTier()?.hotels||[]).join(' / ')||'Hotel incluido'));
 
   $('lxProductHotelCategory').textContent=state.customHotel?'Hotel alternativo solicitado':
