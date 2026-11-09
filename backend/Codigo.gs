@@ -1148,7 +1148,8 @@ function doPost(e) {
 
     return json({ ok: false, error: 'Acción no reconocida.' });
   } catch (error) {
-    registrarError(error, e && e.postData ? e.postData.contents : '');
+    // Nunca registrar formularios completos: incluyen nombres y documentos de identidad.
+    registrarError(error, 'doPost · '+String(e&&e.parameter&&e.parameter.action||'json').slice(0,60));
     return json({ ok: false, error: mensajeSeguro(error) });
   }
 }
