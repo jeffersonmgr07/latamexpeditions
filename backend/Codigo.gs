@@ -85,9 +85,9 @@ const CONFIG = {
 
   agency: {
     name: 'Latam Expeditions',
-    email: 'reservas@latamexpeditions.com',
-    phone: '+51 900 608 980',
-    whatsapp: '51900608980',
+    email: 'contact@latamexpeditions.com',
+    phone: '+51 906 472 060',
+    whatsapp: '51906472060',
     web: 'https://latamexpeditions.com',
     agent: 'Jefferson García'
   }
