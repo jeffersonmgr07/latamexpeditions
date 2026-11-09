@@ -1115,7 +1115,8 @@ function doPost(e) {
       throw new Error('La solicitud es demasiado grande.');
     }
 
-    const formRequest = Boolean(e.parameter && e.parameter.action === 'registerPayOnTour' && e.parameter.payload);
+    const formRequest = Boolean(e.parameter &&
+      /^(registerPayOnTour|createOrder|captureOrder)$/.test(e.parameter.action||'') && e.parameter.payload);
     const body = formRequest
       ? {action:'registerPayOnTour',data:JSON.parse(String(e.parameter.payload))}
       : JSON.parse(e.postData.contents);
@@ -1131,8 +1132,18 @@ function doPost(e) {
         emailSent:result.emailSent===true,paymentStatus:'pending'
       }) : json(result);
     }
-    if (action === 'createOrder') return json({ ok: true, orderId: crearOrden(data) });
-    if (action === 'captureOrder') return json(capturarOrden(data));
+    if (action === 'createOrder') {
+      const output={ok:true,orderId:crearOrden(data)};
+      return formRequest ? lxHtmlAcuse_(Object.assign({
+        type:'latam-paypal-response',action:'createOrder',requestKey:String(data.requestKey||'')
+      },output)) : json(output);
+    }
+    if (action === 'captureOrder') {
+      const output=capturarOrden(data);
+      return formRequest ? lxHtmlAcuse_(Object.assign({
+        type:'latam-paypal-response',action:'captureOrder',requestKey:String(data.requestKey||'')
+      },output)) : json(output);
+    }
 
     // --- Cuentas y consultas (Cuentas.gs) ---
     if (action === 'authNonce') return json({ ok: true, nonce: crearNonceGoogle() });
@@ -1149,7 +1160,15 @@ function doPost(e) {
     return json({ ok: false, error: 'Acción no reconocida.' });
   } catch (error) {
     // Nunca registrar formularios completos: incluyen nombres y documentos de identidad.
-    registrarError(error, 'doPost · '+String(e&&e.parameter&&e.parameter.action||'json').slice(0,60));
+    const action=String(e&&e.parameter&&e.parameter.action||'');
+    registrarError(error, 'doPost · '+(action||'json').slice(0,60));
+    if(/^(registerPayOnTour|createOrder|captureOrder)$/.test(action) && e&&e.parameter&&e.parameter.payload){
+      const rawKey=String(e.parameter.payload||'');
+      let key='';
+      try{key=String(JSON.parse(rawKey).requestKey||'');}catch(ignore){}
+      return lxHtmlAcuse_({type:action==='registerPayOnTour'?'latam-booking-receipt':'latam-paypal-response',
+        action:action,requestKey:key,ok:false,pending:false,emailSent:false,error:mensajeSeguro(error)});
+    }
     return json({ ok: false, error: mensajeSeguro(error) });
   }
 }
@@ -1177,6 +1196,7 @@ function mensajeSeguro(error) {
     'Demasiados viajeros', 'Fecha demasiado próxima', 'Fecha inválida',
     'La solicitud es demasiado grande', 'La orden de pago', 'No se pudo iniciar el pago',
     'El pago no se completó', 'El pago fue recibido', 'No encontramos la orden de pago',
+    'Las tarifas adicionales',
     // Cuentas
     'Introduce un correo', 'Indícanos tu nombre', 'La contraseña debe',
     'Ya existe una cuenta', 'Correo o contraseña', 'Esta cuenta está desactivada',
@@ -1506,6 +1526,8 @@ function capturarOrden(payload) {
   try {
     let orden = buscarOrdenPayPal(orderId);
     if (!orden) throw new Error('No encontramos la orden de pago. Vuelve a iniciar el pago.');
+    if(payload&&payload.requestKey&&String(payload.requestKey)!==orden.requestKey)
+      throw new Error('La orden de pago no coincide con esta solicitud.');
 
     if (orden.estado === 'CAPTURADA' && orden.codigoReserva) {
       return {
