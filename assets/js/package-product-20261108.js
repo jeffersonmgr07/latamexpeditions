@@ -405,13 +405,17 @@ function showTierQuote(){
   setStatus(flightStatus,'La consulta aérea admite hasta 6 niños. Ajusta la cantidad de viajeros.',true);
   return;
  }
- if(!state.date||!params.destination){
+ if(!params.destination){
   toggleFlightEditor(true);
-  setStatus(flightStatus,!state.date?'Selecciona primero la fecha de llegada en la ficha del paquete.':
-   'El destino no dispone de búsqueda de vuelos.',true);
+  setStatus(flightStatus,'La búsqueda aérea de este paquete todavía no está habilitada.',true);
   return;
  }
- toggleFlightEditor(false);
+ if(!state.date&&!state.flightSearch){
+  toggleFlightEditor(true);
+  setStatus(flightStatus,'Selecciona las fechas de ida y regreso para buscar vuelos.');
+  return;
+ }
+  toggleFlightEditor(false);
  if(state.offers.length&&state.flightSearch){
   state.flightStage='outbound';state.outboundKey='';state.choice=null;renderFlightOffers();
   setStatus(flightStatus,'Elige tu vuelo de ida. Los precios corresponden a ida y regreso.');
@@ -551,12 +555,14 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   const arrival=$('lxFlightArrival').value;
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
   if(adults+children>9||children>6){setStatus(flightStatus,'Máximo 9 viajeros y hasta 6 niños por consulta.',true);toggleFlightEditor(true);return}
-  if(!dateOK(arrival)||arrival<minDate||!dateOK(out)||out<minDate||!dateOK(ret)||ret<addDays(arrival,params.nights)||out>arrival){
-   setStatus(flightStatus,'Verifica la llegada, salida desde origen y regreso.',true);toggleFlightEditor(true);return}
+  if(!dateOK(out)||out<minDate||!dateOK(ret)||ret<addDays(out,params.nights)){
+   setStatus(flightStatus,'Selecciona fechas válidas de ida y regreso. El regreso debe permitir la duración del paquete.',true);
+   toggleFlightEditor(true);return;
+  }
   if(airport===params.destination){setStatus(flightStatus,'La ciudad de salida y el destino deben ser diferentes.',true);return}
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
   $('lxProductSearchFlights').disabled=true;
-  state.date=arrival;state.adults=adults;state.children=children;state.origin=airport;
+  state.adults=adults;state.children=children;state.origin=airport;
   state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];
   invalidateFlight();clearHotelLookup();update();
   renderFlightSearchSummary();toggleFlightEditor(false);
@@ -565,16 +571,16 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    const result=await callApi({origin:airport,destination:params.destination,departure:out,returnDate:ret,
     trip:'roundtrip',adults,children,cabin:'economy'});
    if(!result?.ok)throw Error(result?.message||'No hay vuelos disponibles para esta búsqueda.');
-   state.flightSearch={origin:airport,departure:out,returnDate:ret,arrival,adults,children};
+   state.flightSearch={origin:airport,departure:out,returnDate:ret,arrival:state.date||out,adults,children};
     state.flightStage='outbound';renderFlightSearchSummary();toggleFlightEditor(false);
     state.offers=(Array.isArray(result.offers)?result.offers:[]).filter(o=>
      Number(o.price)>0&&o.outbound?.segments?.length&&o.inbound?.segments?.length&&
      o.departure===out&&o.returnDate===ret&&Number(o.partyAdults)===adults&&Number(o.partyChildren)===children&&
-     (!dateOK(String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10))||
-       String(o.outbound.segments.at(-1).to.time).slice(0,10)===state.date)).slice(0,30);
+     (()=>{const land=String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10);
+       return !dateOK(land)||ret>=addDays(land,params.nights)})()).slice(0,30);
    setStatus(flightStatus,state.offers.length?
     state.offers.length+' combinaciones encontradas. Tarifas combinadas de ida y vuelta por persona; el importe no se cobra dos veces. Elige la ida.':
-    'No encontramos combinaciones que lleguen en la fecha de inicio del paquete.',!state.offers.length);
+    'No encontramos vuelos compatibles con las fechas y la duración de este paquete.',!state.offers.length);
    renderFlightOffers();
   }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
   finally{$('lxProductSearchFlights').disabled=false}
@@ -582,6 +588,12 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  $('lxFlightApply').addEventListener('click',()=>{
   const offer=state.choice;if(!offer)return;
   const d=$('lxFlightDeparture').value,returnDate=$('lxFlightReturn').value;
+  const actualArrival=String(offer.outbound?.segments?.at(-1)?.to?.time||'').slice(0,10);
+  if(dateOK(actualArrival)){
+    state.date=actualArrival;state.flightSearch={...state.flightSearch,arrival:actualArrival};
+  }else if(!state.date){
+    state.date=d;state.flightSearch={...state.flightSearch,arrival:d};
+  }
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
   state.origin=$('lxFlightOrigin').value;
   state.adults=adults;state.children=children;
