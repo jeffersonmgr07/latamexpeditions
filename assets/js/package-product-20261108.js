@@ -130,7 +130,24 @@
  '<div class="lx-addon-row"><span class="lx-package-addons-note">Puedes cambiar de categoría o solicitar otro hotel.</span>'+
  '<button type="button" id="lxProductOpenHotel">Elegir habitación u hotel</button></div>';
  if(sectionAt){sectionAt.before(addonFlights,addonHotels)}
- else main.prepend(addonHotels,addonFlights);
+ else main.prepend(addonFlights,addonHotels);
+ // En móvil, la fecha y los viajeros deben quedar antes de personalizar el paquete.
+ const reserveShortcut=el('button','lx-mobile-book-shortcut','Reservar ahora');
+ reserveShortcut.type='button';
+ reserveShortcut.addEventListener('click',()=>book.click());
+ panel.append(reserveShortcut);
+ const mobileLayout=window.matchMedia('(max-width:900px)');
+ const positionQuickPanel=()=>{
+   if(mobileLayout.matches){
+     if(panel.parentNode!==main||main.firstElementChild!==panel)main.prepend(panel);
+     reserveShortcut.hidden=false;
+   }else{
+     if(panel.parentNode!==side)side.querySelector('.price-block')?.after(panel);
+     reserveShortcut.hidden=true;
+   }
+ };
+ positionQuickPanel();
+ mobileLayout.addEventListener?.('change',positionQuickPanel);
  // Modal container (shared design for flights and hotels).
  function modal(id,title){
   const wrap=el('div','lx-package-modal');wrap.id=id;wrap.setAttribute('role','dialog');wrap.setAttribute('aria-modal','true');
