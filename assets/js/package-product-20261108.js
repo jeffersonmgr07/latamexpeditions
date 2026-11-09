@@ -509,6 +509,7 @@ function showTierQuote(){
 }
 $('lxFlightNextStep').addEventListener('click',()=>{
  if(!state.outboundKey)return;state.flightStage='return';renderFlightOffers();
+ setStatus(flightStatus,'Elige el regreso. La cifra mostrada es el total combinado de ida y vuelta; no se suma nuevamente al precio de la ida.');
  $('lxFlightReturns').scrollIntoView({block:'nearest'});
 });
 $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound';renderFlightOffers()});
