@@ -2363,7 +2363,7 @@
         $('#paxName0')?.focus();
       }catch(error){
         console.error('[LATAM] Error al abrir los datos de pasajeros:',error);
-        showError('No se pudieron preparar los datos de los pasajeros. Recarga la página e inténtalo nuevamente.');
+        showError('No fue posible iniciar el formulario. Cierra esta ventana y vuelve a abrir la reserva.');
       }
     };
     const close = () => { modal.classList.remove('is-open'); document.body.style.overflow=''; lastFocused?.focus?.(); };
