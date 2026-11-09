@@ -129,7 +129,7 @@ function lxEstadoAcuse_(key){
 }
 function lxHtmlAcuse_(reply){
   const json=JSON.stringify(reply).replace(/</g,'\\u003c');
-  return HtmlService.createHtmlOutput('<!doctype html><meta charset="utf-8"><script>parent.postMessage('+json+', "*");<\\/script>')
+  return HtmlService.createHtmlOutput('<!doctype html><meta charset="utf-8"><script>parent.postMessage('+json+', "*");</script>')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 function lxResponderEstado_(e){
