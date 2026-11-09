@@ -77,7 +77,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="field"><label>Nombre interno</label><input data-field="identity.internalName"></div>
     <div class="field"><label>País</label><select data-field="identity.country" id="country"><option>Chile</option><option>Perú</option><option>Colombia</option><option>Argentina</option><option>Brasil</option><option>Bolivia</option><option>Ecuador</option><option>México</option><option>Panamá</option><option>Uruguay</option><option>Costa Rica</option><option>Venezuela</option></select></div>
     <div class="field"><label>Región / departamento / estado</label><input list="regions" data-field="identity.region" placeholder="Antofagasta"><datalist id="regions"></datalist></div>
-    <div class="field"><label>Ciudad / destino</label><input data-field="identity.city" placeholder="San Pedro de Atacama"></div>
+    <div class="field"><label>Ciudad / destino</label><input list="cities" data-field="identity.city" placeholder="San Pedro de Atacama"><datalist id="cities"></datalist></div>
     <div class="field"><label>Destino comercial completo</label><input data-field="identity.destination"></div>
     <div class="field"><label>Días</label><input data-field="identity.days" type="number" min="1" max="40"></div>
     <div class="field"><label>Noches</label><input data-field="identity.nights" type="number" min="0" max="39"></div>
@@ -156,6 +156,16 @@ const regions={
 "Colombia":["Antioquia","Bogotá D.C.","Bolívar","Magdalena","Cundinamarca","Santander"],
 "Brasil":["Río de Janeiro","São Paulo","Bahía","Amazonas"],"Argentina":["Buenos Aires","Mendoza","Santa Cruz","Misiones"]
 };
+const cities={
+"Chile|Antofagasta":["San Pedro de Atacama","Calama","Antofagasta","Mejillones"],
+"Chile|Metropolitana de Santiago":["Santiago","Providencia","Las Condes"],
+"Perú|Cusco":["Cusco","Aguas Calientes","Ollantaytambo","Urubamba"],
+"Perú|Lima":["Lima","Pachacámac","Miraflores","Barranco"],
+"Colombia|Antioquia":["Medellín","Guatapé","Jardín","Santa Fe de Antioquia"],
+"Colombia|Bogotá D.C.":["Bogotá"],
+"Colombia|Bolívar":["Cartagena"],
+"Brasil|Río de Janeiro":["Río de Janeiro","Arraial do Cabo"]
+};
 let product=null,publicJson=null,dirty=false,loading=false;
 const blank=()=>({schemaVersion:1,id:'',code:'',status:'BORRADOR',version:0,
  identity:{type:'package',title:'',slug:'',country:'Chile',region:'Antofagasta',city:'',days:5,nights:4,minAge:18,defaultAdults:2,defaultChildren:0,maxTravelers:9},
@@ -173,7 +183,9 @@ function api(name,...args){
   google.script.run.withSuccessHandler(resolve).withFailureHandler(e=>reject(new Error(e&&e.message||String(e))))[name](...args);
  });
 }
-function setRegions(){const l=$('#regions');l.replaceChildren();(regions[$('#country').value]||[]).forEach(s=>{const opt=document.createElement('option');opt.value=s;l.append(opt)})}
+function setCities(){const l=$('#cities');l.replaceChildren();const country=$('#country').value,region=$('[data-field="identity.region"]').value;
+ (cities[country+'|'+region]||[]).forEach(v=>{const opt=document.createElement('option');opt.value=v;l.append(opt)})}
+function setRegions(){const l=$('#regions');l.replaceChildren();(regions[$('#country').value]||[]).forEach(s=>{const opt=document.createElement('option');opt.value=s;l.append(opt)});setCities()}
 function fill(p){
  product=structuredClone(p||blank());dirty=false;publicJson=null;$('#publicOutput').value='';$('#download').disabled=true;
  $$('[data-field]').forEach(el=>{const value=pathGet(product,el.dataset.field);el.value=value===undefined||value===null?'':value});
@@ -261,6 +273,7 @@ $('#download').onclick=()=>{if(!publicJson)return;const data=JSON.stringify(publ
  a.href=url;a.download=(product.identity.slug||'experiencia')+'.public-preview.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
 document.addEventListener('input',e=>{if(e.target.matches('[data-field],[data-list]'))dirty=true});
 $('#country').addEventListener('change',setRegions);
+$('[data-field="identity.region"]').addEventListener('input',setCities);
 fill(blank());list();
 })();
 </script></body></html>
