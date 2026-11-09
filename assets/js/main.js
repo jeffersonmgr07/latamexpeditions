@@ -791,7 +791,12 @@
       section.append(layout);
       // Ubicar las consultas fuera del bloque de reserva, después de la información principal.
       outer?.after(section);
-      links.forEach(link=>{if(link!==custom&&link!==whatsapp)link.remove()});
+      links.forEach(link=>{
+        if(link!==custom&&link!==whatsapp){
+          link.classList.remove('btn-outline','btn-primary');link.classList.add('lx-product-help-cta');
+          layout.firstElementChild.append(link);
+        }
+      });
     }
     // Conservar íntegro el contenido editorial de cada experiencia.
     content.querySelectorAll('h2').forEach(h=>{
