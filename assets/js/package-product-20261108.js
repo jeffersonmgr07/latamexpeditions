@@ -335,7 +335,7 @@ function renderHotelCards(){
   const options=el('div','lx-hotel-room-options');
   options.setAttribute('role','radiogroup');options.setAttribute('aria-label','Habitaciones de '+name);
   roomPlans(n).forEach(plan=>{
-   const selected=$('lxHotelTier').value===t.code&&pendingRoomPlan?.label===plan.label;
+   const selected=!hotelsPendingSelection&&$('lxHotelTier').value===t.code&&pendingRoomPlan?.label===plan.label;
    const button=el('button','lx-hotel-room-choice'+(selected?' is-selected':''));button.type='button';
    button.setAttribute('role','radio');button.setAttribute('aria-checked',String(selected));
    const rate=Number(t.occupancyPrices?.[plan.code]??t.pricePerPerson??params.base);
@@ -356,6 +356,13 @@ function renderHotelCards(){
  });
 }
 function showTierQuote(){
+ if(hotelsPendingSelection){
+  const h=hotelsPendingSelection;
+  $('lxHotelCurrentSummary').textContent='Hotel alternativo: '+h.name+' · '+
+    (h.supplement>0?'+ '+fmt(h.supplement)+' por el grupo':'sin costo adicional');
+  $('lxHotelExtraStatus').textContent='Tarifa observada para '+h.nights+' noches, sujeta a disponibilidad del proveedor.';
+  return;
+ }
  const t=tiers.find(x=>x.code===$('lxHotelTier').value)||firstTier;
  const plan=pendingRoomPlan||roomPlans(state.adults+state.children)[0];
  if(!t)return;
@@ -700,36 +707,55 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   try{
    const result=await callApi({mode:'hotels',destination:params.destinationPlace,
     check_in_date:state.date,check_out_date:addDays(state.date,params.nights),
-    adults:state.adults,children:state.children,children_ages:ages.join(',')});
+    adults:state.adults,children:state.children,children_ages:ages.join(','),
+    baseline_hotel:String((firstTier?.hotels||[])[0]||'')});
    if(!result?.ok)throw Error(result?.message||'No hay opciones para estas fechas.');
    const list=$('lxHotelLookupOptions');list.replaceChildren();
    const options=(Array.isArray(result.hotels)?result.hotels:[]).slice(0,12);
-   if(!options.length){setStatus(hotelStatus,'No se encontraron hoteles para esas fechas.');return}
-   setStatus(hotelStatus,'Elige un hotel alternativo. Confirmaremos su suplemento antes de finalizar la reserva.');
+   if(!options.length){setStatus(hotelStatus,'No se encontraron hoteles para estas fechas.');return}
+   const nights=params.nights;
+   const providerBaseline=Number(result.referenceHotel?.totalRate)||0;
+   const configuredBudget=Number(firstTier?.hotelBudgetPerNight||book.dataset.bookHotelBudgetNightly)||0;
+   const budget=hasHotelIncluded?(providerBaseline>0?providerBaseline:
+     configuredBudget>0?Math.round(configuredBudget*nights*100)/100:null):0;
+   setStatus(hotelStatus,'Tarifas observadas para '+nights+' noches. La disponibilidad y habitación definitiva se verifican al reservar.');
    options.forEach(h=>{
     if(!h?.name)return;
+    const rate=Number(h.nightlyRate)||0;
+    const stay=Number(h.totalRate)>0?Number(h.totalRate):rate>0?Math.round(rate*nights*100)/100:0;
+    const canPrice=stay>0&&budget!==null;
+    const difference=canPrice?Math.round(Math.max(0,stay-budget)*100)/100:0;
     const card=el('button','lx-package-offer lx-hotel-live-card');card.type='button';
     const left=el('span');
     if(validSrc(h.thumbnail)){const img=el('img');img.src=h.thumbnail;img.alt='';img.loading='lazy';img.referrerPolicy='no-referrer';left.append(img);
      state.hotelPhotos[normalizeHotelName(h.name)]=h.thumbnail;}
-    left.append(el('b','',h.name),
-     el('small','',h.nightlyRate?fmt(h.nightlyRate)+' / noche · tarifa del proveedor, no suplemento': 'Suplemento por confirmar'));
-    card.append(left,el('strong','','Consultar'));
-    card.addEventListener('click',()=>{
+    left.append(el('b','',h.name));
+    if(stay>0)left.append(el('small','',fmt(stay)+' · '+nights+' '+(nights===1?'noche':'noches')+
+      (rate>0?' · '+fmt(rate)+'/noche':'')));
+    else left.append(el('small','','Tarifa no disponible para estas fechas'));
+    const actions=el('span','lx-hotel-choice-meta');
+    if(canPrice)actions.append(el('strong','',difference>0?'+ '+fmt(difference):'Sin recargo'),el('small','','Elegir'));
+    else actions.append(el('small','',stay>0?'Sin tarifa comparable del hotel incluido':'Sin tarifa disponible'));
+    card.disabled=!canPrice;card.append(left,actions);
+    if(canPrice)card.addEventListener('click',()=>{
       hotelsPendingName=h.name;
+      hotelsPendingSelection={name:h.name,stayTotal:Math.round(stay*100)/100,
+        supplement:difference,baselineTotal:budget,nights,nightlyRate:rate,
+        checkIn:state.date,checkOut:addDays(state.date,nights),priceSource:'Google Hotels via SerpApi'};
       list.querySelectorAll('.lx-package-offer').forEach(x=>x.classList.remove('is-selected'));
-      card.classList.add('is-selected');
-      $('lxHotelExtraStatus').textContent='Cambio solicitado: '+h.name+' · suplemento por confirmar';
+      card.classList.add('is-selected');renderHotelCards();showTierQuote();
     });
     list.append(card);
    });
+   if(budget===null)setStatus(hotelStatus,
+     'Para calcular el cambio falta una tarifa comparable del hotel incluido. Configura su presupuesto por noche o vuelve a consultar.',true);
    renderHotelCards();renderHotelPhoto();
   }catch(err){setStatus(hotelStatus,err?.message||'No se pudo consultar hoteles.',true)}
   finally{btn.disabled=false}
  });
  // Al cambiar el tipo de categoría oficial se cancela la sustitución externa.
- $('lxHotelTier').addEventListener('change',()=>{hotelsPendingName=''});
- $('lxHotelOccupancy').addEventListener('change',()=>{hotelsPendingName=''});
+ $('lxHotelTier').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null});
+ $('lxHotelOccupancy').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null});
  // Para más de cuatro viajeros, no presentar como un precio listo para cobrarse.
  book.addEventListener('click',event=>{
   if(state.adults+state.children<=maxHotelOccupancy)return;
