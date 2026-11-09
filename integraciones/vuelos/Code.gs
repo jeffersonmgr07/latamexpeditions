@@ -272,8 +272,10 @@ function normalizeTrip_(item) {
     segments:(Array.isArray(item.flights)?item.flights:[]).slice(0,8).map(normalizeSegment_),
     layovers:(Array.isArray(item.layovers)?item.layovers:[]).slice(0,7).map(function(l){
       return {airport:String(l.id||"").slice(0,3),
+        id:String(l.id||"").slice(0,3),
         name:String(l.name||"").slice(0,100),
-        duration:typeof l.duration==="number"?l.duration:null};
+        duration:typeof l.duration==="number"?l.duration:null,
+        overnight:!!l.overnight};
     }),
     duration:typeof item.total_duration==="number"?item.total_duration:null
   };
@@ -446,8 +448,21 @@ function submitFlightRequest(p) {
  * solicitudes ejecutar initTripRequestsSheet() una vez y desplegar NUEVA versión.
  */
 function searchBundleHotels_(p) {
-  var destination=String(p.destination||"");
-  if(destination!=="Medellín, Colombia")return {ok:false,message:"Por ahora consultamos hoteles en Medellín."};
+  var destination=String(p.destination||"").trim();
+  // Lista blanca: evita que un endpoint público consuma cuota SerpAPI con consultas arbitrarias.
+  var supported={
+    "Medellín, Colombia":{q:"hoteles en Medellín Colombia",gl:"co"},
+    "Bogotá, Colombia":{q:"hoteles en Bogotá Colombia",gl:"co"},
+    "Cartagena, Colombia":{q:"hoteles en Cartagena Colombia",gl:"co"},
+    "Cusco, Perú":{q:"hoteles en Cusco Perú",gl:"pe"},
+    "Lima, Perú":{q:"hoteles en Lima Perú",gl:"pe"},
+    "Arequipa, Perú":{q:"hoteles en Arequipa Perú",gl:"pe"},
+    "Río de Janeiro, Brasil":{q:"hoteles en Río de Janeiro Brasil",gl:"br"},
+    "Buenos Aires, Argentina":{q:"hoteles en Buenos Aires Argentina",gl:"ar"},
+    "Santiago, Chile":{q:"hoteles en Santiago Chile",gl:"cl"}
+  };
+  var location=supported[destination];
+  if(!location)return {ok:false,message:"Consulta hotelera todavía no habilitada para este destino."};
   var checkin=String(p.check_in_date||""),checkout=String(p.check_out_date||"");
   var adults=Number(p.adults||2),children=Number(p.children||0);
   var ages=String(p.children_ages||"").split(",").filter(function(x){return x!==""});
@@ -468,7 +483,7 @@ function searchBundleHotels_(p) {
       [destination,checkin,checkout,adults,children,ages.join(",")].join("|"))).slice(0,50);
   var cache=CacheService.getScriptCache(),stored=cache.get(ck);
   if(stored)return JSON.parse(stored);
-  var params={engine:"google_hotels",q:"hoteles en Medellín Colombia",hl:"es",gl:"co",
+  var params={engine:"google_hotels",q:location.q,hl:"es",gl:location.gl,
     currency:"USD",check_in_date:checkin,check_out_date:checkout,
     adults:String(adults),children:String(children),api_key:key};
   if(children>0)params.children_ages=ages.join(",");
