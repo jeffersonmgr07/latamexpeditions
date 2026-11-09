@@ -1568,6 +1568,89 @@
       .map(code=>'<option value="'+code+'">'+labels[code]+'</option>').join('');
   };
 
+
+  // Controles visuales de marca. El select nativo conserva el valor y la validación.
+  function buildCustomBookingSelects() {
+    if(!document.getElementById('lxBookingSelectStyle')){
+      const style=document.createElement('style');style.id='lxBookingSelectStyle';
+      style.textContent=".lx-custom-select{position:relative;width:100%;min-width:0}.lx-custom-select>select{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}.lx-select-trigger{display:flex;align-items:center;gap:8px;width:100%;min-height:46px;text-align:left;padding:10px;border:1px solid #cedbd3;border-radius:11px;background:#fff;color:#183c2b;font:inherit;cursor:pointer}.lx-select-trigger:focus-visible{outline:2px solid #07873e;outline-offset:2px}.lx-select-value{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.lx-select-trigger::after{content:'⌄';font-size:18px;color:#07873e}.lx-select-options{position:absolute;z-index:10050;top:calc(100% + 5px);left:0;right:0;max-height:min(330px,45vh);overflow:auto;background:#fff;border:1px solid #c9dcd0;border-radius:12px;box-shadow:0 12px 35px #123c242e;padding:6px}.lx-select-options[hidden]{display:none!important}.lx-select-search{box-sizing:border-box;width:100%;padding:10px;border:1px solid #d2dfd5;border-radius:8px;margin-bottom:5px;font:inherit;position:sticky;top:0;background:#fff;z-index:1}.lx-select-item{display:flex;width:100%;align-items:center;gap:9px;border:0;background:transparent;padding:9px 10px;text-align:left;border-radius:7px;color:#173e2b;font:inherit;cursor:pointer}.lx-select-item:hover,.lx-select-item:focus-visible,.lx-select-item[aria-selected=true]{background:#eaf5ee}.lx-select-flag{width:23px;height:16px;object-fit:cover;border:1px solid #e0e0e0;border-radius:2px;flex:none}.booking-phone-combined .lx-custom-select{flex:0 0 112px;width:112px;min-width:100px}.booking-phone-combined .lx-select-trigger{padding:10px 6px;gap:5px}@media(max-width:520px){.lx-select-options{max-height:38vh}.booking-phone-combined .lx-custom-select{flex-basis:98px;width:98px}}";document.head.append(style);
+    }
+    const targets=$('#bkPaxList select[data-pax-field="docType"],#bkPaxList select[data-pax-field="nationality"],#bkTourLanguage,#bkPhoneDial');
+    const closeAll=()=>{
+      $('.lx-select-options').forEach(panel=>panel.hidden=true);
+      $('.lx-select-trigger').forEach(btn=>btn.setAttribute('aria-expanded','false'));
+    };
+    if(!document.documentElement.dataset.lxSelectListeners){
+      document.documentElement.dataset.lxSelectListeners='1';
+      document.addEventListener('pointerdown',event=>{
+        if(!event.target.closest('.lx-custom-select'))closeAll();
+      });
+      document.addEventListener('keydown',event=>{if(event.key==='Escape')closeAll();});
+    }
+    targets.forEach(select=>{
+      if(select.parentElement?.classList.contains('lx-custom-select'))return;
+      const isDial=select.id==='bkPhoneDial';
+      const items=[...select.options].map((option,index)=>{
+        const phone=isDial?PHONE_COUNTRIES[index]:null;
+        return {value:option.value,label:phone?phone[0]:option.textContent.trim(),
+          dial:phone?phone[1]:'',iso:phone?phone[2]:'',disabled:option.disabled};
+      });
+      const wrap=document.createElement('div');wrap.className='lx-custom-select';
+      select.parentNode.insertBefore(wrap,select);wrap.append(select);
+      const button=document.createElement('button');button.type='button';
+      button.className='lx-select-trigger';button.setAttribute('aria-haspopup','listbox');
+      button.setAttribute('aria-expanded','false');
+      button.setAttribute('aria-label',select.getAttribute('aria-label')||select.closest('.form-field')?.querySelector('label')?.textContent||'Elegir opción');
+      const value=document.createElement('span');value.className='lx-select-value';
+      button.append(value);wrap.append(button);
+      const panel=document.createElement('div');panel.className='lx-select-options';
+      panel.setAttribute('role','listbox');panel.hidden=true;wrap.append(panel);
+      const search=document.createElement('input');search.type='search';
+      search.className='lx-select-search';search.placeholder='Buscar…';
+      if(items.length>8)panel.append(search);
+      const optionsWrap=document.createElement('div');panel.append(optionsWrap);
+      const flag=(iso)=>{
+        const img=document.createElement('img');img.className='lx-select-flag';
+        img.src='https://flagcdn.com/w40/'+iso.toLowerCase()+'.png';
+        img.alt='';img.loading='lazy';return img;
+      };
+      const display=()=>{
+        const item=items.find(x=>x.value===select.value)||items[0];
+        value.replaceChildren();
+        const summary=document.createElement('span');
+        summary.textContent=isDial?(item?.dial||'Código'):item?.label||'Seleccionar';
+        if(isDial&&item?.iso)value.append(flag(item.iso));
+        value.append(summary);
+      };
+      const render=(query='')=>{
+        optionsWrap.replaceChildren();
+        const normalized=query.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+        items.filter(item=>!item.disabled&&[item.label,item.dial,item.iso].join(' ').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().includes(normalized))
+          .forEach(item=>{
+            const option=document.createElement('button');option.type='button';
+            option.className='lx-select-item';option.setAttribute('role','option');
+            option.setAttribute('aria-selected',String(item.value===select.value));
+            if(isDial&&item.iso)option.append(flag(item.iso));
+            const label=document.createElement('span');
+            label.textContent=isDial?item.dial+' · '+item.label:item.label;
+            option.append(label);
+            option.addEventListener('click',()=>{
+              select.value=item.value;select.dispatchEvent(new Event('change',{bubbles:true}));
+              display();closeAll();button.focus();
+            });
+            optionsWrap.append(option);
+          });
+      };
+      button.addEventListener('click',()=>{
+        const open=panel.hidden;closeAll();
+        panel.hidden=!open;button.setAttribute('aria-expanded',String(open));
+        if(open){search.value='';render();if(items.length>8)search.focus();}
+      });
+      search.addEventListener('input',()=>render(search.value));
+      select.addEventListener('change',display);display();
+    });
+  }
+
   function buildPassengers() {
     const list = $('#bkPaxList');
     const previous=[...list.querySelectorAll('.passenger-card')].map(card=>({
@@ -1630,6 +1713,7 @@
         deferred.addEventListener('change',sync);sync();
       }
     });
+    buildCustomBookingSelects();
     list.querySelectorAll('[data-pax-field="birth"]').forEach((input) => {
       setupPassengerBirthCalendar(input);
       const updateAge = () => {
