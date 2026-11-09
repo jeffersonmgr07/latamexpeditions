@@ -131,7 +131,11 @@
   const body=el('div','lx-package-modal-body');head.append(heading,close);dialog.append(head,body);wrap.append(dialog);
   document.body.append(wrap);
   let last=null;
-  function hide(){wrap.classList.remove('is-open');document.body.style.overflow='';last?.focus?.()}
+  function hide(){
+    wrap.querySelectorAll('.lx-date-calendar,.lx-travel-popover').forEach(node=>{node.hidden=true});
+    wrap.querySelectorAll('[aria-expanded="true"]').forEach(node=>node.setAttribute('aria-expanded','false'));
+    wrap.classList.remove('is-open');document.body.style.overflow='';last?.focus?.();
+  }
   function show(){last=document.activeElement;wrap.classList.add('is-open');document.body.style.overflow='hidden';close.focus()}
   close.addEventListener('click',hide);wrap.addEventListener('click',e=>{if(e.target===wrap)hide()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&wrap.classList.contains('is-open'))hide()});
@@ -162,7 +166,7 @@
  '<label class="lx-baggage-select" id="lxFlightBaggageRow" hidden><input type="checkbox" id="lxFlightCheckedBag"> Añadir equipaje facturado (tarifa por confirmar)</label>'+
  '<div class="lx-package-modal-bottom lx-flight-modal-bottom">'+
  '<button type="button" id="lxFlightBackStep" class="lx-flight-back" hidden>Volver a ida</button>'+
- '<strong id="lxFlightConfirmedTotal">Selecciona tu vuelo de ida</strong>'+
+ '<div id="lxFlightConfirmedTotal" class="lx-flight-price-summary" role="status" aria-live="polite">Selecciona tu vuelo de ida</div>'+
  '<button type="button" id="lxFlightNextStep" disabled hidden>Continuar al regreso</button>'+
  '<button type="button" id="lxFlightApply" disabled hidden>Confirmar vuelos</button></div>';
  const hotels=modal('lxProductHotelsModal','Hotel y acomodación');
@@ -186,12 +190,25 @@
   counts=>{$('lxFlightAdults').value=String(counts.adults);$('lxFlightChildren').value=String(counts.children)},
   {max:9,maxChildren:6}
  );
- function setStatus(node,message,err=false){node.textContent=message;node.classList.toggle('is-error',err)}
+ function setStatus(node,message,err=false,loading=false){
+  node.replaceChildren();node.classList.toggle('is-error',err);node.classList.toggle('is-loading',loading);
+  if(loading){const spin=el('span','lx-flight-spinner');spin.setAttribute('aria-hidden','true');node.append(spin,el('span','',message))}
+  else node.textContent=message;
+ }
  function currentFlightQuery(){
  return {origin:$('lxFlightOrigin').value,destination:params.destination,departure:$('lxFlightDeparture').value,
   returnDate:$('lxFlightReturn').value,arrival:$('lxFlightArrival').value,
   adults:Number($('lxFlightAdults').value),children:Number($('lxFlightChildren').value)};
 }
+function syncFlightReturnMin(){
+ const outbound=$('lxFlightDeparture').value,ret=$('lxFlightReturn');
+ // El regreso nunca puede ser anterior a la ida ni a la duración del paquete.
+ const earliest=dateOK(outbound)?addDays(outbound,params.nights):minDate;
+ ret.min=earliest;
+ if(dateOK(outbound)&&(!dateOK(ret.value)||ret.value<earliest))ret.value=earliest;
+ inboundCalendar.sync();
+}
+$('lxFlightDeparture').addEventListener('change',syncFlightReturnMin);
 function syncFlightForm(){
  if(state.origin&&!Array.from($('lxFlightOrigin').options).some(o=>o.value===state.origin)){
   const option=el('option','',state.origin);option.value=state.origin;$('lxFlightOrigin').append(option);
@@ -201,10 +218,11 @@ function syncFlightForm(){
  $('lxFlightOrigin').value=state.origin;
  $('lxFlightAdults').value=String(Math.min(state.adults,9));
  $('lxFlightChildren').value=String(Math.min(state.children,6));
- $('lxFlightDeparture').min=minDate;$('lxFlightReturn').min=minDate;
+ $('lxFlightDeparture').min=minDate;
  $('lxFlightArrival').value=state.date||'';
  $('lxFlightDeparture').value=reuse?old.departure:(state.date||'');
  $('lxFlightReturn').value=reuse?old.returnDate:(state.date?addDays(state.date,params.nights):'');
+ syncFlightReturnMin();
  $('lxFlightCheckedBag').checked=false;
  outboundCalendar.sync();inboundCalendar.sync();flightTravelers.sync();
  renderFlightSearchSummary();
@@ -357,9 +375,11 @@ function showTierQuote(){
    const baseAmount=Math.round(params.base*weight*100)/100;
    const people=state.adults+' '+(state.adults===1?'adulto':'adultos')+
      (state.children?' · '+state.children+' '+(state.children===1?'niño':'niños'):'');
-   function addLine(label,amount,pending=false){
+   function addLine(label,amount,pending=false,detail=''){
      const item=el('div','lx-package-cost-line');
-     item.append(el('span','',label),el('strong','',pending?'Por cotizar':fmt(amount)));
+     const description=el('span','',label);
+     if(detail)description.append(el('small','lx-flight-pax-detail',detail));
+     item.append(description,el('strong','',pending?'Por cotizar':fmt(amount)));
      if(pending)item.classList.add('is-pending');
      rows.append(item);
    }
@@ -368,8 +388,8 @@ function showTierQuote(){
    if(Math.abs(adjustment)>=.01)addLine(adjustment>0?'Mejora de hotel':'Ajuste de alojamiento',adjustment);
    if(state.flight){
      const airlines=[...new Set([state.flight.outbound?.[0]?.airline,state.flight.inbound?.[0]?.airline].filter(Boolean))];
-     addLine('Vuelos ida y vuelta · '+(airlines.join(' + ')||state.flight.airline)+' · '+
-       state.adults+'A'+(state.children?' / '+state.children+'N':''),priceFlight());
+     addLine('Vuelos ida y vuelta · '+(airlines.join(' + ')||state.flight.airline),
+       priceFlight(),false,'('+passengerText()+')');
    }
    if(state.customHotel)addLine((hasHotelIncluded?'Cambio de hotel · ':'Alojamiento · ')+state.customHotel,0,true);
    else if(state.hotelQuotePending)addLine('Habitación o alojamiento adicional',0,true);
@@ -478,10 +498,8 @@ function showTierQuote(){
  function flightCard(leg,price,selected,action,phase,partyCount,offer){
  const seg=leg?.segments||[],first=seg[0]||{},last=seg[seg.length-1]||{};
  const count=Math.max(1,Number(partyCount)||1);
+ // La cotización devuelve una combinación de ida y vuelta para todo el grupo.
  const perPerson=Math.round(Number(price)/count*100)/100;
- // Solo mostrar precio por tramo si el backend devuelve importes por tramo independientes.
- const legFare=Number(phase==='outbound'?offer?.outboundPricePerPerson:offer?.inboundPricePerPerson);
- const hasLegFare=Number.isFinite(legFare)&&legFare>0;
  const card=el('article','lx-flight-choice'+(selected?' is-selected':''));
  const select=el('button','lx-flight-choice-select');select.type='button';
  select.setAttribute('aria-pressed',String(selected));
@@ -508,8 +526,8 @@ function showTierQuote(){
  route.append(depart,el('span','lx-flight-route-middle',!nStops?'Directo':nStops+' escala(s)'),arrive);
  body.append(brand,route);
  const cost=el('span','lx-flight-choice-price');
- cost.append(el('strong','',fmt(hasLegFare?legFare:perPerson)),
-  el('small','',hasLegFare?(phase==='outbound'?'Ida · por persona':'Regreso · por persona'):'Ida y vuelta · promedio por viajero'));
+ cost.append(el('strong','',fmt(perPerson)),
+  el('small','','Precio por persona · ida y vuelta'));
  select.append(body,cost);select.addEventListener('click',action);card.append(select);
  if(nStops){
   const details=el('details','lx-flight-layovers'),summary=el('summary','','Ver '+nStops+' escala(s) y conexiones');
@@ -526,6 +544,19 @@ function showTierQuote(){
  }
  return card;
 }
+ function showFlightPriceSummary(amount){
+   const target=$('lxFlightConfirmedTotal'),count=state.adults+state.children;
+   const badges=[
+     ['Precio por persona · ida y vuelta',amount/Math.max(1,count),false],
+     ['Precio total por '+count+' '+(count===1?'pasajero':'pasajeros'),amount,true]
+   ];
+   target.replaceChildren();
+   badges.forEach(([label,value,isTotal])=>{
+     const badge=el('span','lx-flight-price-badge'+(isTotal?' is-total':''));
+     badge.append(el('small','',label),el('strong','',fmt(value)));
+     target.append(badge);
+   });
+ }
  function renderFlightOffers(){
  const departures=$('lxFlightDepartures'),returns=$('lxFlightReturns');
  departures.replaceChildren();returns.replaceChildren();
@@ -559,12 +590,13 @@ function showTierQuote(){
   });
   apply.disabled=!state.choice;
   const amount=state.choice?Math.round(Number(state.choice.price)*(1+flightMarkup(state.choice.departure))*100)/100:0;
-  $('lxFlightConfirmedTotal').textContent=state.choice?fmt(amount)+' total · '+fmt(amount/Math.max(1,state.adults+state.children))+' promedio por viajero (ida y vuelta)':'Selecciona un vuelo de regreso';
+  if(state.choice)showFlightPriceSummary(amount);
+  else $('lxFlightConfirmedTotal').textContent='Selecciona un vuelo de regreso';
  }
 }
 $('lxFlightNextStep').addEventListener('click',()=>{
  if(!state.outboundKey)return;state.flightStage='return';renderFlightOffers();
- setStatus(flightStatus,'Elige el regreso. La cifra mostrada es el total combinado de ida y vuelta; no se suma nuevamente al precio de la ida.');
+ setStatus(flightStatus,'Selecciona tu vuelo de regreso. Las tarifas mostradas incluyen ida y vuelta.');
  $('lxFlightReturns').scrollIntoView({block:'nearest'});
 });
 $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound';renderFlightOffers()});
@@ -584,7 +616,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   state.hotelPicked=false;state.occupancy=defaultRoom();state.roomPlan='';state.hotelQuotePending=false;state.customHotel='';state.childrenAges=[];
   invalidateFlight();clearHotelLookup();update();
   renderFlightSearchSummary();toggleFlightEditor(false);
-  setStatus(flightStatus,'Buscando combinaciones de ida y regreso…');
+  setStatus(flightStatus,'Buscando vuelos de ida y vuelta…',false,true);
   try{
    const result=await callApi({origin:airport,destination:params.destination,departure:out,returnDate:ret,
     trip:'roundtrip',adults,children,cabin:'economy'});
@@ -597,7 +629,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
      (()=>{const land=String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10);
        return dateOK(land)&&ret>=addDays(land,params.nights)})()).slice(0,30);
    setStatus(flightStatus,state.offers.length?
-    state.offers.length+' combinaciones encontradas. Tarifas combinadas de ida y vuelta por persona; el importe no se cobra dos veces. Elige la ida.':
+    'Encontramos '+state.offers.length+' '+(state.offers.length===1?'opción de vuelo':'opciones de vuelos')+'. Los precios mostrados incluyen ida y vuelta. Elige tu vuelo de ida.':
     'No encontramos vuelos compatibles con las fechas y la duración de este paquete.',!state.offers.length);
    renderFlightOffers();
   }catch(err){toggleFlightEditor(true);setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
@@ -697,7 +729,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  if(!document.querySelector('.product-booking-card [data-book-kind="package"]'))return;
  const activeScript=document.currentScript?.src||document.querySelector('script[src*="package-product-20261108.js"]')?.src||location.href;
  const controls=document.createElement('script');
- controls.src=new URL('latam-product-controls.js?v=20261109-product-controls-fix',activeScript).href;
+ controls.src=new URL('latam-product-controls.js?v=20261109-product-final-1',activeScript).href;
  controls.onload=()=>{if(window.LatamProductControls)startWhenReady();else console.error('[LATAM] Controles de viajeros y calendario no disponibles.');};
  controls.onerror=()=>console.error('[LATAM] No se pudo cargar latam-product-controls.js.');
  document.head.append(controls);

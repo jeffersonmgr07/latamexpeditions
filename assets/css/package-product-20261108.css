@@ -198,7 +198,7 @@
  background:#f9fcfa;margin:0 0 14px}
 .lx-flight-search-panel .lx-package-modal-fields{margin-bottom:12px}
 .lx-flight-modal-bottom{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px}
-.lx-flight-modal-bottom strong{text-align:right;font-size:13px;color:#236a43}
+.lx-flight-modal-bottom #lxFlightConfirmedTotal{text-align:right;font-size:13px;color:#236a43}
 .lx-flight-modal-bottom .lx-flight-back{background:#fff;color:#147943;border:1px solid #b4d7c1}
 .lx-flight-choice[aria-pressed="true"]{outline-offset:1px}
 .lx-hotel-live-card:hover,.lx-flight-choice:hover,.lx-hotel-room-choice:hover{border-color:#a5cfb1}
@@ -207,7 +207,7 @@
  .lx-flight-search-context button{font-size:11px;padding:9px;white-space:nowrap}
  .lx-flight-search-context strong{font-size:12px}
  .lx-flight-modal-bottom{grid-template-columns:1fr auto}
- .lx-flight-modal-bottom strong{grid-column:1;grid-row:1;text-align:left}
+ .lx-flight-modal-bottom #lxFlightConfirmedTotal{grid-column:1/-1;grid-row:1;text-align:left;justify-content:flex-start}
  .lx-flight-modal-bottom #lxFlightBackStep{grid-column:1;grid-row:2;justify-self:start}
  .lx-flight-modal-bottom #lxFlightNextStep,
  .lx-flight-modal-bottom #lxFlightApply{grid-column:2;grid-row:2}
@@ -280,8 +280,13 @@
 .lx-date-trigger:hover,.lx-travel-trigger:hover{border-color:#07873e!important}
 .lx-date-trigger:focus-visible,.lx-travel-trigger:focus-visible,
 .lx-travel-adjust:focus-visible,.lx-date-day:focus-visible{outline:3px solid rgba(7,135,62,.35);outline-offset:2px}
-.lx-date-icon{font-size:18px;line-height:1;color:#07873e}
-.lx-travel-chevron{font-size:19px;line-height:1;color:#07873e}
+.lx-date-icon,.lx-travel-chevron{display:inline-flex;align-items:center;justify-content:center;flex:none;color:#07873e}
+.lx-date-icon svg,.lx-travel-chevron svg{display:block;width:19px;height:19px}
+.lx-travel-trigger .lx-travel-chevron{margin-left:auto;align-self:center}
+.lx-package-quick .lx-travel-popover,#lxProductFlightsModal .lx-travel-popover{
+  background:#fff;border:1px solid #d6e6dc;border-radius:16px;
+  box-shadow:0 20px 46px rgba(0,40,23,.19)
+}
 .lx-date-calendar[hidden],.lx-travel-popover[hidden],.lx-flight-search-context[hidden]{display:none!important}
 .lx-custom-date-field{position:relative}
 .lx-date-calendar,.lx-travel-popover{
@@ -349,3 +354,31 @@
  .lx-date-calendar,.lx-travel-popover{max-width:min(310px,calc(100vw - 44px))}
  .lx-package-cost-line{font-size:10.5px}
 }
+
+/* Ajustes finales del modal de vuelos, calendarios y desglose para todos los paquetes */
+#lxProductFlightsModal .lx-date-calendar.is-modal-calendar{
+ position:fixed!important;z-index:30!important;left:0;top:0;
+ max-height:calc(100dvh - 20px);overflow-y:auto;overscroll-behavior:contain;
+}
+/* El calendario se muestra sobre el modal, sin quedar recortado por el scroll. */
+#lxProductFlightsModal:has(.is-modal-calendar:not([hidden])) .lx-package-dialog{
+ min-height:min(570px,calc(100dvh - 24px));
+}
+.lx-package-status.is-loading{display:flex;align-items:center;gap:10px;color:#176b3a;font-weight:750}
+.lx-flight-spinner{display:inline-block;flex:none;width:18px;height:18px;
+ border-radius:50%;border:2.5px solid #c9e8d2;border-top-color:#07873e;
+ animation:lx-flight-spin .85s linear infinite}
+@keyframes lx-flight-spin{to{transform:rotate(360deg)}}
+.lx-flight-price-summary{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:9px;min-width:0}
+.lx-flight-price-badge{display:grid;gap:3px;text-align:left;padding:9px 12px;
+ border:1px solid #c9dece;background:#f4f9f6;border-radius:11px;min-width:0}
+.lx-flight-price-badge.is-total{background:#e9f6ed;border-color:#9ed5b2}
+.lx-flight-price-badge small{font-size:10px;font-weight:700;color:#54755f;line-height:1.35}
+.lx-flight-price-badge strong{font-size:15px;color:#0c7139;line-height:1.2;white-space:nowrap}
+.lx-flight-pax-detail{display:block;color:#658172;font-size:10.5px;font-weight:650;margin-top:2px}
+#lxProductFlightsModal .lx-package-dialog{scrollbar-gutter:stable}
+@media(max-width:670px){
+ .lx-flight-price-summary{justify-content:flex-start;gap:8px}
+ .lx-flight-price-badge{flex:1 1 165px}
+}
+@media(prefers-reduced-motion:reduce){.lx-flight-spinner{animation-duration:2s}}

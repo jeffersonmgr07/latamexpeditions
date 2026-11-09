@@ -3405,27 +3405,29 @@ body.has-pn-header .topbar { border: 0 !important; }
 }
 .lx-product-help{padding:0!important;margin:0!important;min-width:0;width:100%}
 .lx-product-help-grid{
- display:grid;grid-template-columns:minmax(0,1fr);
- gap:14px;width:100%;max-width:none;margin:0;
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:22px;width:100%;max-width:none;margin:0;
 }
 .lx-product-help-card{
  min-width:0;width:100%;box-sizing:border-box;background:#fff;border:1px solid #d8e9df;
- border-radius:20px;padding:23px 25px;
+ border-radius:20px;padding:18px 19px;
  box-shadow:0 10px 30px rgba(0,48,27,.04)
 }
 .lx-product-help-card h2{margin:0 0 10px!important;color:#17432c;font-size:18px!important;font-weight:800}
 .lx-product-help-card p{margin:0 0 20px;color:#58705f;font-size:13px;line-height:1.65}
 .lx-product-help-cta{
- display:inline-flex;align-items:center;justify-content:center;min-height:43px;
- padding:10px 18px;border:1px solid #07873e;border-radius:11px;
- color:#07873e!important;text-decoration:none!important;background:#fff;
- font-weight:800;font-size:12px;transition:background .15s ease
+ display:inline-flex;align-items:center;justify-content:center;gap:9px;
+ width:100%;box-sizing:border-box;min-height:67px;text-align:center;
+ padding:14px 12px;border:2px solid #b8c9e2;border-radius:21px;
+ color:#12261a!important;text-decoration:none!important;background:#fff!important;
+ font-weight:800;font-size:clamp(14px,1.3vw,17px);line-height:1.35;
+ transition:border-color .15s ease,background .15s ease
 }
-.lx-product-help-cta:hover{background:#e8f6ec}
-.lx-product-help-cta.lx-product-help-whatsapp{gap:9px;background:#25d366;color:#fff!important;border-color:#25d366}
-.lx-product-help-cta.lx-product-help-whatsapp:hover{background:#1dad53}
-.lx-product-help-whatsapp .fa-whatsapp{font-size:19px;line-height:1}
+.lx-product-help-cta:hover{border-color:#8ea8ce;background:#f8fbff!important}
+.lx-product-help-cta.lx-product-help-whatsapp{gap:9px;background:#fff!important;color:#12261a!important;border-color:#b8c9e2}
+.lx-product-help-cta.lx-product-help-whatsapp:hover{background:#f8fbff!important;border-color:#8ea8ce}
+.lx-product-help-whatsapp .fa-whatsapp{font-size:23px;line-height:1}
 @media(max-width:720px){
- .lx-product-help-grid{grid-template-columns:1fr;gap:12px}
+ .lx-product-help-grid{grid-template-columns:1fr;gap:14px}
  .lx-product-help-card{padding:18px}
 }
