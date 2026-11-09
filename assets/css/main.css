@@ -3385,3 +3385,7 @@ body.has-pn-header .topbar { border: 0 !important; }
  .lx-unified-hero.product-hero-clean{padding:42px 18px}
  .lx-unified-product .product-detail-section{padding:15px}
 }
+
+/* Keep the reservation overlay above the site navigation */
+.booking-modal{z-index:6500}
+.booking-modal .booking-box{isolation:isolate}
