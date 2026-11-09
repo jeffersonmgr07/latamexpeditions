@@ -770,14 +770,24 @@
         whatsapp.target='_blank';whatsapp.rel='noopener noreferrer';
       }
       const section=document.createElement('section');
-      section.className='lx-product-help section';
+      section.className='lx-product-help';
       section.setAttribute('aria-label','Atención personalizada para '+title);
       const layout=document.createElement('div');layout.className='lx-product-help-grid';
       const createCard=(heading,description,link,label)=>{
-        const card=document.createElement('article');card.className='lx-product-help-card';
+        const card=document.createElement('article');card.className='detail-card lx-product-help-card';
         const h=document.createElement('h2');h.textContent=heading;
         const p=document.createElement('p');p.textContent=description;
-        link.textContent=label;link.classList.remove('btn-outline','btn-primary');link.classList.add('lx-product-help-cta');
+        if(link===whatsapp){
+          // Conservar el icono y la identidad visual de WhatsApp al reubicar la acción.
+          const icon=link.querySelector('i.fa-whatsapp')?.cloneNode(true)||document.createElement('i');
+          icon.className='fab fa-whatsapp';icon.setAttribute('aria-hidden','true');
+          const caption=document.createElement('span');caption.textContent=label;
+          link.replaceChildren(icon,caption);
+          link.classList.add('lx-product-help-whatsapp');
+        }else{
+          link.textContent=label;link.classList.remove('btn-outline','btn-primary');
+        }
+        link.classList.add('lx-product-help-cta');
         card.append(h,p,link);return card;
       };
       layout.append(
@@ -789,8 +799,11 @@
           whatsapp,'Consultar por WhatsApp')
       );
       section.append(layout);
-      // Ubicar las consultas fuera del bloque de reserva, después de la información principal.
-      outer?.after(section);
+      // Las consultas pertenecen a la misma columna de contenido que el itinerario.
+      const important=[...content.querySelectorAll(':scope > .detail-card')].find(card=>
+        /^Informaci[oó]n importante antes de reservar\b/i.test(card.querySelector('h2')?.textContent?.trim()||''));
+      if(important)important.after(section);
+      else content.append(section);
       links.forEach(link=>{
         if(link!==custom&&link!==whatsapp){
           link.classList.remove('btn-outline','btn-primary');link.classList.add('lx-product-help-cta');
