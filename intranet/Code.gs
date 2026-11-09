@@ -98,10 +98,16 @@ function lxNormalizeProduct_(input){
     const quality=p.quality||{};
     const checks=['pricesConfirmed','hotelConfirmed','suppliersConfirmed','flightConfirmed',
       'photosLicensed','policiesApproved','datesVerified','bookingTested'];
-    const pending=checks.filter(key=>quality[key]!==true);
-    if(p.pricing.priceStatus!=='CONFIRMADA'||!p.lodging.costDoubleRoomNightUSD||
-       !p.lodging.costSingleRoomNightUSD||pending.length)
-      throw Error('No se puede aprobar todavía: falta confirmar precio doble/single y calidad operativa ('+
+    const hotelRequired=p.identity.type==='package'&&p.lodging.included!==false;
+    const flightRequired=Boolean(p.flights&&p.flights.included);
+    const pending=checks.filter(key=>{
+      if(key==='hotelConfirmed'&&!hotelRequired)return false;
+      if(key==='flightConfirmed'&&!flightRequired)return false;
+      return quality[key]!==true;
+    });
+    const missingRoomRates=hotelRequired&&(!p.lodging.costDoubleRoomNightUSD||!p.lodging.costSingleRoomNightUSD);
+    if(p.pricing.priceStatus!=='CONFIRMADA'||missingRoomRates||pending.length)
+      throw Error('No se puede aprobar todavía: faltan tarifas verificadas o control de calidad ('+
         pending.join(', ')+').');
   }
   // El primer MVP no publica directamente en GitHub: aprobación y exportación son pasos separados.
@@ -162,12 +168,13 @@ function lxPricePreview(data,count){
   const singles=adults%2,doubles=Math.floor(adults/2);
   if(!base)return {adults,status:'PENDIENTE',message:'Falta precio base por adulto, en doble.'};
   const hotel=p.lodging, nights=Number(hotel.nights)||0;
-  if(singles&&(!hotel.costDoubleRoomNightUSD||!hotel.costSingleRoomNightUSD)){
+  const roomRequired=p.identity.type==='package'&&hotel.included!==false;
+  if(roomRequired&&singles&&(!hotel.costDoubleRoomNightUSD||!hotel.costSingleRoomNightUSD)){
     return {adults,doubles,singles,status:'SINGLE_PENDIENTE',
       indicativeBase:Math.round(adults*base*100)/100,
       message:'Se necesita una cotización doble y una individual del mismo hotel/fechas. No mostrar precio final todavía.'};
   }
-  const supplement=singles?Math.max(0,Math.round((hotel.costSingleRoomNightUSD-hotel.costDoubleRoomNightUSD/2)*nights*100)/100):0;
+  const supplement=roomRequired&&singles?Math.max(0,Math.round((hotel.costSingleRoomNightUSD-hotel.costDoubleRoomNightUSD/2)*nights*100)/100):0;
   const total=Math.round((adults*base+supplement)*100)/100;
   const valid=Boolean(p.pricing.priceStatus==='CONFIRMADA'&&p.quality&&p.quality.pricesConfirmed&&p.quality.hotelConfirmed);
   return {adults,doubles,singles,basePerPerson:base,supplement,total,
