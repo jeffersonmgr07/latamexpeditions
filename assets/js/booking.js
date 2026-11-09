@@ -1592,7 +1592,7 @@
       const isDial=select.id==='bkPhoneDial';
       const items=[...select.options].map((option,index)=>{
         const phone=isDial?PHONE_COUNTRIES[index]:null;
-        return {value:option.value,label:phone?phone[0]:option.textContent.trim(),
+        return {index,value:option.value,label:phone?phone[0]:option.textContent.trim(),
           dial:phone?phone[1]:'',iso:phone?phone[2]:'',disabled:option.disabled};
       });
       const wrap=document.createElement('div');wrap.className='lx-custom-select';
@@ -1615,7 +1615,7 @@
         img.alt='';img.loading='lazy';return img;
       };
       const display=()=>{
-        const item=items.find(x=>x.value===select.value)||items[0];
+        const item=items[select.selectedIndex]||items[0];
         value.replaceChildren();
         const summary=document.createElement('span');
         summary.textContent=isDial?(item?.dial||'Código'):item?.label||'Seleccionar';
@@ -1629,13 +1629,13 @@
           .forEach(item=>{
             const option=document.createElement('button');option.type='button';
             option.className='lx-select-item';option.setAttribute('role','option');
-            option.setAttribute('aria-selected',String(item.value===select.value));
+            option.setAttribute('aria-selected',String(item.index===select.selectedIndex));
             if(isDial&&item.iso)option.append(flag(item.iso));
             const label=document.createElement('span');
             label.textContent=isDial?item.dial+' · '+item.label:item.label;
             option.append(label);
             option.addEventListener('click',()=>{
-              select.value=item.value;select.dispatchEvent(new Event('change',{bubbles:true}));
+              select.selectedIndex=item.index;select.dispatchEvent(new Event('change',{bubbles:true}));
               display();closeAll();button.focus();
             });
             optionsWrap.append(option);
