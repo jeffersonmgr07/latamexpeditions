@@ -38,7 +38,7 @@ Estado: **MVP implementado en repositorio, NO desplegado en Google**. Este módu
 - **Categoría:** 4★, habitación Andina matrimonial/twin sujeta a disponibilidad.
 - **Fechas piloto:** 22–26/03/2027 (4 noches). Necesitamos cotización oficial para 2 adultos en doble/matrimonial, desayuno e impuestos y otra para una persona sola.
 - **Política de menores:** Terrantai admite desde 14 años, pero este programa piloto es 18+ hasta que se revisen excursiones y tarifas.
-- **Precio referencial anterior:** USD 1,449.50 por adulto sobre base de dos, USD 2,899 por la pareja. **NO es precio confirmado con Terrantai** y no se puede publicar ni cobrar.
+- **Precio preliminar:** consta únicamente en la ficha Word original; introducirlo en Google Sheets privado cuando se despliegue la consola. No es un precio confirmado con Terrantai ni debe aparecer en el sitio o checkout.
 - Para fechas distintas de la piloto, volver a confirmar costos aéreos, hotel, transfers y excursiones.
 
 ## Fórmula del simulador (paquetes basados en doble)
