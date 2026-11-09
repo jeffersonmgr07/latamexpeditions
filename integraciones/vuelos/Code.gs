@@ -481,7 +481,7 @@ function searchBundleHotels_(p) {
   }
   var key=PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
   if(!key)return {ok:false,message:"Google Hotels requiere la propiedad SERPAPI_KEY en Apps Script."};
-  var ck="hotels_"+Utilities.base64EncodeWebSafe(
+  var ck="hotels_v2_"+Utilities.base64EncodeWebSafe(
     Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
       [destination,checkin,checkout,adults,children,ages.join(","),baselineHotel].join("|"))).slice(0,50);
   var cache=CacheService.getScriptCache(),stored=cache.get(ck);
