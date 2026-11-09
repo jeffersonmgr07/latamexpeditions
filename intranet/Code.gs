@@ -94,6 +94,16 @@ function lxNormalizeProduct_(input){
     d.activities.forEach(a=>{a.time=lxClean_(a.time,25);a.activity=lxClean_(a.activity,160);a.detail=lxClean_(a.detail,600);});
   });
   p.status=LXADMIN_STATES.indexOf(p.status)>=0?p.status:'BORRADOR';
+  if(p.status==='APROBADO'){
+    const quality=p.quality||{};
+    const checks=['pricesConfirmed','hotelConfirmed','suppliersConfirmed','flightConfirmed',
+      'photosLicensed','policiesApproved','datesVerified','bookingTested'];
+    const pending=checks.filter(key=>quality[key]!==true);
+    if(p.pricing.priceStatus!=='CONFIRMADA'||!p.lodging.costDoubleRoomNightUSD||
+       !p.lodging.costSingleRoomNightUSD||pending.length)
+      throw Error('No se puede aprobar todavía: falta confirmar precio doble/single y calidad operativa ('+
+        pending.join(', ')+').');
+  }
   // El primer MVP no publica directamente en GitHub: aprobación y exportación son pasos separados.
   p.public=false;p.approved=p.status==='APROBADO';
   p.schemaVersion=1;
