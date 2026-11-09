@@ -773,7 +773,8 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
       hotelsPendingName=h.name;
       hotelsPendingSelection={name:h.name,stayTotal:Math.round(stay*100)/100,
         supplement:difference,baselineTotal:budget,nights,nightlyRate:rate,
-        checkIn:state.date,checkOut:addDays(state.date,nights),priceSource:'Google Hotels via SerpApi'};
+        checkIn:state.date,checkOut:addDays(state.date,nights),
+        adults:state.adults,children:state.children,priceSource:'Google Hotels via SerpApi'};
       list.querySelectorAll('.lx-package-offer').forEach(x=>x.classList.remove('is-selected'));
       card.classList.add('is-selected');renderHotelCards();showTierQuote();
     });
