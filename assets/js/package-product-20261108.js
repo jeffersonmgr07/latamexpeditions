@@ -689,12 +689,16 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   u.searchParams.set('adults',String(state.adults));u.searchParams.set('children',String(state.children));}
  };
  // Algunas fichas incluyen este archivo directamente; cargar los controles ANTES de iniciar la UI.
- if(window.LatamProductControls){startProductUI();return;}
+ const startWhenReady=()=>{
+   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',startProductUI,{once:true});
+   else startProductUI();
+ };
+ if(window.LatamProductControls){startWhenReady();return;}
  if(!document.querySelector('.product-booking-card [data-book-kind="package"]'))return;
  const activeScript=document.currentScript?.src||document.querySelector('script[src*="package-product-20261108.js"]')?.src||location.href;
  const controls=document.createElement('script');
  controls.src=new URL('latam-product-controls.js?v=20261109-product-controls-fix',activeScript).href;
- controls.onload=()=>{if(window.LatamProductControls)startProductUI();else console.error('[LATAM] Controles de viajeros y calendario no disponibles.');};
+ controls.onload=()=>{if(window.LatamProductControls)startWhenReady();else console.error('[LATAM] Controles de viajeros y calendario no disponibles.');};
  controls.onerror=()=>console.error('[LATAM] No se pudo cargar latam-product-controls.js.');
  document.head.append(controls);
 })();
