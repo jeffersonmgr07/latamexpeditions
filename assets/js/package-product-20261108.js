@@ -792,7 +792,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    const result=await callApi({mode:'hotels',destination:params.destinationPlace,
     check_in_date:state.date,check_out_date:addDays(state.date,params.nights),
     adults:state.adults,children:state.children,children_ages:ages.join(','),
-    baseline_hotel:String((currentTier()?.hotels||[])[0]||'')});
+    baseline_hotel:String(((tiers.find(t=>t.code===$('lxHotelTier').value)||currentTier())?.hotels||[])[0]||'')});
    if(requestedRevision!==quoteRevision)return;
    if(!result?.ok)throw Error(result?.message||'No hay opciones para estas fechas.');
    const list=$('lxHotelLookupOptions');list.replaceChildren();
@@ -811,7 +811,8 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
      Math.round(Number(comparableOption.nightlyRate)*nights*100)/100:0):0;
    const providerBaseline=(referenceTotal>0&&(!referenceName||
      normalizeHotelName(referenceName)===normalizeHotelName(includedName)))?referenceTotal:comparableTotal;
-   const configuredBudget=Number(quotedTier?.hotelBudgetPerNight||book.dataset.bookHotelBudgetNightly)||0;
+   const configuredBudget=Number(quotedTier?.hotelBudgetPerNight||
+     (quotedTier?.code===firstTier?.code?book.dataset.bookHotelBudgetNightly:0))||0;
    const budget=hasHotelIncluded?(configuredBudget>0?Math.round(configuredBudget*nights*100)/100:
      providerBaseline>0?providerBaseline:null):0;
    setStatus(hotelStatus,'Tarifas observadas para '+nights+' noches. La disponibilidad y habitación definitiva se verifican al reservar.');
