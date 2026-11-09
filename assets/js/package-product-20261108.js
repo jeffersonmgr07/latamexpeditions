@@ -454,7 +454,7 @@ function showTierQuote(){
  body.append(brand,route);
  const cost=el('span','lx-flight-choice-price');
  cost.append(el('strong','',fmt(hasLegFare?legFare:perPerson)),
-  el('small','',hasLegFare?(phase==='outbound'?'Ida · por persona':'Regreso · por persona'):'Ida y vuelta · por persona'));
+  el('small','',hasLegFare?(phase==='outbound'?'Ida · por persona':'Regreso · por persona'):'Ida y vuelta · promedio por viajero'));
  select.append(body,cost);select.addEventListener('click',action);card.append(select);
  if(nStops){
   const details=el('details','lx-flight-layovers'),summary=el('summary','','Ver '+nStops+' escala(s) y conexiones');
@@ -504,7 +504,7 @@ function showTierQuote(){
   });
   apply.disabled=!state.choice;
   const amount=state.choice?Math.round(Number(state.choice.price)*(1+flightMarkup(state.choice.departure))*100)/100:0;
-  $('lxFlightConfirmedTotal').textContent=state.choice?fmt(amount)+' total · '+fmt(amount/Math.max(1,state.adults+state.children))+' por persona (ida y vuelta)':'Selecciona un vuelo de regreso';
+  $('lxFlightConfirmedTotal').textContent=state.choice?fmt(amount)+' total · '+fmt(amount/Math.max(1,state.adults+state.children))+' promedio por viajero (ida y vuelta)':'Selecciona un vuelo de regreso';
  }
 }
 $('lxFlightNextStep').addEventListener('click',()=>{
