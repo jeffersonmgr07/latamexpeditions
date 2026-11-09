@@ -1123,7 +1123,7 @@
     date: '', departureTime: PRODUCT.departures[0] || '', adults: 2, children: 0,
     travelers: 2, tier: PRODUCT.tiers[0]?.code || null, occupancy: 'double',
     holder: {}, passengers: [], adultUnit: PRODUCT.price, childUnit: round2(PRODUCT.price * PRODUCT.childFactor),
-    total: 0, due: 0, mode: 'deposito', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', roomPlan: '', hotelQuotePending: false
+    total: 0, due: 0, mode: 'deposito', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', hotelAlternative: null, hotelSupplement: 0, roomPlan: '', hotelQuotePending: false
   };
 
   // El punto de recojo de experiencias se indica ahora en la ficha y no en el modal.
@@ -1230,6 +1230,14 @@
     state.travelers = state.adults + state.children;
     state.adultUnit = round2(selectedAdultPrice());
     state.childUnit = round2(state.adultUnit * PRODUCT.childFactor);
+    // Una oferta hotelera solo es válida para las mismas fechas y la misma ocupación.
+    if(state.customHotel&&state.hotelAlternative&&(
+      state.hotelAlternative.checkIn!==state.date||
+      Number(state.hotelAlternative.adults)!==state.adults||
+      Number(state.hotelAlternative.children)!==state.children)){
+      state.customHotel='';state.hotelAlternative=null;state.hotelSupplement=0;
+      state.roomPlan='';
+    }
     // Los vuelos solo se incorporan como cotización no cobrada; nunca como tarifa aérea confirmada.
     const validFlight = state.flightQuote && state.date &&
       state.flightQuote.adults === state.adults &&
@@ -1237,7 +1245,8 @@
       state.flightQuote.arrival === state.date;
     if (!validFlight) state.flightQuote = null;
     state.total = round2(state.adults * state.adultUnit + state.children * state.childUnit +
-      (validFlight ? Number(state.flightQuote.displayedPrice || 0) : 0));
+      (validFlight ? Number(state.flightQuote.displayedPrice || 0) : 0) +
+      (state.customHotel ? Number(state.hotelSupplement||0) : 0));
     const charge = calculateCharge(state.total);
     state.due = charge.due;
     state.mode = charge.mode;
@@ -1278,7 +1287,8 @@
     badge.textContent = english ? (tier.starsEn || tier.stars || 'Hotel') : (tier.stars || 'Hotel');
     name.textContent = selectedName;
     caption.textContent = state.customHotel ?
-      (english ? 'Alternative hotel requested. Price pending.' : 'Hotel alternativo solicitado; suplemento pendiente.') :
+      (english ? 'Alternative hotel selected. Additional '+money(state.hotelSupplement)+'.' :
+        'Hotel alternativo seleccionado · adicional '+money(state.hotelSupplement)) :
       noAccommodation ? (english ? 'This option does not include a hotel night.' : 'Esta opción no incluye noche de hotel.') :
       (english ? 'Photo of the planned accommodation.' : 'Imagen del hotel previsto.');
 
@@ -1525,7 +1535,10 @@
         '. Sujeto a confirmación antes del pago.';
     }
     if(state.customHotel)state.holder.notes+=(state.holder.notes?'\n':'')+
-      'Solicita hotel alternativo: '+state.customHotel+' (suplemento por confirmar).';
+      'Hotel alternativo seleccionado: '+state.customHotel+'; suplemento ofrecido '+money(state.hotelSupplement)+
+      (state.hotelAlternative?' (estancia '+money(state.hotelAlternative.stayTotal)+
+        ', '+state.hotelAlternative.nights+' noches, tarifa observada Google Hotels)':'')+
+      '. Verificar disponibilidad antes de la confirmación.';
     if(state.roomPlan)state.holder.notes+=(state.holder.notes?'\n':'')+
       'Distribución de habitaciones: '+state.roomPlan+(state.hotelQuotePending?' (precio pendiente, no cobrar automáticamente).':'.');
     recalculate();
@@ -1681,7 +1694,7 @@
       const details = [];
       if (state.flightQuote) details.push('Vuelos ida y regreso · '+money(state.flightQuote.displayedPrice)+
         (state.flightQuote.baggage === 'checked' ? ' · maleta facturada por cotizar' : ''));
-      if (state.customHotel) details.push('Hotel alternativo: '+state.customHotel+' · suplemento por confirmar');
+      if (state.customHotel) details.push('Hotel alternativo: '+state.customHotel+' · adicional '+money(state.hotelSupplement));
       if (state.roomPlan) details.push('Acomodación: '+state.roomPlan+(state.hotelQuotePending?' · suplemento por confirmar':''));
       addonSummary.textContent = details.join('  |  ');
       addonSummary.hidden = !details.length;
@@ -1761,6 +1774,8 @@
         displayedPrice: state.flightQuote.displayedPrice, baggage: state.flightQuote.baggage
       } : null,
       alternateHotel: state.customHotel || '',
+      alternateHotelSupplement: state.customHotel ? state.hotelSupplement : 0,
+      alternateHotelDetails: state.customHotel&&state.hotelAlternative?{...state.hotelAlternative}:null,
       language: document.documentElement.lang || 'es'
     };
   }
@@ -2209,6 +2224,14 @@
         state.occupancy=source.occupancy;if($('#bkOccupancy'))$('#bkOccupancy').value=state.occupancy;
       }
       state.customHotel=String(source.customHotel||'').slice(0,100);
+      const alternative=source.hotelAlternative;
+      const hasRate=state.customHotel&&alternative&&alternative.name===state.customHotel&&
+        Number.isFinite(Number(alternative.stayTotal))&&Number(alternative.stayTotal)>0&&
+        Number.isFinite(Number(alternative.supplement))&&Number(alternative.supplement)>=0&&
+        alternative.checkIn===date&&Number(alternative.adults)===state.adults&&
+        Number(alternative.children)===state.children&&alternative.nights>0;
+      state.hotelAlternative=hasRate?{...alternative}:null;
+      state.hotelSupplement=hasRate?round2(Number(alternative.supplement)):0;
       state.roomPlan=String(source.roomPlan||'').slice(0,120);
       state.hotelQuotePending=Boolean(source.hotelQuotePending);
       const flight=source.flight;
@@ -2235,7 +2258,7 @@
           state.flightQuote?'Vuelos seleccionados desde '+state.flightQuote.origin:'Vuelos no añadidos'];
         const estimated=Number(source.totalEstimate);
         if(Number.isFinite(estimated)&&estimated>0)
-          extras.push((state.hotelQuotePending?'Total desde ':'Total referencial ')+money(estimated));
+          extras.push('Total por reserva '+money(estimated));
         $('#bkPackageSelectionDetail').textContent=extras.filter(Boolean).join(' · ');
       }
       return dateValid&&paxValid;
@@ -2284,7 +2307,7 @@
     ['#bkAdults','#bkChildren','#bkTier','#bkOccupancy'].forEach((selector) => $(selector)?.addEventListener('change', () => {
       const hasChangedHotel = state.tier !== ($('#bkTier')?.value || state.tier) ||
         state.occupancy !== ($('#bkOccupancy')?.value || state.occupancy);
-      if(hasChangedHotel)state.customHotel='';
+      if(hasChangedHotel){state.customHotel='';state.hotelAlternative=null;state.hotelSupplement=0;}
       state.adults = Number($('#bkAdults').value); state.children = Number($('#bkChildren').value);
       state.tier = $('#bkTier')?.value || state.tier; state.occupancy = $('#bkOccupancy')?.value || state.occupancy; recalculate(); refreshCounters();
     }));
