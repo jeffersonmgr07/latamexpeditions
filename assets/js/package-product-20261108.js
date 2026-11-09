@@ -238,6 +238,7 @@ function toggleFlightEditor(open){
  flights.body.querySelector('.lx-flight-search-context').hidden=open;
  flights.body.querySelector('.lx-flight-modal-bottom').hidden=open;
  if(open){
+   setStatus(flightStatus,'');
    $('lxFlightDepartures').hidden=true;$('lxFlightReturns').hidden=true;
  }else if(state.offers.length){
    renderFlightOffers();
@@ -585,12 +586,12 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
      Number(o.price)>0&&o.outbound?.segments?.length&&o.inbound?.segments?.length&&
      o.departure===out&&o.returnDate===ret&&Number(o.partyAdults)===adults&&Number(o.partyChildren)===children&&
      (()=>{const land=String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10);
-       return !dateOK(land)||ret>=addDays(land,params.nights)})()).slice(0,30);
+       return dateOK(land)&&ret>=addDays(land,params.nights)})()).slice(0,30);
    setStatus(flightStatus,state.offers.length?
     state.offers.length+' combinaciones encontradas. Tarifas combinadas de ida y vuelta por persona; el importe no se cobra dos veces. Elige la ida.':
     'No encontramos vuelos compatibles con las fechas y la duración de este paquete.',!state.offers.length);
    renderFlightOffers();
-  }catch(err){setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
+  }catch(err){toggleFlightEditor(true);setStatus(flightStatus,err?.message||'No se pudieron consultar vuelos.',true)}
   finally{$('lxProductSearchFlights').disabled=false}
  });
  $('lxFlightApply').addEventListener('click',()=>{
