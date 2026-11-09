@@ -134,21 +134,24 @@
  }
  const flights=modal('lxProductFlightsModal','Elige tus vuelos');
  flights.body.innerHTML=
- '<div class="lx-flight-search-context"><div class="lx-flight-context-heading"><small>Itinerario de vuelos</small><div id="lxFlightSearchSummary" class="lx-flight-search-summary" role="group" aria-label="Resumen del itinerario de vuelos">Preparando búsqueda…</div></div>'+
+ '<div class="lx-flight-search-context"><div class="lx-flight-context-heading"><small>Itinerario de vuelos</small><div id="lxFlightSearchSummary" class="lx-flight-search-summary" role="group" aria-label="Resumen de vuelos">Preparando búsqueda…</div></div>'+
  '<button type="button" id="lxFlightEditBtn" aria-expanded="false" aria-controls="lxFlightSearchPanel">Editar búsqueda</button></div>'+
  '<div id="lxFlightSearchPanel" class="lx-flight-search-panel" hidden><div class="lx-package-modal-fields">'+
  '<label>Salida desde<select id="lxFlightOrigin">'+
  ['LIM|Lima','BOG|Bogotá','CUZ|Cusco','MDE|Medellín','CLO|Cali','CTG|Cartagena',
- 'AQP|Arequipa','EZE|Buenos Aires','AEP|Buenos Aires (Aeroparque)','GIG|Río de Janeiro','SCL|Santiago','MEX|Ciudad de México',
- 'UIO|Quito','GRU|São Paulo','PTY|Ciudad de Panamá','MIA|Miami','CCS|Caracas'].map(s=>{
- const [code,label]=s.split('|');return '<option value="'+code+'">'+label+' ('+code+')</option>';
+  'AQP|Arequipa','EZE|Buenos Aires','AEP|Buenos Aires (Aeroparque)','GIG|Río de Janeiro',
+  'PUQ|Punta Arenas','SCL|Santiago','MEX|Ciudad de México','UIO|Quito',
+  'GRU|São Paulo','PTY|Ciudad de Panamá','MIA|Miami','CCS|Caracas'].map(s=>{
+  const [code,label]=s.split('|');return '<option value="'+code+'">'+label+' ('+code+')</option>';
  }).join('')+'</select></label>'+
- '<label>Llegada al destino<input type="date" id="lxFlightArrival"></label>'+
- '<label>Salida de origen<input type="date" id="lxFlightDeparture"></label>'+
- '<label>Regreso<input type="date" id="lxFlightReturn"></label>'+
- '<label>Adultos<select id="lxFlightAdults">'+Array.from({length:9},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'</option>').join('')+'</select></label>'+
- '<label>Niños<select id="lxFlightChildren">'+Array.from({length:7},(_,i)=>'<option value="'+i+'">'+i+'</option>').join('')+'</select></label>'+
- '</div><button type="button" class="lx-package-search" id="lxProductSearchFlights">Actualizar resultados</button></div>'+
+ '<label>Vuelo de ida<input type="date" id="lxFlightDeparture"></label>'+
+ '<label>Vuelo de regreso<input type="date" id="lxFlightReturn"></label>'+
+ '<input type="hidden" id="lxFlightArrival"><input type="hidden" id="lxFlightAdults"><input type="hidden" id="lxFlightChildren">'+
+ '<div class="lx-travel-field"><label for="lxFlightTravelers">Viajeros</label>'+
+ '<button type="button" id="lxFlightTravelers" class="lx-travel-trigger">2 viajeros</button></div>'+
+ '</div><div class="lx-flight-editor-actions">'+
+ '<button type="button" class="lx-package-search" id="lxProductSearchFlights">Realizar búsqueda</button>'+
+ '<button type="button" class="lx-search-cancel" id="lxFlightCancelEdit">Cancelar</button></div></div>'+
  '<div id="lxFlightSearchStatus" role="status" class="lx-package-status" aria-live="polite"></div>'+
  '<div id="lxFlightDepartures" class="lx-package-offers"></div><div id="lxFlightReturns" class="lx-package-offers" hidden></div>'+
  '<label class="lx-baggage-select" id="lxFlightBaggageRow" hidden><input type="checkbox" id="lxFlightCheckedBag"> Añadir equipaje facturado (tarifa por confirmar)</label>'+
