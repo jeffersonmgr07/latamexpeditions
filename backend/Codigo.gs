@@ -1785,41 +1785,80 @@ function registrarError(error, contexto) {
 
 /** Registra una solicitud sin cobrar. Nunca la presenta como pagada. */
 function registrarPagoEnTour(data) {
-  if (data.paymentMethod !== 'pay_on_tour') throw new Error('Forma de pago no válida.');
-  const calc = validarYCalcular(data);
-  const key = textoPlano(data.requestKey, 80);
-  if (!/^[a-zA-Z0-9]{16,80}$/.test(key)) throw new Error('Identificador de reserva inválido.');
-  const hoja = hojaReservas();
-  const valores = hoja.getDataRange().getValues();
-  for (let i = 1; i < valores.length; i++) {
-    if (String(valores[i][17]) === 'CASH:' + key) return { ok:true, bookingCode:String(valores[i][1]), balance:Number(valores[i][11]), paymentStatus:'pending' };
-  }
-  const code = generarCodigo();
-  const address = textoPlano(data.pickupAddress, 400);
-  const holder = data.holder || {};
-  const viajeros = (data.passengers || []).map(function (x) {
-    return textoPlano(x.name,120) + ' (' + textoPlano(x.docType,50) + ' ' + textoPlano(x.docNumber,50) + ')';
-  }).join(' | ');
-  // Guardar antes de enviar emails, para que el registro sea auditable.
-  hoja.appendRow([new Date(),code,'PENDIENTE DE CONFIRMACIÓN',textoHoja(data.title),textoPlano(data.slug,100),textoPlano(data.tier,50),data.date,
-    data.travelers,calc.precio,calc.total,0,calc.total,'pay_on_tour',textoHoja(holder.email),textoHoja(holder.phone),textoHoja(holder.notes),textoHoja(viajeros),
-    'CASH:'+key,'','',textoHoja(data.departureTime),'pending_validation',textoHoja(address),'pay_on_tour','pending']);
-  const mensaje = [
-    'NUEVA SOLICITUD DE RESERVA — NO PAGADA', 'Código: '+code,'Tour: '+data.title,'Fecha: '+data.date,
-    'Viajeros: '+data.travelers,'Importe referencial: USD '+calc.total,'PAGO: EFECTIVO AL INICIAR EL TOUR (PENDIENTE)',
-    'Titular: '+(data.passengers[0]||{}).name,'Correo: '+holder.email,'WhatsApp: '+holder.phone,
-    'Recojo: '+(address||'No indicado'),'Estado de recojo: PENDIENTE DE VALIDACIÓN',
-    'Comentarios: '+(holder.notes||''),'Pasajeros: '+viajeros
-  ].join('\n');
+  // No se realizan cobros: registra una solicitud para emisión y confirmación manual.
+  const lock=LockService.getScriptLock();
+  lock.waitLock(30000);
   try {
-    MailApp.sendEmail({to:'contact@latamexpeditions.com', subject:'[Solicitud SIN PAGO] '+code+' · '+data.title, body:mensaje, name:'Latam Expeditions'});
-    MailApp.sendEmail({to:holder.email, subject:'Solicitud recibida · '+code+' · Latam Expeditions', body:'Hemos recibido tu solicitud para '+data.title+' el '+data.date+'.\nCódigo: '+code+'\nPago pendiente en efectivo al iniciar el tour.\nRevisaremos la dirección de recojo y te confirmaremos el horario o punto de encuentro.\nLa disponibilidad todavía no está confirmada.', name:'Latam Expeditions'});
-  } catch(e) {
-    registrarError(e, 'Correo pendiente para reserva '+code);
-    // La reserva ya quedó registrada; comunicar el error sin afirmar envío del correo.
-    return {ok:true, bookingCode:code, balance:calc.total, paymentStatus:'pending', emailSent:false};
-  }
-  return {ok:true, bookingCode:code, balance:calc.total, paymentStatus:'pending', emailSent:true};
+    if(data.paymentMethod!=='pay_on_tour')throw Error('Forma de pago no válida.');
+    const key=textoPlano(data.requestKey,80);
+    if(!/^[A-Za-z0-9]{16,80}$/.test(key))throw Error('Identificador de reserva inválido.');
+    const hasExtras=Boolean(data.flightSelection||data.alternateHotel||data.hotelQuotePending);
+    // La tarifa dinámica enviada por la web es únicamente una estimación de solicitud.
+    // Para NO PAGADO se valida el precio BASE contra la tabla oficial del servidor.
+    const baseData=Object.assign({},data);
+    if(hasExtras){
+      delete baseData.quotedTotal;delete baseData.quotedDue;
+      delete baseData.flightSelection;delete baseData.alternateHotel;
+      delete baseData.hotelQuotePending;delete baseData.alternateHotelDetails;
+    }
+    const calc=validarYCalcular(baseData);
+    const hoja=hojaReservas();
+    const valores=hoja.getDataRange().getValues();
+    for(let i=1;i<valores.length;i++)if(String(valores[i][17])==='CASH:'+key){
+      const receipt=lxEstadoAcuse_(key);
+      return {ok:true,bookingCode:String(valores[i][1]),balance:Number(valores[i][11]),
+        paymentStatus:'pending',emailSent:receipt.emailSent===true};
+    }
+    const code=generarCodigo(),holder=data.holder||{};
+    const address=textoPlano(data.pickupAddress,400);
+    const totalCotizado=Number(data.quotedTotal);
+    const estimated=hasExtras&&Number.isFinite(totalCotizado)&&totalCotizado>=calc.total&&totalCotizado<1000000
+      ? redondear2(totalCotizado):calc.total;
+    const estado=hasExtras?'COTIZACIÓN PENDIENTE':'PENDIENTE DE CONFIRMACIÓN';
+    const viajeros=(data.passengers||[]).map(function(x){
+      return textoPlano(x.name,120)+' ('+textoPlano(x.docType,50)+' '+
+        textoPlano(x.docNumber,50)+' / '+textoPlano(x.nationality,65)+
+        ' / '+textoPlano(x.birth,12)+')';
+    }).join(' | ');
+    hoja.appendRow([new Date(),code,estado,textoHoja(data.title),
+      textoPlano(data.slug,100),textoPlano(data.tier,50),textoPlano(data.date,10),
+      Number(data.travelers)||0,calc.precio,estimated,0,estimated,
+      'pay_on_tour',textoHoja(holder.email),textoHoja(holder.phone),
+      textoHoja(holder.notes||''),textoHoja(viajeros),'CASH:'+key,'','',
+      textoHoja(data.departureTime),'pending_validation',textoHoja(address),
+      'pay_on_tour','pending']);
+    try{lxGuardarDetalle_(code,data,estado,'','',calc.total);}
+    catch(err){registrarError(err,'Detalle operativo '+code);}
+    const mensaje=[
+      'NUEVA SOLICITUD SIN PAGO · EMISIÓN MANUAL',
+      'Código: '+code,'Producto: '+textoPlano(data.title,120),
+      'Fecha: '+textoPlano(data.date,10),'Viajeros: '+data.travelers,
+      'Total base validado: USD '+calc.total.toFixed(2),
+      'Total estimado web: USD '+estimated.toFixed(2)+(hasExtras?' (PENDIENTE DE COTIZACIÓN)':''),
+      'No cobrar / no emitir sin validar proveedores.',
+      'Titular: '+textoPlano((data.passengers[0]||{}).name,120),
+      'Correo: '+textoPlano(holder.email,254),'WhatsApp: '+textoPlano(holder.phone,50),
+      'Recojo: '+(address||'No indicado'),'Comentarios: '+textoMultilinea(holder.notes,1200),
+      'PASAJEROS: '+viajeros,lxTextoOperativo_(data)
+    ].join('\n');
+    let emailSent=false;
+    try{
+      MailApp.sendEmail({to:CONFIG.notifyEmail||'contact@latamexpeditions.com',
+        subject:'[SOLICITUD · SIN PAGO] '+code+' · '+textoPlano(data.title,100),
+        body:mensaje,name:'Latam Expeditions'});
+      MailApp.sendEmail({to:holder.email,
+        subject:'Solicitud recibida · '+code+' · Latam Expeditions',
+        body:'Hemos recibido tu solicitud para '+textoPlano(data.title,120)+
+          ' el '+textoPlano(data.date,10)+'.\nCódigo: '+code+
+          '\nNO se ha realizado ningún cobro. Nuestro equipo validará vuelos, hoteles y disponibilidad antes de confirmar el servicio.\n'+
+          'La solicitud no equivale a un boleto de avión ni una reserva hotelera confirmada.',
+        name:'Latam Expeditions'});
+      emailSent=true;
+    }catch(err){registrarError(err,'Notificación de solicitud '+code);}
+    try{lxRegistrarAcuse_(key,code,emailSent,estado);}
+    catch(err){registrarError(err,'Acuse de solicitud '+code);}
+    return {ok:true,bookingCode:code,balance:estimated,paymentStatus:'pending',emailSent};
+  }finally{lock.releaseLock();}
 }
 
 /* ========================================================================== */
