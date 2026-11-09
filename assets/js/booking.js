@@ -2359,7 +2359,7 @@
       // La misma mejora visual y datos heredados se utiliza en todas las fichas de paquetes.
       if(!document.querySelector('link[href*="package-product-20261108.css"]')){
         const css=document.createElement('link');css.rel='stylesheet';
-        css.href=BASE+'assets/css/package-product-20261108.css?v=1';document.head.append(css);
+        css.href=BASE+'assets/css/package-product-20261108.css?v=20261109-pricing-calendar';document.head.append(css);
       }
       const addUI=()=>{
         if(document.querySelector('script[data-lx-package-ui]'))return;
