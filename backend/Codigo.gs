@@ -1359,7 +1359,13 @@ function lxQuoteValidateFlight_(flight,context){
 function lxQuoteValidateHotel_(data,context){
   const name=textoPlano(data.alternateHotel,110);
   if(!name)return {amount:0,details:null,name:''};
-  if(data.hotelQuotePending)throw new Error('Las tarifas adicionales necesitan confirmación. Revisa el hotel.');
+  if(data.hotelQuotePending){
+    // Solicitud NO vinculante de cambio. Se cobra el hotel BASE incluido,
+    // no se contrata ni se cobra el hotel alternativo sin tarifa firmada.
+    if(Number(data.alternateHotelSupplement||0)!==0)
+      throw new Error('No se puede cobrar un suplemento hotelero sin cotización.');
+    return {amount:0,name:'',pendingName:name,details:null};
+  }
   const item=data.alternateHotelDetails||{},q=lxVerifySignedQuote_(item.quoteToken,'hotel');
   const extra=Number(q.supplement);
   const same=q.slug===context.slug&&q.tier===context.tier&&q.occupancy===context.occupancy&&
@@ -1446,7 +1452,7 @@ function validarYCalcular(data) {
   const ctx={slug,date:fechaTexto,tier,occupancy,adults:adultos,children:ninos};
   const validatedFlight=lxQuoteValidateFlight_(data.flightSelection,ctx);
   const validatedHotel=lxQuoteValidateHotel_(data,ctx);
-  if(data.hotelQuotePending)throw new Error('Las tarifas adicionales necesitan validación antes de pagar en línea.');
+  // Si el cambio de hotel sigue pendiente, el cobro conserva el hotel base incluido.
   const total = redondear2(tarifas.adulto*adultos+tarifas.nino*ninos+
     validatedFlight.amount+validatedHotel.amount);
   const cobro = calcularCobro(total);
@@ -1486,7 +1492,8 @@ function validarYCalcular(data) {
     alternateHotel: validatedHotel.name,
     alternateHotelDetails: validatedHotel.details,
     alternateHotelSupplement: validatedHotel.amount,
-    hotelQuotePending:false,
+    hotelQuotePending:Boolean(validatedHotel.pendingName),
+    pendingHotelRequest:textoPlano(validatedHotel.pendingName||'',110),
     quotedTotal:total,
     availabilityStatus:'PENDIENTE_DE_CONFIRMACION_PROVEEDOR',
     language: textoPlano(data.language || 'es', 10)
