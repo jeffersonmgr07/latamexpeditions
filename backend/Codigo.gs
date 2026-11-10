@@ -1161,6 +1161,12 @@ function doPost(e) {
     if (action === 'googleLogin') return json(entrarConGoogle(data));
     if (action === 'logout') return json(cerrarSesion(data));
     if (action === 'myTrips') return json(misViajes(data));
+    // --- Mi Cuenta / Expedition Rewards (ExpeditionDashboard.gs) ---
+    if (action === 'dashboardHome') return json(lxRwDashboard_(data));
+    if (action === 'dashboardTrip') return json(lxRwTripDetail_(data));
+    if (action === 'dashboardSendVerification') return json(lxRwSendCode_(data));
+    if (action === 'dashboardVerifyEmail') return json(lxRwVerifyCode_(data));
+    if (action === 'dashboardReadNotification') return json(lxRwMarkRead_(data));
     if (action === 'findBooking') return json(consultarReserva(data));
     if (action === 'resendVoucher') return json(reenviarVoucher(data));
     // --- Formularios del sitio público (Formularios.gs) ---
