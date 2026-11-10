@@ -481,17 +481,25 @@ function searchBundleHotels_(p) {
   }
   var key=PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
   if(!key)return {ok:false,message:"Google Hotels requiere la propiedad SERPAPI_KEY en Apps Script."};
-  var ck="hotels_v2_"+Utilities.base64EncodeWebSafe(
+  // Paginación de hasta tres páginas: solo continuaciones generadas y almacenadas
+  // por el servidor. El navegador no puede enviar tokens arbitrarios a SerpApi.
+  var page=Number(p.page||0);
+  if(!Number.isInteger(page)||page<0||page>2)
+    return {ok:false,message:"Página de hoteles no disponible."};
+  var baseKey="hotels_v3_"+Utilities.base64EncodeWebSafe(
     Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
       [destination,checkin,checkout,adults,children,ages.join(","),baselineHotel].join("|"))).slice(0,50);
-  var cache=CacheService.getScriptCache(),stored=cache.get(ck);
+  var cache=CacheService.getScriptCache(),ck=baseKey+"_p"+page,stored=cache.get(ck);
   if(stored)return JSON.parse(stored);
+  var token=page?cache.get(baseKey+"_token"+page):null;
+  if(page&&!token)return {ok:false,message:"La búsqueda expiró. Vuelve a consultar hoteles para continuar."};
   var params={engine:"google_hotels",q:location.q,hl:"es",gl:location.gl,
     currency:"USD",check_in_date:checkin,check_out_date:checkout,
     adults:String(adults),children:String(children),api_key:key};
   if(children>0)params.children_ages=ages.join(",");
-  function fetchHotels_(query){
+  function fetchHotels_(query,nextToken){
     var queryParams=Object.assign({},params,{q:query});
+    if(nextToken)queryParams.next_page_token=nextToken;
     var url="https://serpapi.com/search.json?"+Object.keys(queryParams).map(function(k){
       return encodeURIComponent(k)+"="+encodeURIComponent(queryParams[k]);}).join("&");
     var res=UrlFetchApp.fetch(url,{muteHttpExceptions:true,followRedirects:true});
@@ -501,11 +509,14 @@ function searchBundleHotels_(p) {
     // Al buscar un hotel concreto, Google Hotels/SerpApi puede devolver
     // un objeto de propiedad directamente, sin el arreglo "properties".
     // Antes esto descartaba la tarifa del hotel incluido en el paquete.
-    if(Array.isArray(body.properties))return body.properties;
-    if(body.name && (body.total_rate || body.rate_per_night))return [body];
-    return [];
+    return {
+      properties:Array.isArray(body.properties)?body.properties:
+        body.name&&(body.total_rate||body.rate_per_night)?[body]:[],
+      nextToken:body.serpapi_pagination&&String(body.serpapi_pagination.next_page_token||'')||''
+    };
   }
-  var properties=fetchHotels_(location.q);
+  var firstResponse=fetchHotels_(location.q,token);
+  var properties=firstResponse.properties;
   function number_(obj){
     if(typeof obj==="number")return obj>0&&obj<100000?obj:null;
     if(obj&&typeof obj==="object"){
@@ -525,7 +536,13 @@ function searchBundleHotels_(p) {
     var rating=Number(h.overall_rating||h.rating||0);
     var night=number_(h.rate_per_night),stay=number_(h.total_rate);
     // SerpAPI total_rate es el total de la estancia; nunca multiplicarlo por noches.
+    var stars=Number(h.extracted_hotel_class||0);
+    if(!Number.isInteger(stars)||stars<1||stars>5){
+      var parsed=String(h.hotel_class||"").match(/(?:^|\D)([1-5])(?:\s*[- ]?star|\s*estrell)/i);
+      stars=parsed?Number(parsed[1]):null;
+    }
     return {name:String(h.name).slice(0,110),rating:rating>=1&&rating<=5?rating:null,
+      stars:stars>=1&&stars<=5?stars:null,
       thumbnail:photo_(h),nightlyRate:night,totalRate:stay||(night?Math.round(night*nights*100)/100:null),
       address:String(h.address||"").slice(0,160),source:"Google Hotels",roomsVerified:false};
   }
@@ -537,20 +554,26 @@ function searchBundleHotels_(p) {
   var filtered=properties.filter(function(h){
     return h&&h.name&&String(h.type||"hotel").toLowerCase()!=="vacation rental";
   });
-  var hotels=filtered.slice(0,12).map(toHotel_);
-  var reference=baselineHotel?exactHotel_(filtered,baselineHotel):null;
+  var hotels=filtered.slice(0,24).map(toHotel_);
+  var reference=page===0&&baselineHotel?exactHotel_(filtered,baselineHotel):null;
   // Solo una consulta adicional si el hotel incluido no aparece en el listado principal.
-  if(!reference&&baselineHotel){
-    try{reference=exactHotel_(fetchHotels_(baselineHotel+" "+destination),baselineHotel);}catch(ignore){
+  if(page===0&&!reference&&baselineHotel){
+    try{reference=exactHotel_(fetchHotels_(baselineHotel+" "+destination).properties,baselineHotel);}catch(ignore){
       console.warn("No se encontró tarifa comparable para hotel incluido.");
     }
   }
   var referenceHotel=reference?toHotel_(reference):null;
   if(referenceHotel&&!(referenceHotel.totalRate>0))referenceHotel=null;
+  var nextToken=String(firstResponse.nextToken||"");
+  var hasMore=page<2 && !!nextToken && nextToken.length<3000;
   var result={ok:true,source:"Google Hotels via SerpApi",pricesVerified:false,
     occupancyPricedForChildren:children===0||ages.length===children,
-    nights:nights,referenceHotel:referenceHotel,hotels:hotels};
-  try{cache.put(ck,JSON.stringify(result),600)}catch(ignore){}
+    nights:nights,referenceHotel:referenceHotel,hotels:hotels,
+    page:page,hasMore:hasMore,nextPage:hasMore?page+1:null};
+  try{
+    if(hasMore)cache.put(baseKey+"_token"+(page+1),nextToken,600);
+    cache.put(ck,JSON.stringify(result),600);
+  }catch(ignore){}
   return result;
 }
 function sanitizeTripBundle_(b){
