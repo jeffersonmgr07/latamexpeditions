@@ -223,7 +223,6 @@ function lxRwReadNotifications_(email) {
 function lxRwDashboard_(data) {
   var user=lxRwUser_(data),verified=lxRwIsVerified_(user);
   if(verified)lxRwAwardWelcome_(user);
-  lxRwCreditApprovedSocial_(user.email);
   var bookings=lxRwBookings_(user.email);
   lxRwSyncNotifications_(user.email,bookings,verified);
   var notices=lxRwReadNotifications_(user.email);
@@ -555,31 +554,20 @@ function lxRwSocialFor_(email){
   }
   return out;
 }
-function lxRwCreditApprovedSocial_(email){
-  var aliases=lxRwEmails_(email),rows=lxRwSocialSheet_().getDataRange().getValues();
-  var lock=LockService.getScriptLock();lock.waitLock(15000);
-  try{
-    var ledger=lxRwLedger_(),existing=ledger.getDataRange().getValues().map(function(r){return String(r[0]);});
-    for(var i=1;i<rows.length;i++){
-      var r=rows[i],network=String(r[2]||'');
-      if(aliases.indexOf(normalizarEmail(r[1]))<0||String(r[5])!=='APROBADO')continue;
-      if(!(r[4] instanceof Date)||Date.now()-r[4].getTime()<86400000)continue;
-      var key='SOCIAL:'+network+':'+email;
-      if(aliases.some(function(alias){return existing.indexOf('SOCIAL:'+network+':'+alias)>=0;}))continue;
-      ledger.appendRow([key,email,new Date(),'SOCIAL',
-        'Publicación en '+network,100,'DISPONIBLE',network]);
-      existing.push(key);
-    }
-  }finally{lock.releaseLock();}
-}
 /**
- * Función para el equipo: comprobar manualmente el enlace después de 24h,
- * y marcar APROBADO/RECHAZADO en hoja 'Acciones sociales Rewards'.
- * La acreditación sucede sin duplicados en la siguiente consulta del usuario.
+ * Moderación de publicaciones voluntarias. No se asignan puntos por publicar
+ * ni por compartir contenidos en redes. Las reglas de las plataformas prohíben
+ * diversas formas de participación incentivada.
+ * El equipo puede marcar APROBADO o RECHAZADO tras revisar el enlace.
  */
-function procesarAprobacionesLatamRewards(){
-  var rows=lxRwSocialSheet_().getDataRange().getValues(),emails={};
-  for(var i=1;i<rows.length;i++)if(String(rows[i][5])==='APROBADO')emails[normalizarEmail(rows[i][1])]=true;
-  Object.keys(emails).forEach(lxRwCreditApprovedSocial_);
-  Logger.log('Aprobaciones procesadas.');
+function revisarPublicacionesComunidadLatam(){
+  var sh=lxRwSocialSheet_(),rows=sh.getDataRange().getValues(),ready=0;
+  for(var i=1;i<rows.length;i++){
+    if(String(rows[i][5])!=='EN ESPERA')continue;
+    if(rows[i][4] instanceof Date && Date.now()-rows[i][4].getTime()>=86400000){
+      sh.getRange(i+1,6).setValue('EN REVISION');ready++;
+    }
+  }
+  Logger.log('Publicaciones listas para revisar: '+ready);
+  return ready;
 }
