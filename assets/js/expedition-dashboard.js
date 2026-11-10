@@ -280,20 +280,7 @@
         (!n.read?'<button type="button" class="exp-link" data-exp-read="'+esc(n.id)+'">Marcar leída</button>':'')+
         '</div>').join(''):empty('No tienes notificaciones nuevas','Cuando haya novedades sobre tus reservas, aparecerán aquí.',false))+'</div>';
   }
-  function profilePage() {
-    const u=state.data.user||{};
-    return heading('Mi perfil','Información y verificación de tu cuenta de viajero.')+
-      '<div class="exp-card"><h3>Información personal</h3><div class="exp-facts">'+
-      fact('Nombre y apellido',u.name||'Sin nombre')+fact('Correo electrónico',u.email||'—')+
-      fact('Teléfono',u.phone||'No registrado')+fact('Método de acceso',u.provider||'Correo')+'</div></div>'+
-      '<div class="exp-card"><h3>Verificación y bono de bienvenida</h3>'+
-      (state.legacy?notice('Para verificar tu correo necesitas publicar el nuevo módulo de Apps Script.'):
-        (state.data.verified?
-          '<div class="exp-notice"><i class="fa-solid fa-circle-check" aria-hidden="true"></i><p>Tu cuenta está verificada. Si todavía no aparece el bono, revisa los movimientos de Millas Expedition.</p></div>':
-          verificationBanner()))+'</div>'+
-      '<div class="exp-card"><h3>Seguridad</h3><p>Tu sesión está protegida por el sistema de autenticación actual. Si utilizas un equipo compartido, cierra sesión al terminar.</p>'+
-      '<button type="button" class="exp-btn exp-btn--light" data-logout>Cerrar sesión</button></div>';
-  }
+  // La vista de perfil se declara junto al resto de LATAM Rewards.
   function fact(label,value) {
     return '<div class="exp-fact"><small>'+esc(label)+'</small><strong>'+esc(value||'—')+'</strong></div>';
   }
@@ -343,7 +330,15 @@
     if(small)small.hidden=count===0;
     const name=d.user&&d.user.name?String(d.user.name):'Mi cuenta';
     $('#expSidebarName').textContent=name;
+    const tier=$('#expSidebarTier');
+    if(tier)tier.textContent=membership().name+' · LATAM Rewards';
+    const avatar=$('.exp-sidebar-avatar');
+    const source=state.avatar||d.profile?.googlePicture||d.user?.picture||'';
+    if(avatar)avatar.innerHTML=source?'<img src="'+esc(source)+'" alt="" decoding="async">':
+      '<i class="fa-solid fa-user" aria-hidden="true"></i>';
     $('#expHeading').textContent=titleFor(state.page);
+    const subtitle=$('#expHeadingSubtitle');
+    if(subtitle)subtitle.textContent=subtitleFor(state.page);
     $$('[data-exp-nav]',document).forEach(btn=>{
       if(btn.closest('.exp-side-nav')){btn.classList.toggle('is-active',btn.dataset.expNav===state.page);
         if(btn.dataset.expNav===state.page)btn.setAttribute('aria-current','page');else btn.removeAttribute('aria-current');}
@@ -395,6 +390,7 @@
           verified:null,miles:null,notifications:[]};
       }
       render();
+      loadAvatar();
     }catch(err){
       $('#expLoading').hidden=true;
       flash(err.message||'No fue posible cargar tu cuenta.',true);
@@ -465,11 +461,85 @@
       render();
     }catch(err){flash(err.message,true);btn.disabled=false;}
   }
+
+  async function loadAvatar(){
+    if(state.legacy || !state.data.profile?.hasAvatar)return;
+    try{const result=await api('dashboardGetAvatar');if(result.avatar){state.avatar=result.avatar;render();}}catch(err){}
+  }
+  async function profileSave(form,button){
+    button.disabled=true;
+    try{
+      const formData=new FormData(form);
+      const payload=Object.fromEntries(formData.entries());
+      const result=await api('dashboardSaveProfile',payload);
+      state.data.profile=result.profile;
+      state.data.user.name=result.profile.name;
+      state.data.user.phone=result.profile.phone;
+      const cached=JSON.parse(localStorage.getItem(kUser)||'{}');
+      cached.name=result.profile.name;cached.phone=result.profile.phone;
+      localStorage.setItem(kUser,JSON.stringify(cached));
+      render();flash('Tus datos se guardaron correctamente.');
+    }catch(err){flash(err.message,true);}finally{button.disabled=false;}
+  }
+  async function emailRequest(form,button){
+    button.disabled=true;
+    try{
+      const payload=Object.fromEntries(new FormData(form).entries());
+      const result=await api('dashboardRequestEmailChange',payload);
+      flash(result.message||'Revisa tu nuevo correo.');
+    }catch(err){flash(err.message,true);}finally{button.disabled=false;}
+  }
+  async function emailConfirm(form,button){
+    button.disabled=true;
+    try{
+      const result=await api('dashboardConfirmEmailChange',Object.fromEntries(new FormData(form).entries()));
+      await reload();
+      const cached=JSON.parse(localStorage.getItem(kUser)||'{}');
+      cached.email=result.email;localStorage.setItem(kUser,JSON.stringify(cached));
+      flash('Correo actualizado y verificado. Tus viajes y puntos se mantienen asociados a la cuenta.');
+    }catch(err){flash(err.message,true);}finally{button.disabled=false;}
+  }
+  async function socialSubmit(form,button){
+    button.disabled=true;
+    try{
+      const result=await api('dashboardSubmitSocial',{
+        network:form.dataset.expSocialForm,url:form.elements.postUrl.value.trim()
+      });
+      await reload();
+      flash(result.message||'Publicación enviada. Gracias por participar.');
+    }catch(err){flash(err.message,true);}finally{button.disabled=false;}
+  }
+  async function avatarUpload(file){
+    if(!file || !/^image\/(jpeg|png|webp)$/.test(file.type)){
+      flash('Selecciona una fotografía JPG, PNG o WebP.',true);return;
+    }
+    if(file.size>7*1024*1024){flash('La imagen supera el límite de 7 MB.',true);return;}
+    try{
+      const source=await new Promise((resolve,reject)=>{
+        const reader=new FileReader();reader.onload=()=>resolve(reader.result);
+        reader.onerror=reject;reader.readAsDataURL(file);
+      });
+      const img=await new Promise((resolve,reject)=>{
+        const pic=new Image();pic.onload=()=>resolve(pic);pic.onerror=reject;pic.src=source;
+      });
+      const canvas=document.createElement('canvas');canvas.width=160;canvas.height=160;
+      const ctx=canvas.getContext('2d');
+      const side=Math.min(img.width,img.height),sx=(img.width-side)/2,sy=(img.height-side)/2;
+      ctx.drawImage(img,sx,sy,side,side,0,0,160,160);
+      const jpeg=canvas.toDataURL('image/jpeg',.78).split(',')[1];
+      if(jpeg.length>108000)throw Error('Prueba con una fotografía más pequeña.');
+      const result=await api('dashboardUploadAvatar',{image:jpeg});
+      state.avatar=result.avatar;state.data.profile.hasAvatar=true;
+      render();flash('Fotografía actualizada.');
+    }catch(err){flash(err.message||'No se pudo guardar la fotografía.',true);}
+  }
   document.addEventListener('click',e=>{
     const tab=e.target.closest('[data-exp-nav]');
     if(tab && (tab.closest('.exp-app')||tab.closest('.exp-workspace'))) {
       e.preventDefault();navigate(tab.dataset.expNav);return;
     }
+    const reservationFilter=e.target.closest('[data-exp-res-filter]');
+    if(reservationFilter){state.reservationFilter=reservationFilter.dataset.expResFilter;render();return;}
     const filter=e.target.closest('[data-exp-filter]');
     if(filter){state.filter=filter.dataset.expFilter;render();return;}
     const trip=e.target.closest('[data-exp-trip]');
@@ -480,13 +550,21 @@
     if(read){markRead(read.dataset.expRead,read);return;}
   });
   document.addEventListener('submit',e=>{
-    if(e.target.id!=='expVerifyForm')return;
-    e.preventDefault();
-    const input=$('#expEmailCode');
-    if(!input || !/^\d{6}$/.test(input.value.trim())) {
-      flash('Introduce los seis dígitos del correo.',true);return;
+    const form=e.target,submit=e.submitter||form.querySelector('[type="submit"]');
+    if(form.id==='expVerifyForm'){
+      e.preventDefault();const input=$('#expEmailCode');
+      if(!input || !/^\d{6}$/.test(input.value.trim())){
+        flash('Introduce los seis dígitos del correo.',true);return;
+      }
+      verifyCode(input.value.trim(),submit);return;
     }
-    verifyCode(input.value.trim(),e.submitter||e.target.querySelector('[type="submit"]'));
+    if(form.id==='expProfileForm'){e.preventDefault();profileSave(form,submit);return;}
+    if(form.id==='expEmailRequestForm'){e.preventDefault();emailRequest(form,submit);return;}
+    if(form.id==='expEmailConfirmForm'){e.preventDefault();emailConfirm(form,submit);return;}
+    if(form.dataset.expSocialForm){e.preventDefault();socialSubmit(form,submit);}
+  });
+  document.addEventListener('change',e=>{
+    if(e.target.id==='expAvatarInput' && e.target.files?.[0])avatarUpload(e.target.files[0]);
   });
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);
   else load();
