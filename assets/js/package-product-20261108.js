@@ -52,6 +52,23 @@
  const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);return e};
  const normalizeHotelName=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const validSrc=s=>/^https:\/\/[^<>"'\s]+$/.test(s||'');
+  // Archivos locales: se activan automáticamente cuando se suben a assets/img/.
+  const hotelImages={
+    'hotel terrantai':'hotel-terrantai-01.jpg','terrantai boutique':'hotel-terrantai-01.jpg',
+    'hotel panamericano santiago':'hotel-panamericano-santiago-01.jpg',
+    'hostal la ruca':'hostal-la-ruca-01.jpg',
+    'cumbres lastarria':'cumbres-lastarria-01.jpg',
+    'hotel cumbres san pedro':'hotel-cumbres-san-pedro-01.jpg',
+    'the singular santiago':'the-singular-santiago-01.jpg',
+    'tierra atacama':'tierra-atacama-01.jpg'
+  };
+  const hotelImageUrl=name=>hotelImages[normalizeHotelName(name)]?
+    new URL((document.documentElement.dataset.base||'../')+'assets/img/'+hotelImages[normalizeHotelName(name)],location.href).href:'';
+  const hotelPhotoElement=(name,cls)=>{const src=hotelImageUrl(name);if(!src)return null;
+    const photo=el('img',cls);photo.src=src;photo.alt='Imagen de '+name;photo.loading='lazy';
+    photo.style.cssText='width:100%;height:100%;max-height:130px;object-fit:cover;border-radius:9px';
+    photo.addEventListener('error',()=>photo.remove(),{once:true});return photo;
+  };
  function currentTier(){return tiers.find(x=>x.code===state.tier)||firstTier}
  function pricePackage(){const tier=currentTier();const rate=tier?Number(tier.occupancyPrices?.[state.occupancy]??tier.pricePerPerson??params.base):params.base;
   return Math.round((state.adults*rate+state.children*rate*params.childFactor)*100)/100;
@@ -520,7 +537,12 @@ function showTierQuote(){
   if(!hasHotelIncluded&&!state.customHotel){slot.append(el('span','','Hotel no incluido'));return}
   const photo=state.hotelPhotos[normalizeHotelName(name)];
   if(validSrc(photo)){const image=el('img');image.src=photo;image.alt='Imagen de '+name;image.loading='lazy';image.referrerPolicy='no-referrer';slot.append(image)}
-  else slot.append(el('span','', 'Foto del hotel al consultar opciones'));
+  else {
+    const fallback=el('span','','Foto del hotel al consultar opciones');
+    slot.append(fallback);
+    const local=hotelPhotoElement(name,'lx-local-hotel-photo');
+    if(local){local.style.maxHeight='none';local.addEventListener('load',()=>fallback.remove(),{once:true});slot.append(local)}
+  }
  }
 
  function renderPriceBreakdown(){
@@ -579,6 +601,15 @@ function showTierQuote(){
     const santiago=$('lxSantiagoHotel'),atacama=$('lxAtacamaHotel');
     if(santiago)santiago.textContent=pair[0]||'Alojamiento por confirmar';
     if(atacama)atacama.textContent=pair[1]||'Alojamiento por confirmar';
+    for(const [element,name] of [[santiago,pair[0]],[atacama,pair[1]]]){
+      if(!element)continue;
+      const holder=element.parentElement,existing=holder.querySelector('img.lx-paired-photo');
+      if(existing?.dataset.hotel!==name)existing.remove();
+      if(!holder.querySelector('img.lx-paired-photo')&&name){
+        const photo=hotelPhotoElement(name,'lx-paired-photo');
+        if(photo){photo.dataset.hotel=name;photo.style.marginTop='10px';holder.append(photo)}
+      }
+    }
   }
 
   $('lxProductHotelCategory').textContent=state.customHotel?'Hotel seleccionado':
