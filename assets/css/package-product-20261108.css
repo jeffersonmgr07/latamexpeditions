@@ -500,3 +500,34 @@
  .lx-hotel-filters label{font-size:10.5px}
  .lx-hotel-category-line{font-size:10px!important}
 }
+
+/* Filtros LATAM: tres campos, menús propios sin dropdown nativo del sistema */
+.lx-hotel-filters{grid-template-columns:minmax(200px,1.45fr) repeat(2,minmax(150px,1fr))}
+.lx-hotel-filter-name{grid-column:auto}
+.lx-hotel-original-select{position:absolute!important;width:1px!important;height:1px!important;
+ opacity:0!important;pointer-events:none!important;clip-path:inset(50%)!important}
+.lx-hotel-custom-select{position:relative;min-width:0;width:100%}
+.lx-hotel-custom-select .lx-hotel-select-trigger{
+ width:100%;min-height:42px;display:flex;align-items:center;justify-content:space-between;
+ gap:10px;padding:10px 12px;text-align:left;background:#fff;border:1px solid #c6dcca;
+ border-radius:9px;color:#214a30;font:650 12px Inter,Arial,sans-serif;cursor:pointer;
+}
+.lx-hotel-select-trigger:focus-visible,.lx-hotel-select-option:focus-visible{outline:2px solid #07873e;outline-offset:2px}
+.lx-hotel-select-chevron{font-size:20px;color:#07873e;line-height:.6;transition:transform .18s}
+.lx-hotel-custom-select.is-open .lx-hotel-select-chevron{transform:rotate(180deg)}
+.lx-hotel-custom-select.is-open{z-index:11}
+.lx-hotel-select-options{display:none;position:absolute;top:calc(100% + 5px);left:0;right:0;
+ padding:5px;min-width:190px;max-height:245px;overflow-y:auto;background:#fff;
+ border:1px solid #c6dcca;border-radius:11px;box-shadow:0 16px 40px rgba(3,49,25,.16);z-index:12}
+.lx-hotel-custom-select.is-open .lx-hotel-select-options{display:grid;gap:2px}
+.lx-hotel-select-option{display:block;width:100%;min-height:39px;text-align:left;border:0;
+ border-radius:7px;background:transparent;color:#28543b;padding:10px 12px;cursor:pointer;font:600 12px Inter,Arial,sans-serif}
+.lx-hotel-select-option:hover,.lx-hotel-select-option.is-selected{background:#e8f6ec;color:#08743e}
+@media(max-width:700px){
+ .lx-hotel-filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lx-hotel-filter-name{grid-column:1/-1}
+}
+@media(max-width:480px){
+ .lx-hotel-custom-select .lx-hotel-select-trigger{min-height:40px;font-size:11px;padding:8px 9px}
+ .lx-hotel-select-options{min-width:145px}
+}
