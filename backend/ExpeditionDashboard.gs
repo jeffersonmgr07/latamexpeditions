@@ -438,7 +438,7 @@ function lxRwAliasInUse_(email){
 }
 function lxRwEmailChangeSheet_(){
   return lxRwSheet_('Cambios de email Expedition',
-    ['Email actual','Email nuevo','Código hash','Expira','Fecha envío','Intentos']);
+    ['Email actual','Email nuevo','Código hash','Expira','Fecha envío','Intentos','Código anterior hash']);
 }
 function lxRwEmailChangeRow_(email){
   var sh=lxRwEmailChangeSheet_(),rows=sh.getDataRange().getValues();
@@ -459,17 +459,24 @@ function lxRwRequestEmailChange_(data){
     throw Error('Espera un minuto antes de pedir otro código.');
   var rnd=Utilities.getUuid().replace(/-/g,'');
   var six=String((parseInt(rnd.slice(0,7),16)%900000)+100000);
+  var oldSix=String((parseInt(Utilities.getUuid().replace(/-/g,'').slice(0,7),16)%900000)+100000);
   var key=hashTokenSesion('EMAIL:'+user.email+':'+target+':'+six);
-  var value=[user.email,target,key,new Date(now+10*60000),new Date(),0];
-  if(rec.row)rec.sheet.getRange(rec.row,1,1,6).setValues([value]);
+  var oldKey=hashTokenSesion('EMAIL-CURRENT:'+user.email+':'+target+':'+oldSix);
+  var value=[user.email,target,key,new Date(now+10*60000),new Date(),0,oldKey];
+  if(rec.row)rec.sheet.getRange(rec.row,1,1,7).setValues([value]);
   else rec.sheet.appendRow(value);
   MailApp.sendEmail({to:target,subject:'Confirma tu nuevo correo · LATAM Rewards',
-    body:'Tu código de verificación es '+six+'. Vence en 10 minutos. No lo compartas.'});
-  return{ok:true,message:'Enviamos un código al nuevo correo.'};
+    body:'Código de verificación para tu NUEVO correo: '+six+'. Vence en 10 minutos.'});
+  MailApp.sendEmail({to:user.email,subject:'Autoriza el cambio de correo · LATAM Rewards',
+    body:'Código de seguridad para tu correo ACTUAL: '+oldSix+
+      '. Vence en 10 minutos. Si no solicitaste este cambio, ignora el mensaje y contacta soporte.'});
+  return{ok:true,message:'Enviamos un código al correo actual y otro al nuevo.'};
 }
 function lxRwConfirmEmailChange_(data){
-  var user=lxRwUser_(data),code=String(data.code||'').trim();
-  if(!/^\d{6}$/.test(code))throw Error('Introduce los seis números del código.');
+  var user=lxRwUser_(data),code=String(data.code||'').trim(),
+      currentCode=String(data.currentCode||'').trim();
+  if(!/^\d{6}$/.test(code)||!/^\d{6}$/.test(currentCode))
+    throw Error('Introduce los dos códigos de seis dígitos.');
   var lock=LockService.getScriptLock();lock.waitLock(20000);
   var to,old=user.email;
   try{
@@ -480,9 +487,11 @@ function lxRwConfirmEmailChange_(data){
       throw Error('El código ha caducado.');
     to=normalizarEmail(row[1]);
     if(buscarUsuario(to)||lxRwAliasInUse_(to))throw Error('El correo ya se encuentra registrado.');
-    if(!igualSeguro(String(row[2]),hashTokenSesion('EMAIL:'+old+':'+to+':'+code))){
+    var matchNew=igualSeguro(String(row[2]),hashTokenSesion('EMAIL:'+old+':'+to+':'+code));
+    var matchOld=igualSeguro(String(row[6]||''),hashTokenSesion('EMAIL-CURRENT:'+old+':'+to+':'+currentCode));
+    if(!matchNew||!matchOld){
       rec.sheet.getRange(rec.row,6).setValue(Number(row[5]||0)+1);
-      throw Error('El código no coincide.');
+      throw Error('Uno de los códigos no coincide.');
     }
     var verify=lxRwVerification_(to);
     var verified=[to,new Date(),'','',0,'',0];
@@ -497,7 +506,7 @@ function lxRwConfirmEmailChange_(data){
     for(var i=1;i<values.length;i++)if(normalizarEmail(values[i][1])===old)
       sessions.getRange(i+1,2).setValue(lxRwSafe_(to,254));
     hojaUsuarios().getRange(user.fila,1).setValue(lxRwSafe_(to,254));
-    rec.sheet.getRange(rec.row,3,1,4).clearContent();
+    rec.sheet.getRange(rec.row,3,1,5).clearContent();
   }finally{lock.releaseLock();}
   try{MailApp.sendEmail({to:old,subject:'Tu correo de LATAM Rewards se actualizó',
     body:'El correo asociado a tu cuenta LATAM Expeditions se actualizó a '+to+
