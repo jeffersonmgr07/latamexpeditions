@@ -83,11 +83,11 @@ function pruebaPayPalConsultarOrdenSandbox() {
   const b=lxRevisarOrdenSandbox_(id);
   const captures=((b.purchase_units||[])[0]?.payments?.captures)||[];
   const approval=(b.links||[]).find(l=>l.rel==='payer-action'||l.rel==='approve');
-  const url=approval&&/^https:\\/\\/([a-z0-9-]+\\.)*paypal\\.com\\//i.test(approval.href||'')
+  const url=approval&&String(approval.href||'').startsWith('https://www.sandbox.paypal.com/')
     ? approval.href : '';
   const report='SANDBOX ORDER '+id+' | ESTADO: '+b.status+
     ' | CAPTURAS: '+captures.map(c=>c.status+' ('+(c.amount&&c.amount.value||'')+' USD)').join(', ')+
-    (url?'\\nAPPROVAL_URL: '+url:'');
+    (url?String.fromCharCode(10)+'APPROVAL_URL: '+url:'');
   console.log(report);
   return report;
 }
