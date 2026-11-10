@@ -387,7 +387,8 @@ function renderHotelCards(){
     el('strong','',supplementLabel));
    button.addEventListener('click',()=>{
     $('lxHotelTier').value=t.code;$('lxHotelOccupancy').value=plan.code;
-    pendingRoomPlan=plan;hotelsPendingName='';hotelsPendingSelection=null;renderHotelCards();showTierQuote();
+    pendingRoomPlan=plan;hotelsPendingName='';hotelsPendingSelection=null;
+    clearHotelLookup();renderHotelCards();showTierQuote();
    });
    options.append(button);
   });
@@ -959,8 +960,8 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    });
  });
  // Al cambiar el tipo de categoría oficial se cancela la sustitución externa.
- $('lxHotelTier').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null});
- $('lxHotelOccupancy').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null});
+ $('lxHotelTier').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null;clearHotelLookup()});
+ $('lxHotelOccupancy').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null;clearHotelLookup()});
  // Para más de cuatro viajeros, no presentar como un precio listo para cobrarse.
  book.addEventListener('click',event=>{
   if(state.adults+state.children<=maxHotelOccupancy)return;
