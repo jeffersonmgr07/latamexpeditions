@@ -248,8 +248,9 @@
       '<p>Los puntos pueden aplicarse a experiencias individuales y souvenirs. Para vuelos, hoteles y paquetes se usarán cupones con condiciones específicas. Los canjes requieren disponibilidad y confirmación de LATAM Expeditions.</p>'+
       '</div></details>';
   }
-  function profileSelect(name,label,selected,options) {
-    const active=options.find(x=>x.value===selected)||options[0];
+  function profileSelect(name,label,selected,options,selectedIso) {
+    const active=options.find(x=>x.value===selected&&(!selectedIso||x.iso===selectedIso))||
+      options.find(x=>x.value===selected)||options[0];
     const render=(x)=>x.iso?
       '<span class="exp-country-choice"><img class="exp-flag" src="https://flagcdn.com/24x18/'+x.iso.toLowerCase()+'.png" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
       '<span class="exp-flag-emoji">'+esc(x.flag||'')+'</span><span>'+esc(x.text)+'</span></span>':esc(x.text);
@@ -311,8 +312,7 @@
       '<label>Fecha de nacimiento<input type="date" name="birthdate" min="1900-01-01" max="'+new Date().toISOString().slice(0,10)+'" value="'+esc(p.birthdate||'')+'"></label>'+
       '<label>Tipo de acceso<input value="'+esc(method)+'" disabled></label></div>'+
       '<h4>WhatsApp</h4><div class="exp-whatsapp-row">'+
-      '<div class="exp-custom-field">'+profileSelect('whatsappCode','País y código',selectedCountry.value,
-        countries.map(x=>Object.assign({},x,{value:x.value})))+'</div>'+
+      '<div class="exp-custom-field">'+profileSelect('whatsappCode','País y código',selectedCountry.value,countries,selectedCountry.iso)+'</div>'+
       '<label>Número de WhatsApp<input type="tel" name="whatsapp" inputmode="numeric" maxlength="15" placeholder="987654321" value="'+esc(p.whatsapp||'')+'"></label></div>'+
       '<button class="exp-btn" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar cambios</button></form></div>'+
       '<div class="exp-card"><h3>Acceso y contraseña</h3>'+
@@ -608,6 +608,70 @@
       render();flash('Fotografía actualizada.');
     }catch(err){flash(err.message||'No se pudo guardar la fotografía.',true);}
   }
+
+  function closeCustomSelects(except) {
+    $('.exp-custom-select').forEach(w=>{
+      if(w===except)return;
+      const menu=w.querySelector('.exp-custom-menu'),btn=w.querySelector('.exp-custom-trigger');
+      if(menu)menu.hidden=true;
+      if(btn)btn.setAttribute('aria-expanded','false');
+    });
+  }
+  async function copyInvitation(textValue){
+    try{
+      if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(textValue);
+      else {
+        const input=document.createElement('textarea');input.value=textValue;
+        input.style.position='fixed';input.style.opacity='0';document.body.append(input);
+        input.select();if(!document.execCommand('copy'))throw Error('No se pudo copiar.');
+        input.remove();
+      }
+      flash('Texto copiado. Puedes compartirlo con tus amigos.');
+    }catch(err){flash('No pudimos copiarlo. Selecciona el enlace y cópialo manualmente.',true);}
+  }
+  async function shareReferral(platform){
+    const link=state.data?.referrals?.link;
+    if(!link){flash('Tu enlace personal no está disponible todavía.',true);return;}
+    const message=referralText(),full=message+' '+link;
+    const go=(url)=>window.open(url,'_blank','noopener,noreferrer');
+    if(platform==='facebook'){
+      go('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(link));return;
+    }
+    if(platform==='x'){
+      go('https://twitter.com/intent/tweet?text='+encodeURIComponent(message)+'&url='+encodeURIComponent(link));return;
+    }
+    if(platform==='whatsapp'){
+      go('https://wa.me/?text='+encodeURIComponent(full));return;
+    }
+    if(navigator.share){
+      try{await navigator.share({title:'Descubre LATAM Expeditions',text:message,url:link});return;}
+      catch(err){if(err.name==='AbortError')return;}
+    }
+    await copyInvitation(full);
+    const urls={instagram:'https://www.instagram.com/',tiktok:'https://www.tiktok.com/',
+      youtube:'https://www.youtube.com/'};
+    if(urls[platform])go(urls[platform]);
+  }
+  function inquireReward(id){
+    const r=REWARD_CATALOG.find(x=>x.id===id);
+    if(!r)return;
+    const text='Hola LATAM Expeditions. Quisiera consultar disponibilidad y condiciones para canjear "'+
+      r.name+'" en '+r.place+' por '+r.points+' puntos LATAM Rewards.';
+    window.open('https://wa.me/51906472060?text='+encodeURIComponent(text),
+      '_blank','noopener,noreferrer');
+  }
+  async function changePassword(form,button){
+    const values=Object.fromEntries(new FormData(form).entries());
+    if(values.newPassword!==values.confirmPassword){
+      flash('Las contraseñas nuevas no coinciden.',true);return;
+    }
+    button.disabled=true;
+    try{
+      await api('dashboardChangePassword',values);
+      try{localStorage.removeItem(kToken);localStorage.removeItem(kUser);}catch(err){}
+      window.location.href=base+'login.html';
+    }catch(err){flash(err.message,true);button.disabled=false;}
+  }
   document.addEventListener('click',e=>{
     const logout=e.target.closest('#expPagePanels [data-logout]');
     if(logout){
@@ -617,6 +681,48 @@
         window.location.href=base+'index.html';
       });return;
     }
+    const avatarOpen=e.target.closest('[data-exp-open-avatar]');
+    if(avatarOpen){
+      e.preventDefault();
+      if(state.page!=='perfil')navigate('perfil');
+      document.querySelector('#expAvatarDialog')?.showModal();return;
+    }
+    if(e.target.closest('[data-exp-close-avatar]')){
+      document.querySelector('#expAvatarDialog')?.close();return;
+    }
+    const trigger=e.target.closest('[data-exp-select-trigger]');
+    if(trigger){
+      const wrap=trigger.closest('.exp-custom-select'),menu=wrap?.querySelector('.exp-custom-menu');
+      if(menu){const opened=!menu.hidden;closeCustomSelects(wrap);menu.hidden=opened;
+        trigger.setAttribute('aria-expanded',String(!opened));
+        if(!opened)menu.querySelector('input[type=search]')?.focus();}
+      return;
+    }
+    const option=e.target.closest('.exp-custom-option');
+    if(option){
+      const wrap=option.closest('.exp-custom-select'),name=wrap?.dataset.expSelect;
+      const hidden=wrap?.querySelector('input[name="'+name+'"]');
+      if(hidden)hidden.value=option.dataset.expValue;
+      const country=wrap?.querySelector('input[name="whatsappCountry"]');
+      if(country&&option.dataset.expIso)country.value=option.dataset.expIso;
+      const label=wrap?.querySelector('[data-exp-select-current]');
+      if(label)label.innerHTML=option.innerHTML;
+      wrap?.querySelectorAll('.exp-custom-option').forEach(x=>{
+        x.classList.toggle('is-selected',x===option);x.setAttribute('aria-selected',String(x===option));
+      });
+      closeCustomSelects();return;
+    }
+    if(!e.target.closest('.exp-custom-select'))closeCustomSelects();
+    if(e.target.closest('[data-exp-copy-ref]')){
+      copyInvitation(state.data?.referrals?.link||'');return;
+    }
+    if(e.target.closest('[data-exp-copy-message]')){
+      copyInvitation(referralText()+' '+(state.data?.referrals?.link||''));return;
+    }
+    const share=e.target.closest('[data-exp-share]');
+    if(share){shareReferral(share.dataset.expShare);return;}
+    const reward=e.target.closest('[data-exp-reward]');
+    if(reward){inquireReward(reward.dataset.expReward);return;}
     const tab=e.target.closest('[data-exp-nav]');
     if(tab && (tab.closest('.exp-app')||tab.closest('.exp-workspace'))) {
       e.preventDefault();navigate(tab.dataset.expNav);return;
@@ -642,12 +748,24 @@
       verifyCode(input.value.trim(),submit);return;
     }
     if(form.id==='expProfileForm'){e.preventDefault();profileSave(form,submit);return;}
+    if(form.id==='expChangePasswordForm'){e.preventDefault();changePassword(form,submit);return;}
     if(form.id==='expEmailRequestForm'){e.preventDefault();emailRequest(form,submit);return;}
     if(form.id==='expEmailConfirmForm'){e.preventDefault();emailConfirm(form,submit);return;}
     if(form.dataset.expSocialForm){e.preventDefault();socialSubmit(form,submit);}
   });
   document.addEventListener('change',e=>{
     if(e.target.id==='expAvatarInput' && e.target.files?.[0])avatarUpload(e.target.files[0]);
+  });
+  document.addEventListener('input',e=>{
+    const search=e.target.closest('[data-exp-select-search]');
+    if(!search)return;
+    const q=search.value.toLocaleLowerCase('es').trim();
+    search.closest('.exp-custom-menu')?.querySelectorAll('.exp-custom-option').forEach(opt=>{
+      opt.hidden=!opt.textContent.toLocaleLowerCase('es').includes(q);
+    });
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape')closeCustomSelects();
   });
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);
   else load();
