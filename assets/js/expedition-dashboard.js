@@ -49,7 +49,7 @@
   function membership() {
     const points=num(state.data?.miles?.tierPoints);
     return state.data?.membership || {
-      name:points>=10000?'Diamond':points>=7000?'Platinum':points>=3000?'Gold':'Explorer',
+      name:points>=10000?'Signature':points>=7000?'Platinum':points>=3000?'Gold':'Explorer',
       points:points,next:points>=10000?null:points>=7000?10000:points>=3000?7000:3000,
       remaining:points>=10000?0:Math.max(0,(points>=7000?10000:points>=3000?7000:3000)-points)
     };
@@ -205,32 +205,47 @@
         '<td><span class="'+(num(x.points)<0?'exp-negative':'exp-positive')+'">'+(num(x.points)>0?'+':'')+esc(x.points)+'</span></td></tr>').join('')+
       '</tbody></table></div>':empty('Aún no hay movimientos','Tus bonos y compras se reflejarán aquí.',false))+'</div>';
   }
+  const REWARD_CATALOG=[
+    {id:'cusco-bienvenida',name:'Bienvenida ancestral en Cusco',place:'Cusco, Perú',points:500,img:'assets/img/home-cusco-machu-picchu.webp'},
+    {id:'cusco-city',name:'City Tour en Cusco',place:'Cusco, Perú',points:550,img:'assets/img/peru-machu-picchu-01.jpg'},
+    {id:'machu-guia',name:'Tour guiado por Machu Picchu',place:'Machu Picchu, Perú',points:650,img:'assets/img/peru-machu-picchu-01.jpg'},
+    {id:'buenos-aires',name:'City Tour en Buenos Aires',place:'Buenos Aires, Argentina',points:600,img:'assets/img/argentina-buenos-aires-01.jpg'},
+    {id:'rio',name:'City Tour en Río de Janeiro',place:'Río de Janeiro, Brasil',points:650,img:'assets/img/brasil-rio-01.jpg'},
+    {id:'lima',name:'City Tour histórico en Lima',place:'Lima, Perú',points:500,img:'assets/img/peru-machu-picchu-01.jpg'},
+    {id:'chiva-medellin',name:'Chiva rumbera en Medellín',place:'Medellín, Colombia',points:550,img:'assets/img/colombia-experiencia-medellin-nocturno-gastronomia-rooftops.jpg'},
+    {id:'cartagena',name:'Paseo cultural en Cartagena',place:'Cartagena, Colombia',points:600,img:'assets/img/colombia-cartagena-01.jpg'}
+  ];
   function rewardsPage() {
-    const values=[
-      ['fa-map-location-dot','Experiencias','Tours Full Day, visitas de medio día, city tours, recorridos culturales y experiencias seleccionadas.'],
-      ['fa-gift','Souvenirs','Recuerdos de viaje, artesanías y productos regionales seleccionados en nuestros destinos.'],
-      ['fa-ticket','Cupones de descuento','Canjea puntos por cupones para experiencias, paquetes, vuelos y hoteles, sujetos a sus condiciones.'],
-      ['fa-star','Promociones exclusivas','Beneficios por temporadas, campañas para miembros y experiencias destacadas.']
-    ];
-    const levels=[['Explorer','0–2,999'],['Gold','3,000–6,999'],['Platinum','7,000–9,999'],['Diamond','10,000+']];
-    return '<div class="exp-rewards-grid">'+values.map(x=>
-        '<article class="exp-reward"><i class="fa-solid '+x[0]+'" aria-hidden="true"></i>'+
-        '<h3>'+x[1]+'</h3><p>'+x[2]+'</p></article>').join('')+'</div>'+
-      '<details class="exp-program-accordion"><summary><span><i class="fa-solid fa-gem" aria-hidden="true"></i> Todo sobre LATAM Rewards</span>'+
-      '<span class="exp-accordion-arrow"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span></summary>'+
-      '<div class="exp-program-body"><p>Acumula puntos con tus viajes y actividades elegibles. A mayor cantidad de puntos acreditados, mejor será tu nivel de membresía.</p>'+
+    const levels=[['Explorer','0–2,999'],['Gold','3,000–6,999'],
+      ['Platinum','7,000–9,999'],['Signature','10,000+']];
+    return '<div class="exp-rewards-section-head"><h2>Experiencias con puntos</h2>'+
+      '<p>Descubre actividades seleccionadas para solicitar mediante LATAM Rewards.</p></div>'+
+      '<div class="exp-redeem-grid">'+REWARD_CATALOG.map(x=>
+      '<article class="exp-redeem-card"><img src="'+base+esc(x.img)+'" loading="lazy" alt="'+esc(x.place)+'">'+
+      '<div class="exp-redeem-content"><span class="exp-redeem-location"><i class="fa-solid fa-location-dot"></i> '+esc(x.place)+'</span>'+
+      '<h3>'+esc(x.name)+'</h3><div class="exp-redeem-price"><strong>'+esc(x.points)+'</strong> puntos Rewards</div>'+
+      '<button type="button" class="exp-btn exp-btn--light" data-exp-reward="'+esc(x.id)+'">Consultar canje</button></div></article>').join('')+'</div>'+
+      '<div class="exp-rewards-grid">'+[
+        ['fa-map-location-dot','Experiencias','Full Days, recorridos culturales, city tours y visitas guiadas.'],
+        ['fa-gift','Souvenirs','Recuerdos de viaje, artesanías y productos regionales.'],
+        ['fa-ticket','Cupones','Descuentos para experiencias, paquetes, hoteles y vuelos, según condiciones.'],
+        ['fa-star','Beneficios exclusivos','Oportunidades especiales para miembros de LATAM Rewards.']
+      ].map(x=>'<article class="exp-reward"><i class="fa-solid '+x[0]+'"></i><h3>'+x[1]+'</h3><p>'+x[2]+'</p></article>').join('')+'</div>'+
+      '<details class="exp-program-accordion"><summary><span><i class="fa-solid fa-gem" aria-hidden="true"></i>'+
+      ' Todo sobre LATAM Rewards</span><span class="exp-accordion-arrow"><i class="fa-solid fa-chevron-down"></i></span></summary>'+
+      '<div class="exp-program-body"><p>Tu programa de beneficios para descubrir más de Latinoamérica. Acumula puntos y asciende de nivel con tus viajes.</p>'+
       '<div class="exp-program-how">'+
-      '<article><i class="fa-solid fa-user-check"></i><strong>100 puntos</strong><span>Al verificar tu cuenta por primera vez</span></article>'+
-      '<article><i class="fa-solid fa-credit-card"></i><strong>1 punto / US$10</strong><span>En experiencias, paquetes, vuelos y hoteles pagados</span></article>'+
-      '<article><i class="fa-solid fa-share-nodes"></i><strong>Comunidad viajera</strong><span>Comparte tus experiencias cuando quieras, sin obligación ni recompensas por publicaciones</span></article>'+
-      '<article><i class="fa-solid fa-clock-rotate-left"></i><strong>Puntos disponibles</strong><span>Las compras se acreditan al completar el servicio</span></article></div>'+
-      '<h3>Tu camino de recompensas</h3><div class="exp-tiers">'+levels.map(x=>
-      '<div><i class="fa-solid fa-medal"></i><strong>'+x[0]+'</strong><small>'+x[1]+' puntos acreditados</small></div>').join('')+'</div>'+
+      '<article><i class="fa-solid fa-user-check"></i><strong>100 puntos</strong><span>Por verificar tu cuenta al registrarte</span></article>'+
+      '<article><i class="fa-solid fa-credit-card"></i><strong>1 punto por US$10</strong><span>Por compras de experiencias, vuelos, hoteles y paquetes; disponibles al completar el servicio</span></article>'+
+      '<article><i class="fa-solid fa-user-group"></i><strong>100 puntos por referido</strong>'+
+      '<span>Por cada amigo que se registre con tu enlace, verifique su cuenta y complete su primera compra. Hasta 4 bonificaciones al mes</span></article>'+
+      '<article><i class="fa-solid fa-ticket"></i><strong>Canjes por experiencias</strong>'+
+      '<span>Elige actividades con puntos y consulta fechas, cupos y condiciones antes de confirmar</span></article></div>'+
+      '<h3>Tu nivel de miembro</h3><div class="exp-tiers">'+levels.map(x=>
+      '<div><i class="fa-solid fa-medal"></i><strong>'+x[0]+'</strong>'+
+      '<small>'+x[1]+' puntos acumulados</small></div>').join('')+'</div>'+
       tierProgress()+
-      '<div class="exp-highlight-reward"><i class="fa-solid fa-ticket"></i><div><strong>Experiencias locales desde 500 puntos</strong>'+
-      '<p>Podrás solicitar beneficios seleccionados en Cusco, Pachacámac, Santiago, Río de Janeiro o Buenos Aires, según disponibilidad y campaña vigente.</p></div></div>'+
-      '<p>Los puntos pueden canjearse directamente por experiencias independientes y souvenirs. Para paquetes, hoteles y vuelos se utilizan cupones con condiciones específicas.</p>'+
-      '<p>En Tripadvisor puedes compartir una opinión auténtica sobre tu experiencia, sin premios ni puntos por reseñas.</p>'+
+      '<p>Los puntos pueden aplicarse a experiencias individuales y souvenirs. Para vuelos, hoteles y paquetes se usarán cupones con condiciones específicas. Los canjes requieren disponibilidad y confirmación de LATAM Expeditions.</p>'+
       '</div></details>';
   }
   function profileSelect(name,label,selected,options) {
