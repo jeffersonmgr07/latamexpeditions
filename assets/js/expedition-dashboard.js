@@ -33,7 +33,7 @@
   }
   function titleFor(page) {
     return ({inicio:'Mi espacio de viajes',viajes:'Mis viajes',reservas:'Mis reservaciones',
-      millas:'Mis puntos LATAM Rewards',recompensas:'Recompensas y cupones',
+      millas:'Mis puntos',recompensas:'Recompensas y cupones',
       avisos:'Notificaciones',perfil:'Mi perfil',detalle:'Detalle del viaje'})[page] || 'Mi cuenta';
   }
   function subtitleFor(page) {
