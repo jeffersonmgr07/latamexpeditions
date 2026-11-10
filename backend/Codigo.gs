@@ -1587,10 +1587,12 @@ function idSolicitudPayPal(tipo, clave) {
 }
 
 function crearOrden(data) {
-  // El producto Atacama se muestra en catálogo como COTIZACIÓN hasta verificar hotel y operadores.
-  // Nunca convertir una referencia comercial en cobro Live por manipulación del navegador.
-  if(String(data&&data.slug||'').toLowerCase()==='desierto-atacama-premium-5d4n')
-    throw new Error('Este paquete requiere confirmar disponibilidad y precio final antes del pago. Envía una solicitud sin cobro.');
+  // Atacama: la agencia HA FIJADO el precio de venta y asume las variaciones de proveedores.
+  // Esto NO acredita hotel reservado. El cliente debe ser informado y recibir devolución
+  // íntegra si la agencia no puede cumplir la prestación contratada.
+  if(String(data&&data.slug||'').toLowerCase()==='desierto-atacama-premium-5d4n' &&
+     (Number(data.adults)<1||Number(data.adults)>2||Number(data.children)!==0))
+    throw new Error('La compra online de Atacama se admite para 1–2 adultos. Para grupos mayores solicita una cotización personalizada.');
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
