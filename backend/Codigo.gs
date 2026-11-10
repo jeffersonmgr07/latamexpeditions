@@ -398,25 +398,25 @@ const PRECIOS_PAQUETES = {
   },
   'chile-atacama-5d4n': {
     '3e': {
-      'single': 980.0,
-      'double': 980.0,
-      'matrimonial': 980.0,
-      'triple': 980.0,
-      'family': 980.0
+      'single': 880.0,
+      'double': 880.0,
+      'matrimonial': 880.0,
+      'triple': 880.0,
+      'family': 880.0
     },
     '4e': {
-      'single': 1270.0,
-      'double': 1270.0,
-      'matrimonial': 1270.0,
-      'triple': 1270.0,
-      'family': 1270.0
+      'single': 1170.0,
+      'double': 1170.0,
+      'matrimonial': 1170.0,
+      'triple': 1170.0,
+      'family': 1170.0
     },
     '5e': {
-      'single': 1720.0,
-      'double': 1720.0,
-      'matrimonial': 1720.0,
-      'triple': 1720.0,
-      'family': 1720.0
+      'single': 1620.0,
+      'double': 1620.0,
+      'matrimonial': 1620.0,
+      'triple': 1620.0,
+      'family': 1620.0
     }
   },
   'chile-patagonia-6d5n': {
