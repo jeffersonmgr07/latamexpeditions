@@ -142,3 +142,89 @@ body.has-pn-header .exp-account-main, .exp-account-main {background:#f5f7ef !imp
  .exp-detail-photo {width:80px;height:85px;}
  .exp-wallet {padding:20px;}
 }
+
+
+/* LATAM Rewards · jerarquía visual, niveles, recompensas, perfil y campañas */
+.exp-greeting {font:650 clamp(17px,2vw,22px)/1.45 Montserrat,Inter,sans-serif;color:#164d30;margin:0 0 18px;}
+.exp-sidebar-avatar {overflow:hidden;flex-shrink:0;}
+.exp-sidebar-avatar img {width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.exp-tier-progress {border-radius:17px;border:1px solid #e0eade;padding:18px 21px;background:#fff;margin-bottom:20px;}
+.exp-tier-meta {display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;color:#2c6340;font-size:13px;}
+.exp-tier-meta strong {font-size:16px;color:#087a40;}
+.exp-tier-track {height:9px;background:#e6eee5;border-radius:10px;overflow:hidden;margin:14px 0 7px;}
+.exp-tier-track>span {display:block;background:linear-gradient(90deg,#0a7c3b,#c9ab56);height:100%;border-radius:10px;transition:width .2s;}
+.exp-tier-progress>small {font-size:12px;color:#6e806f;}
+.exp-card-intro {font-size:13px;margin:-2px 0 16px;color:#617563;}
+.exp-program-accordion {background:#fff;border:1px solid #dee9df;border-radius:20px;margin-top:22px;overflow:hidden;box-shadow:0 12px 25px rgba(13,53,24,.04);}
+.exp-program-accordion>summary {display:flex;align-items:center;justify-content:space-between;gap:14px;padding:22px 24px;list-style:none;cursor:pointer;color:#153d25;font:750 clamp(16px,2vw,20px)/1.3 Montserrat,Inter,sans-serif;}
+.exp-program-accordion>summary::-webkit-details-marker {display:none;}
+.exp-program-accordion>summary>span:first-child {display:flex;align-items:center;gap:12px;}
+.exp-program-accordion>summary i.fa-gem {color:#07873e;}
+.exp-accordion-arrow {display:grid;place-items:center;width:35px;height:35px;border-radius:50%;background:#eaf6ee;color:#087940;flex-shrink:0;transition:transform .2s;}
+.exp-program-accordion[open] .exp-accordion-arrow {transform:rotate(180deg);}
+.exp-program-body {border-top:1px solid #e9efe9;padding:24px;}
+.exp-program-body>p {font-size:13.5px;line-height:1.7;margin:0 0 20px;color:#627361;}
+.exp-program-body h3 {font:700 18px/1.3 Montserrat,Inter,sans-serif;color:#1b482d;margin:25px 0 15px;}
+.exp-program-how {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;}
+.exp-program-how article {display:grid;gap:8px;background:#f6faf4;border:1px solid #e3efe0;border-radius:15px;padding:17px;}
+.exp-program-how i {display:grid;place-items:center;width:39px;height:39px;background:#e6f4e9;border-radius:12px;color:#0b853e;font-size:17px;}
+.exp-program-how strong {font-size:17px;color:#194d2d;}
+.exp-program-how span {font-size:12px;color:#6d7d6b;line-height:1.55;}
+.exp-tiers {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px;}
+.exp-tiers>div {min-width:0;background:#f7faf6;border-radius:14px;padding:15px 12px;border:1px solid #e3ece2;display:grid;gap:7px;text-align:center;}
+.exp-tiers i {font-size:20px;color:#ba9a52;}
+.exp-tiers strong {font:750 14px Montserrat,Inter,sans-serif;color:#16462b;}
+.exp-tiers small {color:#647868;font-size:10px;line-height:1.4;}
+.exp-highlight-reward {display:flex;gap:14px;border:1px solid #d4e7d4;border-radius:15px;padding:18px;margin:16px 0;background:#f4fbf0;}
+.exp-highlight-reward>i {font-size:26px;color:#0a773a;flex-shrink:0;}
+.exp-highlight-reward strong {color:#144a2e;display:block;margin-bottom:5px;}
+.exp-highlight-reward p {margin:0;font-size:12px;color:#607862;line-height:1.6;}
+.exp-social-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.exp-social-card {border-radius:15px;border:1px solid #dde9dd;background:#fcfefb;padding:17px;display:flex;flex-direction:column;gap:12px;min-width:0;}
+.exp-social-icon {width:44px;height:44px;background:#e9f5ee;border-radius:12px;display:grid;place-items:center;color:#147b47;font-size:20px;}
+.exp-social-card strong {color:#15442a;}
+.exp-social-card p {font-size:12px;margin:6px 0 10px;line-height:1.5;min-height:55px;color:#647665;}
+.exp-social-card .exp-btn {padding:10px 12px;white-space:normal;}
+.exp-social-card small {font-size:11px;overflow-wrap:anywhere;color:#617967;}
+.exp-social-form {display:grid;gap:8px;}
+.exp-social-form label {font-size:11px;color:#375942;font-weight:750;}
+.exp-social-form input {min-width:0;width:100%;padding:10px;border-radius:9px;border:1px solid #d8e6d9;font-size:12px;}
+.exp-social-form .exp-btn {font-size:12px;}
+.exp-social-note {color:#687b68;font-size:11px;line-height:1.65;margin:14px 0 0;}
+.exp-profile-top {display:flex;gap:18px;align-items:center;}
+.exp-profile-avatar {height:92px;width:92px;background:#e8f4e8;color:#127c42;font-size:28px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;overflow:hidden;}
+.exp-profile-avatar img {width:100%;height:100%;object-fit:cover;}
+.exp-profile-top strong {color:#1d4b30;}
+.exp-profile-top p {margin:4px 0 10px;font-size:12px;}
+.exp-profile-top .exp-btn {cursor:pointer;font-size:12px;}
+.exp-profile-form {display:grid;gap:17px;}
+.exp-form-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;}
+.exp-profile-form label,.exp-email-confirm label {display:grid;gap:7px;color:#284c32;font-weight:700;font-size:12px;min-width:0;}
+.exp-profile-form input,.exp-profile-form select,.exp-email-confirm input {
+  width:100%;min-width:0;border-radius:10px;padding:12px 13px;background:#fbfdfb;
+  border:1px solid #d6e4d7;color:#1c3d25;font:500 13px Inter,sans-serif;}
+.exp-profile-form input:focus,.exp-profile-form select:focus,.exp-email-confirm input:focus,.exp-social-form input:focus {
+  outline:2px solid rgba(7,135,62,.18);border-color:#07873e;}
+.exp-profile-form input:disabled {background:#f0f4ef;color:#637565;cursor:not-allowed;}
+.exp-profile-form h4 {margin:4px 0 -6px;font-size:15px;color:#1a4c30;}
+.exp-whatsapp-row {display:grid;grid-template-columns:minmax(170px,.9fr) minmax(0,1.1fr);gap:14px;}
+.exp-profile-form>.exp-btn {justify-self:start;}
+.exp-subdetails {padding:14px;background:#f7fbf6;border:1px solid #e0eadf;border-radius:14px;}
+.exp-subdetails summary {display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:740;color:#225338;cursor:pointer;list-style:none;}
+.exp-subdetails summary::-webkit-details-marker {display:none;}
+.exp-subdetails[open] summary i {transform:rotate(180deg);}
+.exp-subdetails>p {font-size:12px;margin:12px 0;}
+.exp-subdetails form {margin-top:14px;max-width:500px;}
+.exp-email-confirm {display:grid;gap:12px;border-top:1px solid #e5ece4;padding-top:14px;}
+.exp-security-foot {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;padding-top:17px;border-top:1px solid #e6ece5;font-size:13px;color:#617763;}
+.exp-reward {min-height:180px;}
+@media(max-width:1080px){.exp-social-grid {grid-template-columns:1fr;}.exp-social-card {display:grid;grid-template-columns:48px minmax(0,1fr);align-items:start;}
+.exp-social-card>.exp-btn,.exp-social-card>.exp-social-form,.exp-social-card>small {grid-column:2;}
+.exp-social-card p {min-height:0;}
+}
+@media(max-width:760px){.exp-program-body {padding:17px;}.exp-program-how {grid-template-columns:1fr 1fr;}.exp-tiers {grid-template-columns:repeat(2,minmax(0,1fr));}
+.exp-profile-form>.exp-btn{justify-self:stretch;}
+.exp-profile-avatar{width:75px;height:75px;}}
+@media(max-width:480px){.exp-program-how,.exp-form-grid,.exp-whatsapp-row {grid-template-columns:1fr;}
+.exp-social-card{grid-template-columns:1fr;}.exp-social-card>.exp-btn,.exp-social-card>.exp-social-form,.exp-social-card>small {grid-column:1;}
+.exp-profile-top{align-items:start;}.exp-program-accordion>summary{padding:17px;}.exp-heading h1{font-size:25px;}}

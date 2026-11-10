@@ -1211,6 +1211,12 @@ function doPost(e) {
     if (action === 'dashboardSendVerification') return json(lxRwSendCode_(data));
     if (action === 'dashboardVerifyEmail') return json(lxRwVerifyCode_(data));
     if (action === 'dashboardReadNotification') return json(lxRwMarkRead_(data));
+    if (action === 'dashboardSaveProfile') return json(lxRwUpdateProfile_(data));
+    if (action === 'dashboardUploadAvatar') return json(lxRwUploadAvatar_(data));
+    if (action === 'dashboardGetAvatar') return json(lxRwGetAvatar_(data));
+    if (action === 'dashboardRequestEmailChange') return json(lxRwRequestEmailChange_(data));
+    if (action === 'dashboardConfirmEmailChange') return json(lxRwConfirmEmailChange_(data));
+    if (action === 'dashboardSubmitSocial') return json(lxRwSubmitSocial_(data));
     if (action === 'findBooking') return json(consultarReserva(data));
     if (action === 'resendVoucher') return json(reenviarVoucher(data));
     // --- Formularios del sitio público (Formularios.gs) ---
@@ -1297,7 +1303,15 @@ function mensajeSeguro(error) {
     // Google
     'El acceso con Google no está configurado', 'La sesión de Google',
     'No hemos recibido la credencial', 'Tu correo de Google',
-    'Google no nos ha devuelto', 'La verificación de Google ha caducado'
+    'Google no nos ha devuelto', 'La verificación de Google ha caducado',
+    // LATAM Rewards: mostrar solo mensajes validados
+    'Indica tu nombre', 'El teléfono', 'Selecciona el código', 'El número de WhatsApp',
+    'Selecciona un tipo', 'Revisa el tipo', 'Carga una imagen',
+    'Introduce un correo nuevo', 'Ese correo', 'Confirma tu contraseña',
+    'Espera un minuto', 'Enviamos un código', 'Introduce los seis', 'Primero solicita',
+    'Se alcanzó', 'El código', 'Uno de los', 'El correo ya', 'El enlace',
+    'Introduce el enlace', 'Selecciona una red', 'Ya enviaste una publicación',
+    'Verifica tu cuenta'
   ];
   return publicos.some(function (p) { return msg.indexOf(p) === 0; })
     ? msg
