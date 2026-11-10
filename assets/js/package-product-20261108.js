@@ -874,7 +874,10 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    const sort=$('lxHotelSort').value;
    let list=hotelResults.filter(h=>{
      if(search&&!normalizeHotelName(h.name).includes(search))return false;
-     if(stars!=='all'&&Number(h.stars)!==Number(stars))return false;
+     const tierMinStars=parseInt(String(currentTier()?.stars||firstTier?.stars||''),10);
+   const hotelStars=Number(h.stars)||0;
+   if(Number.isFinite(tierMinStars)&&tierMinStars>=1&&hotelStars<tierMinStars)return false;
+   if(stars!=='all'&&hotelStars!==Number(stars))return false;
      return true;
    });
    if(sort==='priceAsc')list.sort((a,b)=>stayPrice(a)-stayPrice(b));
