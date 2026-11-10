@@ -97,6 +97,14 @@ function lxNormalizeProduct_(input){
   if(p.status==='PUBLICADO_COTIZACION'&&p.identity.slug!=='desierto-atacama-premium-5d4n')
     throw Error('La publicación en modo cotización está habilitada únicamente para el piloto de Atacama que ya tiene ficha creada en GitHub.');
   if(p.status==='APROBADO'){
+    const agencyPilot=p.identity.slug==='desierto-atacama-premium-5d4n' &&
+      p.pricing.priceStatus==='PRECIO_FIJO_AGENCIA' &&
+      p.commercialApproval?.riskAccepted===true &&
+      Number(p.commercialApproval?.unitPriceUSD)===Number(p.pricing.pricePerAdultOnDoubleUSD) &&
+      Number(p.pricing.pricePerAdultOnDoubleUSD)===1499.90 &&
+      p.flights?.included===false &&
+      p.lodging?.name==='Hotel Terrantai';
+    if(!agencyPilot){
     const quality=p.quality||{};
     const checks=['pricesConfirmed','hotelConfirmed','suppliersConfirmed','flightConfirmed',
       'photosLicensed','policiesApproved','datesVerified','bookingTested'];
@@ -111,10 +119,11 @@ function lxNormalizeProduct_(input){
     if(p.pricing.priceStatus!=='CONFIRMADA'||missingRoomRates||pending.length)
       throw Error('No se puede aprobar todavía: faltan tarifas verificadas o control de calidad ('+
         pending.join(', ')+').');
+    }
   }
   // Solo Atacama tiene una ficha pública de cotización preparada en el repositorio.
   // Guardar otros productos NO crea una página HTML ni actualiza PayPal.
-  p.public=p.status==='PUBLICADO_COTIZACION';
+  p.public=p.status==='PUBLICADO_COTIZACION'||p.status==='APROBADO';
   p.approved=p.status==='APROBADO';
   p.schemaVersion=1;
   return p;
@@ -246,6 +255,38 @@ function lxAplicarEstudioAtacama(){
     })
   });
   return lxSaveProduct(next);
+}
+
+/**
+ * Aprobación COMERCIAL explícita del precio fijo de venta de Atacama.
+ * NO altera los indicadores de verificación de hotel/operadores.
+ * La página pública ya existe en GitHub; esta función guarda la decisión
+ * comercial en Google Sheets y su auditoría, no modifica GitHub Pages.
+ */
+function lxAprobarPrecioAtacama(){
+  const actor=lxAdminWho_(),row=lxReadRows_().find(x=>x.slug==='desierto-atacama-premium-5d4n');
+  if(!row)throw Error('No encontramos Atacama en la consola. Primero impórtalo.');
+  const p=lxReadProduct_(row.id);
+  if(!p.internal||p.internal.costBasis!=='REFERENCIAL_MERCADO_NO_COTIZADO')
+    throw Error('Completa primero el estudio de costos del producto Atacama.');
+  if(p.flights?.included!==false)throw Error('Los vuelos deben estar excluidos del precio base.');
+  if(p.lodging?.name!=='Hotel Terrantai')
+    throw Error('El hotel del producto ya no coincide con la ficha comercial.');
+  if(Number(p.pricing?.pricePerAdultOnDoubleUSD)!==1499.90)
+    throw Error('El precio base cambió. Actualiza antes la ficha pública, catálogo y precios del checkout.');
+  p.status='APROBADO';p.pricing.priceStatus='PRECIO_FIJO_AGENCIA';
+  p.pricing.note='Precio fijo al público aprobado por LATAM Expeditions, USD 1,499.90 por adulto en base doble; vuelos no incluidos. La agencia asume diferencias frente al costo del proveedor. Disponibilidad de hotel y excursiones sujeta a confirmación posterior al pago y reembolso si no se puede cumplir.';
+  p.commercialApproval={riskAccepted:true,approvedAt:new Date().toISOString(),
+    approvedBy:actor,unitPriceUSD:1499.90,
+    authority:'LATAM Expeditions fija el precio comercial; NO es una tarifa neta ni disponibilidad confirmada del proveedor'};
+  // Dejar false todas las verificaciones de terceros que NO se realizaron.
+  p.quality=p.quality||{};
+  p.quality.pricesConfirmed=false;p.quality.hotelConfirmed=false;
+  p.quality.suppliersConfirmed=false;p.quality.datesVerified=false;
+  const saved=lxSaveProduct(p);
+  lxAudit_(actor,'PRECIO_FIJO_AGENCIA',saved.id,
+    'Atacama comercialmente aprobado USD 1499.90 pp doble, excluye vuelos; proveedores sin verificar, riesgo asumido');
+  return saved;
 }
 
 function lxPricePreview(data,count){
