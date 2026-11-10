@@ -17,7 +17,7 @@
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "1 día",
-      "priceFrom": 340.0,
+      "priceFrom": 340,
       "currency": "USD",
       "img": "peru-machu-picchu-01.jpg",
       "alt": "Ciudadela inca de Machu Picchu al amanecer",
@@ -51,7 +51,7 @@
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "1 día",
-      "priceFrom": 55.0,
+      "priceFrom": 55,
       "currency": "USD",
       "img": "destino-peru-01.jpg",
       "alt": "Terrazas incas del Valle Sagrado de los Incas",
@@ -83,7 +83,7 @@
       "style": "aventura",
       "styleLabel": "Aventura",
       "duration": "1 día",
-      "priceFrom": 45.0,
+      "priceFrom": 45,
       "currency": "USD",
       "img": "estilo-aventura-01.jpg",
       "alt": "Montaña de siete colores de Vinicunca en los Andes",
@@ -116,7 +116,7 @@
       "style": "gastronomia",
       "styleLabel": "Gastronomía",
       "duration": "4 horas",
-      "priceFrom": 75.0,
+      "priceFrom": 75,
       "currency": "USD",
       "img": "estilo-gastronomia-01.jpg",
       "alt": "Plato de ceviche peruano con maíz y camote",
@@ -148,7 +148,7 @@
       "style": "naturaleza",
       "styleLabel": "Naturaleza",
       "duration": "1 día",
-      "priceFrom": 40.0,
+      "priceFrom": 40,
       "currency": "USD",
       "img": "estilo-naturaleza-01.jpg",
       "alt": "Lobos marinos y aves en las Islas Ballestas",
@@ -180,7 +180,7 @@
       "style": "cultura",
       "styleLabel": "Cultura viva",
       "duration": "4 horas",
-      "priceFrom": 25.0,
+      "priceFrom": 25,
       "currency": "USD",
       "img": "colombia-experiencia-cartagena-centro-getsemani.jpg",
       "alt": "Balcones floridos en el centro amurallado de Cartagena",
@@ -219,7 +219,7 @@
       "style": "playa",
       "styleLabel": "Playa y verano",
       "duration": "1 día",
-      "priceFrom": 65.0,
+      "priceFrom": 65,
       "currency": "USD",
       "img": "colombia-experiencia-islas-rosario-baru.jpg",
       "alt": "Agua turquesa y playa de arena blanca en Islas del Rosario",
@@ -1130,7 +1130,7 @@
       "style": "cultura",
       "styleLabel": "Cultura viva",
       "duration": "4 horas 30 minutos",
-      "priceFrom": 39.0,
+      "priceFrom": 39,
       "currency": "USD",
       "img": "colombia-experiencia-tour-pablo-escobar.jpg",
       "alt": "Parque de la Inflexión y recorrido histórico por Medellín",
@@ -1466,7 +1466,7 @@
       "style": "aventura",
       "styleLabel": "Aventura",
       "duration": "3 a 4 horas",
-      "priceFrom": 99.0,
+      "priceFrom": 99,
       "currency": "USD",
       "img": "colombia-experiencia-parapente-medellin.jpg",
       "alt": "Vuelo tándem en parapente sobre las montañas del Valle de Aburrá",
@@ -1793,7 +1793,7 @@
       "style": "gastronomia",
       "styleLabel": "Gastronomía",
       "duration": "4 horas",
-      "priceFrom": 49.0,
+      "priceFrom": 49,
       "currency": "USD",
       "img": "colombia-experiencia-medellin-nocturno-gastronomia-rooftops.jpg",
       "alt": "Terraza nocturna y gastronomía en el sector de Provenza en Medellín",
@@ -2138,7 +2138,7 @@
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "1 día",
-      "priceFrom": 110.0,
+      "priceFrom": 110,
       "currency": "USD",
       "img": "argentina-buenos-aires-01.jpg",
       "alt": "Bailarines de tango en una calle de Buenos Aires",
@@ -2170,7 +2170,7 @@
       "style": "naturaleza",
       "styleLabel": "Naturaleza",
       "duration": "1 día",
-      "priceFrom": 70.0,
+      "priceFrom": 70,
       "currency": "USD",
       "img": "destino-argentina-01.jpg",
       "alt": "Cataratas del Iguazú vistas desde las pasarelas argentinas",
@@ -2202,7 +2202,7 @@
       "style": "naturaleza",
       "styleLabel": "Naturaleza",
       "duration": "1 día",
-      "priceFrom": 95.0,
+      "priceFrom": 95,
       "currency": "USD",
       "img": "chile-patagonia-01.jpg",
       "alt": "Frente del glaciar Perito Moreno en la Patagonia argentina",
@@ -2234,7 +2234,7 @@
       "style": "gastronomia",
       "styleLabel": "Gastronomía",
       "duration": "1 día",
-      "priceFrom": 90.0,
+      "priceFrom": 90,
       "currency": "USD",
       "img": "estilo-lujo-flexible-01.jpg",
       "alt": "Viñedos de Mendoza con la cordillera de los Andes al fondo",
@@ -2266,7 +2266,7 @@
       "style": "naturaleza",
       "styleLabel": "Naturaleza",
       "duration": "4 días",
-      "priceFrom": 790.0,
+      "priceFrom": 790,
       "currency": "USD",
       "img": "ecuador-galapagos-01.jpg",
       "alt": "Tortuga gigante de Galápagos en su hábitat natural",
@@ -2299,7 +2299,7 @@
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "1 día",
-      "priceFrom": 55.0,
+      "priceFrom": 55,
       "currency": "USD",
       "img": "destino-ecuador-01.jpg",
       "alt": "Centro histórico colonial de Quito con sus cúpulas",
@@ -2331,7 +2331,7 @@
       "style": "aventura",
       "styleLabel": "Aventura",
       "duration": "1 día",
-      "priceFrom": 70.0,
+      "priceFrom": 70,
       "currency": "USD",
       "img": "estilo-naturaleza-01.jpg",
       "alt": "Laguna turquesa del cráter del Quilotoa en los Andes ecuatorianos",
@@ -2363,7 +2363,7 @@
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "1 día",
-      "priceFrom": 95.0,
+      "priceFrom": 95,
       "currency": "USD",
       "img": "brasil-rio-01.jpg",
       "alt": "Cristo Redentor sobre Río de Janeiro al atardecer",
@@ -2395,7 +2395,7 @@
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "4 horas",
-      "priceFrom": 40.0,
+      "priceFrom": 40,
       "currency": "USD",
       "img": "estilo-cultura-01.jpg",
       "alt": "Vista de las casas de la favela Rocinha en Río de Janeiro",
@@ -2427,7 +2427,7 @@
       "style": "naturaleza",
       "styleLabel": "Naturaleza",
       "duration": "1 día",
-      "priceFrom": 65.0,
+      "priceFrom": 65,
       "currency": "USD",
       "img": "destino-brasil-01.jpg",
       "alt": "Panorámica de las Cataratas del Iguazú desde el lado brasileño",
@@ -2459,7 +2459,7 @@
       "style": "aventura",
       "styleLabel": "Aventura",
       "duration": "3 días",
-      "priceFrom": 230.0,
+      "priceFrom": 230,
       "currency": "USD",
       "img": "bolivia-uyuni-01.jpg",
       "alt": "Reflejo del cielo sobre el Salar de Uyuni",
@@ -2493,7 +2493,7 @@
       "style": "aventura",
       "styleLabel": "Aventura",
       "duration": "1 día",
-      "priceFrom": 60.0,
+      "priceFrom": 60,
       "currency": "USD",
       "img": "paquete-bolivia-4d3n-01.jpg",
       "alt": "Ruta en 4x4 sobre la superficie blanca del Salar de Uyuni",
@@ -2525,7 +2525,7 @@
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "5 horas",
-      "priceFrom": 45.0,
+      "priceFrom": 45,
       "currency": "USD",
       "img": "destino-bolivia-01.jpg",
       "alt": "Teleférico de La Paz sobre la ciudad y el Illimani al fondo",
@@ -2557,7 +2557,7 @@
       "style": "naturaleza",
       "styleLabel": "Naturaleza",
       "duration": "1 día",
-      "priceFrom": 75.0,
+      "priceFrom": 75,
       "currency": "USD",
       "img": "destino-chile-01.jpg",
       "alt": "Formaciones de sal y arena del Valle de la Luna en Atacama",
@@ -2589,7 +2589,7 @@
       "style": "aventura",
       "styleLabel": "Aventura",
       "duration": "1 día",
-      "priceFrom": 55.0,
+      "priceFrom": 55,
       "currency": "USD",
       "img": "estilo-aventura-01.jpg",
       "alt": "Fumarolas de los géiseres del Tatio al amanecer",
@@ -2621,7 +2621,7 @@
       "style": "naturaleza",
       "styleLabel": "Naturaleza",
       "duration": "1 día",
-      "priceFrom": 120.0,
+      "priceFrom": 120,
       "currency": "USD",
       "img": "chile-patagonia-01.jpg",
       "alt": "Cuernos del Paine reflejados en un lago patagónico",
@@ -2653,7 +2653,7 @@
       "style": "cultura",
       "styleLabel": "Cultural",
       "duration": "1 día",
-      "priceFrom": 95.0,
+      "priceFrom": 95,
       "currency": "USD",
       "img": "destino-mexico-01.jpg",
       "alt": "Pirámide de Kukulkán en la zona arqueológica de Chichén Itzá",
@@ -2686,7 +2686,7 @@
       "style": "playa",
       "styleLabel": "Playa",
       "duration": "1 día",
-      "priceFrom": 75.0,
+      "priceFrom": 75,
       "currency": "USD",
       "img": "mexico-riviera-maya-01.jpg",
       "alt": "Ruinas mayas de Tulum sobre un acantilado frente al mar Caribe",
@@ -2719,7 +2719,7 @@
       "style": "familia",
       "styleLabel": "Familia",
       "duration": "1 día",
-      "priceFrom": 190.0,
+      "priceFrom": 190,
       "currency": "USD",
       "img": "estilo-familia-01.jpg",
       "alt": "Río subterráneo y vegetación tropical en un parque de la Riviera Maya",
@@ -4682,7 +4682,7 @@
       "country": "Perú",
       "region": "Cusco",
       "nights": "4D/3N",
-      "priceFrom": 590.0,
+      "priceFrom": 590,
       "currency": "USD",
       "img": "paquete-peru-4d3n-01.jpg",
       "alt": "Ciudadela de Machu Picchu y terrazas incas",
@@ -4713,7 +4713,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 590.0,
+          "pricePerPerson": 590,
           "hotels": [
             "Hotel Royal Qosqo",
             "Tierra Viva Centro"
@@ -4723,7 +4723,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 770.0,
+          "pricePerPerson": 770,
           "hotels": [
             "Casa Andina Premium",
             "Xima Cusco"
@@ -4733,7 +4733,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 1030.0,
+          "pricePerPerson": 1030,
           "hotels": [
             "Palacio del Inka",
             "JW Marriott El Convento"
@@ -4748,7 +4748,7 @@
       "country": "Perú",
       "region": "Cusco / Puno / Arequipa",
       "nights": "7D/6N",
-      "priceFrom": 1180.0,
+      "priceFrom": 1180,
       "currency": "USD",
       "img": "destino-peru-01.jpg",
       "alt": "Lago Titicaca e islas flotantes de los Uros",
@@ -4781,7 +4781,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 1180.0,
+          "pricePerPerson": 1180,
           "hotels": [
             "Hotel Royal Qosqo",
             "Casona Plaza Puno"
@@ -4791,7 +4791,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 1530.0,
+          "pricePerPerson": 1530,
           "hotels": [
             "Casa Andina Premium",
             "Xima Arequipa"
@@ -4801,7 +4801,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 2060.0,
+          "pricePerPerson": 2060,
           "hotels": [
             "Palacio del Inka",
             "Titilaka Lodge"
@@ -5010,7 +5010,7 @@
       ],
       "flightsAvailable": false,
       "preserveDetail": true,
-      "childFactor": 1.0,
+      "childFactor": 1,
       "childMinAge": 5,
       "en": {
         "title": "Lima, Paracas, Ica and Huacachina",
@@ -5043,7 +5043,7 @@
       "country": "Argentina",
       "region": "Buenos Aires / Misiones",
       "nights": "5D/4N",
-      "priceFrom": 890.0,
+      "priceFrom": 890,
       "currency": "USD",
       "img": "paquete-argentina-7d6n-01.jpg",
       "alt": "Cataratas del Iguazú desde las pasarelas",
@@ -5074,7 +5074,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 890.0,
+          "pricePerPerson": 890,
           "hotels": [
             "Hotel Rochester Concept",
             "Orquideas Palace Iguazú"
@@ -5084,7 +5084,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 1160.0,
+          "pricePerPerson": 1160,
           "hotels": [
             "Dazzler Palermo",
             "Mercure Iguazú"
@@ -5094,7 +5094,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 1560.0,
+          "pricePerPerson": 1560,
           "hotels": [
             "Alvear Art Hotel",
             "Gran Meliá Iguazú"
@@ -5109,7 +5109,7 @@
       "country": "Argentina",
       "region": "Buenos Aires / El Calafate",
       "nights": "7D/6N",
-      "priceFrom": 1650.0,
+      "priceFrom": 1650,
       "currency": "USD",
       "img": "destino-argentina-01.jpg",
       "alt": "Glaciar Perito Moreno en el Parque Nacional Los Glaciares",
@@ -5142,7 +5142,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 1650.0,
+          "pricePerPerson": 1650,
           "hotels": [
             "Hotel Rochester Concept",
             "Kau Yatun El Calafate"
@@ -5152,7 +5152,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 2140.0,
+          "pricePerPerson": 2140,
           "hotels": [
             "Dazzler Palermo",
             "Xelena Hotel"
@@ -5162,7 +5162,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 2890.0,
+          "pricePerPerson": 2890,
           "hotels": [
             "Alvear Art Hotel",
             "Eolo Patagonia Spirit"
@@ -5177,7 +5177,7 @@
       "country": "Bolivia",
       "region": "La Paz / Uyuni",
       "nights": "4D/3N",
-      "priceFrom": 620.0,
+      "priceFrom": 620,
       "currency": "USD",
       "img": "paquete-bolivia-4d3n-01.jpg",
       "alt": "Reflejo del cielo en el Salar de Uyuni",
@@ -5207,7 +5207,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 620.0,
+          "pricePerPerson": 620,
           "hotels": [
             "Hotel Rosario La Paz",
             "Hotel de Sal Luna Salada básico"
@@ -5217,7 +5217,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 810.0,
+          "pricePerPerson": 810,
           "hotels": [
             "Casa Grande La Paz",
             "Palacio de Sal"
@@ -5227,7 +5227,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 1080.0,
+          "pricePerPerson": 1080,
           "hotels": [
             "Atix Hotel",
             "Hotel de Sal Luna Salada Premium"
@@ -5304,11 +5304,11 @@
       "country": "Chile",
       "region": "Santiago / San Pedro",
       "nights": "5D/4N",
-      "priceFrom": 980.0,
+      "priceFrom": 880,
       "currency": "USD",
       "img": "paquete-chile-6d5n-01.jpg",
       "alt": "Valle de la Luna en el desierto de Atacama",
-      "excerpt": "Santiago, paisajes del desierto y géiseres en una experiencia inolvidable. Vuelos opcionales.",
+      "excerpt": "Santiago y desierto de Atacama en 5 días. Desde US$880 por persona, vuelos no incluidos.",
       "itinerary": [
         "Día 1 · Llegada a Santiago y city tour",
         "Día 2 · Vuelo a Calama y traslado a San Pedro de Atacama",
@@ -5336,38 +5336,63 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 980.0,
+          "pricePerPerson": 880,
           "hotels": [
             "Hotel Panamericano Santiago",
             "Hostal La Ruca"
-          ]
+          ],
+          "occupancyPrices": {
+            "single": 880,
+            "double": 880,
+            "matrimonial": 880,
+            "triple": 880,
+            "family": 880
+          }
         },
         {
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 1270.0,
+          "pricePerPerson": 1170,
           "hotels": [
             "Cumbres Lastarria",
             "Hotel Cumbres San Pedro"
-          ]
+          ],
+          "occupancyPrices": {
+            "single": 1170,
+            "double": 1170,
+            "matrimonial": 1170,
+            "triple": 1170,
+            "family": 1170
+          }
         },
         {
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 1720.0,
+          "pricePerPerson": 1620,
           "hotels": [
             "The Singular Santiago",
             "Tierra Atacama"
-          ]
+          ],
+          "occupancyPrices": {
+            "single": 1620,
+            "double": 1620,
+            "matrimonial": 1620,
+            "triple": 1620,
+            "family": 1620
+          }
         }
       ],
-      "quoteOnly": true,
+      "quoteOnly": false,
       "flightIncluded": false,
       "flightRoute": "SCL-CJC-SCL",
-      "airfareDeductionPending": true,
-      "flightsAvailable": true
+      "airfareDeductionPending": false,
+      "flightsAvailable": true,
+      "pricingUpdated": "2026-11-10",
+      "priceSetByAgency": true,
+      "supplierRatesConfirmed": false,
+      "airfareExcludedPerPerson": 100
     },
     {
       "slug": "chile-patagonia-6d5n",
@@ -5375,7 +5400,7 @@
       "country": "Chile",
       "region": "Patagonia",
       "nights": "6D/5N",
-      "priceFrom": 1450.0,
+      "priceFrom": 1450,
       "currency": "USD",
       "img": "chile-patagonia-01.jpg",
       "alt": "Cuernos del Paine reflejados en un lago patagónico",
@@ -5406,7 +5431,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 1450.0,
+          "pricePerPerson": 1450,
           "hotels": [
             "Hotel Vendaval Puerto Natales",
             "Hostal Keoken"
@@ -5416,7 +5441,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 1880.0,
+          "pricePerPerson": 1880,
           "hotels": [
             "Hotel Costaustralis",
             "Hotel Cabo de Hornos"
@@ -5426,7 +5451,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 2540.0,
+          "pricePerPerson": 2540,
           "hotels": [
             "The Singular Patagonia",
             "Explora Patagonia"
@@ -5441,7 +5466,7 @@
       "country": "Ecuador",
       "region": "Quito / Galápagos",
       "nights": "5D/4N",
-      "priceFrom": 1390.0,
+      "priceFrom": 1390,
       "currency": "USD",
       "img": "ecuador-galapagos-01.jpg",
       "alt": "Fauna endémica en las islas Galápagos",
@@ -5472,7 +5497,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 1390.0,
+          "pricePerPerson": 1390,
           "hotels": [
             "Hotel San Francisco de Quito",
             "Hotel Fiesta Santa Cruz"
@@ -5482,7 +5507,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 1810.0,
+          "pricePerPerson": 1810,
           "hotels": [
             "Casa Gangotena",
             "Angermeyer Waterfront Inn"
@@ -5492,7 +5517,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 2430.0,
+          "pricePerPerson": 2430,
           "hotels": [
             "Illa Experience Hotel",
             "Finch Bay Galápagos"
@@ -5507,7 +5532,7 @@
       "country": "Brasil",
       "region": "Río de Janeiro",
       "nights": "4D/3N",
-      "priceFrom": 620.0,
+      "priceFrom": 620,
       "currency": "USD",
       "img": "paquete-brasil-5d4n-01.jpg",
       "alt": "Playa de Copacabana y el Pan de Azúcar",
@@ -5536,7 +5561,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 620.0,
+          "pricePerPerson": 620,
           "hotels": [
             "Hotel Atlântico Copacabana",
             "Ibis Copacabana"
@@ -5546,7 +5571,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 810.0,
+          "pricePerPerson": 810,
           "hotels": [
             "Windsor California",
             "PortoBay Rio Internacional"
@@ -5556,7 +5581,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 1080.0,
+          "pricePerPerson": 1080,
           "hotels": [
             "Belmond Copacabana Palace",
             "Fasano Rio"
@@ -5571,7 +5596,7 @@
       "country": "Brasil",
       "region": "Río / Foz do Iguaçu",
       "nights": "6D/5N",
-      "priceFrom": 1180.0,
+      "priceFrom": 1180,
       "currency": "USD",
       "img": "destino-brasil-01.jpg",
       "alt": "Cataratas del Iguazú desde el lado brasileño",
@@ -5602,7 +5627,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 1180.0,
+          "pricePerPerson": 1180,
           "hotels": [
             "Hotel Atlântico Copacabana",
             "Viale Cataratas"
@@ -5612,7 +5637,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 1530.0,
+          "pricePerPerson": 1530,
           "hotels": [
             "Windsor California",
             "Wish Foz do Iguaçu"
@@ -5622,7 +5647,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 2060.0,
+          "pricePerPerson": 2060,
           "hotels": [
             "Belmond Copacabana Palace",
             "Belmond Hotel das Cataratas"
@@ -5637,7 +5662,7 @@
       "country": "México",
       "region": "Riviera Maya",
       "nights": "5D/4N",
-      "priceFrom": 790.0,
+      "priceFrom": 790,
       "currency": "USD",
       "img": "mexico-riviera-maya-01.jpg",
       "alt": "Ruinas mayas de Tulum sobre el Caribe",
@@ -5668,7 +5693,7 @@
           "code": "3e",
           "stars": "3*",
           "name": "Turista",
-          "pricePerPerson": 790.0,
+          "pricePerPerson": 790,
           "hotels": [
             "Hotel Riviera Caribe Maya",
             "Cabañas Tulum"
@@ -5678,7 +5703,7 @@
           "code": "4e",
           "stars": "4*",
           "name": "Primera",
-          "pricePerPerson": 1030.0,
+          "pricePerPerson": 1030,
           "hotels": [
             "Barceló Maya Beach",
             "Grand Palladium"
@@ -5688,7 +5713,7 @@
           "code": "5e",
           "stars": "5*",
           "name": "Lujo",
-          "pricePerPerson": 1380.0,
+          "pricePerPerson": 1380,
           "hotels": [
             "Rosewood Mayakoba",
             "Banyan Tree Mayakoba"
