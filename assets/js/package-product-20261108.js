@@ -38,7 +38,7 @@
   children:Math.max(0,Math.min(8,Number(q.get('children'))||0)),
   origin:(q.get('origen')||defaults[country]||'LIM').toUpperCase(),
   tier:firstTier?.code||'',occupancy:'double',hotelPicked:false,customHotel:'',
-  hotelPhotos:{},roomPlan:'',hotelQuotePending:false,hotelAlternative:null,childrenAges:[],flight:null,baggage:'none',offers:[],outboundKey:'',choice:null,flightStage:'outbound',flightSearch:null
+  hotelPhotos:{},couponCode:'',roomPlan:'',hotelQuotePending:false,hotelAlternative:null,childrenAges:[],flight:null,baggage:'none',offers:[],outboundKey:'',choice:null,flightStage:'outbound',flightSearch:null
  };
  if(state.adults+state.children>9)state.children=Math.max(0,9-state.adults);
  function defaultRoom(){
@@ -64,7 +64,8 @@
  }
  function priceFlight(){return state.flight?.displayedPrice||0}
  function extraHotelCost(){return state.customHotel?Number(state.hotelAlternative?.supplement||0):0}
- function total(){return Math.round((pricePackage()+priceFlight()+extraHotelCost())*100)/100}
+ function discountAmount(){return state.couponCode==='LATAM10'?Math.round(pricePackage()*10)/100:0}
+ function total(){return Math.round((pricePackage()+priceFlight()+extraHotelCost()-discountAmount())*100)/100}
  function passengerText(){return state.adults+(state.adults===1?' adulto':' adultos')+(state.children?', '+state.children+(state.children===1?' niño':' niños'):'')}
  function flightMarkup(date){const n=Math.round((new Date(date+'T12:00:00')-new Date(localISO(new Date())+'T12:00:00'))/86400000);
   return n<=30?.1:n<=45?.05:n<=90?0:n<=180?-.05:n<=270?-.1:-.15;
@@ -74,7 +75,7 @@
   hotelAlternative:state.hotelAlternative?{...state.hotelAlternative}:null,hotelSupplement:extraHotelCost(),
   roomPlan:state.roomPlan,hotelQuotePending:state.hotelQuotePending,
   flight:state.flight?{...state.flight,baggage:state.baggage}:null,
-  totalEstimate:total(),packageEstimate:pricePackage(),origin:state.origin};}
+  totalEstimate:total(),packageEstimate:pricePackage(),couponCode:state.couponCode,discountAmount:discountAmount(),origin:state.origin};}
  window.LatamPackageDetails={getSelection};
  function removeInternalNotes(){
   const facts=main.querySelector('.tour-facts.product-facts');
@@ -100,10 +101,20 @@
   '<label>Fecha de llegada<input type="date" id="lxProductDate" aria-label="Fecha de llegada"></label>'+
   '<div class="lx-travel-field"><label for="lxProductTotalPax">Viajeros</label><button id="lxProductTotalPax" class="lx-travel-trigger" type="button">2 viajeros</button></div></div>'+
   '<div id="lxProductPriceDetails" class="lx-package-price-details" aria-live="polite"></div>'+
+  '<div class="lx-product-coupon" style="margin:12px 0"><label for="lxCouponCode" style="display:block;margin-bottom:6px;font-size:13px;font-weight:600">Código de descuento</label><div style="display:flex;gap:8px"><input id="lxCouponCode" maxlength="32" placeholder="Ingresa tu cupón" style="min-width:0;flex:1;border:1px solid #ccd6d0;border-radius:9px;padding:10px"><button type="button" id="lxCouponApply" style="border:0;background:#176b45;color:white;border-radius:9px;padding:10px 15px">Aplicar</button></div><small id="lxCouponNotice" role="status" aria-live="polite" style="display:block;margin-top:6px"></small></div>'+
   '<div class="lx-package-quick-total"><small>Total a pagar</small><strong id="lxProductGroupPrice"></strong></div>'+
   '<div id="lxProductFlightPrice" class="lx-package-flight-price" hidden></div>'+
   '<p class="lx-package-addons-note" id="lxProductQuoteNote">Elige la fecha y los viajeros para continuar.</p>';
  side.querySelector('.price-block')?.after(panel);
+ $('lxCouponApply').addEventListener('click',()=>{
+   const code=String($('lxCouponCode').value||'').trim().toUpperCase();
+   state.couponCode=code==='LATAM10'?'LATAM10':'';
+   $('lxCouponNotice').textContent=state.couponCode?'Descuento del 10 % aplicado al paquete. No incluye vuelos ni adicionales.':code?'Código no válido o no disponible.':'Cupón eliminado.';
+   update();
+ });
+ $('lxCouponCode').addEventListener('input',()=>{
+   if(state.couponCode&&$('lxCouponCode').value.trim().toUpperCase()!==state.couponCode){state.couponCode='';$('lxCouponNotice').textContent='Vuelve a aplicar el código.';update()}
+ });
  $('lxProductDate').min=minDate;$('lxProductDate').value=state.date;
  const productCalendar=window.LatamProductControls.calendar($('lxProductDate'));
  $('lxProductDate').addEventListener('change',()=>{
@@ -502,6 +513,7 @@ function showTierQuote(){
      addLine(adjustment>0?'Upgrade de hotel':'Ajuste de alojamiento',adjustment,false,
        arrangement?'('+arrangement+')':'');
    }
+   if(state.couponCode)addLine('Descuento · '+state.couponCode,-discountAmount());
    if(state.flight){
      const airlines=[...new Set([state.flight.outbound?.[0]?.airline,state.flight.inbound?.[0]?.airline].filter(Boolean))];
      addLine('Vuelos ida y vuelta · '+(airlines.join(' + ')||state.flight.airline),
@@ -520,9 +532,10 @@ function showTierQuote(){
   productCalendar.sync();productTravelers.sync();
   renderPriceBreakdown();
   const needsGroupQuote=state.adults+state.children>maxHotelOccupancy||state.hotelQuotePending;
-  $('lxProductGroupPrice').textContent=needsGroupQuote?'Consultar':fmt(total());
+  $('lxProductGroupPrice').textContent=state.adults+state.children>maxHotelOccupancy?'Consultar':fmt(total());
   // Mostrar avisos solo cuando afectan al itinerario; nunca añadir textos de cotización al importe.
-  const notice=needsGroupQuote?'La distribución de habitaciones requiere una tarifa adicional.':
+  const notice=state.adults+state.children>maxHotelOccupancy?'La distribución de habitaciones requiere una tarifa adicional.':
+    state.hotelQuotePending?'El hotel alternativo solicitado está pendiente de cotizar y NO forma parte del pago. Se mantiene el hotel base del paquete.':
     state.flight&&state.date&&state.flight.returnDate>addDays(state.date,params.nights)?
       'El vuelo de regreso es posterior al final del paquete; verifica las noches adicionales.':
       state.flight&&state.baggage==='checked'?'El equipaje facturado no está incluido en esta tarifa.':'';
@@ -536,7 +549,7 @@ function showTierQuote(){
 
   $('lxProductHotelStatus').textContent=state.customHotel&&state.hotelAlternative?
     state.hotelAlternative.nights+' noches · '+(state.roomPlan||'habitación seleccionada')+' · '+
-     (state.hotelQuotePending?'suplemento por confirmar':extraHotelCost()>0?'+ '+fmt(extraHotelCost())+' por la estancia':'sin recargo'):
+     (state.hotelQuotePending?'cambio pendiente de cotizar · no incluido en el pago':extraHotelCost()>0?'+ '+fmt(extraHotelCost())+' por la estancia':'sin recargo'):
     !hasHotelIncluded?'Este paquete no incluye noches de hotel.':
     'Alojamiento incluido · '+(state.roomPlan||(state.occupancy==='double'?'habitación doble':state.occupancy==='single'?'habitación simple':state.occupancy==='matrimonial'?'habitación matrimonial':state.occupancy==='triple'?'habitación triple':'habitación familiar'));
   let selectedHotelTotal=document.getElementById('lxSelectedHotelTotal');
