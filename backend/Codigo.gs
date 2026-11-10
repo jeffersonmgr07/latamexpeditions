@@ -1179,9 +1179,34 @@ function doPost(e) {
 function doGet(e) {
   const action=String(e&&e.parameter&&e.parameter.action||'');
   if(action==='status'||action==='status_html')return lxResponderEstado_(e);
+  if(action==='paypal_order_status')return lxResponderOrdenPayPal_(e);
   return ContentService
     .createTextOutput('Latam Expeditions — backend de reservas activo. Usa POST.')
     .setMimeType(ContentService.MimeType.TEXT);
+}
+
+/** Estado público mínimo de la orden con clave impredecible.
+ * Sirve para confirmar en el navegador el POST del iframe de Apps Script.
+ * No expone datos de pasajeros, email, precio ni documento. */
+function lxResponderOrdenPayPal_(e){
+  const p=e&&e.parameter||{},key=String(p.requestKey||'');
+  const callback=String(p.callback||'');
+  if(!/^__latamPayStatus_[A-Za-z0-9_]{12,100}$/.test(callback))
+    return ContentService.createTextOutput('/* callback inválido */')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  let reply={ok:true,pending:true,requestKey:key};
+  if(/^[A-Za-z0-9_-]{24,80}$/.test(key)){
+    try{
+      const item=buscarOrdenPorRequestKey(key);
+      if(item){
+        reply={ok:true,pending:false,requestKey:key,orderId:item.orderId,
+          status:item.estado,captured:item.estado==='CAPTURADA',bookingCode:item.codigoReserva||''};
+      }
+    }catch(ex){registrarError(ex,'Consultar estado de orden PayPal');}
+  }
+  const raw=JSON.stringify(reply).replace(/</g,'\\u003c');
+  return ContentService.createTextOutput(callback+'('+raw+');')
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
 
 function json(obj) {
@@ -1223,10 +1248,11 @@ function mensajeSeguro(error) {
 function redondear2(n) { return Math.round(n * 100) / 100; }
 
 function calcularCobro(total) {
-  if (total <= CONFIG.payFullBelow) return { due: redondear2(total), mode: 'completo' };
-  let due = Math.ceil((total * CONFIG.depositPercent) / 100 / CONFIG.depositRoundTo) * CONFIG.depositRoundTo;
-  due = Math.max(CONFIG.depositMin, Math.min(due, CONFIG.depositMax));
-  return { due: Math.min(due, redondear2(total)), mode: 'deposito' };
+  // LATAM Expeditions: pago íntegro del importe validado, sin depósitos.
+  const amount=Number(total);
+  if(!Number.isFinite(amount)||amount<=0||amount>1000000)
+    throw new Error('El importe no coincide. Revisa el total de la reserva.');
+  return {due:redondear2(amount),mode:'completo'};
 }
 
 function textoPlano(valor, maximo) {
