@@ -148,7 +148,18 @@
  '<button type="button" id="lxProductOpenHotel">Elegir habitación u hotel</button></div>';
  if(multiCityAtacama){
    const flightIntro=addonFlights.querySelector('p');
-   if(flightIntro)flightIntro.textContent='Añade opcionalmente los vuelos internos Santiago (SCL) – Calama (CJC) – Santiago, para los días 2 y 5. El traslado internacional a Santiago se reserva aparte.';
+   if(flightIntro){
+     flightIntro.replaceChildren();
+     const route=el('strong','','Santiago (SCL) → Calama (CJC) → Santiago (SCL)');
+     route.style.cssText='display:block;margin:8px 0 5px;font-size:1rem;color:inherit';
+     const explain=el('span','','Vuelo interno para llegar a San Pedro de Atacama · días 2 y 5 del itinerario.');
+     explain.style.display='block';
+     const separate=el('small','','¿Necesitas vuelos hacia o desde Santiago? También podemos cotizarlos por separado.');
+     separate.style.cssText='display:block;margin-top:8px;line-height:1.5';
+     flightIntro.append(route,explain,separate);
+   }
+   addonFlights.querySelector('h2').textContent='✈ Añade tus vuelos internos';
+   addonFlights.querySelector('#lxProductOpenFlights').textContent='Buscar vuelos internos';
    const intro=addonHotels.querySelector('.lx-addon-row .lx-package-addons-note');
    if(intro)intro.textContent='Elige una categoría que incluye hotel en Santiago (1 noche) y San Pedro de Atacama (3 noches). Los cambios individuales se solicitan a un asesor.';
    const button=addonHotels.querySelector('#lxProductOpenHotel');
@@ -530,7 +541,8 @@ function showTierQuote(){
    const adjustment=Math.round((pricePackage()-baseAmount)*100)/100;
    if(Math.abs(adjustment)>=.01){
      const arrangement=state.roomPlan||roomPlans(state.adults+state.children).find(p=>p.code===state.occupancy)?.label||'';
-     addLine(adjustment>0?'Upgrade de hotel':'Ajuste de alojamiento',adjustment,false,
+     addLine(state.occupancy==='single'?'Acomodación de hotel':
+       state.tier!==firstTier?.code?'Diferencia de tarifa hotelera':'Acomodación de hotel',adjustment,false,
        arrangement?'('+arrangement+')':'');
    }
    if(state.couponCode)addLine('Descuento · '+state.couponCode,-discountAmount());
