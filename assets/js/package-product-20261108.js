@@ -31,7 +31,9 @@
   'Brasil':'GRU','Ecuador':'UIO','Bolivia':'LPB','Venezuela':'CCS','Costa Rica':'SJO','Uruguay':'MVD'};
  let country='';try{country=localStorage.getItem('latam_country')||''}catch(_){}
  const state={
-  date:dateOK(q.get('fecha'))&&q.get('fecha')>=minDate?q.get('fecha'):'',
+  date:dateOK(q.get('fecha'))&&q.get('fecha')>=minDate?q.get('fecha'):
+    dateOK(book.dataset.bookDefaultArrival)&&book.dataset.bookDefaultArrival>=minDate?
+      book.dataset.bookDefaultArrival:'',
   adults:Math.max(1,Math.min(9,Number(q.get('adults'))||Number(q.get('viajeros'))||2)),
   children:Math.max(0,Math.min(8,Number(q.get('children'))||0)),
   origin:(q.get('origen')||defaults[country]||'LIM').toUpperCase(),
@@ -121,7 +123,7 @@
    main.querySelector('.package-itinerary')?.closest('section.detail-card');
  const addonFlights=el('section','lx-package-addon');
  addonFlights.innerHTML='<div class="lx-addon-row"><div><h2><i class="fa-solid fa-plane"></i> Añade vuelos a tu paquete</h2>'+
- '<p>Elige ida y regreso desde tu ciudad de salida. Puedes continuar también sin vuelos.</p></div>'+
+ '<p>Consulta vuelos a '+(params.destination==='CJC'?'Calama (CJC)':params.destination)+', o continúa sin añadirlos.</p></div>'+
  '<button type="button" id="lxProductOpenFlights">Buscar vuelos</button></div>'+
  '<div id="lxProductSelectedFlight" class="lx-package-status">Vuelos no incluidos</div>';
  const addonHotels=el('section','lx-package-addon');
@@ -197,7 +199,7 @@
  '<button type="button" id="lxFlightNextStep" disabled hidden>Continuar al regreso</button>'+
  '<button type="button" id="lxFlightApply" disabled hidden>Confirmar vuelos</button></div>';
  const hotels=modal('lxProductHotelsModal','Hotel y acomodación');
- hotels.body.innerHTML='<p class="lx-modal-lead">Elige hotel y habitaciones compatibles con tu grupo. Los cambios de hotel y combinaciones especiales se cotizan antes del pago.</p>'+
+ hotels.body.innerHTML='<p class="lx-modal-lead">Encuentra el alojamiento que prefieras para tu viaje.</p>'+
  '<div hidden><select id="lxHotelTier">'+tiers.map(t=>'<option value="'+String(t.code).replace(/["<>]/g,'')+'">'+String(t.name||'').replace(/</g,'')+'</option>').join('')+'</select>'+
  '<select id="lxHotelOccupancy"><option value="single">Simple</option><option value="double">Doble</option><option value="matrimonial">Matrimonial</option><option value="triple">Triple</option><option value="family">Familiar</option></select></div>'+
  '<div id="lxHotelTierCards" class="lx-hotel-cards"></div>'+
@@ -327,7 +329,7 @@ function renderFlightSearchSummary(){
   return m&&Number(m[2])>=1&&Number(m[2])<=12?
    Number(m[3])+' '+months[Number(m[2])-1]+' '+m[1]:(en?'To be defined':'Por definir');
  };
- const airports={MDE:'Medellín',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',PUQ:'Punta Arenas',CLO:'Cali',
+ const airports={MDE:'Medellín',CJC:'Calama · San Pedro de Atacama',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',PUQ:'Punta Arenas',CLO:'Cali',
   CTG:'Cartagena',AQP:'Arequipa',EZE:'Buenos Aires',SCL:'Santiago',MEX:'Ciudad de México',
   UIO:'Quito',GRU:'São Paulo',GIG:'Río de Janeiro',AEP:'Buenos Aires',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
  const origin=$('lxFlightOrigin').selectedOptions[0]?.textContent.replace(/\s*\([A-Z]{3}\)\s*$/,'')||
@@ -421,7 +423,7 @@ function renderHotelCards(){
   const name=(t.hotels||[]).join(' / ')||t.name||'Hotel previsto';
   const photo=state.hotelPhotos[normalizeHotelName((t.hotels||[])[0])];
   if(validSrc(photo)){const img=el('img');img.src=photo;img.alt=name;img.loading='lazy';img.referrerPolicy='no-referrer';media.append(img)}
-  else media.append(el('span','lx-hotel-placeholder','⌂'),el('small','','Foto por confirmar'));
+  else media.append(el('span','lx-hotel-placeholder','⌂'),el('small','','Hotel'));
   const details=el('div','lx-hotel-card-details');
   details.append(el('strong','lx-hotel-card-name',name),el('small','lx-hotel-card-category',(t.stars||'')+' · '+(t.name||'')),
    el('p','lx-hotel-room-title','Selecciona tu acomodación'));
@@ -911,9 +913,9 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
        ' · '+(pendingRoomPlan?.label||'acomodación seleccionada')));
      const actions=el('span','lx-hotel-choice-meta');
      if(canPrice)actions.append(el('strong','',difference>0?'+ '+fmt(differenceNight):'Sin recargo'),
-       el('small','',difference>0?'por noche · + '+fmt(difference)+' total':'Incluido en el presupuesto'));
-     else actions.append(el('strong','',canSelect?'Suplemento por confirmar':'No disponible'),
-       el('small','',canSelect?'Sin cobro hasta confirmar':'Sin tarifa para la fecha'));
+       el('small','',difference>0?'por noche · + '+fmt(difference)+' por estancia':'Sin costo adicional'));
+     else actions.append(el('strong','',canSelect?'Consultar tarifa':'No disponible'),
+       el('small','',canSelect?'Elige el hotel para recibir una propuesta':'Prueba otras fechas'));
      card.disabled=!canSelect;card.append(left,actions);
      if(canSelect)card.addEventListener('click',()=>{
        hotelsPendingName=h.name;
@@ -982,9 +984,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
        hotelLookupUi.hidden=false;
        $('lxHotelNameSearch').value='';$('lxHotelStarsFilter').value='all';$('lxHotelSort').value='recommended';
        $('lxHotelStarsFilter')._lxRefreshCustom?.();$('lxHotelSort')._lxRefreshCustom?.();
-       $('lxHotelFilterHelp').textContent=hotelBudget===null&&!hotelPrivateReference
-         ?'Puedes filtrar hoteles por nombre, categoría y ordenar por tarifas observadas. Los suplementos requieren confirmar el hotel incluido.'
-         :'Los suplementos se calculan por estancia sin mostrar presupuestos internos.';
+       $('lxHotelFilterHelp').textContent='Busca por nombre, categoría o precio y elige tu alojamiento favorito.';
      }
      const previous=new Set(hotelResults.map(h=>normalizeHotelName(h.name)));
      (Array.isArray(result.hotels)?result.hotels:[]).forEach(h=>{
@@ -994,8 +994,8 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
      hotelPage=page;hotelNextPage=result.hasMore===true&&Number.isInteger(result.nextPage)?result.nextPage:null;
      if(!hotelResults.length){setStatus(hotelStatus,'No se encontraron hoteles para estas fechas.');return}
      setStatus(hotelStatus,hotelBudget===null&&!hotelPrivateReference?
-       'Resultados encontrados. El suplemento se confirmará después de verificar el hotel incluido.':
-       'Recargos estimados para '+params.nights+' noches. Consulta el adicional por noche y elige tu hotel.');
+       'Estos son los hoteles disponibles en la búsqueda. Elige tu favorito para conocer la tarifa.':
+       'Explora opciones para '+params.nights+' noches. Puedes comparar el adicional por noche.');
      renderHotelResults();renderHotelCards();renderHotelPhoto();
    }catch(err){
      if(requestedRevision!==quoteRevision)return;
