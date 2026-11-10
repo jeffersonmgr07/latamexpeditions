@@ -237,8 +237,14 @@
     const codes=[['🇵🇪','+51','Perú'],['🇨🇴','+57','Colombia'],['🇨🇱','+56','Chile'],
       ['🇦🇷','+54','Argentina'],['🇧🇷','+55','Brasil'],['🇻🇪','+58','Venezuela'],
       ['🇧🇴','+591','Bolivia'],['🇪🇨','+593','Ecuador'],['🇲🇽','+52','México'],
-      ['🇺🇾','+598','Uruguay'],['🇨🇷','+506','Costa Rica'],['🇺🇸','+1','Estados Unidos'],
-      ['🇪🇸','+34','España'],['🇨🇦','+1','Canadá'],['🇫🇷','+33','Francia']];
+      ['🇺🇾','+598','Uruguay'],['🇨🇷','+506','Costa Rica'],['🇵🇦','+507','Panamá'],
+      ['🇵🇾','+595','Paraguay'],['🇬🇹','+502','Guatemala'],['🇭🇳','+504','Honduras'],
+      ['🇸🇻','+503','El Salvador'],['🇳🇮','+505','Nicaragua'],['🇩🇴','+1','República Dominicana'],
+      ['🇨🇺','+53','Cuba'],['🇺🇸','+1','Estados Unidos'],['🇨🇦','+1','Canadá'],
+      ['🇪🇸','+34','España'],['🇫🇷','+33','Francia'],['🇬🇧','+44','Reino Unido'],
+      ['🇩🇪','+49','Alemania'],['🇮🇹','+39','Italia'],['🇵🇹','+351','Portugal'],
+      ['🇯🇵','+81','Japón'],['🇨🇳','+86','China'],['🇰🇷','+82','Corea del Sur'],
+      ['🇮🇳','+91','India'],['🇦🇺','+61','Australia']];
     const avatar=state.avatar||p.googlePicture||'';
     return '<div class="exp-card"><div class="exp-profile-top">'+
       '<span class="exp-profile-avatar">'+(avatar?'<img src="'+esc(avatar)+'" alt="Tu fotografía de perfil">':'<i class="fa-solid fa-user" aria-hidden="true"></i>')+'</span>'+
@@ -257,7 +263,7 @@
       codes.map(x=>'<option value="'+x[1]+'"'+(x[1]===(p.whatsappCode||'+51')?' selected':'')+'>'+x[0]+' '+x[1]+' · '+x[2]+'</option>').join('')+
       '</select></label><label>Número de WhatsApp<input type="tel" name="whatsapp" inputmode="numeric" maxlength="15" placeholder="987654321" value="'+esc(p.whatsapp||'')+'"></label></div>'+
       '<button type="submit" class="exp-btn"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></form></div>'+
-      '<div class="exp-card"><h3>Correo y seguridad</h3>'+
+      '<div class="exp-card"><h3>Cambiar correo electrónico</h3>'+
       '<details class="exp-subdetails"><summary>Cambiar correo electrónico <i class="fa-solid fa-chevron-down"></i></summary>'+
       '<p>Para proteger tus viajes y puntos, enviaremos un código al correo actual y otro al nuevo.</p>'+
       '<form id="expEmailRequestForm" class="exp-profile-form">'+
@@ -268,7 +274,8 @@
       '<form id="expEmailConfirmForm" class="exp-email-confirm"><label>Código del correo actual<input name="currentCode" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
       '<label>Código del correo nuevo<input name="code" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
       '<button class="exp-btn" type="submit">Confirmar cambio de correo</button></form></details>'+
-      '<div class="exp-security-foot"><span>Sesión actual</span><button type="button" class="exp-btn exp-btn--light" data-logout>Cerrar sesión</button></div></div>'+
+      '</div><div class="exp-card"><h3>Seguridad</h3>'+
+      '<button type="button" class="exp-btn exp-btn--light" data-logout>Cerrar sesión</button></div>'+
       '<div class="exp-card"><h3>Verificación y bienvenida</h3>'+
       (state.data.verified?'<div class="exp-notice"><i class="fa-solid fa-circle-check"></i><p>Tu cuenta está verificada y participa en LATAM Rewards.</p></div>':verificationBanner())+'</div>';
   }
