@@ -1783,6 +1783,7 @@
     const addonSummary = $('#bkExtraTravelSummary');
     if (addonSummary) {
       const details = [];
+      if(state.couponCode==='LATAM10')details.push('Cupón LATAM10 · 10 % de descuento en el paquete');
       if (state.flightQuote) details.push('Vuelos ida y regreso · '+money(state.flightQuote.displayedPrice)+
         (state.flightQuote.baggage === 'checked' ? ' · maleta facturada por cotizar' : ''));
       if (state.customHotel) details.push('Hotel alternativo: '+state.customHotel+' · '+
@@ -2455,6 +2456,7 @@
           ' · '+(state.adults+state.children)+' viajero(s)';
         const hotel=state.customHotel||tierOptionLabel(getTier());
         const extras=[hotel,
+          state.couponCode==='LATAM10'?'Cupón LATAM10 aplicado':'',
           state.roomPlan||occupancyLabel(state.occupancy),
           state.flightQuote?'Vuelos seleccionados desde '+state.flightQuote.origin:'Vuelos no añadidos'];
         const estimated=Number(source.totalEstimate);
