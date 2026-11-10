@@ -2590,14 +2590,14 @@
       // La misma mejora visual y datos heredados se utiliza en todas las fichas de paquetes.
       if(!document.querySelector('link[href*="package-product-20261108.css"]')){
         const css=document.createElement('link');css.rel='stylesheet';
-        css.href=BASE+'assets/css/package-product-20261108.css?v=20261110-paypal-full-r16';document.head.append(css);
+        css.href=BASE+'assets/css/package-product-20261108.css?v=20261110-hotelfotos-v1';document.head.append(css);
       }
       const addUI=()=>{
         if(document.querySelector('script[data-lx-package-ui]'))return;
         const start=()=>{
           if(document.querySelector('script[data-lx-package-ui]'))return;
           const script=document.createElement('script');script.dataset.lxPackageUi='true';
-          script.src=BASE+'assets/js/package-product-20261108.js?v=20261110-atacama-v3';document.head.append(script);
+          script.src=BASE+'assets/js/package-product-20261108.js?v=20261110-hotelfotos-v1';document.head.append(script);
         };
         if(window.LatamProductControls){start();return}
         const controls=document.createElement('script');
