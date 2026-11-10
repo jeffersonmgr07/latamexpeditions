@@ -1,4 +1,4 @@
-/** PRECARGA SANITIZADA: sin precios internos, costos, márgenes ni datos privados de proveedores. */
+/** Precarga pública de Atacama Premium: vuelos OPCIONALES, precio REFERENCIAL, sin costos netos ni márgenes privados. */
 const ATACAMA_PREMIUM_DRAFT = {
   "schemaVersion": 1,
   "id": "",
@@ -21,9 +21,9 @@ const ATACAMA_PREMIUM_DRAFT = {
     "category": "Naturaleza, aventura, astronomía",
     "modality": "Excursiones y traslados compartidos",
     "difficulty": "Moderada · excursiones de altura",
-    "language": "Inglés (por confirmar)",
-    "startPoint": "Aeropuerto de Santiago (SCL)",
-    "endPoint": "Aeropuerto de Santiago (SCL)",
+    "language": "Español · inglés sujeto a confirmación",
+    "startPoint": "Aeropuerto El Loa de Calama (CJC)",
+    "endPoint": "Aeropuerto El Loa de Calama (CJC)",
     "minAge": 18,
     "minTravelers": 1,
     "maxTravelers": 4,
@@ -33,13 +33,13 @@ const ATACAMA_PREMIUM_DRAFT = {
   "dates": {
     "pilotCheckin": "2027-03-22",
     "pilotCheckout": "2027-03-26",
-    "onlyPilotWindow": true,
-    "minLeadDays": 30,
-    "notes": "El 26/03/2027 es Viernes Santo en Chile. El vuelo de retorno debe ser tarde/noche. Fuera de estas fechas, recotizar."
+    "onlyPilotWindow": false,
+    "minLeadDays": 21,
+    "notes": "Fechas flexibles, siempre sujetas a confirmación y recotización. Piloto 22–26/03/2027 incluye Viernes Santo el día 26; revisar la operación y la actividad astrolunar por luna llena."
   },
   "commercial": {
-    "short": "Descubre el desierto de Atacama en 5 días: salares, lagunas, géiseres y Valle de la Luna, con hotel 4 estrellas, vuelos internos y guías en inglés.",
-    "description": "Viaja desde Santiago al corazón del desierto de Atacama y descubre salares, lagunas de altura, géiseres y formaciones rocosas. La llegada a Calama y el primer día libre permiten aclimatarse. Las siguientes jornadas combinan Valle del Arcoíris y Yerbas Buenas, Valle de la Luna, Piedras Rojas, Lagunas Altiplánicas, Salar de Atacama, Géiseres del Tatio, Machuca, Laguna Cejar y Ojos del Salar. Las excursiones se plantean en servicio compartido con guías en inglés. Se contempla una actividad astronómica adaptada a luna llena, pendiente de aceptación del pasajero y confirmación operativa. Todos los servicios y horarios siguen sujetos a disponibilidad.",
+    "short": "Cinco días y cuatro noches en San Pedro de Atacama con Hotel Terrantai 4★, tours por el desierto, traslados desde Calama y desayuno. Vuelos opcionales.",
+    "description": "Descubre los paisajes de Atacama con cuatro noches en el hotel boutique Terrantai 4★, traslados compartidos desde el aeropuerto de Calama y excursiones por Valle de la Luna, Valle del Arcoíris, Piedras Rojas, Lagunas Altiplánicas, Géiseres del Tatio y Laguna Cejar. Los vuelos no están incluidos en el precio base y pueden añadirse durante la reserva. La actividad nocturna se adapta a la luna y el clima; horarios, guías y alojamiento sujetos a confirmación.",
     "highlights": [
       "Valle de la Luna y atardecer en el desierto",
       "Valle del Arcoíris y Yerbas Buenas",
@@ -49,29 +49,30 @@ const ATACAMA_PREMIUM_DRAFT = {
       "Experiencia astronómica/lunar condicionada"
     ],
     "includes": [
-      "Vuelos domésticos Santiago–Calama–Santiago (tarifa y aerolínea por confirmar)",
       "4 noches en Hotel Terrantai 4★, habitación doble o matrimonial, sujeto a cotización",
       "Desayuno diario durante 4 mañanas",
       "Traslados compartidos aeropuerto CJC–hotel–aeropuerto CJC",
       "3 jornadas de excursiones agrupadas en 5 salidas",
-      "Guías en inglés por confirmar",
+      "Guías locales (idioma sujeto a confirmación)",
       "Entradas a los atractivos incluidos en las excursiones",
-      "Una actividad astronómica/lunar por confirmar"
+      "Una actividad astronómica/lunar por confirmar",
+      "Actividad astrolunar nocturna, sujeta a confirmación de operador y condiciones climáticas"
     ],
     "excludes": [
-      "Vuelos internacionales y noches en Santiago",
+      "Vuelos nacionales e internacionales, incluido Santiago–Calama–Santiago (opcional al configurar reserva)",
+      "Equipaje y asientos aéreos; tasas o servicios no incluidos por la aerolínea",
       "Traslados en Santiago entre aeropuerto y hotel",
       "Almuerzos y cenas salvo confirmación de los operadores",
-      "Equipaje extra, asientos y servicios aéreos no tarifados",
       "Seguro, propinas y gastos personales",
       "Servicios no señalados expresamente como incluidos"
     ],
     "optional": [
       "Traslado privado a cotizar",
       "Excursiones privadas en inglés a cotizar",
-      "Habitación individual: suplemento calculado con tarifa real del hotel, pendiente"
+      "Añadir vuelos desde el origen del viajero hasta Calama (CJC), según tarifa dinámica disponible",
+      "Habitación individual: suplemento según tarifa efectiva y ocupación, sujeto a cotización"
     ],
-    "policies": "Cancelación y reprogramación pendientes de condiciones firmes de vuelos, hotel y excursiones.",
+    "policies": "Precio preliminar para base doble. Hotel, excursiones y entradas sujetos a disponibilidad y confirmación del proveedor. Si no se puede cumplir un servicio, se ofrecerá una alternativa aceptada o la devolución correspondiente. No incluye vuelos. Condiciones definitivas de cancelación al confirmar los servicios.",
     "recommendations": "Abrigo por capas, calzado cerrado, protector solar, sombrero, hidratación y documento de viaje.",
     "restrictions": "Altura superior a 4.000 m en El Tatio; cambios de temperatura; evaluar condiciones físicas. Piloto solo para adultos (18+).",
     "accessibility": "No verificada; excursiones en altitud y caminatas en terreno irregular."
@@ -79,41 +80,36 @@ const ATACAMA_PREMIUM_DRAFT = {
   "itinerary": [
     {
       "day": 1,
-      "title": "Llegada a Calama y aclimatación en San Pedro",
+      "title": "Llegada a Calama, traslado y aclimatación en San Pedro",
       "date": "2027-03-22",
-      "intro": "Vuelo Santiago–Calama, transfer a San Pedro, registro en hotel y tarde de aclimatación. Actividad lunar solo si el proveedor confirma operación.",
+      "intro": "Llegada al aeropuerto de Calama (vuelo no incluido), traslado compartido a San Pedro, registro en Terrantai y descanso para aclimatación. Posible actividad astrolunar, condicionada a confirmar operador y clima.",
       "activities": [
         {
-          "time": "09:00",
-          "activity": "Presentación en aeropuerto de Santiago",
-          "detail": "Hora estimada; depende del vuelo."
+          "time": "Según vuelo",
+          "activity": "Llegada al Aeropuerto El Loa (CJC)",
+          "detail": "Los vuelos son opcionales y no forman parte del precio base."
         },
         {
-          "time": "11:00",
-          "activity": "Vuelo Santiago → Calama",
-          "detail": "Aerolínea y vuelo por confirmar; duración aproximada de 2 horas."
+          "time": "Según llegada",
+          "activity": "Recepción y traslado a San Pedro",
+          "detail": "Transfer compartido de aproximadamente 1 h 15 a 1 h 30; sujeto a horario de vuelo."
         },
         {
-          "time": "13:00",
-          "activity": "Recepción y traslado en Calama",
-          "detail": "Transfer compartido de 1 h 15 a 1 h 30 aproximadamente."
+          "time": "Desde 15:00",
+          "activity": "Check-in y descanso en Hotel Terrantai",
+          "detail": "Aclimatación y paseo libre por el centro de San Pedro."
         },
         {
-          "time": "15:00",
-          "activity": "Check-in y descanso",
-          "detail": "Hidratación y aclimatación; comidas por cuenta del viajero."
-        },
-        {
-          "time": "20:30",
-          "activity": "Experiencia astronómica / lunar",
-          "detail": "Solo si se confirma bajo condiciones de luna llena."
+          "time": "Noche",
+          "activity": "Actividad astrolunar opcional/condicionada",
+          "detail": "Luna llena cercana; solo si se confirma un operador para modalidad lunar. Se informará antes de reservar."
         }
       ],
-      "meals": "No se incluyen comidas; desayuno desde el día siguiente.",
+      "meals": "No se incluyen comidas el día de llegada",
       "lodging": "Terrantai 4★, primera noche sujeto a confirmación",
-      "transport": "Vuelo SCL–CJC y transfer compartido",
+      "transport": "Traslado compartido aeropuerto CJC–San Pedro (sin vuelo incluido)",
       "difficulty": "Aclimatación progresiva a ~2.400 m",
-      "operationalNote": "No fijar la excursión nocturna sin horarios y proveedor confirmados."
+      "operationalNote": "Luna llena el 22/03/2027; no anunciar observación de estrellas de cielo oscuro. Reconfirmar horarios y disponibilidad de actividad lunar."
     },
     {
       "day": 2,
@@ -263,34 +259,34 @@ const ATACAMA_PREMIUM_DRAFT = {
       "day": 5,
       "title": "Regreso a Santiago de Chile",
       "date": "2027-03-26",
-      "intro": "Desayuno y salida del hotel. Transfer al aeropuerto de Calama y vuelo CJC–SCL en la tarde/noche del Viernes Santo.",
+      "intro": "Desayuno, salida del hotel y traslado al aeropuerto de Calama (CJC) para tomar el vuelo contratado por el viajero u opcionalmente añadido.",
       "activities": [
         {
           "time": "08:00",
           "activity": "Desayuno",
-          "detail": "Según disponibilidad del comedor."
+          "detail": "Horario del hotel y salida sujetos a la programación."
         },
         {
           "time": "11:00",
           "activity": "Check-out y tiempo libre",
-          "detail": "Entregar habitación a la hora oficial."
+          "detail": "Consultar con recepción guarda de equipaje."
         },
         {
-          "time": "13:00",
-          "activity": "Transfer San Pedro → Calama",
-          "detail": "Hora definitiva en función del vuelo."
+          "time": "Según vuelo",
+          "activity": "Traslado San Pedro → Aeropuerto Calama",
+          "detail": "Salidas según horarios del vuelo que contrate o añada el viajero."
         },
         {
-          "time": "16:00–22:00",
-          "activity": "Vuelo Calama → Santiago",
-          "detail": "Franja solicitada, vuelo no confirmado."
+          "time": "—",
+          "activity": "Fin de nuestros servicios en Calama",
+          "detail": "Vuelos no incluidos en el paquete base."
         }
       ],
       "meals": "Desayuno",
       "lodging": "Fin del programa",
-      "transport": "Transfer CJC y vuelo CJC–SCL",
+      "transport": "Traslado compartido a CJC (vuelos opcionales)",
       "difficulty": "Planear tiempo suficiente para embarque",
-      "operationalNote": "El 26/03 es feriado; verificar vuelos y transfer."
+      "operationalNote": "26/03/2027 Viernes Santo en Chile. Revisar salidas de operadores y transfer, sin prometer vuelo SCL."
     }
   ],
   "lodging": {
@@ -310,20 +306,21 @@ const ATACAMA_PREMIUM_DRAFT = {
     "note": "Confirmar disponibilidad y precio de habitación doble y uso individual para 22–26/03/2027."
   },
   "flights": {
-    "included": true,
-    "route": "SCL-CJC-SCL",
+    "included": false,
+    "availableAsAddOn": true,
+    "route": "CJC (Calama) como aeropuerto de destino; origen seleccionable",
     "preferredAirlines": [
       "LATAM",
       "SKY",
       "JetSMART"
     ],
-    "returnWindow": "2027-03-26 tarde/noche",
     "flightConfirmed": false,
-    "originDomesticSCL": true
+    "originDomesticSCL": false,
+    "note": "Vuelos no incluidos. El turista puede añadir vuelo desde su aeropuerto de origen con motor SerpApi y pago como suplemento validado."
   },
   "transfers": {
     "included": true,
-    "route": "CJC–hotel San Pedro–CJC",
+    "route": "CJC–San Pedro–CJC",
     "mode": "compartido",
     "confirmed": false
   },
@@ -332,19 +329,19 @@ const ATACAMA_PREMIUM_DRAFT = {
     "basisOccupancy": 2,
     "defaultAdults": 2,
     "defaultChildren": 0,
-    "pricePerAdultOnDoubleUSD": null,
-    "baseGroupPriceForTwoUSD": null,
+    "pricePerAdultOnDoubleUSD": 1499.9,
+    "baseGroupPriceForTwoUSD": 2999.8,
     "priceStatus": "REFERENCIAL_NO_PUBLICAR",
     "childrenPriceUSD": null,
     "soloRateStatus": "PENDIENTE_TARIFA_SINGLE",
     "costValidationRequired": true,
-    "note": "Introduce la tarifa de venta referencial desde el documento Word en la consola privada, tras comprobar el costo real de Hotel Terrantai."
+    "note": "Precio público indicativo para 2 adultos en doble; no garantizado hasta confirmar hotel y excursiones para las fechas. Vuelos adicionales."
   },
   "seo": {
-    "title": "Desierto de Atacama Premium 5D/4N | LATAM Expeditions",
-    "description": "Viaja 5 días al desierto de Atacama con hotel Terrantai 4 estrellas, vuelos internos, traslados y excursiones guiadas. Cotización bajo solicitud.",
+    "title": "Atacama Premium 5D/4N con Hotel Terrantai | LATAM Expeditions",
+    "description": "Desierto de Atacama 5 días y 4 noches con Hotel Terrantai 4★, excursiones, traslados desde Calama y vuelos opcionales. Consulta disponibilidad.",
     "keywords": "desierto de atacama 5 días, san pedro de atacama paquete, piedras rojas, géiseres del tatio, chile 5d4n",
-    "heroImage": "",
+    "heroImage": "https://latamexpeditions.com/assets/img/chile-experiencia-atacama-valle-luna.jpg",
     "gallery": [],
     "translationEnglishReady": false,
     "relatedSlugs": [
@@ -364,6 +361,6 @@ const ATACAMA_PREMIUM_DRAFT = {
     "datesVerified": false,
     "englishApproved": false,
     "bookingTested": false,
-    "notes": "Plantilla de prueba: requiere tarifas hoteleras y validación antes de publicar."
+    "notes": "Investigación referencial 10/11/2026. Precios netos no confirmados para 22–26/03/2027. Producto visible como cotización, no pago garantizado."
   }
 };
