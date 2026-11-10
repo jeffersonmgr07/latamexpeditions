@@ -113,7 +113,7 @@
 .product-detail-section .detail-main>.detail-card:first-child{margin-top:0!important}
 .product-hero-clean.package-hero-clean{
  background-color:#0b4b30;
- background-image:linear-gradient(90deg,rgba(5,53,33,.95) 0%,rgba(7,70,39,.81) 48%,rgba(6,61,38,.63) 100%),var(--lx-hero-img);
+ background-image:linear-gradient(90deg,rgba(5,53,33,.83) 0%,rgba(7,70,39,.64) 48%,rgba(6,61,38,.48) 100%),var(--lx-hero-img);
  background-size:cover;background-position:center;min-height:190px;
  padding-top:clamp(50px,6vw,76px);padding-bottom:clamp(45px,6vw,72px);
 }
