@@ -54,10 +54,11 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </style></head>
 <body>
 <header><div class="brand"><span class="icon">L</span><div><h1>LATAM EXPEDITIONS</h1><small>Consola privada · Gestión de experiencias</small></div></div><span class="pill">Borrador → Revisión → Aprobación</span></header>
-<main><aside><div class="sidebar-title"><h2>Experiencias</h2><button class="primary" id="new">+ Nueva</button></div><p>Los datos internos no se publican en el sitio web.</p><div id="products"></div><button class="secondary" id="import" style="width:100%;margin-top:12px">Importar Atacama 5D/4N</button><button class="secondary" id="atacamaStudy" style="width:100%;margin-top:9px">Completar costos de Atacama</button></aside>
+<main><aside><div class="sidebar-title"><h2>Experiencias</h2><button class="primary" id="new">+ Nueva</button></div><p>Los datos internos no se publican en el sitio web.</p><div id="products"></div><button class="secondary" id="import" style="width:100%;margin-top:12px">Importar Atacama 5D/4N</button><button class="secondary" id="atacamaStudy" style="width:100%;margin-top:9px">Completar costos de Atacama</button>
+<button class="primary" id="approveAtacama" style="width:100%;margin-top:9px">Aprobar precio y publicar Atacama</button></aside>
 <section class="workspace">
  <div class="toolbar"><div><h2 id="heading">Nueva experiencia</h2><div class="meta" id="codeInfo">Código correlativo al guardar</div></div><div class="toolbar-actions"><button class="secondary" id="test">Calcular ocupación</button><button class="primary" id="save">Guardar borrador</button></div></div>
- <div class="banner">Esta consola está separada de GitHub Pages. Guardar un producto no lo publica ni habilita cobros. Los costos privados se almacenan únicamente en Google Sheets con acceso restringido.</div>
+ <div class="banner">Atacama ya tiene una ficha creada en GitHub Pages. Usa «Aprobar precio y publicar Atacama» para registrar tu decisión comercial en Sheets. Los demás productos aún no se publican automáticamente desde esta consola. Los costos internos permanecen privados.</div>
  <div id="message" role="status"></div>
  <nav class="tabs" id="tabs" aria-label="Secciones de producto">
   <button class="active" data-tab="general">1. Identificación</button>
@@ -72,7 +73,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <div class="card"><h3>Identificación comercial</h3><p class="sub">Campos necesarios para crear el registro y ubicarlo en el catálogo.</p>
    <div class="grid">
     <div class="field"><label>Tipo de producto</label><select data-field="identity.type"><option value="package">Paquete / circuito</option><option value="experience">Experiencia / excursión</option></select></div>
-    <div class="field"><label>Estado interno</label><select data-field="status"><option value="BORRADOR">Borrador</option><option value="EN_REVISION">En revisión</option><option value="PUBLICADO_COTIZACION">Publicado solo para cotizar · piloto Atacama</option><option value="APROBADO">Aprobado para ventas (requiere validación)</option></select></div>
+    <div class="field"><label>Estado interno</label><select data-field="status"><option value="BORRADOR">Borrador</option><option value="EN_REVISION">En revisión</option><option value="PUBLICADO_COTIZACION">Publicado solo para cotizar · piloto Atacama</option><option value="APROBADO">Aprobado para ventas</option></select></div>
     <div class="field span"><label>Título comercial</label><input data-field="identity.title" placeholder="Ej. Desierto de Atacama Premium · 5 días / 4 noches"></div>
     <div class="field"><label>Slug / URL</label><input data-field="identity.slug" placeholder="desierto-atacama-premium-5d4n"></div>
     <div class="field"><label>Nombre interno</label><input data-field="identity.internalName"></div>
@@ -117,7 +118,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
     <div class="field"><label>Tarifa de venta por adulto en doble (USD)</label><input data-field="pricing.pricePerAdultOnDoubleUSD" type="number" min="0" step="0.01"></div>
     <div class="field"><label>Costo interno habitación doble por noche (USD)</label><input data-field="lodging.costDoubleRoomNightUSD" type="number" min="0" step="0.01" placeholder="Pendiente de cotización"></div>
     <div class="field"><label>Costo interno habitación para una persona por noche (USD)</label><input data-field="lodging.costSingleRoomNightUSD" type="number" min="0" step="0.01" placeholder="Pendiente de cotización"></div>
-    <div class="field"><label>Estado de tarifa de venta</label><select data-field="pricing.priceStatus"><option value="REFERENCIAL_NO_PUBLICAR">Referencial · no publicar</option><option value="CONFIRMADA">Confirmada por proveedor</option></select></div>
+    <div class="field"><label>Estado de tarifa de venta</label><select data-field="pricing.priceStatus"><option value="REFERENCIAL_NO_PUBLICAR">Referencial · no publicar</option><option value="CONFIRMADA">Confirmada por proveedor</option><option value="PRECIO_FIJO_AGENCIA">Precio de venta fijo aprobado por agencia (no confirma hotel)</option></select></div>
    </div>
    <div class="info">Regla para impar: 1 persona en habitación individual + parejas en habitaciones dobles. El suplemento individual sale de la diferencia real del costo de habitación, no de duplicar el precio del tour.</div>
   </div>
@@ -208,7 +209,7 @@ const blank=()=>({schemaVersion:1,id:'',code:'',status:'BORRADOR',version:0,
 const pathGet=(o,path)=>path.split('.').reduce((x,k)=>x&&x[k],o);
 const pathSet=(o,path,value)=>{const keys=path.split('.');let x=o;for(let i=0;i<keys.length-1;i++){x[keys[i]]=x[keys[i]]||{};x=x[keys[i]]}x[keys[keys.length-1]]=value};
 function msg(text,error=false){const el=$('#message');el.textContent=text;el.classList.toggle('error',error);el.classList.add('visible');}
-function busy(b){loading=b;$('#save').disabled=b;$('#import').disabled=b;$('#atacamaStudy').disabled=b;$('#new').disabled=b;}
+function busy(b){loading=b;$('#save').disabled=b;$('#import').disabled=b;$('#atacamaStudy').disabled=b;$('#approveAtacama').disabled=b;$('#new').disabled=b;}
 function api(name,...args){
  return new Promise((resolve,reject)=>{
   if(!window.google||!google.script||!google.script.run){reject(new Error('Abre esta consola desde una implementación privada de Google Apps Script, no directamente en GitHub Pages.'));return}
@@ -294,6 +295,16 @@ $('#tabs').addEventListener('click',event=>{
  if(b.dataset.tab==='hotel')renderQuotes();
 });
 $('#new').onclick=()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Crear uno nuevo?'))return;fill(blank());$('#tabs button').click()};
+$('#approveAtacama').onclick=async()=>{
+ if(dirty){msg('Primero guarda o descarta los cambios sin guardar de este formulario.',true);return}
+ if(!confirm('APROBACIÓN COMERCIAL: LATAM Expeditions venderá Atacama Premium a USD 1,499.90 por adulto (base doble, sin vuelos). El precio será fijo para el cliente, aunque los costos de Terrantai y excursiones varíen. La agencia asume el riesgo, y ofrecerá una devolución si no puede cumplir el viaje. Esto NO significa que hotel y tours estén reservados. ¿Aprobar?'))return;
+ busy(true);
+ try{
+  fill(await api('lxAprobarPrecioAtacama'));
+  msg('¡Atacama aprobado comercialmente! Precio fijo de agencia USD 1,499.90 por adulto en doble. Proveedores aún no confirmados. La ficha pública ya fue preparada en GitHub; publica las nuevas versiones de Apps Script para habilitar el checkout.');
+  await list();
+ }catch(e){msg(e.message,true)}finally{busy(false)}
+};
 $('#atacamaStudy').onclick=async()=>{
  if(dirty&&!confirm('Tienes cambios sin guardar. Esta actualización repondrá la ficha investigada de Atacama. ¿Continuar?'))return;
  if(!confirm('Se rellenarán costos ESTIMADOS de Atacama y se actualizarán los vuelos a OPCIONALES. El hotel NO está confirmado y el estado seguirá EN REVISIÓN. ¿Aplicar?'))return;
@@ -303,7 +314,7 @@ $('#atacamaStudy').onclick=async()=>{
 };
 $('#import').onclick=async()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Importar Atacama?'))return;
  busy(true);try{fill(await api('lxImportAtacama'));msg('Atacama Premium se importó/abrió como borrador. Terrantai está pendiente de cotización.');await list()}catch(e){msg(e.message,true)}finally{busy(false)}};
-$('#save').onclick=async()=>{busy(true);try{fill(await api('lxSaveProduct',collect()));msg('Producto guardado en tu Google Sheet privado. No se ha publicado en la web.');await list()}
+$('#save').onclick=async()=>{busy(true);try{const saved=await api('lxSaveProduct',collect());fill(saved);msg(saved.identity?.slug==='desierto-atacama-premium-5d4n'&&saved.status==='APROBADO'?'Atacama: aprobación comercial guardada. La página pública está en GitHub; los cambios de contenido requieren sincronización.':'Producto guardado en tu Google Sheet privado. La consola todavía no sincroniza cambios automáticamente con GitHub.');await list()}
  catch(e){msg(e.message,true)}finally{busy(false)}};
 $('#addDay').onclick=()=>{product.itinerary=product.itinerary||[];product.itinerary.push({day:product.itinerary.length+1,title:'',intro:'',activities:[]});dirty=true;renderDays()};
 $('#recalc').onclick=renderQuotes;$('#test').onclick=()=>{$('#tabs button[data-tab="hotel"]').click()};
