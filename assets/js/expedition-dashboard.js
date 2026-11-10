@@ -446,7 +446,7 @@
     try{
       await api('dashboardVerifyEmail',{code:code});
       await reload();
-      flash('¡Tu correo está verificado! Ya puedes consultar tus 100 millas de bienvenida.');
+      flash('¡Tu correo está verificado! Ya puedes consultar tus 100 puntos de bienvenida.');
       state.page='millas';render();
     }catch(err){flash(err.message,true);}
     finally{btn.disabled=false;}
@@ -534,6 +534,14 @@
     }catch(err){flash(err.message||'No se pudo guardar la fotografía.',true);}
   }
   document.addEventListener('click',e=>{
+    const logout=e.target.closest('#expPagePanels [data-logout]');
+    if(logout){
+      e.preventDefault();logout.disabled=true;
+      api('logout').catch(()=>{}).finally(()=>{
+        try{localStorage.removeItem(kToken);localStorage.removeItem(kUser);}catch(err){}
+        window.location.href=base+'index.html';
+      });return;
+    }
     const tab=e.target.closest('[data-exp-nav]');
     if(tab && (tab.closest('.exp-app')||tab.closest('.exp-workspace'))) {
       e.preventDefault();navigate(tab.dataset.expNav);return;
