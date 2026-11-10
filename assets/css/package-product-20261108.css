@@ -465,3 +465,38 @@
  .lx-layover-copy strong{font-size:12px}
  .lx-layover-copy span,.lx-layover-copy small{font-size:11px}
 }
+
+/* Hotel finder · filtro por estrellas y suplemento, carga paginada */
+.lx-hotel-filters{display:grid;grid-template-columns:minmax(150px,1.45fr) repeat(3,minmax(135px,1fr));
+ gap:11px;margin:15px 0 12px;padding:14px;border:1px solid #d3e6d9;
+ background:#f5faf6;border-radius:13px;align-items:end;min-width:0}
+.lx-hotel-filters[hidden]{display:none!important}
+.lx-hotel-filters label{display:grid;gap:6px;min-width:0;color:#284e37;font-size:11px;font-weight:800}
+.lx-hotel-filters input,.lx-hotel-filters select{
+  min-width:0;width:100%;min-height:42px;box-sizing:border-box;border:1px solid #c6dcca;
+  border-radius:9px;background:#fff;padding:10px 12px;color:#214a30;font:600 12px Inter,Arial,sans-serif;
+  outline-offset:2px
+}
+.lx-hotel-filters input:focus,.lx-hotel-filters select:focus{border-color:#07873e;outline:2px solid rgba(7,135,62,.16)}
+.lx-hotel-filters input:disabled{background:#ecf0ed;color:#879b8e;cursor:not-allowed}
+.lx-hotel-filter-help{grid-column:1/-1;margin:1px 0 0;color:#63816c;font-size:11px;line-height:1.5}
+.lx-hotel-result-count{margin:10px 0 12px;color:#567662;font-size:12px;font-weight:650}
+.lx-hotel-result-count[hidden]{display:none!important}
+.lx-hotel-category-line{color:#678576!important;font-weight:650}
+.lx-hotel-load-more{display:block;min-height:43px;border:1px solid #07873e;border-radius:10px;
+ background:#fff;color:#07873e;font-weight:800;font-size:12px;padding:11px 18px;
+ margin:15px auto 10px;cursor:pointer}
+.lx-hotel-load-more:hover{background:#edf8f0}
+.lx-hotel-load-more:disabled{opacity:.6;cursor:progress}
+.lx-hotel-load-more[hidden]{display:none!important}
+.lx-hotel-no-results{padding:20px 13px;color:#547362;font-size:12px;line-height:1.55;border:1px dashed #cfdfd3;border-radius:11px}
+@media(max-width:850px){
+ .lx-hotel-filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:12px}
+ .lx-hotel-filter-name{grid-column:1/-1}
+}
+@media(max-width:480px){
+ .lx-hotel-filters{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:10px}
+ .lx-hotel-filters input,.lx-hotel-filters select{min-height:40px;font-size:11.5px;padding:8px}
+ .lx-hotel-filters label{font-size:10.5px}
+ .lx-hotel-category-line{font-size:10px!important}
+}
