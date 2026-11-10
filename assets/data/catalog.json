@@ -5246,7 +5246,7 @@
       "currency": "USD",
       "img": "chile-experiencia-atacama-valle-luna.jpg",
       "alt": "Paisajes del Valle de la Luna en San Pedro de Atacama, Chile",
-      "excerpt": "Hotel Terrantai 4★, cuatro noches, excursiones y traslados. Vuelos opcionales. Precio referencial sujeto a cotización.",
+      "excerpt": "Hotel Terrantai 4★, 4 noches, excursiones y traslados. Vuelos opcionales. Precio fijo de LATAM Expeditions, sujeto a disponibilidad operativa.",
       "category": "Premium",
       "style": "naturaleza",
       "itinerary": [
@@ -5285,16 +5285,18 @@
         }
       ],
       "flightsAvailable": true,
-      "bookingStatus": "request_only",
-      "quoteOnly": true,
+      "bookingStatus": "fixed_agency_price",
+      "quoteOnly": false,
       "ages": "Solo adultos (18+)",
       "pricingUpdated": "2026-11-10",
-      "pricingBasis": "Tarifa preliminar por persona en doble (2 adultos), sin vuelos, sujeto a cotización de proveedores. No habilitar PayPal hasta confirmar Hotel Terrantai.",
+      "pricingBasis": "Precio de venta fijo de LATAM Expeditions por persona, en base doble de 2 adultos. Incluye alojamiento y servicios detallados; vuelos opcionales. Disponibilidad de proveedores por confirmar; alternativa acordada o devolución íntegra si no puede prestarse lo contratado.",
       "styles": [
         "naturaleza",
         "aventura",
         "pareja"
-      ]
+      ],
+      "supplierRatesConfirmed": false,
+      "priceSetByAgency": true
     },
     {
       "slug": "chile-atacama-5d4n",
