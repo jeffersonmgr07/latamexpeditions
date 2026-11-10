@@ -146,6 +146,23 @@
  '<small id="lxProductHotelCategory"></small><p id="lxProductHotelStatus"></p></div></div>'+
  '<div class="lx-addon-row"><span class="lx-package-addons-note">Puedes cambiar de categoría o solicitar otro hotel.</span>'+
  '<button type="button" id="lxProductOpenHotel">Elegir habitación u hotel</button></div>';
+ if(multiCityAtacama){
+   const flightIntro=addonFlights.querySelector('p');
+   if(flightIntro)flightIntro.textContent='Añade opcionalmente los vuelos internos Santiago (SCL) – Calama (CJC) – Santiago, para los días 2 y 5. El traslado internacional a Santiago se reserva aparte.';
+   const intro=addonHotels.querySelector('.lx-addon-row .lx-package-addons-note');
+   if(intro)intro.textContent='Elige una categoría que incluye hotel en Santiago (1 noche) y San Pedro de Atacama (3 noches). Los cambios individuales se solicitan a un asesor.';
+   const button=addonHotels.querySelector('#lxProductOpenHotel');
+   if(button)button.textContent='Elegir categoría y habitación';
+   const paired=el('div','lx-paired-hotels');
+   paired.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:12px';
+   for(const [id,label] of [['lxSantiagoHotel','Santiago · 1 noche'],['lxAtacamaHotel','San Pedro de Atacama · 3 noches']]){
+     const item=el('div','lx-paired-hotel');item.style.cssText='padding:12px;border:1px solid #dce6df;border-radius:12px';
+     item.append(el('small','',label),el('strong','', ''));item.querySelector('strong').id=id;
+     item.querySelector('strong').style.cssText='display:block;margin-top:5px';
+     paired.append(item);
+   }
+   addonHotels.append(paired);
+ }
  if(sectionAt){sectionAt.before(addonFlights,addonHotels)}
  else main.prepend(addonFlights,addonHotels);
  // En móvil, la fecha y los viajeros deben quedar antes de personalizar el paquete.
@@ -545,6 +562,12 @@ function showTierQuote(){
   const note=$('lxProductQuoteNote');note.textContent=notice;note.hidden=!notice;
   const flightPrice=$('lxProductFlightPrice');flightPrice.hidden=true;
   $('lxProductHotelName').textContent=state.customHotel||(!hasHotelIncluded?'Sin alojamiento':((currentTier()?.hotels||[]).join(' / ')||'Hotel incluido'));
+  if(multiCityAtacama){
+    const pair=currentTier()?.hotels||[];
+    const santiago=$('lxSantiagoHotel'),atacama=$('lxAtacamaHotel');
+    if(santiago)santiago.textContent=pair[0]||'Alojamiento por confirmar';
+    if(atacama)atacama.textContent=pair[1]||'Alojamiento por confirmar';
+  }
 
   $('lxProductHotelCategory').textContent=state.customHotel?'Hotel seleccionado':
     (!hasHotelIncluded?'Puedes solicitar un hotel adicional':
@@ -1021,6 +1044,14 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
      if(requestedRevision!==quoteRevision)return;
      setStatus(hotelStatus,err?.message||'No se pudieron consultar hoteles.',true);
    }finally{btn.disabled=false;load.disabled=false}
+ }
+ if(multiCityAtacama){
+   $('lxProductLookupHotels').hidden=true;
+   const msg=$('lxHotelLookupStatus');
+   msg.textContent='Este circuito incluye un hotel en Santiago y otro en San Pedro de Atacama. Elige la categoría para ambos alojamientos. Si necesitas cambiar solo uno, solicita una cotización personalizada.';
+   msg.hidden=false;
+   const lead=hotels.body.querySelector('.lx-modal-lead');
+   if(lead)lead.textContent='Escoge la categoría de alojamiento de tu circuito: 1 noche en Santiago y 3 noches en San Pedro de Atacama.';
  }
  $('lxProductLookupHotels').addEventListener('click',()=>searchHotelsPage(0));
  $('lxHotelLoadMore').addEventListener('click',()=>{
