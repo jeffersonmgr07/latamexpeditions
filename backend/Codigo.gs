@@ -273,6 +273,14 @@ const HORARIOS_PRODUCTOS = {
  * aquí el precio. Una categoría inexistente rechaza la reserva.
  */
 const PRECIOS_PAQUETES = {
+  // Atacama Premium: PRECIO REFERENCIAL, solo solicitudes SIN PAGO hasta validar Terrantai.
+  'desierto-atacama-premium-5d4n': {
+    '4e': {
+      'single': 2159.90,
+      'double': 1499.90,
+      'matrimonial': 1499.90
+    }
+  },
   'peru-cusco-4d3n': {
     '3e': {
       'single': 590.0,
@@ -1374,6 +1382,9 @@ function validarYCalcular(data) {
     throw new Error('La cantidad de viajeros no es válida.');
   }
 
+  if(slug==='desierto-atacama-premium-5d4n' && ninos>0)
+    throw new Error('El programa Atacama Premium está destinado a pasajeros adultos. Consulta antes de viajar con menores.');
+
   const tier = data.tier ? textoPlano(data.tier, 10) : '';
   const occupancy = textoPlano(data.occupancy || 'double', 20);
   const tarifas = resolverTarifas({ slug: slug, tier: tier, occupancy: occupancy });
@@ -1576,6 +1587,10 @@ function idSolicitudPayPal(tipo, clave) {
 }
 
 function crearOrden(data) {
+  // El producto Atacama se muestra en catálogo como COTIZACIÓN hasta verificar hotel y operadores.
+  // Nunca convertir una referencia comercial en cobro Live por manipulación del navegador.
+  if(String(data&&data.slug||'').toLowerCase()==='desierto-atacama-premium-5d4n')
+    throw new Error('Este paquete requiere confirmar disponibilidad y precio final antes del pago. Envía una solicitud sin cobro.');
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
