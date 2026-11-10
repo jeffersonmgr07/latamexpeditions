@@ -1303,7 +1303,15 @@ function mensajeSeguro(error) {
     // Google
     'El acceso con Google no está configurado', 'La sesión de Google',
     'No hemos recibido la credencial', 'Tu correo de Google',
-    'Google no nos ha devuelto', 'La verificación de Google ha caducado'
+    'Google no nos ha devuelto', 'La verificación de Google ha caducado',
+    // LATAM Rewards: mostrar solo mensajes validados
+    'Indica tu nombre', 'El teléfono', 'Selecciona el código', 'El número de WhatsApp',
+    'Selecciona un tipo', 'Revisa el tipo', 'Carga una imagen',
+    'Introduce un correo nuevo', 'Ese correo', 'Confirma tu contraseña',
+    'Espera un minuto', 'Enviamos un código', 'Introduce los seis', 'Primero solicita',
+    'Se alcanzó', 'El código', 'Uno de los', 'El correo ya', 'El enlace',
+    'Introduce el enlace', 'Selecciona una red', 'Ya enviaste una publicación',
+    'Verifica tu cuenta'
   ];
   return publicos.some(function (p) { return msg.indexOf(p) === 0; })
     ? msg
