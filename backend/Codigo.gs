@@ -1453,8 +1453,15 @@ function validarYCalcular(data) {
   const validatedFlight=lxQuoteValidateFlight_(data.flightSelection,ctx);
   const validatedHotel=lxQuoteValidateHotel_(data,ctx);
   // Si el cambio de hotel sigue pendiente, el cobro conserva el hotel base incluido.
-  const total = redondear2(tarifas.adulto*adultos+tarifas.nino*ninos+
-    validatedFlight.amount+validatedHotel.amount);
+  // Los cupones se validan siempre en el servidor; NUNCA confiar en la resta del navegador.
+  const couponCode=textoPlano(data.couponCode||'',32).toUpperCase();
+  if(couponCode&&couponCode!=='LATAM10')
+    throw new Error('El cupón indicado no es válido.');
+  if(couponCode&& !PRECIOS_PAQUETES[slug])
+    throw new Error('Este cupón solo está disponible para paquetes de viaje.');
+  const packageBase=redondear2(tarifas.adulto*adultos+tarifas.nino*ninos);
+  const discountAmount=couponCode==='LATAM10'?redondear2(packageBase*0.10):0;
+  const total = redondear2(packageBase+validatedFlight.amount+validatedHotel.amount-discountAmount);
   const cobro = calcularCobro(total);
 
   if (data.quotedTotal !== undefined && Math.abs(Number(data.quotedTotal) - total) > 0.01) {
@@ -1492,6 +1499,8 @@ function validarYCalcular(data) {
     alternateHotel: validatedHotel.name,
     alternateHotelDetails: validatedHotel.details,
     alternateHotelSupplement: validatedHotel.amount,
+    couponCode:couponCode,
+    discountAmount:discountAmount,
     hotelQuotePending:Boolean(validatedHotel.pendingName),
     pendingHotelRequest:textoPlano(validatedHotel.pendingName||'',110),
     quotedTotal:total,
