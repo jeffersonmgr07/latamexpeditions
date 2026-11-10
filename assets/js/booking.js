@@ -2540,7 +2540,7 @@
         const start=()=>{
           if(document.querySelector('script[data-lx-package-ui]'))return;
           const script=document.createElement('script');script.dataset.lxPackageUi='true';
-          script.src=BASE+'assets/js/package-product-20261108.js?v=20261110-hotel-filters-r10';document.head.append(script);
+          script.src=BASE+'assets/js/package-product-20261108.js?v=20261110-hotel-filters-r12';document.head.append(script);
         };
         if(window.LatamProductControls){start();return}
         const controls=document.createElement('script');
