@@ -59,7 +59,7 @@ function lxRwAwardWelcome_(user) {
     var sheet=lxRwLedger_(),vals=sheet.getDataRange().getValues();
     for(var i=1;i<vals.length;i++)if(emails.some(function(email){return String(vals[i][0])==='WELCOME:'+email;}))return false;
     sheet.appendRow([key,lxRwSafe_(user.email,254),new Date(),'BONO',
-      'Bono de bienvenida · cuenta verificada',100,'DISPONIBLE','Registro']);
+      'Bono de bienvenida · LATAM Rewards',100,'DISPONIBLE','Registro']);
     return true;
   }finally{lock.releaseLock();}
 }
@@ -188,7 +188,7 @@ function lxRwSyncNotifications_(email,bookings,verified) {
   if(verified){
     var welcomeId='VERIFIED:'+email;
     if(!existing[welcomeId]) adds.push([welcomeId,email,now,'rewards',
-      '¡Bienvenido a Expedition Rewards!','Tu cuenta está verificada y puedes consultar tus millas.','','NO']);
+      '¡Bienvenido a LATAM Rewards!','Tu cuenta está verificada y puedes consultar tus puntos.','','NO']);
   }
   bookings.slice(-100).forEach(function(b){
     if(!b.code)return;
@@ -202,17 +202,17 @@ function lxRwSyncNotifications_(email,bookings,verified) {
     if(lxRwCompleted_(b) && lxRwPaid_(b)){
       var rewardId='MILES:'+email+':'+b.code;
       if(!existing[rewardId])adds.push([rewardId,email,now,'rewards',
-        'Compra elegible completada','Las millas de '+b.code+
+        'Compra elegible completada','Los puntos de '+b.code+
           ' ya cuentan como disponibles en tu estado de cuenta.',b.code,'NO']);
     }
   });
   if(adds.length)h.getRange(h.getLastRow()+1,1,adds.length,8).setValues(adds);
 }
 function lxRwReadNotifications_(email) {
-  var values=lxRwNotifications_().getDataRange().getValues(),list=[];
+  var aliases=lxRwEmails_(email),values=lxRwNotifications_().getDataRange().getValues(),list=[];
   for(var i=values.length-1;i>=1;i--) {
     var r=values[i];
-    if(lxRwEmails_(email).indexOf(normalizarEmail(r[1]))<0)continue;
+    if(aliases.indexOf(normalizarEmail(r[1]))<0)continue;
     list.push({id:String(r[0]),date:lxRwIsoTime_(r[2]),
       type:String(r[3]),title:String(r[4]),text:String(r[5]),
       code:String(r[6]||''),read:String(r[7]).toUpperCase()==='SI'});
@@ -525,6 +525,7 @@ function lxRwSocialUrl_(network,url){
 }
 function lxRwSubmitSocial_(data){
   var u=lxRwUser_(data),network=textoPlano(data.network,20);
+  if(!lxRwIsVerified_(u))throw Error('Verifica tu cuenta antes de participar.');
   if(['facebook','instagram','tiktok'].indexOf(network)<0)throw Error('Selecciona una red válida.');
   var url=lxRwSocialUrl_(network,data.url);
   var lock=LockService.getScriptLock();lock.waitLock(15000);
