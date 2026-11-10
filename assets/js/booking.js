@@ -2153,12 +2153,17 @@
       return;
     }
     try {
+      // Crear la orden ANTES de abrir la ventana de PayPal evita que el popup
+      // se quede en about:blank esperando un POST lento de Apps Script.
+      // La orden se crea sin capturar fondos; la captura ocurre tras aprobación.
+      const prepared=await callBackend('createOrder',payload());
+      if(!prepared?.orderId)throw new Error('No llegó el identificador de orden PayPal.');
       const paypal = await loadPayPal();
       container.innerHTML = '';
       if (paypalButtons?.close) { try { await paypalButtons.close(); } catch (_) {} }
       paypalButtons = paypal.Buttons({
         style: { layout:'vertical', shape:'rect', label:'pay', height:46 },
-        createOrder: async () => (await callBackend('createOrder', payload())).orderId,
+        createOrder: () => prepared.orderId,
         onApprove: async (data) => {
           if (paymentInProgress) return;
           paymentInProgress = true;
@@ -2174,7 +2179,7 @@
       if (paypalButtons.isEligible && !paypalButtons.isEligible()) throw new Error('PayPal no está disponible en este navegador');
       await paypalButtons.render('#paypalButtons');
     } catch (error) {
-      console.error(error); container.innerHTML=''; $('#bkFallback').hidden=false; showError('No hemos podido cargar la pasarela de pago. Puedes reservar por WhatsApp.');
+      console.error(error); container.innerHTML=''; $('#bkFallback').hidden=false; showError(error?.message||'No hemos podido preparar la orden de pago. Comprueba tu conexión y vuelve a intentar.');
     }
   }
 
