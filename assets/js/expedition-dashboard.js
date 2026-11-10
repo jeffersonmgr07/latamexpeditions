@@ -156,33 +156,35 @@
       '<div class="exp-tier-track"><span style="width:'+fraction.toFixed(1)+'%"></span></div>'+
       '<small>'+(t.next===null?'¡Has alcanzado el nivel más alto!':'Te faltan '+esc(t.remaining.toLocaleString('es-PE'))+' puntos para '+esc(levels.find(x=>x[1]===t.next)?.[0]||'el siguiente nivel'))+'</small></div>';
   }
+  function referralText() {
+    return 'Te invito a descubrir LATAM Expeditions 🌎. Explora experiencias por Latinoamérica y crea tu cuenta aquí:';
+  }
   function shareCards() {
-    const choices=[
-      {network:'facebook',name:'Facebook',ico:'fa-brands fa-facebook-f',
-        href:'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flatamexpeditions.com%2F',
-        detail:'Comparte el sitio en una publicación pública con tus propias palabras.'},
-      {network:'instagram',name:'Instagram',ico:'fa-brands fa-instagram',
-        href:'https://www.instagram.com/',detail:'Publica una foto o reel propio y menciona LATAM Expeditions.'},
-      {network:'tiktok',name:'TikTok',ico:'fa-brands fa-tiktok',
-        href:'https://www.tiktok.com/',detail:'Comparte un video original relacionado con tus planes de viaje.'}
+    const ref=state.data.referrals||{},link=ref.link||'';
+    const networks=[
+      ['facebook','Facebook','fa-facebook-f','#1877F2'],
+      ['instagram','Instagram','fa-instagram','#D93175'],
+      ['tiktok','TikTok','fa-tiktok','#161B22'],
+      ['x','X','fa-x-twitter','#161B22'],
+      ['youtube','YouTube','fa-youtube','#E62117'],
+      ['whatsapp','WhatsApp','fa-whatsapp','#25D366']
     ];
-    const social=state.data.social||{};
-    return '<div class="exp-social-grid">'+choices.map(n=>{
-      const claim=social[n.network],status=claim?.status||'';
-      const done=status==='APROBADO',pending=status==='EN ESPERA'||status==='EN REVISION';
-      const statusText=done?'Publicación destacada':pending?(status==='EN ESPERA'?'Pendiente de 24 horas':'En revisión'):
-        status==='RECHAZADO'?'Enlace rechazado. Puedes enviar otro.':'Compartir es voluntario';
-      return '<article class="exp-social-card"><div class="exp-social-icon"><i class="'+n.ico+'" aria-hidden="true"></i></div>'+
-        '<div><strong>'+n.name+'</strong><p>'+n.detail+'</p><span class="exp-tag'+(pending?' exp-tag--pending':'')+'">'+statusText+'</span></div>'+
-        '<a class="exp-btn exp-btn--light" href="'+n.href+'" target="_blank" rel="noopener noreferrer">Ir a '+n.name+' <i class="fa-solid fa-arrow-up-right-from-square"></i></a>'+
-        (!pending&&!done?'<form class="exp-social-form" data-exp-social-form="'+n.network+'">'+
-          '<label for="expSocial'+n.network+'">Enlace de tu publicación</label>'+
-          '<input id="expSocial'+n.network+'" type="url" name="postUrl" placeholder="https://…" required>'+
-          '<button type="submit" class="exp-btn">Enviar publicación</button></form>':
-          '<small>Referencia enviada: '+esc(claim?.url||'')+'</small>')+
-        '</article>';
-    }).join('')+'</div>'+
-      '<p class="exp-social-note">Compartir es voluntario y no otorga puntos. Puedes enviar un enlace para que tu publicación forme parte de nuestra comunidad. Los enlaces se revisan a partir de las 24 horas. Si publicas contenido comercial, identifica la colaboración conforme a las reglas de cada plataforma.</p>';
+    return '<div class="exp-referral-intro">'+
+      '<div class="exp-referral-head"><span class="exp-referral-medal"><i class="fa-solid fa-user-group"></i></span>'+
+      '<div><strong>100 puntos por amigo viajero</strong>'+
+      '<p>Invítalo a registrarse. Recibirás los puntos cuando verifique su cuenta y complete su primera compra de viaje.</p></div></div>'+
+      '<div class="exp-referral-counts"><span><strong>'+esc(ref.invited||0)+'</strong> invitados</span>'+
+      '<span><strong>'+esc(ref.qualified||0)+'</strong> bonificados</span></div>'+
+      (link?'<div class="exp-referral-link"><input aria-label="Tu enlace de invitación" readonly value="'+esc(link)+'">'+
+      '<button type="button" class="exp-btn exp-btn--light" data-exp-copy-ref><i class="fa-regular fa-copy"></i> Copiar</button></div>':
+      '<p>Verifica tu cuenta para disponer de un enlace personal.</p>')+'</div>'+
+      '<p class="exp-social-heading">Comparte tu invitación</p>'+
+      '<div class="exp-share-grid">'+networks.map(x=>
+        '<button type="button" class="exp-share-btn" data-exp-share="'+x[0]+'" '+(!link?'disabled':'')+'>'+
+        '<span class="exp-share-brand" style="--share-brand:'+x[3]+'"><i class="fa-brands '+x[2]+'" aria-hidden="true"></i></span>'+
+        '<span>'+x[1]+'</span></button>').join('')+'</div>'+
+      '<button type="button" class="exp-link exp-copy-message" data-exp-copy-message><i class="fa-regular fa-copy"></i> Copiar mensaje de invitación</button>'+
+      '<p class="exp-social-note">El mensaje y el enlace están preparados para compartirlos voluntariamente. La publicación la realiza el usuario desde cada aplicación; ninguna red permite capturar automáticamente todas las publicaciones personales. El bono depende del registro y la compra del amigo, no de publicar en una red.</p>';
   }
   function milesPage() {
     const m=state.data.miles,ready=!!m,t=membership();
@@ -194,7 +196,7 @@
       tierProgress()+
       '<div class="exp-card"><div class="exp-card-head"><h3>Obtén más puntos</h3>'+
       '<button class="exp-link" type="button" data-exp-nav="recompensas">Ver el programa</button></div>'+
-      '<p class="exp-card-intro">Cada US$10 pagados en experiencias, paquetes, vuelos y hoteles te suma 1 punto. También puedes compartir voluntariamente tus planes de viaje.</p>'+
+      '<p class="exp-card-intro">Comparte tu enlace personal con tus amigos y descubre cómo obtener puntos por nuevas reservas.</p>'+
       (state.data.verified?shareCards():verificationBanner())+'</div>'+
       '<div class="exp-card"><h3>Estado de cuenta</h3>'+
       (ready&&m.movements.length?'<div class="exp-table-wrap"><table class="exp-table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Estado</th><th>Puntos</th></tr></thead><tbody>'+
