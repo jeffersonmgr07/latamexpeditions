@@ -1,0 +1,98 @@
+/* LATAM Expeditions — inicio de sesión, registro y consulta de reservas.
+   Hoja acotada a estas tres páginas para no afectar el resto del sitio. */
+body.auth-page-surface,body.has-pn-header.auth-page-surface {background:#f5f7ef!important;}
+body.has-pn-header.auth-page-surface main.auth-layout--refined {background:transparent!important;}
+.auth-layout--refined {
+  width:min(1200px,calc(100% - 48px));min-height:650px;margin:34px auto 64px;
+  display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  border-radius:28px;overflow:hidden;
+  background:#fff;border:1px solid #e3eae2;box-shadow:0 20px 65px rgba(4,34,19,.10);
+}
+.auth-layout--register {min-height:780px;}
+.auth-layout--refined .auth-aside {
+  padding:clamp(32px,5vw,68px);display:flex;align-items:center;
+  background:#063a28;color:#fff;
+}
+.auth-layout--refined .auth-aside::before {
+  background:linear-gradient(155deg,rgba(3,45,31,.84),rgba(3,56,36,.94)),url("../img/latam-hero-01.jpg") center/cover no-repeat;
+}
+.auth-aside__content {position:relative;z-index:1;width:100%;max-width:510px;}
+.auth-eyebrow {display:block;font-size:11px;font-weight:750;letter-spacing:.15em;color:#a9f398;}
+.auth-layout--refined .auth-aside h2 {margin:19px 0 20px;font-size:clamp(29px,3vw,40px);line-height:1.18;font-weight:650;}
+.auth-layout--refined .auth-aside p {font-size:15px;line-height:1.75;font-weight:450;color:rgba(255,255,255,.9);}
+.auth-layout--refined .auth-aside ul {gap:17px;margin-top:32px;}
+.auth-layout--refined .auth-aside li {font-size:14px;line-height:1.5;font-weight:550;}
+.auth-layout--refined .auth-aside li i {color:#9be872;width:18px;text-align:center;margin-top:3px;}
+.auth-aside__reward {display:flex;align-items:center;gap:12px;margin:24px 0 9px;padding:17px;
+  border:1px solid rgba(177,255,160,.35);border-radius:16px;background:rgba(128,216,104,.12);font-size:14px;}
+.auth-aside__reward i {color:#b3ff91;font-size:20px;}
+.auth-aside__reward strong {color:#ccffbd;}
+.auth-layout--refined .auth-main {background:#f5f7ef;min-width:0;padding:clamp(20px,4vw,56px);display:grid;place-items:center;}
+.auth-layout--refined .auth-card {
+  box-sizing:border-box;width:100%;max-width:540px;padding:clamp(24px,3.25vw,44px);
+  background:#fff;border:1px solid #e1e8e1;border-radius:24px;
+  box-shadow:0 12px 40px rgba(20,51,31,.06);
+}
+.auth-layout--refined .auth-card h1 {margin:0 0 12px;font-size:clamp(27px,3vw,36px);line-height:1.2;font-weight:720;}
+.auth-layout--refined .auth-card > p:not(.auth-alt) {margin:0 0 23px;font-size:14.5px;line-height:1.7;}
+.auth-layout--refined .form-grid {gap:17px;}
+.auth-layout--refined .form-field {gap:7px;min-width:0;}
+.auth-layout--refined .form-field label {font-weight:650;font-size:13.5px;}
+.auth-layout--refined .form-field input:not([type="checkbox"]) {
+  width:100%;min-height:50px;padding:12px 15px;border:1px solid #d9e3dc;
+  border-radius:12px;background:#fbfcf9;color:#1d3026;
+}
+.auth-layout--refined .form-field input:focus {border-color:#07873e;box-shadow:0 0 0 3px rgba(7,135,62,.12);}
+.auth-layout--refined .btn-primary,.lookup-card--refined .btn-primary {
+  min-height:52px;border-radius:12px;background:#07873e;color:#fff;font-weight:760;
+}
+.auth-layout--refined .auth-divider {margin:17px 0;color:#718075;}
+.auth-layout--refined .google-block,.auth-layout--refined .google-btn-wrap {max-width:100%;min-width:0;}
+.auth-layout--refined .auth-alt {margin:20px 0 0;font-size:14px;}
+.auth-layout--refined .auth-alt a {font-weight:750;color:#07873e;}
+.auth-points-banner {
+  display:grid;gap:7px;padding:17px 18px;margin:0 0 21px;
+  border-radius:16px;background:#f0f9ec;border:1px solid #cfe9cc;color:#26482d;
+}
+.auth-points-banner__label {font-size:10px;font-weight:850;letter-spacing:.10em;color:#087c3d;}
+.auth-points-banner > strong {font-family:Montserrat,Inter,sans-serif;font-size:clamp(19px,2.5vw,25px);line-height:1.2;color:#096b36;}
+.auth-points-banner > span:not(.auth-points-banner__label) {font-size:13px;line-height:1.6;}
+.auth-points-banner small {color:#59705d;font-size:11.5px;line-height:1.55;}
+body.has-pn-header main.lookup-page {
+  min-height:calc(100vh - 130px)!important;
+  background:linear-gradient(90deg,rgba(245,247,239,.89),rgba(245,247,239,.81)),url("../img/peru-machu-picchu-01.jpg") center/cover no-repeat!important;
+}
+.lookup-page .lookup-section {
+  max-width:none;background:transparent!important;min-height:670px;
+  padding:clamp(72px,10vw,136px) 20px 90px;
+}
+.lookup-page .lookup-card--refined {
+  max-width:570px;margin:0 auto;padding:clamp(24px,4vw,42px);
+  border-radius:24px;background:rgba(255,255,255,.96);
+  border:1px solid rgba(225,235,225,.9);box-shadow:0 20px 66px rgba(26,52,32,.13);
+  backdrop-filter:blur(6px);
+}
+.lookup-page .lookup-card--refined .form-grid {gap:20px;}
+.lookup-page .lookup-card--refined .form-field label {font-weight:700;font-size:14px;}
+.lookup-page .lookup-card--refined .form-field input {
+  min-height:52px;padding:13px 15px;border-radius:12px;
+  border:1px solid #dae4da;background:#fbfcf9;
+}
+.lookup-page .lookup-result {background:rgba(255,255,255,.97);backdrop-filter:blur(8px);box-shadow:0 14px 46px rgba(26,52,32,.13);}
+@media(max-width:980px) {
+  .auth-layout--refined {grid-template-columns:1fr;min-height:0;width:min(620px,calc(100% - 28px));margin:20px auto 38px;}
+  .auth-layout--refined .auth-aside {display:none!important;}
+  .auth-layout--refined .auth-main {padding:18px;background:#f5f7ef;}
+  .auth-layout--refined .auth-card {max-width:none;padding:clamp(24px,5vw,36px);}
+  .lookup-page .lookup-section {min-height:560px;padding-top:85px;}
+}
+@media(max-width:520px) {
+  .auth-layout--refined {width:calc(100% - 20px);border-radius:19px;margin:14px auto 30px;}
+  .auth-layout--refined .auth-main {padding:10px;}
+  .auth-layout--refined .auth-card {padding:24px 19px;border-radius:17px;}
+  .auth-layout--refined .auth-card h1 {font-size:27px;}
+  .auth-layout--refined .auth-card > p:not(.auth-alt) {font-size:13.5px;}
+  .auth-layout--refined .auth-points-banner {padding:15px;}
+  .lookup-page .lookup-section {padding:52px 12px 72px;min-height:calc(100svh - 135px);}
+  .lookup-page .lookup-card--refined {padding:25px 19px;border-radius:18px;}
+}
