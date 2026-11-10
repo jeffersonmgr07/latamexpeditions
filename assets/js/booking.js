@@ -1862,7 +1862,8 @@
         departure: state.flightQuote.departure, returnDate: state.flightQuote.returnDate,
         airline: state.flightQuote.airline, outbound: state.flightQuote.outbound,
         inbound: state.flightQuote.inbound, observedPrice: state.flightQuote.observedPrice,
-        displayedPrice: state.flightQuote.displayedPrice, baggage: state.flightQuote.baggage
+        displayedPrice: state.flightQuote.displayedPrice, baggage: state.flightQuote.baggage,
+        quoteToken: String(state.flightQuote.quoteToken||'')
       } : null,
       alternateHotel: state.customHotel || '',
       alternateHotelSupplement: state.customHotel ? state.hotelSupplement : 0,
@@ -2419,14 +2420,18 @@
       const cash=$('input[name="bkPaymentMethod"][value="pay_on_tour"]');
       if(online){
         // Los vuelos y las distribuciones no verificadas siguen sin cobro online.
-        const extraUnverified=Boolean(state.flightQuote)||Boolean(state.customHotel)||state.hotelQuotePending;
+        const extraUnverified=Boolean(state.flightQuote&&!state.flightQuote.quoteToken)||
+          Boolean(state.customHotel&&(!state.hotelAlternative?.quoteToken||state.hotelQuotePending))||
+          state.hotelQuotePending;
         online.disabled=!onlineConfigured()||extraUnverified;
         const note=$('bkOnlineAvailability');
         if(note)note.textContent=!onlineConfigured()
           ?'Pago online temporalmente no disponible. Puedes solicitar la reserva sin pagar.'
           :extraUnverified
-            ?'Los vuelos o el cambio de hotel necesitan validar el importe antes del cobro.'
-            :'Paga de forma segura con PayPal · importe validado del paquete base.';
+            ?'Actualiza la búsqueda para obtener una cotización verificable de vuelos y hotel.'
+            :state.flightQuote||state.customHotel
+              ?'Pago íntegro con PayPal · vuelos y hotel sujetos a disponibilidad y emisión manual.'
+              :'Pago íntegro con PayPal · precio del paquete seleccionado.';
         if(online.disabled&&online.checked&&cash){cash.checked=true;state.paymentMethod='pay_on_tour'}
       }
       const summary=$('#bkPackageSelection');
