@@ -72,7 +72,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <div class="card"><h3>Identificación comercial</h3><p class="sub">Campos necesarios para crear el registro y ubicarlo en el catálogo.</p>
    <div class="grid">
     <div class="field"><label>Tipo de producto</label><select data-field="identity.type"><option value="package">Paquete / circuito</option><option value="experience">Experiencia / excursión</option></select></div>
-    <div class="field"><label>Estado interno</label><select data-field="status"><option value="BORRADOR">Borrador</option><option value="EN_REVISION">En revisión</option><option value="APROBADO">Aprobado (requiere validación)</option></select></div>
+    <div class="field"><label>Estado interno</label><select data-field="status"><option value="BORRADOR">Borrador</option><option value="EN_REVISION">En revisión</option><option value="PUBLICADO_COTIZACION">Publicado solo para cotizar · piloto Atacama</option><option value="APROBADO">Aprobado para ventas (requiere validación)</option></select></div>
     <div class="field span"><label>Título comercial</label><input data-field="identity.title" placeholder="Ej. Desierto de Atacama Premium · 5 días / 4 noches"></div>
     <div class="field"><label>Slug / URL</label><input data-field="identity.slug" placeholder="desierto-atacama-premium-5d4n"></div>
     <div class="field"><label>Nombre interno</label><input data-field="identity.internalName"></div>
@@ -297,7 +297,7 @@ $('#atacamaStudy').onclick=async()=>{
  if(dirty&&!confirm('Tienes cambios sin guardar. Esta actualización repondrá la ficha investigada de Atacama. ¿Continuar?'))return;
  if(!confirm('Se rellenarán costos ESTIMADOS de Atacama y se actualizarán los vuelos a OPCIONALES. El hotel NO está confirmado y el estado seguirá EN REVISIÓN. ¿Aplicar?'))return;
  busy(true);
- try{fill(await api('lxAplicarEstudioAtacama'));msg('Atacama actualizado. Presupuesto interno de referencia para 2 adultos, vuelos OPCIONALES y precio indicativo. No se ha aprobado ni publicado mediante esta acción.');await list();}
+ try{fill(await api('lxAplicarEstudioAtacama'));msg('Atacama actualizado en tu hoja privada: presupuesto estimado para 2 adultos, vuelos opcionales y estado PUBLICADO PARA COTIZACIÓN (sin pago). La ficha pública ya se preparó en GitHub; revisa disponibilidad del hotel antes de aprobar ventas.');await list();}
  catch(e){msg(e.message,true)}finally{busy(false)}
 };
 $('#import').onclick=async()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Importar Atacama?'))return;
