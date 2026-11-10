@@ -1794,8 +1794,8 @@
       ? (isEnglish ? 'Pay in full now' : 'Pago total ahora')
       : (isEnglish ? 'Book now' : 'Reserva ahora');
     $('#bkPayNote').textContent = isEnglish
-      ? 'You pay 100% now. Flights, hotel changes and other supplier services remain subject to availability and manual fulfillment confirmation; we will contact you if anything changes.'
-      : 'Pagas el 100% ahora. Los vuelos, hoteles alternativos y otros servicios siguen sujetos a disponibilidad y confirmación operativa; te contactaremos si surge algún cambio.';
+      ? 'You pay 100% now. Flights and alternative hotels still require manual supplier confirmation. If a service cannot be fulfilled, we will offer an agreed alternative or a refund.'
+      : 'Pagas el 100% ahora. Los vuelos y hoteles alternativos requieren confirmación manual con proveedores. Si algún servicio no puede prestarse, te ofreceremos una alternativa acordada o la devolución correspondiente.';
   }
 
   function goToStep(next) {
