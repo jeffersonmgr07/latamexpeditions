@@ -9515,7 +9515,7 @@
     "paypalClientId": "BAAubUJBtWdzvUQ5l-BN_D-NKZEMfPETAfQnvo20tYG_D7v8vW0zXJ4wTio9o8gYI3rbDxX5jJ6KB6ytzE",
     "paypalEnvironment": "live",
     "paypalEnabled": true,
-    "endpoint": "https://script.google.com/macros/s/AKfycbyskPa7iRuzuH9Kr6oF0i9bA8kuWWT2Z10yazJT0Qsig6z5KgpuNg_lLmusoa5eJDg74w/exec",
+    "endpoint": "https://script.google.com/macros/s/AKfycbxkwb5Ly2DUrpl2Z9G59ht1xXUDNvWJYUV2Owk4tMsbJ2UpGRaFMSZrKbuwoI5Zb-lTqQ/exec",
     "documentTypes": [
       "Pasaporte",
       "DNI / Cédula de identidad / ID",
