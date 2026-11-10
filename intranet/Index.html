@@ -54,7 +54,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </style></head>
 <body>
 <header><div class="brand"><span class="icon">L</span><div><h1>LATAM EXPEDITIONS</h1><small>Consola privada · Gestión de experiencias</small></div></div><span class="pill">Borrador → Revisión → Aprobación</span></header>
-<main><aside><div class="sidebar-title"><h2>Experiencias</h2><button class="primary" id="new">+ Nueva</button></div><p>Los datos internos no se publican en el sitio web.</p><div id="products"></div><button class="secondary" id="import" style="width:100%;margin-top:12px">Importar Atacama 5D/4N</button></aside>
+<main><aside><div class="sidebar-title"><h2>Experiencias</h2><button class="primary" id="new">+ Nueva</button></div><p>Los datos internos no se publican en el sitio web.</p><div id="products"></div><button class="secondary" id="import" style="width:100%;margin-top:12px">Importar Atacama 5D/4N</button><button class="secondary" id="atacamaStudy" style="width:100%;margin-top:9px">Completar costos de Atacama</button></aside>
 <section class="workspace">
  <div class="toolbar"><div><h2 id="heading">Nueva experiencia</h2><div class="meta" id="codeInfo">Código correlativo al guardar</div></div><div class="toolbar-actions"><button class="secondary" id="test">Calcular ocupación</button><button class="primary" id="save">Guardar borrador</button></div></div>
  <div class="banner">Esta consola está separada de GitHub Pages. Guardar un producto no lo publica ni habilita cobros. Los costos privados se almacenan únicamente en Google Sheets con acceso restringido.</div>
@@ -207,7 +207,7 @@ const blank=()=>({schemaVersion:1,id:'',code:'',status:'BORRADOR',version:0,
 const pathGet=(o,path)=>path.split('.').reduce((x,k)=>x&&x[k],o);
 const pathSet=(o,path,value)=>{const keys=path.split('.');let x=o;for(let i=0;i<keys.length-1;i++){x[keys[i]]=x[keys[i]]||{};x=x[keys[i]]}x[keys[keys.length-1]]=value};
 function msg(text,error=false){const el=$('#message');el.textContent=text;el.classList.toggle('error',error);el.classList.add('visible');}
-function busy(b){loading=b;$('#save').disabled=b;$('#import').disabled=b;$('#new').disabled=b;}
+function busy(b){loading=b;$('#save').disabled=b;$('#import').disabled=b;$('#atacamaStudy').disabled=b;$('#new').disabled=b;}
 function api(name,...args){
  return new Promise((resolve,reject)=>{
   if(!window.google||!google.script||!google.script.run){reject(new Error('Abre esta consola desde una implementación privada de Google Apps Script, no directamente en GitHub Pages.'));return}
@@ -293,6 +293,13 @@ $('#tabs').addEventListener('click',event=>{
  if(b.dataset.tab==='hotel')renderQuotes();
 });
 $('#new').onclick=()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Crear uno nuevo?'))return;fill(blank());$('#tabs button').click()};
+$('#atacamaStudy').onclick=async()=>{
+ if(dirty&&!confirm('Tienes cambios sin guardar. Esta actualización repondrá la ficha investigada de Atacama. ¿Continuar?'))return;
+ if(!confirm('Se rellenarán costos ESTIMADOS de Atacama y se actualizarán los vuelos a OPCIONALES. El hotel NO está confirmado y el estado seguirá EN REVISIÓN. ¿Aplicar?'))return;
+ busy(true);
+ try{fill(await api('lxAplicarEstudioAtacama'));msg('Atacama actualizado. Presupuesto interno de referencia para 2 adultos, vuelos OPCIONALES y precio indicativo. No se ha aprobado ni publicado mediante esta acción.');await list();}
+ catch(e){msg(e.message,true)}finally{busy(false)}
+};
 $('#import').onclick=async()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Importar Atacama?'))return;
  busy(true);try{fill(await api('lxImportAtacama'));msg('Atacama Premium se importó/abrió como borrador. Terrantai está pendiente de cotización.');await list()}catch(e){msg(e.message,true)}finally{busy(false)}};
 $('#save').onclick=async()=>{busy(true);try{fill(await api('lxSaveProduct',collect()));msg('Producto guardado en tu Google Sheet privado. No se ha publicado en la web.');await list()}
