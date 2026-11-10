@@ -1280,6 +1280,84 @@ function requestKeySeguro(valor) {
  * Recalcula el importe desde cero, valida y normaliza todos los datos.
  * El objeto normalizado es el único que se guarda junto a la orden de PayPal.
  */
+
+/* Cotizaciones de Flights API firmadas con LATAM_PRICE_QUOTE_KEY.
+ * Se aceptan precios observados para marcha blanca, NO confirmación del proveedor.
+ * Nunca tomar quotedTotal/displayedPrice/alternateHotelSupplement como autoridad.
+ */
+function lxVerifySignedQuote_(token,kind){
+  const secret=String(PROPS.getProperty('LATAM_PRICE_QUOTE_KEY')||'');
+  if(secret.length<40)throw new Error('Las tarifas adicionales necesitan validación antes de pagar en línea.');
+  const parts=String(token||'').split('.');
+  if(parts.length!==2||parts[0].length>6000||!parts.every(x=>/^[A-Za-z0-9_-]+$/.test(x)))
+    throw new Error('Las tarifas adicionales necesitan una cotización válida. Vuelve a buscar vuelos u hoteles.');
+  const expected=Utilities.base64EncodeWebSafe(
+    Utilities.computeHmacSha256Signature(parts[0],secret,Utilities.Charset.UTF_8)).replace(/=+$/,'');
+  if(expected.length!==parts[1].length)throw new Error('Las tarifas adicionales necesitan una cotización válida. Vuelve a buscar.');
+  let mismatch=0;
+  for(let i=0;i<expected.length;i++)mismatch|=expected.charCodeAt(i)^parts[1].charCodeAt(i);
+  if(mismatch!==0)throw new Error('Las tarifas adicionales necesitan una cotización válida. Vuelve a buscar.');
+  let o={};
+  try{o=JSON.parse(Utilities.newBlob(Utilities.base64DecodeWebSafe(parts[0])).getDataAsString('UTF-8'))}
+  catch(e){throw new Error('Las tarifas adicionales necesitan una cotización válida. Vuelve a buscar.');}
+  const now=Date.now();
+  if(o.v!==1||o.kind!==kind||!Number.isFinite(o.issued)||!Number.isFinite(o.expires)||
+    o.issued>now+120000||o.expires<now||o.expires-o.issued>1800000)
+    throw new Error('Las tarifas adicionales caducaron. Vuelve a buscar vuelos u hoteles.');
+  return o;
+}
+function lxQuoteFlightSegments_(list){
+  return (Array.isArray(list)?list:[]).map(s=>[
+    String(s.airline||''),String(s.flightNumber||''),
+    String(s.from&&s.from.code||''),String(s.from&&s.from.time||''),
+    String(s.to&&s.to.code||''),String(s.to&&s.to.time||'')
+  ]);
+}
+function lxQuoteValidateFlight_(flight,context){
+  if(!flight||typeof flight!=='object')return {amount:0,details:null};
+  const q=lxVerifySignedQuote_(flight.quoteToken,'flight');
+  const same=q.slug===context.slug&&q.adults===context.adults&&q.children===context.children&&
+    q.arrival===context.date&&q.origin===String(flight.origin||'')&&
+    q.destination===String(flight.destination||'')&&q.departure===String(flight.departure||'')&&
+    q.returnDate===String(flight.returnDate||'')&&
+    JSON.stringify(q.legs)===JSON.stringify([
+      lxQuoteFlightSegments_(flight.outbound),lxQuoteFlightSegments_(flight.inbound)]);
+  const amount=Number(q.amount);
+  if(!same||!Number.isFinite(amount)||amount<=0||amount>100000||
+    Math.abs(amount-Number(flight.displayedPrice||0))>.01)
+    throw new Error('Las tarifas adicionales necesitan volver a cotizarse. Revisa el vuelo seleccionado.');
+  const details={
+    origin:textoPlano(flight.origin,3),destination:textoPlano(flight.destination,3),
+    departure:textoPlano(flight.departure,10),returnDate:textoPlano(flight.returnDate,10),
+    airline:textoPlano(flight.airline,80),observedPrice:Number(q.observed)||0,
+    displayedPrice:redondear2(amount),baggage:'none',
+    outbound:Array.isArray(flight.outbound)?flight.outbound.slice(0,6):[],
+    inbound:Array.isArray(flight.inbound)?flight.inbound.slice(0,6):[],
+    quoteSource:'SerpApi · precio observado firmado, emisión manual pendiente'
+  };
+  return {amount:redondear2(amount),details};
+}
+function lxQuoteValidateHotel_(data,context){
+  const name=textoPlano(data.alternateHotel,110);
+  if(!name)return {amount:0,details:null,name:''};
+  if(data.hotelQuotePending)throw new Error('Las tarifas adicionales necesitan confirmación. Revisa el hotel.');
+  const item=data.alternateHotelDetails||{},q=lxVerifySignedQuote_(item.quoteToken,'hotel');
+  const extra=Number(q.supplement);
+  const same=q.slug===context.slug&&q.tier===context.tier&&q.occupancy===context.occupancy&&
+    q.checkIn===context.date&&q.adults===context.adults&&q.children===context.children&&
+    q.name===name&&q.nights>0&&q.checkOut===String(item.checkOut||'')&&
+    q.checkIn===String(item.checkIn||'');
+  if(!same||!Number.isFinite(extra)||extra<0||extra>100000||
+    Math.abs(extra-Number(data.alternateHotelSupplement||0))>.01)
+    throw new Error('Las tarifas adicionales necesitan volver a cotizarse. Revisa el hotel seleccionado.');
+  return {amount:redondear2(extra),name,details:{
+    name,checkIn:q.checkIn,checkOut:q.checkOut,nights:q.nights,
+    roomPlan:textoPlano(data.roomPlan,120),supplement:redondear2(extra),
+    stayTotal:Number(q.alternativeStay)||0,
+    priceSource:'SerpApi · estimación firmada, alojamiento pendiente de confirmación'
+  }};
+}
+
 function validarYCalcular(data) {
   if (!data || !data.slug) throw new Error('Faltan datos de la reserva.');
 
@@ -1341,12 +1419,14 @@ function validarYCalcular(data) {
   limite.setHours(0, 0, 0, 0);
   if (fecha < limite) throw new Error('Fecha demasiado próxima.');
 
-  // Las consultas de vuelos y hoteles NO son inventario emitible. No aceptar un
-  // total añadido por el cliente como autoridad para crear un cobro PayPal.
-  if(data.flightSelection || data.alternateHotel || data.hotelQuotePending){
-    throw new Error('Las tarifas adicionales necesitan validación antes de pagar en línea.');
-  }
-  const total = redondear2(tarifas.adulto * adultos + tarifas.nino * ninos);
+  // Marcha blanca: precios observados y firmados por el backend de búsquedas.
+  // La agencia asume diferencias posteriores, sin declarar emitidos los servicios.
+  const ctx={slug,date:fechaTexto,tier,occupancy,adults:adultos,children:ninos};
+  const validatedFlight=lxQuoteValidateFlight_(data.flightSelection,ctx);
+  const validatedHotel=lxQuoteValidateHotel_(data,ctx);
+  if(data.hotelQuotePending)throw new Error('Las tarifas adicionales necesitan validación antes de pagar en línea.');
+  const total = redondear2(tarifas.adulto*adultos+tarifas.nino*ninos+
+    validatedFlight.amount+validatedHotel.amount);
   const cobro = calcularCobro(total);
 
   if (data.quotedTotal !== undefined && Math.abs(Number(data.quotedTotal) - total) > 0.01) {
@@ -1380,7 +1460,13 @@ function validarYCalcular(data) {
     includedHotel: textoPlano(data.includedHotel,140),
     roomPlan: textoPlano(data.roomPlan,120),
     tourLanguage: textoPlano(data.tourLanguage||holder.tourLanguage,20),
-    flightSelection: null, alternateHotel: '',
+    flightSelection: validatedFlight.details,
+    alternateHotel: validatedHotel.name,
+    alternateHotelDetails: validatedHotel.details,
+    alternateHotelSupplement: validatedHotel.amount,
+    hotelQuotePending:false,
+    quotedTotal:total,
+    availabilityStatus:'PENDIENTE_DE_CONFIRMACION_PROVEEDOR',
     language: textoPlano(data.language || 'es', 10)
   };
 
