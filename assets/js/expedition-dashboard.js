@@ -231,53 +231,103 @@
       '<p>En Tripadvisor puedes compartir una opinión auténtica sobre tu experiencia, sin premios ni puntos por reseñas.</p>'+
       '</div></details>';
   }
+  function profileSelect(name,label,selected,options) {
+    const active=options.find(x=>x.value===selected)||options[0];
+    const render=(x)=>x.iso?
+      '<span class="exp-country-choice"><img class="exp-flag" src="https://flagcdn.com/24x18/'+x.iso.toLowerCase()+'.png" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
+      '<span class="exp-flag-emoji">'+esc(x.flag||'')+'</span><span>'+esc(x.text)+'</span></span>':esc(x.text);
+    return '<label class="exp-field-title" id="expLabel'+name+'">'+esc(label)+'</label>'+
+      '<div class="exp-custom-select" data-exp-select="'+esc(name)+'">'+
+      '<input type="hidden" name="'+esc(name)+'" value="'+esc(active.value||'')+'">'+
+      (name==='whatsappCode'?'<input type="hidden" name="whatsappCountry" value="'+esc(active.iso||'PE')+'">':'')+
+      '<button class="exp-custom-trigger" type="button" aria-labelledby="expLabel'+name+'" aria-expanded="false" data-exp-select-trigger>'+
+      '<span data-exp-select-current>'+render(active)+'</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>'+
+      '<div class="exp-custom-menu" role="listbox" hidden>'+
+      '<input type="search" class="exp-custom-search" placeholder="Buscar…" aria-label="Buscar '+esc(label)+'" data-exp-select-search>'+
+      '<div class="exp-custom-options">'+options.map(x=>
+        '<button type="button" class="exp-custom-option'+(x.value===active.value&&(!x.iso||x.iso===active.iso)?' is-selected':'')+
+        '" role="option" data-exp-value="'+esc(x.value)+'" data-exp-iso="'+esc(x.iso||'')+
+        '" aria-selected="'+(x.value===active.value)+'">'+render(x)+'</button>').join('')+'</div></div></div>';
+  }
+  function profileCountries() {
+    const list=[
+      ['PE','🇵🇪','+51','Perú'],['CO','🇨🇴','+57','Colombia'],['CL','🇨🇱','+56','Chile'],
+      ['AR','🇦🇷','+54','Argentina'],['BR','🇧🇷','+55','Brasil'],['VE','🇻🇪','+58','Venezuela'],
+      ['EC','🇪🇨','+593','Ecuador'],['BO','🇧🇴','+591','Bolivia'],['UY','🇺🇾','+598','Uruguay'],
+      ['MX','🇲🇽','+52','México'],['PA','🇵🇦','+507','Panamá'],['PY','🇵🇾','+595','Paraguay'],
+      ['GT','🇬🇹','+502','Guatemala'],['HN','🇭🇳','+504','Honduras'],['SV','🇸🇻','+503','El Salvador'],
+      ['NI','🇳🇮','+505','Nicaragua'],['CR','🇨🇷','+506','Costa Rica'],
+      ['DO','🇩🇴','+1','República Dominicana'],['CU','🇨🇺','+53','Cuba'],
+      ['US','🇺🇸','+1','Estados Unidos'],['CA','🇨🇦','+1','Canadá'],
+      ['ES','🇪🇸','+34','España'],['FR','🇫🇷','+33','Francia'],['GB','🇬🇧','+44','Reino Unido'],
+      ['DE','🇩🇪','+49','Alemania'],['IT','🇮🇹','+39','Italia'],['PT','🇵🇹','+351','Portugal'],
+      ['JP','🇯🇵','+81','Japón'],['CN','🇨🇳','+86','China'],['KR','🇰🇷','+82','Corea del Sur'],
+      ['AU','🇦🇺','+61','Australia'],['IN','🇮🇳','+91','India']
+    ];
+    return list.map(x=>({iso:x[0],flag:x[1],value:x[2],text:x[2]+' · '+x[3]}));
+  }
   function profilePage() {
     const u=state.data.user||{},p=state.data.profile||{},provider=String(u.provider||'correo');
-    const method=provider.toLowerCase().includes('google')?'Google':'Correo y contraseña';
-    const codes=[['🇵🇪','+51','Perú'],['🇨🇴','+57','Colombia'],['🇨🇱','+56','Chile'],
-      ['🇦🇷','+54','Argentina'],['🇧🇷','+55','Brasil'],['🇻🇪','+58','Venezuela'],
-      ['🇧🇴','+591','Bolivia'],['🇪🇨','+593','Ecuador'],['🇲🇽','+52','México'],
-      ['🇺🇾','+598','Uruguay'],['🇨🇷','+506','Costa Rica'],['🇵🇦','+507','Panamá'],
-      ['🇵🇾','+595','Paraguay'],['🇬🇹','+502','Guatemala'],['🇭🇳','+504','Honduras'],
-      ['🇸🇻','+503','El Salvador'],['🇳🇮','+505','Nicaragua'],['🇩🇴','+1','República Dominicana'],
-      ['🇨🇺','+53','Cuba'],['🇺🇸','+1','Estados Unidos'],['🇨🇦','+1','Canadá'],
-      ['🇪🇸','+34','España'],['🇫🇷','+33','Francia'],['🇬🇧','+44','Reino Unido'],
-      ['🇩🇪','+49','Alemania'],['🇮🇹','+39','Italia'],['🇵🇹','+351','Portugal'],
-      ['🇯🇵','+81','Japón'],['🇨🇳','+86','China'],['🇰🇷','+82','Corea del Sur'],
-      ['🇮🇳','+91','India'],['🇦🇺','+61','Australia']];
-    const avatar=state.avatar||p.googlePicture||'';
-    return '<div class="exp-card"><div class="exp-profile-top">'+
-      '<span class="exp-profile-avatar">'+(avatar?'<img src="'+esc(avatar)+'" alt="Tu fotografía de perfil">':'<i class="fa-solid fa-user" aria-hidden="true"></i>')+'</span>'+
-      '<div><strong>Tu fotografía</strong><p>Usa la foto de Google o carga tu propia imagen.</p>'+
-      '<label class="exp-btn exp-btn--light" for="expAvatarInput"><i class="fa-solid fa-camera"></i> Cambiar fotografía</label>'+
-      '<input type="file" id="expAvatarInput" accept="image/jpeg,image/png,image/webp" hidden></div></div></div>'+
-      '<div class="exp-card"><h3>Información personal</h3><form id="expProfileForm" class="exp-profile-form">'+
-      '<div class="exp-form-grid"><label>Nombre y apellido<input name="name" maxlength="120" value="'+esc(p.name||u.name||'')+'" required></label>'+
-      '<label>Correo electrónico<input value="'+esc(p.email||u.email||'')+'" disabled></label>'+
-      '<label>Teléfono de contacto<input name="phone" type="tel" maxlength="28" value="'+esc(p.phone||u.phone||'')+'" placeholder="+51 987654321"></label>'+
-      '<label>Tipo de documento<select name="docType"><option value="">Seleccionar</option>'+
-      ['DNI','CE','PASAPORTE','CI','RG','CPF','OTRO'].map(x=>'<option value="'+x+'"'+(x===p.docType?' selected':'')+'>'+({'CE':'Carné de extranjería','PASAPORTE':'Pasaporte','CI':'Cédula de identidad','RG':'RG (Brasil)','CPF':'CPF (Brasil)'}[x]||x)+'</option>').join('')+'</select></label>'+
+    const isGoogle=provider.toLowerCase().includes('google'),hasPassword=!isGoogle||provider.toLowerCase().includes('password');
+    const method=isGoogle?(hasPassword?'Google y contraseña':'Google'):'Correo y contraseña';
+    const avatar=state.avatar||p.googlePicture||u.picture||'';
+    const countries=profileCountries();
+    const selectedCountry=countries.find(x=>x.iso===(p.whatsappCountry||'PE'))||
+      countries.find(x=>x.value===(p.whatsappCode||'+51'))||countries[0];
+    const docOptions=[
+      {value:'',text:'Seleccionar tipo de documento'},{value:'DNI',text:'DNI'},
+      {value:'CE',text:'Carné de extranjería'},{value:'PASAPORTE',text:'Pasaporte'},
+      {value:'CI',text:'Cédula de identidad'},{value:'RG',text:'RG (Brasil)'},
+      {value:'CPF',text:'CPF (Brasil)'},{value:'OTRO',text:'Otro documento'}
+    ];
+    return '<div class="exp-card"><h3>Información personal</h3>'+
+      '<div class="exp-profile-mini"><button type="button" class="exp-profile-photo-button" data-exp-open-avatar title="Cambiar fotografía" aria-label="Ver o cambiar mi fotografía">'+
+      (avatar?'<img src="'+esc(avatar)+'" alt="Foto de perfil">':'<i class="fa-solid fa-user" aria-hidden="true"></i>')+
+      '<span class="exp-photo-edit"><i class="fa-solid fa-camera" aria-hidden="true"></i></span></button>'+
+      '<span>Tu perfil <small>Toca tu imagen para cambiarla</small></span></div>'+
+      '<form id="expProfileForm" class="exp-profile-form">'+
+      '<div class="exp-form-grid">'+
+      '<label>Nombres y apellidos<input name="name" maxlength="120" value="'+esc(p.name||u.name||'')+'" required autocomplete="name"></label>'+
+      '<label>Correo electrónico<input value="'+esc(p.email||u.email||'')+'" type="email" disabled></label>'+
+      '<div class="exp-custom-field">'+profileSelect('docType','Tipo de documento',p.docType||'',docOptions)+'</div>'+
       '<label>Número de documento<input name="docNumber" maxlength="30" value="'+esc(p.docNumber||'')+'" autocomplete="off"></label>'+
-      '<label>Acceso a la cuenta<input value="'+esc(method)+'" disabled></label></div>'+
-      '<h4>WhatsApp</h4><div class="exp-whatsapp-row"><label>Código de país<select name="whatsappCode">'+
-      codes.map(x=>'<option value="'+x[1]+'"'+(x[1]===(p.whatsappCode||'+51')?' selected':'')+'>'+x[0]+' '+x[1]+' · '+x[2]+'</option>').join('')+
-      '</select></label><label>Número de WhatsApp<input type="tel" name="whatsapp" inputmode="numeric" maxlength="15" placeholder="987654321" value="'+esc(p.whatsapp||'')+'"></label></div>'+
-      '<button type="submit" class="exp-btn"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></form></div>'+
-      '<div class="exp-card"><h3>Cambiar correo electrónico</h3>'+
+      '<label>Fecha de nacimiento<input type="date" name="birthdate" min="1900-01-01" max="'+new Date().toISOString().slice(0,10)+'" value="'+esc(p.birthdate||'')+'"></label>'+
+      '<label>Tipo de acceso<input value="'+esc(method)+'" disabled></label></div>'+
+      '<h4>WhatsApp</h4><div class="exp-whatsapp-row">'+
+      '<div class="exp-custom-field">'+profileSelect('whatsappCode','País y código',selectedCountry.value,
+        countries.map(x=>Object.assign({},x,{value:x.value})))+'</div>'+
+      '<label>Número de WhatsApp<input type="tel" name="whatsapp" inputmode="numeric" maxlength="15" placeholder="987654321" value="'+esc(p.whatsapp||'')+'"></label></div>'+
+      '<button class="exp-btn" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar cambios</button></form></div>'+
+      '<div class="exp-card"><h3>Acceso y contraseña</h3>'+
       '<details class="exp-subdetails"><summary>Cambiar correo electrónico <i class="fa-solid fa-chevron-down"></i></summary>'+
-      '<p>Para proteger tus viajes y puntos, enviaremos un código al correo actual y otro al nuevo.</p>'+
+      '<p>Enviaremos un código a tu correo actual y otro al nuevo.</p>'+
       '<form id="expEmailRequestForm" class="exp-profile-form">'+
-      '<label>Nuevo correo<input type="email" name="newEmail" required placeholder="nuevo@correo.com"></label>'+
-      (provider.toLowerCase().includes('password')?
-        '<label>Contraseña actual<input type="password" name="password" required autocomplete="current-password"></label>':'')+
-      '<button class="exp-btn exp-btn--light" type="submit">Enviar código al nuevo correo</button></form>'+
-      '<form id="expEmailConfirmForm" class="exp-email-confirm"><label>Código del correo actual<input name="currentCode" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
+      '<label>Nuevo correo electrónico<input type="email" name="newEmail" required placeholder="nuevo@correo.com"></label>'+
+      (hasPassword?'<label>Contraseña actual<input type="password" name="password" autocomplete="current-password" required></label>':'')+
+      '<button type="submit" class="exp-btn exp-btn--light">Enviar códigos</button></form>'+
+      '<form id="expEmailConfirmForm" class="exp-email-confirm">'+
+      '<label>Código del correo actual<input name="currentCode" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
       '<label>Código del correo nuevo<input name="code" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
       '<button class="exp-btn" type="submit">Confirmar cambio de correo</button></form></details>'+
-      '</div><div class="exp-card"><h3>Seguridad</h3>'+
-      '<button type="button" class="exp-btn exp-btn--light" data-logout>Cerrar sesión</button></div>'+
+      (hasPassword?'<details class="exp-subdetails"><summary>Cambiar contraseña <i class="fa-solid fa-chevron-down"></i></summary>'+
+        '<form id="expChangePasswordForm" class="exp-profile-form">'+
+        '<label>Contraseña actual<input name="currentPassword" type="password" autocomplete="current-password" required></label>'+
+        '<label>Contraseña nueva<input name="newPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required></label>'+
+        '<label>Repetir contraseña nueva<input name="confirmPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required></label>'+
+        '<button class="exp-btn exp-btn--light" type="submit">Actualizar contraseña</button></form></details>':
+        '<div class="exp-auth-google"><i class="fa-brands fa-google" aria-hidden="true"></i> Tu contraseña se administra desde tu cuenta de Google.</div>')+
+      '</div>'+
       '<div class="exp-card"><h3>Verificación y bienvenida</h3>'+
-      (state.data.verified?'<div class="exp-notice"><i class="fa-solid fa-circle-check"></i><p>Tu cuenta está verificada y participa en LATAM Rewards.</p></div>':verificationBanner())+'</div>';
+      (state.data.verified?'<div class="exp-notice"><i class="fa-solid fa-circle-check"></i><p>Tu cuenta está verificada y participa en LATAM Rewards.</p></div>':verificationBanner())+'</div>'+
+      '<dialog id="expAvatarDialog" class="exp-avatar-dialog" aria-labelledby="expAvatarTitle">'+
+      '<div class="exp-avatar-dialog-head"><h2 id="expAvatarTitle">Fotografía de perfil</h2>'+
+      '<button type="button" data-exp-close-avatar aria-label="Cerrar" class="exp-avatar-close"><i class="fa-solid fa-xmark"></i></button></div>'+
+      '<div class="exp-avatar-dialog-body"><span class="exp-avatar-preview">'+
+      (avatar?'<img src="'+esc(avatar)+'" alt="Tu fotografía">':'<i class="fa-solid fa-user"></i>')+'</span>'+
+      '<p>Tu foto de Google se mostrará automáticamente, o puedes elegir una foto propia.</p>'+
+      '<label for="expAvatarInput" class="exp-btn"><i class="fa-solid fa-camera"></i> Subir una fotografía</label>'+
+      '<input id="expAvatarInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>'+
+      '<small>JPG, PNG o WebP · Imagen privada.</small></div></dialog>';
   }
   function notificationsPage() {
     const notes=state.data.notifications||[];
