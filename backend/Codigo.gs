@@ -1602,17 +1602,10 @@ function crearOrden(data) {
       description: descripcion,
       custom_id: booking.requestKey,
       soft_descriptor: 'LATAMEXPED'
-    }],
-    payment_source: {
-      paypal: {
-        experience_context: {
-          brand_name: CONFIG.agency.name,
-          locale: 'es-ES',
-          shipping_preference: 'NO_SHIPPING',
-          user_action: 'PAY_NOW'
-        }
-      }
-    }
+    }]
+    // El SDK de PayPal Buttons gestiona la aprobación del comprador.
+    // No enviar payment_source: createOrder REST responde CREATED y el SDK
+    // abre la aprobación con ese Order ID (flujo Standard Checkout).
   }, requestId);
 
   if (resultado.code >= 300 || !resultado.body.id) {
