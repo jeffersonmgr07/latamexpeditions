@@ -1211,6 +1211,12 @@ function doPost(e) {
     if (action === 'dashboardSendVerification') return json(lxRwSendCode_(data));
     if (action === 'dashboardVerifyEmail') return json(lxRwVerifyCode_(data));
     if (action === 'dashboardReadNotification') return json(lxRwMarkRead_(data));
+    if (action === 'dashboardSaveProfile') return json(lxRwUpdateProfile_(data));
+    if (action === 'dashboardUploadAvatar') return json(lxRwUploadAvatar_(data));
+    if (action === 'dashboardGetAvatar') return json(lxRwGetAvatar_(data));
+    if (action === 'dashboardRequestEmailChange') return json(lxRwRequestEmailChange_(data));
+    if (action === 'dashboardConfirmEmailChange') return json(lxRwConfirmEmailChange_(data));
+    if (action === 'dashboardSubmitSocial') return json(lxRwSubmitSocial_(data));
     if (action === 'findBooking') return json(consultarReserva(data));
     if (action === 'resendVoucher') return json(reenviarVoucher(data));
     // --- Formularios del sitio público (Formularios.gs) ---
