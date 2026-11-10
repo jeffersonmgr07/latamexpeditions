@@ -390,6 +390,8 @@
       if (window.google?.accounts?.id) { resolve(); return; }
       const existing = document.querySelector('script[data-lx-google-sdk]');
       if (existing) {
+        if(existing.dataset.lxGoogleError==='1'){reject(Error('Google no disponible'));return;}
+        if(existing.dataset.lxGoogleReady==='1'){resolve();return;}
         existing.addEventListener('load', () => resolve(), { once: true });
         existing.addEventListener('error', () => reject(Error('Google no disponible')), { once: true });
         return;
@@ -481,6 +483,8 @@
       const preload=document.createElement('script');
       preload.src='https://accounts.google.com/gsi/client';
       preload.async=true;preload.dataset.lxGoogleSdk='1';
+      preload.addEventListener('load',()=>{preload.dataset.lxGoogleReady='1';});
+      preload.addEventListener('error',()=>{preload.dataset.lxGoogleError='1';});
       document.head.appendChild(preload);
     }
     try {
