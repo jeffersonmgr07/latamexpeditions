@@ -33,7 +33,7 @@
   }
   function titleFor(page) {
     return ({inicio:'Mi espacio de viajes',viajes:'Mis viajes',reservas:'Mis reservaciones',
-      millas:'Mis puntos',recompensas:'Recompensas y cupones',
+      millas:'LATAM Rewards',recompensas:'Recompensas y cupones',
       avisos:'Notificaciones',perfil:'Mi perfil',detalle:'Detalle del viaje'})[page] || 'Mi cuenta';
   }
   function subtitleFor(page) {
@@ -147,7 +147,7 @@
   }
 
   function tierProgress() {
-    const t=membership(),levels=[['Explorer',0],['Gold',3000],['Platinum',7000],['Diamond',10000]];
+    const t=membership(),levels=[['Explorer',0],['Gold',3000],['Platinum',7000],['Signature',10000]];
     const low=t.points>=10000?10000:t.points>=7000?7000:t.points>=3000?3000:0;
     const next=t.next||10000;
     const fraction=t.next===null?100:Math.max(0,Math.min(100,100*(t.points-low)/(next-low)));
@@ -553,6 +553,7 @@
       const cached=JSON.parse(localStorage.getItem(kUser)||'{}');
       cached.name=result.profile.name;cached.phone=result.profile.phone;
       localStorage.setItem(kUser,JSON.stringify(cached));
+      window.dispatchEvent(new CustomEvent('latam:sessionchange'));
       render();flash('Tus datos se guardaron correctamente.');
     }catch(err){flash(err.message,true);}finally{button.disabled=false;}
   }
