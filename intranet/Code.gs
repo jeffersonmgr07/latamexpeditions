@@ -105,6 +105,8 @@ function lxNormalizeProduct_(input){
       p.flights?.included===false &&
       p.lodging?.name==='Hotel Terrantai';
     if(!agencyPilot){
+    if(p.identity.slug==='desierto-atacama-premium-5d4n')
+      throw Error('Para aprobar Atacama con un precio fijo asumido por la agencia, usa el botón «Aprobar precio y publicar Atacama». No marques tarifas de proveedores como verificadas.');
     const quality=p.quality||{};
     const checks=['pricesConfirmed','hotelConfirmed','suppliersConfirmed','flightConfirmed',
       'photosLicensed','policiesApproved','datesVerified','bookingTested'];
@@ -306,9 +308,11 @@ function lxPricePreview(data,count){
   const supplement=roomRequired&&singles?Math.max(0,Math.round((hotel.costSingleRoomNightUSD-hotel.costDoubleRoomNightUSD/2)*nights*100)/100):0;
   const total=Math.round((adults*base+supplement)*100)/100;
   const valid=Boolean(p.pricing.priceStatus==='CONFIRMADA'&&p.quality&&p.quality.pricesConfirmed&&p.quality.hotelConfirmed);
+  const fixedAgency=p.identity.slug==='desierto-atacama-premium-5d4n'&&p.pricing.priceStatus==='PRECIO_FIJO_AGENCIA'&&p.commercialApproval?.riskAccepted===true;
   return {adults,doubles,singles,basePerPerson:base,supplement,total,
     perPerson:Math.round(total/adults*100)/100,
-    status:valid?'COTIZADO':'REFERENCIAL',message:valid?'Precio calculado para la ocupación.':'Simulación interna: faltan precios/proveedores confirmados.'};
+    status:valid?'COTIZADO':fixedAgency?'PRECIO_FIJO_AGENCIA':'REFERENCIAL',
+    message:valid?'Precio con tarifa de proveedor confirmada.':fixedAgency?'Precio comercial fijo de LATAM Expeditions: la agencia asume variaciones, el hotel permanece sujeto a disponibilidad.':'Simulación interna: faltan precios/proveedores confirmados.'};
 }
 function lxPublicPreview(data){
   lxAdminWho_();const p=lxNormalizeProduct_(data);
