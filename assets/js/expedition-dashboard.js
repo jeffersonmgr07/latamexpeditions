@@ -15,7 +15,7 @@
     page: ['inicio','viajes','reservas','millas','recompensas','avisos','perfil'].includes(location.hash.slice(1))
       ? location.hash.slice(1) : 'inicio',
     data: null, legacy: false, details: null, filter: 'upcoming',
-    endpoint: '', busy: false
+    endpoint: '', busy: false, reservationFilter: 'all', avatar: ''
   };
   function token() { try { return localStorage.getItem(kToken) || ''; } catch (_) { return ''; } }
   function esc(value) {
@@ -33,8 +33,26 @@
   }
   function titleFor(page) {
     return ({inicio:'Mi espacio de viajes',viajes:'Mis viajes',reservas:'Mis reservaciones',
-      millas:'Mis Millas Expedition',recompensas:'Recompensas y cupones',
-      avisos:'Mis notificaciones',perfil:'Mi perfil',detalle:'Detalle del viaje'})[page] || 'Mi cuenta';
+      millas:'Mis puntos LATAM Rewards',recompensas:'Recompensas y cupones',
+      avisos:'Notificaciones',perfil:'Mi perfil',detalle:'Detalle del viaje'})[page] || 'Mi cuenta';
+  }
+  function subtitleFor(page) {
+    return ({inicio:'Tus viajes y beneficios, siempre a mano.',
+      viajes:'Próximos, anteriores y cancelados.',
+      reservas:'Consulta el estado de pago y confirmación de cada reserva.',
+      millas:'Saldo disponible, puntos pendientes y movimientos.',
+      recompensas:'Descubre experiencias, beneficios y formas de ganar puntos.',
+      avisos:'Las novedades importantes sobre tus viajes.',
+      perfil:'Actualiza tus datos personales y preferencias.',
+      detalle:'Información completa de tu reservación.'})[page] || '';
+  }
+  function membership() {
+    const points=num(state.data?.miles?.tierPoints);
+    return state.data?.membership || {
+      name:points>=10000?'Diamond':points>=7000?'Platinum':points>=3000?'Gold':'Explorer',
+      points:points,next:points>=10000?null:points>=7000?10000:points>=3000?7000:3000,
+      remaining:points>=10000?0:Math.max(0,(points>=7000?10000:points>=3000?7000:3000)-points)
+    };
   }
   function statusClass(s) {
     if (/cancel|anulad|reembols/i.test(String(s||''))) return ' exp-tag--cancel';
@@ -80,10 +98,10 @@
       '</article>';
   }
   function verificationBanner() {
-    if(state.legacy) return notice('El panel de millas requiere instalar y publicar el nuevo módulo de Apps Script. Tus reservas siguen disponibles.');
+    if(state.legacy) return '';
     if(state.data&&state.data.verified) return '';
     return '<div class="exp-notice"><i class="fa-solid fa-envelope-circle-check" aria-hidden="true"></i>'+
-      '<div><strong>Verifica tu correo y activa 100 Millas Expedition</strong>'+
+      '<div><strong>Verifica tu correo y activa 100 puntos LATAM Rewards</strong>'+
       '<p>Enviaremos un código de seis dígitos al correo registrado. El bono se concede una sola vez por cuenta verificada.</p>'+
       '<div class="exp-verification"><button class="exp-btn exp-btn--light" data-exp-send-code type="button">Enviar código por correo</button>'+
       '<form id="expVerifyForm"><label for="expEmailCode">Código recibido</label> '+
@@ -95,32 +113,35 @@
     const miles=d.miles;
     const available=miles?String(miles.available):'—';
     const incoming=(d.upcoming||[]).filter(x=>!/cancel|anulad|reembols/i.test(x.status||''));
-    return heading('Hola'+(u.name?', '+u.name.split(' ')[0]:'')+' 👋','Todo sobre tus próximos viajes y recompensas, en un solo lugar.')+
-      (state.legacy?notice('La versión visual ya está disponible. Las millas, documentos operativos y notificaciones estarán activas cuando se publique el módulo de Apps Script.'):verificationBanner())+
+    return '<p class="exp-greeting">¡Hola'+(u.name?', '+esc(u.name.split(' ')[0]):'')+'! 👋</p>'+
+      verificationBanner()+
       '<div class="exp-grid">'+stat('fa-suitcase-rolling',incoming.length,'Viajes próximos')+
-      stat('fa-ticket',all.length,'Reservaciones')+stat('fa-gift',available,'Millas disponibles')+'</div>'+
+      stat('fa-ticket',all.length,'Reservaciones')+stat('fa-gift',available,'Puntos disponibles')+'</div>'+
       '<div class="exp-card"><div class="exp-card-head"><h3>Tu próximo viaje</h3><button class="exp-link" data-exp-nav="viajes" type="button">Ver todos</button></div>'+
       (next?tripCard(next):empty('Tu próxima aventura empieza aquí','Aún no tienes viajes próximos registrados.',true))+'</div>'+
-      '<div class="exp-card"><div class="exp-card-head"><h3>Expedition Rewards</h3><button class="exp-link" data-exp-nav="millas" type="button">Ver estado de cuenta</button></div>'+
-      '<div class="exp-wallet"><label>EXPEDITION REWARDS</label><strong>'+esc(available)+' millas</strong>'+
-      '<small>Saldo disponible para futuros canjes</small><div class="exp-wallet-stats">'+
-      '<div><b>'+(miles?esc(miles.pending):'—')+'</b><span>Millas pendientes</span></div>'+
-      '<div><b>'+(miles?esc(miles.bonus):'—')+'</b><span>Bono de bienvenida recibido</span></div></div></div>'+
-      '<p style="font-size:13px">Acumula 1 milla por cada US$10 pagados en experiencias, paquetes, vuelos y hoteles. Los canjes estarán disponibles cuando se publique el catálogo.</p></div>';
+      '<div class="exp-card"><div class="exp-card-head"><h3>Tus puntos LATAM Rewards</h3><button class="exp-link" data-exp-nav="millas" type="button">Ver estado de cuenta</button></div>'+
+      '<div class="exp-wallet"><label>LATAM REWARDS · '+esc(membership().name.toUpperCase())+'</label><strong>'+esc(available)+' puntos</strong>'+
+      '<small>Puntos disponibles para recompensas</small><div class="exp-wallet-stats">'+
+      '<div><b>'+(miles?esc(miles.pending):'—')+'</b><span>Puntos pendientes</span></div>'+
+      '<div><b>'+(miles?esc(miles.bonus):'—')+'</b><span>Bono de bienvenida</span></div></div></div>'+
+      '<button type="button" class="exp-link" data-exp-nav="recompensas">Descubre cómo ganar puntos</button></div>';
   }
   function tripsPage(kind) {
     const all=allTrips();
     if(kind==='reservas'){
-      return heading('Mis reservaciones','Consulta cada compra, sus importes y el estado de confirmación.')+
-        (all.length?all.map(tripCard).join(''):empty('No hay reservaciones','Cuando realices una compra o solicitud, aparecerá aquí.',true));
+      const filters=[['all','Todas'],['pending','Pendientes de pago'],['confirmed','Pagadas o confirmadas']];
+      const list=state.reservationFilter==='pending'?all.filter(x=>num(x.balance)>0||/pendiente|cotiz/i.test(x.status||'')):
+        state.reservationFilter==='confirmed'?all.filter(x=>num(x.paid)>0&&num(x.balance)<=0):all;
+      return '<div class="exp-filters">'+filters.map(x=>'<button class="exp-filter'+(state.reservationFilter===x[0]?' is-active':'')+
+        '" type="button" data-exp-res-filter="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>'+
+        (list.length?list.map(tripCard).join(''):empty('No hay reservaciones en esta categoría','Cuando tengas reservas con ese estado, aparecerán aquí.',true));
     }
     let list=[];
     if(state.filter==='upcoming')list=state.data.upcoming.filter(x=>!/cancel|anulad|reembols/i.test(x.status||''));
     else if(state.filter==='past')list=state.data.past.filter(x=>!/cancel|anulad|reembols/i.test(x.status||''));
     else list=all.filter(x=>/cancel|anulad|reembols/i.test(x.status||''));
     const filters=[['upcoming','Próximos'],['past','Anteriores'],['cancel','Cancelados']];
-    return heading('Mis viajes','Abre una reserva para consultar pasajeros, vuelos, hotel, itinerario y pagos.')+
-      '<div class="exp-filters">'+filters.map(x=>
+    return '<div class="exp-filters">'+filters.map(x=>
         '<button class="exp-filter'+(state.filter===x[0]?' is-active':'')+'" type="button" data-exp-filter="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>'+
       (list.length?list.map(tripCard).join(''):empty('No hay viajes en esta categoría','Aquí verás tus viajes cuando estén registrados.',state.filter==='upcoming'));
   }
@@ -141,7 +162,7 @@
         '<td><span class="exp-tag'+(x.status==='PENDIENTE'?' exp-tag--pending':'')+'">'+esc(x.status)+'</span></td>'+
         '<td><span class="'+(num(x.points)<0?'exp-negative':'exp-positive')+'">'+(num(x.points)>0?'+':'')+esc(x.points)+'</span></td></tr>').join('')+
       '</tbody></table></div>':empty('Aún no hay movimientos','Los bonos y compras confirmadas se registrarán aquí.',false))+'</div>'+
-      notice('Las millas no equivalen automáticamente a dinero. El catálogo definirá cuántas millas requiere cada experiencia, souvenir o cupón.');
+      '';
   }
   function rewardsPage() {
     const values=[
@@ -160,9 +181,7 @@
   }
   function notificationsPage() {
     const notes=state.data.notifications||[];
-    return heading('Centro de notificaciones','Novedades de tus reservas y tu programa de recompensas.')+
-      (state.legacy?notice('Las notificaciones internas requieren el nuevo módulo Apps Script.'): '')+
-      '<div class="exp-card">'+(notes.length?notes.map(n=>
+    return '<div class="exp-card">'+(notes.length?notes.map(n=>
         '<div class="exp-notification'+(n.read?'':' is-unread')+'"><i class="fa-solid '+
         (n.type==='booking'?'fa-suitcase-rolling':'fa-gift')+'" aria-hidden="true"></i><div style="flex:1;min-width:0">'+
         '<strong>'+esc(n.title)+'</strong><p>'+esc(n.text)+'</p><time>'+esc(String(n.date||'').replace('T',' '))+'</time></div>'+
