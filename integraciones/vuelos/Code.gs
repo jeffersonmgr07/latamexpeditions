@@ -21,6 +21,24 @@ var CACHE_SECONDS = 900;
  * Comparte LATAM_PRICE_QUOTE_KEY (mín. 40 caracteres aleatorios) con Reservas.
  * Ningún precio firmado equivale a boleto o hotel confirmado.
  */
+/**
+ * Ejecutar UNA sola vez en LATAM Flights API, tras copiar el nuevo Code.gs.
+ * Guarda una clave aleatoria en propiedades del proyecto y la muestra en
+ * el registro SOLO para copiarla a LATAM – Reservas y Pagos.
+ * NO envíes esta clave en capturas ni mensajes.
+ */
+function lxPrepararClaveCotizaciones(){
+  const p=PropertiesService.getScriptProperties();
+  let key=String(p.getProperty('LATAM_PRICE_QUOTE_KEY')||'');
+  if(!key){
+    key=(Utilities.getUuid()+Utilities.getUuid()+Utilities.getUuid()).replace(/-/g,'');
+    p.setProperty('LATAM_PRICE_QUOTE_KEY',key);
+  }
+  if(key.length<40)throw Error('La clave de firma es demasiado corta. Reemplázala por una aleatoria de 64 caracteres o más.');
+  console.log('Copia LATAM_PRICE_QUOTE_KEY en las propiedades PRIVADAS de LATAM – Reservas y Pagos: '+key);
+  console.log('No compartas capturas que contengan esta clave. No modifiques la clave tras recibir cotizaciones.');
+  return 'Clave creada o encontrada; cópiala del registro de ejecución y guárdala de forma segura.';
+}
 function lxQuoteKey_(){
   var k=String(PropertiesService.getScriptProperties().getProperty('LATAM_PRICE_QUOTE_KEY')||'');
   return k.length>=40?k:'';
