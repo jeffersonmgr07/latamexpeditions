@@ -380,28 +380,32 @@
   async function initGoogle() {
     const contenedores = $$('[data-google-signin]');
     if (!contenedores.length) return;
-
     if (!GOOGLE_CLIENT_ID || GOOGLE_CLIENT_ID.startsWith('PEGAR_AQUI')) {
       $$('[data-google-block]').forEach((n) => { n.hidden = true; });
       return;
     }
-
+    // La SDK y la verificación del backend se cargan en paralelo: ninguna bloquea
+    // el inicio de la otra. No se modifica la validación del token en servidor.
+    const sdkReady = new Promise((resolve, reject) => {
+      if (window.google?.accounts?.id) { resolve(); return; }
+      const existing = document.querySelector('script[data-lx-google-sdk]');
+      if (existing) {
+        existing.addEventListener('load', () => resolve(), { once: true });
+        existing.addEventListener('error', () => reject(Error('Google no disponible')), { once: true });
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.dataset.lxGoogleSdk = '1';
+      script.onload = () => resolve();
+      script.onerror = () => reject(Error('Google no disponible'));
+      document.head.appendChild(script);
+    });
     try {
-      const nonce = await llamar('authNonce', {});
+      const [, nonce] = await Promise.all([sdkReady, llamar('authNonce', {})]);
+      if (!window.google?.accounts?.id || !nonce?.nonce) throw Error('Google no disponible');
       GOOGLE_NONCE = nonce.nonce;
-    } catch (err) {
-      console.warn('[google] No se pudo crear la verificación', err);
-      $$('[data-google-block]').forEach((n) => { n.hidden = true; });
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => {
-      if (!window.google || !window.google.accounts || !GOOGLE_NONCE) return;
-
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
         callback: manejarCredencialGoogle,
@@ -409,25 +413,24 @@
         context: window.location.pathname.includes('registro') ? 'signup' : 'signin',
         nonce: GOOGLE_NONCE
       });
-
       contenedores.forEach((div) => {
+        div.replaceChildren();
         window.google.accounts.id.renderButton(div, {
           type: 'standard',
           theme: 'outline',
           size: 'large',
-          text: window.location.pathname.includes('registro') ? 'signup_with' : 'signin_with',
-          shape: 'rectangular',
+          text: window.location.pathname.includes('registro') ? 'signup_with' : 'continue_with',
+          shape: 'pill',
           logo_alignment: 'left',
           locale: 'es',
-          width: Math.min(div.offsetWidth || 380, 400)
+          width: Math.min(Math.max(div.offsetWidth || 320, 220), 400)
         });
       });
-    };
-    script.onerror = () => {
+    } catch (err) {
+      console.warn('[google] No se pudo preparar el inicio de sesión', err);
+      // Mantener el formulario de correo/contraseña aunque Google no responda.
       $$('[data-google-block]').forEach((n) => { n.hidden = true; });
-      console.warn('[google] No se pudo cargar Identity Services');
-    };
-    document.head.appendChild(script);
+    }
   }
 
   async function manejarCredencialGoogle(respuesta) {
