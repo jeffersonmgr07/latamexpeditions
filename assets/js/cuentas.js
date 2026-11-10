@@ -474,6 +474,15 @@
   /* --------------------------------------------------------- Arranque */
 
   async function init() {
+    // La configuración del catálogo puede ser grande. Descargar la biblioteca
+    // oficial de Google desde el inicio evita esperar a leer todo catalog.json.
+    if($('[data-google-signin]').length&&!window.google?.accounts?.id&&
+       !document.querySelector('script[data-lx-google-sdk]')){
+      const preload=document.createElement('script');
+      preload.src='https://accounts.google.com/gsi/client';
+      preload.async=true;preload.dataset.lxGoogleSdk='1';
+      document.head.appendChild(preload);
+    }
     try {
       const r = await fetch(`${BASE}assets/data/catalog.json`, { cache: 'no-store' });
       const cfg = (await r.json()).booking;
