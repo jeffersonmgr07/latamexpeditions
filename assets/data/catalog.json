@@ -5308,7 +5308,7 @@
       "currency": "USD",
       "img": "paquete-chile-6d5n-01.jpg",
       "alt": "Valle de la Luna en el desierto de Atacama",
-      "excerpt": "Capital, desierto, géiseres y los cielos más limpios del planeta.",
+      "excerpt": "Santiago, paisajes del desierto y géiseres en una experiencia inolvidable. Vuelos opcionales.",
       "itinerary": [
         "Día 1 · Llegada a Santiago y city tour",
         "Día 2 · Vuelo a Calama y traslado a San Pedro de Atacama",
@@ -5318,14 +5318,15 @@
       ],
       "includes": [
         "4 noches de alojamiento con desayuno",
-        "Vuelo interno Santiago - Calama - Santiago",
+        "Asistencia en la coordinación de vuelos internos opcionales",
         "Todas las excursiones indicadas con guía",
         "Observación astronómica con telescopios",
         "Traslados en el desierto",
         "Asistencia 24/7 durante el viaje"
       ],
       "notIncludes": [
-        "Vuelos internacionales",
+        "Vuelos internacionales hasta Santiago",
+        "Vuelos internos Santiago–Calama–Santiago (selección opcional)",
         "Ingresos a parques y reservas",
         "Comidas no especificadas",
         "Propinas y gastos personales"
@@ -5362,6 +5363,10 @@
           ]
         }
       ],
+      "quoteOnly": true,
+      "flightIncluded": false,
+      "flightRoute": "SCL-CJC-SCL",
+      "airfareDeductionPending": true,
       "flightsAvailable": true
     },
     {
