@@ -11,7 +11,7 @@
  * Data is cached airfare observations, NOT live bookable inventory.
  */
 var FLIGHT_AIRPORTS = [
-  "LIM","CUZ","AQP","JUL","PIU","TRU","IQT","TPP","CIX","PEM","BOG","MDE","CTG","CLO","SMR","ADZ","PEI","LET","UIO","GYE","SCL","ANF","PUQ","EZE","AEP","COR","MDZ","GRU","GIG","BSB","LPB","VVI","MEX","CUN","GDL","PTY","SJO","MVD","CCS","BLA","MAR","MIA","MCO","JFK","LAX","MAD","BCN"
+  "LIM","CUZ","AQP","JUL","PIU","TRU","IQT","TPP","CIX","PEM","BOG","MDE","CTG","CLO","SMR","ADZ","PEI","LET","UIO","GYE","SCL","CJC","ANF","PUQ","EZE","AEP","COR","MDZ","GRU","GIG","BSB","LPB","VVI","MEX","CUN","GDL","PTY","SJO","MVD","CCS","BLA","MAR","MIA","MCO","JFK","LAX","MAD","BCN"
 ];
 var API_ROOT = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates";
 var CACHE_SECONDS = 900;
@@ -77,6 +77,11 @@ function lxSignProviderResults_(result,request){
     try{budgetMap=JSON.parse(PropertiesService.getScriptProperties().getProperty('HOTEL_REFERENCE_NIGHT_USD')||'{}')}
     catch(ignore){budgetMap={}}
     var privateNight=Number(budgetMap[slug+'|'+tier+'|'+room]||0);
+    // Referencia presupuestaria INTERNA del piloto Terrantai. Es un costo de trabajo
+    // de la agencia (no precio neto confirmado) y NO se devuelve a la web.
+    // Si se configura el valor en las propiedades, prevalece el costo personalizado.
+    if(!(privateNight>0)&&slug==='desierto-atacama-premium-5d4n'&&tier==='4e'&&
+       ['double','matrimonial','single'].indexOf(room)>=0)privateNight=370;
     var providerBaseline=Number(result.referenceHotel&&result.referenceHotel.totalRate||0);
     var baseline=privateNight>0?privateNight*nights:providerBaseline>0?providerBaseline:0;
     result.hotels.forEach(function(h){
@@ -560,7 +565,8 @@ function searchBundleHotels_(p) {
     "Arequipa, Perú":{q:"hoteles en Arequipa Perú",gl:"pe"},
     "Río de Janeiro, Brasil":{q:"hoteles en Río de Janeiro Brasil",gl:"br"},
     "Buenos Aires, Argentina":{q:"hoteles en Buenos Aires Argentina",gl:"ar"},
-    "Santiago, Chile":{q:"hoteles en Santiago Chile",gl:"cl"}
+    "Santiago, Chile":{q:"hoteles en Santiago Chile",gl:"cl"},
+    "San Pedro de Atacama, Chile":{q:"hoteles en San Pedro de Atacama Chile",gl:"cl"}
   };
   var location=supported[destination];
   if(!location)return {ok:false,message:"Consulta hotelera todavía no habilitada para este destino."};
@@ -602,6 +608,10 @@ function searchBundleHotels_(p) {
   var lookupKey=packageSlug+"|"+tierCode+"|"+roomCode;
   var refNight=Number(budgetMap[lookupKey]||0);
   if(!(refNight>0&&refNight<10000))refNight=0;
+  // Suplementos del piloto de Atacama: referencia privada que la agencia asume.
+  // No incluye vuelos ni modifica el precio fijo del paquete.
+  if(!refNight&&packageSlug==='desierto-atacama-premium-5d4n'&&tierCode==='4e'&&
+     ['single','double','matrimonial'].indexOf(roomCode)>=0)refNight=370;
   // Paginación de hasta tres páginas: solo continuaciones generadas y almacenadas
   // por el servidor. El navegador no puede enviar tokens arbitrarios a SerpApi.
   var page=Number(p.page||0);
