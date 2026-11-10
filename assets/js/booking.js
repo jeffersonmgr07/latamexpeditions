@@ -1800,7 +1800,7 @@
       ? 'You pay 100% now. Flights and alternative hotels still require manual supplier confirmation. If a service cannot be fulfilled, we will offer an agreed alternative or a refund.'
       : 'Pagas el 100% ahora. Los vuelos y hoteles alternativos requieren confirmación manual con proveedores. Si algún servicio no puede prestarse, te ofreceremos una alternativa acordada o la devolución correspondiente.';
     if(PRODUCT.slug==='desierto-atacama-premium-5d4n')$('#bkPayNote').textContent=
-      'Precio de venta fijo de LATAM Expeditions, pagadero al 100%. Hotel Terrantai y excursiones requieren confirmación posterior con el proveedor. Si no podemos prestar lo contratado, te ofreceremos una alternativa de tu elección o devolución íntegra. Vuelos opcionales aparte.';
+      'Pago seguro del total. Te enviaremos la confirmación de hotel, excursiones y horarios. Los servicios están sujetos a disponibilidad; si alguno no estuviera disponible, podrás elegir una alternativa o solicitar la devolución.';
   }
 
   function goToStep(next) {
