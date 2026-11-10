@@ -281,6 +281,50 @@ const PRECIOS_PAQUETES = {
       'matrimonial': 1499.90
     }
   },
+  'lima-paracas-ica-huacachina-2d1n': {
+    'sin-hotel': {
+      'single': 132.62,
+      'double': 126.21,
+      'matrimonial': 126.21,
+      'triple': 116.60,
+      'family': 116.60
+    },
+    'challaca': {
+      'single': 155.04,
+      'double': 148.63,
+      'matrimonial': 148.63,
+      'triple': 135.82,
+      'family': 135.82
+    },
+    'will-robert': {
+      'single': 225.51,
+      'double': 196.68,
+      'matrimonial': 196.68,
+      'triple': 183.87,
+      'family': 183.87
+    },
+    'villa-valverde': {
+      'single': 219.11,
+      'double': 196.68,
+      'matrimonial': 196.68,
+      'triple': 183.87,
+      'family': 183.87
+    },
+    'vinas-queirolo': {
+      'single': 315.20,
+      'double': 260.75,
+      'matrimonial': 260.75,
+      'triple': 247.94,
+      'family': 247.94
+    },
+    'hacienda-caravedo': {
+      'single': 315.20,
+      'double': 260.75,
+      'matrimonial': 260.75,
+      'triple': 247.94,
+      'family': 247.94
+    }
+  },
   'peru-cusco-4d3n': {
     '3e': {
       'single': 590.0,
@@ -1528,7 +1572,7 @@ function resolverTarifas(data) {
     const occupancy = data.occupancy || 'double';
     if (typeof tier[occupancy] !== 'number') throw new Error('Elige una acomodación válida.');
     const adulto = tier[occupancy];
-    return { adulto: adulto, nino: redondear2(adulto * 0.70) };
+    return { adulto: adulto, nino: redondear2(adulto * (data.slug==='lima-paracas-ica-huacachina-2d1n'?1:0.70)) };
   }
   throw new Error('Producto no disponible.');
 }
