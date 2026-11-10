@@ -170,8 +170,8 @@
     return '<div class="exp-social-grid">'+choices.map(n=>{
       const claim=social[n.network],status=claim?.status||'';
       const done=status==='APROBADO',pending=status==='EN ESPERA'||status==='EN REVISION';
-      const statusText=done?'100 puntos acreditados':pending?(status==='EN ESPERA'?'Pendiente de 24 horas':'En revisión'):
-        status==='RECHAZADO'?'Enlace rechazado. Puedes enviar otro.':'100 puntos por publicación válida';
+      const statusText=done?'Publicación destacada':pending?(status==='EN ESPERA'?'Pendiente de 24 horas':'En revisión'):
+        status==='RECHAZADO'?'Enlace rechazado. Puedes enviar otro.':'Compartir es voluntario';
       return '<article class="exp-social-card"><div class="exp-social-icon"><i class="'+n.ico+'" aria-hidden="true"></i></div>'+
         '<div><strong>'+n.name+'</strong><p>'+n.detail+'</p><span class="exp-tag'+(pending?' exp-tag--pending':'')+'">'+statusText+'</span></div>'+
         '<a class="exp-btn exp-btn--light" href="'+n.href+'" target="_blank" rel="noopener noreferrer">Ir a '+n.name+' <i class="fa-solid fa-arrow-up-right-from-square"></i></a>'+
@@ -182,7 +182,7 @@
           '<small>Referencia enviada: '+esc(claim?.url||'')+'</small>')+
         '</article>';
     }).join('')+'</div>'+
-      '<p class="exp-social-note">Las publicaciones deben ser originales y expresar tu opinión real. Si recibes una recompensa por compartir, identifica tu contenido como publicidad o colaboración. Cada red admite una bonificación por cuenta. Los enlaces se revisan después de 24 horas.</p>';
+      '<p class="exp-social-note">Compartir es voluntario y no otorga puntos. Puedes enviar un enlace para que tu publicación forme parte de nuestra comunidad. Los enlaces se revisan a partir de las 24 horas. Si publicas contenido comercial, identifica la colaboración conforme a las reglas de cada plataforma.</p>';
   }
   function milesPage() {
     const m=state.data.miles,ready=!!m,t=membership();
@@ -192,9 +192,9 @@
       '<small>Tu saldo actual</small><div class="exp-wallet-stats"><div><b>'+(ready?esc(m.pending):'—')+'</b>'+
       '<span>Pendientes de completar el servicio</span></div><div><b>'+(ready?esc(m.used):'—')+'</b><span>Puntos utilizados</span></div></div></div>'+
       tierProgress()+
-      '<div class="exp-card"><div class="exp-card-head"><h3>Gana más puntos</h3>'+
+      '<div class="exp-card"><div class="exp-card-head"><h3>Obtén más puntos</h3>'+
       '<button class="exp-link" type="button" data-exp-nav="recompensas">Ver el programa</button></div>'+
-      '<p class="exp-card-intro">Comparte LATAM Expeditions con tu comunidad y participa en LATAM Rewards.</p>'+
+      '<p class="exp-card-intro">Cada US$10 pagados en experiencias, paquetes, vuelos y hoteles te suma 1 punto. También puedes compartir voluntariamente tus planes de viaje.</p>'+
       (state.data.verified?shareCards():verificationBanner())+'</div>'+
       '<div class="exp-card"><h3>Estado de cuenta</h3>'+
       (ready&&m.movements.length?'<div class="exp-table-wrap"><table class="exp-table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Estado</th><th>Puntos</th></tr></thead><tbody>'+
@@ -220,7 +220,7 @@
       '<div class="exp-program-how">'+
       '<article><i class="fa-solid fa-user-check"></i><strong>100 puntos</strong><span>Al verificar tu cuenta por primera vez</span></article>'+
       '<article><i class="fa-solid fa-credit-card"></i><strong>1 punto / US$10</strong><span>En experiencias, paquetes, vuelos y hoteles pagados</span></article>'+
-      '<article><i class="fa-solid fa-share-nodes"></i><strong>Hasta 300 puntos</strong><span>100 por Facebook, Instagram y TikTok, con publicaciones aprobadas</span></article>'+
+      '<article><i class="fa-solid fa-share-nodes"></i><strong>Comunidad viajera</strong><span>Comparte tus experiencias cuando quieras, sin obligación ni recompensas por publicaciones</span></article>'+
       '<article><i class="fa-solid fa-clock-rotate-left"></i><strong>Puntos disponibles</strong><span>Las compras se acreditan al completar el servicio</span></article></div>'+
       '<h3>Tu camino de recompensas</h3><div class="exp-tiers">'+levels.map(x=>
       '<div><i class="fa-solid fa-medal"></i><strong>'+x[0]+'</strong><small>'+x[1]+' puntos acreditados</small></div>').join('')+'</div>'+
