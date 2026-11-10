@@ -160,6 +160,90 @@ function lxImportAtacama(){
   if(existing)return lxReadProduct_(existing.id);
   return lxSaveProduct(ATACAMA_PREMIUM_DRAFT);
 }
+/**
+ * Importa la revisión de contenido y un PRESUPUESTO ESTIMADO a Atacama.
+ * SOLO consulta referencias públicas, no es una tarifa neta contratada.
+ * Nunca publica ni habilita PayPal. Afecta únicamente al producto piloto,
+ * con control de versión y auditoría. Se ejecuta desde la interfaz.
+ */
+function lxAplicarEstudioAtacama(){
+  lxAdminWho_();
+  const rows=lxReadRows_(),row=rows.find(x=>x.slug==='desierto-atacama-premium-5d4n');
+  if(!row)throw Error('Primero importa Atacama 5D/4N desde el menú lateral.');
+  const previous=lxReadProduct_(row.id);
+  if(previous.status==='APROBADO'||previous.status==='PUBLICADO')
+    throw Error('Esta actualización referencial no modifica productos aprobados.');
+  const seed=JSON.parse(JSON.stringify(ATACAMA_PREMIUM_DRAFT));
+  // Se conserva la identidad de la ficha existente para evitar duplicados.
+  const next=Object.assign({},previous,{
+    identity:Object.assign({},previous.identity,seed.identity),
+    commercial:seed.commercial,
+    itinerary:seed.itinerary,
+    flights:seed.flights,
+    transfers:seed.transfers,
+    dates:seed.dates,
+    seo:Object.assign({},previous.seo,seed.seo),
+    lodging:Object.assign({},previous.lodging,seed.lodging,{
+      costDoubleRoomNightUSD:null,costSingleRoomNightUSD:null,
+      rateStatus:'ESTIMACION_MERCADO_NO_CONFIRMADA',
+      note:'Referencia pública de marzo: aprox. USD 329/noche; presupuesto conservador de trabajo USD 370/noche por habitación doble. Sin cotización firme ni tarifa single para 22–26/03/2027.'
+    }),
+    pricing:Object.assign({},previous.pricing,seed.pricing,{
+      currency:'USD',basisOccupancy:2,defaultAdults:2,defaultChildren:0,
+      pricePerAdultOnDoubleUSD:1499.90,baseGroupPriceForTwoUSD:2999.80,
+      priceStatus:'REFERENCIAL_NO_PUBLICAR',
+      note:'Tarifa preliminar por adulto en doble, sin vuelos. Precisa confirmar Terrantai, guías, tours y cancelación.'
+    }),
+    status:'EN_REVISION',approved:false,public:false,
+    quality:Object.assign({},previous.quality,{
+      pricesConfirmed:false,hotelConfirmed:false,suppliersConfirmed:false,
+      flightConfirmed:false,datesVerified:false,policiesApproved:false,
+      bookingTested:false,photosLicensed:false,englishApproved:false,
+      notes:'ESTUDIO NO VINCULANTE de referencias públicas actualizado 10/11/2026; falta cotización específica de Terrantai y operadores para marzo 2027.'
+    }),
+    internal:Object.assign({},previous.internal,{
+      costBasis:'REFERENCIAL_MERCADO_NO_COTIZADO',
+      currency:'USD',estimateForAdults:2,
+      estimateDate:'2026-11-10',
+      costsForTwoUSD:{
+        domesticFlights:0,
+        hotel:1480,
+        transfers:70,
+        toursAndMoon:600,
+        entries:178,
+        contingency:130,
+        paymentFeeEstimate:150,
+        totalCostEst:2608
+      },
+      estimatedHotelRoomNightUSD:370,
+      estimatedSingleNightUSD:null,
+      revenueForTwoUSD:2999.80,
+      expectedMarginUSD:391.80,
+      expectedMarginPerPersonUSD:195.90,
+      expectedMarginPercent:13.06,
+      supplierNotes:[
+        'HOTEL: Terrantai Lodge, Tocopilla 411, San Pedro de Atacama; info@terrantai.com. Se requiere cotización Andina twin/doble 22–26/03/2027, más single y políticas. Base de trabajo USD 370/noche (NO tarifa confirmada).',
+        'TOURS: Expedición San Pedro (expedicionsanpedro.com) / Civitatis para comparar; tour de Luna CLP 37.900, Arcoíris CLP 45.000, Piedras Rojas CLP 70.000, El Tatio CLP 50.000, Cejar CLP 45.000, astronómico CLP 40.000 por persona, antes de entradas; confirmar combinación e idiomas.',
+        'ENTRADAS: referencias publicadas Valle de la Luna CLP 10.800, Arcoíris/Yerbas Buenas CLP 10.000, Piedras Rojas CLP 29.000, Tatio CLP 15.000, Cejar CLP 21.000 por persona; confirmar administradores y políticas.',
+        'TRANSFER: Transfer Pampa (transferpampa.cl), CLP 34.000 ida y vuelta por persona; confirmar coordinación con vuelos opcionales.',
+        'FECHA: 26/03/2027 Viernes Santo. 22/03/2027 luna llena: la actividad nocturna requiere operador ASTROLUNAR, no prometer estrellas oscuras.'
+      ].join('\n'),
+      notes:[
+        'Fuente del hotel: https://terrantai.com/es/ y promedio marzo https://www.vio.com/Hotel/1716746/es',
+        'Tour y entradas: https://viajandochile.com/planifica/mejores-tours-san-pedro-de-atacama',
+        'Transfer: https://www.transferpampa.cl/',
+        'Tipo de cambio de trabajo CLP 970/USD, solo para modelar.',
+        'USD 1499.90 por adulto en base doble, dos adultos USD 2999.80.',
+        'Costo grupo previsto USD 2608; margen estimado USD 391.80 (USD 195.90 pp).',
+        'Este margen NO está garantizado: hotel, excursiones, entradas, comisiones y disponibilidades varían.',
+        'Tarifa individual desconocida: mantener pendiente de cotización y no ofertar un precio definitivo para uno o tres adultos.',
+        'Los vuelos NO están incluidos. Ofrecerlos únicamente como complemento dinámico.'
+      ].join('\n')
+    })
+  });
+  return lxSaveProduct(next);
+}
+
 function lxPricePreview(data,count){
   lxAdminWho_();
   const p=lxNormalizeProduct_(data),adults=Math.floor(Number(count));
