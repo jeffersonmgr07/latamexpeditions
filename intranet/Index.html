@@ -296,7 +296,7 @@ $('#tabs').addEventListener('click',event=>{
 });
 $('#new').onclick=()=>{if(dirty&&!confirm('Tienes cambios sin guardar. ¿Crear uno nuevo?'))return;fill(blank());$('#tabs button').click()};
 $('#approveAtacama').onclick=async()=>{
- if(dirty){msg('Primero guarda o descarta los cambios sin guardar de este formulario.',true);return}
+ if(dirty&&!confirm('Hay cambios sin guardar en pantalla. Para aprobar utilizaremos la última versión GUARDADA del tour Atacama. Los cambios de esta pantalla se descartarán. ¿Continuar?'))return;
  if(!confirm('APROBACIÓN COMERCIAL: LATAM Expeditions venderá Atacama Premium a USD 1,499.90 por adulto (base doble, sin vuelos). El precio será fijo para el cliente, aunque los costos de Terrantai y excursiones varíen. La agencia asume el riesgo, y ofrecerá una devolución si no puede cumplir el viaje. Esto NO significa que hotel y tours estén reservados. ¿Aprobar?'))return;
  busy(true);
  try{
