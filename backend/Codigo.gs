@@ -74,11 +74,12 @@ const CONFIG = {
   },
 
   // Reglas de cobro. Deben coincidir con booking en catalog.json.
-  depositPercent: 20,
-  depositRoundTo: 10,
-  depositMin: 30,
-  depositMax: 500,
-  payFullBelow: 60,
+  // Campos legados conservados para compatibilidad. calcularCobro cobra siempre 100%.
+  depositPercent: 100,
+  depositRoundTo: 1,
+  depositMin: 0,
+  depositMax: 999999,
+  payFullBelow: 999999,
   currency: 'USD',
   maxTravelers: 12,
   minLeadDays: 1,
