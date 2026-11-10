@@ -311,3 +311,10 @@ body.has-pn-header .exp-account-main, .exp-account-main {background:#f5f7ef !imp
 .exp-custom-menu{max-height:280px;}.exp-custom-options{max-height:200px;}
 .exp-profile-mini{gap:11px;}.exp-profile-photo-button{height:65px;width:65px;}
 }
+
+.exp-redeem-illustration{height:142px;background:linear-gradient(125deg,#0b5b3b,#e1d6ae);display:grid;place-items:center;align-content:center;gap:10px;color:#fff;}
+.exp-redeem-illustration i{font-size:39px;opacity:.92;}
+.exp-redeem-illustration span{font:800 15px Montserrat,Inter,sans-serif;letter-spacing:.17em;}
+@media(max-width:790px){.exp-redeem-illustration{height:130px;}}
+@media(max-width:500px){.exp-redeem-illustration{height:116px;}}
+.exp-sidebar-avatar{border:0;cursor:pointer;}
