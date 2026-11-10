@@ -259,13 +259,14 @@
       '<button type="submit" class="exp-btn"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></form></div>'+
       '<div class="exp-card"><h3>Correo y seguridad</h3>'+
       '<details class="exp-subdetails"><summary>Cambiar correo electrónico <i class="fa-solid fa-chevron-down"></i></summary>'+
-      '<p>Para proteger tu cuenta, enviaremos un código al nuevo correo.</p>'+
+      '<p>Para proteger tus viajes y puntos, enviaremos un código al correo actual y otro al nuevo.</p>'+
       '<form id="expEmailRequestForm" class="exp-profile-form">'+
       '<label>Nuevo correo<input type="email" name="newEmail" required placeholder="nuevo@correo.com"></label>'+
       (provider.toLowerCase().includes('password')?
         '<label>Contraseña actual<input type="password" name="password" required autocomplete="current-password"></label>':'')+
       '<button class="exp-btn exp-btn--light" type="submit">Enviar código al nuevo correo</button></form>'+
-      '<form id="expEmailConfirmForm" class="exp-email-confirm"><label>Código de seis dígitos<input name="code" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
+      '<form id="expEmailConfirmForm" class="exp-email-confirm"><label>Código del correo actual<input name="currentCode" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
+      '<label>Código del correo nuevo<input name="code" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
       '<button class="exp-btn" type="submit">Confirmar cambio de correo</button></form></details>'+
       '<div class="exp-security-foot"><span>Sesión actual</span><button type="button" class="exp-btn exp-btn--light" data-logout>Cerrar sesión</button></div></div>'+
       '<div class="exp-card"><h3>Verificación y bienvenida</h3>'+
