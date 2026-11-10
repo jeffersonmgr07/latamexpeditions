@@ -531,3 +531,17 @@
  .lx-hotel-custom-select .lx-hotel-select-trigger{min-height:40px;font-size:11px;padding:8px 9px}
  .lx-hotel-select-options{min-width:145px}
 }
+
+
+/* Fotografías de hoteles locales en modal de selección — Santiago y Atacama */
+.lx-hotel-modal-photo-grid{width:100%;display:grid;gap:9px;min-width:0}
+.lx-hotel-modal-photo{position:relative;width:100%;min-width:0;display:flex;flex-direction:column;gap:5px}
+.lx-hotel-card-media .lx-hotel-modal-photo img{display:block;width:100%;height:150px;min-height:0!important;max-height:none!important;object-fit:cover;border-radius:9px;background:#e9f0eb}
+.lx-hotel-modal-photo-grid.is-multicity .lx-hotel-modal-photo img{height:104px}
+.lx-hotel-photo-label{font-size:11px;color:#365b45;line-height:1.3;text-align:left;font-weight:650}
+.lx-hotel-photo-missing{min-height:90px;display:grid;place-items:center;border:1px dashed #b7cdbc;border-radius:9px;color:#627d69;font-size:11px}
+@media(max-width:640px){
+ .lx-hotel-modal-photo-grid.is-multicity{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .lx-hotel-modal-photo-grid.is-multicity .lx-hotel-modal-photo img{height:94px}
+ .lx-hotel-photo-label{font-size:10px}
+}
