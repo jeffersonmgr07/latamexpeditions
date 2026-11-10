@@ -209,7 +209,7 @@
  '<label class="lx-hotel-filter-name">Buscar hotel<input id="lxHotelNameSearch" type="search" placeholder="Nombre del hotel" autocomplete="off"></label>'+
  '<label>Categoría<select id="lxHotelStarsFilter"><option value="all">Todas</option><option value="3">3 estrellas</option><option value="4">4 estrellas</option><option value="5">5 estrellas</option></select></label>'+
  '<label>Ordenar<select id="lxHotelSort"><option value="recommended">Recomendados</option><option value="priceAsc">Menor precio</option><option value="priceDesc">Mayor precio</option><option value="rating">Mejor valoración</option></select></label>'+
- '<label>Recargo máx. por noche (USD)<input id="lxHotelMaxExtra" type="number" min="0" step="5" placeholder="Sin límite"></label>'+
+
  '<p class="lx-hotel-filter-help" id="lxHotelFilterHelp" aria-live="polite"></p>'+
  '</div>'+
  '<div id="lxHotelResultCount" class="lx-hotel-result-count" role="status" hidden></div>'+
@@ -217,6 +217,59 @@
  '<button type="button" id="lxHotelLoadMore" class="lx-hotel-load-more" hidden>Mostrar más hoteles</button>'+
  '<div class="lx-package-modal-bottom"><span class="lx-package-quotes-extra" id="lxHotelExtraStatus"></span>'+
  '<button type="button" id="lxHotelApply">Confirmar alojamiento</button></div>';
+
+ // Selectores de LATAM: lista visual propia, accesible y sin desplegable nativo.
+ function lxStyleHotelSelect(id){
+   const select=$(id);if(!select)return;
+   const host=el('div','lx-hotel-custom-select');
+   const trigger=el('button','lx-hotel-select-trigger');trigger.type='button';
+   const list=el('div','lx-hotel-select-options');list.setAttribute('role','listbox');
+   const setClosed=()=>{host.classList.remove('is-open');trigger.setAttribute('aria-expanded','false');};
+   const sync=()=>{
+     trigger.replaceChildren(el('span','',select.selectedOptions[0]?.textContent||'Seleccionar'),
+       el('span','lx-hotel-select-chevron','⌄'));
+     list.replaceChildren();
+     [...select.options].forEach(option=>{
+       const choice=el('button','lx-hotel-select-option'+(option.value===select.value?' is-selected':''),option.textContent);
+       choice.type='button';choice.setAttribute('role','option');
+       choice.setAttribute('aria-selected',String(option.value===select.value));
+       choice.addEventListener('click',()=>{
+         select.value=option.value;select.dispatchEvent(new Event('change',{bubbles:true}));
+         sync();setClosed();trigger.focus();
+       });
+       list.append(choice);
+     });
+   };
+   trigger.setAttribute('aria-haspopup','listbox');trigger.setAttribute('aria-expanded','false');
+   trigger.setAttribute('aria-label',select.closest('label')?.textContent?.trim().replace(select.textContent,'')||'Filtro');
+   select.classList.add('lx-hotel-original-select');
+   select.after(host);host.append(trigger,list);
+   trigger.addEventListener('click',()=>{
+     const wasOpen=host.classList.contains('is-open');
+     hotels.body.querySelectorAll('.lx-hotel-custom-select.is-open').forEach(h=>{
+       h.classList.remove('is-open');h.querySelector('button[aria-expanded]')?.setAttribute('aria-expanded','false');
+     });
+     if(!wasOpen){host.classList.add('is-open');trigger.setAttribute('aria-expanded','true');}
+   });
+   trigger.addEventListener('keydown',event=>{
+     if(['ArrowDown','ArrowUp','Enter',' '].includes(event.key)){
+       if(host.classList.contains('is-open')&&event.key==='Enter')return;
+       event.preventDefault();host.classList.add('is-open');trigger.setAttribute('aria-expanded','true');
+       const options=[...list.querySelectorAll('button')];options[Math.max(0,options.findIndex(o=>o.classList.contains('is-selected')))]?.focus();
+     }
+     if(event.key==='Escape')setClosed();
+   });
+   list.addEventListener('keydown',event=>{
+     const items=[...list.querySelectorAll('button')];const index=items.indexOf(document.activeElement);
+     if(event.key==='ArrowDown'||event.key==='ArrowUp'){
+       event.preventDefault();items[(index+(event.key==='ArrowDown'?1:-1)+items.length)%items.length]?.focus();
+     }else if(event.key==='Escape'){event.preventDefault();setClosed();trigger.focus();}
+   });
+   document.addEventListener('click',event=>{if(!host.contains(event.target))setClosed()});
+   select.addEventListener('change',sync);sync();
+ }
+ ['lxHotelStarsFilter','lxHotelSort'].forEach(lxStyleHotelSelect);
+
  const flightStatus=$('lxFlightSearchStatus'),hotelStatus=$('lxHotelLookupStatus');
  const outboundCalendar=window.LatamProductControls.calendar($('lxFlightDeparture'));
  const inboundCalendar=window.LatamProductControls.calendar($('lxFlightReturn'));
@@ -810,16 +863,10 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  function filterHotels(){
    const search=normalizeHotelName($('lxHotelNameSearch').value);
    const stars=$('lxHotelStarsFilter').value;
-   const maxRaw=$('lxHotelMaxExtra').value.trim();
-   const maxExtra=maxRaw===''?null:Number(maxRaw);
    const sort=$('lxHotelSort').value;
    let list=hotelResults.filter(h=>{
      if(search&&!normalizeHotelName(h.name).includes(search))return false;
      if(stars!=='all'&&Number(h.stars)!==Number(stars))return false;
-     if(maxExtra!==null&&Number.isFinite(maxExtra)){
-       const totalExtra=extraForHotel(h);
-       if(totalExtra!==null&&totalExtra/params.nights>maxExtra+.0001)return false;
-     }
      return true;
    });
    if(sort==='priceAsc')list.sort((a,b)=>stayPrice(a)-stayPrice(b));
@@ -927,11 +974,9 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
        hotelResults=[];hotelDisplayCount=10;
        hotelLookupUi.hidden=false;
        $('lxHotelNameSearch').value='';$('lxHotelStarsFilter').value='all';$('lxHotelSort').value='recommended';
-       $('lxHotelMaxExtra').value='';
-       $('lxHotelMaxExtra').disabled=hotelBudget===null&&!hotelPrivateReference;
        $('lxHotelFilterHelp').textContent=hotelBudget===null&&!hotelPrivateReference
-         ?'El recargo máximo estará disponible al confirmar el hotel incluido. Puedes filtrar por estrellas y ordenar por precio observado.'
-         :'Los recargos se calculan por estancia frente al hotel incluido; no mostramos presupuestos internos.';
+         ?'Puedes filtrar hoteles por nombre, categoría y ordenar por tarifas observadas. Los suplementos requieren confirmar el hotel incluido.'
+         :'Los suplementos se calculan por estancia sin mostrar presupuestos internos.';
      }
      const previous=new Set(hotelResults.map(h=>normalizeHotelName(h.name)));
      (Array.isArray(result.hotels)?result.hotels:[]).forEach(h=>{
@@ -954,8 +999,8 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
    if(hotelDisplayCount<filterHotels().length){hotelDisplayCount+=10;renderHotelResults();}
    else if(hotelNextPage!==null)searchHotelsPage(hotelNextPage);
  });
- ['lxHotelNameSearch','lxHotelStarsFilter','lxHotelSort','lxHotelMaxExtra'].forEach(id=>{
-   const input=$(id);input.addEventListener(id==='lxHotelNameSearch'||id==='lxHotelMaxExtra'?'input':'change',()=>{
+ ['lxHotelNameSearch','lxHotelStarsFilter','lxHotelSort'].forEach(id=>{
+   const input=$(id);input.addEventListener(id==='lxHotelNameSearch'?'input':'change',()=>{
      hotelDisplayCount=10;renderHotelResults();
    });
  });
