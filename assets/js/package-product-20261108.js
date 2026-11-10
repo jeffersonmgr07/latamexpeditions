@@ -266,6 +266,7 @@
      }else if(event.key==='Escape'){event.preventDefault();setClosed();trigger.focus();}
    });
    document.addEventListener('click',event=>{if(!host.contains(event.target))setClosed()});
+   select._lxRefreshCustom=sync;
    select.addEventListener('change',sync);sync();
  }
  ['lxHotelStarsFilter','lxHotelSort'].forEach(lxStyleHotelSelect);
@@ -980,6 +981,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
        hotelResults=[];hotelDisplayCount=10;
        hotelLookupUi.hidden=false;
        $('lxHotelNameSearch').value='';$('lxHotelStarsFilter').value='all';$('lxHotelSort').value='recommended';
+       $('lxHotelStarsFilter')._lxRefreshCustom?.();$('lxHotelSort')._lxRefreshCustom?.();
        $('lxHotelFilterHelp').textContent=hotelBudget===null&&!hotelPrivateReference
          ?'Puedes filtrar hoteles por nombre, categoría y ordenar por tarifas observadas. Los suplementos requieren confirmar el hotel incluido.'
          :'Los suplementos se calculan por estancia sin mostrar presupuestos internos.';
