@@ -1123,7 +1123,7 @@
     date: '', departureTime: PRODUCT.departures[0] || '', adults: 2, children: 0,
     travelers: 2, tier: PRODUCT.tiers[0]?.code || null, occupancy: 'double',
     holder: {}, passengers: [], adultUnit: PRODUCT.price, childUnit: round2(PRODUCT.price * PRODUCT.childFactor),
-    total: 0, due: 0, mode: 'deposito', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', hotelAlternative: null, hotelSupplement: 0, roomPlan: '', hotelQuotePending: false
+    total: 0, due: 0, mode: 'completo', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', hotelAlternative: null, hotelSupplement: 0, roomPlan: '', hotelQuotePending: false
   };
 
   // El punto de recojo de experiencias se indica ahora en la ficha y no en el modal.
@@ -1224,10 +1224,8 @@
   }
 
   function calculateCharge(total) {
-    if (total <= CONFIG.payFullBelow) return { due: round2(total), mode: 'completo' };
-    let due = Math.ceil((total * CONFIG.depositPercent) / 100 / CONFIG.depositRoundTo) * CONFIG.depositRoundTo;
-    due = Math.max(CONFIG.depositMin, Math.min(due, CONFIG.depositMax));
-    return { due: Math.min(round2(total), due), mode: 'deposito' };
+    // Cobro único por el 100% de la reserva. No aceptar depósitos parciales.
+    return {due:round2(total),mode:'completo'};
   }
 
   function recalculate() {
@@ -1873,6 +1871,26 @@
     };
   }
 
+  // Consulta de estado de pago, sin datos personales. Evita que un popup PayPal
+  // permanezca indefinidamente esperando un postMessage de los iframes Google.
+  function queryPayPalOrderStatus(requestKey,waitMs=4500){
+    return new Promise(resolve=>{
+      if(!/^[A-Za-z0-9_-]{24,80}$/.test(String(requestKey||''))){resolve(null);return;}
+      const cb='__latamPayStatus_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,15);
+      const script=document.createElement('script');let completed=false;
+      const done=(result)=>{
+        if(completed)return;completed=true;clearTimeout(timer);
+        delete window[cb];script.remove();resolve(result||null);
+      };
+      window[cb]=(reply)=>done(reply);
+      const timer=setTimeout(()=>done(null),waitMs);
+      const params=new URLSearchParams({action:'paypal_order_status',requestKey,callback:cb,_:String(Date.now())});
+      script.src=CONFIG.endpoint.split('?')[0]+'?'+params.toString();
+      script.onerror=()=>done(null);
+      document.head.append(script);
+    });
+  }
+
   function callBackendViaFrame(action,data) {
     return new Promise((resolve,reject)=>{
       const key=String(data?.requestKey||'');
@@ -1887,10 +1905,10 @@
       for(const [name,value] of Object.entries({action,payload:JSON.stringify(data)})){
         const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.append(input);
       }
-      let finished=false,timer;
+      let finished=false,timer,pollTimer;
       const finish=(error,result)=>{
         if(finished)return;finished=true;
-        clearTimeout(timer);window.removeEventListener('message',onMessage);
+        clearTimeout(timer);clearTimeout(pollTimer);window.removeEventListener('message',onMessage);
         form.remove();setTimeout(()=>iframe.remove(),500);
         if(error)reject(error);else resolve(result);
       };
@@ -1909,7 +1927,26 @@
         'No se pudo verificar la captura. No pagues nuevamente; contacta al equipo con tu referencia.':
         'La creación de la orden tardó demasiado. Inténtalo nuevamente.')),90000);
       document.body.append(iframe,form);
-      try{form.submit();}catch(error){finish(error);}
+      const poll=async ()=>{
+        if(finished)return;
+        try{
+          const status=await queryPayPalOrderStatus(key);
+          if(finished)return;
+          if(status?.ok===true&&status.requestKey===key){
+            if(action==='createOrder'&&status.orderId){
+              finish(null,{ok:true,orderId:status.orderId});return;
+            }
+            if(action==='captureOrder'&&status.captured===true&&status.bookingCode){
+              finish(null,{ok:true,bookingCode:status.bookingCode,balance:0});return;
+            }
+            if(action==='captureOrder'&&['PAGO_SIN_REGISTRO','REVISION'].includes(status.status)){
+              finish(new Error('PayPal procesó el pago pero necesita revisión manual. No vuelvas a pagar. Orden: '+(status.orderId||'')));return;
+            }
+          }
+        }catch(err){console.warn('[LATAM] Consulta de estado PayPal no disponible',err?.message||err)}
+        if(!finished)pollTimer=setTimeout(poll,1600);
+      };
+      try{form.submit();pollTimer=setTimeout(poll,2200);}catch(error){finish(error);}
     });
   }
 
