@@ -145,39 +145,131 @@
         '<button class="exp-filter'+(state.filter===x[0]?' is-active':'')+'" type="button" data-exp-filter="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>'+
       (list.length?list.map(tripCard).join(''):empty('No hay viajes en esta categoría','Aquí verás tus viajes cuando estén registrados.',state.filter==='upcoming'));
   }
+
+  function tierProgress() {
+    const t=membership(),levels=[['Explorer',0],['Gold',3000],['Platinum',7000],['Diamond',10000]];
+    const low=t.points>=10000?10000:t.points>=7000?7000:t.points>=3000?3000:0;
+    const next=t.next||10000;
+    const fraction=t.next===null?100:Math.max(0,Math.min(100,100*(t.points-low)/(next-low)));
+    return '<div class="exp-tier-progress"><div class="exp-tier-meta"><span>Tu nivel: <strong>'+esc(t.name)+'</strong></span>'+
+      '<span>'+esc(t.points.toLocaleString('es-PE'))+' puntos acumulados</span></div>'+
+      '<div class="exp-tier-track"><span style="width:'+fraction.toFixed(1)+'%"></span></div>'+
+      '<small>'+(t.next===null?'¡Has alcanzado el nivel más alto!':'Te faltan '+esc(t.remaining.toLocaleString('es-PE'))+' puntos para '+esc(levels.find(x=>x[1]===t.next)?.[0]||'el siguiente nivel'))+'</small></div>';
+  }
+  function shareCards() {
+    const choices=[
+      {network:'facebook',name:'Facebook',ico:'fa-brands fa-facebook-f',
+        href:'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flatamexpeditions.com%2F',
+        detail:'Comparte el sitio en una publicación pública con tus propias palabras.'},
+      {network:'instagram',name:'Instagram',ico:'fa-brands fa-instagram',
+        href:'https://www.instagram.com/',detail:'Publica una foto o reel propio y menciona LATAM Expeditions.'},
+      {network:'tiktok',name:'TikTok',ico:'fa-brands fa-tiktok',
+        href:'https://www.tiktok.com/',detail:'Comparte un video original relacionado con tus planes de viaje.'}
+    ];
+    const social=state.data.social||{};
+    return '<div class="exp-social-grid">'+choices.map(n=>{
+      const claim=social[n.network],status=claim?.status||'';
+      const done=status==='APROBADO',pending=status==='EN ESPERA'||status==='EN REVISION';
+      const statusText=done?'100 puntos acreditados':pending?(status==='EN ESPERA'?'Pendiente de 24 horas':'En revisión'):
+        status==='RECHAZADO'?'Enlace rechazado. Puedes enviar otro.':'100 puntos por publicación válida';
+      return '<article class="exp-social-card"><div class="exp-social-icon"><i class="'+n.ico+'" aria-hidden="true"></i></div>'+
+        '<div><strong>'+n.name+'</strong><p>'+n.detail+'</p><span class="exp-tag'+(pending?' exp-tag--pending':'')+'">'+statusText+'</span></div>'+
+        '<a class="exp-btn exp-btn--light" href="'+n.href+'" target="_blank" rel="noopener noreferrer">Ir a '+n.name+' <i class="fa-solid fa-arrow-up-right-from-square"></i></a>'+
+        (!pending&&!done?'<form class="exp-social-form" data-exp-social-form="'+n.network+'">'+
+          '<label for="expSocial'+n.network+'">Enlace de tu publicación</label>'+
+          '<input id="expSocial'+n.network+'" type="url" name="postUrl" placeholder="https://…" required>'+
+          '<button type="submit" class="exp-btn">Enviar publicación</button></form>':
+          '<small>Referencia enviada: '+esc(claim?.url||'')+'</small>')+
+        '</article>';
+    }).join('')+'</div>'+
+      '<p class="exp-social-note">Las publicaciones deben ser originales y expresar tu opinión real. Si recibes una recompensa por compartir, identifica tu contenido como publicidad o colaboración. Cada red admite una bonificación por cuenta. Los enlaces se revisan después de 24 horas.</p>';
+  }
   function milesPage() {
-    const m=state.data.miles,ready=!!m;
-    return heading('Mis Millas Expedition','Tu saldo, las millas en proceso y los movimientos de tu cuenta.')+
-      verificationBanner()+
-      '<div class="exp-wallet"><label>MI SALDO · EXPEDITION REWARDS</label>'+
-      '<strong>'+(ready?esc(m.available):'—')+' millas</strong>'+
-      '<small>Millas disponibles</small><div class="exp-wallet-stats"><div><b>'+(ready?esc(m.pending):'—')+'</b>'+
-      '<span>Pendientes de completar el servicio</span></div><div><b>'+(ready?esc(m.used):'—')+'</b><span>Millas utilizadas</span></div></div></div>'+
-      '<div class="exp-card"><h3>Cómo acumulas millas</h3>'+
-      '<p>Obtienes 1 milla por cada US$10 efectivamente pagados. Se incluyen experiencias, paquetes, vuelos y hoteles; los importes menores a US$10 se acumulan para futuras compras. Las millas de una compra quedan pendientes hasta que el viaje figure como completado.</p>'+
-      (ready?'<p>Importe acumulado hacia tu próxima milla: <strong>'+esc(usd(m.carryUsd))+'</strong>.</p>':'')+'</div>'+
+    const m=state.data.miles,ready=!!m,t=membership();
+    return verificationBanner()+
+      '<div class="exp-wallet"><label>LATAM REWARDS · NIVEL '+esc(t.name.toUpperCase())+'</label>'+
+      '<strong>'+(ready?esc(m.available):'—')+' puntos disponibles</strong>'+
+      '<small>Tu saldo actual</small><div class="exp-wallet-stats"><div><b>'+(ready?esc(m.pending):'—')+'</b>'+
+      '<span>Pendientes de completar el servicio</span></div><div><b>'+(ready?esc(m.used):'—')+'</b><span>Puntos utilizados</span></div></div></div>'+
+      tierProgress()+
+      '<div class="exp-card"><div class="exp-card-head"><h3>Gana más puntos</h3>'+
+      '<button class="exp-link" type="button" data-exp-nav="recompensas">Ver el programa</button></div>'+
+      '<p class="exp-card-intro">Comparte LATAM Expeditions con tu comunidad y participa en LATAM Rewards.</p>'+
+      (state.data.verified?shareCards():verificationBanner())+'</div>'+
       '<div class="exp-card"><h3>Estado de cuenta</h3>'+
-      (ready&&m.movements.length?'<div class="exp-table-wrap"><table class="exp-table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Estado</th><th>Millas</th></tr></thead><tbody>'+
+      (ready&&m.movements.length?'<div class="exp-table-wrap"><table class="exp-table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Estado</th><th>Puntos</th></tr></thead><tbody>'+
       m.movements.map(x=>'<tr><td>'+esc(fmtDate(x.date))+'</td><td><strong>'+esc(x.title)+'</strong><small>'+esc(x.code||x.type)+'</small></td>'+
         '<td><span class="exp-tag'+(x.status==='PENDIENTE'?' exp-tag--pending':'')+'">'+esc(x.status)+'</span></td>'+
         '<td><span class="'+(num(x.points)<0?'exp-negative':'exp-positive')+'">'+(num(x.points)>0?'+':'')+esc(x.points)+'</span></td></tr>').join('')+
-      '</tbody></table></div>':empty('Aún no hay movimientos','Los bonos y compras confirmadas se registrarán aquí.',false))+'</div>'+
-      '';
+      '</tbody></table></div>':empty('Aún no hay movimientos','Tus bonos y compras se reflejarán aquí.',false))+'</div>';
   }
   function rewardsPage() {
     const values=[
-      ['fa-map-location-dot','Experiencias','Canje directo por experiencias independientes, como Full Day.'],
-      ['fa-gift','Souvenirs','Productos y recuerdos seleccionados de los destinos.'],
-      ['fa-ticket','Cupones','Descuentos aplicables a experiencias, paquetes, vuelos y hoteles, según condiciones.'],
-      ['fa-percent','Promociones exclusivas','Beneficios especiales que se habilitarán dentro del programa.']
+      ['fa-map-location-dot','Experiencias','Tours Full Day, visitas de medio día, city tours, recorridos culturales y experiencias seleccionadas.'],
+      ['fa-gift','Souvenirs','Recuerdos de viaje, artesanías y productos regionales seleccionados en nuestros destinos.'],
+      ['fa-ticket','Cupones de descuento','Canjea puntos por cupones para experiencias, paquetes, vuelos y hoteles, sujetos a sus condiciones.'],
+      ['fa-star','Promociones exclusivas','Beneficios por temporadas, campañas para miembros y experiencias destacadas.']
     ];
-    return heading('Recompensas y cupones','Próximo catálogo de Expedition Rewards.')+
-      notice('Los canjes todavía no están habilitados. Las millas podrán comenzar a acumularse una vez instalado el backend, pero ningún botón realizará canjes antes de que definamos sus valores y condiciones.')+
-      '<div class="exp-rewards-grid">'+values.map(x=>
+    const levels=[['Explorer','0–2,999'],['Gold','3,000–6,999'],['Platinum','7,000–9,999'],['Diamond','10,000+']];
+    return '<div class="exp-rewards-grid">'+values.map(x=>
         '<article class="exp-reward"><i class="fa-solid '+x[0]+'" aria-hidden="true"></i>'+
-        '<h3>'+x[1]+'</h3><p>'+x[2]+'</p><span>Próximamente</span></article>').join('')+'</div>'+
-      '<div class="exp-card" style="margin-top:20px"><h3>Reglas de canje</h3>'+
-      '<p>Las millas NO se aplicarán directamente al pago de vuelos, hoteles o paquetes. Sí podrán canjearse por cupones que apliquen a esos servicios, sujetos a límites y restricciones.</p></div>';
+        '<h3>'+x[1]+'</h3><p>'+x[2]+'</p></article>').join('')+'</div>'+
+      '<details class="exp-program-accordion"><summary><span><i class="fa-solid fa-gem" aria-hidden="true"></i> Todo sobre LATAM Rewards</span>'+
+      '<span class="exp-accordion-arrow"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span></summary>'+
+      '<div class="exp-program-body"><p>Acumula puntos con tus viajes y actividades elegibles. A mayor cantidad de puntos acreditados, mejor será tu nivel de membresía.</p>'+
+      '<div class="exp-program-how">'+
+      '<article><i class="fa-solid fa-user-check"></i><strong>100 puntos</strong><span>Al verificar tu cuenta por primera vez</span></article>'+
+      '<article><i class="fa-solid fa-credit-card"></i><strong>1 punto / US$10</strong><span>En experiencias, paquetes, vuelos y hoteles pagados</span></article>'+
+      '<article><i class="fa-solid fa-share-nodes"></i><strong>Hasta 300 puntos</strong><span>100 por Facebook, Instagram y TikTok, con publicaciones aprobadas</span></article>'+
+      '<article><i class="fa-solid fa-clock-rotate-left"></i><strong>Puntos disponibles</strong><span>Las compras se acreditan al completar el servicio</span></article></div>'+
+      '<h3>Tu camino de recompensas</h3><div class="exp-tiers">'+levels.map(x=>
+      '<div><i class="fa-solid fa-medal"></i><strong>'+x[0]+'</strong><small>'+x[1]+' puntos acreditados</small></div>').join('')+'</div>'+
+      tierProgress()+
+      '<div class="exp-highlight-reward"><i class="fa-solid fa-ticket"></i><div><strong>Experiencias locales desde 500 puntos</strong>'+
+      '<p>Podrás solicitar beneficios seleccionados en Cusco, Pachacámac, Santiago, Río de Janeiro o Buenos Aires, según disponibilidad y campaña vigente.</p></div></div>'+
+      '<p>Los puntos pueden canjearse directamente por experiencias independientes y souvenirs. Para paquetes, hoteles y vuelos se utilizan cupones con condiciones específicas.</p>'+
+      '<p>En Tripadvisor puedes compartir una opinión auténtica sobre tu experiencia, sin premios ni puntos por reseñas.</p>'+
+      '</div></details>';
+  }
+  function profilePage() {
+    const u=state.data.user||{},p=state.data.profile||{},provider=String(u.provider||'correo');
+    const method=provider.toLowerCase().includes('google')?'Google':'Correo y contraseña';
+    const codes=[['🇵🇪','+51','Perú'],['🇨🇴','+57','Colombia'],['🇨🇱','+56','Chile'],
+      ['🇦🇷','+54','Argentina'],['🇧🇷','+55','Brasil'],['🇻🇪','+58','Venezuela'],
+      ['🇧🇴','+591','Bolivia'],['🇪🇨','+593','Ecuador'],['🇲🇽','+52','México'],
+      ['🇺🇾','+598','Uruguay'],['🇨🇷','+506','Costa Rica'],['🇺🇸','+1','Estados Unidos'],
+      ['🇪🇸','+34','España'],['🇨🇦','+1','Canadá'],['🇫🇷','+33','Francia']];
+    const avatar=state.avatar||p.googlePicture||'';
+    return '<div class="exp-card"><div class="exp-profile-top">'+
+      '<span class="exp-profile-avatar">'+(avatar?'<img src="'+esc(avatar)+'" alt="Tu fotografía de perfil">':'<i class="fa-solid fa-user" aria-hidden="true"></i>')+'</span>'+
+      '<div><strong>Tu fotografía</strong><p>Usa la foto de Google o carga tu propia imagen.</p>'+
+      '<label class="exp-btn exp-btn--light" for="expAvatarInput"><i class="fa-solid fa-camera"></i> Cambiar fotografía</label>'+
+      '<input type="file" id="expAvatarInput" accept="image/jpeg,image/png,image/webp" hidden></div></div></div>'+
+      '<div class="exp-card"><h3>Información personal</h3><form id="expProfileForm" class="exp-profile-form">'+
+      '<div class="exp-form-grid"><label>Nombre y apellido<input name="name" maxlength="120" value="'+esc(p.name||u.name||'')+'" required></label>'+
+      '<label>Correo electrónico<input value="'+esc(p.email||u.email||'')+'" disabled></label>'+
+      '<label>Teléfono de contacto<input name="phone" type="tel" maxlength="28" value="'+esc(p.phone||u.phone||'')+'" placeholder="+51 987654321"></label>'+
+      '<label>Tipo de documento<select name="docType"><option value="">Seleccionar</option>'+
+      ['DNI','CE','PASAPORTE','CI','RG','CPF','OTRO'].map(x=>'<option value="'+x+'"'+(x===p.docType?' selected':'')+'>'+({'CE':'Carné de extranjería','PASAPORTE':'Pasaporte','CI':'Cédula de identidad','RG':'RG (Brasil)','CPF':'CPF (Brasil)'}[x]||x)+'</option>').join('')+'</select></label>'+
+      '<label>Número de documento<input name="docNumber" maxlength="30" value="'+esc(p.docNumber||'')+'" autocomplete="off"></label>'+
+      '<label>Acceso a la cuenta<input value="'+esc(method)+'" disabled></label></div>'+
+      '<h4>WhatsApp</h4><div class="exp-whatsapp-row"><label>Código de país<select name="whatsappCode">'+
+      codes.map(x=>'<option value="'+x[1]+'"'+(x[1]===(p.whatsappCode||'+51')?' selected':'')+'>'+x[0]+' '+x[1]+' · '+x[2]+'</option>').join('')+
+      '</select></label><label>Número de WhatsApp<input type="tel" name="whatsapp" inputmode="numeric" maxlength="15" placeholder="987654321" value="'+esc(p.whatsapp||'')+'"></label></div>'+
+      '<button type="submit" class="exp-btn"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></form></div>'+
+      '<div class="exp-card"><h3>Correo y seguridad</h3>'+
+      '<details class="exp-subdetails"><summary>Cambiar correo electrónico <i class="fa-solid fa-chevron-down"></i></summary>'+
+      '<p>Para proteger tu cuenta, enviaremos un código al nuevo correo.</p>'+
+      '<form id="expEmailRequestForm" class="exp-profile-form">'+
+      '<label>Nuevo correo<input type="email" name="newEmail" required placeholder="nuevo@correo.com"></label>'+
+      (provider.toLowerCase().includes('password')?
+        '<label>Contraseña actual<input type="password" name="password" required autocomplete="current-password"></label>':'')+
+      '<button class="exp-btn exp-btn--light" type="submit">Enviar código al nuevo correo</button></form>'+
+      '<form id="expEmailConfirmForm" class="exp-email-confirm"><label>Código de seis dígitos<input name="code" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
+      '<button class="exp-btn" type="submit">Confirmar cambio de correo</button></form></details>'+
+      '<div class="exp-security-foot"><span>Sesión actual</span><button type="button" class="exp-btn exp-btn--light" data-logout>Cerrar sesión</button></div></div>'+
+      '<div class="exp-card"><h3>Verificación y bienvenida</h3>'+
+      (state.data.verified?'<div class="exp-notice"><i class="fa-solid fa-circle-check"></i><p>Tu cuenta está verificada y participa en LATAM Rewards.</p></div>':verificationBanner())+'</div>';
   }
   function notificationsPage() {
     const notes=state.data.notifications||[];
