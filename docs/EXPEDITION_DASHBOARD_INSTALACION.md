@@ -18,7 +18,7 @@ Los archivos backend de GitHub no se ejecutan automáticamente con GitHub Pages.
 2. Crea allí un archivo de secuencia de comandos llamado ExpeditionDashboard.gs y copia íntegramente el archivo homónimo de este repositorio.
 3. Abre el archivo Code.gs / Codigo.gs que contiene doPost. Busca la ruta de myTrips e inserta debajo las cinco rutas del bloque **Mi Cuenta / Expedition Rewards** que ya están incorporadas a backend/Codigo.gs. Compara antes de reemplazar, para evitar sobrescribir modificaciones de PayPal existentes.
 4. Verifica que el proyecto contiene Cuentas.gs y Operaciones.gs; las funciones compartirán el mismo Spreadsheet ID configurado.
-5. Ejecuta una vez lxRwInstall_() desde el editor con permisos de administrador. Acepta las autorizaciones de Google Sheets y MailApp. La respuesta debería ser «Expedition Rewards: hojas creadas».
+5. En el selector de funciones del editor selecciona **instalarExpeditionRewards** (sin guion bajo final) y pulsa **Ejecutar** una vez con tu cuenta administradora. Acepta las autorizaciones de Google Sheets y MailApp. En el registro de ejecución verás «Expedition Rewards: hojas creadas». La función interna `lxRwInstall_()` termina en guion bajo y puede no aparecer en el selector.
 6. En **Implementar → Gestionar implementaciones → Editar → Nueva versión**, publica una nueva versión bajo la misma URL /exec configurada en assets/data/catalog.json, en booking.endpoint.
 7. Inicia sesión con una cuenta de prueba y abre https://latamexpeditions.com/mis-viajes.html.
 
