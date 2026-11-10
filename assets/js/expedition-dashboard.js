@@ -184,7 +184,7 @@
         '<span class="exp-share-brand" style="--share-brand:'+x[3]+'"><i class="fa-brands '+x[2]+'" aria-hidden="true"></i></span>'+
         '<span>'+x[1]+'</span></button>').join('')+'</div>'+
       '<button type="button" class="exp-link exp-copy-message" data-exp-copy-message><i class="fa-regular fa-copy"></i> Copiar mensaje de invitación</button>'+
-      '<p class="exp-social-note">El mensaje y el enlace están preparados para compartirlos voluntariamente. La publicación la realiza el usuario desde cada aplicación; ninguna red permite capturar automáticamente todas las publicaciones personales. El bono depende del registro y la compra del amigo, no de publicar en una red.</p>';
+      '<p class="exp-social-note">Tu enlace es personal. Por cada amigo que se registre con él, verifique su cuenta y complete su primer viaje, recibirás 100 puntos LATAM Rewards (máximo cuatro bonificaciones al mes).</p>';
   }
   function milesPage() {
     const m=state.data.miles,ready=!!m,t=membership();
