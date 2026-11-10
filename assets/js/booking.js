@@ -1793,11 +1793,9 @@
     $('#bkPayLabel').textContent = state.mode === 'completo'
       ? (isEnglish ? 'Pay in full now' : 'Pago total ahora')
       : (isEnglish ? 'Book now' : 'Reserva ahora');
-    $('#bkPayNote').textContent = state.mode === 'completo'
-      ? (isEnglish ? 'The full product amount is charged to confirm the booking.' : 'El importe del producto se paga por completo para confirmar la reserva.')
-      : (isEnglish
-        ? `Pay ${money(state.due)} now. The remaining balance of ${money(round2(state.total - state.due))} will be coordinated according to the voucher terms.`
-        : `Pagas ${money(state.due)} ahora. El saldo de ${money(round2(state.total - state.due))} se coordina según las condiciones del voucher.`);
+    $('#bkPayNote').textContent = isEnglish
+      ? 'You pay 100% now. Flights, hotel changes and other supplier services remain subject to availability and manual fulfillment confirmation; we will contact you if anything changes.'
+      : 'Pagas el 100% ahora. Los vuelos, hoteles alternativos y otros servicios siguen sujetos a disponibilidad y confirmación operativa; te contactaremos si surge algún cambio.';
   }
 
   function goToStep(next) {
