@@ -296,3 +296,19 @@ function lxRwInstall_() {
   lxRwVerifiedSheet_();lxRwLedger_();lxRwNotifications_();
   return 'Expedition Rewards: hojas creadas';
 }
+
+
+/**
+ * Ejecutar UNA VEZ desde el selector de funciones de Apps Script.
+ * Los métodos que terminan en _ son internos y pueden ocultarse del editor.
+ * No cobra dinero ni asigna millas: solo prepara las hojas necesarias.
+ */
+function instalarExpeditionRewards() {
+  if (!CONFIG.sheetId) {
+    throw new Error('Falta la propiedad SHEET_ID en este proyecto de Apps Script.');
+  }
+  var resultado = lxRwInstall_();
+  Logger.log(resultado);
+  Logger.log('Hojas conectadas: ' + SpreadsheetApp.openById(CONFIG.sheetId).getName());
+  return resultado;
+}
