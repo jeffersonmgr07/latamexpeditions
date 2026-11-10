@@ -5237,6 +5237,67 @@
       "flightsAvailable": true
     },
     {
+      "slug": "desierto-atacama-premium-5d4n",
+      "title": "Desierto de Atacama Premium",
+      "country": "Chile",
+      "region": "San Pedro de Atacama",
+      "nights": "5D/4N",
+      "priceFrom": 1499.9,
+      "currency": "USD",
+      "img": "chile-experiencia-atacama-valle-luna.jpg",
+      "alt": "Paisajes del Valle de la Luna en San Pedro de Atacama, Chile",
+      "excerpt": "Hotel Terrantai 4★, cuatro noches, excursiones y traslados. Vuelos opcionales. Precio referencial sujeto a cotización.",
+      "category": "Premium",
+      "style": "naturaleza",
+      "code": "LEX-PKG-ATACAMA-PILOTO",
+      "itinerary": [
+        "Día 1 · Llegada a Calama, traslado y aclimatación en San Pedro",
+        "Día 2 · Valle del Arcoíris, Yerbas Buenas y Valle de la Luna",
+        "Día 3 · Piedras Rojas, Lagunas Altiplánicas y Salar de Atacama",
+        "Día 4 · Géiseres del Tatio, Machuca, Laguna Cejar y Ojos del Salar",
+        "Día 5 · Traslado al aeropuerto de Calama (sin vuelo incluido)"
+      ],
+      "includes": [
+        "4 noches en Hotel Terrantai 4★, habitación doble/twin con desayuno, sujeto a confirmación",
+        "Traslados compartidos Calama–San Pedro–Calama",
+        "Excursiones guiadas según programa y entradas descritas",
+        "Asistencia al viajero durante la estadía"
+      ],
+      "notIncludes": [
+        "Vuelos nacionales e internacionales (opcional al configurar la reserva)",
+        "Almuerzos y cenas no expresamente incluidos",
+        "Seguro, propinas y gastos personales",
+        "Servicios y accesos no especificados"
+      ],
+      "hotelTiers": [
+        {
+          "code": "4e",
+          "stars": "4★",
+          "name": "Terrantai Boutique",
+          "pricePerPerson": 1499.9,
+          "hotels": [
+            "Hotel Terrantai"
+          ],
+          "occupancyPrices": {
+            "single": 2159.9,
+            "double": 1499.9,
+            "matrimonial": 1499.9
+          }
+        }
+      ],
+      "flightsAvailable": true,
+      "bookingStatus": "request_only",
+      "quoteOnly": true,
+      "ages": "Solo adultos (18+)",
+      "pricingUpdated": "2026-11-10",
+      "pricingBasis": "Tarifa preliminar por persona en doble (2 adultos), sin vuelos, sujeto a cotización de proveedores. No habilitar PayPal hasta confirmar Hotel Terrantai.",
+      "styles": [
+        "naturaleza",
+        "aventura",
+        "pareja"
+      ]
+    },
+    {
       "slug": "chile-atacama-5d4n",
       "title": "Santiago y Atacama",
       "country": "Chile",
