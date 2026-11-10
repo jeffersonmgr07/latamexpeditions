@@ -9505,10 +9505,10 @@
     }
   ],
   "booking": {
-    "depositPercent": 20,
-    "depositRoundTo": 10,
-    "depositMin": 30,
-    "depositMax": 500,
+    "depositPercent": 100,
+    "depositRoundTo": 1,
+    "depositMin": 0,
+    "depositMax": 999999,
     "currency": "USD",
     "maxTravelers": 12,
     "minLeadDays": 1,
@@ -9522,7 +9522,7 @@
       "Carné de extranjería",
       "Otro"
     ],
-    "payFullBelow": 60,
+    "payFullBelow": 999999,
     "googleClientId": "143110161381-ldb66gor0o0mloqtctd8vsffdv6giiq2.apps.googleusercontent.com",
     "maxAdults": 12,
     "maxChildren": 8,
