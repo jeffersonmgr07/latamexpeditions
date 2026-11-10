@@ -1,4 +1,4 @@
-/** Precarga pública de Atacama Premium: vuelos OPCIONALES, precio REFERENCIAL, sin costos netos ni márgenes privados. */
+/** Semilla administrativa del paquete Atacama. Nunca exportar tarifas internas ni verificaciones al HTML público. */
 const ATACAMA_PREMIUM_DRAFT = {
   "schemaVersion": 1,
   "id": "",
@@ -39,42 +39,39 @@ const ATACAMA_PREMIUM_DRAFT = {
   },
   "commercial": {
     "short": "Cinco días y cuatro noches en San Pedro de Atacama con Hotel Terrantai 4★, tours por el desierto, traslados desde Calama y desayuno. Vuelos opcionales.",
-    "description": "Descubre los paisajes de Atacama con cuatro noches en el hotel boutique Terrantai 4★, traslados compartidos desde el aeropuerto de Calama y excursiones por Valle de la Luna, Valle del Arcoíris, Piedras Rojas, Lagunas Altiplánicas, Géiseres del Tatio y Laguna Cejar. Los vuelos no están incluidos en el precio base y pueden añadirse durante la reserva. La actividad nocturna se adapta a la luna y el clima; horarios, guías y alojamiento sujetos a confirmación.",
+    "description": "Cinco días para descubrir el Desierto de Atacama, con cuatro noches en el boutique Hotel Terrantai, traslados desde Calama y visitas a Valle de la Luna, Valle del Arcoíris, Piedras Rojas, Lagunas Altiplánicas, Géiseres del Tatio y Laguna Cejar. Añade tus vuelos a Calama al personalizar la reserva.",
     "highlights": [
       "Valle de la Luna y atardecer en el desierto",
       "Valle del Arcoíris y Yerbas Buenas",
       "Piedras Rojas, Lagunas Miscanti y Miñiques y Salar de Atacama",
       "Géiseres del Tatio y Machuca",
       "Laguna Cejar y Ojos del Salar",
-      "Experiencia astronómica/lunar condicionada"
+      "Experiencia de observación lunar en el desierto"
     ],
     "includes": [
-      "4 noches en Hotel Terrantai 4★, habitación doble o matrimonial, sujeto a cotización",
-      "Desayuno diario durante 4 mañanas",
-      "Traslados compartidos aeropuerto CJC–hotel–aeropuerto CJC",
-      "3 jornadas de excursiones agrupadas en 5 salidas",
-      "Guías locales (idioma sujeto a confirmación)",
-      "Entradas a los atractivos incluidos en las excursiones",
-      "Una actividad astronómica/lunar por confirmar",
-      "Actividad astrolunar nocturna, sujeta a confirmación de operador y condiciones climáticas"
+      "4 noches en Hotel Terrantai 4★, habitación Andina doble o matrimonial",
+      "Desayuno buffet diario",
+      "Traslados compartidos Calama–San Pedro–Calama",
+      "Excursiones guiadas por los principales paisajes de Atacama",
+      "Entradas a los atractivos incluidos en el itinerario",
+      "Actividad de observación lunar, según las condiciones del cielo"
     ],
     "excludes": [
-      "Vuelos nacionales e internacionales, incluido Santiago–Calama–Santiago (opcional al configurar reserva)",
-      "Equipaje y asientos aéreos; tasas o servicios no incluidos por la aerolínea",
-      "Traslados en Santiago entre aeropuerto y hotel",
-      "Almuerzos y cenas salvo confirmación de los operadores",
-      "Seguro, propinas y gastos personales",
-      "Servicios no señalados expresamente como incluidos"
+      "Vuelos nacionales e internacionales (opcionales al reservar)",
+      "Equipaje y servicios adicionales de las aerolíneas",
+      "Almuerzos y cenas",
+      "Seguro de viaje, propinas y gastos personales",
+      "Servicios no indicados en el programa"
     ],
     "optional": [
-      "Traslado privado a cotizar",
-      "Excursiones privadas en inglés a cotizar",
-      "Añadir vuelos desde el origen del viajero hasta Calama (CJC), según tarifa dinámica disponible",
-      "Habitación individual: suplemento según tarifa efectiva y ocupación, sujeto a cotización"
+      "Vuelos a Calama desde la ciudad de origen",
+      "Traslados privados",
+      "Excursiones privadas o en otros idiomas",
+      "Habitación individual y otras acomodaciones"
     ],
-    "policies": "Precio preliminar para base doble. Hotel, excursiones y entradas sujetos a disponibilidad y confirmación del proveedor. Si no se puede cumplir un servicio, se ofrecerá una alternativa aceptada o la devolución correspondiente. No incluye vuelos. Condiciones definitivas de cancelación al confirmar los servicios.",
+    "policies": "Programa de 5 días y 4 noches con vuelos opcionales. Los servicios, horarios y términos de reserva se muestran al completar la compra.",
     "recommendations": "Abrigo por capas, calzado cerrado, protector solar, sombrero, hidratación y documento de viaje.",
-    "restrictions": "Altura superior a 4.000 m en El Tatio; cambios de temperatura; evaluar condiciones físicas. Piloto solo para adultos (18+).",
+    "restrictions": "Excursiones en altura, especialmente El Tatio; se recomienda aclimatación, ropa de abrigo e hidratación. Programa para adultos.",
     "accessibility": "No verificada; excursiones en altitud y caminatas en terreno irregular."
   },
   "itinerary": [
@@ -82,7 +79,7 @@ const ATACAMA_PREMIUM_DRAFT = {
       "day": 1,
       "title": "Llegada a Calama, traslado y aclimatación en San Pedro",
       "date": "2027-03-22",
-      "intro": "Llegada al aeropuerto de Calama (vuelo no incluido), traslado compartido a San Pedro, registro en Terrantai y descanso para aclimatación. Posible actividad astrolunar, condicionada a confirmar operador y clima.",
+      "intro": "Llegada al aeropuerto de Calama, traslado a San Pedro de Atacama y tiempo libre para conocer el centro y descansar antes de las excursiones.",
       "activities": [
         {
           "time": "Según vuelo",
@@ -101,12 +98,12 @@ const ATACAMA_PREMIUM_DRAFT = {
         },
         {
           "time": "Noche",
-          "activity": "Actividad astrolunar opcional/condicionada",
-          "detail": "Luna llena cercana; solo si se confirma un operador para modalidad lunar. Se informará antes de reservar."
+          "activity": "Experiencia de observación lunar",
+          "detail": "Actividad nocturna según las condiciones del cielo."
         }
       ],
       "meals": "No se incluyen comidas el día de llegada",
-      "lodging": "Terrantai 4★, primera noche sujeto a confirmación",
+      "lodging": "Hotel Terrantai 4★",
       "transport": "Traslado compartido aeropuerto CJC–San Pedro (sin vuelo incluido)",
       "difficulty": "Aclimatación progresiva a ~2.400 m",
       "operationalNote": "Luna llena el 22/03/2027; no anunciar observación de estrellas de cielo oscuro. Reconfirmar horarios y disponibilidad de actividad lunar."
@@ -125,7 +122,7 @@ const ATACAMA_PREMIUM_DRAFT = {
         {
           "time": "08:00",
           "activity": "Salida a Yerbas Buenas",
-          "detail": "Excursión guiada en inglés por confirmar."
+          "detail": "Excursión con guía local. Otros idiomas a solicitud."
         },
         {
           "time": "09:30",
@@ -201,7 +198,7 @@ const ATACAMA_PREMIUM_DRAFT = {
           "detail": "Horario aproximado."
         }
       ],
-      "meals": "Desayuno; almuerzo por confirmar; cena no incluida",
+      "meals": "Desayuno; almuerzo y cena no incluidos",
       "lodging": "Terrantai 4★, tercera noche",
       "transport": "Bus turístico o miniván compartida",
       "difficulty": "Altitud elevada, aclimatación necesaria",
@@ -339,7 +336,7 @@ const ATACAMA_PREMIUM_DRAFT = {
   },
   "seo": {
     "title": "Atacama Premium 5D/4N con Hotel Terrantai | LATAM Expeditions",
-    "description": "Desierto de Atacama 5 días y 4 noches con Hotel Terrantai 4★, excursiones, traslados desde Calama y vuelos opcionales. Consulta disponibilidad.",
+    "description": "Atacama Premium 5D/4N: Hotel Terrantai 4★, Valle de la Luna, Piedras Rojas, Géiseres del Tatio, traslados y vuelos opcionales.",
     "keywords": "desierto de atacama 5 días, san pedro de atacama paquete, piedras rojas, géiseres del tatio, chile 5d4n",
     "heroImage": "https://latamexpeditions.com/assets/img/chile-experiencia-atacama-valle-luna.jpg",
     "gallery": [],
