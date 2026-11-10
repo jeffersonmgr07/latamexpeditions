@@ -211,7 +211,7 @@
     {id:'machu-guia',name:'Tour guiado por Machu Picchu',place:'Machu Picchu, Perú',points:650,img:'assets/img/peru-machu-picchu-01.jpg'},
     {id:'buenos-aires',name:'City Tour en Buenos Aires',place:'Buenos Aires, Argentina',points:600,img:'assets/img/argentina-buenos-aires-01.jpg'},
     {id:'rio',name:'City Tour en Río de Janeiro',place:'Río de Janeiro, Brasil',points:650,img:'assets/img/brasil-rio-01.jpg'},
-    {id:'lima',name:'City Tour histórico en Lima',place:'Lima, Perú',points:500,img:'assets/img/peru-machu-picchu-01.jpg'},
+    {id:'lima',name:'City Tour histórico en Lima',place:'Lima, Perú',points:500,img:''},
     {id:'chiva-medellin',name:'Chiva rumbera en Medellín',place:'Medellín, Colombia',points:550,img:'assets/img/colombia-experiencia-medellin-nocturno-gastronomia-rooftops.jpg'},
     {id:'cartagena',name:'Paseo cultural en Cartagena',place:'Cartagena, Colombia',points:600,img:'assets/img/colombia-cartagena-01.jpg'}
   ];
@@ -221,7 +221,9 @@
     return '<div class="exp-rewards-section-head"><h2>Experiencias con puntos</h2>'+
       '<p>Descubre actividades seleccionadas para solicitar mediante LATAM Rewards.</p></div>'+
       '<div class="exp-redeem-grid">'+REWARD_CATALOG.map(x=>
-      '<article class="exp-redeem-card"><img src="'+base+esc(x.img)+'" loading="lazy" alt="'+esc(x.place)+'">'+
+      '<article class="exp-redeem-card">'+
+      (x.img?'<img src="'+base+esc(x.img)+'" loading="lazy" alt="'+esc(x.place)+'">':
+        '<div class="exp-redeem-illustration"><i class="fa-solid fa-landmark" aria-hidden="true"></i><span>LIMA</span></div>')+
       '<div class="exp-redeem-content"><span class="exp-redeem-location"><i class="fa-solid fa-location-dot"></i> '+esc(x.place)+'</span>'+
       '<h3>'+esc(x.name)+'</h3><div class="exp-redeem-price"><strong>'+esc(x.points)+'</strong> puntos Rewards</div>'+
       '<button type="button" class="exp-btn exp-btn--light" data-exp-reward="'+esc(x.id)+'">Consultar canje</button></div></article>').join('')+'</div>'+
