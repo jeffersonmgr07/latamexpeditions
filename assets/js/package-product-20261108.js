@@ -480,8 +480,29 @@ function renderHotelCards(){
   if(!t?.code)return;
   const card=el('article','lx-hotel-option-card'),media=el('div','lx-hotel-card-media');
   const name=(t.hotels||[]).join(' / ')||t.name||'Hotel previsto';
-  const photo=state.hotelPhotos[normalizeHotelName((t.hotels||[])[0])];
-  if(validSrc(photo)){const img=el('img');img.src=photo;img.alt=name;img.loading='lazy';img.referrerPolicy='no-referrer';media.append(img)}
+  const hotelNames=(t.hotels||[]).filter(Boolean);
+  // Priorizar las fotografías que la agencia ha subido a assets/img/.
+  // Para itinerarios con dos ciudades, mostrar ambos hoteles y sus respectivas fotos.
+  const displayNames=multiCityAtacama?hotelNames.slice(0,2):hotelNames.slice(0,1);
+  const photoGrid=el('div','lx-hotel-modal-photo-grid'+(multiCityAtacama?' is-multicity':''));
+  displayNames.forEach((hotelName,index)=>{
+    const item=el('div','lx-hotel-modal-photo');
+    const city=multiCityAtacama?(index===0?'Santiago · 1 noche':'San Pedro de Atacama · 3 noches'):'';
+    const label=el('small','lx-hotel-photo-label',city||hotelName);
+    const remotePhoto=state.hotelPhotos[normalizeHotelName(hotelName)];
+    const local=hotelPhotoElement(hotelName,'lx-hotel-local-img');
+    const img=local||(validSrc(remotePhoto)?el('img','lx-hotel-local-img'):null);
+    if(img){
+      if(!local){img.src=remotePhoto;img.alt='Imagen de '+hotelName;img.loading='lazy';img.referrerPolicy='no-referrer';}
+      img.addEventListener('error',()=>{
+        img.remove();
+        if(!item.querySelector('.lx-hotel-photo-missing'))item.prepend(el('span','lx-hotel-photo-missing','Foto no disponible'));
+      },{once:true});
+      item.append(img);
+    }else item.append(el('span','lx-hotel-photo-missing','Foto no disponible'));
+    item.append(label);photoGrid.append(item);
+  });
+  if(photoGrid.childElementCount)media.append(photoGrid);
   else media.append(el('span','lx-hotel-placeholder','⌂'),el('small','','Hotel'));
   const details=el('div','lx-hotel-card-details');
   details.append(el('strong','lx-hotel-card-name',name),el('small','lx-hotel-card-category',(t.stars||'')+' · '+(t.name||'')),
