@@ -17,6 +17,16 @@
   const BASE = document.documentElement.dataset.base || './';
   const KEY_TOKEN = 'latamExpeditionsToken';
   const KEY_USER = 'latamExpeditionsUser';
+  const KEY_REF = 'latamRewardsReferral';
+  // Conservar la invitación hasta que el visitante termine el registro.
+  try {
+    const requested = new URLSearchParams(location.search).get('ref');
+    if(requested && /^LEX[A-F0-9]{11}$/i.test(requested))
+      sessionStorage.setItem(KEY_REF,requested.toUpperCase());
+  } catch(e){}
+  function referral() {
+    try { return sessionStorage.getItem(KEY_REF) || ''; } catch(e){ return ''; }
+  }
 
   // Traducción en tiempo de ejecución (idioma activo gestionado por main.js).
   const T = (s) => (window.LatamI18n && window.LatamI18n.t ? window.LatamI18n.t(s) : s);
@@ -173,9 +183,11 @@
           name: $('#regName').value.trim(),
           phone: $('#regPhone') ? $('#regPhone').value.trim() : '',
           password: $('#regPassword').value,
-          device: navigator.userAgent
+          device: navigator.userAgent,
+          ref: referral()
         });
         sesion.guardar(r.token, r.user);
+        try { sessionStorage.removeItem(KEY_REF); } catch(e){}
         window.location.href = `${BASE}mis-viajes.html`;
       } catch (err) {
         error('#authError', err.message);
@@ -444,7 +456,8 @@
       const r = await llamar('googleLogin', {
         credential: respuesta.credential,
         nonce: GOOGLE_NONCE,
-        device: navigator.userAgent
+        device: navigator.userAgent,
+        ref: referral()
       });
       GOOGLE_NONCE = null;
       sesion.guardar(r.token, r.user);
