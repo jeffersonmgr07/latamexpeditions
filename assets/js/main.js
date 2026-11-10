@@ -909,7 +909,26 @@
         }
       }else{
         btn.classList.remove('is-account-active');
+        btn.setAttribute('aria-label','Iniciar sesión');
+        label.setAttribute('data-i18n','nav.login');
         label.textContent='Iniciar sesión';
+        const dropdown=menu.querySelector('.login-dropdown');
+        if(dropdown&&dropdown.dataset.latamAccountMenu){
+          dropdown.dataset.latamAccountMenu='';
+          dropdown.innerHTML='';
+          const guest=[
+            ['Consultar reserva','mi-reserva.html','fa-solid fa-magnifying-glass'],
+            ['Iniciar sesión','login.html','fa-solid fa-right-to-bracket'],
+            ['Crear cuenta','registro.html','fa-solid fa-user-plus']
+          ];
+          guest.forEach(item=>{
+            const a=document.createElement('a');a.href=base+item[1];
+            a.setAttribute('role','menuitem');
+            const icon=document.createElement('i');icon.className=item[2];
+            icon.setAttribute('aria-hidden','true');
+            a.append(icon,document.createTextNode(item[0]));dropdown.append(a);
+          });
+        }
       }
     }
     const mobile=document.querySelector('#mobileNav .mobile-nav__panel');
