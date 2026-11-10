@@ -16,6 +16,86 @@ var FLIGHT_AIRPORTS = [
 var API_ROOT = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates";
 var CACHE_SECONDS = 900;
 
+
+/* Cotizaciones firmadas, con expiración, para los pagos de marcha blanca.
+ * Comparte LATAM_PRICE_QUOTE_KEY (mín. 40 caracteres aleatorios) con Reservas.
+ * Ningún precio firmado equivale a boleto o hotel confirmado.
+ */
+function lxQuoteKey_(){
+  var k=String(PropertiesService.getScriptProperties().getProperty('LATAM_PRICE_QUOTE_KEY')||'');
+  return k.length>=40?k:'';
+}
+function lxQuoteFingerprint_(segments){
+  return (Array.isArray(segments)?segments:[]).map(function(s){
+    return [String(s.airline||''),String(s.flightNumber||''),
+      String(s.from&&s.from.code||''),String(s.from&&s.from.time||''),
+      String(s.to&&s.to.code||''),String(s.to&&s.to.time||'')];
+  });
+}
+function lxQuoteSign_(payload){
+  var key=lxQuoteKey_();if(!key)return '';
+  payload.v=1;payload.issued=Date.now();payload.expires=payload.issued+30*60*1000;
+  var b64=Utilities.base64EncodeWebSafe(
+    Utilities.newBlob(JSON.stringify(payload),'application/json').getBytes()).replace(/=+$/,'');
+  var sig=Utilities.base64EncodeWebSafe(
+    Utilities.computeHmacSha256Signature(b64,key,Utilities.Charset.UTF_8)).replace(/=+$/,'');
+  return b64+'.'+sig;
+}
+function lxFlightMarkupServer_(date){
+  var d=new Date(String(date||'')+'T00:00:00Z'),today=new Date();
+  var todayDay=new Date(Date.UTC(today.getUTCFullYear(),today.getUTCMonth(),today.getUTCDate()));
+  var n=Math.round((d-todayDay)/86400000);
+  return n<=30?.10:n<=45?.05:n<=90?0:n<=180?-.05:n<=270?-.10:-.15;
+}
+function lxSignProviderResults_(result,request){
+  if(!result||result.ok!==true||!lxQuoteKey_())return result;
+  var slug=String(request.package_slug||'').toLowerCase();
+  if(!/^[a-z0-9-]{4,90}$/.test(slug))return result;
+  if(request.mode==='hotels'&&Array.isArray(result.hotels)){
+    var tier=String(request.hotel_tier||''),room=String(request.hotel_occupancy||'');
+    var adults=Number(request.adults||2),children=Number(request.children||0);
+    var nights=Number(result.nights||0);
+    var budgetMap={};
+    try{budgetMap=JSON.parse(PropertiesService.getScriptProperties().getProperty('HOTEL_REFERENCE_NIGHT_USD')||'{}')}
+    catch(ignore){budgetMap={}}
+    var privateNight=Number(budgetMap[slug+'|'+tier+'|'+room]||0);
+    var providerBaseline=Number(result.referenceHotel&&result.referenceHotel.totalRate||0);
+    var baseline=privateNight>0?privateNight*nights:providerBaseline>0?providerBaseline:0;
+    result.hotels.forEach(function(h){
+      var alt=Number(h.totalRate||0);
+      if(!(alt>0&&baseline>0&&nights>0))return;
+      var extra=Math.round(Math.max(0,alt-baseline)*100)/100;
+      h.supplementTotal=extra;h.supplementPerNight=Math.round(extra/nights*100)/100;
+      h.quoteToken=lxQuoteSign_({
+        kind:'hotel',slug:slug,tier:tier,occupancy:room,
+        checkIn:String(request.check_in_date||''),checkOut:String(request.check_out_date||''),
+        adults:adults,children:children,name:String(h.name||''),
+        supplement:extra,alternativeStay:Math.round(alt*100)/100,nights:nights
+      });
+    });
+  }else if(Array.isArray(result.offers)){
+    var offers=result.offers;
+    offers.forEach(function(o){
+      if(!(o&&Number(o.price)>0&&o.origin&&o.destination&&
+        o.outbound&&Array.isArray(o.outbound.segments)&&o.outbound.segments.length))return;
+      var displayed=Math.round(Number(o.price)*(1+lxFlightMarkupServer_(o.departure))*100)/100;
+      var allOut=o.outbound.segments,arrival=String(allOut[allOut.length-1].to&&
+        allOut[allOut.length-1].to.time||'').slice(0,10);
+      if(!/^\d{4}-\d\d-\d\d$/.test(arrival))return;
+      o.displayedPrice=displayed;
+      o.quoteToken=lxQuoteSign_({
+        kind:'flight',slug:slug,origin:String(o.origin),destination:String(o.destination),
+        departure:String(o.departure),returnDate:String(o.returnDate||''),arrival:arrival,
+        adults:Number(o.partyAdults),children:Number(o.partyChildren),amount:displayed,
+        observed:Math.round(Number(o.price)*100)/100,
+        legs:[lxQuoteFingerprint_(o.outbound.segments),
+          lxQuoteFingerprint_(o.inbound&&o.inbound.segments)]
+      });
+    });
+  }
+  return result;
+}
+
 function doGet(e) {
   var p = (e && e.parameter) || {};
   if (p.mode === "bundle") {
@@ -67,6 +147,9 @@ function doGet(e) {
     output = { ok:false, error:"service_error", message:"No pudimos consultar tarifas. Intenta de nuevo o solicita una cotización." };
     console.error("Flight lookup failed: " + String(err && err.message || err).slice(0,200));
   }
+  // Firmar el precio observado solo cuando existe clave privada compartida.
+  // El backend de PayPal comprobará la firma, fechas, viajeros y selección exacta.
+  output=lxSignProviderResults_(output,p);
   // Payload is JSON-only, callback is strict allowlisted; no HTML output or secret.
   return ContentService.createTextOutput(cb + "(" + JSON.stringify(output) + ");")
     .setMimeType(ContentService.MimeType.JAVASCRIPT);
