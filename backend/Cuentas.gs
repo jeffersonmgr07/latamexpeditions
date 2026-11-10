@@ -233,6 +233,9 @@ function registrarUsuario(data) {
     if (buscarUsuario(email)) {
       throw new Error('Ya existe una cuenta con este correo. Inicia sesión o usa Google.');
     }
+    if (typeof lxRwAliasInUse_ === 'function' && lxRwAliasInUse_(email)) {
+      throw new Error('Este correo está vinculado a una cuenta anterior. Contacta con soporte.');
+    }
     const salt = generarSalt();
     hojaUsuarios().appendRow([
       textoHoja(email), textoHoja(nombre), textoHoja(telefono),
@@ -424,6 +427,9 @@ function entrarConGoogle(data) {
     }
 
     const h = hojaUsuarios();
+    if (!usuario && typeof lxRwAliasInUse_ === 'function' && lxRwAliasInUse_(perfil.email)) {
+      throw new Error('Este correo está vinculado a una cuenta anterior. Contacta con soporte.');
+    }
     if (!usuario) {
       hojaUsuarios().appendRow([
         textoHoja(perfil.email), textoHoja(perfil.name || perfil.email.split('@')[0]), '',
