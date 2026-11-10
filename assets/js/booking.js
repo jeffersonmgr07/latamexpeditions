@@ -1101,6 +1101,7 @@
 
   const PRODUCT = {
     slug: trigger.dataset.book,
+    quoteOnly: trigger.dataset.bookQuoteOnly==='true',
     kind: trigger.dataset.bookKind || 'experience',
     title: trigger.dataset.bookTitle || '',
     price: Number(trigger.dataset.bookPrice || 0),
@@ -1170,7 +1171,7 @@
   }
     // Backend actual: solo correo. No habilitar PayPal por error al añadir un Client ID.
   // El cobro solo se habilita tras pruebas y activación explícita en catalog.json.
-  const onlineConfigured = () => Boolean(CONFIG?.paypalEnabled === true &&
+  const onlineConfigured = () => Boolean(!PRODUCT.quoteOnly && CONFIG?.paypalEnabled === true &&
     CONFIG?.paypalClientId && !String(CONFIG.paypalClientId).startsWith('PEGAR_AQUI') &&
     /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(CONFIG?.endpoint||'') &&
     CONFIG.currency==='USD');
