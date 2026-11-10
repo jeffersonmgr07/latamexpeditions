@@ -479,16 +479,37 @@ function searchBundleHotels_(p) {
      toUtcDay_(checkout)-toUtcDay_(checkin)>30*86400000){
     return {ok:false,message:"Revisa fechas y ocupación del hotel."};
   }
-  var key=PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
+  var scriptProps=PropertiesService.getScriptProperties();
+  var key=scriptProps.getProperty("SERPAPI_KEY");
   if(!key)return {ok:false,message:"Google Hotels requiere la propiedad SERPAPI_KEY en Apps Script."};
+  // Referencia presupuestada por ocupación. Propiedad PRIVADA de Apps Script:
+  // HOTEL_REFERENCE_NIGHT_USD = {"medellin-esencial|3e|double":100}
+  // El ejemplo NO es una tarifa real y NO debe cargarse sin presupuesto de proveedor.
+  var packageSlug=String(p.package_slug||"").toLowerCase().trim();
+  var tierCode=String(p.hotel_tier||"").toLowerCase().trim();
+  var roomCode=String(p.hotel_occupancy||"").toLowerCase().trim();
+  if(!/^[a-z0-9-]{2,90}$/.test(packageSlug)||
+     !/^[a-z0-9-]{1,40}$/.test(tierCode)||
+     !/^(single|double|matrimonial|triple|family)$/.test(roomCode)){
+    packageSlug="";tierCode="";roomCode="";
+  }
+  var budgetMap={};
+  try{
+    var fromProps=JSON.parse(scriptProps.getProperty("HOTEL_REFERENCE_NIGHT_USD")||"{}");
+    if(fromProps&&typeof fromProps==="object"&&!Array.isArray(fromProps))budgetMap=fromProps;
+  }catch(ignore){console.warn("Configuración privada de presupuestos hoteleros inválida.");}
+  var lookupKey=packageSlug+"|"+tierCode+"|"+roomCode;
+  var refNight=Number(budgetMap[lookupKey]||0);
+  if(!(refNight>0&&refNight<10000))refNight=0;
   // Paginación de hasta tres páginas: solo continuaciones generadas y almacenadas
   // por el servidor. El navegador no puede enviar tokens arbitrarios a SerpApi.
   var page=Number(p.page||0);
   if(!Number.isInteger(page)||page<0||page>2)
     return {ok:false,message:"Página de hoteles no disponible."};
-  var baseKey="hotels_v3_"+Utilities.base64EncodeWebSafe(
+  var baseKey="hotels_v4_"+Utilities.base64EncodeWebSafe(
     Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
-      [destination,checkin,checkout,adults,children,ages.join(","),baselineHotel].join("|"))).slice(0,50);
+      [destination,checkin,checkout,adults,children,ages.join(","),baselineHotel,
+        lookupKey,refNight].join("|"))).slice(0,50);
   var cache=CacheService.getScriptCache(),ck=baseKey+"_p"+page,stored=cache.get(ck);
   if(stored)return JSON.parse(stored);
   var token=page?cache.get(baseKey+"_token"+page):null;
@@ -541,9 +562,14 @@ function searchBundleHotels_(p) {
       var parsed=String(h.hotel_class||"").match(/(?:^|\D)([1-5])(?:\s*[- ]?star|\s*estrell)/i);
       stars=parsed?Number(parsed[1]):null;
     }
+    var computedStay=stay||(night?Math.round(night*nights*100)/100:null);
+    var addition=refNight>0&&computedStay>0?
+      Math.round(Math.max(0,computedStay-refNight*nights)*100)/100:null;
     return {name:String(h.name).slice(0,110),rating:rating>=1&&rating<=5?rating:null,
       stars:stars>=1&&stars<=5?stars:null,
-      thumbnail:photo_(h),nightlyRate:night,totalRate:stay||(night?Math.round(night*nights*100)/100:null),
+      thumbnail:photo_(h),nightlyRate:night,totalRate:computedStay,
+      supplementTotal:addition,
+      supplementPerNight:addition===null?null:Math.round(addition/nights*100)/100,
       address:String(h.address||"").slice(0,160),source:"Google Hotels",roomsVerified:false};
   }
   function canonical_(value){return String(value||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();}
@@ -557,7 +583,7 @@ function searchBundleHotels_(p) {
   var hotels=filtered.slice(0,24).map(toHotel_);
   var reference=page===0&&baselineHotel?exactHotel_(filtered,baselineHotel):null;
   // Solo una consulta adicional si el hotel incluido no aparece en el listado principal.
-  if(page===0&&!reference&&baselineHotel){
+  if(page===0&&!reference&&baselineHotel&&refNight===0){
     try{reference=exactHotel_(fetchHotels_(baselineHotel+" "+destination).properties,baselineHotel);}catch(ignore){
       console.warn("No se encontró tarifa comparable para hotel incluido.");
     }
@@ -568,7 +594,8 @@ function searchBundleHotels_(p) {
   var hasMore=page<2 && !!nextToken && nextToken.length<3000;
   var result={ok:true,source:"Google Hotels via SerpApi",pricesVerified:false,
     occupancyPricedForChildren:children===0||ages.length===children,
-    nights:nights,referenceHotel:referenceHotel,hotels:hotels,
+    nights:nights,referenceHotel:refNight>0?null:referenceHotel,hotels:hotels,
+    supplementReferenceConfigured:refNight>0,
     page:page,hasMore:hasMore,nextPage:hasMore?page+1:null};
   try{
     if(hasMore)cache.put(baseKey+"_token"+(page+1),nextToken,600);
