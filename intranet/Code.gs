@@ -8,7 +8,7 @@
  * IMPORTANTE: NO desplegar "cualquiera, incluso anónimo".
  */
 const LXADMIN_HEADERS=['ID','Código','Slug','Estado','Título','País','Ciudad','Actualizado','Versión','Autor','Producto JSON'];
-const LXADMIN_STATES=['BORRADOR','EN_REVISION','APROBADO'];
+const LXADMIN_STATES=['BORRADOR','EN_REVISION','PUBLICADO_COTIZACION','APROBADO'];
 const LXADMIN_TYPES=['package','experience'];
 function lxAdminWho_(){
   const configured=(PropertiesService.getScriptProperties().getProperty('LATAM_ADMIN_EMAILS')||'')
@@ -94,6 +94,8 @@ function lxNormalizeProduct_(input){
     d.activities.forEach(a=>{a.time=lxClean_(a.time,25);a.activity=lxClean_(a.activity,160);a.detail=lxClean_(a.detail,600);});
   });
   p.status=LXADMIN_STATES.indexOf(p.status)>=0?p.status:'BORRADOR';
+  if(p.status==='PUBLICADO_COTIZACION'&&p.identity.slug!=='desierto-atacama-premium-5d4n')
+    throw Error('La publicación en modo cotización está habilitada únicamente para el piloto de Atacama que ya tiene ficha creada en GitHub.');
   if(p.status==='APROBADO'){
     const quality=p.quality||{};
     const checks=['pricesConfirmed','hotelConfirmed','suppliersConfirmed','flightConfirmed',
@@ -110,8 +112,10 @@ function lxNormalizeProduct_(input){
       throw Error('No se puede aprobar todavía: faltan tarifas verificadas o control de calidad ('+
         pending.join(', ')+').');
   }
-  // El primer MVP no publica directamente en GitHub: aprobación y exportación son pasos separados.
-  p.public=false;p.approved=p.status==='APROBADO';
+  // Solo Atacama tiene una ficha pública de cotización preparada en el repositorio.
+  // Guardar otros productos NO crea una página HTML ni actualiza PayPal.
+  p.public=p.status==='PUBLICADO_COTIZACION';
+  p.approved=p.status==='APROBADO';
   p.schemaVersion=1;
   return p;
 }
@@ -194,7 +198,7 @@ function lxAplicarEstudioAtacama(){
       priceStatus:'REFERENCIAL_NO_PUBLICAR',
       note:'Tarifa preliminar por adulto en doble, sin vuelos. Precisa confirmar Terrantai, guías, tours y cancelación.'
     }),
-    status:'EN_REVISION',approved:false,public:false,
+    status:'PUBLICADO_COTIZACION',approved:false,public:true,
     quality:Object.assign({},previous.quality,{
       pricesConfirmed:false,hotelConfirmed:false,suppliersConfirmed:false,
       flightConfirmed:false,datesVerified:false,policiesApproved:false,
@@ -277,7 +281,7 @@ function lxPublicPreview(data){
     itinerary:p.itinerary||[],hotel:{name:h.name,stars:h.stars,nights:h.nights,
       roomType:h.roomType,breakfast:h.breakfast,minimumAge:h.minHotelGuestAge||null},
     currency:pr.currency,basisOccupancy:2,defaultAdults:2,defaultChildren:0,
-    status:'NO PUBLICADO',price:null,
+    status:p.status==='PUBLICADO_COTIZACION'?'PUBLICADO PARA COTIZACIÓN, SIN COBRO':'NO PUBLICADO',price:null,
     seo:{title:p.seo.title||i.title,description:p.seo.description||'',heroImage:p.seo.heroImage||'',gallery:p.seo.gallery||[]}};
 }
 function doGet(){
