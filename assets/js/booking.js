@@ -1455,7 +1455,7 @@
               <h3>¿Cómo deseas pagar?</h3>
               <div class="booking-payment-options" role="radiogroup" aria-label="Forma de pago">
                 <label><input type="radio" name="bkPaymentMethod" value="pay_on_tour" checked><span><strong>${PRODUCT.kind === 'package' ? 'Solicitar reserva y coordinar el pago' : 'Pagar en efectivo al iniciar el tour'}</strong><small>${PRODUCT.kind === 'package' ? 'Sin cobro ahora: confirmaremos tus servicios y condiciones' : 'Pago pendiente hasta el inicio de la experiencia'}</small></span></label>
-                <label><input type="radio" name="bkPaymentMethod" value="online" ${onlineConfigured() ? '' : 'disabled'}><span><strong>Pagar online ahora</strong><small>${onlineConfigured() ? 'Paga de forma segura con PayPal' : 'Próximamente · pasarela por configurar'}</small></span></label>
+                <label><input type="radio" name="bkPaymentMethod" value="online" ${onlineConfigured() ? '' : 'disabled'}><span><strong>Pagar online ahora</strong><small id="bkOnlineAvailability">${onlineConfigured() ? 'Paga de forma segura con PayPal' : 'La pasarela no está habilitada para este producto'}</small></span></label>
               </div>
               <div id="bkPayOnTour"><p class="form-note">Tu registro se enviará a nuestro equipo. La reserva no estará pagada y la disponibilidad debe ser confirmada.</p><button type="button" class="btn-primary" id="bkSubmitCash">Enviar solicitud de reserva</button></div>
               <div id="bkPayOnline" hidden>
@@ -2382,7 +2382,14 @@
       const cash=$('input[name="bkPaymentMethod"][value="pay_on_tour"]');
       if(online){
         // Los vuelos y las distribuciones no verificadas siguen sin cobro online.
-        online.disabled=!onlineConfigured()||Boolean(state.flightQuote)||Boolean(state.customHotel)||state.hotelQuotePending;
+        const extraUnverified=Boolean(state.flightQuote)||Boolean(state.customHotel)||state.hotelQuotePending;
+        online.disabled=!onlineConfigured()||extraUnverified;
+        const note=$('bkOnlineAvailability');
+        if(note)note.textContent=!onlineConfigured()
+          ?'Pago online temporalmente no disponible. Puedes solicitar la reserva sin pagar.'
+          :extraUnverified
+            ?'Los vuelos o el cambio de hotel necesitan validar el importe antes del cobro.'
+            :'Paga de forma segura con PayPal · importe validado del paquete base.';
         if(online.disabled&&online.checked&&cash){cash.checked=true;state.paymentMethod='pay_on_tour'}
       }
       const summary=$('#bkPackageSelection');
@@ -2526,14 +2533,14 @@
       // La misma mejora visual y datos heredados se utiliza en todas las fichas de paquetes.
       if(!document.querySelector('link[href*="package-product-20261108.css"]')){
         const css=document.createElement('link');css.rel='stylesheet';
-        css.href=BASE+'assets/css/package-product-20261108.css?v=20261109-mobile-quote-r4';document.head.append(css);
+        css.href=BASE+'assets/css/package-product-20261108.css?v=20261110-hotel-filters-r10';document.head.append(css);
       }
       const addUI=()=>{
         if(document.querySelector('script[data-lx-package-ui]'))return;
         const start=()=>{
           if(document.querySelector('script[data-lx-package-ui]'))return;
           const script=document.createElement('script');script.dataset.lxPackageUi='true';
-          script.src=BASE+'assets/js/package-product-20261108.js?v=20261109-mobile-quote-r4';document.head.append(script);
+          script.src=BASE+'assets/js/package-product-20261108.js?v=20261110-hotel-filters-r10';document.head.append(script);
         };
         if(window.LatamProductControls){start();return}
         const controls=document.createElement('script');
