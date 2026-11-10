@@ -25,6 +25,8 @@
   childFactor:Number(book.dataset.bookChildFactor||.7)};
  let tiers=[];try{tiers=JSON.parse(book.dataset.bookTiers||'[]')}catch(_){}
  const firstTier=tiers[0]||null;
+ const multiCityAtacama=params.slug==='chile-atacama-5d4n';
+ const flightStayNights=multiCityAtacama?3:params.nights;
  const hasHotelIncluded=Boolean(firstTier&&!firstTier.noAccommodation&&firstTier.code!=='sin-hotel');
  const maxHotelOccupancy=4;
  const defaults={'Perú':'LIM','Colombia':'BOG','Argentina':'EZE','Chile':'SCL','México':'MEX',
@@ -36,7 +38,7 @@
       book.dataset.bookDefaultArrival:'',
   adults:Math.max(1,Math.min(9,Number(q.get('adults'))||Number(q.get('viajeros'))||2)),
   children:Math.max(0,Math.min(8,Number(q.get('children'))||0)),
-  origin:(q.get('origen')||defaults[country]||'LIM').toUpperCase(),
+  origin:(params.slug==='chile-atacama-5d4n'?'SCL':q.get('origen')||defaults[country]||'LIM').toUpperCase(),
   tier:firstTier?.code||'',occupancy:'double',hotelPicked:false,customHotel:'',
   hotelPhotos:{},couponCode:'',roomPlan:'',hotelQuotePending:false,hotelAlternative:null,childrenAges:[],flight:null,baggage:'none',offers:[],outboundKey:'',choice:null,flightStage:'outbound',flightSearch:null
  };
@@ -306,7 +308,7 @@
 function syncFlightReturnMin(){
  const outbound=$('lxFlightDeparture').value,ret=$('lxFlightReturn');
  // El regreso nunca puede ser anterior a la ida ni a la duración del paquete.
- const earliest=dateOK(outbound)?addDays(outbound,params.nights):minDate;
+ const earliest=dateOK(outbound)?addDays(outbound,flightStayNights):minDate;
  ret.min=earliest;
  if(dateOK(outbound)&&(!dateOK(ret.value)||ret.value<earliest))ret.value=earliest;
  inboundCalendar.sync();
@@ -323,8 +325,9 @@ function syncFlightForm(){
  $('lxFlightChildren').value=String(Math.min(state.children,6));
  $('lxFlightDeparture').min=minDate;
  $('lxFlightArrival').value=state.date||'';
- $('lxFlightDeparture').value=reuse?old.departure:(state.date||'');
+ $('lxFlightDeparture').value=reuse?old.departure:(state.date?addDays(state.date,multiCityAtacama?1:0):'');
  $('lxFlightReturn').value=reuse?old.returnDate:(state.date?addDays(state.date,params.nights):'');
+ if(multiCityAtacama){$('lxFlightOrigin').value='SCL';$('lxFlightOrigin').disabled=true;}
  syncFlightReturnMin();
  $('lxFlightCheckedBag').checked=false;
  outboundCalendar.sync();inboundCalendar.sync();flightTravelers.sync();
@@ -806,10 +809,11 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   const arrival=$('lxFlightArrival').value;
   const adults=Number($('lxFlightAdults').value),children=Number($('lxFlightChildren').value);
   if(adults+children>9||children>6){setStatus(flightStatus,'Máximo 9 viajeros y hasta 6 niños por consulta.',true);toggleFlightEditor(true);return}
-  if(!dateOK(out)||out<minDate||!dateOK(ret)||ret<addDays(out,params.nights)){
+  if(!dateOK(out)||out<minDate||!dateOK(ret)||ret<addDays(out,flightStayNights)){
    setStatus(flightStatus,'Selecciona fechas válidas de ida y regreso. El regreso debe permitir la duración del paquete.',true);
    toggleFlightEditor(true);return;
   }
+  if(multiCityAtacama&&airport!=='SCL'){setStatus(flightStatus,'Este itinerario consulta vuelos internos Santiago–Calama–Santiago.',true);return}
   if(airport===params.destination){setStatus(flightStatus,'La ciudad de salida y el destino deben ser diferentes.',true);return}
   if(!params.destination){setStatus(flightStatus,'Este destino aún no cuenta con consulta de vuelos integrada.',true);return}
   $('lxProductSearchFlights').disabled=true;
@@ -831,7 +835,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
      Number(o.price)>0&&o.outbound?.segments?.length&&o.inbound?.segments?.length&&
      o.departure===out&&o.returnDate===ret&&Number(o.partyAdults)===adults&&Number(o.partyChildren)===children&&
      (()=>{const land=String(o.outbound.segments.at(-1)?.to?.time||'').slice(0,10);
-       return dateOK(land)&&ret>=addDays(land,params.nights)})()).slice(0,30);
+       return dateOK(land)&&ret>=addDays(land,flightStayNights)})()).slice(0,30);
    setStatus(flightStatus,state.offers.length?
     'Encontramos '+state.offers.length+' '+(state.offers.length===1?'opción de vuelo':'opciones de vuelos')+'. Los precios mostrados incluyen ida y vuelta. Elige tu vuelo de ida.':
     'No encontramos vuelos compatibles con las fechas y la duración de este paquete.',!state.offers.length);
@@ -843,7 +847,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   const offer=state.choice;if(!offer)return;
   const d=$('lxFlightDeparture').value,returnDate=$('lxFlightReturn').value;
   const actualArrival=String(offer.outbound?.segments?.at(-1)?.to?.time||'').slice(0,10);
-  if(dateOK(actualArrival)){
+  if(dateOK(actualArrival)&&!multiCityAtacama){
     if(state.date&&state.date!==actualArrival)resetSelections();
     state.date=actualArrival;state.flightSearch={...state.flightSearch,arrival:actualArrival};
   }else if(!state.date){
