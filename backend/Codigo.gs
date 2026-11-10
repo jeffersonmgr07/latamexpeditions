@@ -1118,7 +1118,7 @@ function doPost(e) {
     const formRequest = Boolean(e.parameter &&
       /^(registerPayOnTour|createOrder|captureOrder)$/.test(e.parameter.action||'') && e.parameter.payload);
     const body = formRequest
-      ? {action:'registerPayOnTour',data:JSON.parse(String(e.parameter.payload))}
+      ? {action:String(e.parameter.action),data:JSON.parse(String(e.parameter.payload))}
       : JSON.parse(e.postData.contents);
     const action = String(body.action || '');
     const data = body.data || {};
@@ -1154,6 +1154,9 @@ function doPost(e) {
     if (action === 'myTrips') return json(misViajes(data));
     if (action === 'findBooking') return json(consultarReserva(data));
     if (action === 'resendVoucher') return json(reenviarVoucher(data));
+    // --- Formularios del sitio público (Formularios.gs) ---
+    if (['complaint','agency','supplier','changeRequest','contactLead'].indexOf(action) !== -1)
+      return json(enviarFormulario(action, data));
 
     if (action === 'ping') return json({ ok: true, env: CONFIG.env, hora: new Date().toISOString() });
 
