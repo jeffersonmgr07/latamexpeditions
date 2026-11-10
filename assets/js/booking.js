@@ -1171,7 +1171,9 @@
   }
     // Backend actual: solo correo. No habilitar PayPal por error al añadir un Client ID.
   // El cobro solo se habilita tras pruebas y activación explícita en catalog.json.
-  const onlineConfigured = () => Boolean(!PRODUCT.quoteOnly && CONFIG?.paypalEnabled === true &&
+  const onlineConfigured = () => Boolean(!PRODUCT.quoteOnly &&
+    (PRODUCT.slug!=='desierto-atacama-premium-5d4n'||(state.adults>=1&&state.adults<=2&&state.children===0)) &&
+    CONFIG?.paypalEnabled === true &&
     CONFIG?.paypalClientId && !String(CONFIG.paypalClientId).startsWith('PEGAR_AQUI') &&
     /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(CONFIG?.endpoint||'') &&
     CONFIG.currency==='USD');
@@ -1797,6 +1799,8 @@
     $('#bkPayNote').textContent = isEnglish
       ? 'You pay 100% now. Flights and alternative hotels still require manual supplier confirmation. If a service cannot be fulfilled, we will offer an agreed alternative or a refund.'
       : 'Pagas el 100% ahora. Los vuelos y hoteles alternativos requieren confirmación manual con proveedores. Si algún servicio no puede prestarse, te ofreceremos una alternativa acordada o la devolución correspondiente.';
+    if(PRODUCT.slug==='desierto-atacama-premium-5d4n')$('#bkPayNote').textContent=
+      'Precio de venta fijo de LATAM Expeditions, pagadero al 100%. Hotel Terrantai y excursiones requieren confirmación posterior con el proveedor. Si no podemos prestar lo contratado, te ofreceremos una alternativa de tu elección o devolución íntegra. Vuelos opcionales aparte.';
   }
 
   function goToStep(next) {
