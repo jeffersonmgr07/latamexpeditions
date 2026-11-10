@@ -247,7 +247,10 @@ function registrarUsuario(data) {
   }
 
   try { enviarBienvenida(email, nombre); } catch (e) { registrarError(e, 'enviarBienvenida'); }
-
+  if (data.ref && typeof lxRefTrackSignup_ === 'function') {
+    try { lxRefTrackSignup_(data.ref, email); }
+    catch (err) { registrarError(err, 'referido registro'); }
+  }
   const usuario = buscarUsuario(email);
   const token = crearSesion(email, data.device);
   return { ok: true, token: token, user: usuarioPublico(usuario) };
@@ -416,6 +419,7 @@ function entrarConGoogle(data) {
   const lock = LockService.getScriptLock();
   lock.waitLock(10000);
   let usuario;
+  let nuevoUsuarioGoogle = false;
   try {
     usuario = buscarUsuarioPorGoogleSub(perfil.sub);
 
@@ -431,6 +435,7 @@ function entrarConGoogle(data) {
       throw new Error('Este correo está vinculado a una cuenta anterior. Contacta con soporte.');
     }
     if (!usuario) {
+      nuevoUsuarioGoogle = true;
       hojaUsuarios().appendRow([
         textoHoja(perfil.email), textoHoja(perfil.name || perfil.email.split('@')[0]), '',
         '', '', new Date(), new Date(), 'ACTIVA', 0, '',
@@ -457,6 +462,10 @@ function entrarConGoogle(data) {
     lock.releaseLock();
   }
 
+  if (nuevoUsuarioGoogle && data.ref && typeof lxRefTrackSignup_ === 'function') {
+    try { lxRefTrackSignup_(data.ref, usuario.email); }
+    catch (err) { registrarError(err, 'referido google'); }
+  }
   const token = crearSesion(usuario.email, data.device);
   return { ok: true, token: token, user: usuarioPublico(usuario) };
 }

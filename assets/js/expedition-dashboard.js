@@ -33,7 +33,7 @@
   }
   function titleFor(page) {
     return ({inicio:'Mi espacio de viajes',viajes:'Mis viajes',reservas:'Mis reservaciones',
-      millas:'Mis puntos',recompensas:'Recompensas y cupones',
+      millas:'LATAM Rewards',recompensas:'Recompensas y cupones',
       avisos:'Notificaciones',perfil:'Mi perfil',detalle:'Detalle del viaje'})[page] || 'Mi cuenta';
   }
   function subtitleFor(page) {
@@ -49,7 +49,7 @@
   function membership() {
     const points=num(state.data?.miles?.tierPoints);
     return state.data?.membership || {
-      name:points>=10000?'Diamond':points>=7000?'Platinum':points>=3000?'Gold':'Explorer',
+      name:points>=10000?'Signature':points>=7000?'Platinum':points>=3000?'Gold':'Explorer',
       points:points,next:points>=10000?null:points>=7000?10000:points>=3000?7000:3000,
       remaining:points>=10000?0:Math.max(0,(points>=7000?10000:points>=3000?7000:3000)-points)
     };
@@ -147,7 +147,7 @@
   }
 
   function tierProgress() {
-    const t=membership(),levels=[['Explorer',0],['Gold',3000],['Platinum',7000],['Diamond',10000]];
+    const t=membership(),levels=[['Explorer',0],['Gold',3000],['Platinum',7000],['Signature',10000]];
     const low=t.points>=10000?10000:t.points>=7000?7000:t.points>=3000?3000:0;
     const next=t.next||10000;
     const fraction=t.next===null?100:Math.max(0,Math.min(100,100*(t.points-low)/(next-low)));
@@ -156,33 +156,35 @@
       '<div class="exp-tier-track"><span style="width:'+fraction.toFixed(1)+'%"></span></div>'+
       '<small>'+(t.next===null?'¡Has alcanzado el nivel más alto!':'Te faltan '+esc(t.remaining.toLocaleString('es-PE'))+' puntos para '+esc(levels.find(x=>x[1]===t.next)?.[0]||'el siguiente nivel'))+'</small></div>';
   }
+  function referralText() {
+    return 'Te invito a descubrir LATAM Expeditions 🌎. Explora experiencias por Latinoamérica y crea tu cuenta aquí:';
+  }
   function shareCards() {
-    const choices=[
-      {network:'facebook',name:'Facebook',ico:'fa-brands fa-facebook-f',
-        href:'https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flatamexpeditions.com%2F',
-        detail:'Comparte el sitio en una publicación pública con tus propias palabras.'},
-      {network:'instagram',name:'Instagram',ico:'fa-brands fa-instagram',
-        href:'https://www.instagram.com/',detail:'Publica una foto o reel propio y menciona LATAM Expeditions.'},
-      {network:'tiktok',name:'TikTok',ico:'fa-brands fa-tiktok',
-        href:'https://www.tiktok.com/',detail:'Comparte un video original relacionado con tus planes de viaje.'}
+    const ref=state.data.referrals||{},link=ref.link||'';
+    const networks=[
+      ['facebook','Facebook','fa-facebook-f','#1877F2'],
+      ['instagram','Instagram','fa-instagram','#D93175'],
+      ['tiktok','TikTok','fa-tiktok','#161B22'],
+      ['x','X','fa-x-twitter','#161B22'],
+      ['youtube','YouTube','fa-youtube','#E62117'],
+      ['whatsapp','WhatsApp','fa-whatsapp','#25D366']
     ];
-    const social=state.data.social||{};
-    return '<div class="exp-social-grid">'+choices.map(n=>{
-      const claim=social[n.network],status=claim?.status||'';
-      const done=status==='APROBADO',pending=status==='EN ESPERA'||status==='EN REVISION';
-      const statusText=done?'Publicación destacada':pending?(status==='EN ESPERA'?'Pendiente de 24 horas':'En revisión'):
-        status==='RECHAZADO'?'Enlace rechazado. Puedes enviar otro.':'Compartir es voluntario';
-      return '<article class="exp-social-card"><div class="exp-social-icon"><i class="'+n.ico+'" aria-hidden="true"></i></div>'+
-        '<div><strong>'+n.name+'</strong><p>'+n.detail+'</p><span class="exp-tag'+(pending?' exp-tag--pending':'')+'">'+statusText+'</span></div>'+
-        '<a class="exp-btn exp-btn--light" href="'+n.href+'" target="_blank" rel="noopener noreferrer">Ir a '+n.name+' <i class="fa-solid fa-arrow-up-right-from-square"></i></a>'+
-        (!pending&&!done?'<form class="exp-social-form" data-exp-social-form="'+n.network+'">'+
-          '<label for="expSocial'+n.network+'">Enlace de tu publicación</label>'+
-          '<input id="expSocial'+n.network+'" type="url" name="postUrl" placeholder="https://…" required>'+
-          '<button type="submit" class="exp-btn">Enviar publicación</button></form>':
-          '<small>Referencia enviada: '+esc(claim?.url||'')+'</small>')+
-        '</article>';
-    }).join('')+'</div>'+
-      '<p class="exp-social-note">Compartir es voluntario y no otorga puntos. Puedes enviar un enlace para que tu publicación forme parte de nuestra comunidad. Los enlaces se revisan a partir de las 24 horas. Si publicas contenido comercial, identifica la colaboración conforme a las reglas de cada plataforma.</p>';
+    return '<div class="exp-referral-intro">'+
+      '<div class="exp-referral-head"><span class="exp-referral-medal"><i class="fa-solid fa-user-group"></i></span>'+
+      '<div><strong>100 puntos por amigo viajero</strong>'+
+      '<p>Invítalo a registrarse. Recibirás los puntos cuando verifique su cuenta y complete su primera compra de viaje.</p></div></div>'+
+      '<div class="exp-referral-counts"><span><strong>'+esc(ref.invited||0)+'</strong> invitados</span>'+
+      '<span><strong>'+esc(ref.qualified||0)+'</strong> bonificados</span></div>'+
+      (link?'<div class="exp-referral-link"><input aria-label="Tu enlace de invitación" readonly value="'+esc(link)+'">'+
+      '<button type="button" class="exp-btn exp-btn--light" data-exp-copy-ref><i class="fa-regular fa-copy"></i> Copiar</button></div>':
+      '<p>Verifica tu cuenta para disponer de un enlace personal.</p>')+'</div>'+
+      '<p class="exp-social-heading">Comparte tu invitación</p>'+
+      '<div class="exp-share-grid">'+networks.map(x=>
+        '<button type="button" class="exp-share-btn" data-exp-share="'+x[0]+'" '+(!link?'disabled':'')+'>'+
+        '<span class="exp-share-brand" style="--share-brand:'+x[3]+'"><i class="fa-brands '+x[2]+'" aria-hidden="true"></i></span>'+
+        '<span>'+x[1]+'</span></button>').join('')+'</div>'+
+      '<button type="button" class="exp-link exp-copy-message" data-exp-copy-message><i class="fa-regular fa-copy"></i> Copiar mensaje de invitación</button>'+
+      '<p class="exp-social-note">Tu enlace es personal. Por cada amigo que se registre con él, verifique su cuenta y complete su primer viaje, recibirás 100 puntos LATAM Rewards (máximo cuatro bonificaciones al mes).</p>';
   }
   function milesPage() {
     const m=state.data.miles,ready=!!m,t=membership();
@@ -194,7 +196,7 @@
       tierProgress()+
       '<div class="exp-card"><div class="exp-card-head"><h3>Obtén más puntos</h3>'+
       '<button class="exp-link" type="button" data-exp-nav="recompensas">Ver el programa</button></div>'+
-      '<p class="exp-card-intro">Cada US$10 pagados en experiencias, paquetes, vuelos y hoteles te suma 1 punto. También puedes compartir voluntariamente tus planes de viaje.</p>'+
+      '<p class="exp-card-intro">Comparte tu enlace personal con tus amigos y descubre cómo obtener puntos por nuevas reservas.</p>'+
       (state.data.verified?shareCards():verificationBanner())+'</div>'+
       '<div class="exp-card"><h3>Estado de cuenta</h3>'+
       (ready&&m.movements.length?'<div class="exp-table-wrap"><table class="exp-table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Estado</th><th>Puntos</th></tr></thead><tbody>'+
@@ -203,81 +205,148 @@
         '<td><span class="'+(num(x.points)<0?'exp-negative':'exp-positive')+'">'+(num(x.points)>0?'+':'')+esc(x.points)+'</span></td></tr>').join('')+
       '</tbody></table></div>':empty('Aún no hay movimientos','Tus bonos y compras se reflejarán aquí.',false))+'</div>';
   }
+  const REWARD_CATALOG=[
+    {id:'cusco-bienvenida',name:'Bienvenida ancestral en Cusco',place:'Cusco, Perú',points:500,img:'assets/img/home-cusco-machu-picchu.webp'},
+    {id:'cusco-city',name:'City Tour en Cusco',place:'Cusco, Perú',points:550,img:'assets/img/peru-machu-picchu-01.jpg'},
+    {id:'machu-guia',name:'Tour guiado por Machu Picchu',place:'Machu Picchu, Perú',points:650,img:'assets/img/peru-machu-picchu-01.jpg'},
+    {id:'buenos-aires',name:'City Tour en Buenos Aires',place:'Buenos Aires, Argentina',points:600,img:'assets/img/argentina-buenos-aires-01.jpg'},
+    {id:'rio',name:'City Tour en Río de Janeiro',place:'Río de Janeiro, Brasil',points:650,img:'assets/img/brasil-rio-01.jpg'},
+    {id:'lima',name:'City Tour histórico en Lima',place:'Lima, Perú',points:500,img:''},
+    {id:'chiva-medellin',name:'Chiva rumbera en Medellín',place:'Medellín, Colombia',points:550,img:'assets/img/colombia-experiencia-medellin-nocturno-gastronomia-rooftops.jpg'},
+    {id:'cartagena',name:'Paseo cultural en Cartagena',place:'Cartagena, Colombia',points:600,img:'assets/img/colombia-cartagena-01.jpg'}
+  ];
   function rewardsPage() {
-    const values=[
-      ['fa-map-location-dot','Experiencias','Tours Full Day, visitas de medio día, city tours, recorridos culturales y experiencias seleccionadas.'],
-      ['fa-gift','Souvenirs','Recuerdos de viaje, artesanías y productos regionales seleccionados en nuestros destinos.'],
-      ['fa-ticket','Cupones de descuento','Canjea puntos por cupones para experiencias, paquetes, vuelos y hoteles, sujetos a sus condiciones.'],
-      ['fa-star','Promociones exclusivas','Beneficios por temporadas, campañas para miembros y experiencias destacadas.']
-    ];
-    const levels=[['Explorer','0–2,999'],['Gold','3,000–6,999'],['Platinum','7,000–9,999'],['Diamond','10,000+']];
-    return '<div class="exp-rewards-grid">'+values.map(x=>
-        '<article class="exp-reward"><i class="fa-solid '+x[0]+'" aria-hidden="true"></i>'+
-        '<h3>'+x[1]+'</h3><p>'+x[2]+'</p></article>').join('')+'</div>'+
-      '<details class="exp-program-accordion"><summary><span><i class="fa-solid fa-gem" aria-hidden="true"></i> Todo sobre LATAM Rewards</span>'+
-      '<span class="exp-accordion-arrow"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span></summary>'+
-      '<div class="exp-program-body"><p>Acumula puntos con tus viajes y actividades elegibles. A mayor cantidad de puntos acreditados, mejor será tu nivel de membresía.</p>'+
+    const levels=[['Explorer','0–2,999'],['Gold','3,000–6,999'],
+      ['Platinum','7,000–9,999'],['Signature','10,000+']];
+    return '<div class="exp-rewards-section-head"><h2>Experiencias con puntos</h2>'+
+      '<p>Descubre actividades seleccionadas para solicitar mediante LATAM Rewards.</p></div>'+
+      '<div class="exp-redeem-grid">'+REWARD_CATALOG.map(x=>
+      '<article class="exp-redeem-card">'+
+      (x.img?'<img src="'+base+esc(x.img)+'" loading="lazy" alt="'+esc(x.place)+'">':
+        '<div class="exp-redeem-illustration"><i class="fa-solid fa-landmark" aria-hidden="true"></i><span>LIMA</span></div>')+
+      '<div class="exp-redeem-content"><span class="exp-redeem-location"><i class="fa-solid fa-location-dot"></i> '+esc(x.place)+'</span>'+
+      '<h3>'+esc(x.name)+'</h3><div class="exp-redeem-price"><strong>'+esc(x.points)+'</strong> puntos Rewards</div>'+
+      '<button type="button" class="exp-btn exp-btn--light" data-exp-reward="'+esc(x.id)+'">Consultar canje</button></div></article>').join('')+'</div>'+
+      '<div class="exp-rewards-grid">'+[
+        ['fa-map-location-dot','Experiencias','Full Days, recorridos culturales, city tours y visitas guiadas.'],
+        ['fa-gift','Souvenirs','Recuerdos de viaje, artesanías y productos regionales.'],
+        ['fa-ticket','Cupones','Descuentos para experiencias, paquetes, hoteles y vuelos, según condiciones.'],
+        ['fa-star','Beneficios exclusivos','Oportunidades especiales para miembros de LATAM Rewards.']
+      ].map(x=>'<article class="exp-reward"><i class="fa-solid '+x[0]+'"></i><h3>'+x[1]+'</h3><p>'+x[2]+'</p></article>').join('')+'</div>'+
+      '<details class="exp-program-accordion"><summary><span><i class="fa-solid fa-gem" aria-hidden="true"></i>'+
+      ' Todo sobre LATAM Rewards</span><span class="exp-accordion-arrow"><i class="fa-solid fa-chevron-down"></i></span></summary>'+
+      '<div class="exp-program-body"><p>Tu programa de beneficios para descubrir más de Latinoamérica. Acumula puntos y asciende de nivel con tus viajes.</p>'+
       '<div class="exp-program-how">'+
-      '<article><i class="fa-solid fa-user-check"></i><strong>100 puntos</strong><span>Al verificar tu cuenta por primera vez</span></article>'+
-      '<article><i class="fa-solid fa-credit-card"></i><strong>1 punto / US$10</strong><span>En experiencias, paquetes, vuelos y hoteles pagados</span></article>'+
-      '<article><i class="fa-solid fa-share-nodes"></i><strong>Comunidad viajera</strong><span>Comparte tus experiencias cuando quieras, sin obligación ni recompensas por publicaciones</span></article>'+
-      '<article><i class="fa-solid fa-clock-rotate-left"></i><strong>Puntos disponibles</strong><span>Las compras se acreditan al completar el servicio</span></article></div>'+
-      '<h3>Tu camino de recompensas</h3><div class="exp-tiers">'+levels.map(x=>
-      '<div><i class="fa-solid fa-medal"></i><strong>'+x[0]+'</strong><small>'+x[1]+' puntos acreditados</small></div>').join('')+'</div>'+
+      '<article><i class="fa-solid fa-user-check"></i><strong>100 puntos</strong><span>Por verificar tu cuenta al registrarte</span></article>'+
+      '<article><i class="fa-solid fa-credit-card"></i><strong>1 punto por US$10</strong><span>Por compras de experiencias, vuelos, hoteles y paquetes; disponibles al completar el servicio</span></article>'+
+      '<article><i class="fa-solid fa-user-group"></i><strong>100 puntos por referido</strong>'+
+      '<span>Por cada amigo que se registre con tu enlace, verifique su cuenta y complete su primera compra. Hasta 4 bonificaciones al mes</span></article>'+
+      '<article><i class="fa-solid fa-ticket"></i><strong>Canjes por experiencias</strong>'+
+      '<span>Elige actividades con puntos y consulta fechas, cupos y condiciones antes de confirmar</span></article></div>'+
+      '<h3>Tu nivel de miembro</h3><div class="exp-tiers">'+levels.map(x=>
+      '<div><i class="fa-solid fa-medal"></i><strong>'+x[0]+'</strong>'+
+      '<small>'+x[1]+' puntos acumulados</small></div>').join('')+'</div>'+
       tierProgress()+
-      '<div class="exp-highlight-reward"><i class="fa-solid fa-ticket"></i><div><strong>Experiencias locales desde 500 puntos</strong>'+
-      '<p>Podrás solicitar beneficios seleccionados en Cusco, Pachacámac, Santiago, Río de Janeiro o Buenos Aires, según disponibilidad y campaña vigente.</p></div></div>'+
-      '<p>Los puntos pueden canjearse directamente por experiencias independientes y souvenirs. Para paquetes, hoteles y vuelos se utilizan cupones con condiciones específicas.</p>'+
-      '<p>En Tripadvisor puedes compartir una opinión auténtica sobre tu experiencia, sin premios ni puntos por reseñas.</p>'+
+      '<p>Los puntos pueden aplicarse a experiencias individuales y souvenirs. Para vuelos, hoteles y paquetes se usarán cupones con condiciones específicas. Los canjes requieren disponibilidad y confirmación de LATAM Expeditions.</p>'+
       '</div></details>';
+  }
+  function profileSelect(name,label,selected,options,selectedIso) {
+    const active=options.find(x=>x.value===selected&&(!selectedIso||x.iso===selectedIso))||
+      options.find(x=>x.value===selected)||options[0];
+    const render=(x)=>x.iso?
+      '<span class="exp-country-choice"><img class="exp-flag" src="https://flagcdn.com/24x18/'+x.iso.toLowerCase()+'.png" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
+      '<span class="exp-flag-emoji">'+esc(x.flag||'')+'</span><span>'+esc(x.text)+'</span></span>':esc(x.text);
+    return '<label class="exp-field-title" id="expLabel'+name+'">'+esc(label)+'</label>'+
+      '<div class="exp-custom-select" data-exp-select="'+esc(name)+'">'+
+      '<input type="hidden" name="'+esc(name)+'" value="'+esc(active.value||'')+'">'+
+      (name==='whatsappCode'?'<input type="hidden" name="whatsappCountry" value="'+esc(active.iso||'PE')+'">':'')+
+      '<button class="exp-custom-trigger" type="button" aria-labelledby="expLabel'+name+'" aria-expanded="false" data-exp-select-trigger>'+
+      '<span data-exp-select-current>'+render(active)+'</span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>'+
+      '<div class="exp-custom-menu" role="listbox" hidden>'+
+      '<input type="search" class="exp-custom-search" placeholder="Buscar…" aria-label="Buscar '+esc(label)+'" data-exp-select-search>'+
+      '<div class="exp-custom-options">'+options.map(x=>
+        '<button type="button" class="exp-custom-option'+(x.value===active.value&&(!x.iso||x.iso===active.iso)?' is-selected':'')+
+        '" role="option" data-exp-value="'+esc(x.value)+'" data-exp-iso="'+esc(x.iso||'')+
+        '" aria-selected="'+(x.value===active.value)+'">'+render(x)+'</button>').join('')+'</div></div></div>';
+  }
+  function profileCountries() {
+    const list=[
+      ['PE','🇵🇪','+51','Perú'],['CO','🇨🇴','+57','Colombia'],['CL','🇨🇱','+56','Chile'],
+      ['AR','🇦🇷','+54','Argentina'],['BR','🇧🇷','+55','Brasil'],['VE','🇻🇪','+58','Venezuela'],
+      ['EC','🇪🇨','+593','Ecuador'],['BO','🇧🇴','+591','Bolivia'],['UY','🇺🇾','+598','Uruguay'],
+      ['MX','🇲🇽','+52','México'],['PA','🇵🇦','+507','Panamá'],['PY','🇵🇾','+595','Paraguay'],
+      ['GT','🇬🇹','+502','Guatemala'],['HN','🇭🇳','+504','Honduras'],['SV','🇸🇻','+503','El Salvador'],
+      ['NI','🇳🇮','+505','Nicaragua'],['CR','🇨🇷','+506','Costa Rica'],
+      ['DO','🇩🇴','+1','República Dominicana'],['CU','🇨🇺','+53','Cuba'],
+      ['US','🇺🇸','+1','Estados Unidos'],['CA','🇨🇦','+1','Canadá'],
+      ['ES','🇪🇸','+34','España'],['FR','🇫🇷','+33','Francia'],['GB','🇬🇧','+44','Reino Unido'],
+      ['DE','🇩🇪','+49','Alemania'],['IT','🇮🇹','+39','Italia'],['PT','🇵🇹','+351','Portugal'],
+      ['JP','🇯🇵','+81','Japón'],['CN','🇨🇳','+86','China'],['KR','🇰🇷','+82','Corea del Sur'],
+      ['AU','🇦🇺','+61','Australia'],['IN','🇮🇳','+91','India']
+    ];
+    return list.map(x=>({iso:x[0],flag:x[1],value:x[2],text:x[2]+' · '+x[3]}));
   }
   function profilePage() {
     const u=state.data.user||{},p=state.data.profile||{},provider=String(u.provider||'correo');
-    const method=provider.toLowerCase().includes('google')?'Google':'Correo y contraseña';
-    const codes=[['🇵🇪','+51','Perú'],['🇨🇴','+57','Colombia'],['🇨🇱','+56','Chile'],
-      ['🇦🇷','+54','Argentina'],['🇧🇷','+55','Brasil'],['🇻🇪','+58','Venezuela'],
-      ['🇧🇴','+591','Bolivia'],['🇪🇨','+593','Ecuador'],['🇲🇽','+52','México'],
-      ['🇺🇾','+598','Uruguay'],['🇨🇷','+506','Costa Rica'],['🇵🇦','+507','Panamá'],
-      ['🇵🇾','+595','Paraguay'],['🇬🇹','+502','Guatemala'],['🇭🇳','+504','Honduras'],
-      ['🇸🇻','+503','El Salvador'],['🇳🇮','+505','Nicaragua'],['🇩🇴','+1','República Dominicana'],
-      ['🇨🇺','+53','Cuba'],['🇺🇸','+1','Estados Unidos'],['🇨🇦','+1','Canadá'],
-      ['🇪🇸','+34','España'],['🇫🇷','+33','Francia'],['🇬🇧','+44','Reino Unido'],
-      ['🇩🇪','+49','Alemania'],['🇮🇹','+39','Italia'],['🇵🇹','+351','Portugal'],
-      ['🇯🇵','+81','Japón'],['🇨🇳','+86','China'],['🇰🇷','+82','Corea del Sur'],
-      ['🇮🇳','+91','India'],['🇦🇺','+61','Australia']];
-    const avatar=state.avatar||p.googlePicture||'';
-    return '<div class="exp-card"><div class="exp-profile-top">'+
-      '<span class="exp-profile-avatar">'+(avatar?'<img src="'+esc(avatar)+'" alt="Tu fotografía de perfil">':'<i class="fa-solid fa-user" aria-hidden="true"></i>')+'</span>'+
-      '<div><strong>Tu fotografía</strong><p>Usa la foto de Google o carga tu propia imagen.</p>'+
-      '<label class="exp-btn exp-btn--light" for="expAvatarInput"><i class="fa-solid fa-camera"></i> Cambiar fotografía</label>'+
-      '<input type="file" id="expAvatarInput" accept="image/jpeg,image/png,image/webp" hidden></div></div></div>'+
-      '<div class="exp-card"><h3>Información personal</h3><form id="expProfileForm" class="exp-profile-form">'+
-      '<div class="exp-form-grid"><label>Nombre y apellido<input name="name" maxlength="120" value="'+esc(p.name||u.name||'')+'" required></label>'+
-      '<label>Correo electrónico<input value="'+esc(p.email||u.email||'')+'" disabled></label>'+
-      '<label>Teléfono de contacto<input name="phone" type="tel" maxlength="28" value="'+esc(p.phone||u.phone||'')+'" placeholder="+51 987654321"></label>'+
-      '<label>Tipo de documento<select name="docType"><option value="">Seleccionar</option>'+
-      ['DNI','CE','PASAPORTE','CI','RG','CPF','OTRO'].map(x=>'<option value="'+x+'"'+(x===p.docType?' selected':'')+'>'+({'CE':'Carné de extranjería','PASAPORTE':'Pasaporte','CI':'Cédula de identidad','RG':'RG (Brasil)','CPF':'CPF (Brasil)'}[x]||x)+'</option>').join('')+'</select></label>'+
+    const isGoogle=provider.toLowerCase().includes('google'),hasPassword=!isGoogle||provider.toLowerCase().includes('password');
+    const method=isGoogle?(hasPassword?'Google y contraseña':'Google'):'Correo y contraseña';
+    const avatar=state.avatar||p.googlePicture||u.picture||'';
+    const countries=profileCountries();
+    const selectedCountry=countries.find(x=>x.iso===(p.whatsappCountry||'PE'))||
+      countries.find(x=>x.value===(p.whatsappCode||'+51'))||countries[0];
+    const docOptions=[
+      {value:'',text:'Seleccionar tipo de documento'},{value:'DNI',text:'DNI'},
+      {value:'CE',text:'Carné de extranjería'},{value:'PASAPORTE',text:'Pasaporte'},
+      {value:'CI',text:'Cédula de identidad'},{value:'RG',text:'RG (Brasil)'},
+      {value:'CPF',text:'CPF (Brasil)'},{value:'OTRO',text:'Otro documento'}
+    ];
+    return '<div class="exp-card"><h3>Información personal</h3>'+
+      '<div class="exp-profile-mini"><button type="button" class="exp-profile-photo-button" data-exp-open-avatar title="Cambiar fotografía" aria-label="Ver o cambiar mi fotografía">'+
+      (avatar?'<img src="'+esc(avatar)+'" alt="Foto de perfil">':'<i class="fa-solid fa-user" aria-hidden="true"></i>')+
+      '<span class="exp-photo-edit"><i class="fa-solid fa-camera" aria-hidden="true"></i></span></button>'+
+      '<span>Tu perfil <small>Toca tu imagen para cambiarla</small></span></div>'+
+      '<form id="expProfileForm" class="exp-profile-form">'+
+      '<div class="exp-form-grid">'+
+      '<label>Nombres y apellidos<input name="name" maxlength="120" value="'+esc(p.name||u.name||'')+'" required autocomplete="name"></label>'+
+      '<label>Correo electrónico<input value="'+esc(p.email||u.email||'')+'" type="email" disabled></label>'+
+      '<div class="exp-custom-field">'+profileSelect('docType','Tipo de documento',p.docType||'',docOptions)+'</div>'+
       '<label>Número de documento<input name="docNumber" maxlength="30" value="'+esc(p.docNumber||'')+'" autocomplete="off"></label>'+
-      '<label>Acceso a la cuenta<input value="'+esc(method)+'" disabled></label></div>'+
-      '<h4>WhatsApp</h4><div class="exp-whatsapp-row"><label>Código de país<select name="whatsappCode">'+
-      codes.map(x=>'<option value="'+x[1]+'"'+(x[1]===(p.whatsappCode||'+51')?' selected':'')+'>'+x[0]+' '+x[1]+' · '+x[2]+'</option>').join('')+
-      '</select></label><label>Número de WhatsApp<input type="tel" name="whatsapp" inputmode="numeric" maxlength="15" placeholder="987654321" value="'+esc(p.whatsapp||'')+'"></label></div>'+
-      '<button type="submit" class="exp-btn"><i class="fa-solid fa-floppy-disk"></i> Guardar cambios</button></form></div>'+
-      '<div class="exp-card"><h3>Cambiar correo electrónico</h3>'+
+      '<label>Fecha de nacimiento<input type="date" name="birthdate" min="1900-01-01" max="'+new Date().toISOString().slice(0,10)+'" value="'+esc(p.birthdate||'')+'"></label>'+
+      '<label>Tipo de acceso<input value="'+esc(method)+'" disabled></label></div>'+
+      '<h4>WhatsApp</h4><div class="exp-whatsapp-row">'+
+      '<div class="exp-custom-field">'+profileSelect('whatsappCode','País y código',selectedCountry.value,countries,selectedCountry.iso)+'</div>'+
+      '<label>Número de WhatsApp<input type="tel" name="whatsapp" inputmode="numeric" maxlength="15" placeholder="987654321" value="'+esc(p.whatsapp||'')+'"></label></div>'+
+      '<button class="exp-btn" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Guardar cambios</button></form></div>'+
+      '<div class="exp-card"><h3>Acceso y contraseña</h3>'+
       '<details class="exp-subdetails"><summary>Cambiar correo electrónico <i class="fa-solid fa-chevron-down"></i></summary>'+
-      '<p>Para proteger tus viajes y puntos, enviaremos un código al correo actual y otro al nuevo.</p>'+
+      '<p>Enviaremos un código a tu correo actual y otro al nuevo.</p>'+
       '<form id="expEmailRequestForm" class="exp-profile-form">'+
-      '<label>Nuevo correo<input type="email" name="newEmail" required placeholder="nuevo@correo.com"></label>'+
-      (provider.toLowerCase().includes('password')?
-        '<label>Contraseña actual<input type="password" name="password" required autocomplete="current-password"></label>':'')+
-      '<button class="exp-btn exp-btn--light" type="submit">Enviar código al nuevo correo</button></form>'+
-      '<form id="expEmailConfirmForm" class="exp-email-confirm"><label>Código del correo actual<input name="currentCode" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
+      '<label>Nuevo correo electrónico<input type="email" name="newEmail" required placeholder="nuevo@correo.com"></label>'+
+      (hasPassword?'<label>Contraseña actual<input type="password" name="password" autocomplete="current-password" required></label>':'')+
+      '<button type="submit" class="exp-btn exp-btn--light">Enviar códigos</button></form>'+
+      '<form id="expEmailConfirmForm" class="exp-email-confirm">'+
+      '<label>Código del correo actual<input name="currentCode" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
       '<label>Código del correo nuevo<input name="code" pattern="[0-9]{6}" maxlength="6" inputmode="numeric" placeholder="000000" required></label>'+
       '<button class="exp-btn" type="submit">Confirmar cambio de correo</button></form></details>'+
-      '</div><div class="exp-card"><h3>Seguridad</h3>'+
-      '<button type="button" class="exp-btn exp-btn--light" data-logout>Cerrar sesión</button></div>'+
+      (hasPassword?'<details class="exp-subdetails"><summary>Cambiar contraseña <i class="fa-solid fa-chevron-down"></i></summary>'+
+        '<form id="expChangePasswordForm" class="exp-profile-form">'+
+        '<label>Contraseña actual<input name="currentPassword" type="password" autocomplete="current-password" required></label>'+
+        '<label>Contraseña nueva<input name="newPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required></label>'+
+        '<label>Repetir contraseña nueva<input name="confirmPassword" type="password" minlength="8" maxlength="128" autocomplete="new-password" required></label>'+
+        '<button class="exp-btn exp-btn--light" type="submit">Actualizar contraseña</button></form></details>':
+        '<div class="exp-auth-google"><i class="fa-brands fa-google" aria-hidden="true"></i> Tu contraseña se administra desde tu cuenta de Google.</div>')+
+      '</div>'+
       '<div class="exp-card"><h3>Verificación y bienvenida</h3>'+
-      (state.data.verified?'<div class="exp-notice"><i class="fa-solid fa-circle-check"></i><p>Tu cuenta está verificada y participa en LATAM Rewards.</p></div>':verificationBanner())+'</div>';
+      (state.data.verified?'<div class="exp-notice"><i class="fa-solid fa-circle-check"></i><p>Tu cuenta está verificada y participa en LATAM Rewards.</p></div>':verificationBanner())+'</div>'+
+      '<dialog id="expAvatarDialog" class="exp-avatar-dialog" aria-labelledby="expAvatarTitle">'+
+      '<div class="exp-avatar-dialog-head"><h2 id="expAvatarTitle">Fotografía de perfil</h2>'+
+      '<button type="button" data-exp-close-avatar aria-label="Cerrar" class="exp-avatar-close"><i class="fa-solid fa-xmark"></i></button></div>'+
+      '<div class="exp-avatar-dialog-body"><span class="exp-avatar-preview">'+
+      (avatar?'<img src="'+esc(avatar)+'" alt="Tu fotografía">':'<i class="fa-solid fa-user"></i>')+'</span>'+
+      '<p>Tu foto de Google se mostrará automáticamente, o puedes elegir una foto propia.</p>'+
+      '<label for="expAvatarInput" class="exp-btn"><i class="fa-solid fa-camera"></i> Subir una fotografía</label>'+
+      '<input id="expAvatarInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>'+
+      '<small>JPG, PNG o WebP · Imagen privada.</small></div></dialog>';
   }
   function notificationsPage() {
     const notes=state.data.notifications||[];
@@ -486,6 +555,7 @@
       const cached=JSON.parse(localStorage.getItem(kUser)||'{}');
       cached.name=result.profile.name;cached.phone=result.profile.phone;
       localStorage.setItem(kUser,JSON.stringify(cached));
+      window.dispatchEvent(new CustomEvent('latam:sessionchange'));
       render();flash('Tus datos se guardaron correctamente.');
     }catch(err){flash(err.message,true);}finally{button.disabled=false;}
   }
@@ -541,6 +611,70 @@
       render();flash('Fotografía actualizada.');
     }catch(err){flash(err.message||'No se pudo guardar la fotografía.',true);}
   }
+
+  function closeCustomSelects(except) {
+    $('.exp-custom-select').forEach(w=>{
+      if(w===except)return;
+      const menu=w.querySelector('.exp-custom-menu'),btn=w.querySelector('.exp-custom-trigger');
+      if(menu)menu.hidden=true;
+      if(btn)btn.setAttribute('aria-expanded','false');
+    });
+  }
+  async function copyInvitation(textValue){
+    try{
+      if(navigator.clipboard?.writeText) await navigator.clipboard.writeText(textValue);
+      else {
+        const input=document.createElement('textarea');input.value=textValue;
+        input.style.position='fixed';input.style.opacity='0';document.body.append(input);
+        input.select();if(!document.execCommand('copy'))throw Error('No se pudo copiar.');
+        input.remove();
+      }
+      flash('Texto copiado. Puedes compartirlo con tus amigos.');
+    }catch(err){flash('No pudimos copiarlo. Selecciona el enlace y cópialo manualmente.',true);}
+  }
+  async function shareReferral(platform){
+    const link=state.data?.referrals?.link;
+    if(!link){flash('Tu enlace personal no está disponible todavía.',true);return;}
+    const message=referralText(),full=message+' '+link;
+    const go=(url)=>window.open(url,'_blank','noopener,noreferrer');
+    if(platform==='facebook'){
+      go('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(link));return;
+    }
+    if(platform==='x'){
+      go('https://twitter.com/intent/tweet?text='+encodeURIComponent(message)+'&url='+encodeURIComponent(link));return;
+    }
+    if(platform==='whatsapp'){
+      go('https://wa.me/?text='+encodeURIComponent(full));return;
+    }
+    if(navigator.share){
+      try{await navigator.share({title:'Descubre LATAM Expeditions',text:message,url:link});return;}
+      catch(err){if(err.name==='AbortError')return;}
+    }
+    await copyInvitation(full);
+    const urls={instagram:'https://www.instagram.com/',tiktok:'https://www.tiktok.com/',
+      youtube:'https://www.youtube.com/'};
+    if(urls[platform])go(urls[platform]);
+  }
+  function inquireReward(id){
+    const r=REWARD_CATALOG.find(x=>x.id===id);
+    if(!r)return;
+    const text='Hola LATAM Expeditions. Quisiera consultar disponibilidad y condiciones para canjear "'+
+      r.name+'" en '+r.place+' por '+r.points+' puntos LATAM Rewards.';
+    window.open('https://wa.me/51906472060?text='+encodeURIComponent(text),
+      '_blank','noopener,noreferrer');
+  }
+  async function changePassword(form,button){
+    const values=Object.fromEntries(new FormData(form).entries());
+    if(values.newPassword!==values.confirmPassword){
+      flash('Las contraseñas nuevas no coinciden.',true);return;
+    }
+    button.disabled=true;
+    try{
+      await api('dashboardChangePassword',values);
+      try{localStorage.removeItem(kToken);localStorage.removeItem(kUser);}catch(err){}
+      window.location.href=base+'login.html';
+    }catch(err){flash(err.message,true);button.disabled=false;}
+  }
   document.addEventListener('click',e=>{
     const logout=e.target.closest('#expPagePanels [data-logout]');
     if(logout){
@@ -550,6 +684,48 @@
         window.location.href=base+'index.html';
       });return;
     }
+    const avatarOpen=e.target.closest('[data-exp-open-avatar]');
+    if(avatarOpen){
+      e.preventDefault();
+      if(state.page!=='perfil')navigate('perfil');
+      document.querySelector('#expAvatarDialog')?.showModal();return;
+    }
+    if(e.target.closest('[data-exp-close-avatar]')){
+      document.querySelector('#expAvatarDialog')?.close();return;
+    }
+    const trigger=e.target.closest('[data-exp-select-trigger]');
+    if(trigger){
+      const wrap=trigger.closest('.exp-custom-select'),menu=wrap?.querySelector('.exp-custom-menu');
+      if(menu){const opened=!menu.hidden;closeCustomSelects(wrap);menu.hidden=opened;
+        trigger.setAttribute('aria-expanded',String(!opened));
+        if(!opened)menu.querySelector('input[type=search]')?.focus();}
+      return;
+    }
+    const option=e.target.closest('.exp-custom-option');
+    if(option){
+      const wrap=option.closest('.exp-custom-select'),name=wrap?.dataset.expSelect;
+      const hidden=wrap?.querySelector('input[name="'+name+'"]');
+      if(hidden)hidden.value=option.dataset.expValue;
+      const country=wrap?.querySelector('input[name="whatsappCountry"]');
+      if(country&&option.dataset.expIso)country.value=option.dataset.expIso;
+      const label=wrap?.querySelector('[data-exp-select-current]');
+      if(label)label.innerHTML=option.innerHTML;
+      wrap?.querySelectorAll('.exp-custom-option').forEach(x=>{
+        x.classList.toggle('is-selected',x===option);x.setAttribute('aria-selected',String(x===option));
+      });
+      closeCustomSelects();return;
+    }
+    if(!e.target.closest('.exp-custom-select'))closeCustomSelects();
+    if(e.target.closest('[data-exp-copy-ref]')){
+      copyInvitation(state.data?.referrals?.link||'');return;
+    }
+    if(e.target.closest('[data-exp-copy-message]')){
+      copyInvitation(referralText()+' '+(state.data?.referrals?.link||''));return;
+    }
+    const share=e.target.closest('[data-exp-share]');
+    if(share){shareReferral(share.dataset.expShare);return;}
+    const reward=e.target.closest('[data-exp-reward]');
+    if(reward){inquireReward(reward.dataset.expReward);return;}
     const tab=e.target.closest('[data-exp-nav]');
     if(tab && (tab.closest('.exp-app')||tab.closest('.exp-workspace'))) {
       e.preventDefault();navigate(tab.dataset.expNav);return;
@@ -575,12 +751,24 @@
       verifyCode(input.value.trim(),submit);return;
     }
     if(form.id==='expProfileForm'){e.preventDefault();profileSave(form,submit);return;}
+    if(form.id==='expChangePasswordForm'){e.preventDefault();changePassword(form,submit);return;}
     if(form.id==='expEmailRequestForm'){e.preventDefault();emailRequest(form,submit);return;}
     if(form.id==='expEmailConfirmForm'){e.preventDefault();emailConfirm(form,submit);return;}
     if(form.dataset.expSocialForm){e.preventDefault();socialSubmit(form,submit);}
   });
   document.addEventListener('change',e=>{
     if(e.target.id==='expAvatarInput' && e.target.files?.[0])avatarUpload(e.target.files[0]);
+  });
+  document.addEventListener('input',e=>{
+    const search=e.target.closest('[data-exp-select-search]');
+    if(!search)return;
+    const q=search.value.toLocaleLowerCase('es').trim();
+    search.closest('.exp-custom-menu')?.querySelectorAll('.exp-custom-option').forEach(opt=>{
+      opt.hidden=!opt.textContent.toLocaleLowerCase('es').includes(q);
+    });
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape')closeCustomSelects();
   });
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);
   else load();

@@ -1217,6 +1217,7 @@ function doPost(e) {
     if (action === 'dashboardRequestEmailChange') return json(lxRwRequestEmailChange_(data));
     if (action === 'dashboardConfirmEmailChange') return json(lxRwConfirmEmailChange_(data));
     if (action === 'dashboardSubmitSocial') return json(lxRwSubmitSocial_(data));
+    if (action === 'dashboardChangePassword') return json(lxRwChangePassword_(data));
     if (action === 'findBooking') return json(consultarReserva(data));
     if (action === 'resendVoucher') return json(reenviarVoucher(data));
     // --- Formularios del sitio público (Formularios.gs) ---
@@ -1311,7 +1312,8 @@ function mensajeSeguro(error) {
     'Espera un minuto', 'Enviamos un código', 'Introduce los seis', 'Primero solicita',
     'Se alcanzó', 'El código', 'Uno de los', 'El correo ya', 'El enlace',
     'Introduce el enlace', 'Selecciona una red', 'Ya enviaste una publicación',
-    'Verifica tu cuenta'
+    'Verifica tu cuenta', 'Fecha de nacimiento', 'La contraseña actual',
+    'Elige una contraseña', 'Tu cuenta utiliza Google', 'Vuelve a iniciar sesión'
   ];
   return publicos.some(function (p) { return msg.indexOf(p) === 0; })
     ? msg

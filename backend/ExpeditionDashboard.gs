@@ -223,6 +223,8 @@ function lxRwReadNotifications_(email) {
 function lxRwDashboard_(data) {
   var user=lxRwUser_(data),verified=lxRwIsVerified_(user);
   if(verified)lxRwAwardWelcome_(user);
+  // Los puntos por invitación solo se acreditan tras un viaje pagado y completado.
+  var referrals=lxRefDashboard_(user.email);
   var bookings=lxRwBookings_(user.email);
   lxRwSyncNotifications_(user.email,bookings,verified);
   var notices=lxRwReadNotifications_(user.email);
@@ -241,6 +243,7 @@ function lxRwDashboard_(data) {
   past.sort(function(a,b){return String(b.date).localeCompare(String(a.date));});
   return {ok:true,user:usuarioPublico(user),verified:verified,
     profile:lxRwProfileFor_(user),social:lxRwSocialFor_(user.email),
+    referrals:referrals,
     membership:lxRwMembership_(miles.tierPoints||0),
     verificationMethod:user.googleSub?'google':'email',miles:miles,
     upcoming:upcoming,past:past,notifications:notices};
@@ -302,6 +305,7 @@ function lxRwMarkRead_(data) {
 function lxRwInstall_() {
   lxRwVerifiedSheet_();lxRwLedger_();lxRwNotifications_();
   lxRwProfileSheet_();lxRwSocialSheet_();lxRwEmailChangeSheet_();lxRwAliasesSheet_();
+  lxRefCodesSheet_();lxRefEntriesSheet_();
   return 'Expedition Rewards: hojas creadas';
 }
 
@@ -325,14 +329,14 @@ function instalarExpeditionRewards() {
 /* ================= LATAM Rewards · Niveles y perfil ================ */
 function lxRwMembership_(points) {
   var p=Math.max(0,Math.floor(Number(points)||0));
-  var level=p>=10000?'Diamond':p>=7000?'Platinum':p>=3000?'Gold':'Explorer';
+  var level=p>=10000?'Signature':p>=7000?'Platinum':p>=3000?'Gold':'Explorer';
   var next=p>=10000?null:p>=7000?10000:p>=3000?7000:3000;
   return {name:level,points:p,next:next,remaining:next===null?0:next-p};
 }
 function lxRwProfileSheet_(){
   return lxRwSheet_('Perfiles Expedition',
     ['Email','Nombre','Teléfono','Código WhatsApp','Número WhatsApp',
-      'Tipo documento','Número documento','Archivo avatar Drive','Actualizado']);
+      'Tipo documento','Número documento','Archivo avatar Drive','Actualizado','Fecha nacimiento','WhatsApp país ISO']);
 }
 function lxRwProfileRow_(email){
   var sh=lxRwProfileSheet_(),rows=sh.getDataRange().getValues(),aliases=lxRwEmails_(email);
@@ -347,33 +351,41 @@ function lxRwProfileFor_(user){
     email:user.email,phone:String(p[2]||user.telefono||''),
     whatsappCode:String(p[3]||'+51'),whatsapp:String(p[4]||''),
     docType:String(p[5]||''),docNumber:String(p[6]||''),
+    birthdate:lxRwIsoDate_(p[9]),whatsappCountry:String(p[10]||'PE'),
     hasAvatar:!!p[7],googlePicture:String(user.foto||'')
   };
 }
 function lxRwUpdateProfile_(data){
   var u=lxRwUser_(data);
-  var name=textoPlano(data.name,120),phone=textoPlano(data.phone,30),
+  var name=textoPlano(data.name,120),
       code=textoPlano(data.whatsappCode,6),wa=textoPlano(data.whatsapp,18),
-      docType=textoPlano(data.docType,20),doc=textoPlano(data.docNumber,35);
+      docType=textoPlano(data.docType,20),doc=textoPlano(data.docNumber,35),
+      birthdate=textoPlano(data.birthdate,10),country=textoPlano(data.whatsappCountry,2).toUpperCase();
   if(name.length<3)throw Error('Indica tu nombre y apellido.');
-  if(phone&&!/^\+?[\d ()-]{6,28}$/.test(phone))throw Error('El teléfono no tiene un formato válido.');
   if(!/^\+[1-9]\d{0,3}$/.test(code))throw Error('Selecciona el código de WhatsApp.');
+  if(!/^[A-Z]{2}$/.test(country))throw Error('Selecciona el país de WhatsApp.');
   if(wa&&!/^\d{6,15}$/.test(wa))throw Error('El número de WhatsApp no es válido.');
   if(docType&&['DNI','CE','PASAPORTE','CI','RG','CPF','OTRO'].indexOf(docType)<0)
     throw Error('Selecciona un tipo de documento válido.');
   if(doc&&(!docType||!/^[A-Za-z0-9-]{4,30}$/.test(doc)))
     throw Error('Revisa el tipo y número de documento.');
+  if(birthdate){
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(birthdate))throw Error('Fecha de nacimiento no válida.');
+    var parsed=new Date(birthdate+'T12:00:00Z');
+    if(isNaN(parsed.getTime()) || parsed.toISOString().slice(0,10)!==birthdate ||
+      birthdate<'1900-01-01' || parsed.getTime()>Date.now())
+      throw Error('Fecha de nacimiento no válida.');
+  }
   var lock=LockService.getScriptLock();lock.waitLock(15000);
   try{
     var entry=lxRwProfileRow_(u.email),prev=entry.values;
-    var row=[u.email,lxRwSafe_(name,120),lxRwSafe_(phone,30),
+    var row=[u.email,lxRwSafe_(name,120),lxRwSafe_(prev[2]||'',30),
       lxRwSafe_(code,6),lxRwSafe_(wa,18),lxRwSafe_(docType,20),
-      lxRwSafe_(doc,35),String(prev[7]||''),new Date()];
-    if(entry.row)entry.sheet.getRange(entry.row,1,1,9).setValues([row]);
+      lxRwSafe_(doc,35),String(prev[7]||''),new Date(),birthdate,country];
+    if(entry.row)entry.sheet.getRange(entry.row,1,1,11).setValues([row]);
     else entry.sheet.appendRow(row);
     var users=hojaUsuarios();
     users.getRange(u.fila,2).setValue(lxRwSafe_(name,120));
-    users.getRange(u.fila,3).setValue(lxRwSafe_(phone,30));
   }finally{lock.releaseLock();}
   return {ok:true,profile:lxRwProfileFor_(buscarUsuario(u.email))};
 }
@@ -400,8 +412,8 @@ function lxRwUploadAvatar_(data){
     previous=String(entry.values[7]||'');
     var row=[user.email,lxRwSafe_(p.name,120),lxRwSafe_(p.phone,30),
       lxRwSafe_(p.whatsappCode,6),lxRwSafe_(p.whatsapp,18),
-      lxRwSafe_(p.docType,20),lxRwSafe_(p.docNumber,35),file.getId(),new Date()];
-    if(entry.row)entry.sheet.getRange(entry.row,1,1,9).setValues([row]);
+      lxRwSafe_(p.docType,20),lxRwSafe_(p.docNumber,35),file.getId(),new Date(),p.birthdate||'',p.whatsappCountry||'PE'];
+    if(entry.row)entry.sheet.getRange(entry.row,1,1,11).setValues([row]);
     else entry.sheet.appendRow(row);
   }catch(err){file.setTrashed(true);throw err;}
   finally{lock.releaseLock();}
@@ -579,4 +591,32 @@ function revisarPublicacionesComunidadLatam(){
   }
   Logger.log('Publicaciones listas para revisar: '+ready);
   return ready;
+}
+
+
+/** Cambio de contraseña únicamente para cuentas con acceso por correo. */
+function lxRwChangePassword_(data) {
+  var user=lxRwUser_(data),current=String(data.currentPassword||''),
+      next=String(data.newPassword||'');
+  if(!user.hash)throw Error('Tu cuenta utiliza Google. No necesita contraseña local.');
+  if(!verificarPassword(current,user).ok)throw Error('La contraseña actual no coincide.');
+  validarPassword(next);
+  if(igualSeguro(current,next))throw Error('Elige una contraseña nueva diferente.');
+  var salt=generarSalt(),hash=derivarHash(next,salt);
+  var lock=LockService.getScriptLock();lock.waitLock(15000);
+  try{
+    var fresh=buscarUsuario(user.email);
+    if(!fresh || !verificarPassword(current,fresh).ok)
+      throw Error('Vuelve a iniciar sesión antes de cambiar tu contraseña.');
+    var sh=hojaUsuarios();
+    sh.getRange(fresh.fila,4,1,2).setValues([[hash,salt]]);
+    sh.getRange(fresh.fila,9).setValue(0);
+    sh.getRange(fresh.fila,10).clearContent();
+    // Revocar todas las sesiones anteriores una vez cambiada la contraseña.
+    var sessions=hojaSesiones(),rows=sessions.getDataRange().getValues();
+    var emails=lxRwEmails_(user.email);
+    for(var i=rows.length-1;i>=1;i--)if(emails.indexOf(normalizarEmail(rows[i][1]))>=0)
+      sessions.deleteRow(i+1);
+  }finally{lock.releaseLock();}
+  return {ok:true,reauthenticate:true};
 }

@@ -862,6 +862,123 @@
 })();
 
 
+/* Cuenta de viajero: nombre visible y menú en todas las páginas LATAM.
+   Conserva el comportamiento de cuentas.js cuando ese script está presente. */
+(function(){
+  'use strict';
+  const TOKEN='latamExpeditionsToken',USER='latamExpeditionsUser';
+  const base=document.documentElement.dataset.base||'./';
+  function user(){
+    try{
+      const token=localStorage.getItem(TOKEN);
+      const u=JSON.parse(localStorage.getItem(USER)||'null');
+      return token&&u&&u.name?u:null;
+    }catch(err){return null;}
+  }
+  function apply(){
+    const current=user();
+    const menu=document.querySelector('.login-menu');
+    const btn=menu?.querySelector('.login-toggle');
+    const label=btn?.querySelector('[data-auth-label]');
+    if(btn&&label){
+      if(current){
+        label.removeAttribute('data-i18n');
+        label.textContent=String(current.name).trim().split(/\s+/)[0].slice(0,36);
+        btn.setAttribute('aria-label','Menú de '+String(current.name).slice(0,65));
+        btn.classList.add('is-account-active');
+        const dropdown=menu.querySelector('.login-dropdown');
+        if(dropdown&&!dropdown.dataset.latamAccountMenu){
+          dropdown.dataset.latamAccountMenu='1';
+          dropdown.innerHTML='';
+          const items=[
+            {label:'Mi cuenta',href:base+'mis-viajes.html',icon:'fa-regular fa-user'},
+            {label:'Consultar reserva',href:base+'mi-reserva.html',icon:'fa-solid fa-magnifying-glass'}
+          ];
+          items.forEach(item=>{
+            const a=document.createElement('a');a.href=item.href;
+            a.setAttribute('role','menuitem');
+            const i=document.createElement('i');i.className=item.icon;
+            i.setAttribute('aria-hidden','true');
+            a.append(i,document.createTextNode(item.label));dropdown.append(a);
+          });
+          const logout=document.createElement('button');
+          logout.type='button';logout.dataset.logout='';logout.dataset.headerAccountLogout='';
+          logout.className='latam-account-logout';logout.setAttribute('role','menuitem');
+          logout.innerHTML='<i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i> Cerrar sesión';
+          dropdown.append(logout);
+        }
+      }else{
+        btn.classList.remove('is-account-active');
+        btn.setAttribute('aria-label','Iniciar sesión');
+        label.setAttribute('data-i18n','nav.login');
+        label.textContent='Iniciar sesión';
+        const dropdown=menu.querySelector('.login-dropdown');
+        if(dropdown&&dropdown.dataset.latamAccountMenu){
+          dropdown.dataset.latamAccountMenu='';
+          dropdown.innerHTML='';
+          const guest=[
+            ['Consultar reserva','mi-reserva.html','fa-solid fa-magnifying-glass'],
+            ['Iniciar sesión','login.html','fa-solid fa-right-to-bracket'],
+            ['Crear cuenta','registro.html','fa-solid fa-user-plus']
+          ];
+          guest.forEach(item=>{
+            const a=document.createElement('a');a.href=base+item[1];
+            a.setAttribute('role','menuitem');
+            const icon=document.createElement('i');icon.className=item[2];
+            icon.setAttribute('aria-hidden','true');
+            a.append(icon,document.createTextNode(item[0]));dropdown.append(a);
+          });
+        }
+      }
+    }
+    const mobile=document.querySelector('#mobileNav .mobile-nav__panel');
+    if(mobile){
+      const account=mobile.querySelector('a[data-auth-in]');
+      if(account){account.hidden=!current;account.textContent='Mi cuenta';account.href=base+'mis-viajes.html';}
+      const login=mobile.querySelector('a[data-auth-out]');
+      if(login)login.hidden=Boolean(current);
+      let logout=mobile.querySelector('[data-header-account-mobile-logout]');
+      if(current&&!logout){
+        logout=document.createElement('button');
+        logout.type='button';logout.dataset.logout='';
+        logout.dataset.headerAccountMobileLogout='';
+        logout.className='latam-mobile-account-logout';
+        logout.textContent='Cerrar sesión';
+        mobile.append(logout);
+      }else if(logout)logout.hidden=!current;
+    }
+  }
+  async function signout(){
+    let token;
+    try{token=localStorage.getItem(TOKEN);}catch(err){}
+    try{localStorage.removeItem(TOKEN);localStorage.removeItem(USER);}catch(err){}
+    if(token){
+      try{
+        const cfg=await fetch(base+'assets/data/catalog.json',{cache:'no-store'}).then(r=>r.json());
+        const endpoint=cfg.booking?.endpoint;
+        if(endpoint)await fetch(endpoint,{
+          method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},
+          body:JSON.stringify({action:'logout',data:{token}})
+        });
+      }catch(err){}
+    }
+    location.assign(base+'index.html');
+  }
+  function init(){
+    apply();
+    window.addEventListener('storage',e=>{if(e.key===TOKEN||e.key===USER)apply();});
+    window.addEventListener('latam:sessionchange',apply);
+    document.addEventListener('latam:langchange',()=>{if(user())apply();});
+    // cuentas.js gestiona estos botones cuando está instalado en la página.
+    if(!document.querySelector('script[src*="cuentas.js"]')){
+      document.addEventListener('click',e=>{
+        const clicked=e.target.closest('[data-header-account-logout],[data-header-account-mobile-logout]');
+        if(clicked){e.preventDefault();clicked.disabled=true;signout();}
+      });
+    }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+  else init();
 /* LATAM · Itinerarios unificados en todas las fichas de paquetes.
  * Convierte los listados antiguos al diseño usado en Atacama Premium,
  * manteniendo el texto original y sin inventar horarios de operación. */
