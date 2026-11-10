@@ -691,6 +691,18 @@ function searchBundleHotels_(p) {
   }
   var referenceHotel=reference?toHotel_(reference):null;
   if(referenceHotel&&!(referenceHotel.totalRate>0))referenceHotel=null;
+  // En páginas posteriores recuperar la misma referencia cotizada en página 1,
+  // para firmar suplementos compatibles también en "Mostrar más hoteles".
+  if(page>0&&!referenceHotel&&refNight===0){
+    try{
+      var firstCached=cache.get(baseKey+"_p0");
+      if(firstCached){
+        var firstPage=JSON.parse(firstCached);
+        if(firstPage.referenceHotel&&Number(firstPage.referenceHotel.totalRate)>0)
+          referenceHotel=firstPage.referenceHotel;
+      }
+    }catch(ignore){console.warn("No se pudo recuperar la tarifa base del primer resultado.");}
+  }
   var nextToken=String(firstResponse.nextToken||"");
   var hasMore=page<2 && !!nextToken && nextToken.length<3000;
   var result={ok:true,source:"Google Hotels via SerpApi",pricesVerified:false,
