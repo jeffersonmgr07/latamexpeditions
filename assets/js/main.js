@@ -979,4 +979,52 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();
+/* LATAM · Itinerarios unificados en todas las fichas de paquetes.
+ * Convierte los listados antiguos al diseño usado en Atacama Premium,
+ * manteniendo el texto original y sin inventar horarios de operación. */
+(function () {
+  'use strict';
+  function enhancePackageItineraries() {
+    document.querySelectorAll('.product-detail-section ol.itinerary, .product-detail-section ul.itinerary').forEach(function (list) {
+      if (list.dataset.lxDetailed === '1') return;
+      const items = Array.from(list.children).filter(el => el.tagName === 'LI');
+      if (!items.length) return;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'package-itinerary';
+      items.forEach(function (item, index) {
+        const original = String(item.textContent || '').trim();
+        if (!original) return;
+        const matched = original.match(/^(?:d[ií]a|day)\s*(\d+)\s*[·:—-]?\s*(.*)$/i);
+        const dayNumber = matched ? matched[1] : String(index + 1);
+        const title = matched && matched[2] ? matched[2] : original;
+        const article = document.createElement('article');
+        article.className = 'package-day';
+        const head = document.createElement('div');
+        head.className = 'package-day__head';
+        const label = document.createElement('span');
+        label.textContent = 'Día ' + dayNumber;
+        const heading = document.createElement('h3');
+        heading.textContent = title;
+        head.append(label, heading);
+        const summary = document.createElement('p');
+        summary.className = 'tour-note';
+        summary.textContent = 'Programa de la jornada · el horario de salida y la secuencia de visitas se confirman con la reserva.';
+        const listRows = document.createElement('ul');
+        const row = document.createElement('li');
+        row.className = 'package-day__row';
+        const time = document.createElement('time');
+        time.textContent = 'Según programa';
+        const detail = document.createElement('span');
+        detail.textContent = title;
+        row.append(time, detail);
+        listRows.append(row);
+        article.append(head, summary, listRows);
+        wrapper.append(article);
+      });
+      if(wrapper.children.length){list.replaceWith(wrapper);}
+    });
+  }
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', enhancePackageItineraries, {once: true});
+  else enhancePackageItineraries();
 })();
