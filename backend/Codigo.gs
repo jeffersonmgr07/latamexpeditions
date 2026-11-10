@@ -1181,6 +1181,10 @@ function doGet(e) {
   const action=String(e&&e.parameter&&e.parameter.action||'');
   if(action==='status'||action==='status_html')return lxResponderEstado_(e);
   if(action==='paypal_order_status')return lxResponderOrdenPayPal_(e);
+  if(action==='health')return json({
+    ok:true,version:'2026-11-10-fullpay-signed-v1',paymentMode:'completo',
+    signedQuotesReady:String(PROPS.getProperty('LATAM_PRICE_QUOTE_KEY')||'').length>=40
+  });
   return ContentService
     .createTextOutput('Latam Expeditions — backend de reservas activo. Usa POST.')
     .setMimeType(ContentService.MimeType.TEXT);
@@ -2206,6 +2210,10 @@ function pruebaDeInstalacion() {
     tokenPayPal();
     ok('Credenciales de PayPal (' + CONFIG.env + ')');
   } catch (e) { mal('PayPal: ' + e.message); }
+
+  if(String(PROPS.getProperty('LATAM_PRICE_QUOTE_KEY')||'').length>=40)
+    ok('Clave compartida de cotización (LATAM_PRICE_QUOTE_KEY)');
+  else mal('Falta LATAM_PRICE_QUOTE_KEY para cobrar vuelos/hoteles adicionales');
 
   const googleId = PROPS.getProperty('GOOGLE_CLIENT_ID') || '';
   if (googleId && googleId.indexOf('.apps.googleusercontent.com') > -1) {
