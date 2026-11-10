@@ -82,8 +82,12 @@ function pruebaPayPalConsultarOrdenSandbox() {
   if(!id)throw Error('Primero ejecuta pruebaPayPalCrearOrdenSandbox.');
   const b=lxRevisarOrdenSandbox_(id);
   const captures=((b.purchase_units||[])[0]?.payments?.captures)||[];
+  const approval=(b.links||[]).find(l=>l.rel==='payer-action'||l.rel==='approve');
+  const url=approval&&/^https:\\/\\/([a-z0-9-]+\\.)*paypal\\.com\\//i.test(approval.href||'')
+    ? approval.href : '';
   const report='SANDBOX ORDER '+id+' | ESTADO: '+b.status+
-    ' | CAPTURAS: '+captures.map(c=>c.status+' ('+(c.amount&&c.amount.value||'')+' USD)').join(', ');
+    ' | CAPTURAS: '+captures.map(c=>c.status+' ('+(c.amount&&c.amount.value||'')+' USD)').join(', ')+
+    (url?'\\nAPPROVAL_URL: '+url:'');
   console.log(report);
   return report;
 }
