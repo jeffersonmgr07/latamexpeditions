@@ -3500,3 +3500,16 @@ body.has-pn-header .topbar { border: 0 !important; }
  .booking-modal .booking-pay h3{font-size:16px}
  .booking-modal .booking-payment-options label{padding:13px 12px;gap:10px}
 }
+
+
+/* Menú de usuario autenticado LATAM Rewards */
+.login-toggle.is-account-active {max-width:174px;}
+.login-toggle.is-account-active [data-auth-label] {max-width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.login-dropdown .latam-account-logout {background:transparent;border:0;border-radius:11px;cursor:pointer;
+  display:flex;gap:9px;align-items:center;width:100%;padding:11px 12px;
+  color:#103c29;text-align:left;font:650 13px Inter,sans-serif;}
+.login-dropdown .latam-account-logout:hover {background:#eaf5eb;color:#0b7c3f;}
+.latam-mobile-account-logout {background:transparent;border:1px solid rgba(120,179,145,.35);
+  border-radius:12px;display:block;color:#115435;font-weight:720;font-size:14px;
+  width:calc(100% - 28px);text-align:left;padding:13px;margin:8px 14px 15px;cursor:pointer;}
+.latam-mobile-account-logout[hidden] {display:none!important;}
