@@ -1790,8 +1790,8 @@
       addonSummary.textContent = details.join('  |  ');
       addonSummary.hidden = !details.length;
     }
-    $('#bkSumTotal').textContent = state.hotelQuotePending?'Pendiente de cotización · base '+money(state.total):money(state.total);
-    $('#bkPayAmount').textContent = state.hotelQuotePending?'Por confirmar':money(state.due);
+    $('#bkSumTotal').textContent = money(state.total);
+    $('#bkPayAmount').textContent = money(state.due);
     const isEnglish = document.documentElement.lang === 'en';
     $('#bkPayLabel').textContent = state.mode === 'completo'
       ? (isEnglish ? 'Pay in full now' : 'Pago total ahora')
@@ -1799,7 +1799,8 @@
     $('#bkPayNote').textContent = isEnglish
       ? 'You pay 100% now. Flights and alternative hotels still require manual supplier confirmation. If a service cannot be fulfilled, we will offer an agreed alternative or a refund.'
       : 'Pagas el 100% ahora. Los vuelos y hoteles alternativos requieren confirmación manual con proveedores. Si algún servicio no puede prestarse, te ofreceremos una alternativa acordada o la devolución correspondiente.';
-    if(PRODUCT.slug==='desierto-atacama-premium-5d4n')$('#bkPayNote').textContent=
+    if(state.hotelQuotePending)$('#bkPayNote').textContent='El hotel alternativo solicitado queda pendiente de cotizar y no forma parte de este cobro. El importe mostrado corresponde al paquete con el hotel originalmente incluido y a los demás servicios con precio. Podrás aceptar una cotización separada antes de cambiar de hotel.';
+    else if(PRODUCT.slug==='desierto-atacama-premium-5d4n')$('#bkPayNote').textContent=
       'Pago seguro del total. Te enviaremos la confirmación de hotel, excursiones y horarios. Los servicios están sujetos a disponibilidad; si alguno no estuviera disponible, podrás elegir una alternativa o solicitar la devolución.';
   }
 
@@ -1860,6 +1861,7 @@
       includedHotel: PRODUCT.tiers.length?tierHotels(getTier(),false).join(' / '):'',
       roomPlan:state.roomPlan,
       hotelQuotePending:state.hotelQuotePending,
+      pendingHotelRequest:state.hotelQuotePending?state.customHotel:'',
       flightSelection: state.flightQuote ? {
         origin: state.flightQuote.origin, destination: state.flightQuote.destination,
         departure: state.flightQuote.departure, returnDate: state.flightQuote.returnDate,
@@ -2419,6 +2421,7 @@
       state.hotelSupplement=hasRate?round2(Number(alternative.supplement)):0;
       state.roomPlan=String(source.roomPlan||'').slice(0,120);
       state.hotelQuotePending=Boolean(source.hotelQuotePending);
+      if(state.hotelQuotePending){state.hotelSupplement=0;state.hotelAlternative=alternative?{...alternative,supplement:null,pending:true}:null;}
       const flight=source.flight;
       const compatible=flight&&Number.isFinite(Number(flight.displayedPrice))&&
         Number(flight.displayedPrice)>0&&date===state.date&&state.adults===Number(source.adults)&&
@@ -2429,8 +2432,7 @@
       if(online){
         // Los vuelos y las distribuciones no verificadas siguen sin cobro online.
         const extraUnverified=Boolean(state.flightQuote&&!state.flightQuote.quoteToken)||
-          Boolean(state.customHotel&&(!state.hotelAlternative?.quoteToken||state.hotelQuotePending))||
-          state.hotelQuotePending;
+          Boolean(state.customHotel&&!state.hotelQuotePending&&!state.hotelAlternative?.quoteToken);
         online.disabled=!onlineConfigured()||extraUnverified;
         const note=$('bkOnlineAvailability');
         if(note)note.textContent=!onlineConfigured()
