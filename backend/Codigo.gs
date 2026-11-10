@@ -2029,13 +2029,17 @@ function enviarVoucher(r) {
     MailApp.sendEmail({
       to:cliente.email,
       subject:'Pago recibido · Servicios de Atacama en coordinación · '+r.code,
-      htmlBody:'<h2>LATAM Expeditions · Pago recibido</h2>'+
-        '<p>Hemos recibido el pago por tu solicitud <strong>'+textoPlano(r.code,80)+'</strong> para '+
-          textoPlano(r.data.title,120)+'.</p>'+
-        '<p><strong>Importe abonado:</strong> USD '+Number(r.paidAmount).toFixed(2)+
-          '. <strong>Fecha de llegada:</strong> '+textoPlano(r.data.date,10)+'.</p>'+
-        '<p><strong>Importante:</strong> Este comprobante acredita el pago, pero el Hotel Terrantai, excursiones y vuelos opcionales todavía necesitan confirmación operativa. Nos pondremos en contacto para comunicarte los datos definitivos. Si no podemos prestar lo contratado, podrás optar por una alternativa acordada o devolución íntegra.</p>'+
-        '<p>Contacto: contact@latamexpeditions.com</p>',
+      body:[
+        'LATAM Expeditions · Pago recibido',
+        'Código de reserva: '+textoPlano(r.code,80),
+        'Paquete: '+textoPlano(r.data.title,120),
+        'Importe abonado: USD '+Number(r.paidAmount).toFixed(2),
+        'Fecha de llegada: '+textoPlano(r.data.date,10),
+        '',
+        'Este comprobante acredita el pago. Hotel Terrantai, excursiones y vuelos opcionales todavía requieren confirmación operativa. Si no podemos cumplir los servicios contratados, podrás optar por una alternativa acordada o devolución íntegra.',
+        '',
+        'Contacto: contact@latamexpeditions.com'
+      ].join('\n'),
       name:CONFIG.agency.name,replyTo:CONFIG.agency.email
     });
     return;
