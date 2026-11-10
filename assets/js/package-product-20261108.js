@@ -755,7 +755,8 @@ function showTierQuote(){
   departures.append(el('h3','lx-package-options-title','Paso 1 · Selecciona tu vuelo de ida'));
   groups.forEach((options,key)=>{
    const cheapest=options.reduce((a,o)=>Number(o.price)<Number(a.price)?o:a,options[0]);
-   const amount=Math.round(Number(cheapest.price)*(1+flightMarkup(cheapest.departure))*100)/100;
+   const amount=Number(cheapest.displayedPrice)>0?Number(cheapest.displayedPrice):
+    Math.round(Number(cheapest.price)*(1+flightMarkup(cheapest.departure))*100)/100;
    departures.append(flightCard(cheapest.outbound,amount,key===state.outboundKey,()=>{
      state.outboundKey=key;state.choice=null;renderFlightOffers();
    },'outbound',state.adults+state.children,cheapest));
@@ -765,13 +766,15 @@ function showTierQuote(){
  }else{
   returns.append(el('h3','lx-package-options-title','Paso 2 · Selecciona tu vuelo de regreso'));
   (groups.get(state.outboundKey)||[]).forEach(offer=>{
-   const price=Math.round(Number(offer.price)*(1+flightMarkup(offer.departure))*100)/100;
+   const price=Number(offer.displayedPrice)>0?Number(offer.displayedPrice):
+     Math.round(Number(offer.price)*(1+flightMarkup(offer.departure))*100)/100;
    returns.append(flightCard(offer.inbound,price,state.choice===offer,()=>{
      state.choice=offer;renderFlightOffers();
    },'return',state.adults+state.children,offer));
   });
   apply.disabled=!state.choice;
-  const amount=state.choice?Math.round(Number(state.choice.price)*(1+flightMarkup(state.choice.departure))*100)/100:0;
+  const amount=state.choice?(Number(state.choice.displayedPrice)>0?Number(state.choice.displayedPrice):
+    Math.round(Number(state.choice.price)*(1+flightMarkup(state.choice.departure))*100)/100):0;
   if(state.choice)showFlightPriceSummary(amount);
   else $('lxFlightConfirmedTotal').textContent='Selecciona un vuelo de regreso';
  }
@@ -803,7 +806,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   const requestedRevision=quoteRevision;
   try{
    const result=await callApi({origin:airport,destination:params.destination,departure:out,returnDate:ret,
-    trip:'roundtrip',adults,children,cabin:'economy'});
+    trip:'roundtrip',adults,children,cabin:'economy',package_slug:params.slug});
    if(requestedRevision!==quoteRevision)return;
    if(!result?.ok)throw Error(result?.message||'No hay vuelos disponibles para esta búsqueda.');
    state.flightSearch={origin:airport,departure:out,returnDate:ret,arrival:state.date||out,adults,children};
@@ -840,7 +843,9 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   }
   state.baggage='none';
   state.flight={observedPrice:Number(offer.price),
-   displayedPrice:Math.round(Number(offer.price)*(1+flightMarkup(d))*100)/100,
+   displayedPrice:Number(offer.displayedPrice)>0?Number(offer.displayedPrice):
+     Math.round(Number(offer.price)*(1+flightMarkup(d))*100)/100,
+   quoteToken:String(offer.quoteToken||''),
    origin:state.origin,destination:params.destination,departure:d,returnDate,
    airline:String(offer.airline||offer.outbound.segments[0]?.airline||'Aerolínea').slice(0,80),
    airlineLogo:String(offer.airlineLogo||offer.outbound?.segments?.[0]?.airlineLogo||'').slice(0,180),
@@ -913,6 +918,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
        hotelsPendingName=h.name;
        hotelsPendingSelection={name:h.name,stayTotal:Math.round(stay*100)/100,
          supplement:canPrice?difference:null,supplementPerNight:canPrice?differenceNight:null,
+         quoteToken:String(h.quoteToken||''),
          pending:!canPrice,baselineTotal:hotelBudget,nights:params.nights,nightlyRate:rate,
          tierCode:quotedTier?.code||state.tier,occupancy:$('lxHotelOccupancy').value,
          roomPlan:pendingRoomPlan?.label||'',
