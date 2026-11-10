@@ -223,6 +223,8 @@ function lxRwReadNotifications_(email) {
 function lxRwDashboard_(data) {
   var user=lxRwUser_(data),verified=lxRwIsVerified_(user);
   if(verified)lxRwAwardWelcome_(user);
+  // Los puntos por invitación solo se acreditan tras un viaje pagado y completado.
+  var referrals=lxRefDashboard_(user.email);
   var bookings=lxRwBookings_(user.email);
   lxRwSyncNotifications_(user.email,bookings,verified);
   var notices=lxRwReadNotifications_(user.email);
@@ -241,6 +243,7 @@ function lxRwDashboard_(data) {
   past.sort(function(a,b){return String(b.date).localeCompare(String(a.date));});
   return {ok:true,user:usuarioPublico(user),verified:verified,
     profile:lxRwProfileFor_(user),social:lxRwSocialFor_(user.email),
+    referrals:referrals,
     membership:lxRwMembership_(miles.tierPoints||0),
     verificationMethod:user.googleSub?'google':'email',miles:miles,
     upcoming:upcoming,past:past,notifications:notices};
@@ -302,6 +305,7 @@ function lxRwMarkRead_(data) {
 function lxRwInstall_() {
   lxRwVerifiedSheet_();lxRwLedger_();lxRwNotifications_();
   lxRwProfileSheet_();lxRwSocialSheet_();lxRwEmailChangeSheet_();lxRwAliasesSheet_();
+  lxRefCodesSheet_();lxRefEntriesSheet_();
   return 'Expedition Rewards: hojas creadas';
 }
 
@@ -325,7 +329,7 @@ function instalarExpeditionRewards() {
 /* ================= LATAM Rewards · Niveles y perfil ================ */
 function lxRwMembership_(points) {
   var p=Math.max(0,Math.floor(Number(points)||0));
-  var level=p>=10000?'Diamond':p>=7000?'Platinum':p>=3000?'Gold':'Explorer';
+  var level=p>=10000?'Signature':p>=7000?'Platinum':p>=3000?'Gold':'Explorer';
   var next=p>=10000?null:p>=7000?10000:p>=3000?7000:3000;
   return {name:level,points:p,next:next,remaining:next===null?0:next-p};
 }
