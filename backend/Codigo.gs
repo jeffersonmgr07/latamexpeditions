@@ -2024,6 +2024,22 @@ function registrarPagoEnTour(data) {
 /* ========================================================================== */
 
 function enviarVoucher(r) {
+  if(String(r.data&&r.data.slug||'')==='desierto-atacama-premium-5d4n'){
+    const cliente=r.data.holder||{};
+    MailApp.sendEmail({
+      to:cliente.email,
+      subject:'Pago recibido · Servicios de Atacama en coordinación · '+r.code,
+      htmlBody:'<h2>LATAM Expeditions · Pago recibido</h2>'+
+        '<p>Hemos recibido el pago por tu solicitud <strong>'+textoPlano(r.code,80)+'</strong> para '+
+          textoPlano(r.data.title,120)+'.</p>'+
+        '<p><strong>Importe abonado:</strong> USD '+Number(r.paidAmount).toFixed(2)+
+          '. <strong>Fecha de llegada:</strong> '+textoPlano(r.data.date,10)+'.</p>'+
+        '<p><strong>Importante:</strong> Este comprobante acredita el pago, pero el Hotel Terrantai, excursiones y vuelos opcionales todavía necesitan confirmación operativa. Nos pondremos en contacto para comunicarte los datos definitivos. Si no podemos prestar lo contratado, podrás optar por una alternativa acordada o devolución íntegra.</p>'+
+        '<p>Contacto: contact@latamexpeditions.com</p>',
+      name:CONFIG.agency.name,replyTo:CONFIG.agency.email
+    });
+    return;
+  }
   const asunto = 'Reserva confirmada ' + r.code + ' · ' + r.data.title;
   MailApp.sendEmail({
     to: r.data.holder.email,
