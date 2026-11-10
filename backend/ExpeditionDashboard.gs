@@ -187,10 +187,19 @@ function lxRwSyncNotifications_(email,bookings,verified) {
   }
   bookings.slice(-100).forEach(function(b){
     if(!b.code)return;
-    var id='BOOKING:'+email+':'+b.code;
-    if(existing[id])return;
-    adds.push([id,email,now,'booking','Reserva registrada',
-      b.title+' · '+b.code+' · '+b.status,b.code,'NO']);
+    // Una nueva notificación por cambio de estado; nunca por simple refresco.
+    var currentState=String(b.status||'EN REVISIÓN').trim().toUpperCase().slice(0,60);
+    var id='BOOKING:'+email+':'+b.code+':'+currentState;
+    if(!existing[id]) {
+      adds.push([id,email,now,'booking','Estado de tu reserva',
+        b.title+' · '+b.code+' · '+b.status,b.code,'NO']);
+    }
+    if(lxRwCompleted_(b) && lxRwPaid_(b)){
+      var rewardId='MILES:'+email+':'+b.code;
+      if(!existing[rewardId])adds.push([rewardId,email,now,'rewards',
+        'Compra elegible completada','Las millas de '+b.code+
+          ' ya cuentan como disponibles en tu estado de cuenta.',b.code,'NO']);
+    }
   });
   if(adds.length)h.getRange(h.getLastRow()+1,1,adds.length,8).setValues(adds);
 }
