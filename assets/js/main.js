@@ -979,6 +979,8 @@
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();
+})();
+
 /* LATAM · Itinerarios unificados en todas las fichas de paquetes.
  * Convierte los listados antiguos al diseño usado en Atacama Premium,
  * manteniendo el texto original y sin inventar horarios de operación. */
