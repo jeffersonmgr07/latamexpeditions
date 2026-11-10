@@ -32,7 +32,8 @@
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/main.css?v=20261109-home-r2" />
+  <link rel="stylesheet" href="assets/css/auth-pages-20261110.css?v=1" />
 </head>
 <body>
   <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
@@ -97,16 +98,10 @@
       <a href="login.html" class="mobile-nav__cta" data-close-nav data-auth-out>Iniciar sesión</a>
     </div>
   </div>
-  <main id="contenido">
-  <section class="page-hero">
-    <div class="page-hero__inner">
-      <nav class="breadcrumb" aria-label="Ruta de navegación"><ol><li><a href="index.html">Inicio</a></li><li><span aria-current="page">Mi reserva</span></li></ol></nav>
-      <h1>Consultar mi reserva</h1>
-      <p>Introduce el código que recibiste por correo y el apellido del titular. No necesitas crear una cuenta.</p>
-    </div>
-  </section>
-    <section class="section">
-      <div class="detail-card lookup-card">
+  <main id="contenido" class="lookup-page">
+    <section class="section lookup-section" aria-label="Consulta tu reserva">
+      <h1 class="visually-hidden">Consultar mi reserva</h1>
+      <div class="detail-card lookup-card lookup-card--refined">
         <div class="booking-error" id="authError" role="alert"></div>
         <form class="form-grid" id="lookupForm">
           <div class="form-field">
