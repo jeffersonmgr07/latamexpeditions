@@ -3554,3 +3554,14 @@ body.has-pn-header .topbar { border: 0 !important; }
   background:rgba(126,217,87,.18);
   color:#fff;
 }
+
+/* Reserva: fallback accesible si no se inicializa el selector de nacimiento. */
+.booking-modal .booking-birth-native.is-fallback{
+  display:block!important;position:static!important;opacity:1!important;
+  visibility:visible!important;pointer-events:auto!important;
+  width:100%!important;min-width:0!important;min-height:46px!important;
+  height:auto!important;padding:10px 12px!important;
+  border:1px solid #d0dfd4!important;border-radius:10px!important;
+  background:#fff!important;color:#173c28!important;
+}
+.booking-modal .passenger-birth-field [data-birth-trigger][hidden]{display:none!important;}
