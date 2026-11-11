@@ -16,6 +16,7 @@ import datetime
 import html as html_lib
 
 import partials as P
+import build_auth_config
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = json.loads((ROOT / "assets/data/catalog.json").read_text(encoding="utf-8"))
@@ -1747,6 +1748,7 @@ def main() -> None:
     build_404()
     build_i18n_content()
     build_meta_files()
+    build_auth_config.main()
     limpiar_huerfanos()
     print(f"\nListo: {len(PAGES)} páginas en el sitemap.")
 
