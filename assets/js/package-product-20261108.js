@@ -951,7 +951,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   const actualArrival=String(offer.outbound?.segments?.at(-1)?.to?.time||'').slice(0,10);
   const previousHotel=state.customHotel?{
     name:state.customHotel,tier:state.tier,occupancy:state.occupancy,
-    roomPlan:state.roomPlan,travelers:state.adults+state.children,
+    roomPlan:state.roomPlan,adults:state.adults,children:state.children,
     photos:{...state.hotelPhotos}
   }:null;
   const hotelDateChanged=dateOK(actualArrival)&&!multiCityAtacama&&
@@ -970,7 +970,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
     (state.customHotel&&state.hotelAlternative?.checkIn!==state.date))){
     // No mantener la tarifa ni firma antigua. Solo conservar la preferencia
     // visible como una solicitud pendiente, jamás como suplemento cobrable.
-    const sameParty=previousHotel.travelers===state.adults+state.children;
+    const sameParty=previousHotel.adults===state.adults&&previousHotel.children===state.children;
     state.tier=previousHotel.tier;
     state.occupancy=sameParty?previousHotel.occupancy:defaultRoom();
     state.roomPlan=sameParty?previousHotel.roomPlan:'';
