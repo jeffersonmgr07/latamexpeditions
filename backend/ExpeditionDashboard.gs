@@ -223,7 +223,7 @@ function lxRwReadNotifications_(email) {
 function lxRwDashboard_(data) {
   var user=lxRwUser_(data),verified=lxRwIsVerified_(user);
   if(verified)lxRwAwardWelcome_(user);
-  // Los puntos por invitación solo se acreditan tras un viaje pagado y completado.
+  // Los puntos por invitación se acreditan al registro y verificación del amigo (regla 50 pts).
   var referrals=lxRefDashboard_(user.email);
   var bookings=lxRwBookings_(user.email);
   lxRwSyncNotifications_(user.email,bookings,verified);

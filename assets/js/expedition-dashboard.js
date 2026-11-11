@@ -165,26 +165,29 @@
       ['facebook','Facebook','fa-facebook-f','#1877F2'],
       ['instagram','Instagram','fa-instagram','#D93175'],
       ['tiktok','TikTok','fa-tiktok','#161B22'],
-      ['x','X','fa-x-twitter','#161B22'],
-      ['youtube','YouTube','fa-youtube','#E62117'],
       ['whatsapp','WhatsApp','fa-whatsapp','#25D366']
     ];
     return '<div class="exp-referral-intro">'+
       '<div class="exp-referral-head"><span class="exp-referral-medal"><i class="fa-solid fa-user-group"></i></span>'+
-      '<div><strong>100 puntos por amigo viajero</strong>'+
-      '<p>Invítalo a registrarse. Recibirás los puntos cuando verifique su cuenta y complete su primera compra de viaje.</p></div></div>'+
+      '<div><strong>50 puntos por amigo viajero</strong>'+
+      '<p>Invítalo a registrarse. Recibirás 50 puntos cuando el amigo se registre con tu enlace y verifique su cuenta.</p></div></div>'+
       '<div class="exp-referral-counts"><span><strong>'+esc(ref.invited||0)+'</strong> invitados</span>'+
       '<span><strong>'+esc(ref.qualified||0)+'</strong> bonificados</span></div>'+
       (link?'<div class="exp-referral-link"><input aria-label="Tu enlace de invitación" readonly value="'+esc(link)+'">'+
       '<button type="button" class="exp-btn exp-btn--light" data-exp-copy-ref><i class="fa-regular fa-copy"></i> Copiar</button></div>':
       '<p>Verifica tu cuenta para disponer de un enlace personal.</p>')+'</div>'+
+      (ref.entries&&ref.entries.length?'<div class="exp-referral-people"><h4>Amigos invitados</h4>'+ref.entries.map(person=>
+        '<div class="exp-referral-person"><div><strong>'+esc(person.name||'Viajero registrado')+'</strong><small>'+esc(fmtDate(person.date))+
+        '</small></div><span class="exp-tag'+(person.status==='ACREDITADO'?'':' exp-tag--pending')+'">'+
+        esc(person.status==='ACREDITADO'?'Registrado · verificado':person.status)+'</span>'+
+        (person.status==='ACREDITADO'?'<b>+'+esc(person.points||50)+'</b>':'')+'</div>').join('')+'</div>':'')+
       '<p class="exp-social-heading">Comparte tu invitación</p>'+
       '<div class="exp-share-grid">'+networks.map(x=>
         '<button type="button" class="exp-share-btn" data-exp-share="'+x[0]+'" '+(!link?'disabled':'')+'>'+
         '<span class="exp-share-brand" style="--share-brand:'+x[3]+'"><i class="fa-brands '+x[2]+'" aria-hidden="true"></i></span>'+
         '<span>'+x[1]+'</span></button>').join('')+'</div>'+
       '<button type="button" class="exp-link exp-copy-message" data-exp-copy-message><i class="fa-regular fa-copy"></i> Copiar mensaje de invitación</button>'+
-      '<p class="exp-social-note">Tu enlace es personal. Por cada amigo que se registre con él, verifique su cuenta y complete su primer viaje, recibirás 100 puntos LATAM Rewards (máximo cuatro bonificaciones al mes).</p>';
+      '<p class="exp-social-note">Tu enlace es personal. Por cada amigo que se registre con él y verifique su cuenta, recibirás 50 puntos LATAM Rewards (máximo cuatro bonificaciones al mes).</p>';
   }
   function milesPage() {
     const m=state.data.miles,ready=!!m,t=membership();
@@ -199,21 +202,22 @@
       '<p class="exp-card-intro">Comparte tu enlace personal con tus amigos y descubre cómo obtener puntos por nuevas reservas.</p>'+
       (state.data.verified?shareCards():verificationBanner())+'</div>'+
       '<div class="exp-card"><h3>Estado de cuenta</h3>'+
-      (ready&&m.movements.length?'<div class="exp-table-wrap"><table class="exp-table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Estado</th><th>Puntos</th></tr></thead><tbody>'+
-      m.movements.map(x=>'<tr><td>'+esc(fmtDate(x.date))+'</td><td><strong>'+esc(x.title)+'</strong><small>'+esc(x.code||x.type)+'</small></td>'+
+      (ready&&m.movements.length?'<div class="exp-table-wrap exp-statement"><table class="exp-table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Estado</th><th>Puntos</th></tr></thead><tbody>'+
+      m.movements.map(x=>'<tr><td>'+esc(fmtDate(x.date))+'</td><td><strong class="exp-statement-concept">'+esc(x.title)+'</strong><small>'+esc(x.code||x.type)+'</small>'+
+        '<details class="exp-mobile-more"><summary>Ver más</summary><p>'+esc(x.title)+' · '+esc(x.code||x.type)+'</p></details></td>'+
         '<td><span class="exp-tag'+(x.status==='PENDIENTE'?' exp-tag--pending':'')+'">'+esc(x.status)+'</span></td>'+
         '<td><span class="'+(num(x.points)<0?'exp-negative':'exp-positive')+'">'+(num(x.points)>0?'+':'')+esc(x.points)+'</span></td></tr>').join('')+
       '</tbody></table></div>':empty('Aún no hay movimientos','Tus bonos y compras se reflejarán aquí.',false))+'</div>';
   }
   const REWARD_CATALOG=[
-    {id:'cusco-bienvenida',name:'Bienvenida ancestral en Cusco',place:'Cusco, Perú',points:500,img:'assets/img/home-cusco-machu-picchu.webp'},
-    {id:'cusco-city',name:'City Tour en Cusco',place:'Cusco, Perú',points:550,img:'assets/img/peru-machu-picchu-01.jpg'},
+    {id:'cusco-bienvenida',name:'Bienvenida ancestral en Cusco',place:'Cusco, Perú',points:500,img:'assets/img/rewards-bienvenida-cusco.webp'},
+    {id:'cusco-city',name:'City Tour en Cusco',place:'Cusco, Perú',points:550,img:'assets/img/rewards-bienvenida-cusco.webp'},
     {id:'machu-guia',name:'Tour guiado por Machu Picchu',place:'Machu Picchu, Perú',points:650,img:'assets/img/peru-machu-picchu-01.jpg'},
     {id:'buenos-aires',name:'City Tour en Buenos Aires',place:'Buenos Aires, Argentina',points:600,img:'assets/img/argentina-buenos-aires-01.jpg'},
-    {id:'rio',name:'City Tour en Río de Janeiro',place:'Río de Janeiro, Brasil',points:650,img:'assets/img/brasil-rio-01.jpg'},
-    {id:'lima',name:'City Tour histórico en Lima',place:'Lima, Perú',points:500,img:''},
-    {id:'chiva-medellin',name:'Chiva rumbera en Medellín',place:'Medellín, Colombia',points:550,img:'assets/img/colombia-experiencia-medellin-nocturno-gastronomia-rooftops.jpg'},
-    {id:'cartagena',name:'Paseo cultural en Cartagena',place:'Cartagena, Colombia',points:600,img:'assets/img/colombia-cartagena-01.jpg'}
+    {id:'rio',name:'City Tour en Río de Janeiro',place:'Río de Janeiro, Brasil',points:650,img:'assets/img/rewards-rio-selaron.webp'},
+    {id:'lima',name:'City Tour histórico en Lima',place:'Lima, Perú',points:500,img:'assets/img/rewards-lima-centro.webp'},
+    {id:'chiva-medellin',name:'Chiva rumbera en Medellín',place:'Medellín, Colombia',points:550,img:'assets/img/rewards-chiva-medellin.webp'},
+    {id:'cartagena',name:'Paseo cultural en Cartagena',place:'Cartagena, Colombia',points:600,img:'assets/img/rewards-cartagena.webp'}
   ];
   function rewardsPage() {
     const levels=[['Explorer','0–2,999'],['Gold','3,000–6,999'],
@@ -640,20 +644,16 @@
     if(platform==='facebook'){
       go('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(link));return;
     }
-    if(platform==='x'){
-      go('https://twitter.com/intent/tweet?text='+encodeURIComponent(message)+'&url='+encodeURIComponent(link));return;
-    }
     if(platform==='whatsapp'){
       go('https://wa.me/?text='+encodeURIComponent(full));return;
     }
-    if(navigator.share){
-      try{await navigator.share({title:'Descubre LATAM Expeditions',text:message,url:link});return;}
-      catch(err){if(err.name==='AbortError')return;}
+    if(platform==='instagram'||platform==='tiktok'){
+      // No hay web-share URL que autopublique con texto en estas redes.
+      // Copiar la invitación y abrir la red es una experiencia veraz.
+      await copyInvitation(full);
+      flash('Enlace y mensaje copiados. Pégalos en tu publicación de '+(platform==='instagram'?'Instagram.':'TikTok.'));
+      go(platform==='instagram'?'https://www.instagram.com/':'https://www.tiktok.com/');
     }
-    await copyInvitation(full);
-    const urls={instagram:'https://www.instagram.com/',tiktok:'https://www.tiktok.com/',
-      youtube:'https://www.youtube.com/'};
-    if(urls[platform])go(urls[platform]);
   }
   function inquireReward(id){
     const r=REWARD_CATALOG.find(x=>x.id===id);

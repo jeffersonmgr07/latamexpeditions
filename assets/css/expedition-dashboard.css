@@ -411,3 +411,54 @@ body.has-pn-header .exp-account-main, .exp-account-main {background:#f5f7ef !imp
   .exp-account-main .exp-tier-progress {padding:15px;}
   .exp-account-main .exp-profile-mini {flex-wrap:wrap;}
 }
+
+/* LATAM Rewards · wallet fotográfica y programa de invitaciones, 2026-11-11 */
+.exp-account-main .exp-wallet{
+  background-image:linear-gradient(120deg,rgba(3,69,37,.91),rgba(1,92,46,.90)),url("../img/rewards-machu-picchu.webp");
+  background-position:center,center 44%;
+  background-size:cover,cover;
+  background-repeat:no-repeat;
+}
+.exp-account-main .exp-wallet>*{position:relative;z-index:1;}
+.exp-account-main .exp-wallet strong{text-shadow:0 1px 8px rgba(0,33,16,.23);}
+.exp-account-main .exp-share-grid{grid-template-columns:repeat(4,minmax(0,1fr));}
+.exp-referral-people{margin:17px 0 10px;border-top:1px solid #dce8dc;padding-top:14px;}
+.exp-referral-people h4{font:760 14px/1.4 Montserrat,Inter,sans-serif;color:#17452d;margin:0 0 8px;}
+.exp-referral-person{
+  display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  padding:11px 0;border-bottom:1px solid #e6eee5;font-size:12px;
+}
+.exp-referral-person>div{display:grid;gap:4px;min-width:0;flex:1 1 145px;}
+.exp-referral-person>div strong{font-size:13px;color:#17452c;overflow-wrap:anywhere;}
+.exp-referral-person>div small{font-size:11px;color:#718474;}
+.exp-referral-person>b{color:#07873e;font-size:14px;}
+.exp-referral-person .exp-tag{white-space:normal;text-align:center;}
+.exp-mobile-more{display:none;}
+@media(max-width:760px){
+  .exp-account-main .exp-share-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .exp-account-main .exp-statement{overflow-x:visible;width:100%;max-width:100%;}
+  .exp-account-main .exp-statement .exp-table{
+    display:block;min-width:0;width:100%;border-collapse:separate;
+  }
+  .exp-account-main .exp-statement thead{display:none;}
+  .exp-account-main .exp-statement tbody{display:grid;gap:9px;min-width:0;}
+  .exp-account-main .exp-statement tr{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"concept points" "date status";
+    align-items:center;gap:8px 12px;
+    padding:13px;background:#f9fcf8;border:1px solid #e0ece2;border-radius:12px;
+    min-width:0;
+  }
+  .exp-account-main .exp-statement td{padding:0!important;min-width:0;border:0!important;text-align:left!important;font-size:12px;}
+  .exp-account-main .exp-statement td:nth-child(1){grid-area:date;color:#6e7e70;font-size:11px;}
+  .exp-account-main .exp-statement td:nth-child(2){grid-area:concept;overflow:hidden;}
+  .exp-account-main .exp-statement td:nth-child(3){grid-area:status;}
+  .exp-account-main .exp-statement td:nth-child(4){grid-area:points;text-align:right!important;font-size:14px;font-weight:800;white-space:nowrap;}
+  .exp-account-main .exp-statement-concept{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;}
+  .exp-account-main .exp-statement td:nth-child(2)>small{display:none;}
+  .exp-account-main .exp-mobile-more{display:block;margin-top:4px;color:#08773c;}
+  .exp-account-main .exp-mobile-more summary{cursor:pointer;font-size:11px;font-weight:750;list-style:none;}
+  .exp-account-main .exp-mobile-more summary::-webkit-details-marker{display:none;}
+  .exp-account-main .exp-mobile-more[open] summary{margin-bottom:5px;}
+  .exp-account-main .exp-mobile-more p{margin:0;font-size:11.5px;line-height:1.5;color:#536c59;overflow-wrap:anywhere;}
+}
