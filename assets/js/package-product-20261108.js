@@ -51,7 +51,7 @@
  if(!/^[A-Z]{3}$/.test(state.origin))state.origin='LIM';
  const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);return e};
  const normalizeHotelName=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
- const readableStars=s=>String(s||'').replace(/([1-5])\s*(?:★|\\*)/g,(_,n)=>n+' estrellas');
+ const readableStars=s=>String(s||'').replace(/([1-5])\s*[★*]/g,(_,n)=>n+' estrellas');
   const validSrc=s=>/^https:\/\/[^<>"'\s]+$/.test(s||'');
   // Archivos locales: se activan automáticamente cuando se suben a assets/img/.
   const hotelImages={
