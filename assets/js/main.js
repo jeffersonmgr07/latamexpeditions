@@ -413,15 +413,11 @@
         bar.append(inner);header.after(bar);
       }
     }
-    const panel=document.querySelector('#mobileNav .mobile-nav__panel'),head=panel?.querySelector('.mobile-nav__head');
-    if(panel&&head){
+    const panel=document.querySelector('#mobileNav .mobile-nav__panel');
+    if(panel){
+      // El menú móvil se construye exclusivamente en initPeruNatureHeader.
+      // Eliminar la navegación histórica, sin volver a insertar enlaces duplicados.
       panel.querySelectorAll('a[data-i18n^="nav."]:not(.mobile-nav__cta)').forEach(a=>a.remove());
-      let anchor=head;
-      items.concat([['Experiencias','experiencias.html']])
-        .forEach(([label,href])=>{
-          const a=document.createElement('a');a.href=base+href;a.textContent=label;a.setAttribute('data-close-nav','');
-          anchor.after(a);anchor=a;
-        });
     }
     const logoIcon=base+'assets/img/isotipo-latam-expeditions.png?v=2';
     document.querySelectorAll('link[rel="icon"],link[rel="apple-touch-icon"]').forEach(icon=>{
@@ -588,7 +584,7 @@
       panel.querySelectorAll('.mobile-service-links').forEach(e=>e.remove());
       const block=document.createElement('div');
       block.className='mobile-service-links';
-      block.innerHTML=items.map(([label,href,key])=>
+      block.innerHTML=items.concat([['Experiencias','experiencias.html','experiencias']]).map(([label,href,key])=>
         '<a href="'+base+href+'" data-close-nav data-header-service="'+key+'">'+label+'</a>'
       ).join('');
       head.after(block);
@@ -934,7 +930,50 @@
     const mobile=document.querySelector('#mobileNav .mobile-nav__panel');
     if(mobile){
       const account=mobile.querySelector('a[data-auth-in]');
-      if(account){account.hidden=!current;account.textContent='Mi cuenta';account.href=base+'mis-viajes.html';}
+      // Un solo menú hamburguesa: las secciones privadas se enlazan desde aquí.
+      if(account)account.hidden=true;
+      let section=mobile.querySelector('.mobile-account-links');
+      if(!section){
+        section=document.createElement('div');
+        section.className='mobile-account-links';
+        const heading=document.createElement('strong');
+        heading.className='mobile-account-links__title';
+        heading.textContent='MI CUENTA · LATAM REWARDS';
+        section.append(heading);
+        [
+          ['Mi panel','inicio','fa-solid fa-house'],
+          ['Mis viajes','viajes','fa-solid fa-suitcase-rolling'],
+          ['Mis reservaciones','reservas','fa-solid fa-ticket'],
+          ['LATAM Rewards','millas','fa-solid fa-gift'],
+          ['Recompensas y cupones','recompensas','fa-solid fa-tags'],
+          ['Notificaciones','avisos','fa-regular fa-bell'],
+          ['Mi perfil','perfil','fa-regular fa-user']
+        ].forEach(([label,hash,icon])=>{
+          const link=document.createElement('a');
+          link.href=base+'mis-viajes.html#'+hash;
+          link.dataset.closeNav='';
+          link.dataset.accountSection=hash;
+          const i=document.createElement('i');
+          i.className=icon;i.setAttribute('aria-hidden','true');
+          link.append(i,document.createTextNode(label));
+          section.append(link);
+        });
+        const service=mobile.querySelector('.mobile-service-links');
+        if(service)service.after(section);
+        else mobile.querySelector('.mobile-nav__head')?.after(section);
+        section.addEventListener('click',event=>{
+          if(!event.target.closest('a'))return;
+          mobile.closest('.mobile-nav')?.classList.remove('is-open');
+          document.body.classList.remove('nav-open');
+          document.getElementById('navToggle')?.setAttribute('aria-expanded','false');
+        });
+      }
+      section.hidden=!current;
+      if(current)section.querySelectorAll('a[data-account-section]').forEach(link=>{
+        const currentHash=location.pathname.endsWith('/mis-viajes.html')?(location.hash.slice(1)||'inicio'):'';
+        if(link.dataset.accountSection===currentHash)link.setAttribute('aria-current','page');
+        else link.removeAttribute('aria-current');
+      });
       const login=mobile.querySelector('a[data-auth-out]');
       if(login)login.hidden=Boolean(current);
       let logout=mobile.querySelector('[data-header-account-mobile-logout]');
