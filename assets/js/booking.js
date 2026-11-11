@@ -1562,7 +1562,19 @@
     $('#bkDateTrigger')?.setAttribute('aria-invalid', String(!validDate));
     valid = valid && validDate;
     const total = Number($('#bkAdults').value) + Number($('#bkChildren').value);
-    if (total < 1 || total > CONFIG.maxTravelers) { valid = false; showError(`La reserva admite entre 1 y ${CONFIG.maxTravelers} viajeros.`); }
+    if (PRODUCT.slug==='desierto-atacama-premium-5d4n' &&
+        (Number($('#bkChildren').value)>0 || Number($('#bkAdults').value)>2)) {
+      showError('Atacama Premium tiene tarifa confirmada solo para 1 o 2 adultos. Para grupos o menores, solicita una cotización personalizada antes de continuar.');
+      return false;
+    }
+    if (PRODUCT.childMinAge>=18 && Number($('#bkChildren').value)>0) {
+      showError('Esta experiencia es solo para adultos. Solicita una cotización personalizada si viajas con menores.');
+      return false;
+    }
+    if (total < 1 || total > CONFIG.maxTravelers) {
+      showError(`La reserva admite entre 1 y ${CONFIG.maxTravelers} viajeros.`);
+      return false;
+    }
     if (!valid) showError('Revisa los campos marcados antes de continuar.');
     return valid;
   }
