@@ -538,7 +538,9 @@ function showTierQuote(){
   const h=hotelsPendingSelection;
   $('lxHotelCurrentSummary').textContent='Hotel alternativo: '+h.name+' · '+
     (h.pending?'suplemento por confirmar':h.supplement>0?'+ '+fmt(h.supplement)+' por el grupo':'sin costo adicional');
-  $('lxHotelExtraStatus').textContent='Tarifa observada para '+h.nights+' noches, sujeta a disponibilidad del proveedor.';
+  $('lxHotelExtraStatus').textContent=h.pending?
+    'La fecha de llegada cambió. Conservamos tu hotel favorito, pero debes volver a cotizarlo antes de confirmar el cambio.':
+    'Tarifa observada para '+h.nights+' noches, sujeta a disponibilidad del proveedor.';
   return;
  }
  const t=tiers.find(x=>x.code===$('lxHotelTier').value)||firstTier;
@@ -947,8 +949,15 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   const offer=state.choice;if(!offer)return;
   const d=$('lxFlightDeparture').value,returnDate=$('lxFlightReturn').value;
   const actualArrival=String(offer.outbound?.segments?.at(-1)?.to?.time||'').slice(0,10);
+  const previousHotel=state.customHotel?{
+    name:state.customHotel,tier:state.tier,occupancy:state.occupancy,
+    roomPlan:state.roomPlan,travelers:state.adults+state.children,
+    photos:{...state.hotelPhotos}
+  }:null;
+  const hotelDateChanged=dateOK(actualArrival)&&!multiCityAtacama&&
+    Boolean(state.date)&&state.date!==actualArrival;
   if(dateOK(actualArrival)&&!multiCityAtacama){
-    if(state.date&&state.date!==actualArrival)resetSelections();
+    if(hotelDateChanged)resetSelections();
     state.date=actualArrival;state.flightSearch={...state.flightSearch,arrival:actualArrival};
   }else if(!state.date){
     state.date=d;state.flightSearch={...state.flightSearch,arrival:d};
@@ -957,9 +966,27 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
   state.origin=$('lxFlightOrigin').value;
   state.adults=adults;state.children=children;
   if(!state.hotelPicked)state.occupancy=defaultRoom();
-  if(state.customHotel&&state.hotelAlternative?.checkIn!==state.date){
-   state.customHotel='';state.hotelAlternative=null;state.hotelPicked=false;state.roomPlan='';
-   setStatus(hotelStatus,'La fecha de llegada cambió según el vuelo. Consulta nuevamente hoteles para esa fecha.',true);
+  if(previousHotel&&(hotelDateChanged||
+    (state.customHotel&&state.hotelAlternative?.checkIn!==state.date))){
+    // No mantener la tarifa ni firma antigua. Solo conservar la preferencia
+    // visible como una solicitud pendiente, jamás como suplemento cobrable.
+    const sameParty=previousHotel.travelers===state.adults+state.children;
+    state.tier=previousHotel.tier;
+    state.occupancy=sameParty?previousHotel.occupancy:defaultRoom();
+    state.roomPlan=sameParty?previousHotel.roomPlan:'';
+    state.customHotel=previousHotel.name;
+    state.hotelQuotePending=true;state.hotelPicked=true;
+    state.hotelPhotos={...previousHotel.photos};
+    state.hotelAlternative={
+      name:previousHotel.name,tierCode:state.tier,occupancy:state.occupancy,
+      roomPlan:state.roomPlan,checkIn:state.date,
+      checkOut:addDays(state.date,params.nights),nights:params.nights,
+      adults:state.adults,children:state.children,
+      stayTotal:0,supplement:null,quoteToken:'',pending:true,
+      priceSource:'Nueva consulta necesaria'
+    };
+    setStatus(hotelStatus,
+      'Conservamos tu hotel seleccionado. La nueva fecha de llegada requiere volver a consultar su tarifa; no se cobrará un suplemento anterior.',true);
   }
   state.baggage='none';
   state.flight={observedPrice:Number(offer.price),
