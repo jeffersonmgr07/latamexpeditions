@@ -51,6 +51,7 @@
  if(!/^[A-Z]{3}$/.test(state.origin))state.origin='LIM';
  const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);return e};
  const normalizeHotelName=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+ const readableStars=s=>String(s||'').replace(/([1-5])\s*(?:★|\\*)/g,(_,n)=>n+' estrellas');
   const validSrc=s=>/^https:\/\/[^<>"'\s]+$/.test(s||'');
   // Archivos locales: se activan automáticamente cuando se suben a assets/img/.
   const hotelImages={
@@ -505,7 +506,7 @@ function renderHotelCards(){
   if(photoGrid.childElementCount)media.append(photoGrid);
   else media.append(el('span','lx-hotel-placeholder','⌂'),el('small','','Hotel'));
   const details=el('div','lx-hotel-card-details');
-  details.append(el('strong','lx-hotel-card-name',name),el('small','lx-hotel-card-category',(t.stars||'')+' · '+(t.name||'')),
+  details.append(el('strong','lx-hotel-card-name',name),el('small','lx-hotel-card-category',readableStars(t.stars||'')+' · '+(t.name||'')),
    el('p','lx-hotel-room-title','Selecciona tu acomodación'));
   const options=el('div','lx-hotel-room-options');
   options.setAttribute('role','radiogroup');options.setAttribute('aria-label','Habitaciones de '+name);
@@ -555,17 +556,28 @@ function showTierQuote(){
  function renderHotelPhoto(){
   const name=state.customHotel||(hasHotelIncluded?((currentTier()?.hotels||[])[0]||''):'');
   const slot=$('lxProductHotelPhoto');slot.replaceChildren();
-  if(!hasHotelIncluded&&!state.customHotel){slot.append(el('span','','Hotel no incluido'));return}
-  const photo=state.hotelPhotos[normalizeHotelName(name)];
-  if(validSrc(photo)){const image=el('img');image.src=photo;image.alt='Imagen de '+name;image.loading='lazy';image.referrerPolicy='no-referrer';slot.append(image)}
-  else {
-    const fallback=el('span','','Foto del hotel al consultar opciones');
-    slot.append(fallback);
-    const local=hotelPhotoElement(name,'lx-local-hotel-photo');
-    if(local){local.style.maxHeight='none';local.addEventListener('load',()=>fallback.remove(),{once:true});slot.append(local)}
-  }
+  if(!name){slot.append(el('span','',hasHotelIncluded?'Foto del hotel no disponible':'Hotel no incluido'));return}
+  const remote=state.hotelPhotos[normalizeHotelName(name)];
+  const fallback=el('span','','Foto del hotel no disponible');
+  // Los hoteles contratados usan primero fotografías de la propia web,
+  // como en las tarjetas del modal; no dependen de Google Hotels.
+  const local=hotelPhotoElement(name,'lx-local-hotel-photo');
+  if(local){
+    local.style.cssText='display:block;width:100%;height:100%;min-height:88px;max-height:none;object-fit:cover;border-radius:9px';
+    local.addEventListener('error',()=>{
+      local.remove();
+      if(validSrc(remote)){
+        const img=el('img');img.src=remote;img.alt='Foto de '+name;img.referrerPolicy='no-referrer';
+        img.addEventListener('error',()=>{img.remove();slot.append(fallback)},{once:true});
+        slot.append(img);
+      }else slot.append(fallback);
+    },{once:true});
+    slot.append(local);
+  }else if(validSrc(remote)){
+    const image=el('img');image.src=remote;image.alt='Foto de '+name;image.referrerPolicy='no-referrer';
+    image.addEventListener('error',()=>{image.remove();slot.append(fallback)},{once:true});slot.append(image);
+  }else slot.append(fallback);
  }
-
  function renderPriceBreakdown(){
    const rows=$('lxProductPriceDetails');rows.replaceChildren();
    const weight=state.adults+state.children*params.childFactor;
@@ -635,7 +647,7 @@ function showTierQuote(){
 
   $('lxProductHotelCategory').textContent=state.customHotel?'Hotel seleccionado':
     (!hasHotelIncluded?'Puedes solicitar un hotel adicional':
-      (currentTier()?.stars||'Hotel')+' · '+(currentTier()?.name||'Categoría prevista'));
+      readableStars(currentTier()?.stars||'Hotel')+' · '+(currentTier()?.name||'Categoría prevista'));
 
   $('lxProductHotelStatus').textContent=state.customHotel&&state.hotelAlternative?
     state.hotelAlternative.nights+' noches · '+(state.roomPlan||'habitación seleccionada')+' · '+
@@ -1013,7 +1025,7 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
        left.append(img);state.hotelPhotos[normalizeHotelName(h.name)]=h.thumbnail;
      }
      left.append(el('b','',h.name));
-     const meta=(h.stars?Number(h.stars)+'★':'Categoría por confirmar')+
+     const meta=(h.stars?Number(h.stars)+' estrellas':'Categoría por confirmar')+
        (Number(h.rating)>0?' · Opiniones '+Number(h.rating).toFixed(1)+'/5':'');
      left.append(el('small','lx-hotel-category-line',meta));
      left.append(el('small','',params.nights+' '+(params.nights===1?'noche':'noches')+
