@@ -613,7 +613,7 @@
   }
 
   function closeCustomSelects(except) {
-    $('.exp-custom-select').forEach(w=>{
+    $$('.exp-custom-select').forEach(w=>{
       if(w===except)return;
       const menu=w.querySelector('.exp-custom-menu'),btn=w.querySelector('.exp-custom-trigger');
       if(menu)menu.hidden=true;
