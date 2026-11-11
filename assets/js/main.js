@@ -987,34 +987,49 @@
       }else if(logout)logout.hidden=!current;
     }
   }
+  let signingOut=false;
   async function signout(){
-    let token;
-    try{token=localStorage.getItem(TOKEN);}catch(err){}
-    try{localStorage.removeItem(TOKEN);localStorage.removeItem(USER);}catch(err){}
-    if(token){
+    if(signingOut)return;
+    signingOut=true;
+    let token='';
+    try{
+      token=localStorage.getItem(TOKEN)||'';
+      localStorage.removeItem(TOKEN);
+      localStorage.removeItem(USER);
+    }catch(err){}
+    window.dispatchEvent(new CustomEvent('latam:sessionchange'));
+    const home=base+'index.html';
+    if(!token){location.assign(home);return;}
+    // El cierre visual y local es inmediato. La invalidación remota tiene
+    // un máximo de espera para no bloquear al viajero con mala conexión.
+    const remote=(async()=>{
       try{
-        const cfg=await fetch(base+'assets/data/catalog.json',{cache:'no-store'}).then(r=>r.json());
-        const endpoint=cfg.booking?.endpoint;
+        const cfg=await fetch(base+'assets/data/catalog.json',{cache:'no-cache'}).then(r=>r.json());
+        const endpoint=cfg?.booking?.endpoint;
         if(endpoint)await fetch(endpoint,{
-          method:'POST',headers:{'Content-Type':'text/plain;charset=UTF-8'},
+          method:'POST',keepalive:true,
+          headers:{'Content-Type':'text/plain;charset=UTF-8'},
           body:JSON.stringify({action:'logout',data:{token}})
         });
-      }catch(err){}
-    }
-    location.assign(base+'index.html');
+      }catch(err){console.warn('[logout] Invalidación remota pendiente',err);}
+    })();
+    await Promise.race([remote,new Promise(resolve=>setTimeout(resolve,900))]);
+    location.assign(home);
   }
   function init(){
     apply();
     window.addEventListener('storage',e=>{if(e.key===TOKEN||e.key===USER)apply();});
     window.addEventListener('latam:sessionchange',apply);
     document.addEventListener('latam:langchange',()=>{if(user())apply();});
-    // cuentas.js gestiona estos botones cuando está instalado en la página.
-    if(!document.querySelector('script[src*="cuentas.js"]')){
-      document.addEventListener('click',e=>{
-        const clicked=e.target.closest('[data-header-account-logout],[data-header-account-mobile-logout]');
-        if(clicked){e.preventDefault();clicked.disabled=true;signout();}
-      });
-    }
+    // Delegación global: funciona también para el botón móvil creado dinámicamente.
+    document.addEventListener('click',e=>{
+      const clicked=e.target.closest('[data-logout]');
+      if(!clicked)return;
+      e.preventDefault();
+      e.stopPropagation();
+      clicked.disabled=true;
+      signout();
+    },true);
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();
