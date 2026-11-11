@@ -67,7 +67,10 @@
 - El dashboard consulta al backend para determinar puntos disponibles, pendientes y movimientos. El bono de bienvenida configurado es de **100 puntos al verificar la cuenta** y no se debe duplicar.
 - La política descrita en el backend Rewards calcula millas de compras a partir de reservas y estados de servicio (referencia: una milla por US$10 efectivamente pagados); verificar las reglas comerciales activas antes de anunciar nuevas promociones.
 - El programa de recompensas y canjes puede mostrar experiencias y solicitudes de consulta; **no** implementar descuentos automáticos sin un endpoint que valide saldo, reglas y transacción.
-- El programa de referidos requiere registro, verificación y prevención de duplicados; no acreditar puntos únicamente por pulsar un enlace.
+- **Referidos vigente desde 2026-11-11:** 50 puntos por amigo que se registre mediante el enlace personal y verifique su cuenta (correo o Google); no se requiere primera compra. Se acredita una sola vez por invitado mediante clave única `REFERRAL:correo`, con máximo cuatro bonificaciones por patrocinador y mes según la política actual. Si alcanza el límite mensual, el caso queda `EN COLA` para el siguiente periodo. Las bonificaciones históricas ya concedidas por la regla anterior no se alteran retroactivamente.
+- Los invitados aparecen en el dashboard con nombre de pila e inicial, fecha de registro y estado (registrado, pendiente de verificación, acreditado o en cola); por privacidad no se divulga su correo completo al patrocinador.
+- Los puntos acreditados se registran en `MillasMovimientos` y aparecen automáticamente en el estado de cuenta; el frontend no asigna puntos.
+- Compartir invitaciones: Facebook y WhatsApp usan enlaces oficiales. Instagram y TikTok no admiten autopublicar enlaces mediante URL web; en esos casos se copia el texto y se abre la plataforma para que el usuario pegue su invitación. No se premian clics ni publicaciones.
 - Endpoint base de cuenta: operaciones como `dashboardHome`, `dashboardTrip`, `dashboardSaveProfile`, `dashboardGetAvatar`, verificación de correo, notificaciones, perfil y referidos. Probar la API implementada antes de habilitar cada opción pública.
 
 ## 7. Pasos de instalación / réplica para otra marca
@@ -116,3 +119,11 @@
 ## 11. Mantenimiento de este documento
 
 Al terminar cada intervención: (1) revisar el comportamiento realmente integrado en `main`; (2) actualizar los apartados correspondientes de este manual eliminando alternativas obsoletas; (3) añadir una entrada histórica en `docs/bitacora/` con fecha, archivos, cambio, motivo, verificación y pendientes; (4) vincular el PR/commit; (5) anotar despliegues manuales de Apps Script solo cuando estén confirmados.
+
+
+## 12. Ajustes del 11 de noviembre de 2026
+- El menú compartido controla también Cerrar sesión en móvil; se elimina la sesión local inmediatamente y se intenta invalidar remotamente con espera acotada.
+- El fondo de la tarjeta LATAM Rewards usa una fotografía de Machu Picchu aportada por el propietario, con una capa verde de alta opacidad para mantener contraste.
+- Se han incorporado las fotografías aportadas para Bienvenida Ancestral/Cusco, Río de Janeiro, Lima, Chiva Medellín y Cartagena. Se conservaron las imágenes de Machu Picchu guiado y Buenos Aires. La imagen de Cusco se utiliza provisionalmente en dos tarjetas, hasta disponer de una foto específica diferente.
+- En móvil el estado de cuenta se presenta como tarjetas por movimiento, con fecha, concepto resumido, puntos, estado y `Ver más`. En escritorio mantiene su tabla.
+- **Despliegue obligatorio:** para aplicar las nuevas reglas de 50 puntos hay que actualizar `backend/LatamReferidos.gs` en el proyecto Apps Script existente de reservas y publicar una nueva versión. GitHub Pages no actualiza Apps Script automáticamente. Probar registro, verificación, crédito único, límite mensual, cuenta de puntos y ausencia de duplicados.
