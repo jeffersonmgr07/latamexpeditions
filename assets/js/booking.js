@@ -1721,9 +1721,29 @@
         deferred.addEventListener('change',sync);sync();
       }
     });
-    buildCustomBookingSelects();
+    // La decoración visual es opcional: un error de un selector no debe impedir
+    // la captura de datos ni dejar una ventana vacía.
+    try { buildCustomBookingSelects(); }
+    catch (err) {
+      console.error('[booking] Selectores personalizados no disponibles; se usarán los nativos.',err);
+      document.querySelectorAll('.lx-custom-select').forEach(wrapper=>{
+        const native=wrapper.querySelector('select');
+        if(native){native.removeAttribute('style');wrapper.replaceWith(native);}
+      });
+    }
     list.querySelectorAll('[data-pax-field="birth"]').forEach((input) => {
-      setupPassengerBirthCalendar(input);
+      try {setupPassengerBirthCalendar(input);}
+      catch(err){
+        console.error('[booking] Calendario de nacimiento no disponible; campo nativo habilitado.',err);
+        input.classList.add('is-fallback');input.removeAttribute('tabindex');
+        const wrapper=input.closest('.passenger-birth-field');
+        if(wrapper){
+          const button=wrapper.querySelector('[data-birth-trigger]');
+          if(button)button.hidden=true;
+          const panel=wrapper.querySelector('.booking-birth-calendar');
+          if(panel)panel.hidden=true;
+        }
+      }
       const updateAge = () => {
         const age = ageOnTravelDate(input.value);
         const output = input.closest('.passenger-birth-field')?.querySelector('.passenger-age');
@@ -1746,7 +1766,10 @@
   }
 
   function saveStep2() {
-    state.passengers = $$('.passenger-card').map((card) => {
+    const cards=$('.passenger-card', $('#bkPaxList'));
+    if(cards.length!==state.adults+state.children)
+      throw new Error('El número de formularios no coincide con los viajeros seleccionados.');
+    state.passengers = cards.map((card) => {
       const pendingDetails=!!card.querySelector('[data-defer-passenger]:checked');
       const value=field=>pendingDetails?'':(card.querySelector('[data-pax-field="'+field+'"]')?.value.trim()||'');
       const firstName=value('firstName'),lastName=value('lastName');
@@ -2245,6 +2268,7 @@
     const calendar = field.querySelector('.booking-birth-calendar');
     const grid = field.querySelector('[data-birth-grid]');
     const display = field.querySelector('[data-birth-display]');
+    if(input.value&&display)display.textContent=formatBookingDate(input.value);
     const monthTitle = field.querySelector('[data-birth-month]');
     const monthSelect = field.querySelector('[data-birth-month-select]');
     const yearSelect = field.querySelector('[data-birth-year-select]');
@@ -2526,7 +2550,14 @@
     $('#bkNext').addEventListener('click', async () => {
       if (step === 1) {
         if (!validateStep1() || !validateStep2()) return;
-        saveStep2(); saveStep1(); state.requestKey=requestKey();paintSummary();goToStep(3);updatePaymentMethod();
+        try{
+          saveStep2();saveStep1();
+        }catch(err){
+          console.error('[booking] No fue posible recoger datos del formulario:',err);
+          showError('No pudimos preparar los datos de los viajeros. Revisa el formulario y vuelve a intentarlo.');
+          return;
+        }
+        state.requestKey=requestKey();paintSummary();goToStep(3);updatePaymentMethod();
       }
     });
     const updatePaymentMethod = () => {
