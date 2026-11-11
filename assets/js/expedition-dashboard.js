@@ -210,7 +210,7 @@
       '</tbody></table></div>':empty('Aún no hay movimientos','Tus bonos y compras se reflejarán aquí.',false))+'</div>';
   }
   const REWARD_CATALOG=[
-    {id:'cusco-bienvenida',name:'Bienvenida ancestral en Cusco',place:'Cusco, Perú',points:500,img:'assets/img/rewards-bienvenida-cusco.webp'},
+    {id:'cusco-bienvenida',name:'Bienvenida ancestral en Cusco',place:'Cusco, Perú',points:500,img:'assets/img/rewards-bienvenida-ancestral-20261111.webp'},
     {id:'cusco-city',name:'City Tour en Cusco',place:'Cusco, Perú',points:550,img:'assets/img/rewards-bienvenida-cusco.webp'},
     {id:'machu-guia',name:'Tour guiado por Machu Picchu',place:'Machu Picchu, Perú',points:650,img:'assets/img/peru-machu-picchu-01.jpg'},
     {id:'buenos-aires',name:'City Tour en Buenos Aires',place:'Buenos Aires, Argentina',points:600,img:'assets/img/argentina-buenos-aires-01.jpg'},
