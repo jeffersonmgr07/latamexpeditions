@@ -1515,12 +1515,12 @@ function validarYCalcular(data) {
   // Si el cambio de hotel sigue pendiente, el cobro conserva el hotel base incluido.
   // Los cupones se validan siempre en el servidor; NUNCA confiar en la resta del navegador.
   const couponCode=textoPlano(data.couponCode||'',32).toUpperCase();
-  if(couponCode&&couponCode!=='LATAM10')
+  if(couponCode&&!['LATAM10EXP','LATAM10'].includes(couponCode))
     throw new Error('El cupón indicado no es válido.');
   if(couponCode&& !PRECIOS_PAQUETES[slug])
     throw new Error('Este cupón solo está disponible para paquetes de viaje.');
   const packageBase=redondear2(tarifas.adulto*adultos+tarifas.nino*ninos);
-  const discountAmount=couponCode==='LATAM10'?redondear2(packageBase*0.10):0;
+  const discountAmount=['LATAM10EXP','LATAM10'].includes(couponCode)?redondear2(packageBase*0.10):0;
   const total = redondear2(packageBase+validatedFlight.amount+validatedHotel.amount-discountAmount);
   const cobro = calcularCobro(total);
 
