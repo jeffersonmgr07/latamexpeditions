@@ -433,7 +433,7 @@
           type: 'standard',
           theme: 'outline',
           size: 'large',
-          text: window.location.pathname.includes('registro') ? 'signup_with' : 'continue_with',
+          text: 'signin_with',
           shape: 'pill',
           logo_alignment: 'left',
           locale: 'es',
@@ -442,8 +442,14 @@
       });
     } catch (err) {
       console.warn('[google] No se pudo preparar el inicio de sesión', err);
-      // Mantener el formulario de correo/contraseña aunque Google no responda.
-      $$('[data-google-block]').forEach((n) => { n.hidden = true; });
+      // Si la biblioteca o el nonce no responde, conservar visible el error.
+      // El formulario de correo sigue siendo operativo y el indicador no queda eterno.
+      contenedores.forEach(div => {
+        div.querySelectorAll('.google-pending').forEach(p => {
+          p.classList.add('google-pending--error');
+          p.setAttribute('aria-label','Google no disponible; utiliza tu correo electrónico');
+        });
+      });
     }
   }
 
@@ -479,7 +485,7 @@
 
     // Se aplica siempre el estado completo para evitar que "Cerrar sesión"
     // aparezca por estilos inline, datos antiguos o una carga parcial.
-    $('[data-auth-in]').forEach((n) => {
+    $$('[data-auth-in]').forEach((n) => {
       // El panel móvil de cuenta es generado por main.js. Evitar la entrada duplicada.
       if(n.matches('#mobileNav a[data-auth-in]')) { n.hidden = true; return; }
       n.hidden = !autenticado;
@@ -495,7 +501,7 @@
   async function init() {
     // La configuración del catálogo puede ser grande. Descargar la biblioteca
     // oficial de Google desde el inicio evita esperar a leer todo catalog.json.
-    if($('[data-google-signin]').length&&!window.google?.accounts?.id&&
+    if($$('[data-google-signin]').length&&!window.google?.accounts?.id&&
        !document.querySelector('script[data-lx-google-sdk]')){
       const preload=document.createElement('script');
       preload.src='https://accounts.google.com/gsi/client';
@@ -505,13 +511,25 @@
       document.head.appendChild(preload);
     }
     try {
-      // Revalidar la configuración sin forzar descargas completas en cada login.
-      const r = await fetch(`${BASE}assets/data/catalog.json`, { cache: 'no-cache' });
-      const cfg = (await r.json()).booking;
-      ENDPOINT = cfg.endpoint;
-      GOOGLE_CLIENT_ID = cfg.googleClientId;
+      // Configuración mínima derivada del catálogo (unos cientos de bytes).
+      // No descargamos todo catalog.json para dibujar el botón de Google.
+      let r = await fetch(`${BASE}assets/data/auth-config.json`, { cache: 'no-cache' });
+      if(!r.ok)throw Error('auth-config no disponible');
+      const cfg=(await r.json()).booking;
+      if(!cfg?.endpoint||!cfg?.googleClientId)throw Error('auth-config incompleto');
+      ENDPOINT=cfg.endpoint;
+      GOOGLE_CLIENT_ID=cfg.googleClientId;
     } catch (e) {
-      console.warn('[cuentas] No se pudo cargar la configuración');
+      // Compatibilidad si el archivo aún no se publicó en GitHub Pages.
+      try {
+        const r=await fetch(`${BASE}assets/data/catalog.json`, { cache: 'no-cache' });
+        if(!r.ok)throw Error('catálogo no disponible');
+        const cfg=(await r.json()).booking;
+        ENDPOINT=cfg.endpoint;
+        GOOGLE_CLIENT_ID=cfg.googleClientId;
+      } catch(error) {
+        console.warn('[cuentas] No fue posible cargar la configuración pública',error);
+      }
     }
     initEstadoSesion();
     document.addEventListener('latam:langchange', initEstadoSesion);

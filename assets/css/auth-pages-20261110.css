@@ -105,4 +105,13 @@ body.has-pn-header main.lookup-page {
   border:1px solid #d8dfd9;border-radius:999px;background:#fff;
   color:#597167;font:650 13px Inter,Arial,sans-serif;
 }
-.google-pending i {color:#4285f4;font-size:17px;}
+.google-pending__logo {width:21px;height:21px;flex:0 0 21px;display:block;}
+.google-pending {font-family:Roboto,"Google Sans",Arial,sans-serif;letter-spacing:.1px;color:#3c4043;background:#fff;border:1px solid #dadce0;box-shadow:0 1px 2px rgba(60,64,67,.08);font-weight:600;}
+.google-pending--error {opacity:.65;}
+.auth-points-banner__deadline {
+  display:flex;gap:9px;align-items:flex-start;margin-top:7px;padding:11px 12px;
+  border:1px solid #cfe8d4;background:#e5f4e9;border-radius:11px;
+  color:#1d5c36;font:600 12.5px/1.55 Inter,Arial,sans-serif;
+}
+.auth-points-banner__deadline i {flex:0 0 16px;color:#07873e;margin-top:2px;font-size:15px;}
+.auth-points-banner__deadline strong {font-weight:800;white-space:normal;}

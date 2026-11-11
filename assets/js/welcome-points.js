@@ -22,5 +22,8 @@
       if(n.tagName==='TIME')n.dateTime=`${año}-${String(mes).padStart(2,'0')}-${String(corte).padStart(2,'0')}`;
     });
   }
+  // Mantener la vigencia correcta al volver a una pestaña que cruzó la medianoche.
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)actualizarFecha();});
+  window.addEventListener('focus',actualizarFecha);
   document.readyState==='loading'?document.addEventListener('DOMContentLoaded',actualizarFecha):actualizarFecha();
 })();
