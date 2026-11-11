@@ -28,6 +28,7 @@
     return `${BASE}${value.replace(/^\.?\//, '')}`;
   };
   const languageIsEnglish = () => document.documentElement.lang === 'en';
+  const hotelStarsText = (label, english = languageIsEnglish()) => String(label || '').replace(/([1-5])\s*[★*]/g, (_,n) => n + (english ? ' stars' : ' estrellas'));
   const tierHotels = (tier, english = languageIsEnglish()) => {
     const translated = english && Array.isArray(tier?.hotelsEn) ? tier.hotelsEn : null;
     return translated || (Array.isArray(tier?.hotels) ? tier.hotels : []);
@@ -35,8 +36,8 @@
   const tierOptionLabel = (tier, english = languageIsEnglish()) => {
     if (!tier) return '';
     const explicit = english ? tier.optionLabelEn : tier.optionLabel;
-    if (explicit) return explicit;
-    const category = english ? (tier.starsEn || tier.stars || '') : (tier.stars || '');
+    if (explicit) return hotelStarsText(explicit, english);
+    const category = hotelStarsText(english ? (tier.starsEn || tier.stars || '') : (tier.stars || ''), english);
     const hotels = tierHotels(tier, english);
     const name = hotels.length === 1
       ? hotels[0]
@@ -1290,7 +1291,7 @@
       : (hotels.join(' / ') || (english ? (tier.nameEn || tier.name) : tier.name)));
 
     preview.hidden = false;
-    badge.textContent = english ? (tier.starsEn || tier.stars || 'Hotel') : (tier.stars || 'Hotel');
+    badge.textContent = hotelStarsText(english ? (tier.starsEn || tier.stars || 'Hotel') : (tier.stars || 'Hotel'), english);
     name.textContent = selectedName;
     caption.textContent = state.customHotel ?
       (english ? 'Alternative hotel selected. Additional '+money(state.hotelSupplement)+'.' :
