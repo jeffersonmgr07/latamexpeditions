@@ -31,10 +31,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="preconnect" href="https://accounts.google.com" crossorigin />
+  <link rel="preconnect" href="https://script.google.com" crossorigin />
+  <link rel="preload" href="https://accounts.google.com/gsi/client" as="script" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="assets/css/main.css?v=20261110-account" />
-  <link rel="stylesheet" href="assets/css/auth-pages-20261110.css?v=1" />
+  <link rel="stylesheet" href="assets/css/main.css?v=20261111-mobile-unified" />
+  <link rel="stylesheet" href="assets/css/auth-pages-20261110.css?v=20261111-fast-google" />
 </head>
 <body class="auth-page-surface">
   <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
@@ -119,7 +122,9 @@
         <p>Inicia sesión con tu cuenta y gestiona tus consultas, viajes, vuelos e itinerarios desde un solo lugar.</p>
         <div class="booking-error" id="authError" role="alert"></div>
         <div class="google-block" data-google-block>
-          <div class="google-btn-wrap" data-google-signin></div>
+          <div class="google-btn-wrap" data-google-signin>
+            <div class="google-pending" role="status" aria-live="polite"><i class="fa-brands fa-google" aria-hidden="true"></i><span>Preparando acceso con Google…</span></div>
+          </div>
         </div>
         <div class="auth-divider" data-google-block>o con tu correo</div>
         <form class="form-grid" id="loginForm">
@@ -157,7 +162,7 @@
     </div>
   </div>
 
-  <script src="assets/js/main.js?v=20261110-account" defer></script>
-  <script src="assets/js/cuentas.js?v=20261110-google-pill" defer></script>
+  <script src="assets/js/main.js?v=20261111-mobile-unified" defer></script>
+  <script src="assets/js/cuentas.js?v=20261111-fast-google" defer></script>
 </body>
 </html>
