@@ -1252,7 +1252,7 @@
     state.total = round2(state.adults * state.adultUnit + state.children * state.childUnit +
       (validFlight ? Number(state.flightQuote.displayedPrice || 0) : 0) +
       (state.customHotel ? Number(state.hotelSupplement||0) : 0));
-    if(state.couponCode==='LATAM10'&&PRODUCT.kind==='package')state.total=round2(state.total-round2((state.adults*state.adultUnit+state.children*state.childUnit)*0.10));
+    if(state.couponCode==='LATAM10EXP'&&PRODUCT.kind==='package')state.total=round2(state.total-round2((state.adults*state.adultUnit+state.children*state.childUnit)*0.10));
     const charge = calculateCharge(state.total);
     state.due = charge.due;
     state.mode = charge.mode;
@@ -1783,7 +1783,7 @@
     const addonSummary = $('#bkExtraTravelSummary');
     if (addonSummary) {
       const details = [];
-      if(state.couponCode==='LATAM10')details.push('Cupón LATAM10 · 10 % de descuento en el paquete');
+      if(state.couponCode==='LATAM10EXP')details.push('Cupón LATAM10EXP · 10 % de descuento en el paquete');
       if (state.flightQuote) details.push('Vuelos ida y regreso · '+money(state.flightQuote.displayedPrice)+
         (state.flightQuote.baggage === 'checked' ? ' · maleta facturada por cotizar' : ''));
       if (state.customHotel) details.push('Hotel alternativo: '+state.customHotel+' · '+
@@ -2423,7 +2423,7 @@
       state.hotelAlternative=hasRate?{...alternative}:null;
       state.hotelSupplement=hasRate?round2(Number(alternative.supplement)):0;
       state.roomPlan=String(source.roomPlan||'').slice(0,120);
-      state.couponCode=source.couponCode==='LATAM10'?'LATAM10':'';
+      state.couponCode=source.couponCode==='LATAM10EXP'?'LATAM10EXP':'';
       state.hotelQuotePending=Boolean(source.hotelQuotePending);
       if(state.hotelQuotePending){state.hotelSupplement=0;state.hotelAlternative=alternative?{...alternative,supplement:null,pending:true}:null;}
       const flight=source.flight;
@@ -2456,7 +2456,7 @@
           ' · '+(state.adults+state.children)+' viajero(s)';
         const hotel=state.customHotel||tierOptionLabel(getTier());
         const extras=[hotel,
-          state.couponCode==='LATAM10'?'Cupón LATAM10 aplicado':'',
+          state.couponCode==='LATAM10EXP'?'Cupón LATAM10EXP aplicado':'',
           state.roomPlan||occupancyLabel(state.occupancy),
           state.flightQuote?'Vuelos seleccionados desde '+state.flightQuote.origin:'Vuelos no añadidos'];
         const estimated=Number(source.totalEstimate);
