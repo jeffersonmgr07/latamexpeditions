@@ -414,7 +414,7 @@ body.has-pn-header .exp-account-main, .exp-account-main {background:#f5f7ef !imp
 
 /* LATAM Rewards · wallet fotográfica y programa de invitaciones, 2026-11-11 */
 .exp-account-main .exp-wallet{
-  background-image:linear-gradient(120deg,rgba(3,69,37,.91),rgba(1,92,46,.90)),url("../img/peru-machu-picchu-01.jpg");
+  background-image:linear-gradient(120deg,rgba(3,69,37,.91),rgba(1,92,46,.90)),url("../img/rewards-machu-picchu.webp");
   background-position:center,center 44%;
   background-size:cover,cover;
   background-repeat:no-repeat;
