@@ -551,9 +551,9 @@
 .product-hero-clean.package-hero-clean{
   background-color:#103e2b!important;
   /* URL relativa a assets/css: no depende de variables ni del JS. */
-  background-image:linear-gradient(90deg,rgba(5,44,29,.58) 0%,rgba(5,54,33,.40) 55%,rgba(5,45,30,.24) 100%),url('../img/banner-atacama.jpg')!important;
+  background-image:linear-gradient(90deg,rgba(5,44,29,.60) 0%,rgba(5,54,33,.41) 55%,rgba(5,45,30,.27) 100%),var(--lx-hero-img, url('../img/lagunas-altiplanicas-01.jpg'))!important;
   background-size:cover!important;
-  background-position:center 53%!important;
+  background-position:center 48%!important;
   background-repeat:no-repeat!important;
   min-height:230px;
 }
