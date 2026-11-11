@@ -1,7 +1,7 @@
 /**
  * LATAM Rewards — invitaciones personales.
  * No recompensa compartidos, publicaciones o reseñas.
- * 100 puntos por amigo único que verifica su cuenta y completa una compra pagada.
+ * 50 puntos por amigo único que se registra y verifica su cuenta.
  * Máximo cuatro bonificaciones por patrocinador y mes, sin autoinvitaciones.
  * Se integra con Cuentas.gs y ExpeditionDashboard.gs.
  */
@@ -47,6 +47,16 @@ function lxRefTrackSignup_(code,friendEmail) {
     return true;
   }finally{lock.releaseLock();}
 }
+// Exposición mínima de datos del invitado para el patrocinador: nombre e inicial.
+function lxRefPublicName_(friendUser) {
+  if(!friendUser)return 'Registro pendiente';
+  var name=String(friendUser.nombre||'').trim().replace(/\\s+/g,' ');
+  if(!name)return 'Viajero registrado';
+  var parts=name.split(' ');
+  var first=parts[0].slice(0,35);
+  var initial=parts.length>1?' '+parts[parts.length-1].slice(0,1).toUpperCase()+'.':'';
+  return first+initial;
+}
 function lxRefReview_(email) {
   var aliases=lxRwEmails_(email);
   var sh=lxRefEntriesSheet_(),rows=sh.getDataRange().getValues();
@@ -71,20 +81,19 @@ function lxRefReview_(email) {
       if(aliases.indexOf(normalizarEmail(r[1]))<0)continue;
       var friend=normalizarEmail(r[2]),friendUser=buscarUsuario(friend);
       var key='REFERRAL:'+friend,status=String(r[4]||'REGISTRADO');
+      var displayName=lxRefPublicName_(friendUser);
       if(keys[key])status='ACREDITADO';
       else if(status!=='RECHAZADO'&&friendUser&&lxRwIsVerified_(friendUser)){
-        var hasCompletedPaid=lxRwBookings_(friend).some(function(b){
-          return lxRwPaid_(b)&&lxRwCompleted_(b);
-        });
-        if(hasCompletedPaid && usedThisMonth<4){
+        if(usedThisMonth<4){
+          // Idempotencia por invitado único: solo se acredita una vez, sin compra obligatoria.
           ledger.appendRow([key,email,new Date(),'REFERIDO',
-            'Amigo viajero registrado en LATAM Rewards',100,'DISPONIBLE',friend]);
+            'Amigo viajero · '+displayName,50,'DISPONIBLE',String(r[0]||'')]);
           keys[key]=true;usedThisMonth++;status='ACREDITADO';
           sh.getRange(i+1,5,1,2).setValues([[status,new Date()]]);
-        }else if(hasCompletedPaid)status='EN COLA';
-        else status='PENDIENTE DE VIAJE';
+        }else status='EN COLA';
       }else if(friendUser)status='PENDIENTE DE VERIFICACIÓN';
-      list.push({date:lxRwIsoDate_(r[3]),status:status});
+      list.push({date:lxRwIsoDate_(r[3]),name:displayName,status:status,
+        points:status==='ACREDITADO'?50:0});
     }
     return list;
   }finally{lock.releaseLock();}
