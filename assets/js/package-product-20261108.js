@@ -83,7 +83,7 @@
  }
  function priceFlight(){return state.flight?.displayedPrice||0}
  function extraHotelCost(){return state.customHotel?Number(state.hotelAlternative?.supplement||0):0}
- function discountAmount(){return state.couponCode==='LATAM10'?Math.round(pricePackage()*10)/100:0}
+ function discountAmount(){return state.couponCode==='LATAM10EXP'?Math.round(pricePackage()*10)/100:0}
  function total(){return Math.round((pricePackage()+priceFlight()+extraHotelCost()-discountAmount())*100)/100}
  function passengerText(){return state.adults+(state.adults===1?' adulto':' adultos')+(state.children?', '+state.children+(state.children===1?' niño':' niños'):'')}
  function flightMarkup(date){const n=Math.round((new Date(date+'T12:00:00')-new Date(localISO(new Date())+'T12:00:00'))/86400000);
@@ -127,7 +127,7 @@
  side.querySelector('.price-block')?.after(panel);
  $('lxCouponApply').addEventListener('click',()=>{
    const code=String($('lxCouponCode').value||'').trim().toUpperCase();
-   state.couponCode=code==='LATAM10'?'LATAM10':'';
+   state.couponCode=code==='LATAM10EXP'?'LATAM10EXP':'';
    $('lxCouponNotice').textContent=state.couponCode?'Descuento del 10 % aplicado al paquete. No incluye vuelos ni adicionales.':code?'Código no válido o no disponible.':'Cupón eliminado.';
    update();
  });
