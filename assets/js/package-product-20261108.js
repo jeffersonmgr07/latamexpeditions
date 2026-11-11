@@ -160,7 +160,8 @@
  const addonHotels=el('section','lx-package-addon');
  addonHotels.innerHTML='<h2><i class="fa-solid fa-bed"></i> Alojamiento del paquete</h2>'+
  '<div class="lx-package-hotel-item"><div class="lx-package-hotel-photo" id="lxProductHotelPhoto">'+
- '<span>Foto del hotel al consultar opciones</span></div><div><strong id="lxProductHotelName"></strong>'+
+ (multiCityAtacama?'<img src="'+(document.documentElement.dataset.base||'../')+'assets/img/hotel-panamericano-santiago-01.jpg" alt="Hotel Panamericano Santiago" loading="eager" decoding="async">':'<span>Foto del hotel al consultar opciones</span>')+
+ '</div><div><strong id="lxProductHotelName"></strong>'+
  '<small id="lxProductHotelCategory"></small><p id="lxProductHotelStatus"></p></div></div>'+
  '<div class="lx-addon-row"><span class="lx-package-addons-note">Puedes cambiar de categoría o solicitar otro hotel.</span>'+
  '<button type="button" id="lxProductOpenHotel">Elegir habitación u hotel</button></div>';
