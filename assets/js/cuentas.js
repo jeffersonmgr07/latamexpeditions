@@ -433,7 +433,7 @@
           type: 'standard',
           theme: 'outline',
           size: 'large',
-          text: window.location.pathname.includes('registro') ? 'signup_with' : 'continue_with',
+          text: 'signin_with',
           shape: 'pill',
           logo_alignment: 'left',
           locale: 'es',
@@ -442,8 +442,14 @@
       });
     } catch (err) {
       console.warn('[google] No se pudo preparar el inicio de sesión', err);
-      // Mantener el formulario de correo/contraseña aunque Google no responda.
-      $$('[data-google-block]').forEach((n) => { n.hidden = true; });
+      // Si la biblioteca o el nonce no responde, conservar visible el error.
+      // El formulario de correo sigue siendo operativo y el indicador no queda eterno.
+      contenedores.forEach(div => {
+        div.querySelectorAll('.google-pending').forEach(p => {
+          p.classList.add('google-pending--error');
+          p.setAttribute('aria-label','Google no disponible; utiliza tu correo electrónico');
+        });
+      });
     }
   }
 
