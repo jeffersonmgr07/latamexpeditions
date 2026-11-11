@@ -210,14 +210,14 @@
       '</tbody></table></div>':empty('Aún no hay movimientos','Tus bonos y compras se reflejarán aquí.',false))+'</div>';
   }
   const REWARD_CATALOG=[
-    {id:'cusco-bienvenida',name:'Bienvenida ancestral en Cusco',place:'Cusco, Perú',points:500,img:'assets/img/home-cusco-machu-picchu.webp'},
-    {id:'cusco-city',name:'City Tour en Cusco',place:'Cusco, Perú',points:550,img:'assets/img/peru-machu-picchu-01.jpg'},
+    {id:'cusco-bienvenida',name:'Bienvenida ancestral en Cusco',place:'Cusco, Perú',points:500,img:'assets/img/rewards-bienvenida-cusco.webp'},
+    {id:'cusco-city',name:'City Tour en Cusco',place:'Cusco, Perú',points:550,img:'assets/img/rewards-bienvenida-cusco.webp'},
     {id:'machu-guia',name:'Tour guiado por Machu Picchu',place:'Machu Picchu, Perú',points:650,img:'assets/img/peru-machu-picchu-01.jpg'},
     {id:'buenos-aires',name:'City Tour en Buenos Aires',place:'Buenos Aires, Argentina',points:600,img:'assets/img/argentina-buenos-aires-01.jpg'},
-    {id:'rio',name:'City Tour en Río de Janeiro',place:'Río de Janeiro, Brasil',points:650,img:'assets/img/brasil-rio-01.jpg'},
-    {id:'lima',name:'City Tour histórico en Lima',place:'Lima, Perú',points:500,img:''},
-    {id:'chiva-medellin',name:'Chiva rumbera en Medellín',place:'Medellín, Colombia',points:550,img:'assets/img/colombia-experiencia-medellin-nocturno-gastronomia-rooftops.jpg'},
-    {id:'cartagena',name:'Paseo cultural en Cartagena',place:'Cartagena, Colombia',points:600,img:'assets/img/colombia-cartagena-01.jpg'}
+    {id:'rio',name:'City Tour en Río de Janeiro',place:'Río de Janeiro, Brasil',points:650,img:'assets/img/rewards-rio-selaron.webp'},
+    {id:'lima',name:'City Tour histórico en Lima',place:'Lima, Perú',points:500,img:'assets/img/rewards-lima-centro.webp'},
+    {id:'chiva-medellin',name:'Chiva rumbera en Medellín',place:'Medellín, Colombia',points:550,img:'assets/img/rewards-chiva-medellin.webp'},
+    {id:'cartagena',name:'Paseo cultural en Cartagena',place:'Cartagena, Colombia',points:600,img:'assets/img/rewards-cartagena.webp'}
   ];
   function rewardsPage() {
     const levels=[['Explorer','0–2,999'],['Gold','3,000–6,999'],
