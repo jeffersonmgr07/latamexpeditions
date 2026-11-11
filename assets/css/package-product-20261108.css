@@ -545,3 +545,43 @@
  .lx-hotel-modal-photo-grid.is-multicity .lx-hotel-modal-photo img{height:94px}
  .lx-hotel-photo-label{font-size:10px}
 }
+
+
+/* 2026-11-10 · Atacama: banner real, información completa y galería responsive */
+.product-hero-clean.package-hero-clean{
+  background-color:#103e2b!important;
+  /* URL relativa a assets/css: no depende de variables ni del JS. */
+  background-image:linear-gradient(90deg,rgba(5,44,29,.58) 0%,rgba(5,54,33,.40) 55%,rgba(5,45,30,.24) 100%),url('../img/banner-atacama.jpg')!important;
+  background-size:cover!important;
+  background-position:center 53%!important;
+  background-repeat:no-repeat!important;
+  min-height:230px;
+}
+.product-hero-clean.package-hero-clean h1,
+.product-hero-clean.package-hero-clean p{text-shadow:0 2px 14px rgba(0,24,13,.48)}
+/* La regla anterior ocultaba todas las fichas informativas desde la cuarta. */
+.product-detail-section .tour-facts.product-facts > div:nth-child(n+4){display:grid!important}
+.product-detail-section .tour-facts.product-facts{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.product-detail-section .tour-facts.product-facts > div{min-height:62px}
+.lx-atacama-gallery{margin:0;min-width:0}
+.lx-atacama-gallery-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 14px}
+.lx-atacama-gallery-head h2{margin:0!important}
+.lx-atacama-gallery-actions{display:flex;gap:8px}
+.lx-atacama-gallery-actions button{width:36px;height:36px;border:1px solid #c6dcd0;background:#fff;color:#135934;border-radius:50%;cursor:pointer;font-size:21px;line-height:1;display:grid;place-items:center}
+.lx-atacama-gallery-actions button:hover{border-color:#07873e;background:#f2faf5}
+.lx-atacama-gallery-actions button:focus-visible{outline:3px solid #07873e;outline-offset:2px}
+.lx-atacama-gallery-track{display:flex;gap:13px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:thin;padding:2px 2px 12px}
+.lx-atacama-gallery-track figure{margin:0;flex:0 0 clamp(210px,44%,340px);min-width:0;scroll-snap-align:start}
+.lx-atacama-gallery-track img{display:block;width:100%;aspect-ratio:5/3;object-fit:cover;border-radius:12px;background:#e9f3ec}
+.lx-atacama-gallery-track figcaption{font-size:12px;line-height:1.45;color:#597161;margin:7px 1px 0}
+.lx-paired-hotels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.lx-paired-hotel{min-width:0;display:flex;flex-direction:column;gap:5px}
+.lx-paired-hotel img.lx-paired-photo{display:block!important;width:100%!important;height:118px!important;min-height:118px!important;max-height:none!important;object-fit:cover!important;object-position:center!important;border-radius:9px;margin-top:8px}
+.lx-package-hotel-item .lx-package-hotel-photo img{display:block;width:100%;height:100%;object-fit:cover}
+@media(max-width:740px){
+ .product-detail-section .tour-facts.product-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .lx-atacama-gallery-track figure{flex-basis:76%}
+ .lx-paired-hotels{grid-template-columns:1fr}
+ .lx-paired-hotel img.lx-paired-photo{height:160px!important}
+}
+@media(prefers-reduced-motion:reduce){.lx-atacama-gallery-track{scroll-behavior:auto}}
