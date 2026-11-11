@@ -501,7 +501,8 @@
       document.head.appendChild(preload);
     }
     try {
-      const r = await fetch(`${BASE}assets/data/catalog.json`, { cache: 'no-store' });
+      // Revalidar la configuración sin forzar descargas completas en cada login.
+      const r = await fetch(`${BASE}assets/data/catalog.json`, { cache: 'no-cache' });
       const cfg = (await r.json()).booking;
       ENDPOINT = cfg.endpoint;
       GOOGLE_CLIENT_ID = cfg.googleClientId;
