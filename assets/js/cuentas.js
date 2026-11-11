@@ -485,7 +485,7 @@
 
     // Se aplica siempre el estado completo para evitar que "Cerrar sesión"
     // aparezca por estilos inline, datos antiguos o una carga parcial.
-    $('[data-auth-in]').forEach((n) => {
+    $$('[data-auth-in]').forEach((n) => {
       // El panel móvil de cuenta es generado por main.js. Evitar la entrada duplicada.
       if(n.matches('#mobileNav a[data-auth-in]')) { n.hidden = true; return; }
       n.hidden = !autenticado;
@@ -501,7 +501,7 @@
   async function init() {
     // La configuración del catálogo puede ser grande. Descargar la biblioteca
     // oficial de Google desde el inicio evita esperar a leer todo catalog.json.
-    if($('[data-google-signin]').length&&!window.google?.accounts?.id&&
+    if($$('[data-google-signin]').length&&!window.google?.accounts?.id&&
        !document.querySelector('script[data-lx-google-sdk]')){
       const preload=document.createElement('script');
       preload.src='https://accounts.google.com/gsi/client';
