@@ -1766,7 +1766,7 @@
   }
 
   function saveStep2() {
-    const cards=$('.passenger-card', $('#bkPaxList'));
+    const cards=$$('.passenger-card', $('#bkPaxList'));
     if(cards.length!==state.adults+state.children)
       throw new Error('El número de formularios no coincide con los viajeros seleccionados.');
     state.passengers = cards.map((card) => {
