@@ -50,7 +50,7 @@ function lxRefTrackSignup_(code,friendEmail) {
 // Exposición mínima de datos del invitado para el patrocinador: nombre e inicial.
 function lxRefPublicName_(friendUser) {
   if(!friendUser)return 'Registro pendiente';
-  var name=String(friendUser.nombre||'').trim().replace(/\\s+/g,' ');
+  var name=String(friendUser.nombre||'').trim().replace(/\s+/g,' ');
   if(!name)return 'Viajero registrado';
   var parts=name.split(' ');
   var first=parts[0].slice(0,35);
@@ -66,11 +66,12 @@ function lxRefReview_(email) {
   try {
     rows=sh.getDataRange().getValues();
     movements=ledger.getDataRange().getValues();
-    var keys={};
+    var keys={}, creditedPoints={};
     var usedThisMonth=0,month=Utilities.formatDate(new Date(),'America/Lima','yyyy-MM');
     for(var j=1;j<movements.length;j++){
       var key=String(movements[j][0]||'');
       keys[key]=true;
+      creditedPoints[key]=Number(movements[j][5])||0;
       if(String(movements[j][3])==='REFERIDO'&&
           aliases.indexOf(normalizarEmail(movements[j][1]))>=0&&
           lxRwIsoDate_(movements[j][2]).slice(0,7)===month)usedThisMonth++;
@@ -88,12 +89,12 @@ function lxRefReview_(email) {
           // Idempotencia por invitado único: solo se acredita una vez, sin compra obligatoria.
           ledger.appendRow([key,email,new Date(),'REFERIDO',
             'Amigo viajero · '+displayName,50,'DISPONIBLE',String(r[0]||'')]);
-          keys[key]=true;usedThisMonth++;status='ACREDITADO';
+          keys[key]=true;creditedPoints[key]=50;usedThisMonth++;status='ACREDITADO';
           sh.getRange(i+1,5,1,2).setValues([[status,new Date()]]);
         }else status='EN COLA';
       }else if(friendUser)status='PENDIENTE DE VERIFICACIÓN';
       list.push({date:lxRwIsoDate_(r[3]),name:displayName,status:status,
-        points:status==='ACREDITADO'?50:0});
+        points:status==='ACREDITADO'?(creditedPoints[key]||50):0});
     }
     return list;
   }finally{lock.releaseLock();}
