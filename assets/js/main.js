@@ -1030,3 +1030,25 @@
     document.addEventListener('DOMContentLoaded', enhancePackageItineraries, {once: true});
   else enhancePackageItineraries();
 })();
+
+
+/* Galerías de experiencias: controles accesibles y desplazamiento por fotografías. */
+(function(){
+  'use strict';
+  document.addEventListener('click',function(event){
+    const button=event.target.closest('[data-lx-gallery-dir]');
+    if(!button)return;
+    const track=button.closest('[data-lx-gallery]')?.querySelector('.lx-atacama-gallery-track');
+    if(!track)return;
+    const photo=track.querySelector('figure');
+    const width=photo?.getBoundingClientRect().width||260;
+    const direction=Number(button.dataset.lxGalleryDir)||1;
+    track.scrollBy({left:direction*(width+13),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  });
+  document.addEventListener('keydown',function(event){
+    if(!event.target.matches('.lx-atacama-gallery-track')||!['ArrowLeft','ArrowRight'].includes(event.key))return;
+    event.preventDefault();
+    const track=event.target,photo=track.querySelector('figure');
+    track.scrollBy({left:(event.key==='ArrowRight'?1:-1)*((photo?.getBoundingClientRect().width||260)+13),behavior:'auto'});
+  });
+})();
