@@ -176,8 +176,10 @@
       navToggle.setAttribute('aria-expanded', String(open));
       document.body.classList.toggle('nav-open', open);
     });
-    document.querySelectorAll('[data-close-nav]').forEach((el) => el.addEventListener('click', closeNav));
-    mobileNav?.addEventListener('click', (e) => { if (e.target === mobileNav) closeNav(); });
+    // Delegación: también cierra enlaces generados después del DOMContentLoaded.
+    mobileNav?.addEventListener('click', (e) => {
+      if (e.target === mobileNav || e.target.closest('[data-close-nav]')) closeNav();
+    });
 
     const loginMenu = document.querySelector('.login-menu');
     const loginToggle = loginMenu?.querySelector('.login-toggle');
@@ -588,9 +590,7 @@
         '<a href="'+base+href+'" data-close-nav data-header-service="'+key+'">'+label+'</a>'
       ).join('');
       head.after(block);
-      block.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
-        panel.closest('.mobile-nav')?.classList.remove('is-open');
-      }));
+      // El cierre y aria-expanded se gestionan en setupNavigation.
       panel.querySelectorAll(':scope > a').forEach(a=>{
         if (/^(Destinos|Experiencias|Paquetes|Estilos de viaje|Contacto)$/i.test(a.textContent.trim())) a.style.display='none';
       });
