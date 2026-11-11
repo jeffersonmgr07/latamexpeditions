@@ -770,6 +770,13 @@
   document.addEventListener('keydown',e=>{
     if(e.key==='Escape')closeCustomSelects();
   });
+  // Los enlaces del menú principal usan #inicio, #viajes, #millas, etc.
+  // Al pulsarlos desde esta misma página, cambiar de panel sin recargar.
+  window.addEventListener('hashchange',()=>{
+    const target=location.hash.slice(1);
+    if(['inicio','viajes','reservas','millas','recompensas','avisos','perfil'].includes(target)
+       && target!==state.page)navigate(target);
+  });
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load);
   else load();
 })();

@@ -1,198 +1,48 @@
-# Latam Expeditions
+# LATAM Expeditions
 
-Sitio web estático de una agencia de viajes especializada en Latinoamérica.
-Desplegado en GitHub Pages sobre el dominio `latamexpeditions.com`.
+Sitio de experiencias, vuelos, hoteles y paquetes en Latinoamérica. Frontend estático publicado mediante GitHub Pages; servicios de reservas y búsqueda en Google Apps Script con hojas privadas. Desarrollo y documentación administrados en GitHub.
 
----
+**Documentación oficial vigente:** [Manual técnico y operativo](docs/MANUAL_PROYECTO_VIGENTE.md)  
+**Historial de implementación:** [Bitácora 2026-11-11](docs/bitacora/2026-11-11-dashboard-movil.md) · [Archivo histórico](docs/historico/)
 
-## Cómo está organizado
+> Evita seguir guías archivadas para instalar o configurar el sistema actual. Los documentos previos se conservaron íntegros en `docs/historico/` solo para auditoría y reconstrucción del proceso.
 
-```
-├── index.html              Portada
-├── destinos.html           Los 11 países donde operamos
-├── experiencias.html       Catálogo de experiencias, con filtros
-├── paquetes.html           Catálogo de paquetes, con filtros
-├── estilos-viaje.html      Los 8 estilos de viaje
-├── contacto.html           Formulario de propuesta + preguntas frecuentes
-├── nosotros.html           Quiénes somos
-├── legal.html              Términos, privacidad, cookies, reclamaciones
-├── login.html              Acceso a cuenta
-├── registro.html           Alta de cuenta
-├── mis-viajes.html         Panel del usuario: viajes futuros y pasados
-├── mi-reserva.html         Consulta pública por código + apellido
-├── 404.html                Página de error
-├── experiencias/           9 fichas de detalle (generadas)
-├── paquetes/               6 fichas de detalle (generadas)
-│
-├── assets/
-│   ├── css/main.css        Hoja de estilos única de todo el sitio
-│   ├── js/main.js          JavaScript único de todo el sitio
-│   ├── js/booking.js       Modal de reserva y pago (solo en fichas con precio)
-│   ├── js/cuentas.js       Registro, login, Mis viajes y consulta de reserva
-│   ├── img/                Imágenes en .jpg y .webp
-│   └── data/
-│       ├── catalog.json    ← Fuente de verdad del contenido
-│       └── i18n/           Traducciones de interfaz (8 idiomas)
-│
-├── backend/
-│   ├── Codigo.gs           Reservas y pagos (Apps Script)
-│   └── Cuentas.gs          Cuentas, sesiones y consultas (Apps Script)
-│
-├── tools/
-│   ├── build.py            Generador de páginas
-│   └── partials.py         Cabecera, pie, modal y plantilla de <head>
-│
-├── sitemap.xml             Generado
-├── robots.txt              Generado
-└── site.webmanifest        Generado
-```
+## Módulos activos en el código
+
+| Módulo | Archivos principales |
+| --- | --- |
+| Landing, catálogo y navegación | `index.html`, `assets/js/main.js`, `assets/css/main.css`, `assets/data/catalog.json` |
+| Paquetes y experiencias | `paquetes/`, `experiencias/`, `assets/js/booking.js`, `assets/js/package-product-20261108.js` |
+| Vuelos y hoteles | `vuelos.html`, `assets/js/vuelos.js`, `integraciones/vuelos/Code.gs` |
+| Cuentas y Google Login | `login.html`, `registro.html`, `assets/js/cuentas.js` |
+| Dashboard y LATAM Rewards | `mis-viajes.html`, `assets/js/expedition-dashboard.js`, `backend/ExpeditionDashboard.gs` |
+| Operaciones y PayPal | `backend/Codigo.gs`, `backend/Cuentas.gs`, `backend/Operaciones.gs` |
+| Intranet de productos (MVP) | `intranet/Code.gs`, `intranet/Index.html` |
+
+## Trabajar en este repositorio
+
+1. Abrir una rama descriptiva para cada módulo; no editar `main` directamente durante el desarrollo.
+2. Cambiar el código fuente actual, no añadir otro archivo para sustituirlo mediante un parche temporal.
+3. Validar JavaScript/CSS, navegación móvil y escritorio, lógica de precios, reservas y controles de seguridad que afecte el cambio.
+4. Si cambia la operación, actualizar el [manual vigente](docs/MANUAL_PROYECTO_VIGENTE.md). Añadir un registro fechado en `docs/bitacora/` con cambios, pruebas y despliegues.
+5. Abrir PR, revisar diferencias y fusionar solo al terminar QA.
+6. Cuando cambian scripts backend, desplegar **nueva versión manual** del proyecto Apps Script correspondiente; modificar GitHub no actualiza ese backend.
+
+Para cambios de productos y plantillas, revisar si se requiere `python3 tools/build.py` o las herramientas de generación existentes; nunca sobrescribir fichas editadas a mano sin comparar los cambios.
+
+## Fuente de verdad y seguridad
+
+- El catálogo público está en `assets/data/catalog.json`.
+- El proveedor de consultas dinámicas de vuelos y hoteles es **SerpAPI** en `integraciones/vuelos/Code.gs`. Aviasales/Travelpayouts solo puede tener uso auxiliar/histórico cuando corresponda.
+- Las operaciones de reservas/cuentas/PayPal van en un Apps Script **distinto** al de consultas de vuelos/hoteles. La intranet de productos es un tercer proyecto independiente.
+- **No subir** secretos PayPal, claves SerpAPI, contraseñas, tokens de sesión ni datos de clientes al repositorio.
+- Actualmente el repositorio es público. Cambiarlo a privado no protege datos ya publicados ni sustituye la seguridad del backend.
+- El login existente usa **correo/contraseña y Google**. Facebook y TikTok aún no son opciones activadas.
+
+## Estado de publicación
+
+El frontend está alojado en `https://latamexpeditions.com` con `CNAME`. La existencia de archivos `.gs` en este repositorio **no certifica** su despliegue ni las pruebas en producción. Verificar cada proyecto Google Apps Script, la URL `/exec`, PayPal, reservas y disponibilidad con pruebas reales antes de anunciar funcionamiento.
 
 ---
 
-## Cómo añadir o cambiar contenido
-
-**No edites los HTML a mano.** Se regeneran y perderías los cambios.
-
-1. Abre `assets/data/catalog.json`.
-2. Añade o modifica la entrada en `experiences`, `packages`, `destinations` o `styles`.
-3. Ejecuta el generador:
-
-```bash
-python3 tools/build.py
-```
-
-Se regenerarán todas las páginas afectadas, más el sitemap, con la cabecera,
-el pie, los metadatos SEO y los datos estructurados ya aplicados.
-
-**Para una experiencia nueva necesitas:** una imagen en `assets/img/` (1200×800,
-proporción 3:2, en `.jpg` y `.webp`) y una entrada en el JSON con `slug`, `title`, `country`,
-`region`, `style`, `duration`, `img`, `alt`, `excerpt`, `description`,
-`includes`, `notIncludes` y `highlights`.
-
-**Para convertir una imagen nueva a WebP:**
-
-```bash
-python3 -c "from PIL import Image; im=Image.open('assets/img/NOMBRE.jpg').convert('RGB'); im.save('assets/img/NOMBRE.webp','WEBP',quality=82,method=6)"
-```
-
-### Cambiar diseño o comportamiento
-
-- **Estilos** → `assets/css/main.css` (afecta a todo el sitio).
-- **Comportamiento** → `assets/js/main.js` (afecta a todo el sitio).
-- **Cabecera, pie, menús** → `tools/partials.py`, luego `python3 tools/build.py`.
-
----
-
-## Ver el sitio en local
-
-```bash
-python3 -m http.server 8000
-```
-
-Y abre `http://localhost:8000`. Hace falta un servidor: el sistema de idiomas
-usa `fetch()`, que no funciona abriendo el archivo directamente con `file://`.
-
----
-
-## País del visitante
-
-Se detecta por IP al entrar (`get.geojs.io`, con `ipwho.is` de respaldo) y se
-muestra una barra discreta con opción a cambiar. El modal de selección solo se
-abre si el visitante lo pide.
-
-Para desactivar la detección y volver al modal manual, en `assets/js/main.js`:
-
-```js
-const GEO_ENABLED = false;
-```
-
-Ten en cuenta que la detección envía la IP del visitante a un tercero. Está
-mencionado en `legal.html`, sección de privacidad.
-
----
-
-## Idiomas
-
-El español es el idioma base del marcado. Los demás se cargan desde
-`assets/data/i18n/<código>/ui-translations.json` cuando el visitante cambia el
-selector de la cabecera, y la elección se recuerda en el navegador.
-
-Idiomas activos: `es`, `en`, `pt`, `fr`, `de`, `it`, `ja`, `zh`.
-
-**Para traducir un texto nuevo:** añade `data-i18n="seccion.clave"` al elemento
-en `tools/partials.py` o `tools/build.py`, y la clave correspondiente a los
-ocho archivos JSON. Para atributos existen `data-i18n-placeholder` y
-`data-i18n-aria-label`.
-
----
-
-## Reservas y pagos
-
-El motor de reserva vive en `assets/js/booking.js` y el backend en
-`backend/Codigo.gs`, pensado para Google Apps Script. Instalación completa en
-`RESERVAS-Y-PAGOS.md`.
-
-**Regla crítica:** cuando cambies un precio en `catalog.json`, cámbialo también
-en la tabla `PRECIOS` de `backend/Codigo.gs` y vuelve a implementar el script.
-El backend recalcula el importe por su cuenta y rechaza la reserva si no
-coincide — es lo que impide que alguien manipule el precio desde el navegador.
-
-Para comprobar que ambos coinciden:
-
-```bash
-python3 tools/verificar_precios.py
-```
-
----
-
-## Cuentas de usuario
-
-`backend/Cuentas.gs` añade registro, login, «Mis viajes» y la consulta pública
-de reservas. Se instala en el mismo proyecto de Apps Script que los pagos y usa
-la misma hoja. Detalles en `CUENTAS-Y-RESERVAS.md`.
-
-Hay dos formas de entrar: correo con contraseña, y **Entrar con Google**. Las
-dos conviven y comparten cuenta si el correo es el mismo.
-
-Comprobación tras instalar: `pruebaDeCuentas()` y `pruebaDeGoogle()` en el editor.
-
-Google Sign-In necesita un Client ID de Google Cloud en dos sitios que **deben
-coincidir**: `booking.googleClientId` en `catalog.json` y la propiedad
-`GOOGLE_CLIENT_ID` en Apps Script. Pasos en `GOOGLE-SIGNIN.md`.
-
----
-
-## Imágenes
-
-Proporción **3:2 horizontal**, mínimo 1200 × 800 px. Para añadir una:
-
-```bash
-python3 tools/preparar_imagen.py foto-original.jpg peru-nuevo-tour-01
-```
-
-Recorta al centro, redimensiona y genera el `.jpg` y el `.webp`.
-
----
-
-## Despliegue
-
-GitHub Pages sirve la rama principal directamente. Al hacer push de los
-cambios, el sitio se actualiza. El archivo `CNAME` mantiene el dominio
-personalizado; no lo borres.
-
-Recuerda ejecutar `python3 tools/build.py` **antes** de hacer commit si tocaste
-el catálogo o las plantillas.
-
----
-
-## Pendiente antes de producción
-
-- [ ] El formulario de contacto es una maqueta: no envía datos a ningún sitio.
-      Login y registro sí funcionan contra Apps Script.
-- [ ] Revisar `legal.html` con un asesor legal antes de publicarlo.
-- [ ] Sustituir las imágenes de banco por fotografía propia de los viajes.
-- [ ] Confirmar los precios "Consultar" con tarifas reales cuando estén cerradas.
-- [ ] Añadir analítica respetuosa con la privacidad si se necesita medición.
-- [ ] Cargar los tours reales desde `plantilla-tours-latamexpeditions.xlsx`.
-- [ ] Conectar PayPal: pegar Client ID y endpoint en `catalog.json`.
-      Ver `RESERVAS-Y-PAGOS.md` para la instalación paso a paso.
+Para incorporar un ajuste nuevo, usar este `README` solo como puerta de entrada; el **manual vigente** es la instrucción oficial y la **bitácora** conserva las decisiones anteriores.

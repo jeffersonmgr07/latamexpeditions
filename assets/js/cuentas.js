@@ -479,7 +479,11 @@
 
     // Se aplica siempre el estado completo para evitar que "Cerrar sesión"
     // aparezca por estilos inline, datos antiguos o una carga parcial.
-    $$('[data-auth-in]').forEach((n) => { n.hidden = !autenticado; });
+    $('[data-auth-in]').forEach((n) => {
+      // El panel móvil de cuenta es generado por main.js. Evitar la entrada duplicada.
+      if(n.matches('#mobileNav a[data-auth-in]')) { n.hidden = true; return; }
+      n.hidden = !autenticado;
+    });
     $$('[data-auth-out]').forEach((n) => { n.hidden = autenticado; });
     $$('[data-auth-label]').forEach((n) => {
       n.textContent = autenticado ? user.name.split(' ')[0] : T('Iniciar sesión');
@@ -501,7 +505,8 @@
       document.head.appendChild(preload);
     }
     try {
-      const r = await fetch(`${BASE}assets/data/catalog.json`, { cache: 'no-store' });
+      // Revalidar la configuración sin forzar descargas completas en cada login.
+      const r = await fetch(`${BASE}assets/data/catalog.json`, { cache: 'no-cache' });
       const cfg = (await r.json()).booking;
       ENDPOINT = cfg.endpoint;
       GOOGLE_CLIENT_ID = cfg.googleClientId;

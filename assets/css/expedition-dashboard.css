@@ -318,3 +318,96 @@ body.has-pn-header .exp-account-main, .exp-account-main {background:#f5f7ef !imp
 @media(max-width:790px){.exp-redeem-illustration{height:130px;}}
 @media(max-width:500px){.exp-redeem-illustration{height:116px;}}
 .exp-sidebar-avatar{border:0;cursor:pointer;}
+
+/* 2026-11-11 · Dashboard móvil: una sola navegación (hamburguesa global),
+   tarjetas fluidas y desbordamientos confinados a sus componentes. */
+.exp-account-main .exp-app,
+.exp-account-main .exp-app-shell,
+.exp-account-main .exp-workspace,
+.exp-account-main #expPagePanels,
+.exp-account-main .exp-card,
+.exp-account-main .exp-wallet {
+  min-width:0;
+  max-width:100%;
+  box-sizing:border-box;
+}
+.exp-account-main .exp-card-head,
+.exp-account-main .exp-profile-top,
+.exp-account-main .exp-referral-intro,
+.exp-account-main .exp-referral-head {min-width:0;}
+.exp-account-main .exp-card p,
+.exp-account-main .exp-notice p,
+.exp-account-main .exp-reward p,
+.exp-account-main .exp-rewards-section-head p,
+.exp-account-main .exp-referral-head p,
+.exp-account-main .exp-wallet strong,
+.exp-account-main .exp-tier-progress,
+.exp-account-main .exp-greeting {overflow-wrap:anywhere;}
+@media (max-width:760px) {
+  .exp-account-main .exp-app {
+    width:100%;
+    padding:26px 14px 54px;
+    margin:0 auto;
+    overflow:clip;
+  }
+  .exp-account-main .exp-app-shell {display:block;width:100%;}
+  /* La navegación del viajero vive ahora en #mobileNav del header compartido. */
+  .exp-account-main .exp-sidebar {display:none!important;}
+  .exp-account-main .exp-workspace,
+  .exp-account-main #expPagePanels {width:100%;}
+  .exp-account-main .exp-heading {
+    padding:0;
+    margin:7px 0 23px;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .exp-account-main .exp-heading > div {min-width:0;flex:1;}
+  .exp-account-main .exp-heading h1 {font-size:clamp(23px,6.1vw,30px);letter-spacing:-.035em;}
+  .exp-account-main .exp-heading p {font-size:13px;line-height:1.5;}
+  .exp-account-main .exp-head-alert {width:44px;height:44px;flex:0 0 44px;}
+  .exp-account-main .exp-page-head {gap:10px;align-items:flex-start;flex-wrap:wrap;}
+  .exp-account-main .exp-page-head > div {min-width:0;flex:1 1 190px;}
+  .exp-account-main .exp-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .exp-account-main .exp-grid .exp-stat:last-child {grid-column:1/-1;}
+  .exp-account-main .exp-stat {min-width:0;padding:15px 13px;min-height:125px;}
+  .exp-account-main .exp-stat strong {font-size:25px;}
+  .exp-account-main .exp-stat span {font-size:11px;line-height:1.35;overflow-wrap:anywhere;}
+  .exp-account-main .exp-card {width:100%;padding:19px 16px;margin-bottom:16px;}
+  .exp-account-main .exp-card-head {flex-wrap:wrap;align-items:flex-start;}
+  .exp-account-main .exp-card-head h3 {min-width:0;flex:1 1 165px;}
+  .exp-account-main .exp-card-head .exp-link {text-align:left;}
+  .exp-account-main .exp-wallet {padding:20px 17px;}
+  .exp-account-main .exp-wallet strong {font-size:clamp(25px,6.5vw,37px);line-height:1.15;}
+  .exp-account-main .exp-wallet-stats {gap:10px;}
+  .exp-account-main .exp-rewards-grid,
+  .exp-account-main .exp-social-grid,
+  .exp-account-main .exp-form-grid,
+  .exp-account-main .exp-whatsapp-row {grid-template-columns:1fr;}
+  .exp-account-main .exp-redeem-grid,
+  .exp-account-main .exp-share-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .exp-account-main .exp-referral-link,
+  .exp-account-main .exp-profile-mini {min-width:0;}
+  .exp-account-main .exp-referral-link input,
+  .exp-account-main .exp-profile-form input,
+  .exp-account-main .exp-custom-trigger {max-width:100%;min-width:0;}
+  .exp-account-main .exp-table-wrap {width:100%;max-width:100%;overflow-x:auto;}
+  .exp-account-main .exp-social-card {grid-template-columns:1fr;}
+  .exp-account-main .exp-social-card>.exp-btn,
+  .exp-account-main .exp-social-card>.exp-social-form,
+  .exp-account-main .exp-social-card>small {grid-column:1;}
+}
+@media (max-width:480px) {
+  .exp-account-main .exp-app {padding:22px 12px 44px;}
+  .exp-account-main .exp-greeting {font-size:18px;}
+  .exp-account-main .exp-grid {gap:8px;}
+  .exp-account-main .exp-stat {padding:13px 11px;min-height:119px;}
+  .exp-account-main .exp-card {padding:17px 14px;}
+  .exp-account-main .exp-redeem-grid {grid-template-columns:1fr;gap:12px;}
+  .exp-account-main .exp-redeem-card>img,
+  .exp-account-main .exp-redeem-illustration {height:155px;}
+  .exp-account-main .exp-redeem-card h3 {min-height:0;font-size:14px;}
+  .exp-account-main .exp-redeem-price strong {font-size:22px;}
+  .exp-account-main .exp-share-grid {grid-template-columns:repeat(2,minmax(0,1fr));}
+  .exp-account-main .exp-tier-progress {padding:15px;}
+  .exp-account-main .exp-profile-mini {flex-wrap:wrap;}
+}

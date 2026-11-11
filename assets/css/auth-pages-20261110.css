@@ -96,3 +96,13 @@ body.has-pn-header main.lookup-page {
   .lookup-page .lookup-section {padding:52px 12px 72px;min-height:calc(100svh - 135px);}
   .lookup-page .lookup-card--refined {padding:25px 19px;border-radius:18px;}
 }
+
+/* 2026-11-11 · Estado visible inmediato mientras Google prepara el iframe oficial. */
+.auth-layout--refined .google-btn-wrap {min-height:43px;width:100%;display:flex;align-items:center;justify-content:center;}
+.google-pending {
+  display:flex;align-items:center;justify-content:center;gap:11px;
+  width:100%;max-width:400px;min-height:42px;padding:8px 14px;
+  border:1px solid #d8dfd9;border-radius:999px;background:#fff;
+  color:#597167;font:650 13px Inter,Arial,sans-serif;
+}
+.google-pending i {color:#4285f4;font-size:17px;}

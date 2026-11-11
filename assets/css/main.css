@@ -3513,3 +3513,44 @@ body.has-pn-header .topbar { border: 0 !important; }
   border-radius:12px;display:block;color:#115435;font-weight:720;font-size:14px;
   width:calc(100% - 28px);text-align:left;padding:13px;margin:8px 14px 15px;cursor:pointer;}
 .latam-mobile-account-logout[hidden] {display:none!important;}
+
+/* 2026-11-11 · Menú móvil único con sección privada para viajeros autenticados. */
+.mobile-nav__panel .mobile-account-links {
+  display:grid;
+  gap:4px;
+  margin:9px 0 10px;
+  padding:17px 0 13px;
+  border-top:1px solid rgba(255,255,255,.16);
+  border-bottom:1px solid rgba(255,255,255,.16);
+}
+.mobile-nav__panel .mobile-account-links[hidden],
+.mobile-nav__panel [data-auth-in][hidden],
+.mobile-nav__panel [data-auth-out][hidden] {display:none!important;}
+.mobile-nav__panel .mobile-account-links__title {
+  display:block;
+  font:800 11px/1.4 Inter,Arial,sans-serif;
+  color:#a9e8b4;
+  letter-spacing:.08em;
+  padding:0 12px 8px;
+}
+.mobile-nav__panel .mobile-account-links a {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:#e9f5ec;
+  padding:12px 13px;
+  font-size:14px;
+  font-weight:650;
+  border:0;
+}
+.mobile-nav__panel .mobile-account-links a i {
+  width:20px;
+  flex:0 0 20px;
+  text-align:center;
+  color:#acdeb9;
+}
+.mobile-nav__panel .mobile-account-links a:hover,
+.mobile-nav__panel .mobile-account-links a[aria-current="page"] {
+  background:rgba(126,217,87,.18);
+  color:#fff;
+}
