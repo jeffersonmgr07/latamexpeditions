@@ -722,18 +722,39 @@
       const inner=hero.querySelector('.page-hero__inner');
       inner?.classList.add('container');
       const oldImage=hero.style.getPropertyValue('--detail-image');
-      if(oldImage&&!hero.style.getPropertyValue('--lx-hero-img'))
-        hero.style.setProperty('--lx-hero-img',oldImage);
+      // Experiencias: usar siempre la foto oficial de su ficha como banner (móvil y PC).
+      // El background del componente unificado ya no tapa la capa ::before.
       const og=document.querySelector('meta[property="og:image"]')?.content||'';
       const sideImage=sideCard?.querySelector('img[src]')?.getAttribute('src')||'';
-      const source=sideImage||og;
-      if(!hero.style.getPropertyValue('--lx-hero-img')&&source&&source.indexOf('"')<0)
-        hero.style.setProperty('--lx-hero-img','url("'+source+'")');
+      const rawPhoto=kind==='experience'?(og||sideImage):(sideImage||og);
+      const source=(rawPhoto&&rawPhoto.indexOf('"')<0)?rawPhoto:'';
+      if(kind==='experience'&&source){
+        try{
+          const u=new URL(source,location.href);
+          const allowed=u.origin===location.origin||
+            ['latamexpeditions.com','www.latamexpeditions.com'].includes(u.hostname);
+          if(allowed&&u.pathname.startsWith('/assets/img/')){
+            hero.style.setProperty('--lx-hero-img','url("'+new URL(u.pathname,location.origin).href+'")');
+            hero.classList.add('lx-experience-has-photo');
+          }
+        }catch(ignore){}
+      }else if(!hero.style.getPropertyValue('--lx-hero-img')){
+        if(oldImage)hero.style.setProperty('--lx-hero-img',oldImage);
+        else if(source)hero.style.setProperty('--lx-hero-img','url("'+source+'")');
+      }
     }
     if(sideCard){
       const price=sideCard.querySelector('.price-block');
-      if(price&&!price.querySelector('span')){
-        const span=document.createElement('span');span.textContent='por persona';price.append(span);
+      if(price){
+        const label=price.querySelector('small');
+        if(label)label.textContent=kind==='package'?
+          'Tarifa por persona en base a acomodación doble':'Tarifa por persona';
+        price.querySelectorAll('small,span,p,.lx-quote-promo').forEach(item=>{
+          if(/con c[oó]digo\s+LATAM|LATAM10EXP|precio promocional/i.test(item.textContent||''))item.remove();
+        });
+        if(kind==='experience'&&!price.querySelector('span')){
+          const span=document.createElement('span');span.textContent='por persona';price.append(span);
+        }
       }
       if(!sideCard.querySelector('img[src]')){
         const og=document.querySelector('meta[property="og:image"]')?.content||'';
@@ -813,28 +834,62 @@
       if(/^Itinerario d[ií]a a d[ií]a$/i.test(h.textContent.trim()))
         h.textContent='Itinerario detallado';
     });
-    if(!content.querySelector('.lx-product-info, .product-facts')){
+    // Un único resumen editorial: evita la tarjeta "Información del paquete"
+    // vacía y empieza por "Sobre/Descubre este paquete".
+    if(kind==='package'){
+      const firstInfo=[...content.querySelectorAll(':scope > .detail-card')].find(card=>
+        /^Informaci[oó]n (del paquete|esencial)|^Datos b[aá]sicos/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''));
+      const oldFacts=[...firstInfo?.querySelectorAll('.tour-facts > div,.lx-unified-facts > div')||[]];
+      const fact=(pattern)=>{
+        const row=oldFacts.find(r=>pattern.test(r.querySelector('span')?.textContent||''));
+        return row?.querySelector('strong')?.textContent?.trim()||'';
+      };
+      if(firstInfo)firstInfo.remove();
+      const about=[...content.querySelectorAll(':scope > .detail-card')].find(card=>
+        /^(sobre este paquete|descubre|conoce|sobre el paquete)/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''));
+      if(about&&!about.querySelector('.lx-package-key-facts')){
+        const included=[...content.querySelectorAll('.detail-card')].find(card=>
+          /^(qu[eé] incluye|servicios contemplados|servicios incluidos)/i.test(card.querySelector('h2')?.textContent||''));
+        const incl=(included?.textContent||'').toLowerCase();
+        const features=[];
+        if(/alojamiento|hotel|noches/.test(incl))features.push('Alojamiento');
+        if(/excursi[oó]n|tour|visita|circuito|navegaci[oó]n/.test(incl))features.push('Excursiones');
+        if(/entrada|ingreso|ticket|boleto/.test(incl))features.push('Entradas indicadas');
+        if(/traslado|transporte/.test(incl))features.push('Traslados');
+        const facts=[
+          ['Duración',trigger.dataset.bookDuration||fact(/duraci[oó]n/i)||'Consultar'],
+          ['Destino',fact(/destino|regi[oó]n|lugar|ubicaci[oó]n/i)||trigger.dataset.bookDestinationLabel||trigger.dataset.bookCountry||'Consultar'],
+          ['Dificultad',fact(/dificultad|exigencia/i)||'Según excursión'],
+          ['Servicios',features.length?features.join(' · '):'Según itinerario'],
+          ['Vuelos',/vuelo[^.]{0,35}incluido/i.test(incl)&&!/opcional|no incluido/.test(incl)?'Incluidos':'No incluidos · opcionales']
+        ];
+        const wrap=document.createElement('div');wrap.className='lx-package-key-facts';
+        facts.forEach(([key,val])=>{
+          const item=document.createElement('div'),label=document.createElement('span'),value=document.createElement('strong');
+          label.textContent=key;value.textContent=val;item.append(label,value);wrap.append(item);
+        });
+        const firstPara=about.querySelector(':scope > p');
+        if(firstPara)firstPara.after(wrap);else about.append(wrap);
+      }
+      // Nunca publicar el cupón por defecto; únicamente tras ingresarlo el viajero.
+      content.querySelectorAll('p,small,span').forEach(node=>{
+        if(/beneficio\s+LATAM10EXP|con c[oó]digo\s+LATAM10EXP/i.test(node.textContent?.trim()||'')
+          &&node.children.length===0)node.closest('p')?.remove();
+      });
+    }
+    if(kind==='experience'&&!content.querySelector('.lx-product-info, .product-facts')){
       const first=content.querySelector(':scope > .detail-card');
       const title=first?.querySelector('h2')?.textContent||'';
-      if(!/^(informaci[oó]n (esencial|del paquete)|datos b[aá]sicos)/i.test(title)){
-        const rowLabel=(pattern)=>{
-          const rows=sideCard?.querySelectorAll('.fact-row')||[];
-          const row=[...rows].find(r=>pattern.test(r.querySelector('span')?.textContent||''));
-          return row?.querySelector('strong')?.textContent.trim()||'';
-        };
-        const facts=[
-          ['Duración',trigger.dataset.bookDuration||rowLabel(/duraci[oó]n/i)||'Por confirmar'],
-          ['Destino',rowLabel(/destino|ubicaci[oó]n|ciudad/i)||trigger.dataset.bookCountry||'Por confirmar'],
-          ['Idiomas',rowLabel(/idioma/i)||'Español · Inglés']
-        ];
+      if(!/^(informaci[oó]n (esencial|de la experiencia)|datos b[aá]sicos)/i.test(title)){
         const info=document.createElement('section');info.className='detail-card lx-product-info';
-        const h=document.createElement('h2');h.textContent=kind==='package'?'Información del paquete':'Información de la experiencia';
-        const dl=document.createElement('div');dl.className='lx-unified-facts';
-        facts.forEach(([label,value])=>{
-          const div=document.createElement('div'),small=document.createElement('span'),strong=document.createElement('strong');
-          small.textContent=label;strong.textContent=value;div.append(small,strong);dl.append(div);
-        });
-        info.append(h,dl);content.prepend(info);
+        const h=document.createElement('h2');h.textContent='Información de la experiencia';
+        const row=document.createElement('div');row.className='lx-unified-facts';
+        [['Duración',trigger.dataset.bookDuration||'Consultar'],
+         ['Destino',trigger.dataset.bookCountry||'Consultar']].forEach(([name,value])=>{
+           const div=document.createElement('div'),small=document.createElement('span'),strong=document.createElement('strong');
+           small.textContent=name;strong.textContent=value;div.append(small,strong);row.append(div);
+         });
+        info.append(h,row);content.prepend(info);
       }
     }
     // Vuelos de nuevas fichas: el código de aeropuerto es dato editorial explícito.
