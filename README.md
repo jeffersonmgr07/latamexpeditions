@@ -2,7 +2,8 @@
 
 Sitio de experiencias, vuelos, hoteles y paquetes en Latinoamérica. Frontend estático publicado mediante GitHub Pages; servicios de reservas y búsqueda en Google Apps Script con hojas privadas. Desarrollo y documentación administrados en GitHub.
 
-**Documentación oficial vigente:** [Manual técnico y operativo](docs/MANUAL_PROYECTO_VIGENTE.md)  
+**Documentación oficial vigente:** [Manual técnico y operativo](docs/MANUAL_PROYECTO_VIGENTE.md)
+**Inventario de paquetes por país:** [Catálogo e itinerarios de Chile](docs/CATALOGO_ITINERARIOS_2026-11-11.md)  
 **Historial de implementación:** [Bitácora 2026-11-11](docs/bitacora/2026-11-11-dashboard-movil.md) · [Archivo histórico](docs/historico/)
 
 > Evita seguir guías archivadas para instalar o configurar el sistema actual. Los documentos previos se conservaron íntegros en `docs/historico/` solo para auditoría y reconstrucción del proceso.
