@@ -158,3 +158,6 @@ Actualización: 11 de noviembre de 2026. Fuente: `assets/data/catalog.json` en G
 Cada nuevo paquete tiene una **ficha en el catálogo**, hotel base y referencia de tarifa por ocupación, itinerario diario, qué incluye y qué no, política de vuelos, imagen verificada, página HTML con plantilla compartida, ruta a checkout y pruebas móviles. No publicar un precio para una combinación de viajeros sin tarifa aprobada.
 
 **Documentación viva:** consultar también [Manual técnico vigente](MANUAL_PROYECTO_VIGENTE.md) y registrar cada actualización en `docs/bitacora/`.
+
+
+**Nota de integridad:** `backend/Codigo.gs` fue sincronizado con estas ocupaciones, pero su versión publicada en Google Apps Script deberá actualizarse manualmente. La ficha Santiago–Atacama ahora carga el selector dinámico compartido de vuelos y hoteles.
