@@ -3679,3 +3679,49 @@ main#contenido .product-hero-clean.package-hero-clean.lx-atacama-hero {
     margin-bottom:0;
   }
 }
+
+/* 2026-11-12 · Mobile product cards: contain implicit grid tracks and tidy copy. */
+main#contenido .product-detail-section .detail-card > h2 > .lx-detail-title-icon,
+main#contenido .product-detail-section .lx-product-help-card > h2 > .lx-detail-title-icon {
+  display:inline-block;
+  width:1.25em;
+  margin-right:.35em;
+  color:#07873e;
+  font-size:.70em;
+  line-height:1;
+  text-align:center;
+  vertical-align:.08em;
+}
+@media (max-width:820px) {
+  main#contenido > section.product-detail-section {
+    padding-left:clamp(20px,5.5vw,26px) !important;
+    padding-right:clamp(20px,5.5vw,26px) !important;
+  }
+  main#contenido > section.product-detail-section .detail-main {
+    grid-template-columns:minmax(0,1fr) !important;
+  }
+  main#contenido > section.product-detail-section .detail-main .tour-split {
+    display:grid;
+    grid-template-columns:minmax(0,1fr) !important;
+    min-width:0;
+    max-width:100%;
+    width:100%;
+    box-sizing:border-box;
+  }
+  main#contenido > section.product-detail-section .detail-main .tour-split > .detail-card {
+    min-width:0;
+    max-width:100%;
+    width:100%;
+    box-sizing:border-box;
+    overflow-wrap:break-word;
+  }
+  main#contenido > section.product-detail-section .detail-main .tour-bullet-list {
+    row-gap:6px;
+    line-height:1.43;
+    font-size:14px;
+  }
+  main#contenido > section.product-detail-section .detail-main .tour-body-copy,
+  main#contenido > section.product-detail-section .detail-main > .detail-card > p:not(.tour-lead) {
+    line-height:1.48;
+  }
+}
