@@ -514,8 +514,22 @@
 
     const promo=document.createElement('div');
     promo.className='latam-promo';
-    promo.innerHTML='<span class="latam-promo__message">Aprovecha <strong>10% de descuento</strong> · Código <strong>LATAM</strong></span><span class="latam-promo__mobile">10% de descuento · LATAM</span>';
+    promo.classList.add('lx-promo-marquee');
+    promo.innerHTML='<div class="lx-promo-viewport" aria-label="Promociones de Latam Expeditions"><div class="lx-promo-track"><span class="lx-promo-standard">Aprovecha un <strong>10% de descuento</strong>. Mantente atento: aquí aparecerá un código de descuento. ¡Vuelve a visitarnos!</span><span class="lx-promo-special" hidden>¡Código del momento! <strong class="lx-promo-code">LATAM10EXP</strong> · 10% de descuento</span></div></div>';
     utilityInner.append(promo);
+    // Mostrar el código un minuto por hora, según el horario local del visitante.
+    // La disponibilidad real del cupón sigue regida por el sistema de reservas.
+    const promoMinutes=[12,11,22,23,44,55,6,17,28,39,10,11,12,11,22,23,44,55,6,17,28,39,10,11];
+    const renderPromo=()=>{
+      const now=new Date();
+      const active=now.getMinutes()===promoMinutes[now.getHours()];
+      if(promo.classList.toggle('lx-promo-active',active)!==active)return;
+      promo.querySelector('.lx-promo-standard').hidden=active;
+      promo.querySelector('.lx-promo-special').hidden=!active;
+    };
+    renderPromo();
+    window.setInterval(renderPromo,15000);
+    document.addEventListener('visibilitychange',renderPromo);
 
     const locale=document.createElement('div');
     locale.className='latam-locale';
