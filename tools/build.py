@@ -788,7 +788,7 @@ def render_master_experience(item) -> str:
     )
     html += P.header(base="../")
     html += f'''  <main id="contenido">
-    <section class="page-hero detail-hero detail-hero--master" style="--detail-image:url('../assets/img/{item['img']}')">
+    <section class="page-hero detail-hero detail-hero--master product-hero-clean experience-hero-clean" style="--detail-image:url('../assets/img/{item['img']}');--lx-hero-img:url('../assets/img/{item['img']}')">
       <div class="page-hero__inner">
         {P.breadcrumb([("Inicio", "index.html"), ("Experiencias", "experiencias.html"), (item["title"], None)], base="../")}
         <span class="eyebrow">{eyebrow_es}</span>
@@ -979,7 +979,7 @@ def build_experience_details() -> None:
         )
         html += P.header(base="../")
         html += f'''  <main id="contenido">
-    <section class="page-hero detail-hero" style="--detail-image:url('../assets/img/{item['img']}')">
+    <section class="page-hero detail-hero product-hero-clean experience-hero-clean" style="--detail-image:url('../assets/img/{item['img']}');--lx-hero-img:url('../assets/img/{item['img']}')">
       <div class="page-hero__inner">
         {P.breadcrumb([("Inicio", "index.html"), ("Experiencias", "experiencias.html"), (item["title"], None)], base="../")}
         <span class="eyebrow">{item['styleLabel']} · {item['duration']}</span>
@@ -1000,7 +1000,7 @@ def build_experience_details() -> None:
           <div class="detail-card"><h2>No incluye</h2><ul class="detail-list detail-list--x">{excludes}</ul></div>
         </div>
         <aside class="detail-aside"><div class="detail-card">
-          <div class="price-block"><small>Precio desde</small><strong>{price_label(item)}</strong></div>
+          <div class="price-block"><small>Tarifa por persona</small><strong>{price_label(item)}</strong></div>
           <div class="fact-row"><span>Destino</span><strong>{item['region']}, {item['country']}</strong></div>
           <div class="fact-row"><span>Duración</span><strong>{item['duration']}</strong></div>
           <div class="fact-row"><span>Estilo</span><strong>{item['styleLabel']}</strong></div>
@@ -1074,7 +1074,7 @@ def build_package_details() -> None:
         )
         html += P.header(base="../")
         html += f"""  <main id="contenido">
-    <section class="page-hero">
+    <section class="page-hero detail-hero product-hero-clean" style="--detail-image:url('../assets/img/{item['img']}');--lx-hero-img:url('../assets/img/{item['img']}')">
       <div class="page-hero__inner">
         {P.breadcrumb([("Inicio", "index.html"), ("Paquetes", "paquetes.html"), (item["title"], None)], base="../")}
         <span class="eyebrow" style="margin-top:14px">{item['nights']} · {item['country']}</span>
@@ -1086,6 +1086,9 @@ def build_package_details() -> None:
     <section class="section">
       <div class="detail-grid">
         <div>
+          <div class="detail-card" style="margin-bottom:24px">
+            <h2>Sobre este paquete</h2><p>{item['excerpt']}</p>
+          </div>
           <div class="detail-card" style="margin-bottom:24px">
             <h2>Itinerario día a día</h2>
             <ol class="itinerary">{itinerary}</ol>
@@ -1109,7 +1112,7 @@ def build_package_details() -> None:
           <div class="detail-card">
             {picture(item['img'], item['alt'], '../', style='border-radius:20px;margin-bottom:20px')}
             <div class="price-block">
-              <small>Precio desde</small>
+              <small>Tarifa por persona en base a acomodación doble</small>
               <strong>{price_label(item)}</strong>
             </div>
             <div class="fact-row"><span>Duración</span><strong>{item['nights']}</strong></div>
