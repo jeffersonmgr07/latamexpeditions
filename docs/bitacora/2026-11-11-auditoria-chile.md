@@ -33,3 +33,8 @@ Revisar itinerarios por países, comenzando por Chile, normalizar el diseño a A
 - CONAF: https://www.conaf.cl/parque_nacionales/parque-nacional-torres-del-paine/
 - CONAF: https://www.conaf.cl/parque_nacionales/monumento-natural-los-pinguinos/
 - CONAF nuevas tarifas (2026): https://www.conaf.cl/el-1-de-mayo-entra-en-vigencia-nuevo-sistema-tarifario-para-el-parque-nacional-torres-del-paine/
+
+
+## Cierre de la revisión de tarifas
+
+Se descubrió que `backend/Codigo.gs` aún aceptaba como precios definitivos las ocupaciones single, triple y family de Chile con el mismo importe de la doble. Se restringió la tabla `PRECIOS_PAQUETES` a ocupaciones tarifadas y se reforzó `validarYCalcular` antes de pasar a cobro. **Pendiente obligatorio:** desplegar manualmente el Apps Script, sin cambiar las operaciones de PayPal. La ficha de Santiago–Atacama tenía solamente `booking.js`, sin `vuelos-config.js` ni `package-product-20261108.js`, lo que impedía la misma interacción dinámica que Atacama Premium; se incorporaron. `paquete-vuelos.js` no se añadió porque únicamente atiende el formulario antiguo de Medellín.
