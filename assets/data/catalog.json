@@ -5341,13 +5341,7 @@
             "Hotel Panamericano Santiago",
             "Hostal La Ruca"
           ],
-          "occupancyPrices": {
-            "single": 880,
-            "double": 880,
-            "matrimonial": 880,
-            "triple": 880,
-            "family": 880
-          }
+          "occupancyPrices": {"double": 880,"matrimonial": 880}
         },
         {
           "code": "4e",
@@ -5358,13 +5352,7 @@
             "Cumbres Lastarria",
             "Hotel Cumbres San Pedro"
           ],
-          "occupancyPrices": {
-            "single": 1170,
-            "double": 1170,
-            "matrimonial": 1170,
-            "triple": 1170,
-            "family": 1170
-          }
+          "occupancyPrices": {"double": 1170,"matrimonial": 1170}
         },
         {
           "code": "5e",
@@ -5375,19 +5363,14 @@
             "The Singular Santiago",
             "Tierra Atacama"
           ],
-          "occupancyPrices": {
-            "single": 1620,
-            "double": 1620,
-            "matrimonial": 1620,
-            "triple": 1620,
-            "family": 1620
-          }
+          "occupancyPrices": {"double": 1620,"matrimonial": 1620}
         }
       ],
       "quoteOnly": false,
       "flightIncluded": false,
       "flightRoute": "SCL-CJC-SCL",
       "airfareDeductionPending": false,
+      "pricingBasis": "Tarifa por adulto en habitación doble; otras ocupaciones y menores requieren cotización",
       "flightsAvailable": true,
       "pricingUpdated": "2026-11-10",
       "priceSetByAgency": true,
@@ -5436,8 +5419,7 @@
           "hotels": [
             "Hotel Vendaval Puerto Natales",
             "Hostal Keoken"
-          ]
-        },
+          ], "occupancyPrices": {"double": 1450}},
         {
           "code": "4e",
           "stars": "4*",
@@ -5446,8 +5428,7 @@
           "hotels": [
             "Hotel Costaustralis",
             "Hotel Cabo de Hornos"
-          ]
-        },
+          ], "occupancyPrices": {"double": 1880}},
         {
           "code": "5e",
           "stars": "5*",
@@ -5456,9 +5437,9 @@
           "hotels": [
             "The Singular Patagonia",
             "Explora Patagonia"
-          ]
-        }
+          ], "occupancyPrices": {"double": 2540}}
       ],
+      "pricingBasis": "Tarifa por adulto en habitación doble; otras ocupaciones y menores requieren cotización",
       "flightsAvailable": true
     },
     {
