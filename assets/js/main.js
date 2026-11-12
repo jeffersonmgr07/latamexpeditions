@@ -948,6 +948,9 @@
         info.append(h,row);content.prepend(info);
       }
     }
+    // Ubicar las consultas al final de la ficha, después de las preguntas frecuentes.
+    const helpAtEnd=content.querySelector(':scope > .lx-product-help');
+    if(helpAtEnd)content.append(helpAtEnd);
     // Vuelos de nuevas fichas: el código de aeropuerto es dato editorial explícito.
     // Para fichas históricas, habilitar únicamente destinos únicos conocidos.
     if(kind==='package'&&!trigger.dataset.bookDestination){
