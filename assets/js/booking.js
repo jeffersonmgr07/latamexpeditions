@@ -1562,6 +1562,16 @@
     $('#bkDateTrigger')?.setAttribute('aria-invalid', String(!validDate));
     valid = valid && validDate;
     const total = Number($('#bkAdults').value) + Number($('#bkChildren').value);
+    if (['chile-atacama-5d4n','chile-patagonia-6d5n'].includes(PRODUCT.slug)) {
+      const tier=PRODUCT.tiers.find(t=>t.code===($('#bkTier')?.value||state.tier));
+      const occupancy=$('#bkOccupancy')?.value||state.occupancy;
+      const rate=tier?.occupancyPrices?.[occupancy];
+      if(Number($('#bkAdults').value)!==2||Number($('#bkChildren').value)!==0||
+         !Number.isFinite(Number(rate))||Number(rate)<=0) {
+        showError('Esta tarifa de Chile corresponde a dos adultos en habitación doble (o matrimonial si la categoría lo permite). Para otras ocupaciones, menores o grupos, solicita una cotización personalizada antes de reservar.');
+        return false;
+      }
+    }
     if (PRODUCT.slug==='desierto-atacama-premium-5d4n' &&
         (Number($('#bkChildren').value)>0 || Number($('#bkAdults').value)>2)) {
       showError('Atacama Premium tiene tarifa confirmada solo para 1 o 2 adultos. Para grupos o menores, solicita una cotización personalizada antes de continuar.');

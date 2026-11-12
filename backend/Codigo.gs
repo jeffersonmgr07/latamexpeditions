@@ -442,48 +442,27 @@ const PRECIOS_PAQUETES = {
   },
   'chile-atacama-5d4n': {
     '3e': {
-      'single': 880.0,
-      'double': 880.0,
-      'matrimonial': 880.0,
-      'triple': 880.0,
-      'family': 880.0
+      'double': 880.00,
+      'matrimonial': 880.00
     },
     '4e': {
-      'single': 1170.0,
-      'double': 1170.0,
-      'matrimonial': 1170.0,
-      'triple': 1170.0,
-      'family': 1170.0
+      'double': 1170.00,
+      'matrimonial': 1170.00
     },
     '5e': {
-      'single': 1620.0,
-      'double': 1620.0,
-      'matrimonial': 1620.0,
-      'triple': 1620.0,
-      'family': 1620.0
+      'double': 1620.00,
+      'matrimonial': 1620.00
     }
   },
   'chile-patagonia-6d5n': {
     '3e': {
-      'single': 1450.0,
-      'double': 1450.0,
-      'matrimonial': 1450.0,
-      'triple': 1450.0,
-      'family': 1450.0
+      'double': 1450.00
     },
     '4e': {
-      'single': 1880.0,
-      'double': 1880.0,
-      'matrimonial': 1880.0,
-      'triple': 1880.0,
-      'family': 1880.0
+      'double': 1880.00
     },
     '5e': {
-      'single': 2540.0,
-      'double': 2540.0,
-      'matrimonial': 2540.0,
-      'triple': 2540.0,
-      'family': 2540.0
+      'double': 2540.00
     }
   },
   'ecuador-galapagos-5d4n': {
@@ -1456,6 +1435,12 @@ function validarYCalcular(data) {
 
   if(slug==='desierto-atacama-premium-5d4n' && ninos>0)
     throw new Error('El programa Atacama Premium está destinado a pasajeros adultos. Consulta antes de viajar con menores.');
+
+  // Chile: bloquear combinaciones sin tarifa aprobada desde la autoridad de precios.
+  // La validación en navegador es orientativa, esta regla también protege APIs directas.
+  if(['chile-atacama-5d4n','chile-patagonia-6d5n'].indexOf(slug)>=0 &&
+     (adultos!==2 || ninos!==0))
+    throw new Error('La tarifa publicada de Chile es para dos adultos en habitación doble. Solicita cotización para otras ocupaciones o menores.');
 
   const tier = data.tier ? textoPlano(data.tier, 10) : '';
   const occupancy = textoPlano(data.occupancy || 'double', 20);
