@@ -5397,18 +5397,18 @@
         "Día 6 · Traslado de salida"
       ],
       "includes": [
-        "5 noches de alojamiento con desayuno",
+        "4 noches en Puerto Natales y 1 noche en Punta Arenas con desayuno; hotel de Punta Arenas por confirmar",
         "Todos los traslados terrestres en la región",
-        "Excursiones y navegaciones indicadas",
-        "Guías de montaña certificados",
-        "Asistencia 24/7 durante el viaje"
+        "Tour panorámico por Torres del Paine y navegación ida y vuelta al glaciar Grey, sujetos a confirmación operativa",
+        "Guías locales en las excursiones según servicio contratado",
+        "Asistencia al viajero durante el programa"
       ],
       "notIncludes": [
         "Vuelos internacionales y domésticos",
         "Entrada al Parque Nacional Torres del Paine",
         "Comidas no especificadas",
         "Propinas",
-      "Navegación a Isla Magdalena (opcional, estacional y sujeta a disponibilidad; no incluida)"
+        "Navegación a Isla Magdalena (opcional, estacional y sujeta a disponibilidad; no incluida)"
       ],
       "hotelTiers": [
         {
@@ -5440,7 +5440,9 @@
           ], "occupancyPrices": {"double": 2540}}
       ],
       "pricingBasis": "Tarifa por adulto en habitación doble; otras ocupaciones y menores requieren cotización",
-      "flightsAvailable": true
+      "flightsAvailable": true,
+      "quoteOnly": true,
+      "operationalReview": "Alojamiento quinta noche Punta Arenas y navegación Grey por confirmar; no cobrar automáticamente hasta verificar proveedor y tarifas"
     },
     {
       "slug": "ecuador-galapagos-5d4n",
