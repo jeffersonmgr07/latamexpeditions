@@ -26,6 +26,9 @@
  let tiers=[];try{tiers=JSON.parse(book.dataset.bookTiers||'[]')}catch(_){}
  const firstTier=tiers[0]||null;
  const multiCityAtacama=params.slug==='chile-atacama-5d4n';
+ // En los productos de Chile se publicaron únicamente tarifas para la base doble.
+ // No inferir suplementos single, triple, niños ni familiares sin tabla de tarifas.
+ const chileBaseDouble=multiCityAtacama||params.slug==='chile-patagonia-6d5n';
  const flightStayNights=multiCityAtacama?3:params.nights;
  const hasHotelIncluded=Boolean(firstTier&&!firstTier.noAccommodation&&firstTier.code!=='sin-hotel');
  const maxHotelOccupancy=4;
@@ -71,6 +74,12 @@
     photo.addEventListener('error',()=>photo.remove(),{once:true});return photo;
   };
  function currentTier(){return tiers.find(x=>x.code===state.tier)||firstTier}
+ function needsChileQuote(){
+   if(!chileBaseDouble)return false;
+   const rate=currentTier()?.occupancyPrices?.[state.occupancy];
+   return state.adults!==2||state.children!==0||
+     !Number.isFinite(Number(rate))||Number(rate)<=0;
+ }
  function pricePackage(){const tier=currentTier();const rate=tier?Number(tier.occupancyPrices?.[state.occupancy]??tier.pricePerPerson??params.base):params.base;
   return Math.round((state.adults*rate+state.children*rate*params.childFactor)*100)/100;
  }
@@ -446,7 +455,12 @@ $('lxFlightCancelEdit').addEventListener('click',()=>{syncFlightForm();toggleFli
 }
 // Solo ofrecer distribuciones cuyo precio esté definido para la categoría.
 function supportedRoomPlans(tier,n){
- return roomPlans(n).filter(plan=>!plan.pending&&Number.isFinite(Number(tier?.occupancyPrices?.[plan.code]??tier?.pricePerPerson))&&Number(tier?.occupancyPrices?.[plan.code]??tier?.pricePerPerson)>0);
+ const declared=tier?.occupancyPrices && Object.keys(tier.occupancyPrices).length>0;
+ return roomPlans(n).filter(plan=>{
+   if(plan.pending)return false;
+   const value=declared?tier.occupancyPrices[plan.code]:tier?.pricePerPerson;
+   return value!==undefined&&value!==null&&Number.isFinite(Number(value))&&Number(value)>0;
+ });
 }
 let pendingRoomPlan=null;
 function syncHotelForm(){
@@ -621,10 +635,11 @@ function showTierQuote(){
   $('lxProductDate').value=state.date;
   productCalendar.sync();productTravelers.sync();
   renderPriceBreakdown();
-  const needsGroupQuote=state.adults+state.children>maxHotelOccupancy||state.hotelQuotePending;
-  $('lxProductGroupPrice').textContent=state.adults+state.children>maxHotelOccupancy?'Consultar':fmt(total());
+  const needsGroupQuote=state.adults+state.children>maxHotelOccupancy||state.hotelQuotePending||needsChileQuote();
+  $('lxProductGroupPrice').textContent=needsChileQuote()?'Por cotizar':state.adults+state.children>maxHotelOccupancy?'Consultar':fmt(total());
   // Mostrar avisos solo cuando afectan al itinerario; nunca añadir textos de cotización al importe.
-  const notice=state.adults+state.children>maxHotelOccupancy?'La distribución de habitaciones requiere una tarifa adicional.':
+  const notice=needsChileQuote()?'La tarifa automática de este producto está disponible para 2 adultos con habitación doble (o matrimonial si la categoría indica ese precio). Para otras ocupaciones, niños o grupos, solicita cotización.':
+    state.adults+state.children>maxHotelOccupancy?'La distribución de habitaciones requiere una tarifa adicional.':
     state.hotelQuotePending?'El hotel alternativo solicitado está pendiente de cotizar y NO forma parte del pago. Se mantiene el hotel base del paquete.':
     state.flight&&state.date&&state.flight.returnDate>addDays(state.date,params.nights)?
       'El vuelo de regreso es posterior al final del paquete; verifica las noches adicionales.':
@@ -1172,11 +1187,12 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  $('lxHotelOccupancy').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null;clearHotelLookup()});
  // Para más de cuatro viajeros, no presentar como un precio listo para cobrarse.
  book.addEventListener('click',event=>{
-  if(state.adults+state.children<=maxHotelOccupancy)return;
+  if(state.adults+state.children<=maxHotelOccupancy&&!needsChileQuote())return;
   event.preventDefault();event.stopImmediatePropagation();
   const note=$('lxProductQuoteNote');
-  note.textContent='Para este grupo necesitamos confirmar la distribución hotelera. '+
-    'Escríbenos para una cotización completa antes de reservar.';
+  note.textContent=needsChileQuote()?
+    'Esta acomodación aún no tiene una tarifa confirmada. Solicita una cotización antes de reservar.':
+    'Para este grupo necesitamos confirmar la distribución hotelera. Escríbenos para una cotización completa antes de reservar.';
   const link=el('a','','Solicitar cotización por WhatsApp');
   link.href='https://wa.me/51906472060?text='+encodeURIComponent(
    'Hola, quiero cotizar '+params.title+' para '+passengerText()+
