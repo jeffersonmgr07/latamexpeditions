@@ -963,6 +963,40 @@
     // Ubicar las consultas al final de la ficha, después de las preguntas frecuentes.
     const helpAtEnd=content.querySelector(':scope > .lx-product-help');
     if(helpAtEnd)content.append(helpAtEnd);
+    // Iconos discretos, acordes con el tema de cada recuadro informativo.
+    const titleIcons={
+      'informacion esencial':'fa-circle-info',
+      'informacion del paquete':'fa-circle-info',
+      'informacion de la experiencia':'fa-circle-info',
+      'sobre este paquete':'fa-map-location-dot',
+      'sobre esta experiencia':'fa-map-location-dot',
+      'horarios y operacion':'fa-clock',
+      'itinerario detallado':'fa-route',
+      'que incluye':'fa-circle-check',
+      'que no incluye':'fa-circle-xmark',
+      'entradas y pagos adicionales':'fa-ticket',
+      'idiomas disponibles':'fa-language',
+      'recomendaciones':'fa-suitcase-rolling',
+      'restricciones':'fa-triangle-exclamation',
+      'accesibilidad':'fa-wheelchair',
+      'clima y operacion':'fa-cloud-sun',
+      'cancelacion':'fa-calendar-xmark',
+      'voucher y confirmacion':'fa-ticket',
+      'preguntas frecuentes':'fa-circle-question',
+      'solicita una cotizacion a medida':'fa-pen-to-square',
+      'consulta por whatsapp':'fa-comments'
+    };
+    content.querySelectorAll('.detail-card > h2').forEach(heading=>{
+      if(heading.querySelector('.lx-detail-title-icon'))return;
+      const label=heading.textContent.trim().normalize('NFD')
+        .replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/\\s+/g,' ');
+      const glyph=titleIcons[label];
+      if(!glyph)return;
+      const icon=document.createElement('i');
+      icon.className='fa-solid '+glyph+' lx-detail-title-icon';
+      icon.setAttribute('aria-hidden','true');
+      heading.prepend(icon);
+    });
     // Vuelos de nuevas fichas: el código de aeropuerto es dato editorial explícito.
     // Para fichas históricas, habilitar únicamente destinos únicos conocidos.
     if(kind==='package'&&!trigger.dataset.bookDestination){
