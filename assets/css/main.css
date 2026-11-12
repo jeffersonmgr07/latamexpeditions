@@ -3565,3 +3565,9 @@ body.has-pn-header .topbar { border: 0 !important; }
   background:#fff!important;color:#173c28!important;
 }
 .booking-modal .passenger-birth-field [data-birth-trigger][hidden]{display:none!important;}
+
+
+/* Catálogo Chile premium · imagen del destino pendiente sin falsas fotografías */
+.trip-card__media .lx-chile-card-pending{height:100%;min-height:180px;width:100%;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;padding:20px;text-align:center;background:linear-gradient(135deg,#0b382d,#0d7750);color:#fff;font:650 12px/1.5 Inter,Arial,sans-serif;box-sizing:border-box}
+.trip-card__media .lx-chile-card-pending i{font-size:28px;color:#c0e6d0}
+.trip-card__media .lx-chile-card-pending span{max-width:180px}
