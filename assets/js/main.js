@@ -769,7 +769,7 @@
         const oldImage=hero?.style.getPropertyValue('--detail-image')||'';
         const match=oldImage.match(/url\(['"]?([^'")]+)['"]?\)/);
         const source=match?.[1]||og;
-                if(source&&/^https?:\/\/|^\.\.\//.test(source)){
+                if(source&&/^https?:\/\/|^\.\.\//.test(source)&&!(kind==='package'&&/chile-rapa-nui-moais/.test(trigger.dataset.book||'')&&/destino-chile-01\.jpg/.test(source))){
           const img=document.createElement('img');
           img.src=source;img.alt='Imagen representativa de '+(trigger.dataset.bookTitle||'la experiencia');
           img.loading='lazy';img.decoding='async';
@@ -838,6 +838,15 @@
         }
       });
     }
+    // Aplicar a ambas plantillas las exclusiones editoriales solicitadas.
+    main.querySelectorAll('.tour-logistics > div,.tour-facts > div,.product-facts > div').forEach(row=>{
+      const label=row.querySelector('span,dt')?.textContent?.trim()||'';
+      if(/^(ventana de recogida|lugar de finalizaci[oó]n)$/i.test(label))row.remove();
+    });
+    content.querySelectorAll('i.fa-star,i.fa-star-half-stroke,i.fa-star-half-alt').forEach(icon=>{
+      icon.classList.remove('fa-star','fa-star-half-stroke','fa-star-half-alt');
+      icon.classList.add('fa-check');
+    });
     // Conservar íntegro el contenido editorial de cada experiencia.
     content.querySelectorAll('h2').forEach(h=>{
       if(/^Itinerario d[ií]a a d[ií]a$/i.test(h.textContent.trim()))
