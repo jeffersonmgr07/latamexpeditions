@@ -597,3 +597,24 @@
 .product-booking-card .price-block{min-width:0;overflow-wrap:anywhere}
 .product-booking-card .price-block span{display:block;line-height:1.45}
 @media(max-width:540px){.lx-chile-photo-pending{min-height:180px}.lx-chile-aside-placeholder{min-height:125px}}
+
+/* Descuento visible justo antes del total, únicamente tras aplicar el cupón. */
+.lx-package-discount-applied{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin:12px 0 0;
+  padding:11px 0 0;
+  border-top:1px solid #e0eadf;
+  color:#456655;
+  font-size:12px;
+  line-height:1.4;
+}
+.lx-package-discount-applied[hidden]{display:none!important}
+.lx-package-discount-applied strong{
+  color:#147443;
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
+}
