@@ -68,7 +68,7 @@
  if(!/^[A-Z]{3}$/.test(state.origin))state.origin='LIM';
  const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);return e};
  const normalizeHotelName=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
- const readableStars=s=>String(s||'').replace(/([1-5])\s*[★*]/g,(_,n)=>n+' estrellas');
+ const readableStars=s=>String(s||'').replace(/([1-5])\s*[★*]/g,(_,n)=>({1:'una estrella',2:'dos estrellas',3:'tres estrellas',4:'cuatro estrellas',5:'cinco estrellas'}[n]||n));
   const validSrc=s=>/^https:\/\/[^<>"'\s]+$/.test(s||'');
   // Archivos locales: se activan automáticamente cuando se suben a assets/img/.
   const hotelImages={
@@ -299,7 +299,7 @@
  '<div id="lxHotelLookupStatus" class="lx-package-status" role="status"></div>'+
  '<div id="lxHotelFilters" class="lx-hotel-filters" hidden>'+
  '<label class="lx-hotel-filter-name">Buscar hotel<input id="lxHotelNameSearch" type="search" placeholder="Nombre del hotel" autocomplete="off"></label>'+
- '<label>Categoría<select id="lxHotelStarsFilter"><option value="all">Todas</option><option value="3">3 estrellas</option><option value="4">4 estrellas</option><option value="5">5 estrellas</option></select></label>'+
+ '<label>Categoría<select id="lxHotelStarsFilter"><option value="all">Todas</option><option value="3">tres estrellas</option><option value="4">cuatro estrellas</option><option value="5">cinco estrellas</option></select></label>'+
  '<label>Ordenar<select id="lxHotelSort"><option value="recommended">Recomendados</option><option value="priceAsc">Menor precio</option><option value="priceDesc">Mayor precio</option><option value="rating">Mejor valoración</option></select></label>'+
 
  '<p class="lx-hotel-filter-help" id="lxHotelFilterHelp" aria-live="polite"></p>'+
@@ -1237,9 +1237,9 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
        'Paquete: '+params.title,
        'Fecha de llegada: '+(state.date||'por definir'),
        'Viajeros: '+passengerText(),
-       'Categoría: '+(tier?.name||'hotel 4 estrellas de referencia'),
+       'Categoría: '+(tier?.name||'hotel de cuatro estrellas'),
        'Hotel de referencia: '+(tier?.hotels||[]).join(' / '),
-       'Tarifa objetivo por persona en doble: '+fmt(tier?.pricePerPerson||params.base),
+       'Tarifa por persona: '+fmt(tier?.pricePerPerson||params.base),
        state.couponCode?'Cupón solicitado: '+state.couponCode:'',
        state.flight?'Vuelos de referencia: '+state.origin+' · importe estimado '+fmt(priceFlight()):'Vuelos no incluidos',
        'Por favor, confirmen hoteles, excursiones, disponibilidad y tarifa final antes de realizar cualquier pago.'
