@@ -1317,3 +1317,113 @@
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',clean,{once:true});
  else clean();
 })();
+
+
+/* Country selector: local flags, concise copy and short mobile gallery titles (Nov 2026). */
+(function(){
+  'use strict';
+  const flagCodes={
+    'Perú':'pe','Colombia':'co','Chile':'cl','Argentina':'ar','Bolivia':'bo',
+    'Brasil':'br','Ecuador':'ec','México':'mx','Venezuela':'ve','Uruguay':'uy',
+    'Costa Rica':'cr','Estados Unidos':'us','Italia':'it','Francia':'fr',
+    'Alemania':'de','Reino Unido':'gb','Canadá':'ca','España':'es',
+    'Portugal':'pt','Japón':'jp','China':'cn'
+  };
+  const base=document.documentElement.dataset.base||'./';
+  const flagSource=code=>base+'assets/img/flags/'+code+'.svg';
+  function flagImage(code,klass){
+    const img=document.createElement('img');
+    img.className=klass;
+    img.src=flagSource(code);
+    img.alt='';
+    img.setAttribute('aria-hidden','true');
+    img.width=24;
+    img.height=18;
+    img.decoding='async';
+    return img;
+  }
+  function formatCountryOption(option){
+    if(option.dataset.lxCountryFlagReady==='1')return;
+    const country=option.dataset.country;
+    if(!country)return;
+    const spans=Array.from(option.children).filter(el=>el.tagName==='SPAN');
+    const caption=spans.length>1?spans[spans.length-1].textContent.trim():'';
+    const flag=document.createElement('span');
+    flag.className='country-option__flag lx-country-option__flag';
+    flag.setAttribute('aria-hidden','true');
+    const code=flagCodes[country];
+    if(code)flag.append(flagImage(code,'lx-country-flag-image'));
+    else flag.textContent='🌎';
+    const title=document.createElement('strong');
+    title.className='lx-country-option__name';
+    title.textContent=country;
+    const subtitle=document.createElement('span');
+    subtitle.className='lx-country-option__sub';
+    subtitle.textContent=caption;
+    option.replaceChildren(flag,title,subtitle);
+    option.classList.add('lx-country-option');
+    option.dataset.lxCountryFlagReady='1';
+  }
+  function updateCountryLabel(){
+    const label=document.getElementById('countryLabel');
+    if(!label)return;
+    const name=label.textContent.trim();
+    const code=flagCodes[name];
+    const prior=label.querySelector('img.lx-country-selected-flag');
+    if(code){
+      if(!prior||prior.dataset.countryCode!==code){
+        const img=flagImage(code,'lx-country-selected-flag');
+        img.dataset.countryCode=code;
+        label.replaceChildren(img,document.createTextNode(name));
+      }
+    }else if(prior){
+      label.textContent=name;
+    }
+    const bar=document.getElementById('countryBarFlag');
+    const barName=document.getElementById('countryBarName')?.textContent.trim();
+    if(bar&&barName===name&&code){
+      if(bar.querySelector('img')?.dataset.countryCode!==code){
+        const img=flagImage(code,'lx-country-selected-flag');
+        img.dataset.countryCode=code;
+        bar.replaceChildren(img);
+      }
+    }
+  }
+  function shortenGalleryHeading(){
+    document.querySelectorAll('.lx-atacama-gallery-head > h2').forEach(heading=>{
+      if(heading.querySelector('.lx-gallery-mobile-title'))return;
+      const original=document.createElement('span');
+      original.className='lx-gallery-original-title';
+      original.textContent=heading.textContent.trim();
+      const compact=document.createElement('span');
+      compact.className='lx-gallery-mobile-title';
+      compact.textContent='Fotos de la experiencia';
+      heading.replaceChildren(original,compact);
+    });
+  }
+  function init(){
+    const modal=document.getElementById('countryModal');
+    if(modal){
+      const description=modal.querySelector('.country-box__head p');
+      if(description)description.textContent='Elige tu país de procedencia para encontrar paquetes y experiencias que se ajusten mejor a tu viaje.';
+      modal.querySelectorAll('.country-option').forEach(formatCountryOption);
+      const grid=modal.querySelector('.country-grid');
+      if(grid&&typeof MutationObserver!=='undefined'){
+        new MutationObserver(records=>{
+          records.forEach(record=>record.addedNodes.forEach(node=>{
+            if(node.nodeType===1&&node.matches?.('.country-option'))formatCountryOption(node);
+          }));
+        }).observe(grid,{childList:true});
+      }
+    }
+    const label=document.getElementById('countryLabel');
+    if(label&&typeof MutationObserver!=='undefined'){
+      new MutationObserver(updateCountryLabel).observe(label,{childList:true,characterData:true,subtree:true});
+    }
+    updateCountryLabel();
+    document.addEventListener('latam:countrychange',updateCountryLabel);
+    shortenGalleryHeading();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+})();
