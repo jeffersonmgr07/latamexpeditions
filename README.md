@@ -48,3 +48,5 @@ El frontend está alojado en `https://latamexpeditions.com` con `CNAME`. La exis
 ---
 
 Para incorporar un ajuste nuevo, usar este `README` solo como puerta de entrada; el **manual vigente** es la instrucción oficial y la **bitácora** conserva las decisiones anteriores.
+
+**Revisión UX de fichas y rutas Chile (12/11/2026):** [Manual técnico vigente](docs/MANUAL_PROYECTO_VIGENTE.md) · [Ranking comercial Colombia](docs/RANKING_COLOMBIA_2026-11-12.md) · [Bitácora](docs/bitacora/2026-11-12-fichas-vuelos-colombia.md).

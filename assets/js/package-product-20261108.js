@@ -25,6 +25,19 @@
   childFactor:Number(book.dataset.bookChildFactor||.7)};
  let tiers=[];try{tiers=JSON.parse(book.dataset.bookTiers||'[]')}catch(_){}
  const firstTier=tiers[0]||null;
+ // Ciudad del HOTEL base del paquete, independiente de la ruta aérea.
+ const hotelCities={
+  'chile-santiago-valparaiso-casablanca-4d3n':'Santiago, Chile',
+  'chile-puerto-varas-volcanes-petrohue-5d4n':'Puerto Varas, Chile',
+  'chile-carretera-austral-capillas-marmol-4d3n':'Coyhaique, Chile',
+  'chile-pucon-villarrica-termas-5d4n':'Pucón, Chile',
+  'chile-rapa-nui-moais-5d4n':'Hanga Roa, Rapa Nui, Chile',
+  'chile-santiago-valle-nevado-esqui-4d3n':'Santiago, Chile',
+  'chile-chiloe-cultural-naturaleza-4d3n':'Castro, Chiloé, Chile',
+  'chile-atacama-5d4n':'San Pedro de Atacama, Chile',
+  'chile-patagonia-6d5n':'Puerto Natales, Chile'
+ };
+ if(hotelCities[params.slug])params.destinationPlace=hotelCities[params.slug];
  const multiCityAtacama=params.slug==='chile-atacama-5d4n';
  const splitCityPatagonia=params.slug==='chile-patagonia-6d5n';
  // En los productos de Chile se publicaron únicamente tarifas para la base doble.
@@ -42,7 +55,7 @@
       book.dataset.bookDefaultArrival:'',
   adults:Math.max(1,Math.min(9,Number(q.get('adults'))||Number(q.get('viajeros'))||2)),
   children:Math.max(0,Math.min(8,Number(q.get('children'))||0)),
-  origin:(params.slug==='chile-atacama-5d4n'?'SCL':q.get('origen')||defaults[country]||'LIM').toUpperCase(),
+  origin:(params.slug==='chile-atacama-5d4n'?'SCL':q.get('origen')||(params.destination==='IPC'?'SCL':defaults[country])||'LIM').toUpperCase(),
   tier:firstTier?.code||'',occupancy:'double',hotelPicked:false,customHotel:'',
   hotelPhotos:{},couponCode:'',roomPlan:'',hotelQuotePending:false,hotelAlternative:null,childrenAges:[],flight:null,baggage:'none',offers:[],outboundKey:'',choice:null,flightStage:'outbound',flightSearch:null
  };
@@ -164,7 +177,7 @@
    main.querySelector('.package-itinerary')?.closest('section.detail-card');
  const addonFlights=el('section','lx-package-addon');
  addonFlights.innerHTML='<div class="lx-addon-row"><div><h2><i class="fa-solid fa-plane"></i> Añade vuelos a tu paquete</h2>'+
- '<p>Consulta vuelos a '+(params.destination==='CJC'?'Calama (CJC)':params.destination)+', o continúa sin añadirlos.</p></div>'+
+ '<p>Consulta vuelos a '+(params.destination==='CJC'?'Calama (CJC)':params.destination==='IPC'?'Rapa Nui desde Santiago (SCL–IPC)':params.destination)+', o continúa sin añadirlos.</p></div>'+
  '<button type="button" id="lxProductOpenFlights">Buscar vuelos</button></div>'+
  '<div id="lxProductSelectedFlight" class="lx-package-status">Vuelos no incluidos</div>';
  const addonHotels=el('section','lx-package-addon');
@@ -407,7 +420,8 @@ function renderFlightSearchSummary(){
   return m&&Number(m[2])>=1&&Number(m[2])<=12?
    Number(m[3])+' '+months[Number(m[2])-1]+' '+m[1]:(en?'To be defined':'Por definir');
  };
- const airports={MDE:'Medellín',CJC:'Calama · San Pedro de Atacama',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',PUQ:'Punta Arenas',CLO:'Cali',
+ const airports={MDE:'Medellín',CJC:'Calama · San Pedro de Atacama',LIM:'Lima',BOG:'Bogotá',CUZ:'Cusco',PUQ:'Punta Arenas',IPC:'Rapa Nui · Mataveri',PMC:'Puerto Montt · Puerto Varas',
+  BBA:'Balmaceda · Coyhaique',ZCO:'Temuco · Pucón',MHC:'Mocopulli · Chiloé',CLO:'Cali',
   CTG:'Cartagena',AQP:'Arequipa',EZE:'Buenos Aires',SCL:'Santiago',MEX:'Ciudad de México',
   UIO:'Quito',GRU:'São Paulo',GIG:'Río de Janeiro',AEP:'Buenos Aires',PTY:'Ciudad de Panamá',MIA:'Miami',CCS:'Caracas'};
  const origin=$('lxFlightOrigin').selectedOptions[0]?.textContent.replace(/\s*\([A-Z]{3}\)\s*$/,'')||
@@ -640,6 +654,16 @@ function showTierQuote(){
  }
 
  function update(){
+  // La descripción de tarifa corresponde a la ocupación realmente seleccionada.
+  const priceCaption=side.querySelector('.price-block > small');
+  if(priceCaption){
+    const en=(document.documentElement.lang||'es').toLowerCase().startsWith('en');
+    priceCaption.textContent=state.occupancy==='single'?
+      (en?'Price per person in single room':'Tarifa por persona en habitación individual'):
+      (state.occupancy==='double'||state.occupancy==='matrimonial')?
+        (en?'Price per person based on double occupancy':'Tarifa por persona en base a acomodación doble'):
+        (en?'Price per person · room arrangement on request':'Tarifa por persona · acomodación por cotizar');
+  }
   $('lxProductDate').value=state.date;
   productCalendar.sync();productTravelers.sync();
   renderPriceBreakdown();

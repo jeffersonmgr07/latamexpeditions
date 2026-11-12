@@ -190,3 +190,32 @@ Cinco nuevas fichas necesitan fotografía legítima: **Puerto Varas, Carretera A
 3. Completar fotografías autorizadas y revisar las diez fichas en móvil/PC con fechas y viajeros.
 4. Autorizar cada producto individualmente a pasar de **cotización previa** a **reserva confirmada**, con precio, ocupaciones y entradas explícitas.
 5. Publicar nueva versión de Apps Script tras aprobación y realizar las pruebas completas de cotización/checkout en sandbox **más adelante**, conforme a la decisión comercial actual.
+
+
+## 16. Banners, resumen de producto y vuelos Chile · 12/11/2026
+
+### Plantilla de producto vigente
+- **Única capa compartida**: `assets/js/main.js` normaliza las fichas de **experiencias y paquetes**; `assets/css/main.css` restaura el banner de fondo usando el archivo de imagen propio indicado por `og:image` o `--detail-image`. Esto cubre fichas antiguas y futuras sin reproducir decenas de parches.
+- Las **experiencias de un día** dicen «Tarifa por persona» (no hay acomodación de hotel). Los **paquetes con alojamiento doble** dicen «Tarifa por persona en base a acomodación doble». La selección de habitación individual actualiza el texto dinámicamente mediante `assets/js/package-product-20261108.js`; sin tarifa definida se muestra «Por cotizar».
+- En lugar de la caja poco útil «Información del paquete» se incluye un resumen compacto en la primera descripción de producto: **duración, destino, dificultad, servicios y vuelos**. Los detalles completos siguen en itinerario, inclusiones y exclusiones.
+- El código `LATAM10EXP` **no se expone** en las fichas ni el encabezado. El viajero que conozca un cupón puede introducirlo; solo entonces aparece la deducción en su cálculo. La campaña no se anuncia automáticamente en cada página.
+- En `tools/build.py`, las nuevas experiencias toman la imagen propia como banner, los paquetes nuevos reciben sección «Sobre este paquete» y el precio se titula correctamente. Las fichas especializadas de Chile y Colombia se preservan cuando se ejecuta el generador. Mantener el diseño por plantillas y no editar 81 experiencias manualmente.
+
+### Aeropuertos de Chile en Mini API (Google Flights vía SerpAPI)
+- Código a desplegar: `integraciones/vuelos/Code.gs`.
+- Códigos habilitados: **SCL** Santiago, **CJC** Calama/Atacama, **PUQ** Punta Arenas/Patagonia, **IPC** Mataveri/Rapa Nui, **PMC** Puerto Montt/Puerto Varas, **BBA** Balmaceda/Carretera Austral, **ZCO** Temuco/Pucón y **MHC** Mocopulli/Chiloé. **ANF** Antofagasta también estaba habilitado.
+- Rapa Nui usa **SCL → IPC** como origen inicial recomendado (LATAM opera ruta directa). El cliente puede editar origen y fechas para conexiones; si Google Flights/SerpAPI no devuelve combinaciones no se inventan vuelos.
+- Búsqueda de hoteles `mode=hotels`: lista blanca ampliada para Santiago, San Pedro, **Puerto Varas**, **Coyhaique**, **Pucón**, **Hanga Roa/Rapa Nui**, **Castro/Chiloé**, **Puerto Natales** y **Punta Arenas**.
+- `assets/js/package-product-20261108.js` separa **aeropuerto de llegada** del **destino hotelero base** (Rapa Nui IPC/Hanga Roa; Carretera Austral BBA/Coyhaique; Puerto Varas PMC/Puerto Varas; Pucón ZCO/Pucón; Chiloé MHC/Castro). Las rutas de dos ciudades, Santiago/Atacama y Patagonia, **no ofrecen sustitución de hotel de una sola ciudad** como si abarcase todas las noches.
+- La Mini API devuelve **precios observados, no inventario reservable** y los hoteles alternativos sin presupuesto comparable no reciben un suplemento automático confirmado.
+
+### Despliegue obligatorio y pruebas
+1. Abrir el proyecto Google Apps Script que corresponde al endpoint público definido en `assets/js/vuelos-config.js`, asegurándose de que sea **el proyecto de vuelos** y no el de reservas.
+2. Sustituir el contenido correspondiente por `integraciones/vuelos/Code.gs` del repositorio. **No subir secretos** y conservar las propiedades privadas existentes `SERPAPI_KEY`, claves de firma y configuraciones de hoja.
+3. Crear **Nueva versión** de la implementación Web App actual, manteniendo permisos/URL existente. GitHub Pages no publica Apps Script automáticamente.
+4. Probar una consulta futura **SCL–IPC–SCL**, dos adultos, confirmando que no devuelve «Ruta o fechas no válidas», y consultar hoteles **Hanga Roa, Rapa Nui, Chile** para las mismas fechas y ocupación. Si se obtiene «sin resultados», comprobar disponibilidad real de la aerolínea y cuota del proveedor, no reemplazar datos con precios ficticios.
+5. Repetir con **SCL–PMC**, **SCL–BBA**, **SCL–ZCO**, **SCL–MHC** y búsquedas hoteleras correspondientes. Validar vuelo en fecha adecuada y precios con/ sin suplemento de hotel.
+6. Hacer QA móvil y escritorio, y confirmar que **PayPal permanece fuera de esta etapa**. El proyecto de reservas `backend/Codigo.gs` no se modifica por esta fase.
+
+### Colombia
+El ranking comercial de los **25 paquetes + 55 experiencias de Colombia** se documenta en [Ranking de Colombia 2026-11-12](RANKING_COLOMBIA_2026-11-12.md). No se agregan productos hasta auditar los prioritarios.

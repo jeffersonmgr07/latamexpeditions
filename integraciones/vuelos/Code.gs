@@ -11,7 +11,7 @@
  * Data is cached airfare observations, NOT live bookable inventory.
  */
 var FLIGHT_AIRPORTS = [
-  "LIM","CUZ","AQP","JUL","PIU","TRU","IQT","TPP","CIX","PEM","BOG","MDE","CTG","CLO","SMR","ADZ","PEI","LET","UIO","GYE","SCL","CJC","ANF","PUQ","EZE","AEP","COR","MDZ","GRU","GIG","BSB","LPB","VVI","MEX","CUN","GDL","PTY","SJO","MVD","CCS","BLA","MAR","MIA","MCO","JFK","LAX","MAD","BCN"
+  "LIM","CUZ","AQP","JUL","PIU","TRU","IQT","TPP","CIX","PEM","BOG","MDE","CTG","CLO","SMR","ADZ","PEI","LET","UIO","GYE","SCL","CJC","ANF","PUQ","IPC","PMC","BBA","ZCO","MHC","EZE","AEP","COR","MDZ","GRU","GIG","BSB","LPB","VVI","MEX","CUN","GDL","PTY","SJO","MVD","CCS","BLA","MAR","MIA","MCO","JFK","LAX","MAD","BCN"
 ];
 var API_ROOT = "https://api.travelpayouts.com/aviasales/v3/prices_for_dates";
 var CACHE_SECONDS = 900;
@@ -565,8 +565,15 @@ function searchBundleHotels_(p) {
     "Arequipa, Perú":{q:"hoteles en Arequipa Perú",gl:"pe"},
     "Río de Janeiro, Brasil":{q:"hoteles en Río de Janeiro Brasil",gl:"br"},
     "Buenos Aires, Argentina":{q:"hoteles en Buenos Aires Argentina",gl:"ar"},
-    "Santiago, Chile":{q:"hoteles en Santiago Chile",gl:"cl"},
-    "San Pedro de Atacama, Chile":{q:"hoteles en San Pedro de Atacama Chile",gl:"cl"}
+    "Santiago, Chile":{q:"hoteles 4 estrellas en Santiago Chile",gl:"cl"},
+    "San Pedro de Atacama, Chile":{q:"hoteles 4 estrellas en San Pedro de Atacama Chile",gl:"cl"},
+    "Puerto Varas, Chile":{q:"hoteles 4 estrellas Puerto Varas Chile",gl:"cl"},
+    "Coyhaique, Chile":{q:"hoteles 4 estrellas Coyhaique Chile",gl:"cl"},
+    "Pucón, Chile":{q:"hoteles 4 estrellas Pucón Chile",gl:"cl"},
+    "Hanga Roa, Rapa Nui, Chile":{q:"hoteles 4 estrellas Hanga Roa Isla de Pascua Chile",gl:"cl"},
+    "Castro, Chiloé, Chile":{q:"hoteles 4 estrellas Castro Chiloe Chile",gl:"cl"},
+    "Puerto Natales, Chile":{q:"hoteles 4 estrellas Puerto Natales Chile",gl:"cl"},
+    "Punta Arenas, Chile":{q:"hoteles 4 estrellas Punta Arenas Chile",gl:"cl"}
   };
   var location=supported[destination];
   if(!location)return {ok:false,message:"Consulta hotelera todavía no habilitada para este destino."};
