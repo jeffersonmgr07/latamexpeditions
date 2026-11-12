@@ -886,6 +886,34 @@
       if(firstInfo){
         firstInfo.querySelector('h2').textContent='Información esencial';
         firstInfo.classList.add('lx-product-info');
+        const old=firstInfo.querySelector('.tour-facts,.product-facts,.lx-unified-facts');
+        if(old && !old.querySelector('.tour-fact')){
+          const facts=new Map();
+          old.querySelectorAll(':scope > div').forEach(row=>{
+            const label=row.querySelector('span,dt')?.textContent?.trim();
+            const value=row.querySelector('strong,dd')?.textContent?.trim();
+            if(label&&value)facts.set(label,value);
+          });
+          const text=(pattern)=>[...facts].find(pair=>pattern.test(pair[0]))?.[1]||'';
+          const wanted=[
+            ['Ubicación',text(/destino|regi[oó]n|ubicaci[oó]n/i)||trigger.dataset.bookDestinationLabel||trigger.dataset.bookCountry||'Según itinerario','fa-location-dot'],
+            ['Duración',text(/duraci[oó]n/i)||trigger.dataset.bookDuration||'Según itinerario','fa-clock'],
+            ['Dificultad',text(/dificultad|exigencia/i)||'Varía según las excursiones','fa-person-hiking'],
+            ['Tipo de servicio',text(/modalidad|tipo de servicio/i)||'Según servicios del programa','fa-people-group'],
+            ['Edad mínima',text(/edad m[ií]nima/i)||'Consultar condiciones para menores','fa-child-reaching'],
+            ['Tamaño del grupo',text(/tama[nñ]o del grupo|grupo/i)||'Según excursión','fa-users'],
+            ['Distancia a pie',text(/distancia a pie/i)||'Variable según excursión','fa-shoe-prints'],
+            ['Altitud',text(/altitud/i)||'Depende de los lugares visitados','fa-mountain']
+          ];
+          const dl=document.createElement('dl');dl.className='tour-facts';
+          wanted.forEach(([label,value,icon])=>{
+            const row=document.createElement('div');row.className='tour-fact';
+            const i=document.createElement('i');i.className='fa-solid '+icon;i.setAttribute('aria-hidden','true');
+            const holder=document.createElement('div'),dt=document.createElement('dt'),dd=document.createElement('dd');
+            dt.textContent=label;dd.textContent=value;holder.append(dt,dd);row.append(i,holder);dl.append(row);
+          });
+          old.replaceWith(dl);
+        }
       }
       const about=[...content.querySelectorAll(':scope > .detail-card')].find(card=>
         /^(sobre este paquete|descubre|conoce|sobre el paquete|about this package|discover)/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''));
