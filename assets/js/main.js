@@ -989,7 +989,7 @@
     content.querySelectorAll('.detail-card > h2').forEach(heading=>{
       if(heading.querySelector('.lx-detail-title-icon'))return;
       const label=heading.textContent.trim().normalize('NFD')
-        .replace(/[\\u0300-\\u036f]/g,'').toLowerCase().replace(/\\s+/g,' ');
+        .replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ');
       const glyph=titleIcons[label];
       if(!glyph)return;
       const icon=document.createElement('i');
