@@ -749,8 +749,14 @@
         const label=price.querySelector('small');
         const english=(document.documentElement.lang||'es').toLowerCase().startsWith('en');
         if(label)label.textContent=kind==='package'?
-          (english?'Price per person based on double occupancy':'Tarifa por persona en base a acomodación doble'):
+          (english?'Price per person':'Tarifa por persona'):
           (english?'Price per person':'Tarifa por persona');
+        if(kind==='package'){
+          const sub=price.querySelector('span')||document.createElement('span');
+          sub.textContent=english?'based on double occupancy':'en base a acomodación doble';
+          if(!sub.parentElement)price.append(sub);
+          price.querySelectorAll('p,.lx-quote-promo').forEach(el=>el.remove());
+        }
         price.querySelectorAll('small,span,p,.lx-quote-promo').forEach(item=>{
           if(/con c[oó]digo\s+LATAM|LATAM10EXP|precio promocional/i.test(item.textContent||''))item.remove();
         });
@@ -763,10 +769,11 @@
         const oldImage=hero?.style.getPropertyValue('--detail-image')||'';
         const match=oldImage.match(/url\(['"]?([^'")]+)['"]?\)/);
         const source=match?.[1]||og;
-        if(source&&/^https?:\/\/|^\.\.\//.test(source)){
+                if(source&&/^https?:\/\/|^\.\.\//.test(source)){
           const img=document.createElement('img');
           img.src=source;img.alt='Imagen representativa de '+(trigger.dataset.bookTitle||'la experiencia');
           img.loading='lazy';img.decoding='async';
+          sideCard.querySelectorAll('.lx-chile-aside-placeholder,.lx-chile-photo-pending').forEach(el=>el.remove());
           sideCard.prepend(img);
         }
       }
@@ -836,43 +843,27 @@
       if(/^Itinerario d[ií]a a d[ií]a$/i.test(h.textContent.trim()))
         h.textContent='Itinerario detallado';
     });
-    // Un único resumen editorial: evita la tarjeta "Información del paquete"
-    // vacía y empieza por "Sobre/Descubre este paquete".
+    // Información esencial conserva los datos reales del producto, sin badges decorativos.
     if(kind==='package'){
       const firstInfo=[...content.querySelectorAll(':scope > .detail-card')].find(card=>
         /^Informaci[oó]n (del paquete|esencial)|^Datos b[aá]sicos/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''));
-      const oldFacts=[...firstInfo?.querySelectorAll('.tour-facts > div,.lx-unified-facts > div')||[]];
-      const fact=(pattern)=>{
-        const row=oldFacts.find(r=>pattern.test(r.querySelector('span')?.textContent||''));
-        return row?.querySelector('strong')?.textContent?.trim()||'';
-      };
-      if(firstInfo)firstInfo.remove();
+      if(firstInfo){
+        firstInfo.querySelector('h2').textContent='Información esencial';
+        firstInfo.classList.add('lx-product-info');
+      }
       const about=[...content.querySelectorAll(':scope > .detail-card')].find(card=>
         /^(sobre este paquete|descubre|conoce|sobre el paquete|about this package|discover)/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''));
-      if(about&&!about.querySelector('.lx-package-key-facts')){
-        const included=[...content.querySelectorAll('.detail-card')].find(card=>
-          /^(qu[eé] incluye|servicios contemplados|servicios incluidos)/i.test(card.querySelector('h2')?.textContent||''));
-        const incl=(included?.textContent||'').toLowerCase();
-        const features=[];
-        if(/alojamiento|hotel|noches/.test(incl))features.push('Alojamiento');
-        if(/excursi[oó]n|tour|visita|circuito|navegaci[oó]n/.test(incl))features.push('Excursiones');
-        if(/entrada|ingreso|ticket|boleto/.test(incl))features.push('Entradas indicadas');
-        if(/traslado|transporte/.test(incl))features.push('Traslados');
-        const facts=[
-          ['Duración',trigger.dataset.bookDuration||fact(/duraci[oó]n/i)||'Consultar'],
-          ['Destino',fact(/destino|regi[oó]n|lugar|ubicaci[oó]n/i)||trigger.dataset.bookDestinationLabel||trigger.dataset.bookCountry||'Consultar'],
-          ['Dificultad',fact(/dificultad|exigencia/i)||'Según excursión'],
-          ['Servicios',features.length?features.join(' · '):'Según itinerario'],
-          ['Vuelos',/vuelo[^.]{0,35}incluido/i.test(incl)&&!/opcional|no incluido/.test(incl)?'Incluidos':'No incluidos · opcionales']
-        ];
-        const wrap=document.createElement('div');wrap.className='lx-package-key-facts';
-        facts.forEach(([key,val])=>{
-          const item=document.createElement('div'),label=document.createElement('span'),value=document.createElement('strong');
-          label.textContent=key;value.textContent=val;item.append(label,value);wrap.append(item);
-        });
-        const firstPara=about.querySelector(':scope > p');
-        if(firstPara)firstPara.after(wrap);else about.append(wrap);
-      }
+      about?.querySelectorAll('.lx-package-key-facts,.trip-badge,.package-badge').forEach(node=>node.remove());
+      // Sustituir mensajes internos por información comprensible para el viajero.
+      content.querySelectorAll('p,small,span').forEach(node=>{
+        if(node.children.length)return;
+        const t=node.textContent.trim();
+        if(/tarifa (?:objetivo|meta)|objetivo comercial|precio (?:objetivo|interno)/i.test(t)){
+          node.textContent=t.replace(/tarifa objetivo|precio objetivo/gi,'tarifa por persona')
+           .replace(/objetivo comercial/gi,'precio del paquete');
+        }
+      });
+    }
       // Nunca publicar el cupón por defecto; únicamente tras ingresarlo el viajero.
       content.querySelectorAll('p,small,span').forEach(node=>{
         if(/beneficio\s+LATAM10EXP|con c[oó]digo\s+LATAM10EXP/i.test(node.textContent?.trim()||'')
