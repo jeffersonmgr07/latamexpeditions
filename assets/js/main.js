@@ -486,6 +486,8 @@
     const select = document.getElementById('languageSelect');
     if (!select || !lang || !languageName[lang]) return;
     select.value = lang;
+    const lxLabel=select.closest('.lx-language-picker')?.querySelector('[data-lx-language-label]');
+    if(lxLabel)lxLabel.textContent=lang.toUpperCase();
     if (window.LatamI18n?.lang() !== lang) {
       window.LatamI18n?.set(lang);
     }
@@ -541,7 +543,68 @@
     if (language) {
       language.classList.add('latam-locale__language');
       language.setAttribute('aria-label','Seleccionar idioma');
-      locale.append(language);
+      // En escritorio se usa un menú LATAM, conservando el select nativo para móvil.
+      const picker=document.createElement('div');
+      picker.className='lx-language-picker';
+      const toggle=document.createElement('button');
+      toggle.type='button';
+      toggle.className='lx-language-trigger';
+      toggle.setAttribute('aria-label','Seleccionar idioma');
+      toggle.setAttribute('aria-haspopup','listbox');
+      toggle.setAttribute('aria-expanded','false');
+      toggle.innerHTML='<span data-lx-language-label></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i>';
+      const list=document.createElement('div');
+      list.className='lx-language-options';
+      list.id='lxLanguageOptions';
+      list.setAttribute('role','listbox');
+      list.setAttribute('aria-label','Idiomas disponibles');
+      list.hidden=true;
+      toggle.setAttribute('aria-controls',list.id);
+      const sync=()=>{
+        const current=language.value||'es';
+        toggle.querySelector('[data-lx-language-label]').textContent=current.toUpperCase();
+        list.querySelectorAll('[data-lx-lang]').forEach(btn=>{
+          btn.setAttribute('aria-selected',String(btn.dataset.lxLang===current));
+        });
+      };
+      [...language.options].forEach(option=>{
+        const button=document.createElement('button');
+        button.type='button';
+        button.className='lx-language-option';
+        button.dataset.lxLang=option.value;
+        button.setAttribute('role','option');
+        button.textContent=languageName[option.value]||option.textContent;
+        button.addEventListener('click',()=>{
+          language.value=option.value;
+          language.dispatchEvent(new Event('change',{bubbles:true}));
+          sync();
+          list.hidden=true;
+          toggle.setAttribute('aria-expanded','false');
+          toggle.focus();
+        });
+        list.append(button);
+      });
+      picker.append(language,toggle,list);
+      locale.append(picker);
+      toggle.addEventListener('click',()=>{
+        list.hidden=!list.hidden;
+        toggle.setAttribute('aria-expanded',String(!list.hidden));
+        if(!list.hidden)sync();
+      });
+      language.addEventListener('change',sync);
+      document.addEventListener('click',event=>{
+        if(!picker.contains(event.target)){
+          list.hidden=true;
+          toggle.setAttribute('aria-expanded','false');
+        }
+      });
+      picker.addEventListener('keydown',event=>{
+        if(event.key==='Escape'&&!list.hidden){
+          list.hidden=true;toggle.setAttribute('aria-expanded','false');
+          toggle.focus();
+        }
+      });
+      sync();
     }
     utilityInner.append(locale);
 
