@@ -724,7 +724,7 @@
       // Resolve each existing product cover from the HTML page, not the CSS file.
       // This keeps the approved local destination photo and prevents broken relative URLs.
       const inlineCover=hero.style.getPropertyValue('--lx-hero-img').trim();
-      const coverMatch=inlineCover.match(/^url\\(\\s*(['"]?)([^'")]+)\\1\\s*\\)$/i);
+      const coverMatch=inlineCover.match(/^url\(\s*(['"]?)([^'")]+)\1\s*\)$/i);
       if(coverMatch){
         try{
           const absolute=new URL(coverMatch[2],document.baseURI);
