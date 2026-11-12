@@ -42,6 +42,7 @@
     host.append(text,expand,list);
     select.after(host);
     select.classList.add('lx-flight-original-select');
+    select.required=false; // La validación se realiza sobre el buscador visible.
     select.tabIndex=-1;select.setAttribute('aria-hidden','true');
     const airports=Array.from(select.options).filter(opt=>opt.value).map(opt=>{
       const code=opt.value.toUpperCase();
