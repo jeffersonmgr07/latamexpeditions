@@ -26,6 +26,7 @@
  let tiers=[];try{tiers=JSON.parse(book.dataset.bookTiers||'[]')}catch(_){}
  const firstTier=tiers[0]||null;
  const multiCityAtacama=params.slug==='chile-atacama-5d4n';
+ const splitCityPatagonia=params.slug==='chile-patagonia-6d5n';
  // En los productos de Chile se publicaron únicamente tarifas para la base doble.
  // No inferir suplementos single, triple, niños ni familiares sin tabla de tarifas.
  const chileBaseDouble=multiCityAtacama||params.slug==='chile-patagonia-6d5n';
@@ -201,6 +202,13 @@
      paired.append(item);
    }
    addonHotels.append(paired);
+ }
+ if(splitCityPatagonia){
+   const intro=addonHotels.querySelector('.lx-addon-row .lx-package-addons-note');
+   if(intro)intro.textContent='4 noches Puerto Natales + 1 noche Punta Arenas. El hotel de la quinta noche se asigna al confirmar; los cambios de hotel en dos ciudades requieren cotización personalizada.';
+   const notice=el('p','lx-package-addons-note','La búsqueda automática de hoteles por una sola ciudad no representa este recorrido de dos alojamientos; puedes elegir categoría y habitación, pero las sustituciones se coordinan con un asesor.');
+   notice.style.cssText='font-weight:650;padding:10px;background:#eef7f0;border-radius:10px;margin:12px 0 0';
+   addonHotels.append(notice);
  }
  if(sectionAt){sectionAt.before(addonFlights,addonHotels)}
  else main.prepend(addonFlights,addonHotels);
@@ -667,7 +675,9 @@ function showTierQuote(){
     (!hasHotelIncluded?'Puedes solicitar un hotel adicional':
       readableStars(currentTier()?.stars||'Hotel')+' · '+(currentTier()?.name||'Categoría prevista'));
 
-  $('lxProductHotelStatus').textContent=state.customHotel&&state.hotelAlternative?
+  $('lxProductHotelStatus').textContent=splitCityPatagonia?
+    'Estadía prevista: 4 noches Puerto Natales + 1 noche Punta Arenas. Hotel de Punta Arenas por confirmar con el operador.':
+    state.customHotel&&state.hotelAlternative?
     state.hotelAlternative.nights+' noches · '+(state.roomPlan||'habitación seleccionada')+' · '+
      (state.hotelQuotePending?'cambio pendiente de cotizar · no incluido en el pago':extraHotelCost()>0?'+ '+fmt(extraHotelCost())+' por la estancia':'sin recargo'):
     !hasHotelIncluded?'Este paquete no incluye noches de hotel.':
@@ -763,6 +773,12 @@ function showTierQuote(){
  let hotelsPendingSelection=state.hotelAlternative;
  let hotelResults=[],hotelBudget=null,hotelPrivateReference=false,hotelQuery=null,hotelPage=0,hotelNextPage=null,hotelDisplayCount=10;
  const hotelLookupUi=$('lxHotelFilters');
+ if(splitCityPatagonia){
+   const btn=$('lxProductLookupHotels');
+   if(btn){btn.disabled=true;btn.title='Para Patagonia se necesitan dos cotizaciones hoteleras separadas. Solicita asesoramiento para cambiar de hotel.';}
+   const text=$('lxHotelLookupStatus');
+   if(text)text.textContent='Patagonia requiere alojamiento en Puerto Natales y Punta Arenas. Para sustituir hoteles solicita cotización personalizada.';
+ }
 
  $('lxHotelApply').addEventListener('click',()=>{
   state.hotelPicked=true;
