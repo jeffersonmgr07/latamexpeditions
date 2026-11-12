@@ -3624,3 +3624,58 @@ main#contenido .product-hero-clean.package-hero-clean{
  background-size:cover!important;background-position:center,center 48%!important;background-repeat:no-repeat!important;
 }
 main#contenido .product-hero-clean.package-hero-clean::before{content:none!important}
+
+/* 2026-11-12: Atacama cover and balanced mobile product gutters. */
+main#contenido .product-hero-clean.package-hero-clean.lx-atacama-hero {
+  /* Direct site-root image URL: avoid CSS-relative path resolution. */
+  background-color:#0b3d2e !important;
+  background-image:
+    linear-gradient(90deg,rgba(3,35,24,.70) 0%,rgba(4,40,28,.40) 58%,rgba(4,40,28,.23) 100%),
+    url("/assets/img/lagunas-altiplanicas-01.jpg") !important;
+  background-position:center,center 48% !important;
+  background-size:cover !important;
+  background-repeat:no-repeat !important;
+}
+@media (max-width:820px) {
+  /* Keep equal outside space at both sides of every product detail card. */
+  main#contenido > section.product-detail-section {
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    padding-left:18px !important;
+    padding-right:18px !important;
+  }
+  main#contenido > section.product-detail-section .detail-layout {
+    display:grid;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    grid-template-columns:minmax(0,1fr) !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+  }
+  main#contenido > section.product-detail-section .detail-main,
+  main#contenido > section.product-detail-section .detail-layout > aside {
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+  }
+  main#contenido > section.product-detail-section .detail-main > .detail-card,
+  main#contenido > section.product-detail-section .detail-main > .lx-product-help,
+  main#contenido > section.product-detail-section .detail-main > .lx-package-addon {
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    box-sizing:border-box;
+    margin-left:0 !important;
+    margin-right:0 !important;
+  }
+  /* Compact copy only in the short informational cards; keep headings intact. */
+  main#contenido > section.product-detail-section .detail-main > section.detail-card > p.tour-body-copy {
+    font-size:14.5px;
+    line-height:1.48;
+    margin-top:0;
+    margin-bottom:0;
+  }
+}
