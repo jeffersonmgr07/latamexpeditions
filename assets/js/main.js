@@ -1370,6 +1370,7 @@
     const name=label.textContent.trim();
     const code=flagCodes[name];
     const prior=label.querySelector('img.lx-country-selected-flag');
+    label.closest('.country-pill')?.classList.toggle('lx-has-country-flag',Boolean(code));
     if(code){
       if(!prior||prior.dataset.countryCode!==code){
         const img=flagImage(code,'lx-country-selected-flag');
