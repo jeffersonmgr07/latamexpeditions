@@ -3599,3 +3599,20 @@ body.has-pn-header .topbar { border: 0 !important; }
  .lx-unified-product .lx-unified-hero.product-hero-clean{min-height:245px;background-position:center,center}
  .lx-package-key-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+
+/* Respaldo independiente del checkout: TODAS las excursiones muestran su foto
+   aunque la ficha sea histórica o no cargue el normalizador unificado. */
+main#contenido .product-hero-clean.experience-hero-clean{
+ background-image:linear-gradient(92deg,rgba(3,35,24,.72),rgba(4,40,28,.48),rgba(4,40,28,.28)),
+   var(--lx-hero-img,var(--experience-photo-mobile,none))!important;
+ background-position:center,center!important;background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+main#contenido .page-hero.detail-hero:not(.experience-hero-clean)[style*="--detail-image"]{
+ background-image:linear-gradient(92deg,rgba(3,35,24,.72),rgba(4,40,28,.48),rgba(4,40,28,.28)),
+   var(--lx-hero-img,var(--detail-image,none))!important;
+ background-position:center,center!important;background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+main#contenido .product-hero-clean.experience-hero-clean::before{content:none!important}
