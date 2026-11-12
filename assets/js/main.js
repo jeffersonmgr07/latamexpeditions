@@ -721,6 +721,18 @@
       hero.classList.add('product-hero-clean','lx-unified-hero');
       const inner=hero.querySelector('.page-hero__inner');
       inner?.classList.add('container');
+      // Resolve each existing product cover from the HTML page, not the CSS file.
+      // This keeps the approved local destination photo and prevents broken relative URLs.
+      const inlineCover=hero.style.getPropertyValue('--lx-hero-img').trim();
+      const coverMatch=inlineCover.match(/^url\\(\\s*(['"]?)([^'")]+)\\1\\s*\\)$/i);
+      if(coverMatch){
+        try{
+          const absolute=new URL(coverMatch[2],document.baseURI);
+          if(absolute.origin===location.origin && absolute.pathname.startsWith('/assets/img/')){
+            hero.style.setProperty('--lx-hero-img','url("'+absolute.href+'")');
+          }
+        }catch(ignore){}
+      }
       const oldImage=hero.style.getPropertyValue('--detail-image');
       // Experiencias: usar siempre la foto oficial de su ficha como banner (móvil y PC).
       // El background del componente unificado ya no tapa la capa ::before.
