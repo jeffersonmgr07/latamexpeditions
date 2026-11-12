@@ -79,7 +79,8 @@
     function open(query='',all=false){
       const q=normalize(query);
       const filtered=airports.filter(item=>all||!q||
-        normalize(item.label).includes(q)||normalize(item.country).includes(q));
+        normalize(item.label).includes(q)||normalize(item.code).includes(q)||
+        (q.length>=3&&normalize(item.country).startsWith(q)));
       const prefix=q&&!all?filtered.filter(item=>normalize(item.display).startsWith(q)||normalize(item.code).startsWith(q)):[];
       const rest=q&&!all?filtered.filter(item=>!prefix.includes(item)):[];
       results=(q&&!all?[...prefix,...rest]:filtered).slice(0,70);
