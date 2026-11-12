@@ -933,7 +933,6 @@
         if(/beneficio\s+LATAM10EXP|con c[oó]digo\s+LATAM10EXP/i.test(node.textContent?.trim()||'')
           &&node.children.length===0)node.closest('p')?.remove();
       });
-    }
     if(kind==='experience'&&!content.querySelector('.lx-product-info, .product-facts')){
       const first=content.querySelector(':scope > .detail-card');
       const title=first?.querySelector('h2')?.textContent||'';
