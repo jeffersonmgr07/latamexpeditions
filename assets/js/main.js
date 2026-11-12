@@ -1218,3 +1218,54 @@
     track.scrollBy({left:(event.key==='ArrowRight'?1:-1)*((photo?.getBoundingClientRect().width||260)+13),behavior:'auto'});
   });
 })();
+
+
+/* Texto público coherente en catálogos y fichas. No modifica datos de precios ni reservas. */
+(function(){
+ 'use strict';
+ const words={1:'una estrella',2:'dos estrellas',3:'tres estrellas',4:'cuatro estrellas',5:'cinco estrellas'};
+ function hotelText(t){
+   return String(t||'').replace(/([1-5])(?:\\.5)?\\s*(?:★|\\bestrellas?\\b)/gi,(match,n)=>match.includes('.5')?words[n]+' y media':words[n]);
+ }
+ function clean(){
+   const main=document.querySelector('main');
+   if(!main)return;
+   const walker=document.createTreeWalker(main,NodeFilter.SHOW_TEXT);
+   const nodes=[];
+   while(walker.nextNode()){
+     const n=walker.currentNode;
+     if(n.parentElement?.closest('script,style,template,option,textarea'))continue;
+     if(/(?:★|[1-5] estrellas?|tarifa objetivo|precio objetivo)/i.test(n.nodeValue||''))nodes.push(n);
+   }
+   nodes.forEach(n=>{
+     let t=hotelText(n.nodeValue);
+     t=t.replace(/tarifa objetivo/gi,'tarifa por persona')
+        .replace(/precio objetivo/gi,'precio por persona');
+     if(t!==n.nodeValue)n.nodeValue=t;
+   });
+   main.querySelectorAll('.trip-card').forEach(card=>{
+     const tag=card.querySelector('.trip-card__media .tag');
+     if(!tag)return;
+     const old=tag.textContent.trim();
+     if(!/^(?:[0-9]+D\\s*[\\/·-]\\s*[0-9]+N|[1-5]\\s*(?:★|estrellas?)|cotizaci[oó]n previa|tarifa objetivo)/i.test(old))return;
+     const t=(card.querySelector('h3')?.textContent||'').toLowerCase();
+     tag.textContent=/rapa nui|isla de pascua/.test(t)?'Cultura ancestral':
+       /caf[eé]|cafetera/.test(t)?'Cultura cafetera':
+       /atacama|uyuni|salar|desierto|laguna/.test(t)?'Paisajes':
+       /playa|isla|caribe|patagonia|gal[aá]pagos/.test(t)?'Naturaleza':
+       /senderismo|trek|monta[nñ]a/.test(t)?'Aventura':'Cultura local';
+   });
+   main.querySelectorAll('.trip-card .price small').forEach(label=>{
+     if(/tarifa objetivo|precio objetivo|cotizaci[oó]n previa/i.test(label.textContent||'')){
+       label.textContent='Desde · por persona';
+     }
+   });
+   document.querySelectorAll('[data-book-tiers]').forEach(node=>{
+     const old=node.getAttribute('data-book-tiers');
+     const fixed=hotelText(old);
+     if(fixed!==old)node.setAttribute('data-book-tiers',fixed);
+   });
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',clean,{once:true});
+ else clean();
+})();
