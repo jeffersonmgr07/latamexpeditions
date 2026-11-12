@@ -1,133 +1,82 @@
-# LATAM Expeditions · Estudio comercial de Chile: 10 paquetes
+# Chile · Portafolio comercial premium vigente (10 paquetes)
 
-**Fecha:** 11 de noviembre de 2026. **Estado:** investigación comercial y propuestas de diseño; no autoriza publicar los siete productos nuevos ni modificar los precios de los tres existentes sin validar proveedores/costos internos.
+**Versión:** 11 de noviembre de 2026, revisión premium 2.0. **Estado:** 10 páginas integradas al catálogo web en modalidad de **cotización previa**, sin cobro automático y sin vuelos incluidos. Los importes son precios objetivos de LATAM Expeditions; **no son contratos de hotel o excursiones confirmados**.
 
-## Método y criterios
+La primera evaluación económica, anterior a esta reestructuración, se conserva exclusivamente para auditoría en [histórico](historico/ESTUDIO_MERCADO_CHILE_2026-11-11_inicial.md). **Esta tabla reemplaza los precios recomendados de aquella versión.**
 
-- Comparación de **2 adultos, 1 habitación doble**, fechas y temporadas no cerradas; precios por persona en dólares, vuelos **excluidos**, excepto referencias externas que indiquen explícitamente lo contrario.
-- Se consultaron Booking, Expedia, KAYAK, Viator, TourRadar, LATAM, JetSMART, Hotel Lago Grey, Chile Travel/CONAF, Valle Nevado, operadores nacionales y regionales de Chile.
-- Se usa tipo de cambio **USD 1 ≈ CLP 983** el 11/11/2026 para **ilustrar** CLP; el costo real para LATAM Expeditions depende de cobro, fecha y proveedor.
-- **DIY** = comprar por separado alojamiento (costo de habitación dividido entre dos), excursiones públicas, entradas y traslados. No representa compra ni tarifa firme simultánea.
-- **Precio de lista recomendado** de nuevas propuestas = hipótesis comercial, **NO precio confirmado**. Solo convertirlo en tarifa cobrable tras obtener cotización mayorista por fecha/ocupación, costos de pasarelas, impuestos y margen objetivo.
-- El supuesto de margen de referencia es 25% sobre el **precio final promocional** antes de gastos administrativos/impuestos no modelados; la columna costo máximo es una restricción objetivo, no costo real.
+## Lista objetivo, descuento y techo de costo
 
-## Auditoría de los tres programas vigentes
+Política aplicada: habitación doble para **dos adultos**, precio por persona en USD, descuento de 10% con código `LATAM10EXP` aplicado solo al paquete, **no a vuelos ni adicionales**. Los niveles superiores se cotizan según tier y no se anuncian como reservas confirmadas.
 
-| Producto | Lista actual p/p | Con 10% | DIY comparable (US$/p/p, aproximado) | Diagnóstico | Máx. costo de servicios para margen bruto 25% |
-|---|---:|---:|---:|---|---:|
-| Atacama Premium 5D/4N, Terrantai | 1,499.90 | 1,349.91 | 850–1,300 | Premium; alto frente a DIY económico pero comparable con programas guiados boutique | 1,012.43 |
-| Santiago y Atacama 5D/4N, Panamericano + hostal | 880.00 | 792.00 | 440–760 | Algo alto para hotel 3★/hostal; considerar lista de 799.90 solo si costo real lo permite | 594.00 |
-| Patagonia y Torres del Paine 6D/5N | 1,450.00 | 1,305.00 | 650–1,100 | Rango razonable para programa organizado; falta determinar hotel quinta noche y validar Grey | 978.75 |
+El techo de costo mostrado es **75% del precio final promocional** para dejar un margen bruto objetivo de 25% ANTES de gastos de comercialización, pasarela, impuestos u otros costos. Es una **restricción** para negociar, no un costo real.
 
-### Desglose orientativo DIY
+| # | Paquete / alojamiento base de referencia | Duración | Lista US$ por persona | Con −10% US$ | Costo máximo de servicios US$ |
+|---:|---|---|---:|---:|---:|
+| 1 | Desierto de Atacama Premium · Hotel Terrantai (4★) | 5D/4N | 1,349.00 | 1,214.10 | 910.58 |
+| 2 | Santiago y Atacama · Novotel Santiago Providencia + Casa Solcor (4★) | 5D/4N | 949.90 | 854.91 | 641.18 |
+| 3 | Patagonia y Torres del Paine · Hotel Costaustralis (Puerto Natales) + Hotel Cabo de Hornos (Punta Arenas) (4★) | 6D/5N | 1,399.90 | 1,259.91 | 944.93 |
+| 4 | Santiago, Valparaíso, Viña del Mar y Casablanca · Novotel Santiago Providencia (4★) | 4D/3N | 599.90 | 539.91 | 404.93 |
+| 5 | Puerto Varas, Frutillar, volcán Osorno y Petrohué · Hotel Bellavista Puerto Varas (4★) | 5D/4N | 829.90 | 746.91 | 560.18 |
+| 6 | Carretera Austral y Capillas de Mármol · Hotel Dreams Patagonia Coyhaique (5★) | 4D/3N | 1,199.90 | 1,079.91 | 809.93 |
+| 7 | Pucón, volcán Villarrica y termas · Hotel Casa Solaria (4★) | 5D/4N | 899.90 | 809.91 | 607.43 |
+| 8 | Rapa Nui: moáis y cultura ancestral · Hotel Hare Nua (4★) | 5D/4N | 1,299.90 | 1,169.91 | 877.43 |
+| 9 | Santiago y Valle Nevado: aprende a esquiar · Novotel Santiago Providencia (4★) | 4D/3N | 949.90 | 854.91 | 641.18 |
+| 10 | Chiloé: cultura, palafitos y naturaleza · Hotel Parque Quilquico (4★) | 4D/3N | 799.90 | 719.91 | 539.93 |
 
-**Atacama Premium (2 adultos por habitación):** Terrantai 4 noches ≈ US$480–750/pax (tarifas públicas variables por día), cinco-seis excursiones ≈ US$250–350/pax, entradas ≈ US$60–110, transfer aeropuerto CJC ida/vuelta ≈ US$35–60. Fuentes: KAYAK Terrantai, Expedia Terrantai, Civitatis vía Viajando Chile, Transfer Pampa/Servicio San Pedro. No incluye vuelos.
+## Qué está implementado ahora
 
-**Santiago–Atacama:** 1 noche Panamericano ≈ US$27–50/pax; 3 noches hostal ≈ US$110–210/pax; tours (Luna, Tatio, lagunas, astronomía) ≈ US$200–310/pax; entradas + transfer SCL/CJC ≈ US$100–190/pax. Total ≈ US$440–760/pax. Existe riesgo en nombre del hotel: catálogo llama **Hostal La Ruca**, pero el operador verificable en Toconao 513 es **La Rukka Hostal Boutique**. **No sustituir nombre en contrato ni foto sin confirmar con proveedor.** Los vuelos SCL–CJC–SCL se cotizan aparte: Google Flights informa ofertas de ida/vuelta desde ~US$78 en ciertas fechas, sin garantizar disponibilidad compatible.
+- **Tres existentes:** Terrantai 4★, Novotel Providencia 4★ + Casa Solcor 4★, Costaustralis 4★ + Cabo de Hornos 4★. Los tiers boutique/premium están definidos en catálogo y el backend mantiene los precios objetivo, pero **cualquier venta requiere contratación efectiva del proveedor**.
+- **Siete nuevos:** Santiago/Valparaíso/Casablanca; Puerto Varas y volcanes; Carretera Austral y Capillas de Mármol; Pucón y termas; Rapa Nui; Santiago y Valle Nevado; Chiloé. Hay fichas con itinerario por hora y hoteles 4★ o 5★ de referencia. Todos son **solo cotización**. La opción de hotel alternativo debe comprobarse para varias ciudades antes de prometer suplementación automática.
+- Los datos de tarifas se mantienen en `assets/data/catalog.json`, los nombres y precios se plasman en las 10 fichas HTML y las tres antiguas quedaron sincronizadas con `backend/Codigo.gs` **sin tocar PayPal**.
+- La pestaña de paquetes públicos contiene 10 tarjetas de Chile. La captura de un lead mediante botón «Solicitar cotización» lleva al WhatsApp de la agencia con el viaje, fecha, viajeros y selección, **sin iniciar checkout**.
+- **Imágenes:** fotos locales representativas para los tres productos originales y dos fichas basadas en Santiago. **Faltan fotos autorizadas específicas de Puerto Varas, Capillas de Mármol, Pucón, Rapa Nui y Chiloé.** Esas cinco páginas muestran un aviso visual en lugar de una foto ajena o de otro destino; la agencia debe aportar imágenes propias o con licencia comercial documentada.
+- **Reservas:** `quoteOnly=true` para los 10. No se han solicitado pagos ni confirmado hoteles. La tabla `PRECIOS_PAQUETES` de Apps Script se actualizó en GitHub, pero requiere desplegar manualmente la nueva versión antes de operar, aunque el frontend ya evita el cobro para estos productos.
 
-**Patagonia:** 4 noches Puerto Natales (Vendaval muestra referencia de ~US$135/habitación/noche), 1 noche Punta Arenas a cotizar, full day Paine, navegación Grey (CLP 120.000 adulto en temporada 2026–27), Cueva del Milodón, transporte y coordinación. DIY aproximado US$650–1,100/pax. Entrada al parque no incluida, Isla Magdalena no incluida (CLP 100.000 cabina Turista opcional). No se vende navegación sin confirmar cupo/mínimo/meteorología.
+## Análisis económico de Terrantai
 
-### Riesgos que deben cerrarse antes de lanzar oferta
+Presupuesto del cliente: tarifas OTA entre S/1,059 y S/1,677 por noche en diferentes ofertas, promedio simple **S/1,368/noche para habitación** (una muestra de precios, no garantía de fechas comparables). Aproximadamente US$400 por noche si 1 USD≈S/3.42; dos personas en habitación doble → US$200 por viajero/noche, cuatro noches → **US$800 por persona solo hotel**. Excursiones al público ≈US$250–350 → US$1,050–1,150 antes de transfers, accesos, comisiones y márgenes.
 
-1. Terrantai oficial recibe pasajeros de **14 años o más**; el producto premium de agencia usa criterio aún más restrictivo (adultos), dejarlo claro.
-2. En Santiago–Atacama el hotel **La Ruca / La Rukka** requiere verificar identidad comercial, tarifas y fotografía correctas, además de noches compartidas en dos ciudades.
-3. Patagonia: cuatro noches Natales y una Punta Arenas; el hotel de Punta Arenas **no tiene proveedor ni nombre confirmado**. La ficha se establece **solo cotización** hasta completar costos y operador. La sustitución automática de un único hotel no es válida para las dos ciudades.
-4. Patagonia necesita validar que la navegación Grey, el transporte de acceso, las entradas y el servicio de recepción estén realmente en el costo y la tarifa anunciados.
-5. Evitar un descuento ficticio: el precio de lista debe ser real, público y haberse ofrecido efectivamente, y la promoción solo debe aplicarse a conceptos elegibles. Confirmar regulación publicitaria y condiciones comerciales.
+Con lista **US$1,349.00** y promoción **US$1,214.10**, después de US$800 de hotel y US$350 de excursiones quedan **US$64.10** para traslados, entradas y utilidad. **No es suficiente para afirmar margen positivo**, mucho menos 25%, si se compran los servicios a precio público. El costo operativo total debería estar **como máximo cerca de US$910.58 por persona** para alcanzar 25% de margen bruto; por tanto, hay que conseguir tarifa neta de Terrantai y costo de tours de operador. Si no, aumentar lista, reducir alcance con información transparente o ofrecer otro 4★, sin sustituir unilateralmente Terrantai.
 
-## Ranking editorial de siete nuevos paquetes para llegar a diez
+Fuentes: [Terrantai Google Hotels](https://www.google.com/travel/hotels/entity/CgoI8O2csYna45kfEAE); [hoteles 4★ San Pedro](https://www.hoteles.com/de10349302-st4/4-estrellas-hoteles-san-pedro-de-atacama-chile/).
 
-**Este orden es una priorización de portafolio LATAM Expeditions, no un ranking estadístico de ventas de Viator ni de búsquedas.** Criterios: reconocimiento del destino en Chile Travel, precio de referencia de proveedores, diferenciación y facilidad operativa.
+## Santiago + Atacama
 
-| Orden | Paquete propuesto | Duración | Lista objetivo US$ | Promo −10% US$ | Costo máximo para margen 25% US$ | Estacionalidad |
-|---:|---|---|---:|---:|---:|---|
-| 4 | Santiago, Valparaíso, Viña del Mar y Casablanca | 4D/3N | 449.90 | 404.91 | 303.68 | Todo el año |
-| 5 | Puerto Varas, Frutillar, volcán Osorno y Petrohué | 5D/4N | 649.90 | 584.91 | 438.68 | Todo el año; actividades según clima |
-| 6 | Carretera Austral y Capillas de Mármol | 4D/3N | 699.90 | 629.91 | 472.43 | Preferente noviembre–marzo |
-| 7 | Pucón, Villarrica y termas | 5D/4N | 649.90 | 584.91 | 438.68 | Todo el año; volcán y termas según operación |
-| 8 | Rapa Nui: cultura y moáis | 5D/4N | 749.90 | 674.91 | 506.18 | Todo el año; limitada oferta aérea |
-| 9 | Santiago y Valle Nevado: iniciación al esquí | 4D/3N | 799.90 | 719.91 | 539.93 | Invierno junio–septiembre, según nieve |
-| 10 | Chiloé cultural y naturaleza | 4D/3N | 599.90 | 539.91 | 404.93 | Todo el año; clima y navegación sujetos a operación |
+Base objetivo **US$949.90** (promocional US$854.91), con **1 noche Novotel Santiago Providencia** y **3 noches Casa Solcor** como referencias hoteleras (4★ en proveedores consultados). Alternativas boutique superiores: Novotel + NOI Casa Atacama y Novotel + Hotel Desértica, cada una con su propia lista. Esta combinación reemplaza completamente Panamericano 3★ y Hostal La Rukka, que **no son hoteles 4★**.
 
-> Cada precio de la tabla es **hipotético y sujeto a contrato**. No publicar hasta demostrar que el costo total de todas las prestaciones y contingencias cabe en el máximo de costo indicado, con impuestos/comisiones apropiados. Si no se alcanza, cambiar alcance, tarifa de venta o proveedor; nunca asumir margen.
+No asignar habitaciones reales ni prometer ahorro sin confirmación del precio. El vuelo interno **SCL–CJC–SCL sigue fuera del paquete**, al igual que el vuelo al país de origen.
 
-### Alcance recomendado de cada producto
+Fuentes: [Accor Novotel 4★](https://all.accor.com/hotel/A092/index.es.shtml); [Casa Solcor / NOI / Desértica](https://www.hoteles.com/de10349302-st4/4-estrellas-hoteles-san-pedro-de-atacama-chile/); [La Rukka hostal](https://sanpedroatacama.com/accommodation/hostal-la-rukka/).
 
-#### 4. Santiago, Valparaíso, Viña del Mar y Casablanca (4D/3N)
+## Patagonia
 
-- **Operación sugerida:** Hotel 3 noches en Santiago, city tour, recorrido Valparaíso–Viña, visita al valle del vino, traslados; entradas/degustaciones según especificación.
-- **Mercado:** Santiago, Valparaíso y Viña figuran entre los destinos populares de Chile Travel; tour Viator Valparaíso/Viña/Casablanca desde USD 60.
-- **Llegada aérea o referencia:** SCL. **Viabilidad:** Alta.
-- **Estación:** Todo el año. **Venta base:** dos adultos en doble; suplementos por ocupación solo si proveedor confirma.
+Base objetivo **US$1,399.90** (con cupón US$1,259.91), con **4 noches en Puerto Natales (Costaustralis 4★)** + **1 en Punta Arenas (Cabo de Hornos 4★)** como referencias. Habitaciones, costos y condiciones de navegación Grey siguen pendientes de contrato. El itinerario detallado mantiene 6 días y 35 eventos horarios estimados. Isla Magdalena es opcional, no incluida; el ingreso a Torres del Paine está excluido salvo revisión comercial formal.
 
-#### 5. Puerto Varas, Frutillar, volcán Osorno y Petrohué (5D/4N)
+Fuentes: [Costaustralis 4★](https://www.kayak.com.pe/Puerto-Natales-Hoteles-Hotel-Costaustralis.116552.ksp); [Cabo de Hornos 4★](https://www.google.com/travel/hotels/entity/ChcIvtLxoLyeu5Z7GgsvZy8xdnE3NjJzcBAB); [navegación Grey](https://www.lagogrey.com/navegacion/).
 
-- **Operación sugerida:** 4 noches Puerto Varas, desayunos, Saltos del Petrohué, miradores del volcán Osorno, Frutillar y traslados; navegación opcional.
-- **Mercado:** Lago Llanquihue aparece en imperdibles Chile Travel. Programas de 4–5 días publican tarifas en torno a CLP 485.000–525.000 y otros con vuelo cambian la base.
-- **Llegada aérea o referencia:** PMC. **Viabilidad:** Alta.
-- **Estación:** Todo el año; actividades según clima. **Venta base:** dos adultos en doble; suplementos por ocupación solo si proveedor confirma.
+## Los siete nuevos y riesgos operativos
 
-#### 6. Carretera Austral y Capillas de Mármol (4D/3N)
+| Producto | Hotel base de referencia | Aspecto que falta contratar/verificar |
+|---|---|---|
+| Santiago, Valparaíso, Viña del Mar y Casablanca | Novotel Santiago Providencia (4★) | Todo el año. Cotizar proveedores, ocupación, seguros y entradas; fotos del destino parciales. |
+| Puerto Varas, Frutillar, volcán Osorno y Petrohué | Hotel Bellavista Puerto Varas (4★) | Todo el año; clima condiciona los paisajes. Cotizar proveedores, ocupación, seguros y entradas; fotos del destino pendientes. |
+| Carretera Austral y Capillas de Mármol | Hotel Dreams Patagonia Coyhaique (5★) | Preferente octubre–abril; viento y lago pueden suspender navegación. Cotizar proveedores, ocupación, seguros y entradas; fotos del destino pendientes. |
+| Pucón, volcán Villarrica y termas | Hotel Casa Solaria (4★) | Todo el año; termas y senderos sujetos a clima. Cotizar proveedores, ocupación, seguros y entradas; fotos del destino pendientes. |
+| Rapa Nui: moáis y cultura ancestral | Hotel Hare Nua (4★) | Todo el año; acceso a sitios arqueológicos regulado. Cotizar proveedores, ocupación, seguros y entradas; fotos del destino pendientes. |
+| Santiago y Valle Nevado: aprende a esquiar | Novotel Santiago Providencia (4★) | Invierno austral; nieve y remontes sujetos a condiciones y calendario oficial. Cotizar proveedores, ocupación, seguros y entradas; fotos del destino parciales. |
+| Chiloé: cultura, palafitos y naturaleza | Hotel Parque Quilquico (4★) | Todo el año, clima variable. Cotizar proveedores, ocupación, seguros y entradas; fotos del destino pendientes. |
 
-- **Operación sugerida:** 3 noches divididas Coyhaique/Puerto Río Tranquilo según operador, mirador Cerro Castillo y navegación Capillas de Mármol; carretera y clima condicionan la ruta.
-- **Mercado:** Viajeros Austral ofrece Capillas desde Coyhaique ~CLP 82.000; programa Carretera Austral 5D/4N ~CLP 730.000; NEOTUR ~CLP 645.000 con servicios de mayor alcance.
-- **Llegada aérea o referencia:** BBA. **Viabilidad:** Media, proveedor necesario.
-- **Estación:** Preferente noviembre–marzo. **Venta base:** dos adultos en doble; suplementos por ocupación solo si proveedor confirma.
+### Advertencias comerciales y seguridad del viajero
 
-#### 7. Pucón, Villarrica y termas (5D/4N)
+- **Carretera Austral:** Coyhaique–Puerto Río Tranquilo es una **jornada larga**, con caminos sujetos a hielo/obras y navegación variable por viento. El paquete dispone de hotel en Coyhaique, no atribuye cinco estrellas a todos los alojamientos de la región.
+- **Rapa Nui:** requiere FUI, hospedaje habilitado y guías locales autorizados en sectores arqueológicos; entrada parque según requisitos.
+- **Esquí en Valle Nevado:** temporada austral depende de nieve, pistas y aperturas; la propuesta contempla un día de iniciación y otro panorámico. No promete dos días de clase en forfait si no está contratado. [Tarifas del resort 2026](https://skiday.vallenevado.com/tours/display?ES_AGENCIA=2&LANGUAGE=ES&NOMBRE_PAGINA=arrienda&RESORT=hvn).
+- **Pucón:** Hotel Casa Solaria aparece como hotel 4★. No se incluye ascenso técnico al volcán ni acceso a termas sin confirmar operador.
+- **Puerto Varas:** Hotel Bellavista 4★. Hay referencias OTA desde ~USD 142–171/noche en fechas puntuales, no inventar tarifa fija para todos los meses.
+- **Chiloé:** Parque Quilquico aparece 4★; logística aeroportuaria MHC se comprueba en cada fecha.
 
-- **Operación sugerida:** 4 noches Pucón, termas, panorámicas volcán Villarrica, lagos y senderos habilitados; ascenso al cráter no incluido sin guía y autorización.
-- **Mercado:** Operador Politur ofrece Pucón en familia 5D/4N desde ~CLP 443.000 y circuitos 4D/3N ~CLP 383.000–485.000.
-- **Llegada aérea o referencia:** ZCO. **Viabilidad:** Alta.
-- **Estación:** Todo el año; volcán y termas según operación. **Venta base:** dos adultos en doble; suplementos por ocupación solo si proveedor confirma.
+## Publicación / operación
 
-#### 8. Rapa Nui: cultura y moáis (5D/4N)
+**Catálogo visible no significa disponibilidad confirmada.** Hasta cerrar proveedor y margen de cada paquete: precio referencial, botón de cotización WhatsApp, sin cobro automático ni oferta cruzada de vuelos como servicios emitidos. Cada página nueva dispone de `noindex,follow` hasta contar con fotografías, contratos y validaciones finales. Los tres productos previos mantienen sus URLs públicas con aviso de precio objetivo.
 
-- **Operación sugerida:** 4 noches Hanga Roa, traslados, Rano Raraku, Tongariki, Anakena, Orongo, guía acreditado; entrada al parque a definir, vuelos SCL–IPC opcionales.
-- **Mercado:** Operadores ofrecen paquete terrestre 5D/4N desde USD 649, otros paquetes con vuelo desde CLP 846.000. FUI, hotel habilitado y guía acreditado para ciertos sitios.
-- **Llegada aérea o referencia:** IPC. **Viabilidad:** Media, revisar requisitos.
-- **Estación:** Todo el año; limitada oferta aérea. **Venta base:** dos adultos en doble; suplementos por ocupación solo si proveedor confirma.
-
-#### 9. Santiago y Valle Nevado: iniciación al esquí (4D/3N)
-
-- **Operación sugerida:** 3 noches Santiago, 2 días en la nieve con forfait/equipo estándar y traslados según cotización; clases y ropa de abrigo en modalidad especificada.
-- **Mercado:** Valle Nevado publica forfait con equipo US$121–133 por día, y programa Aprende a Esquiar con equipo US$133–146.
-- **Llegada aérea o referencia:** SCL. **Viabilidad:** Alta estacional.
-- **Estación:** Invierno junio–septiembre, según nieve. **Venta base:** dos adultos en doble; suplementos por ocupación solo si proveedor confirma.
-
-#### 10. Chiloé cultural y naturaleza (4D/3N)
-
-- **Operación sugerida:** 3 noches Castro/Ancud, iglesias patrimoniales, Dalcahue y recorridos costeros; Puñihuil solo cuando la temporada lo permita.
-- **Mercado:** Chile Travel incluye Chiloé entre destinos favoritos. COCHA aconseja 3–4 noches para primera visita, y diferencia vuelo/hotel de excursiones opcionales.
-- **Llegada aérea o referencia:** MHC o PMC. **Viabilidad:** Media, verificar hoteles y traslados.
-- **Estación:** Todo el año; clima y navegación sujetos a operación. **Venta base:** dos adultos en doble; suplementos por ocupación solo si proveedor confirma.
-
-## Alternativa undécima (para cubrir la baja temporada de nieve)
-
-**La Serena y Valle del Elqui · 4D/3N.** Interesante por astronomía, pisco, Vicuña, Coquimbo y atractivos patrimoniales. Visitchile publica paquetes de 4 días desde US$320 y otros operadores ofrecen programas entre CLP 376.000 y CLP 470.000. Precio de lista de estudio: **US$499.90**, promo US$449.91, sujeto a aprobación de costos. Aeropuerto LSC. Puede reemplazar a Valle Nevado cuando no haya nieve.
-
-## Prioridad de lanzamiento
-
-1. Validar/probar los tres productos actuales, sin alterar PayPal.
-2. Abrir proveedores y costos de los tres nuevos fáciles de operar: Santiago/Valparaíso, Puerto Varas y Pucón.
-3. Desarrollar Carretera Austral con un proveedor de carretera/autorizaciones/navegación; no prometer cuevas ni zarpe con viento.
-4. Completar Rapa Nui (FUI, alojamiento habilitado, guía, ticket, posibles restricciones) y Chiloé.
-5. Preparar campaña de esquí solo en invierno austral; nunca prometer nieve, pista o remontes fuera de temporada.
-6. Antes de publicar ficha: disponer de hotel con dirección y fotografía autorizada, itinerario operativo con horarios de referencia, proveedores, vuelos opcionales correctos, precios por ocupación, precios con cupón y política de entradas.
-
-## Fuentes públicas principales (consultadas el 11/11/2026)
-
-- Terrantai: https://terrantai.com/es/ ; https://www.kayak.com/San-Pedro-de-Atacama-Hotels-Terrantai-Lodge.154350.ksp ; https://www.expedia.com/es/San-Pedro-De-Atacama-Hoteles-Terrantai-Lodge-Hotel.h3938915.Informacion-Hotel
-- Excursiones Atacama: https://www.viajandochile.com/planifica/mejores-tours-san-pedro-de-atacama ; https://toursatacama.cl/guias/cuantos-dias-san-pedro-de-atacama-planes-1-a-5-dias
-- Panamericano / hostal: https://www.booking.com/hotel/cl/panamericano-santiago.html ; https://sanpedroatacama.com/accommodation/hostal-la-rukka/
-- Vuelos SCL-CJC / transfer: https://www.google.com/travel/flights/flights-from-santiago-to-calama.html ; https://www.transferpampa.cl/
-- Comparativa paquetes Atacama: https://www.viajandochile.com/planifica/paquete-san-pedro-de-atacama-tours-de-varios-dias
-- Patagonia: https://www.lagogrey.com/navegacion/ ; https://www.bussur.com/destinos/ ; https://www.fiordosdelsur.com/isla-magdalena/ ; https://www.viajandochile.com/planifica/paquete-torres-del-paine-patagonia-varios-dias-pumas ; https://www.pasesparques.cl/es/torres-del-paine-300/parque-nacional-torres-del-paine-3412
-- Popularidad editorial y logística: https://chile.travel/imperdibles/top-10-destinos-populares/ ; https://chile.travel/imperdibles/top-10-atractivos-populares/ ; https://chile.travel/blog/cuando-comienza-la-temporada-de-nieve-en-chile-guia-para-planificar-tu-viaje-a-los-andes/
-- Nuevos productos: https://www.viator.com/es-CL/tours/Santiago/Full-Day-Valparaiso-Vina-del-Mar/d713-182663P2 ; https://www.degira.cl/puertovaras ; https://viajespolitur.cl/paquetes-y-viajes-por-chile-viajes-politur/ ; https://www.viajeroaustral.com/collections/programas-turisticos ; https://www.neotur.cl/tours/zona-sur/carretera-austral-sur-4/ ; https://skiday.vallenevado.com/tours/display?ES_AGENCIA=2&LANGUAGE=ES&NOMBRE_PAGINA=arrienda&RESORT=hvn ; https://www.hotsites.somosaero.ar/elegidos/paquetes/isla-de-pascua/ ; https://www.cocha.com/paquetes/chiloe
-- Rapa Nui entrada: https://chile.travel/datos-utiles/requisitos-de-ingreso-y-visa/
-- Cambio USD-CLP: https://www.investing.com/currencies/usd-clp-historical-data
-
-## Próximo paso tras aprobar este estudio
-
-Crear las siete fichas nuevas con el mismo layout que Atacama Premium **sin inventar precios confirmados**; inicialmente sólo cotización hasta validar costos de proveedores. Mantener el manual vigente y una bitácora fechada.
+**Próximas tareas:** (1) negociar tarifas netas y políticas por ocupación con hoteles; (2) validar proveedor/excursión y entradas; (3) incorporar 5 galerías propias o con licencia; (4) revisar móvil/PC y apertura WhatsApp; (5) publicar backend Apps Script cuando se apruebe; (6) solo más adelante verificar pagos PayPal Sandbox.
