@@ -3571,3 +3571,31 @@ body.has-pn-header .topbar { border: 0 !important; }
 .trip-card__media .lx-chile-card-pending{height:100%;min-height:180px;width:100%;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;padding:20px;text-align:center;background:linear-gradient(135deg,#0b382d,#0d7750);color:#fff;font:650 12px/1.5 Inter,Arial,sans-serif;box-sizing:border-box}
 .trip-card__media .lx-chile-card-pending i{font-size:28px;color:#c0e6d0}
 .trip-card__media .lx-chile-card-pending span{max-width:180px}
+
+
+/* Plantilla única de producto · noviembre 2026: portada fotográfica recuperada */
+.lx-unified-product .lx-unified-hero.product-hero-clean{
+  background-image:linear-gradient(92deg,rgba(4,31,22,.76) 0%,rgba(4,43,29,.54) 55%,rgba(4,39,26,.38) 100%),
+    var(--lx-hero-img,var(--experience-photo-mobile,var(--detail-image,none)));
+  background-size:cover;background-position:center,center 48%;background-repeat:no-repeat;
+}
+.lx-unified-product .lx-unified-hero.experience-hero-clean::before{
+  background-image:none!important;content:none;
+}
+.lx-unified-product .lx-unified-hero.experience-hero-clean::after{
+  background:transparent!important;content:none;
+}
+.lx-unified-product .lx-unified-hero.experience-hero-clean h1,
+.lx-unified-product .lx-unified-hero.experience-hero-clean p{
+  text-shadow:0 3px 18px rgba(0,25,14,.52);
+}
+.lx-package-key-facts{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:18px 0;
+}
+.lx-package-key-facts>div{border:1px solid #dce9df;border-radius:11px;background:#f6faf6;padding:10px 12px;min-width:0;overflow-wrap:anywhere}
+.lx-package-key-facts span{display:block;font-size:10px;color:#577868;font-weight:750;margin-bottom:5px}
+.lx-package-key-facts strong{display:block;font-size:12px;line-height:1.5;color:#163e2d}
+@media(max-width:620px){
+ .lx-unified-product .lx-unified-hero.product-hero-clean{min-height:245px;background-position:center,center}
+ .lx-package-key-facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
