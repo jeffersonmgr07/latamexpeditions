@@ -514,7 +514,7 @@
 
     const promo=document.createElement('div');
     promo.className='latam-promo';
-    promo.innerHTML='<span class="latam-promo__message">LATAM Rewards · <strong>Beneficios exclusivos para viajeros</strong></span><span class="latam-promo__mobile">LATAM Rewards</span>';
+    promo.innerHTML='<span class="latam-promo__message">Aprovecha <strong>10% de descuento</strong> · Código <strong>LATAM</strong></span><span class="latam-promo__mobile">10% de descuento · LATAM</span>';
     utilityInner.append(promo);
 
     const locale=document.createElement('div');
