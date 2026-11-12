@@ -3978,3 +3978,13 @@ main#contenido .product-hero-clean.package-hero-clean.lx-atacama-hero{
     linear-gradient(90deg,rgba(3,35,24,.90),rgba(4,40,28,.62),rgba(4,40,28,.42)),
     url("/assets/img/lagunas-altiplanicas-01.jpg")!important;
 }
+
+/* Paquetes: destacar únicamente los badges temáticos de las tarjetas del catálogo. */
+body.lx-package-catalog .lx-results-catalog .trip-card__media .tag{
+  box-shadow:0 0 0 1px rgba(245,255,247,.5),
+             0 0 16px rgba(151,246,167,.78),
+             0 6px 20px rgba(0,39,21,.24);
+  text-shadow:0 1px 4px rgba(5,38,21,.20);
+  backdrop-filter:blur(5px);
+  -webkit-backdrop-filter:blur(5px);
+}
