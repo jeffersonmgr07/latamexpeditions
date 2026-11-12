@@ -747,8 +747,10 @@
       const price=sideCard.querySelector('.price-block');
       if(price){
         const label=price.querySelector('small');
+        const english=(document.documentElement.lang||'es').toLowerCase().startsWith('en');
         if(label)label.textContent=kind==='package'?
-          'Tarifa por persona en base a acomodación doble':'Tarifa por persona';
+          (english?'Price per person based on double occupancy':'Tarifa por persona en base a acomodación doble'):
+          (english?'Price per person':'Tarifa por persona');
         price.querySelectorAll('small,span,p,.lx-quote-promo').forEach(item=>{
           if(/con c[oó]digo\s+LATAM|LATAM10EXP|precio promocional/i.test(item.textContent||''))item.remove();
         });
@@ -846,7 +848,7 @@
       };
       if(firstInfo)firstInfo.remove();
       const about=[...content.querySelectorAll(':scope > .detail-card')].find(card=>
-        /^(sobre este paquete|descubre|conoce|sobre el paquete)/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''));
+        /^(sobre este paquete|descubre|conoce|sobre el paquete|about this package|discover)/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''));
       if(about&&!about.querySelector('.lx-package-key-facts')){
         const included=[...content.querySelectorAll('.detail-card')].find(card=>
           /^(qu[eé] incluye|servicios contemplados|servicios incluidos)/i.test(card.querySelector('h2')?.textContent||''));
