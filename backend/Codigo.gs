@@ -277,8 +277,8 @@ const PRECIOS_PAQUETES = {
   'desierto-atacama-premium-5d4n': {
     '4e': {
       'single': 2159.90,
-      'double': 1499.90,
-      'matrimonial': 1499.90
+      'double': 1349.00,
+      'matrimonial': 1349.00
     }
   },
   'lima-paracas-ica-huacachina-2d1n': {
@@ -441,28 +441,28 @@ const PRECIOS_PAQUETES = {
     }
   },
   'chile-atacama-5d4n': {
-    '3e': {
-      'double': 880.00,
-      'matrimonial': 880.00
-    },
     '4e': {
-      'double': 1170.00,
-      'matrimonial': 1170.00
+      'double': 949.90,
+      'matrimonial': 949.90
     },
-    '5e': {
-      'double': 1620.00,
-      'matrimonial': 1620.00
+    '4p': {
+      'double': 1129.90,
+      'matrimonial': 1129.90
+    },
+    '4s': {
+      'double': 1349.90,
+      'matrimonial': 1349.90
     }
   },
   'chile-patagonia-6d5n': {
-    '3e': {
-      'double': 1450.00
-    },
     '4e': {
-      'double': 1880.00
+      'double': 1399.90
+    },
+    '4p': {
+      'double': 1699.90
     },
     '5e': {
-      'double': 2540.00
+      'double': 2699.90
     }
   },
   'ecuador-galapagos-5d4n': {
@@ -1435,6 +1435,10 @@ function validarYCalcular(data) {
 
   if(slug==='desierto-atacama-premium-5d4n' && ninos>0)
     throw new Error('El programa Atacama Premium está destinado a pasajeros adultos. Consulta antes de viajar con menores.');
+  // Paquetes Chile 2026: tarifas de 4★ / boutique de referencia sin contrato firme.
+  // Este control protege la API incluso si alguien omite el flujo de cotización de la web.
+  if(['desierto-atacama-premium-5d4n','chile-atacama-5d4n','chile-patagonia-6d5n'].indexOf(slug)>=0)
+    throw new Error('Este programa de Chile requiere confirmación de hoteles y servicios con un asesor antes de aceptar pagos. Solicita tu cotización.');
 
   // Chile: bloquear combinaciones sin tarifa aprobada desde la autoridad de precios.
   // La validación en navegador es orientativa, esta regla también protege APIs directas.
