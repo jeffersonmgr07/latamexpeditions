@@ -656,11 +656,14 @@ function showTierQuote(){
  function update(){
   // La descripción de tarifa corresponde a la ocupación realmente seleccionada.
   const priceCaption=side.querySelector('.price-block > small');
-  if(priceCaption)priceCaption.textContent=
-    state.occupancy==='single'?'Tarifa por persona en habitación individual':
-    state.occupancy==='double'||state.occupancy==='matrimonial'?
-      'Tarifa por persona en base a acomodación doble':
-      'Tarifa por persona · acomodación por cotizar';
+  if(priceCaption){
+    const en=(document.documentElement.lang||'es').toLowerCase().startsWith('en');
+    priceCaption.textContent=state.occupancy==='single'?
+      (en?'Price per person in single room':'Tarifa por persona en habitación individual'):
+      (state.occupancy==='double'||state.occupancy==='matrimonial')?
+        (en?'Price per person based on double occupancy':'Tarifa por persona en base a acomodación doble'):
+        (en?'Price per person · room arrangement on request':'Tarifa por persona · acomodación por cotizar');
+  }
   $('lxProductDate').value=state.date;
   productCalendar.sync();productTravelers.sync();
   renderPriceBreakdown();
