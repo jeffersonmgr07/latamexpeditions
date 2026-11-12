@@ -1257,7 +1257,7 @@
    });
    main.querySelectorAll('.trip-card .price small').forEach(label=>{
      if(/tarifa objetivo|precio objetivo|cotizaci[oó]n previa/i.test(label.textContent||'')){
-       label.textContent='Desde · por persona';
+       label.textContent='Desde';
      }
    });
    document.querySelectorAll('[data-book-tiers]').forEach(node=>{
