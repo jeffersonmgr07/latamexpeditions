@@ -5242,7 +5242,7 @@
       "country": "Chile",
       "region": "San Pedro de Atacama",
       "nights": "5D/4N",
-      "priceFrom": 1499.9,
+      "priceFrom": 1349,
       "currency": "USD",
       "img": "chile-experiencia-atacama-valle-luna.jpg",
       "alt": "Paisajes del Valle de la Luna en San Pedro de Atacama, Chile",
@@ -5272,24 +5272,24 @@
         {
           "code": "4e",
           "stars": "4★",
-          "name": "Terrantai Boutique",
-          "pricePerPerson": 1499.9,
+          "name": "Boutique premium · Terrantai",
+          "pricePerPerson": 1349,
           "hotels": [
             "Hotel Terrantai"
           ],
           "occupancyPrices": {
             "single": 2159.9,
-            "double": 1499.9,
-            "matrimonial": 1499.9
+            "double": 1349,
+            "matrimonial": 1349
           }
         }
       ],
       "flightsAvailable": true,
-      "bookingStatus": "fixed_agency_price",
-      "quoteOnly": false,
+      "bookingStatus": "Cotización previa hasta obtener tarifa mayorista de Terrantai",
+      "quoteOnly": true,
       "ages": "Solo adultos (18+)",
-      "pricingUpdated": "2026-11-10",
-      "pricingBasis": "Precio de venta fijo de LATAM Expeditions por persona, en base doble de 2 adultos. Incluye alojamiento y servicios detallados; vuelos opcionales. Disponibilidad de proveedores por confirmar; alternativa acordada o devolución íntegra si no puede prestarse lo contratado.",
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Lista objetivo US$1,349.00 por adulto en doble y promocional con cupón LATAM10EXP US$1,214.10. Hotel Terrantai 4★, vuelos opcionales. Tarifa sujeta a disponibilidad y validación de proveedor; no cobrar automáticamente hasta confirmar costos de excursiones, entradas y traslados.",
       "styles": [
         "naturaleza",
         "aventura",
@@ -5304,11 +5304,11 @@
       "country": "Chile",
       "region": "Santiago / San Pedro",
       "nights": "5D/4N",
-      "priceFrom": 880,
+      "priceFrom": 949.9,
       "currency": "USD",
       "img": "paquete-chile-6d5n-01.jpg",
       "alt": "Valle de la Luna en el desierto de Atacama",
-      "excerpt": "Santiago y desierto de Atacama en 5 días. Desde US$880 por persona, vuelos no incluidos.",
+      "excerpt": "Santiago y el desierto de Atacama con hoteles de cuatro estrellas o boutique superior; vuelos internos opcionales.",
       "itinerary": [
         "Día 1 · Llegada a Santiago y city tour",
         "Día 2 · Vuelo a Calama y traslado a San Pedro de Atacama",
@@ -5333,46 +5333,55 @@
       ],
       "hotelTiers": [
         {
-          "code": "3e",
-          "stars": "3*",
-          "name": "Turista",
-          "pricePerPerson": 880,
-          "hotels": [
-            "Hotel Panamericano Santiago",
-            "Hostal La Ruca"
-          ],
-          "occupancyPrices": {"double": 880,"matrimonial": 880}
-        },
-        {
           "code": "4e",
-          "stars": "4*",
-          "name": "Primera",
-          "pricePerPerson": 1170,
+          "stars": "4★",
+          "name": "Premium 4 estrellas",
+          "pricePerPerson": 949.9,
           "hotels": [
-            "Cumbres Lastarria",
-            "Hotel Cumbres San Pedro"
+            "Novotel Santiago Providencia",
+            "Casa Solcor"
           ],
-          "occupancyPrices": {"double": 1170,"matrimonial": 1170}
+          "occupancyPrices": {
+            "double": 949.9,
+            "matrimonial": 949.9
+          }
         },
         {
-          "code": "5e",
-          "stars": "5*",
-          "name": "Lujo",
-          "pricePerPerson": 1620,
+          "code": "4p",
+          "stars": "4★/4.5★",
+          "name": "Boutique superior",
+          "pricePerPerson": 1129.9,
           "hotels": [
-            "The Singular Santiago",
-            "Tierra Atacama"
+            "Novotel Santiago Providencia",
+            "NOI Casa Atacama"
           ],
-          "occupancyPrices": {"double": 1620,"matrimonial": 1620}
+          "occupancyPrices": {
+            "double": 1129.9,
+            "matrimonial": 1129.9
+          }
+        },
+        {
+          "code": "4s",
+          "stars": "4★/4.5★",
+          "name": "Boutique selecta",
+          "pricePerPerson": 1349.9,
+          "hotels": [
+            "Novotel Santiago Providencia",
+            "Hotel Desértica"
+          ],
+          "occupancyPrices": {
+            "double": 1349.9,
+            "matrimonial": 1349.9
+          }
         }
       ],
-      "quoteOnly": false,
+      "quoteOnly": true,
       "flightIncluded": false,
       "flightRoute": "SCL-CJC-SCL",
       "airfareDeductionPending": false,
-      "pricingBasis": "Tarifa por adulto en habitación doble; otras ocupaciones y menores requieren cotización",
+      "pricingBasis": "Precio objetivo por adulto en doble 4★, 1 noche Novotel Providencia + 3 noches Casa Solcor (hoteles de referencia no contratados). Lista US$949.90; promo LATAM10EXP US$854.91. Vuelo SCL-CJC-SCL y vuelos internacionales no incluidos; costo y disponibilidad pendientes.",
       "flightsAvailable": true,
-      "pricingUpdated": "2026-11-10",
+      "pricingUpdated": "2026-11-11",
       "priceSetByAgency": true,
       "supplierRatesConfirmed": false,
       "airfareExcludedPerPerson": 100
@@ -5383,11 +5392,11 @@
       "country": "Chile",
       "region": "Patagonia",
       "nights": "6D/5N",
-      "priceFrom": 1450,
+      "priceFrom": 1399.9,
       "currency": "USD",
       "img": "chile-patagonia-01.jpg",
       "alt": "Cuernos del Paine reflejados en un lago patagónico",
-      "excerpt": "El parque nacional más espectacular de Chile, sin trekking exigente.",
+      "excerpt": "Torres del Paine, glaciar Grey y Puerto Natales con 4 noches en Puerto Natales y una en Punta Arenas, hoteles 4★ de referencia.",
       "itinerary": [
         "Día 1 · Llegada a Punta Arenas y traslado a Puerto Natales",
         "Día 2 · Torres del Paine full day por los miradores clásicos",
@@ -5412,37 +5421,51 @@
       ],
       "hotelTiers": [
         {
-          "code": "3e",
-          "stars": "3*",
-          "name": "Turista",
-          "pricePerPerson": 1450,
-          "hotels": [
-            "Hotel Vendaval Puerto Natales",
-            "Hostal Keoken"
-          ], "occupancyPrices": {"double": 1450}},
-        {
           "code": "4e",
-          "stars": "4*",
-          "name": "Primera",
-          "pricePerPerson": 1880,
+          "stars": "4★",
+          "name": "Patagonia 4 estrellas",
+          "pricePerPerson": 1399.9,
           "hotels": [
-            "Hotel Costaustralis",
-            "Hotel Cabo de Hornos"
-          ], "occupancyPrices": {"double": 1880}},
+            "Hotel Costaustralis (Puerto Natales)",
+            "Hotel Cabo de Hornos (Punta Arenas)"
+          ],
+          "occupancyPrices": {
+            "double": 1399.9
+          }
+        },
+        {
+          "code": "4p",
+          "stars": "4★ superior",
+          "name": "Patagonia selecta",
+          "pricePerPerson": 1699.9,
+          "hotels": [
+            "NOI Indigo Patagonia (Puerto Natales)",
+            "Hotel Cabo de Hornos (Punta Arenas)"
+          ],
+          "occupancyPrices": {
+            "double": 1699.9
+          }
+        },
         {
           "code": "5e",
-          "stars": "5*",
-          "name": "Lujo",
-          "pricePerPerson": 2540,
+          "stars": "5★/4★",
+          "name": "Lujo patagónico",
+          "pricePerPerson": 2699.9,
           "hotels": [
-            "The Singular Patagonia",
-            "Explora Patagonia"
-          ], "occupancyPrices": {"double": 2540}}
+            "The Singular Patagonia (Puerto Natales)",
+            "Hotel Cabo de Hornos (Punta Arenas)"
+          ],
+          "occupancyPrices": {
+            "double": 2699.9
+          }
+        }
       ],
-      "pricingBasis": "Tarifa por adulto en habitación doble; otras ocupaciones y menores requieren cotización",
+      "pricingBasis": "Precio objetivo por adulto en habitación doble, 4 noches Costaustralis + 1 Cabo de Hornos de referencia; lista US$1,399.90, con cupón LATAM10EXP US$1,259.91, sin vuelos. Validar navegación Grey, traslados, accesos y hotel antes de aceptar reservas.",
       "flightsAvailable": true,
       "quoteOnly": true,
-      "operationalReview": "Alojamiento quinta noche Punta Arenas y navegación Grey por confirmar; no cobrar automáticamente hasta verificar proveedor y tarifas"
+      "operationalReview": "Cotización previa obligatoria: hotel 4★ Puerto Natales/Punta Arenas, Grey, entradas, traslados y clima",
+      "pricingUpdated": "2026-11-11",
+      "supplierRatesConfirmed": false
     },
     {
       "slug": "ecuador-galapagos-5d4n",
