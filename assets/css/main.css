@@ -3725,3 +3725,94 @@ main#contenido .product-detail-section .lx-product-help-card > h2 > .lx-detail-t
     line-height:1.48;
   }
 }
+
+/* 2026-11-12: country flags alongside names and one-line mobile photo title. */
+#countryLabel{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  white-space:nowrap;
+}
+#countryLabel .lx-country-selected-flag,
+#countryBarFlag .lx-country-selected-flag{
+  display:block;
+  width:22px;
+  height:16.5px;
+  flex:0 0 22px;
+  border-radius:3px;
+  object-fit:cover;
+  border:1px solid rgba(255,255,255,.25);
+}
+.latam-utilitybar .country-pill.lx-has-country-flag > i.fa-globe{
+  display:none!important;
+}
+#countryModal .country-option.lx-country-option{
+  display:grid;
+  grid-template-columns:26px minmax(0,1fr);
+  grid-template-rows:auto auto;
+  align-items:center;
+  column-gap:10px;
+  row-gap:5px;
+  min-width:0;
+}
+#countryModal .country-option.lx-country-option .lx-country-option__flag{
+  display:flex;
+  grid-column:1;
+  grid-row:1;
+  align-items:center;
+  justify-content:center;
+  width:24px;
+  height:18px;
+  margin:0;
+  color:inherit;
+  line-height:1;
+  font-size:19px;
+}
+#countryModal .lx-country-option__flag img{
+  width:24px;
+  height:18px;
+  display:block;
+  border-radius:3px;
+  border:1px solid rgba(9,49,28,.12);
+  object-fit:cover;
+}
+#countryModal .country-option.lx-country-option .lx-country-option__name{
+  grid-column:2;
+  grid-row:1;
+  min-width:0;
+  font-size:14px;
+  font-weight:750;
+  color:#183c28;
+  line-height:1.3;
+}
+#countryModal .country-option.lx-country-option .lx-country-option__sub{
+  grid-column:2;
+  grid-row:2;
+  margin:0;
+  display:block;
+  min-width:0;
+  font-size:12px;
+  font-weight:450;
+  line-height:1.4;
+  color:#63766a;
+}
+.lx-gallery-mobile-title{display:none}
+@media(max-width:700px){
+  .lx-atacama-gallery-head{
+    min-width:0;
+    gap:8px;
+  }
+  .lx-atacama-gallery-head h2{
+    flex:1 1 auto;
+    min-width:0;
+  }
+  .lx-atacama-gallery-head .lx-gallery-original-title{display:none}
+  .lx-atacama-gallery-head .lx-gallery-mobile-title{
+    display:block;
+    white-space:nowrap;
+    font-size:clamp(13px,3.6vw,17px);
+    line-height:1.25;
+    letter-spacing:-.03em;
+  }
+  .lx-atacama-gallery-head .lx-atacama-gallery-actions{flex:0 0 auto}
+}
