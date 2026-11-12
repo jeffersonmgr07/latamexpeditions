@@ -29,7 +29,7 @@
  const splitCityPatagonia=params.slug==='chile-patagonia-6d5n';
  // En los productos de Chile se publicaron únicamente tarifas para la base doble.
  // No inferir suplementos single, triple, niños ni familiares sin tabla de tarifas.
- const chileBaseDouble=multiCityAtacama||params.slug==='chile-patagonia-6d5n';
+ const chileBaseDouble=book.dataset.bookCountry==='Chile'&&!params.slug.startsWith('desierto-atacama-premium');
  const flightStayNights=multiCityAtacama?3:params.nights;
  const hasHotelIncluded=Boolean(firstTier&&!firstTier.noAccommodation&&firstTier.code!=='sin-hotel');
  const maxHotelOccupancy=4;
@@ -170,7 +170,7 @@
  const addonHotels=el('section','lx-package-addon');
  addonHotels.innerHTML='<h2><i class="fa-solid fa-bed"></i> Alojamiento del paquete</h2>'+
  '<div class="lx-package-hotel-item"><div class="lx-package-hotel-photo" id="lxProductHotelPhoto">'+
- (multiCityAtacama?'<img src="'+(document.documentElement.dataset.base||'../')+'assets/img/hotel-panamericano-santiago-01.jpg" alt="Hotel Panamericano Santiago" loading="eager" decoding="async">':'<span>Foto del hotel al consultar opciones</span>')+
+ '<span>Imagen del hotel disponible después de confirmación</span>'+
  '</div><div><strong id="lxProductHotelName"></strong>'+
  '<small id="lxProductHotelCategory"></small><p id="lxProductHotelStatus"></p></div></div>'+
  '<div class="lx-addon-row"><span class="lx-package-addons-note">Puedes cambiar de categoría o solicitar otro hotel.</span>'+
@@ -1202,6 +1202,28 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  $('lxHotelTier').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null;clearHotelLookup()});
  $('lxHotelOccupancy').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null;clearHotelLookup()});
  // Para más de cuatro viajeros, no presentar como un precio listo para cobrarse.
+ // Los paquetes con hotel/proveedor pendientes son exclusivamente de consulta:
+ // nunca abrir el modal de pago ni procesar un importe referencial.
+ if(book.dataset.bookQuoteOnly==='true'){
+   book.addEventListener('click',event=>{
+     event.preventDefault();event.stopImmediatePropagation();
+     const tier=currentTier();
+     const lines=[
+       'Hola, quiero solicitar una cotización de LATAM Expeditions.',
+       'Paquete: '+params.title,
+       'Fecha de llegada: '+(state.date||'por definir'),
+       'Viajeros: '+passengerText(),
+       'Categoría: '+(tier?.name||'hotel 4 estrellas de referencia'),
+       'Hotel de referencia: '+(tier?.hotels||[]).join(' / '),
+       'Tarifa objetivo por persona en doble: '+fmt(tier?.pricePerPerson||params.base),
+       state.couponCode?'Cupón solicitado: '+state.couponCode:'',
+       state.flight?'Vuelos de referencia: '+state.origin+' · importe estimado '+fmt(priceFlight()):'Vuelos no incluidos',
+       'Por favor, confirmen hoteles, excursiones, disponibilidad y tarifa final antes de realizar cualquier pago.'
+     ].filter(Boolean);
+     const link='https://wa.me/51906472060?text='+encodeURIComponent(lines.join('\n'));
+     window.location.assign(link);
+   },true);
+ }
  book.addEventListener('click',event=>{
   if(state.adults+state.children<=maxHotelOccupancy&&!needsChileQuote())return;
   event.preventDefault();event.stopImmediatePropagation();
