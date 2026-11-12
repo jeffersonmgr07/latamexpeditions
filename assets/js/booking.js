@@ -28,7 +28,7 @@
     return `${BASE}${value.replace(/^\.?\//, '')}`;
   };
   const languageIsEnglish = () => document.documentElement.lang === 'en';
-  const hotelStarsText = (label, english = languageIsEnglish()) => String(label || '').replace(/([1-5])\s*[★*]/g, (_,n) => n + (english ? ' stars' : ' estrellas'));
+  const hotelStarsText = (label, english = languageIsEnglish()) => String(label || '').replace(/([1-5])\s*[★*]/g, (_,n) => english ? ({1:'one star',2:'two stars',3:'three stars',4:'four stars',5:'five stars'}[n]) : ({1:'una estrella',2:'dos estrellas',3:'tres estrellas',4:'cuatro estrellas',5:'cinco estrellas'}[n]));
   const tierHotels = (tier, english = languageIsEnglish()) => {
     const translated = english && Array.isArray(tier?.hotelsEn) ? tier.hotelsEn : null;
     return translated || (Array.isArray(tier?.hotels) ? tier.hotels : []);
