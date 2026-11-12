@@ -654,6 +654,13 @@ function showTierQuote(){
  }
 
  function update(){
+  // La descripción de tarifa corresponde a la ocupación realmente seleccionada.
+  const priceCaption=side.querySelector('.price-block > small');
+  if(priceCaption)priceCaption.textContent=
+    state.occupancy==='single'?'Tarifa por persona en habitación individual':
+    state.occupancy==='double'||state.occupancy==='matrimonial'?
+      'Tarifa por persona en base a acomodación doble':
+      'Tarifa por persona · acomodación por cotizar';
   $('lxProductDate').value=state.date;
   productCalendar.sync();productTravelers.sync();
   renderPriceBreakdown();
