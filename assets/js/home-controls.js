@@ -6,7 +6,8 @@
  const targets=['searchOrigin','searchType','searchDate','homeFlightOrigin',
   'homeFlightDestination','homeFlightDeparture','homeFlightReturn',
   'homeFlightAdults','homeHotelDestination','homeHotelCheckin',
-  'homeHotelCheckout','homeHotelGuests'];
+  'homeHotelCheckout','homeHotelGuests',
+  'flightDeparture','flightReturn','flightCabin'];
  const months=['enero','febrero','marzo','abril','mayo','junio','julio',
   'agosto','septiembre','octubre','noviembre','diciembre'];
  const shortMonths=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
