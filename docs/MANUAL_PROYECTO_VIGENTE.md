@@ -180,3 +180,25 @@ La ficha compartida suma mediante `assets/js/package-product-20261108.js`:
 
 **Backend autoritativo de precios de Chile:** el archivo `backend/Codigo.gs` ha sido sincronizado para que `PRECIOS_PAQUETES` contemple exclusivamente ocupaciones definidas en catálogo, y `validarYCalcular` rechace menores y grupos distintos de dos adultos en Santiago–Atacama 5D/4N y Patagonia 6D/5N. Esto **requiere actualizar y publicar una nueva versión del Apps Script de reservas/cuentas/pagos**; la rama GitHub no actualiza el backend desplegado. No se modificaron `createOrder`, `captureOrder` ni credenciales de PayPal. Hasta el despliegue, la validación del frontend es la medida temporal.
 **Corrección de scripts:** se incluyó `vuelos-config.js` y `package-product-20261108.js` en Santiago–Atacama, donde faltaban, para activar los mismos selectores que Atacama Premium. La antigua función `paquete-vuelos.js` específica de Medellín se excluye de las nuevas fichas Chile.
+
+
+## Auditoría de mercado Chile y logística Patagonia · 2026-11-11
+
+**Fuente de investigación:** [Estudio de mercado y portafolio de 10 paquetes](ESTUDIO_MERCADO_CHILE_2026-11-11.md). Incluye comparación de costos de compra individual contra producto organizado, mercado de OTAs, escenarios de promoción del 10% y un ranking **editorial** para completar Chile con siete nuevos programas. **Los precios de los productos nuevos son hipótesis comerciales, no tarifas aprobadas; no publicarlos como disponibles hasta recibir costos firmes y verificar margen.**
+
+### Patagonia y Torres del Paine
+
+- Ficha `paquetes/chile-patagonia-6d5n.html`: contiene 35 eventos con horarios referenciales por día, seis jornadas detalladas, rutas y puntos de control operativos.
+- La distribución comercial prevista es **4 noches en Puerto Natales + 1 noche en Punta Arenas**. El hotel de la quinta noche **todavía no está asignado** y requiere proveedor, categoría y costo.
+- El día 3 propone la navegación **Grey III** de temporada 2026–2027 con registro ~12:00, zarpe ~13:00 y regreso ~15:45 según Hotel Lago Grey; no garantizar hasta obtener cupo, mínimo de pasajeros, traslado y condiciones de navegación.
+- El día 5 traslada temprano al viajero desde Puerto Natales a Punta Arenas. **Isla Magdalena** es adicional y solo posible con reserva y disponibilidad en temporada; la segunda salida del proveedor Fiordos del Sur referencia registro ~12:30 y navegación ~13:30–18:00.
+- Como una cotización de hotel **para cinco noches en una sola ciudad** sería incorrecta, `assets/js/package-product-20261108.js` muestra la distribución 4+1 y **desactiva la búsqueda automática de sustituciones hoteleras** de Patagonia. Las diferencias de categorías definidas sí pueden consultarse.
+- `data-book-quote-only="true"` en la página de Patagonia y `quoteOnly:true` en catálogo dejan pendiente el cobro online **hasta confirmar el hotel de Punta Arenas, servicios y costos**. No se modificaron los métodos de PayPal ni se hicieron cobros.
+- La publicación del backend Apps Script continúa siendo manual. La tarifa de referencia US$1,450 por persona en doble es informativa hasta confirmar los servicios.
+
+### Notas comerciales
+
+- Atacama Premium US$1,499.90 con hotel Terrantai se mantiene como tarifa de referencia premium; el establecimiento confirma que recibe huéspedes a partir de **14 años**, mientras el paquete de la agencia se mantiene para adultos.
+- Santiago–Atacama US$880 por persona es más caro que una combinación básica reservada por separado; evaluar reducción a US$799.90 **solo** si costos mayoristas/operativos permiten sostener margen tras promoción.
+- El hotel del catálogo `Hostal La Ruca` requiere verificar identidad comercial frente a `La Rukka Hostal Boutique` antes de cambiar nombres o fotos.
+- Toda oferta del 10% se calcula sobre la tarifa de lista real del paquete, no sobre los vuelos ni extras fuera de campaña; margen bruto de referencia 25% sobre precio final, sin ignorar pagos/comisiones/costos administrativos.
