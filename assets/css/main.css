@@ -3616,3 +3616,11 @@ main#contenido .page-hero.detail-hero:not(.experience-hero-clean)[style*="--deta
  background-repeat:no-repeat!important;
 }
 main#contenido .product-hero-clean.experience-hero-clean::before{content:none!important}
+
+
+/* Portadas de paquetes: fotografía del destino bajo velo verde, sin bloquear la imagen. */
+main#contenido .product-hero-clean.package-hero-clean{
+ background-image:linear-gradient(92deg,rgba(3,35,24,.76),rgba(4,40,28,.54),rgba(4,40,28,.35)),var(--lx-hero-img,none)!important;
+ background-size:cover!important;background-position:center,center 48%!important;background-repeat:no-repeat!important;
+}
+main#contenido .product-hero-clean.package-hero-clean::before{content:none!important}
