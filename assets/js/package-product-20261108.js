@@ -145,6 +145,7 @@
   '<div class="lx-travel-field"><label for="lxProductTotalPax">Viajeros</label><button id="lxProductTotalPax" class="lx-travel-trigger" type="button">2 viajeros</button></div></div>'+
   '<div id="lxProductPriceDetails" class="lx-package-price-details" aria-live="polite"></div>'+
   '<div class="lx-product-coupon" style="margin:12px 0"><label for="lxCouponCode" style="display:block;margin-bottom:6px;font-size:13px;font-weight:600">Código de descuento</label><div style="display:flex;gap:8px"><input id="lxCouponCode" maxlength="32" placeholder="Ingresa tu cupón" style="min-width:0;flex:1;border:1px solid #ccd6d0;border-radius:9px;padding:10px"><button type="button" id="lxCouponApply" style="border:0;background:#176b45;color:white;border-radius:9px;padding:10px 15px">Aplicar</button></div><small id="lxCouponNotice" role="status" aria-live="polite" style="display:block;margin-top:6px"></small></div>'+
+  '<div class="lx-package-discount-applied" id="lxProductDiscountApplied" hidden><span>Descuento aplicado</span><strong id="lxProductDiscountValue"></strong></div>'+ 
   '<div class="lx-package-quick-total"><small>Total a pagar</small><strong id="lxProductGroupPrice"></strong></div>'+
   '<div id="lxProductFlightPrice" class="lx-package-flight-price" hidden></div>'+
   '<p class="lx-package-addons-note" id="lxProductQuoteNote">Elige la fecha y los viajeros para continuar.</p>';
@@ -639,7 +640,6 @@ function showTierQuote(){
        state.tier!==firstTier?.code?'Diferencia de tarifa hotelera':'Acomodación de hotel',adjustment,false,
        arrangement?'('+arrangement+')':'');
    }
-   if(state.couponCode)addLine('Descuento · '+state.couponCode,-discountAmount());
    if(state.flight){
      const airlines=[...new Set([state.flight.outbound?.[0]?.airline,state.flight.inbound?.[0]?.airline].filter(Boolean))];
      addLine('Vuelos ida y vuelta · '+(airlines.join(' + ')||state.flight.airline),
@@ -666,7 +666,13 @@ function showTierQuote(){
   }
   $('lxProductDate').value=state.date;
   productCalendar.sync();productTravelers.sync();
+  const datePlaceholder=panel.querySelector('.lx-custom-date-field .lx-date-display');
+  if(datePlaceholder&&!state.date)datePlaceholder.textContent='Seleccionar';
   renderPriceBreakdown();
+  const appliedDiscount=discountAmount();
+  const discountRow=$('lxProductDiscountApplied');
+  discountRow.hidden=appliedDiscount<=0;
+  $('lxProductDiscountValue').textContent=appliedDiscount>0?'-'+fmt(appliedDiscount):'';
   const needsGroupQuote=state.adults+state.children>maxHotelOccupancy||state.hotelQuotePending||needsChileQuote();
   $('lxProductGroupPrice').textContent=needsChileQuote()?'Por cotizar':state.adults+state.children>maxHotelOccupancy?'Consultar':fmt(total());
   // Mostrar avisos solo cuando afectan al itinerario; nunca añadir textos de cotización al importe.
