@@ -5242,7 +5242,7 @@
       "country": "Chile",
       "region": "San Pedro de Atacama",
       "nights": "5D/4N",
-      "priceFrom": 1499.9,
+      "priceFrom": 1349,
       "currency": "USD",
       "img": "chile-experiencia-atacama-valle-luna.jpg",
       "alt": "Paisajes del Valle de la Luna en San Pedro de Atacama, Chile",
@@ -5272,24 +5272,24 @@
         {
           "code": "4e",
           "stars": "4★",
-          "name": "Terrantai Boutique",
-          "pricePerPerson": 1499.9,
+          "name": "Boutique premium · Terrantai",
+          "pricePerPerson": 1349,
           "hotels": [
             "Hotel Terrantai"
           ],
           "occupancyPrices": {
             "single": 2159.9,
-            "double": 1499.9,
-            "matrimonial": 1499.9
+            "double": 1349,
+            "matrimonial": 1349
           }
         }
       ],
       "flightsAvailable": true,
-      "bookingStatus": "fixed_agency_price",
-      "quoteOnly": false,
+      "bookingStatus": "Cotización previa hasta obtener tarifa mayorista de Terrantai",
+      "quoteOnly": true,
       "ages": "Solo adultos (18+)",
-      "pricingUpdated": "2026-11-10",
-      "pricingBasis": "Precio de venta fijo de LATAM Expeditions por persona, en base doble de 2 adultos. Incluye alojamiento y servicios detallados; vuelos opcionales. Disponibilidad de proveedores por confirmar; alternativa acordada o devolución íntegra si no puede prestarse lo contratado.",
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Lista objetivo US$1,349.00 por adulto en doble y promocional con cupón LATAM10EXP US$1,214.10. Hotel Terrantai 4★, vuelos opcionales. Tarifa sujeta a disponibilidad y validación de proveedor; no cobrar automáticamente hasta confirmar costos de excursiones, entradas y traslados.",
       "styles": [
         "naturaleza",
         "aventura",
@@ -5304,11 +5304,11 @@
       "country": "Chile",
       "region": "Santiago / San Pedro",
       "nights": "5D/4N",
-      "priceFrom": 880,
+      "priceFrom": 949.9,
       "currency": "USD",
       "img": "paquete-chile-6d5n-01.jpg",
       "alt": "Valle de la Luna en el desierto de Atacama",
-      "excerpt": "Santiago y desierto de Atacama en 5 días. Desde US$880 por persona, vuelos no incluidos.",
+      "excerpt": "Santiago y el desierto de Atacama con hoteles de cuatro estrellas o boutique superior; vuelos internos opcionales.",
       "itinerary": [
         "Día 1 · Llegada a Santiago y city tour",
         "Día 2 · Vuelo a Calama y traslado a San Pedro de Atacama",
@@ -5333,46 +5333,55 @@
       ],
       "hotelTiers": [
         {
-          "code": "3e",
-          "stars": "3*",
-          "name": "Turista",
-          "pricePerPerson": 880,
-          "hotels": [
-            "Hotel Panamericano Santiago",
-            "Hostal La Ruca"
-          ],
-          "occupancyPrices": {"double": 880,"matrimonial": 880}
-        },
-        {
           "code": "4e",
-          "stars": "4*",
-          "name": "Primera",
-          "pricePerPerson": 1170,
+          "stars": "4★",
+          "name": "Premium 4 estrellas",
+          "pricePerPerson": 949.9,
           "hotels": [
-            "Cumbres Lastarria",
-            "Hotel Cumbres San Pedro"
+            "Novotel Santiago Providencia",
+            "Casa Solcor"
           ],
-          "occupancyPrices": {"double": 1170,"matrimonial": 1170}
+          "occupancyPrices": {
+            "double": 949.9,
+            "matrimonial": 949.9
+          }
         },
         {
-          "code": "5e",
-          "stars": "5*",
-          "name": "Lujo",
-          "pricePerPerson": 1620,
+          "code": "4p",
+          "stars": "4★/4.5★",
+          "name": "Boutique superior",
+          "pricePerPerson": 1129.9,
           "hotels": [
-            "The Singular Santiago",
-            "Tierra Atacama"
+            "Novotel Santiago Providencia",
+            "NOI Casa Atacama"
           ],
-          "occupancyPrices": {"double": 1620,"matrimonial": 1620}
+          "occupancyPrices": {
+            "double": 1129.9,
+            "matrimonial": 1129.9
+          }
+        },
+        {
+          "code": "4s",
+          "stars": "4★/4.5★",
+          "name": "Boutique selecta",
+          "pricePerPerson": 1349.9,
+          "hotels": [
+            "Novotel Santiago Providencia",
+            "Hotel Desértica"
+          ],
+          "occupancyPrices": {
+            "double": 1349.9,
+            "matrimonial": 1349.9
+          }
         }
       ],
-      "quoteOnly": false,
+      "quoteOnly": true,
       "flightIncluded": false,
       "flightRoute": "SCL-CJC-SCL",
       "airfareDeductionPending": false,
-      "pricingBasis": "Tarifa por adulto en habitación doble; otras ocupaciones y menores requieren cotización",
+      "pricingBasis": "Precio objetivo por adulto en doble 4★, 1 noche Novotel Providencia + 3 noches Casa Solcor (hoteles de referencia no contratados). Lista US$949.90; promo LATAM10EXP US$854.91. Vuelo SCL-CJC-SCL y vuelos internacionales no incluidos; costo y disponibilidad pendientes.",
       "flightsAvailable": true,
-      "pricingUpdated": "2026-11-10",
+      "pricingUpdated": "2026-11-11",
       "priceSetByAgency": true,
       "supplierRatesConfirmed": false,
       "airfareExcludedPerPerson": 100
@@ -5383,11 +5392,11 @@
       "country": "Chile",
       "region": "Patagonia",
       "nights": "6D/5N",
-      "priceFrom": 1450,
+      "priceFrom": 1399.9,
       "currency": "USD",
       "img": "chile-patagonia-01.jpg",
       "alt": "Cuernos del Paine reflejados en un lago patagónico",
-      "excerpt": "El parque nacional más espectacular de Chile, sin trekking exigente.",
+      "excerpt": "Torres del Paine, glaciar Grey y Puerto Natales con 4 noches en Puerto Natales y una en Punta Arenas, hoteles 4★ de referencia.",
       "itinerary": [
         "Día 1 · Llegada a Punta Arenas y traslado a Puerto Natales",
         "Día 2 · Torres del Paine full day por los miradores clásicos",
@@ -5412,37 +5421,459 @@
       ],
       "hotelTiers": [
         {
-          "code": "3e",
-          "stars": "3*",
-          "name": "Turista",
-          "pricePerPerson": 1450,
-          "hotels": [
-            "Hotel Vendaval Puerto Natales",
-            "Hostal Keoken"
-          ], "occupancyPrices": {"double": 1450}},
-        {
           "code": "4e",
-          "stars": "4*",
-          "name": "Primera",
-          "pricePerPerson": 1880,
+          "stars": "4★",
+          "name": "Patagonia 4 estrellas",
+          "pricePerPerson": 1399.9,
           "hotels": [
-            "Hotel Costaustralis",
-            "Hotel Cabo de Hornos"
-          ], "occupancyPrices": {"double": 1880}},
+            "Hotel Costaustralis (Puerto Natales)",
+            "Hotel Cabo de Hornos (Punta Arenas)"
+          ],
+          "occupancyPrices": {
+            "double": 1399.9
+          }
+        },
+        {
+          "code": "4p",
+          "stars": "4★ superior",
+          "name": "Patagonia selecta",
+          "pricePerPerson": 1699.9,
+          "hotels": [
+            "NOI Indigo Patagonia (Puerto Natales)",
+            "Hotel Cabo de Hornos (Punta Arenas)"
+          ],
+          "occupancyPrices": {
+            "double": 1699.9
+          }
+        },
         {
           "code": "5e",
-          "stars": "5*",
-          "name": "Lujo",
-          "pricePerPerson": 2540,
+          "stars": "5★/4★",
+          "name": "Lujo patagónico",
+          "pricePerPerson": 2699.9,
           "hotels": [
-            "The Singular Patagonia",
-            "Explora Patagonia"
-          ], "occupancyPrices": {"double": 2540}}
+            "The Singular Patagonia (Puerto Natales)",
+            "Hotel Cabo de Hornos (Punta Arenas)"
+          ],
+          "occupancyPrices": {
+            "double": 2699.9
+          }
+        }
       ],
-      "pricingBasis": "Tarifa por adulto en habitación doble; otras ocupaciones y menores requieren cotización",
+      "pricingBasis": "Precio objetivo por adulto en habitación doble, 4 noches Costaustralis + 1 Cabo de Hornos de referencia; lista US$1,399.90, con cupón LATAM10EXP US$1,259.91, sin vuelos. Validar navegación Grey, traslados, accesos y hotel antes de aceptar reservas.",
       "flightsAvailable": true,
       "quoteOnly": true,
-      "operationalReview": "Alojamiento quinta noche Punta Arenas y navegación Grey por confirmar; no cobrar automáticamente hasta verificar proveedor y tarifas"
+      "operationalReview": "Cotización previa obligatoria: hotel 4★ Puerto Natales/Punta Arenas, Grey, entradas, traslados y clima",
+      "pricingUpdated": "2026-11-11",
+      "supplierRatesConfirmed": false
+    },
+    {
+      "slug": "chile-santiago-valparaiso-casablanca-4d3n",
+      "title": "Santiago, Valparaíso, Viña del Mar y Casablanca",
+      "country": "Chile",
+      "region": "Santiago / Costa Central",
+      "nights": "4D/3N",
+      "priceFrom": 599.9,
+      "currency": "USD",
+      "img": "santiago-city-01.jpg",
+      "alt": "Santiago de Chile, punto de partida de Santiago, Valparaíso, Viña del Mar y Casablanca",
+      "excerpt": "Capital, patrimonio porteño, la costa de Viña del Mar y los viñedos del valle de Casablanca.",
+      "category": "Premium 4★ o superior",
+      "style": "naturaleza",
+      "itinerary": [
+        "Día 1 · Bienvenida a Santiago",
+        "Día 2 · Santiago histórico, barrios y miradores",
+        "Día 3 · Valparaíso, Viña del Mar y viñedos de Casablanca",
+        "Día 4 · Despedida de Santiago"
+      ],
+      "includes": [
+        "Tres noches en hotel 4★ de referencia con desayuno",
+        "Traslados aeropuerto Santiago–hotel–aeropuerto",
+        "City tour de Santiago con guía local",
+        "Excursión compartida Valparaíso, Viña del Mar y Casablanca",
+        "Asistencia al viajero"
+      ],
+      "notIncludes": [
+        "Vuelos internacionales o internos",
+        "Degustaciones de vino y entradas no descritas",
+        "Almuerzos, cenas y propinas",
+        "Gastos personales y seguros"
+      ],
+      "hotelTiers": [
+        {
+          "code": "4e",
+          "stars": "4★",
+          "name": "Hotel premium de referencia",
+          "pricePerPerson": 599.9,
+          "hotels": [
+            "Novotel Santiago Providencia"
+          ],
+          "occupancyPrices": {
+            "double": 599.9
+          }
+        }
+      ],
+      "quoteOnly": true,
+      "bookingStatus": "Cotización previa — servicio sujeto a disponibilidad y validación de proveedor",
+      "supplierRatesConfirmed": false,
+      "priceSetByAgency": true,
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Precio objetivo de agencia en doble para 2 adultos, lista USD 599.90, cupón LATAM10EXP (-10 %) sobre paquete, vuelos no incluidos. Hotel Novotel Santiago Providencia (4★) de referencia, sujeto a tarifa y disponibilidad. No cobrar hasta validar contrato de servicios.",
+      "flightsAvailable": true,
+      "flightIncluded": false,
+      "arrivalAirport": "SCL",
+      "seasonality": "Todo el año",
+      "flightRoute": "Llegada/salida Santiago (SCL)"
+    },
+    {
+      "slug": "chile-puerto-varas-volcanes-petrohue-5d4n",
+      "title": "Puerto Varas, Frutillar, volcán Osorno y Petrohué",
+      "country": "Chile",
+      "region": "Región de Los Lagos",
+      "nights": "5D/4N",
+      "priceFrom": 829.9,
+      "currency": "USD",
+      "img": "",
+      "alt": "Imagen específica del destino pendiente de autorización",
+      "excerpt": "Lagos, volcanes, Saltos del Petrohué y arquitectura de Frutillar con hotel cuatro estrellas.",
+      "category": "Premium 4★ o superior",
+      "style": "naturaleza",
+      "itinerary": [
+        "Día 1 · Llegada a Puerto Montt y traslado a Puerto Varas",
+        "Día 2 · Frutillar y orillas del lago Llanquihue",
+        "Día 3 · Volcán Osorno y Saltos del Petrohué",
+        "Día 4 · Paisajes de Llanquihue a ritmo libre",
+        "Día 5 · Regreso desde Puerto Montt"
+      ],
+      "includes": [
+        "Cuatro noches hotel 4★ con desayuno",
+        "Traslados llegada y salida desde PMC",
+        "Excursión Frutillar y Lago Llanquihue",
+        "Excursión volcán Osorno y Saltos del Petrohué",
+        "Asistencia de operador"
+      ],
+      "notIncludes": [
+        "Vuelos",
+        "Entradas y teleféricos no indicados",
+        "Navegación al Lago Todos los Santos (opcional)",
+        "Almuerzos/cenas y gastos personales"
+      ],
+      "hotelTiers": [
+        {
+          "code": "4e",
+          "stars": "4★",
+          "name": "Hotel premium de referencia",
+          "pricePerPerson": 829.9,
+          "hotels": [
+            "Hotel Bellavista Puerto Varas"
+          ],
+          "occupancyPrices": {
+            "double": 829.9
+          }
+        }
+      ],
+      "quoteOnly": true,
+      "bookingStatus": "Cotización previa — servicio sujeto a disponibilidad y validación de proveedor",
+      "supplierRatesConfirmed": false,
+      "priceSetByAgency": true,
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Precio objetivo de agencia en doble para 2 adultos, lista USD 829.90, cupón LATAM10EXP (-10 %) sobre paquete, vuelos no incluidos. Hotel Hotel Bellavista Puerto Varas (4★) de referencia, sujeto a tarifa y disponibilidad. No cobrar hasta validar contrato de servicios.",
+      "flightsAvailable": true,
+      "flightIncluded": false,
+      "arrivalAirport": "PMC",
+      "seasonality": "Todo el año; clima condiciona los paisajes",
+      "flightRoute": "Llegada/salida Puerto Montt (PMC)"
+    },
+    {
+      "slug": "chile-carretera-austral-capillas-marmol-4d3n",
+      "title": "Carretera Austral y Capillas de Mármol",
+      "country": "Chile",
+      "region": "Aysén y lago General Carrera",
+      "nights": "4D/3N",
+      "priceFrom": 1199.9,
+      "currency": "USD",
+      "img": "",
+      "alt": "Imagen específica del destino pendiente de autorización",
+      "excerpt": "La ruta escénica de Aysén, miradores de Cerro Castillo y navegación a Capillas de Mármol.",
+      "category": "Premium 4★ o superior",
+      "style": "naturaleza",
+      "itinerary": [
+        "Día 1 · Llegada a Balmaceda y Coyhaique",
+        "Día 2 · Carretera Austral y Capillas de Mármol",
+        "Día 3 · Reserva Nacional Coyhaique y paisaje patagónico",
+        "Día 4 · Salida desde Balmaceda"
+      ],
+      "includes": [
+        "Tres noches de hotel categoría superior de referencia con desayuno",
+        "Traslados Balmaceda–Coyhaique–Balmaceda",
+        "Excursión de jornada completa a Puerto Río Tranquilo",
+        "Navegación a Capillas de Mármol cuando opere el lago",
+        "Recorrido panorámico y reserva nacional según acceso"
+      ],
+      "notIncludes": [
+        "Vuelos",
+        "Entradas no detalladas",
+        "Almuerzos/cenas y propinas",
+        "Paseos de navegación sustitutos en caso de suspensión; se cotizan por separado"
+      ],
+      "hotelTiers": [
+        {
+          "code": "4e",
+          "stars": "5★",
+          "name": "Hotel premium de referencia",
+          "pricePerPerson": 1199.9,
+          "hotels": [
+            "Hotel Dreams Patagonia Coyhaique"
+          ],
+          "occupancyPrices": {
+            "double": 1199.9
+          }
+        }
+      ],
+      "quoteOnly": true,
+      "bookingStatus": "Cotización previa — servicio sujeto a disponibilidad y validación de proveedor",
+      "supplierRatesConfirmed": false,
+      "priceSetByAgency": true,
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Precio objetivo de agencia en doble para 2 adultos, lista USD 1199.90, cupón LATAM10EXP (-10 %) sobre paquete, vuelos no incluidos. Hotel Hotel Dreams Patagonia Coyhaique (5★) de referencia, sujeto a tarifa y disponibilidad. No cobrar hasta validar contrato de servicios.",
+      "flightsAvailable": true,
+      "flightIncluded": false,
+      "arrivalAirport": "BBA",
+      "seasonality": "Preferente octubre–abril; viento y lago pueden suspender navegación",
+      "flightRoute": "Llegada/salida Balmaceda (BBA)"
+    },
+    {
+      "slug": "chile-pucon-villarrica-termas-5d4n",
+      "title": "Pucón, volcán Villarrica y termas",
+      "country": "Chile",
+      "region": "Araucanía lacustre",
+      "nights": "5D/4N",
+      "priceFrom": 899.9,
+      "currency": "USD",
+      "img": "",
+      "alt": "Imagen específica del destino pendiente de autorización",
+      "excerpt": "Paisajes volcánicos, termas y lagos desde un hotel cuatro estrellas en Pucón.",
+      "category": "Premium 4★ o superior",
+      "style": "naturaleza",
+      "itinerary": [
+        "Día 1 · Llegada a Temuco y Pucón",
+        "Día 2 · Volcán Villarrica y miradores lacustres",
+        "Día 3 · Día termal",
+        "Día 4 · Naturaleza en Huerquehue",
+        "Día 5 · Salida desde Temuco"
+      ],
+      "includes": [
+        "Cuatro noches Hotel Casa Solaria 4★ de referencia con desayuno",
+        "Traslados aeropuerto Temuco–Pucón–Temuco",
+        "Circuito panorámico del volcán Villarrica",
+        "Excursión termal y visita naturaleza según contrato",
+        "Acompañamiento local"
+      ],
+      "notIncludes": [
+        "Vuelos",
+        "Ascenso técnico al cráter",
+        "Entradas a termas/parques si no figuran en confirmación",
+        "Comidas no mencionadas y gastos personales"
+      ],
+      "hotelTiers": [
+        {
+          "code": "4e",
+          "stars": "4★",
+          "name": "Hotel premium de referencia",
+          "pricePerPerson": 899.9,
+          "hotels": [
+            "Hotel Casa Solaria"
+          ],
+          "occupancyPrices": {
+            "double": 899.9
+          }
+        }
+      ],
+      "quoteOnly": true,
+      "bookingStatus": "Cotización previa — servicio sujeto a disponibilidad y validación de proveedor",
+      "supplierRatesConfirmed": false,
+      "priceSetByAgency": true,
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Precio objetivo de agencia en doble para 2 adultos, lista USD 899.90, cupón LATAM10EXP (-10 %) sobre paquete, vuelos no incluidos. Hotel Hotel Casa Solaria (4★) de referencia, sujeto a tarifa y disponibilidad. No cobrar hasta validar contrato de servicios.",
+      "flightsAvailable": true,
+      "flightIncluded": false,
+      "arrivalAirport": "ZCO",
+      "seasonality": "Todo el año; termas y senderos sujetos a clima",
+      "flightRoute": "Llegada/salida Temuco (ZCO)"
+    },
+    {
+      "slug": "chile-rapa-nui-moais-5d4n",
+      "title": "Rapa Nui: moáis y cultura ancestral",
+      "country": "Chile",
+      "region": "Isla de Pascua / Rapa Nui",
+      "nights": "5D/4N",
+      "priceFrom": 1299.9,
+      "currency": "USD",
+      "img": "",
+      "alt": "Imagen específica del destino pendiente de autorización",
+      "excerpt": "Moáis, Rano Raraku, Tongariki, Orongo y playas de la isla con hotel boutique 4★.",
+      "category": "Premium 4★ o superior",
+      "style": "naturaleza",
+      "itinerary": [
+        "Día 1 · Bienvenida a Rapa Nui",
+        "Día 2 · Moáis, Rano Raraku y Tongariki",
+        "Día 3 · Orongo y volcán Rano Kau",
+        "Día 4 · Cultura viva y tiempo libre",
+        "Día 5 · Salida desde Rapa Nui"
+      ],
+      "includes": [
+        "Cuatro noches de hotel boutique de referencia 4★ con desayuno",
+        "Traslados aeropuerto Mataveri–hotel–aeropuerto",
+        "Dos circuitos arqueológicos de referencia con guía local autorizado",
+        "Asistencia al viajero"
+      ],
+      "notIncludes": [
+        "Vuelos a Rapa Nui",
+        "Entrada al Parque Nacional Rapa Nui (a confirmar según nacionalidad)",
+        "Requisitos de Formulario Único de Ingreso FUI",
+        "Actividades opcionales, almuerzos y cenas"
+      ],
+      "hotelTiers": [
+        {
+          "code": "4e",
+          "stars": "4★",
+          "name": "Hotel premium de referencia",
+          "pricePerPerson": 1299.9,
+          "hotels": [
+            "Hotel Hare Nua"
+          ],
+          "occupancyPrices": {
+            "double": 1299.9
+          }
+        }
+      ],
+      "quoteOnly": true,
+      "bookingStatus": "Cotización previa — servicio sujeto a disponibilidad y validación de proveedor",
+      "supplierRatesConfirmed": false,
+      "priceSetByAgency": true,
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Precio objetivo de agencia en doble para 2 adultos, lista USD 1299.90, cupón LATAM10EXP (-10 %) sobre paquete, vuelos no incluidos. Hotel Hotel Hare Nua (4★) de referencia, sujeto a tarifa y disponibilidad. No cobrar hasta validar contrato de servicios.",
+      "flightsAvailable": true,
+      "flightIncluded": false,
+      "arrivalAirport": "IPC",
+      "seasonality": "Todo el año; acceso a sitios arqueológicos regulado",
+      "flightRoute": "Llegada/salida Mataveri (IPC)"
+    },
+    {
+      "slug": "chile-santiago-valle-nevado-esqui-4d3n",
+      "title": "Santiago y Valle Nevado: aprende a esquiar",
+      "country": "Chile",
+      "region": "Santiago / Andes centrales",
+      "nights": "4D/3N",
+      "priceFrom": 949.9,
+      "currency": "USD",
+      "img": "santiago-city-01.jpg",
+      "alt": "Santiago de Chile, punto de partida de Santiago y Valle Nevado: aprende a esquiar",
+      "excerpt": "Hotel 4★ en Santiago, una jornada de esquí con clase para principiantes y otro día de paisajes nevados.",
+      "category": "Premium 4★ o superior",
+      "style": "naturaleza",
+      "itinerary": [
+        "Día 1 · Llegada a Santiago",
+        "Día 2 · Valle Nevado: primera clase de esquí",
+        "Día 3 · Farellones y panorámicas de nieve",
+        "Día 4 · Despedida de Santiago"
+      ],
+      "includes": [
+        "Tres noches en hotel 4★ de Santiago con desayuno",
+        "Traslados aeropuerto",
+        "Excursión de iniciación al esquí en Valle Nevado con equipo/ticket/clase colectiva una jornada, sujeto a confirmar",
+        "Jornada panorámica Farellones/cordillera con transporte",
+        "Asistencia"
+      ],
+      "notIncludes": [
+        "Vuelos",
+        "Ropa personal de abrigo, guantes y gafas",
+        "Comidas, propinas y gastos personales",
+        "Actividades de nieve adicionales no indicadas"
+      ],
+      "hotelTiers": [
+        {
+          "code": "4e",
+          "stars": "4★",
+          "name": "Hotel premium de referencia",
+          "pricePerPerson": 949.9,
+          "hotels": [
+            "Novotel Santiago Providencia"
+          ],
+          "occupancyPrices": {
+            "double": 949.9
+          }
+        }
+      ],
+      "quoteOnly": true,
+      "bookingStatus": "Cotización previa — servicio sujeto a disponibilidad y validación de proveedor",
+      "supplierRatesConfirmed": false,
+      "priceSetByAgency": true,
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Precio objetivo de agencia en doble para 2 adultos, lista USD 949.90, cupón LATAM10EXP (-10 %) sobre paquete, vuelos no incluidos. Hotel Novotel Santiago Providencia (4★) de referencia, sujeto a tarifa y disponibilidad. No cobrar hasta validar contrato de servicios.",
+      "flightsAvailable": true,
+      "flightIncluded": false,
+      "arrivalAirport": "SCL",
+      "seasonality": "Invierno austral; nieve y remontes sujetos a condiciones y calendario oficial",
+      "flightRoute": "Llegada/salida Santiago (SCL)"
+    },
+    {
+      "slug": "chile-chiloe-cultural-naturaleza-4d3n",
+      "title": "Chiloé: cultura, palafitos y naturaleza",
+      "country": "Chile",
+      "region": "Isla Grande de Chiloé",
+      "nights": "4D/3N",
+      "priceFrom": 799.9,
+      "currency": "USD",
+      "img": "",
+      "alt": "Imagen específica del destino pendiente de autorización",
+      "excerpt": "Iglesias patrimoniales, palafitos, Dalcahue y paisajes del archipiélago chilote con hotel 4★.",
+      "category": "Premium 4★ o superior",
+      "style": "naturaleza",
+      "itinerary": [
+        "Día 1 · Llegada a Chiloé y Castro",
+        "Día 2 · Iglesias patrimoniales y Dalcahue",
+        "Día 3 · Naturaleza y tradiciones chilotas",
+        "Día 4 · Salida de la isla"
+      ],
+      "includes": [
+        "Tres noches en Hotel Parque Quilquico 4★ de referencia con desayuno",
+        "Traslados aeropuerto Mocopulli–Castro–Mocopulli",
+        "Visitas guiadas patrimoniales y Dalcahue",
+        "Recorrido panorámico y natural de la isla",
+        "Asistencia local"
+      ],
+      "notIncludes": [
+        "Vuelos",
+        "Entradas no incluidas expresamente",
+        "Comidas y propinas",
+        "Navegaciones estacionales no confirmadas"
+      ],
+      "hotelTiers": [
+        {
+          "code": "4e",
+          "stars": "4★",
+          "name": "Hotel premium de referencia",
+          "pricePerPerson": 799.9,
+          "hotels": [
+            "Hotel Parque Quilquico"
+          ],
+          "occupancyPrices": {
+            "double": 799.9
+          }
+        }
+      ],
+      "quoteOnly": true,
+      "bookingStatus": "Cotización previa — servicio sujeto a disponibilidad y validación de proveedor",
+      "supplierRatesConfirmed": false,
+      "priceSetByAgency": true,
+      "pricingUpdated": "2026-11-11",
+      "pricingBasis": "Precio objetivo de agencia en doble para 2 adultos, lista USD 799.90, cupón LATAM10EXP (-10 %) sobre paquete, vuelos no incluidos. Hotel Hotel Parque Quilquico (4★) de referencia, sujeto a tarifa y disponibilidad. No cobrar hasta validar contrato de servicios.",
+      "flightsAvailable": true,
+      "flightIncluded": false,
+      "arrivalAirport": "MHC",
+      "seasonality": "Todo el año, clima variable",
+      "flightRoute": "Llegada/salida Mocopulli (MHC); alternativa por Puerto Montt"
     },
     {
       "slug": "ecuador-galapagos-5d4n",

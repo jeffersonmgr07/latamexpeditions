@@ -585,3 +585,15 @@
  .lx-paired-hotel img.lx-paired-photo{height:160px!important}
 }
 @media(prefers-reduced-motion:reduce){.lx-atacama-gallery-track{scroll-behavior:auto}}
+
+
+/* Chile premium 2026 · fichas pendientes de fotografías de destino */
+.lx-chile-photo-pending{min-height:225px;border:1px dashed #b6d5c2;border-radius:14px;background:linear-gradient(125deg,#e8f4ea,#f7faf4);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:9px;padding:20px;color:#285d42}
+.lx-chile-photo-pending i{font-size:36px;opacity:.75}
+.lx-chile-photo-pending strong{font:750 17px/1.4 Inter,Arial,sans-serif}
+.lx-chile-photo-pending p{margin:0;color:#597567;font-size:12px;max-width:360px}
+.lx-chile-aside-placeholder{width:100%;min-height:158px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:17px;text-align:center;background:linear-gradient(125deg,#08422e,#0b7950);color:#f6fff9;font-weight:650;border-radius:12px}
+.lx-chile-aside-placeholder i{font-size:27px;color:#c8e8d5}
+.product-booking-card .price-block{min-width:0;overflow-wrap:anywhere}
+.product-booking-card .price-block span{display:block;line-height:1.45}
+@media(max-width:540px){.lx-chile-photo-pending{min-height:180px}.lx-chile-aside-placeholder{min-height:125px}}

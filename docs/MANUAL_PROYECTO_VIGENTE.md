@@ -149,56 +149,44 @@ Al terminar cada intervención: (1) revisar el comportamiento realmente integrad
 - **No ejecutado:** inicio de sesión real contra Google/Apps Script con cuenta del cliente, reserva de prueba, simulación con tarifas de terceros, cobro/captura PayPal; se hará QA funcional específico, sin modificar cobros en este cambio.
 
 
-## 14. Inventario por país y modernización de Chile (11 de noviembre de 2026)
+## 14. Chile: línea premium de diez paquetes (estado vigente 11/11/2026)
 
-El inventario mantenido en [`docs/CATALOGO_ITINERARIOS_2026-11-11.md`](CATALOGO_ITINERARIOS_2026-11-11.md) enumera los **38 paquetes de 8 países** y los días de cada programa chileno; distingue productos del catálogo de fichas históricas que ya no se pueden reservar automáticamente.
+**Documentación comercial:** [Estudio con tarifas vigentes](ESTUDIO_MERCADO_CHILE_2026-11-11.md) · [45 itinerarios por países](CATALOGO_ITINERARIOS_2026-11-11.md) · [Siete nuevos productos con horario](chile/PRODUCTOS_PREMIUM_2026.json).
 
-### Productos de Chile
+La web presenta actualmente **45 paquetes, 10 de Chile**, de los cuales los diez chilenos están en modo **`quoteOnly`**, con la etiqueta **tarifa objetivo/referencial**. Estas fichas no admiten cobro automático mientras proveedores y tarifas no estén contratados. Los siete programas nuevos ya tienen URL y aparecen en el listado; tienen `noindex,follow` hasta estar preparados comercialmente. No agregar información falsa sobre hoteles ni imágenes de destinos no correspondientes.
 
-- **Desierto de Atacama Premium 5D/4N:** plantilla de referencia con Hotel Terrantai. Tarifas configuradas para 1 y 2 adultos; sin tarifa infantil automatizada.
-- **Santiago y Atacama 5D/4N:** plantilla de referencia de dos ciudades; vuelos internos Santiago (SCL) ↔ Calama (CJC) opcionales. Las tarifas publicadas de las categorías se utilizan **para dos adultos en doble o matrimonial**, no se aplican automáticamente a single/triple/familiar sin suplemento validado.
-- **Patagonia y Torres del Paine 6D/5N:** ficha modernizada usando la misma estructura visual, itinerario, galería, tarjetas de hotel, consulta de vuelos con destino Punta Arenas (PUQ) y reglas de ocupación definidas. El precio es por persona en habitación **doble para dos adultos**; no hay tarifa aprobada para otras ocupaciones. Hoteles y servicios sujetos a confirmación.
-- **`paquetes/chile-atacama.html` antiguo:** programa 6D/5N que no forma parte del catálogo actual y carece de precio; marcado `noindex`, con aviso de versión histórica y botón de reserva automática desactivado. No eliminarlo sin decidir si se comercializará de nuevo.
+### Precios base de Chile y promoción
 
-### Tarifas y validación
+- **Desierto de Atacama Premium 5D/4N:** objetivo **US$1,349.00** por adulto en doble, descuento 10% → **US$1,214.10**; Terrantai 4★. El precio requiere tarifa neta mayorista y margen, especialmente considerando la alta tarifa hotelera pública.
+- **Santiago y Atacama 5D/4N:** objetivo **US$949.90**, con código → **US$854.91**; **1 noche Novotel Santiago Providencia 4★ + 3 noches Casa Solcor 4★**, sujetos a confirmación. Otras categorías boutique tienen precios separados. Se descontinúa la base antigua de Hotel Panamericano 3★ y La Rukka Hostal.
+- **Patagonia y Torres del Paine 6D/5N:** objetivo **US$1,399.90**, con código → **US$1,259.91**; **4 noches Costaustralis 4★ en Puerto Natales + 1 noche Cabo de Hornos 4★ en Punta Arenas**, referencias aún no contratadas. La navegación Grey, parques y traslados requieren validación.
+- **Siete nuevos:** Santiago/Valparaíso/Casablanca; Puerto Varas/Frutillar/Osorno; Carretera Austral/Capillas de Mármol; Pucón/Villarrica/termas; Rapa Nui/moáis; Santiago/Valle Nevado; Chiloé. Objetivos, hoteles y riesgos están en el estudio.
 
-La ficha compartida suma mediante `assets/js/package-product-20261108.js`:
+**Descuento:** se aplica `LATAM10EXP` al precio base del **paquete**, sin vuelos ni suplementos externos. Los precios de lista deben utilizarse realmente antes de afirmar un descuento frente a la venta anterior. Los costos a proveedor, IVA/tasas, comisiones y contingencias se deben verificar antes de aceptar el pago.
 
-`Total mostrado = base de paquete por ocupación + vuelo total para el grupo + suplemento de hotel para la estancia - descuento aplicable al paquete`.
+### Lógica del frontend
 
-`assets/js/booking.js` recalcula con los mismos conceptos. La suma de vuelos **no se multiplica otra vez por personas**: la API devuelve un total para los viajeros seleccionados. La diferencia hotelera corresponde al grupo y las noches de la estancia. En Chile los valores solo son utilizables automáticamente con la ocupación definida en el catálogo; las tarifas no configuradas provocan un mensaje de cotización previa, también validado en el formulario de pasajeros.
+- Código fuente principal de catálogo: `assets/data/catalog.json`; listado público: `paquetes.html`; fichas premium: `paquetes/chile-*.html` y `paquetes/desierto-atacama-premium-5d4n.html`.
+- `assets/js/package-product-20261108.js` contiene el selector de vuelos/hoteles y redirige las fichas `data-book-quote-only=true` a **WhatsApp de cotización con fecha, viajeros, categoría y hotel**, sin abrir el checkout.
+- `assets/js/booking.js` y `backend/Codigo.gs` conservan controles de importe: `quoteOnly` desactiva la disponibilidad de pago online, y la validación del backend rechaza los productos chilenos no confirmados. **No se modificaron funciones createOrder/captureOrder ni PayPal**.
+- El backend Apps Script no se despliega con GitHub. El código `backend/Codigo.gs` requiere que el operador lo lleve a una **Nueva versión** del proyecto de reservas cuando corresponda, después de validar los otros productos que ya están en producción.
+- El generador `tools/build.py` **preserva las fichas existentes de Chile y Colombia**; sus tarjetas en el catálogo regenerado manejan `img=""` con placeholder, sin imagen rota. **No ejecutar rebuild completo sin revisar diferencias de index/login/registro y otros archivos personalizados**.
 
-**Importante:** revisar la fórmula en el código no equivale a realizar búsquedas confirmadas con SerpAPI ni a completar una compra. La API pública de Apps Script no respondió a la comprobación desde el entorno de investigación y no se consumieron búsquedas reales ni órdenes PayPal durante esta intervención. El flujo debe ensayarse en navegador con respuesta real, ocupaciones, fechas y backend desplegado antes de ampliar la venta automática.
+### Fotos pendientes y estado de catálogo
 
-### Seguridad y operación del destino
+Cinco nuevas fichas necesitan fotografía legítima: **Puerto Varas, Carretera Austral / Capillas de Mármol, Pucón / Villarrica, Rapa Nui y Chiloé**. La galería y tarjetas respectivas muestran un aviso neutro; no sustituir fotografías de destinos sin permiso de uso. Las dos nuevas fichas que salen de Santiago usan una fotografía de Santiago ya disponible. Se añadirán galerías de hotel solo con imágenes propias, del proveedor o adecuadamente licenciadas.
 
-- Se eliminó del programa actual de Patagonia la visita a la antigua pingüinera turística de **Seno Otway** (cerrada) y se menciona **Isla Magdalena** solo como navegación opcional, estacional y sujeta a cupos y clima. No incluirla en el precio sin coste/proveedor confirmado. CONAF declara la temporada 2026–2027 del Monumento Natural Los Pingüinos entre el 15/10/2026 y el 31/03/2027.
-- La entrada al Parque Nacional Torres del Paine es adicional; validar el sistema tarifario vigente y condiciones en CONAF/Pases Parques antes de cotizar. Grey depende de clima y navegación operativa.
-- Las fotografías locales deben estar en `assets/img/` y corresponder al destino, nunca asumir fotos inexistentes de hoteles. Patagonia tiene una imagen válida y necesitará galería ampliada con fotos verificadas.
-- La plantilla HTML se cambia puntualmente sin regenerar toda la web con `tools/build.py` salvo inspección del diff: existen fichas manuales recientes y un rebuild masivo podría sustituirlas accidentalmente. Documentar nuevas fichas en el catálogo.
+### Criterios de operación
 
+- Rapa Nui: FUI, guía acreditado en circuitos arqueológicos, entradas y vuelos IPC con confirmación.
+- Carretera Austral: día de Capillas de Mármol requiere largas horas terrestres desde Coyhaique; navegación sujeta a viento, situación vial y acceso.
+- Valle Nevado: clases de iniciación y actividad panorámica dependen de temporadas, nieve y remontes.
+- Patagonia: Isla Magdalena opcional estacional, no incluir Seno Otway turístico, entrada a Torres del Paine fuera de tarifa salvo que se declare expresamente.
 
-**Backend autoritativo de precios de Chile:** el archivo `backend/Codigo.gs` ha sido sincronizado para que `PRECIOS_PAQUETES` contemple exclusivamente ocupaciones definidas en catálogo, y `validarYCalcular` rechace menores y grupos distintos de dos adultos en Santiago–Atacama 5D/4N y Patagonia 6D/5N. Esto **requiere actualizar y publicar una nueva versión del Apps Script de reservas/cuentas/pagos**; la rama GitHub no actualiza el backend desplegado. No se modificaron `createOrder`, `captureOrder` ni credenciales de PayPal. Hasta el despliegue, la validación del frontend es la medida temporal.
-**Corrección de scripts:** se incluyó `vuelos-config.js` y `package-product-20261108.js` en Santiago–Atacama, donde faltaban, para activar los mismos selectores que Atacama Premium. La antigua función `paquete-vuelos.js` específica de Medellín se excluye de las nuevas fichas Chile.
+## 15. Próximos pasos para permitir reservas confirmadas
 
-
-## Auditoría de mercado Chile y logística Patagonia · 2026-11-11
-
-**Fuente de investigación:** [Estudio de mercado y portafolio de 10 paquetes](ESTUDIO_MERCADO_CHILE_2026-11-11.md). Incluye comparación de costos de compra individual contra producto organizado, mercado de OTAs, escenarios de promoción del 10% y un ranking **editorial** para completar Chile con siete nuevos programas. **Los precios de los productos nuevos son hipótesis comerciales, no tarifas aprobadas; no publicarlos como disponibles hasta recibir costos firmes y verificar margen.**
-
-### Patagonia y Torres del Paine
-
-- Ficha `paquetes/chile-patagonia-6d5n.html`: contiene 35 eventos con horarios referenciales por día, seis jornadas detalladas, rutas y puntos de control operativos.
-- La distribución comercial prevista es **4 noches en Puerto Natales + 1 noche en Punta Arenas**. El hotel de la quinta noche **todavía no está asignado** y requiere proveedor, categoría y costo.
-- El día 3 propone la navegación **Grey III** de temporada 2026–2027 con registro ~12:00, zarpe ~13:00 y regreso ~15:45 según Hotel Lago Grey; no garantizar hasta obtener cupo, mínimo de pasajeros, traslado y condiciones de navegación.
-- El día 5 traslada temprano al viajero desde Puerto Natales a Punta Arenas. **Isla Magdalena** es adicional y solo posible con reserva y disponibilidad en temporada; la segunda salida del proveedor Fiordos del Sur referencia registro ~12:30 y navegación ~13:30–18:00.
-- Como una cotización de hotel **para cinco noches en una sola ciudad** sería incorrecta, `assets/js/package-product-20261108.js` muestra la distribución 4+1 y **desactiva la búsqueda automática de sustituciones hoteleras** de Patagonia. Las diferencias de categorías definidas sí pueden consultarse.
-- `data-book-quote-only="true"` en la página de Patagonia y `quoteOnly:true` en catálogo dejan pendiente el cobro online **hasta confirmar el hotel de Punta Arenas, servicios y costos**. No se modificaron los métodos de PayPal ni se hicieron cobros.
-- La publicación del backend Apps Script continúa siendo manual. La tarifa de referencia US$1,450 por persona en doble es informativa hasta confirmar los servicios.
-
-### Notas comerciales
-
-- Atacama Premium US$1,499.90 con hotel Terrantai se mantiene como tarifa de referencia premium; el establecimiento confirma que recibe huéspedes a partir de **14 años**, mientras el paquete de la agencia se mantiene para adultos.
-- Santiago–Atacama US$880 por persona es más caro que una combinación básica reservada por separado; evaluar reducción a US$799.90 **solo** si costos mayoristas/operativos permiten sostener margen tras promoción.
-- El hotel del catálogo `Hostal La Ruca` requiere verificar identidad comercial frente a `La Rukka Hostal Boutique` antes de cambiar nombres o fotos.
-- Toda oferta del 10% se calcula sobre la tarifa de lista real del paquete, no sobre los vuelos ni extras fuera de campaña; margen bruto de referencia 25% sobre precio final, sin ignorar pagos/comisiones/costos administrativos.
+1. Solicitar cotizaciones netas a los diez hoteles base y a operadores locales, por fechas/temporada, habitación doble y política de cancelación. Tener alternativas del mismo estándar verificadas.
+2. Cargar el presupuesto operativo total (alojamiento, excursiones, accesos incluidos, traslados, guía, impuestos, comisiones, contingencias) y comprobar margen **después del 10%**.
+3. Completar fotografías autorizadas y revisar las diez fichas en móvil/PC con fechas y viajeros.
+4. Autorizar cada producto individualmente a pasar de **cotización previa** a **reserva confirmada**, con precio, ocupaciones y entradas explícitas.
+5. Publicar nueva versión de Apps Script tras aprobación y realizar las pruebas completas de cotización/checkout en sandbox **más adelante**, conforme a la decisión comercial actual.

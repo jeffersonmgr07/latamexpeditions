@@ -1,0 +1,1013 @@
+{
+  "date": "2026-11-11",
+  "mode": "propuestas_comerciales_solo_cotizacion",
+  "rules": {
+    "hotelMinStars": "4★ o boutique superior acreditado",
+    "occupancy": "2 adultos en doble",
+    "discountCode": "LATAM10EXP",
+    "discount": 0.1,
+    "flightsIncluded": false
+  },
+  "products": [
+    {
+      "slug": "chile-santiago-valparaiso-casablanca-4d3n",
+      "title": "Santiago, Valparaíso, Viña del Mar y Casablanca",
+      "region": "Santiago / Costa Central",
+      "duration": "4D/3N",
+      "price": 599.9,
+      "airport": "SCL",
+      "hotel": "Novotel Santiago Providencia",
+      "stars": "4★",
+      "img": "santiago-city-01.jpg",
+      "imgOK": true,
+      "excerpt": "Capital, patrimonio porteño, la costa de Viña del Mar y los viñedos del valle de Casablanca.",
+      "points": [
+        "Santiago",
+        "Valparaíso",
+        "Viña del Mar",
+        "Valle de Casablanca"
+      ],
+      "days": [
+        [
+          "Bienvenida a Santiago",
+          "Recepción en el aeropuerto SCL y traslado al hotel 4★. Primer contacto con la capital según horario del vuelo.",
+          [
+            [
+              "Según vuelo",
+              "Recepción en SCL y traslado a Providencia"
+            ],
+            [
+              "15:00",
+              "Ingreso al hotel sujeto a disponibilidad"
+            ],
+            [
+              "17:00",
+              "Paseo libre por Providencia y Costanera Center"
+            ],
+            [
+              "20:00",
+              "Cena libre y descanso"
+            ]
+          ]
+        ],
+        [
+          "Santiago histórico, barrios y miradores",
+          "Jornada guiada por los principales atractivos del centro cívico, mercados y barrios culturales.",
+          [
+            [
+              "08:00",
+              "Desayuno en el hotel"
+            ],
+            [
+              "09:00",
+              "Recojo y city tour: Plaza de Armas, La Moneda (exteriores)"
+            ],
+            [
+              "12:30",
+              "Almuerzo libre en sector Lastarria"
+            ],
+            [
+              "14:30",
+              "Mirador panorámico y barrios de Santiago (sujeto acceso)"
+            ],
+            [
+              "18:00",
+              "Regreso al hotel y tarde libre"
+            ]
+          ]
+        ],
+        [
+          "Valparaíso, Viña del Mar y viñedos de Casablanca",
+          "Excursión de jornada completa que combina costa, arte urbano y zona vinícola. Las degustaciones se consideran opcionales salvo confirmación.",
+          [
+            [
+              "07:30",
+              "Salida hacia el valle de Casablanca"
+            ],
+            [
+              "09:00",
+              "Parada panorámica en viñedo (degustación opcional)"
+            ],
+            [
+              "11:30",
+              "Recorrido por Valparaíso: cerros y miradores"
+            ],
+            [
+              "14:00",
+              "Almuerzo libre y paseo por Viña del Mar"
+            ],
+            [
+              "18:30",
+              "Retorno estimado a Santiago"
+            ]
+          ]
+        ],
+        [
+          "Despedida de Santiago",
+          "Desayuno y traslado de salida al aeropuerto según vuelo.",
+          [
+            [
+              "08:00",
+              "Desayuno sujeto a hora de vuelo"
+            ],
+            [
+              "Hasta 11:00",
+              "Check-out, equipaje y coordinación"
+            ],
+            [
+              "Según vuelo",
+              "Traslado SCL y finalización de servicios"
+            ]
+          ]
+        ]
+      ],
+      "includes": [
+        "Tres noches en hotel 4★ de referencia con desayuno",
+        "Traslados aeropuerto Santiago–hotel–aeropuerto",
+        "City tour de Santiago con guía local",
+        "Excursión compartida Valparaíso, Viña del Mar y Casablanca",
+        "Asistencia al viajero"
+      ],
+      "excludes": [
+        "Vuelos internacionales o internos",
+        "Degustaciones de vino y entradas no descritas",
+        "Almuerzos, cenas y propinas",
+        "Gastos personales y seguros"
+      ],
+      "season": "Todo el año",
+      "flightRoute": "Llegada/salida Santiago (SCL)"
+    },
+    {
+      "slug": "chile-puerto-varas-volcanes-petrohue-5d4n",
+      "title": "Puerto Varas, Frutillar, volcán Osorno y Petrohué",
+      "region": "Región de Los Lagos",
+      "duration": "5D/4N",
+      "price": 829.9,
+      "airport": "PMC",
+      "hotel": "Hotel Bellavista Puerto Varas",
+      "stars": "4★",
+      "img": "",
+      "excerpt": "Lagos, volcanes, Saltos del Petrohué y arquitectura de Frutillar con hotel cuatro estrellas.",
+      "points": [
+        "Puerto Montt",
+        "Puerto Varas",
+        "Frutillar",
+        "Volcán Osorno",
+        "Saltos del Petrohué"
+      ],
+      "days": [
+        [
+          "Llegada a Puerto Montt y traslado a Puerto Varas",
+          "Recepción en aeropuerto El Tepual y traslado al alojamiento frente al lago Llanquihue.",
+          [
+            [
+              "Según vuelo",
+              "Llegada a Puerto Montt (PMC)"
+            ],
+            [
+              "+45–75 min",
+              "Traslado a Puerto Varas"
+            ],
+            [
+              "Desde 15:00",
+              "Check-in Hotel Bellavista 4★ o equivalente"
+            ],
+            [
+              "17:00",
+              "Paseo libre por costanera y centro"
+            ]
+          ]
+        ],
+        [
+          "Frutillar y orillas del lago Llanquihue",
+          "Recorrido por casas tradicionales, entorno lacustre y jardines de Frutillar.",
+          [
+            [
+              "08:00",
+              "Desayuno"
+            ],
+            [
+              "09:00",
+              "Salida panorámica por costa del lago"
+            ],
+            [
+              "10:30",
+              "Frutillar Bajo, Teatro del Lago (exteriores)"
+            ],
+            [
+              "13:00",
+              "Almuerzo libre"
+            ],
+            [
+              "15:00",
+              "Miradores y pueblos del circuito según operador"
+            ],
+            [
+              "18:00",
+              "Retorno a Puerto Varas"
+            ]
+          ]
+        ],
+        [
+          "Volcán Osorno y Saltos del Petrohué",
+          "Excursión al Parque Nacional Vicente Pérez Rosales con miradores y cascadas.",
+          [
+            [
+              "08:00",
+              "Desayuno"
+            ],
+            [
+              "09:00",
+              "Recojo hacia Ensenada y volcán Osorno"
+            ],
+            [
+              "11:00",
+              "Miradores de volcán Osorno, acceso según clima"
+            ],
+            [
+              "13:00",
+              "Almuerzo libre"
+            ],
+            [
+              "14:30",
+              "Saltos del Petrohué y senderos habilitados"
+            ],
+            [
+              "18:00",
+              "Regreso a Puerto Varas"
+            ]
+          ]
+        ],
+        [
+          "Paisajes de Llanquihue a ritmo libre",
+          "Día para descansar o añadir navegación opcional en Lago Todos los Santos según temporada.",
+          [
+            [
+              "08:00",
+              "Desayuno"
+            ],
+            [
+              "09:30",
+              "Tiempo libre en la ciudad"
+            ],
+            [
+              "12:30",
+              "Almuerzo libre"
+            ],
+            [
+              "14:00",
+              "Opcional navegación/lago o visitas gastronómicas según disponibilidad"
+            ],
+            [
+              "19:00",
+              "Descanso en hotel"
+            ]
+          ]
+        ],
+        [
+          "Regreso desde Puerto Montt",
+          "Traslado al aeropuerto El Tepual y fin del servicio.",
+          [
+            [
+              "Según vuelo",
+              "Desayuno y check-out"
+            ],
+            [
+              "2–3 h antes",
+              "Traslado a aeropuerto PMC"
+            ],
+            [
+              "Según horario",
+              "Fin del circuito"
+            ]
+          ]
+        ]
+      ],
+      "includes": [
+        "Cuatro noches hotel 4★ con desayuno",
+        "Traslados llegada y salida desde PMC",
+        "Excursión Frutillar y Lago Llanquihue",
+        "Excursión volcán Osorno y Saltos del Petrohué",
+        "Asistencia de operador"
+      ],
+      "excludes": [
+        "Vuelos",
+        "Entradas y teleféricos no indicados",
+        "Navegación al Lago Todos los Santos (opcional)",
+        "Almuerzos/cenas y gastos personales"
+      ],
+      "season": "Todo el año; clima condiciona los paisajes",
+      "flightRoute": "Llegada/salida Puerto Montt (PMC)"
+    },
+    {
+      "slug": "chile-carretera-austral-capillas-marmol-4d3n",
+      "title": "Carretera Austral y Capillas de Mármol",
+      "region": "Aysén y lago General Carrera",
+      "duration": "4D/3N",
+      "price": 1199.9,
+      "airport": "BBA",
+      "hotel": "Hotel Dreams Patagonia Coyhaique",
+      "stars": "5★",
+      "img": "",
+      "excerpt": "La ruta escénica de Aysén, miradores de Cerro Castillo y navegación a Capillas de Mármol.",
+      "points": [
+        "Balmaceda",
+        "Coyhaique",
+        "Cerro Castillo",
+        "Puerto Río Tranquilo",
+        "Capillas de Mármol"
+      ],
+      "days": [
+        [
+          "Llegada a Balmaceda y Coyhaique",
+          "Recepción en aeropuerto de Balmaceda y traslado a Coyhaique, capital de Aysén.",
+          [
+            [
+              "Según vuelo",
+              "Recepción en aeropuerto BBA"
+            ],
+            [
+              "+50–75 min",
+              "Traslado a Coyhaique"
+            ],
+            [
+              "15:00",
+              "Ingreso a hotel superior de referencia"
+            ],
+            [
+              "17:00",
+              "Paseo por centro y miradores urbanos"
+            ]
+          ]
+        ],
+        [
+          "Carretera Austral y Capillas de Mármol",
+          "Jornada larga por la ruta hacia Puerto Río Tranquilo: paisajes de Cerro Castillo y navegación según el estado del lago General Carrera.",
+          [
+            [
+              "05:30–06:00",
+              "Salida muy temprana de Coyhaique"
+            ],
+            [
+              "09:30",
+              "Miradores de Cerro Castillo, paradas fotográficas"
+            ],
+            [
+              "12:00–13:00",
+              "Llegada a Puerto Río Tranquilo según camino"
+            ],
+            [
+              "13:30",
+              "Navegación Capillas de Mármol si autoridad autoriza zarpe"
+            ],
+            [
+              "16:00",
+              "Regreso terrestre, con paradas técnicas"
+            ],
+            [
+              "21:00–22:00",
+              "Llegada estimada a Coyhaique"
+            ]
+          ]
+        ],
+        [
+          "Reserva Nacional Coyhaique y paisaje patagónico",
+          "Ruta de menor intensidad para conocer naturaleza y entorno de Coyhaique, sujeto a condiciones del parque.",
+          [
+            [
+              "08:30",
+              "Desayuno"
+            ],
+            [
+              "10:00",
+              "Caminatas cortas y miradores de Reserva Nacional Coyhaique"
+            ],
+            [
+              "13:00",
+              "Almuerzo libre"
+            ],
+            [
+              "15:00",
+              "Paseo urbano y compras artesanales"
+            ],
+            [
+              "18:00",
+              "Regreso al hotel"
+            ]
+          ]
+        ],
+        [
+          "Salida desde Balmaceda",
+          "Desayuno y traslado al aeropuerto según horario.",
+          [
+            [
+              "Según vuelo",
+              "Check-out y desayuno"
+            ],
+            [
+              "2–3 h antes",
+              "Traslado a aeropuerto BBA"
+            ],
+            [
+              "Según vuelo",
+              "Fin del programa"
+            ]
+          ]
+        ]
+      ],
+      "includes": [
+        "Tres noches de hotel categoría superior de referencia con desayuno",
+        "Traslados Balmaceda–Coyhaique–Balmaceda",
+        "Excursión de jornada completa a Puerto Río Tranquilo",
+        "Navegación a Capillas de Mármol cuando opere el lago",
+        "Recorrido panorámico y reserva nacional según acceso"
+      ],
+      "excludes": [
+        "Vuelos",
+        "Entradas no detalladas",
+        "Almuerzos/cenas y propinas",
+        "Paseos de navegación sustitutos en caso de suspensión; se cotizan por separado"
+      ],
+      "season": "Preferente octubre–abril; viento y lago pueden suspender navegación",
+      "flightRoute": "Llegada/salida Balmaceda (BBA)"
+    },
+    {
+      "slug": "chile-pucon-villarrica-termas-5d4n",
+      "title": "Pucón, volcán Villarrica y termas",
+      "region": "Araucanía lacustre",
+      "duration": "5D/4N",
+      "price": 899.9,
+      "airport": "ZCO",
+      "hotel": "Hotel Casa Solaria",
+      "stars": "4★",
+      "img": "",
+      "excerpt": "Paisajes volcánicos, termas y lagos desde un hotel cuatro estrellas en Pucón.",
+      "points": [
+        "Temuco",
+        "Pucón",
+        "Volcán Villarrica",
+        "Termas",
+        "Huerquehue"
+      ],
+      "days": [
+        [
+          "Llegada a Temuco y Pucón",
+          "Recogida en aeropuerto Temuco La Araucanía (ZCO), traslado a Pucón y descanso.",
+          [
+            [
+              "Según vuelo",
+              "Llegada a ZCO"
+            ],
+            [
+              "+1 h 30 aprox.",
+              "Ruta hasta Pucón"
+            ],
+            [
+              "15:00",
+              "Ingreso a Hotel Casa Solaria 4★ de referencia"
+            ],
+            [
+              "17:00",
+              "Costanera del lago Villarrica y paseo urbano"
+            ]
+          ]
+        ],
+        [
+          "Volcán Villarrica y miradores lacustres",
+          "Circuito panorámico hacia el área de volcán Villarrica, sin ascenso técnico al cráter.",
+          [
+            [
+              "08:00",
+              "Desayuno"
+            ],
+            [
+              "09:00",
+              "Salida hacia los miradores volcánicos habilitados"
+            ],
+            [
+              "11:30",
+              "Paradas fotográficas y senderos cortos"
+            ],
+            [
+              "13:30",
+              "Almuerzo libre"
+            ],
+            [
+              "16:30",
+              "Regreso a Pucón"
+            ]
+          ]
+        ],
+        [
+          "Día termal",
+          "Experiencia de descanso en centro termal regional, a seleccionar según disponibilidad y presupuesto.",
+          [
+            [
+              "08:30",
+              "Desayuno"
+            ],
+            [
+              "10:00",
+              "Traslado a complejo termal seleccionado"
+            ],
+            [
+              "11:30–15:00",
+              "Baños termales y tiempo libre"
+            ],
+            [
+              "15:30",
+              "Retorno a Pucón"
+            ],
+            [
+              "19:00",
+              "Cena libre"
+            ]
+          ]
+        ],
+        [
+          "Naturaleza en Huerquehue",
+          "Senderos de dificultad moderada para observar bosques, cascadas y lagunas según habilitación del parque.",
+          [
+            [
+              "08:00",
+              "Desayuno"
+            ],
+            [
+              "09:00",
+              "Salida a Parque Nacional Huerquehue"
+            ],
+            [
+              "10:30–13:00",
+              "Caminata guiada por sendero habilitado de dificultad apta"
+            ],
+            [
+              "13:00",
+              "Box lunch o almuerzo libre según servicio"
+            ],
+            [
+              "16:30",
+              "Regreso"
+            ]
+          ]
+        ],
+        [
+          "Salida desde Temuco",
+          "Check-out y traslado al aeropuerto de Temuco.",
+          [
+            [
+              "Según vuelo",
+              "Desayuno y equipaje"
+            ],
+            [
+              "2 h 30–3 h antes",
+              "Traslado a ZCO"
+            ],
+            [
+              "Según vuelo",
+              "Fin del programa"
+            ]
+          ]
+        ]
+      ],
+      "includes": [
+        "Cuatro noches Hotel Casa Solaria 4★ de referencia con desayuno",
+        "Traslados aeropuerto Temuco–Pucón–Temuco",
+        "Circuito panorámico del volcán Villarrica",
+        "Excursión termal y visita naturaleza según contrato",
+        "Acompañamiento local"
+      ],
+      "excludes": [
+        "Vuelos",
+        "Ascenso técnico al cráter",
+        "Entradas a termas/parques si no figuran en confirmación",
+        "Comidas no mencionadas y gastos personales"
+      ],
+      "season": "Todo el año; termas y senderos sujetos a clima",
+      "flightRoute": "Llegada/salida Temuco (ZCO)"
+    },
+    {
+      "slug": "chile-rapa-nui-moais-5d4n",
+      "title": "Rapa Nui: moáis y cultura ancestral",
+      "region": "Isla de Pascua / Rapa Nui",
+      "duration": "5D/4N",
+      "price": 1299.9,
+      "airport": "IPC",
+      "hotel": "Hotel Hare Nua",
+      "stars": "4★",
+      "img": "",
+      "excerpt": "Moáis, Rano Raraku, Tongariki, Orongo y playas de la isla con hotel boutique 4★.",
+      "points": [
+        "Hanga Roa",
+        "Ahu Tahai",
+        "Rano Raraku",
+        "Tongariki",
+        "Anakena",
+        "Orongo"
+      ],
+      "days": [
+        [
+          "Bienvenida a Rapa Nui",
+          "Llegada a Mataveri e ingreso al hotel boutique de Hanga Roa.",
+          [
+            [
+              "Según vuelo",
+              "Llegada a aeropuerto Mataveri IPC"
+            ],
+            [
+              "+20–45 min",
+              "Traslado a hotel según servicio"
+            ],
+            [
+              "15:00",
+              "Ingreso a hotel boutique 4★"
+            ],
+            [
+              "17:30",
+              "Ahu Tahai, puesta de sol según condiciones y acceso"
+            ]
+          ]
+        ],
+        [
+          "Moáis, Rano Raraku y Tongariki",
+          "Circuito arqueológico con guía local acreditado por puntos habilitados del parque.",
+          [
+            [
+              "08:00",
+              "Desayuno"
+            ],
+            [
+              "09:00",
+              "Recojo con guía acreditado"
+            ],
+            [
+              "10:30",
+              "Rano Raraku (cantera de moáis)"
+            ],
+            [
+              "12:30",
+              "Ahu Tongariki: plataforma monumental"
+            ],
+            [
+              "14:30",
+              "Anakena y entorno costero"
+            ],
+            [
+              "17:30",
+              "Regreso a Hanga Roa"
+            ]
+          ]
+        ],
+        [
+          "Orongo y volcán Rano Kau",
+          "Patrimonio ceremonial de la aldea de Orongo y paisaje del cráter Rano Kau.",
+          [
+            [
+              "08:00",
+              "Desayuno"
+            ],
+            [
+              "09:00",
+              "Traslado al sector Rano Kau"
+            ],
+            [
+              "10:30",
+              "Visita guiada a Orongo en circuitos permitidos"
+            ],
+            [
+              "12:30",
+              "Almuerzo libre"
+            ],
+            [
+              "15:30",
+              "Paseo por Hanga Roa y mercado artesanal"
+            ]
+          ]
+        ],
+        [
+          "Cultura viva y tiempo libre",
+          "Día flexible de descanso y descubrimiento de tradiciones de la isla, con actividades adicionales a elegir.",
+          [
+            [
+              "08:30",
+              "Desayuno"
+            ],
+            [
+              "10:00",
+              "Encuentro cultural según operador disponible"
+            ],
+            [
+              "13:00",
+              "Almuerzo libre"
+            ],
+            [
+              "15:00",
+              "Playa o actividades opcionales según clima"
+            ],
+            [
+              "18:30",
+              "Retorno al hotel"
+            ]
+          ]
+        ],
+        [
+          "Salida desde Rapa Nui",
+          "Traslado al aeropuerto Mataveri y fin del programa.",
+          [
+            [
+              "Según vuelo",
+              "Desayuno y check-out"
+            ],
+            [
+              "2–3 h antes",
+              "Traslado a IPC"
+            ],
+            [
+              "Según vuelo",
+              "Fin de nuestros servicios"
+            ]
+          ]
+        ]
+      ],
+      "includes": [
+        "Cuatro noches de hotel boutique de referencia 4★ con desayuno",
+        "Traslados aeropuerto Mataveri–hotel–aeropuerto",
+        "Dos circuitos arqueológicos de referencia con guía local autorizado",
+        "Asistencia al viajero"
+      ],
+      "excludes": [
+        "Vuelos a Rapa Nui",
+        "Entrada al Parque Nacional Rapa Nui (a confirmar según nacionalidad)",
+        "Requisitos de Formulario Único de Ingreso FUI",
+        "Actividades opcionales, almuerzos y cenas"
+      ],
+      "season": "Todo el año; acceso a sitios arqueológicos regulado",
+      "flightRoute": "Llegada/salida Mataveri (IPC)"
+    },
+    {
+      "slug": "chile-santiago-valle-nevado-esqui-4d3n",
+      "title": "Santiago y Valle Nevado: aprende a esquiar",
+      "region": "Santiago / Andes centrales",
+      "duration": "4D/3N",
+      "price": 949.9,
+      "airport": "SCL",
+      "hotel": "Novotel Santiago Providencia",
+      "stars": "4★",
+      "img": "santiago-city-01.jpg",
+      "imgOK": true,
+      "excerpt": "Hotel 4★ en Santiago, una jornada de esquí con clase para principiantes y otro día de paisajes nevados.",
+      "points": [
+        "Santiago",
+        "Valle Nevado",
+        "Farellones"
+      ],
+      "days": [
+        [
+          "Llegada a Santiago",
+          "Recepción aeroportuaria y alojamiento de cuatro estrellas.",
+          [
+            [
+              "Según vuelo",
+              "Recepción en SCL y traslado al hotel"
+            ],
+            [
+              "15:00",
+              "Check-in Novotel Providencia"
+            ],
+            [
+              "17:00",
+              "Equipo de abrigo y preparación para la montaña"
+            ],
+            [
+              "20:00",
+              "Descanso"
+            ]
+          ]
+        ],
+        [
+          "Valle Nevado: primera clase de esquí",
+          "Día de iniciación con equipo estándar y clase colectiva para principiantes; el forfait y la clase dependen de temporada y contratación real.",
+          [
+            [
+              "05:00–06:30",
+              "Recojo temprano desde Santiago"
+            ],
+            [
+              "08:30–09:30",
+              "Llegada, vestimenta y rental"
+            ],
+            [
+              "10:00–12:00",
+              "Clase colectiva de iniciación según turno"
+            ],
+            [
+              "12:30–15:00",
+              "Práctica en zona habilitada y almuerzo libre"
+            ],
+            [
+              "16:00–19:00",
+              "Retorno a Santiago"
+            ]
+          ]
+        ],
+        [
+          "Farellones y panorámicas de nieve",
+          "Excursión panorámica en la cordillera, sin requerir experiencia de esquí; parques de nieve o góndola adicionales a confirmar.",
+          [
+            [
+              "07:30",
+              "Desayuno temprano"
+            ],
+            [
+              "08:30",
+              "Salida por Camino a Farellones"
+            ],
+            [
+              "10:30",
+              "Miradores de montaña y tiempo para fotografías"
+            ],
+            [
+              "12:30",
+              "Almuerzo libre"
+            ],
+            [
+              "15:00",
+              "Retorno por camino habilitado"
+            ],
+            [
+              "18:00",
+              "Tarde libre en Santiago"
+            ]
+          ]
+        ],
+        [
+          "Despedida de Santiago",
+          "Traslado a aeropuerto según horario de vuelo.",
+          [
+            [
+              "Según vuelo",
+              "Desayuno y check-out"
+            ],
+            [
+              "2–3 h antes",
+              "Traslado a SCL"
+            ],
+            [
+              "Según vuelo",
+              "Final del programa"
+            ]
+          ]
+        ]
+      ],
+      "includes": [
+        "Tres noches en hotel 4★ de Santiago con desayuno",
+        "Traslados aeropuerto",
+        "Excursión de iniciación al esquí en Valle Nevado con equipo/ticket/clase colectiva una jornada, sujeto a confirmar",
+        "Jornada panorámica Farellones/cordillera con transporte",
+        "Asistencia"
+      ],
+      "excludes": [
+        "Vuelos",
+        "Ropa personal de abrigo, guantes y gafas",
+        "Comidas, propinas y gastos personales",
+        "Actividades de nieve adicionales no indicadas"
+      ],
+      "season": "Invierno austral; nieve y remontes sujetos a condiciones y calendario oficial",
+      "flightRoute": "Llegada/salida Santiago (SCL)"
+    },
+    {
+      "slug": "chile-chiloe-cultural-naturaleza-4d3n",
+      "title": "Chiloé: cultura, palafitos y naturaleza",
+      "region": "Isla Grande de Chiloé",
+      "duration": "4D/3N",
+      "price": 799.9,
+      "airport": "MHC",
+      "hotel": "Hotel Parque Quilquico",
+      "stars": "4★",
+      "img": "",
+      "excerpt": "Iglesias patrimoniales, palafitos, Dalcahue y paisajes del archipiélago chilote con hotel 4★.",
+      "points": [
+        "Castro",
+        "Dalcahue",
+        "Chiloé",
+        "Parque Quilquico"
+      ],
+      "days": [
+        [
+          "Llegada a Chiloé y Castro",
+          "Recepción en Mocopulli (MHC), traslado al hotel y primeras vistas de Castro.",
+          [
+            [
+              "Según vuelo",
+              "Recepción aeropuerto MHC"
+            ],
+            [
+              "+30–45 min",
+              "Traslado al alojamiento"
+            ],
+            [
+              "15:00",
+              "Ingreso a Parque Quilquico o alternativa de 4★"
+            ],
+            [
+              "17:00",
+              "Paseo por palafitos y costanera de Castro"
+            ]
+          ]
+        ],
+        [
+          "Iglesias patrimoniales y Dalcahue",
+          "Recorrido guiado por patrimonio de madera, plazas y ferias artesanales.",
+          [
+            [
+              "08:00",
+              "Desayuno"
+            ],
+            [
+              "09:00",
+              "Salida hacia Dalcahue"
+            ],
+            [
+              "10:00",
+              "Iglesias y mercados locales según apertura"
+            ],
+            [
+              "12:30",
+              "Almuerzo libre con productos de mar"
+            ],
+            [
+              "14:00",
+              "Regreso a Castro y entorno patrimonial"
+            ],
+            [
+              "18:00",
+              "Regreso al hotel"
+            ]
+          ]
+        ],
+        [
+          "Naturaleza y tradiciones chilotas",
+          "Recorrido por paisajes rurales, bosques y costa según clima y rutas habilitadas.",
+          [
+            [
+              "08:30",
+              "Desayuno"
+            ],
+            [
+              "09:30",
+              "Salida hacia miradores y zonas rurales"
+            ],
+            [
+              "11:00",
+              "Recorrido de naturaleza de intensidad suave"
+            ],
+            [
+              "13:00",
+              "Almuerzo libre"
+            ],
+            [
+              "15:00",
+              "Tiempo para comunidades y artesanía según disponibilidad"
+            ],
+            [
+              "18:00",
+              "Regreso al hotel"
+            ]
+          ]
+        ],
+        [
+          "Salida de la isla",
+          "Check-out y traslado al aeropuerto de Mocopulli.",
+          [
+            [
+              "Según vuelo",
+              "Desayuno y equipaje"
+            ],
+            [
+              "2 h antes",
+              "Traslado al aeropuerto MHC"
+            ],
+            [
+              "Según vuelo",
+              "Fin del programa"
+            ]
+          ]
+        ]
+      ],
+      "includes": [
+        "Tres noches en Hotel Parque Quilquico 4★ de referencia con desayuno",
+        "Traslados aeropuerto Mocopulli–Castro–Mocopulli",
+        "Visitas guiadas patrimoniales y Dalcahue",
+        "Recorrido panorámico y natural de la isla",
+        "Asistencia local"
+      ],
+      "excludes": [
+        "Vuelos",
+        "Entradas no incluidas expresamente",
+        "Comidas y propinas",
+        "Navegaciones estacionales no confirmadas"
+      ],
+      "season": "Todo el año, clima variable",
+      "flightRoute": "Llegada/salida Mocopulli (MHC); alternativa por Puerto Montt"
+    }
+  ]
+}

@@ -190,9 +190,16 @@ def trip_card(item, kind: str, base: str = "", lazy: bool = True) -> str:
         tags = ' '.join(dict.fromkeys((item.get('styles') or []) + [COUNTRY_SLUG.get(item['country'], ''), slug_duracion(item['nights'])]))
         cta = "Ver paquete"
 
+    # Los paquetes en preparación conservan una tarjeta limpia, sin imagen rota.
+    photo = (picture(item['img'], item['alt'], base, lazy) if item.get('img')
+             else '<div class="lx-chile-card-pending" role="img" aria-label="Foto de destino pendiente">'
+                  '<i class="fa-regular fa-image" aria-hidden="true"></i>'
+                  '<span>Fotografía del destino próximamente</span></div>')
+    price_caption = ('Tarifa objetivo · cotización previa' if item.get('quoteOnly') and item.get('country') == 'Chile'
+                     else 'Desde')
     return f"""<article class="trip-card" data-tags="{tags}">
           <div class="trip-card__media">
-            {picture(item['img'], item['alt'], base, lazy)}
+            {photo}
             <span class="tag">{tag}</span>
           </div>
           <div class="trip-card__body">
@@ -200,7 +207,7 @@ def trip_card(item, kind: str, base: str = "", lazy: bool = True) -> str:
             <h3>{item['title']}</h3>
             <p>{item['excerpt']}</p>
             <div class="price-row">
-              <div class="price"><small>Desde</small><strong>{price_label(item)}</strong></div>
+              <div class="price"><small>{price_caption}</small><strong>{price_label(item)}</strong></div>
               <a class="card-btn" href="{href}">{cta}<span class="visually-hidden">: {item['title']}</span></a>
             </div>
           </div>
@@ -1022,9 +1029,9 @@ def build_experience_details() -> None:
 
 def build_package_details() -> None:
     for item in DATA["packages"]:
-        if item.get("country") == "Colombia" and (ROOT / "paquetes" / f"{item['slug']}.html").exists():
+        if item.get("country") in ("Colombia", "Chile") and (ROOT / "paquetes" / f"{item['slug']}.html").exists():
             PAGES.append((f"paquetes/{item['slug']}.html", "0.8"))
-            print(f"  ↺ paquetes/{item['slug']}.html (ficha Colombia preservada)")
+            print(f"  ↺ paquetes/{item['slug']}.html (ficha premium/gestionada preservada)")
             continue
         itinerary = "".join(f"<li>{day}</li>" for day in item["itinerary"])
         includes = "".join(
