@@ -1225,7 +1225,7 @@
  'use strict';
  const words={1:'una estrella',2:'dos estrellas',3:'tres estrellas',4:'cuatro estrellas',5:'cinco estrellas'};
  function hotelText(t){
-   return String(t||'').replace(/([1-5])(?:\\.5)?\\s*(?:★|\\bestrellas?\\b)/gi,(match,n)=>match.includes('.5')?words[n]+' y media':words[n]);
+   return String(t||'').replace(/([1-5])(?:\.5)?\s*(?:★|\bestrellas?\b)/gi,(match,n)=>match.includes('.5')?words[n]+' y media':words[n]);
  }
  function clean(){
    const main=document.querySelector('main');
@@ -1247,7 +1247,7 @@
      const tag=card.querySelector('.trip-card__media .tag');
      if(!tag)return;
      const old=tag.textContent.trim();
-     if(!/^(?:[0-9]+D\\s*[\\/·-]\\s*[0-9]+N|[1-5]\\s*(?:★|estrellas?)|cotizaci[oó]n previa|tarifa objetivo)/i.test(old))return;
+     if(!/^(?:[0-9]+D\s*[\/·-]\s*[0-9]+N|[1-5]\s*(?:★|estrellas?)|cotizaci[oó]n previa|tarifa objetivo)/i.test(old))return;
      const t=(card.querySelector('h3')?.textContent||'').toLowerCase();
      tag.textContent=/rapa nui|isla de pascua/.test(t)?'Cultura ancestral':
        /caf[eé]|cafetera/.test(t)?'Cultura cafetera':
