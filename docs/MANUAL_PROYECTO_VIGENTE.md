@@ -147,3 +147,32 @@ Al terminar cada intervención: (1) revisar el comportamiento realmente integrad
 - **Buscador del index:** la fuente es `assets/js/inicio-redesign.js`. Sugiere destinos únicos, sin duplicar tarjetas: `Cusco`, `Machu Picchu` y `Medellín` dan una entrada cada uno; `Colombia` muestra país y ciudades asociadas. La navegación transmite `ciudad` o `destino`, `fecha`, `adults`, `children` y `origen` a `paquetes.html`. Cambios de resultados/tarifas requerirían una revisión específica del catálogo y la operación.
 - **Pruebas efectuadas sobre código fuente:** sintaxis de `cuentas.js`, `welcome-points.js` y `expedition-dashboard.js`; destinos sin etiquetas duplicadas; calendario quincenal en 15/16/30 de noviembre, 1 de diciembre y febreros normales/bisiestos; imagen WebP incorporada; `auth-config` con datos públicos. El sitio se encontró en resultados de búsqueda externos, pero esto **no** demuestra indexación exhaustiva de cada página.
 - **No ejecutado:** inicio de sesión real contra Google/Apps Script con cuenta del cliente, reserva de prueba, simulación con tarifas de terceros, cobro/captura PayPal; se hará QA funcional específico, sin modificar cobros en este cambio.
+
+
+## 14. Inventario por país y modernización de Chile (11 de noviembre de 2026)
+
+El inventario mantenido en [`docs/CATALOGO_ITINERARIOS_2026-11-11.md`](CATALOGO_ITINERARIOS_2026-11-11.md) enumera los **38 paquetes de 8 países** y los días de cada programa chileno; distingue productos del catálogo de fichas históricas que ya no se pueden reservar automáticamente.
+
+### Productos de Chile
+
+- **Desierto de Atacama Premium 5D/4N:** plantilla de referencia con Hotel Terrantai. Tarifas configuradas para 1 y 2 adultos; sin tarifa infantil automatizada.
+- **Santiago y Atacama 5D/4N:** plantilla de referencia de dos ciudades; vuelos internos Santiago (SCL) ↔ Calama (CJC) opcionales. Las tarifas publicadas de las categorías se utilizan **para dos adultos en doble o matrimonial**, no se aplican automáticamente a single/triple/familiar sin suplemento validado.
+- **Patagonia y Torres del Paine 6D/5N:** ficha modernizada usando la misma estructura visual, itinerario, galería, tarjetas de hotel, consulta de vuelos con destino Punta Arenas (PUQ) y reglas de ocupación definidas. El precio es por persona en habitación **doble para dos adultos**; no hay tarifa aprobada para otras ocupaciones. Hoteles y servicios sujetos a confirmación.
+- **`paquetes/chile-atacama.html` antiguo:** programa 6D/5N que no forma parte del catálogo actual y carece de precio; marcado `noindex`, con aviso de versión histórica y botón de reserva automática desactivado. No eliminarlo sin decidir si se comercializará de nuevo.
+
+### Tarifas y validación
+
+La ficha compartida suma mediante `assets/js/package-product-20261108.js`:
+
+`Total mostrado = base de paquete por ocupación + vuelo total para el grupo + suplemento de hotel para la estancia - descuento aplicable al paquete`.
+
+`assets/js/booking.js` recalcula con los mismos conceptos. La suma de vuelos **no se multiplica otra vez por personas**: la API devuelve un total para los viajeros seleccionados. La diferencia hotelera corresponde al grupo y las noches de la estancia. En Chile los valores solo son utilizables automáticamente con la ocupación definida en el catálogo; las tarifas no configuradas provocan un mensaje de cotización previa, también validado en el formulario de pasajeros.
+
+**Importante:** revisar la fórmula en el código no equivale a realizar búsquedas confirmadas con SerpAPI ni a completar una compra. La API pública de Apps Script no respondió a la comprobación desde el entorno de investigación y no se consumieron búsquedas reales ni órdenes PayPal durante esta intervención. El flujo debe ensayarse en navegador con respuesta real, ocupaciones, fechas y backend desplegado antes de ampliar la venta automática.
+
+### Seguridad y operación del destino
+
+- Se eliminó del programa actual de Patagonia la visita a la antigua pingüinera turística de **Seno Otway** (cerrada) y se menciona **Isla Magdalena** solo como navegación opcional, estacional y sujeta a cupos y clima. No incluirla en el precio sin coste/proveedor confirmado. CONAF declara la temporada 2026–2027 del Monumento Natural Los Pingüinos entre el 15/10/2026 y el 31/03/2027.
+- La entrada al Parque Nacional Torres del Paine es adicional; validar el sistema tarifario vigente y condiciones en CONAF/Pases Parques antes de cotizar. Grey depende de clima y navegación operativa.
+- Las fotografías locales deben estar en `assets/img/` y corresponder al destino, nunca asumir fotos inexistentes de hoteles. Patagonia tiene una imagen válida y necesitará galería ampliada con fotos verificadas.
+- La plantilla HTML se cambia puntualmente sin regenerar toda la web con `tools/build.py` salvo inspección del diff: existen fichas manuales recientes y un rebuild masivo podría sustituirlas accidentalmente. Documentar nuevas fichas en el catálogo.
