@@ -588,7 +588,6 @@
     window.scrollTo({top:0,behavior:'smooth'});
   }
   el('flightSummaryEdit').addEventListener('click',openEditSearch);
-  el('flightModifySearch').addEventListener('click',openEditSearch);
   // Apps Script ContentService uses a different origin. JSONP bypasses CORS without
   // exposing the API token. The backend validates the callback and returns data only.
   function getLivePrices(query) {
