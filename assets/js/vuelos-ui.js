@@ -14,6 +14,34 @@
   const collator=new Intl.Collator('es',{sensitivity:'base'});
   const errors=document.getElementById('flightError');
   const airportControls=[];
+  // Los menús se mueven temporalmente al body para evitar recortes por el hero.
+  function floatingMenu(panel,trigger,widthLimit=350){
+    const home=panel.parentNode;
+    let floating=false;
+    function reposition(){
+      if(!floating||panel.hidden)return;
+      const rect=trigger.getBoundingClientRect();
+      const viewportWidth=document.documentElement.clientWidth;
+      const viewportHeight=window.innerHeight;
+      const width=Math.min(widthLimit,viewportWidth-20);
+      const left=Math.max(10,Math.min(rect.left,viewportWidth-width-10));
+      const below=viewportHeight-rect.bottom-12,above=rect.top-12;
+      const estimated=Math.min(350,panel.scrollHeight||350);
+      const flip=below<estimated&&above>below;
+      const space=Math.max(90,Math.min(380,flip?above:below));
+      Object.assign(panel.style,{
+        position:'fixed',zIndex:'9998',width:width+'px',maxWidth:(viewportWidth-20)+'px',
+        left:left+'px',right:'auto',top:(flip?Math.max(8,rect.top-Math.min(space,estimated)-8):rect.bottom+8)+'px',
+        maxHeight:space+'px',overflowY:'auto'
+      });
+    }
+    window.addEventListener('resize',reposition);
+    window.addEventListener('scroll',reposition,true);
+    return {
+      open(){if(floating)return;document.body.append(panel);floating=true;reposition()},
+      close(){if(!floating)return;home.append(panel);floating=false;panel.removeAttribute('style')}
+    };
+  }
 
   function enhanceAirport(select){
     const field=select.closest('.flight-field');
@@ -40,6 +68,7 @@
     list.id=select.id+'Matches';list.className='lx-flight-airport-list';
     list.setAttribute('role','listbox');list.hidden=true;
     host.append(text,expand,list);
+    const floating=floatingMenu(list,text,365);
     select.after(host);
     select.classList.add('lx-flight-original-select');
     select.required=false; // La validación se realiza sobre el buscador visible.
@@ -58,7 +87,7 @@
       else text.value='';
     };
     function close(){
-      list.hidden=true;active=-1;
+      list.hidden=true;floating.close();active=-1;
       text.setAttribute('aria-expanded','false');
       text.removeAttribute('aria-activedescendant');
     }
@@ -104,7 +133,7 @@
         btn.addEventListener('click',()=>choose(item));
         list.append(btn);
       });
-      list.hidden=false;active=-1;text.setAttribute('aria-expanded','true');
+      list.hidden=false;floating.open();active=-1;text.setAttribute('aria-expanded','true');
       text.removeAttribute('aria-activedescendant');
     }
     text.addEventListener('focus',()=>{text.select();open(text.value)});
@@ -131,7 +160,7 @@
       text.focus();open('',true);
     });
     document.addEventListener('pointerdown',event=>{
-      if(!host.contains(event.target))close();
+      if(!host.contains(event.target)&&!list.contains(event.target))close();
     });
     select.addEventListener('change',sync);
     sync();
@@ -160,6 +189,7 @@
     const popup=document.createElement('div');
     popup.className='lx-flight-travelers-menu';
     popup.hidden=true;
+    const floating=floatingMenu(popup,button,320);
     popup.setAttribute('role','dialog');
     popup.setAttribute('aria-label','Seleccionar adultos y niños');
     function row(name,description,type){
@@ -207,19 +237,21 @@
         nA+' '+(nA===1?'adulto':'adultos')+(nC?' · '+nC+' '+(nC===1?'niño':'niños'):'');
     }
     function close(focus=false){
-      popup.hidden=true;button.setAttribute('aria-expanded','false');
+      popup.hidden=true;floating.close();button.setAttribute('aria-expanded','false');
       if(focus)button.focus();
     }
     button.addEventListener('click',()=>{
-      popup.hidden=!popup.hidden;
-      button.setAttribute('aria-expanded',String(!popup.hidden));
+      if(!popup.hidden){close();return}
+      popup.hidden=false;
+      floating.open();
+      button.setAttribute('aria-expanded','true');
       render();
     });
     popup.addEventListener('keydown',event=>{
       if(event.key==='Escape'){close(true)}
     });
     document.addEventListener('pointerdown',event=>{
-      if(!field.contains(event.target))close();
+      if(!field.contains(event.target)&&!popup.contains(event.target))close();
     });
     adults.addEventListener('change',render);
     children.addEventListener('change',render);
