@@ -922,3 +922,21 @@ body.lx-flight-searching{overflow:hidden}
 }
 .flight-load-more:hover{background:#d1f0db;transform:translateY(-1px)}
 .flight-load-more:focus-visible{outline:3px solid #7cdc98;outline-offset:3px}
+
+/* Flight offer cards: subtle brand accents without modifying pricing or layout. */
+body.lx-flights-only .flight-marketplace .flight-offer--detailed{
+  border-color:#d2e8db;
+  box-shadow:0 6px 24px rgba(5,75,36,.065);
+  transition:border-color .18s,box-shadow .18s,transform .18s;
+}
+body.lx-flights-only .flight-marketplace .flight-offer--detailed:hover{
+  border-color:#8bd5a3;
+  box-shadow:0 12px 30px rgba(9,95,44,.11);
+  transform:translateY(-1px);
+}
+body.lx-flights-only .flight-marketplace .flight-offer__carrier strong{color:#145435}
+body.lx-flights-only .flight-marketplace .flight-leg__middle span:nth-child(2){color:#07873e}
+body.lx-flights-only .flight-sortbar__buttons button[aria-pressed="true"]{
+  background:linear-gradient(110deg,#e6f9eb,#d8f0df);
+  border-color:#8cd2a4;
+}
