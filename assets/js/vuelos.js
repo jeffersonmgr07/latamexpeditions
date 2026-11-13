@@ -144,7 +144,10 @@
     AM:'Aeroméxico', G3:'GOL', AD:'Azul', AA:'American Airlines',
     UA:'United Airlines', DL:'Delta Air Lines', '2K':'Avianca Ecuador',
     P5:'Wingo', W4:'Wizz Air Malta', '4C':'LATAM Colombia',
-    '5Q':'Euroairlines', VB:'Viva Aerobus', Y4:'Volaris', '9R':'SATENA'
+    '5Q':'Euroairlines', VB:'Viva Aerobus', Y4:'Volaris', '9R':'SATENA',
+    KL:'KLM', QR:'Qatar Airways', LH:'Lufthansa', AF:'Air France',
+    BA:'British Airways', AC:'Air Canada', TK:'Turkish Airlines',
+    CM:'Copa Airlines', WN:'Southwest Airlines', G3:'GOL'
   };
   let currentSearch = 0, allOffers = [], activeSort = 'price', currentQuery = null;
   function setBusy(busy) {
@@ -225,26 +228,35 @@
     if (days <= 270) return -0.10;
     return -0.15;
   }
-  // Los logos vienen de Google Flights / SerpApi, nunca de URLs arbitrarias.
+  // Solo se muestran logotipos oficiales disponibles en la respuesta o en Google Flights.
   function airlineLogoUrl(seg,airline) {
-    const url=String(seg?.airlineLogo||'');
-    if(/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/70px\/[A-Za-z0-9_-]+\.png$/.test(url)) return url;
-    const name=String(airline||'').toLowerCase();
-    const known=[
+    const url=String(seg?.airlineLogo||seg?.airline_logo||'');
+    if(/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/(?:70px|100px)\/[A-Za-z0-9_-]+\.png$/.test(url))return url;
+    const raw=String(airline||seg?.airline||'').trim();
+    const normalized=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    const named=[
       ['jetsmart','JA'],['latam','LA'],['avianca','AV'],['sky airline','H2'],
-      ['copa','CM'],['aeroméxico','AM'],['american airlines','AA'],['united','UA'],
-      ['iberia','IB'],['gol','G3'],['azul','AD'],['aerolíneas argentinas','AR']
+      ['copa','CM'],['aeromexico','AM'],['american airlines','AA'],['united','UA'],
+      ['iberia','IB'],['gol','G3'],['azul','AD'],['aerolineas argentinas','AR'],
+      ['klm','KL'],['qatar','QR'],['lufthansa','LH'],['air france','AF'],
+      ['british airways','BA'],['air canada','AC'],['delta','DL'],['turkish','TK']
     ];
-    const code=known.find(([key])=>name.includes(key))?.[1];
+    const code=named.find(([name])=>normalized.includes(name))?.[1]||
+      (airlineNames[raw.toUpperCase()]?raw.toUpperCase():'');
     return code?'https://www.gstatic.com/flights/airline_logos/70px/'+code+'.png':'';
   }
   function logoNode(seg,airline){
     const url=airlineLogoUrl(seg,airline);
-    const holder=node('span','flight-offer__airline-icon','✈');
+    const holder=node('span','flight-offer__airline-icon');
+    const fallback=node('i','fa-solid fa-plane');
+    fallback.setAttribute('aria-hidden','true');
+    holder.append(fallback);
     if(url){
-      const img=document.createElement('img');img.src=url;img.loading='lazy';
-      img.alt='';img.width=29;img.height=29;
-      img.addEventListener('load',()=>{holder.replaceChildren(img)});
+      const img=document.createElement('img');
+      img.alt='';img.width=38;img.height=38;img.loading='lazy';
+      img.addEventListener('load',()=>holder.replaceChildren(img),{once:true});
+      img.addEventListener('error',()=>img.remove(),{once:true});
+      img.src=url;
     }
     return holder;
   }
@@ -312,7 +324,11 @@
     const card = node('article','flight-offer flight-offer--detailed');
     const body = node('div','flight-offer__body');
     const carrier = node('div','flight-offer__carrier');
-    carrier.append(logoNode(offer.outbound?.segments?.[0],offer.airline),node('strong','',airlineName(offer.airline)));
+    const segments=[...(offer.outbound?.segments||[]),...(offer.inbound?.segments||[])];
+    const carriers=[...new Map(segments.filter(seg=>seg?.airline).map(seg=>[seg.airline,seg])).values()];
+    if(!carriers.length)carriers.push({airline:offer.airline,airlineLogo:offer.airlineLogo});
+    carriers.slice(0,3).forEach(seg=>carrier.append(logoNode(seg,seg.airline)));
+    carrier.append(node('strong','',carriers.map(seg=>airlineName(seg.airline)).join(' · ')));
     // Las propuestas para otras fechas no se mezclan con las solicitadas.
     body.append(carrier);
     body.append(tripRow('IDA',offer.originAirport || offer.origin || currentQuery.origin,
