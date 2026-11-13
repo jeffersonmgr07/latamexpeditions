@@ -253,7 +253,7 @@
   function queryNow(){
     return {destination:destination.value.trim(),check_in_date:checkin.value,
       check_out_date:checkout.value,adults:String(adults),children:String(children),
-      children_ages:ages.join(','),category:category.value};
+      children_ages:ages.join(','),category:category.value,hotel_name:focusedHotel};
   }
   function getHotels(query,page){
     const endpoint=String(window.LATAM_FLIGHTS_API_URL||'').trim();
@@ -297,6 +297,10 @@
   function render(){
     cards.replaceChildren();
     const ordered=hotels.slice();
+    if(sort.value==='recommended'&&activeQuery&&activeQuery.hotel_name){
+      const focus=norm(activeQuery.hotel_name);
+      ordered.sort((a,b)=>Number(norm(b.name)===focus)-Number(norm(a.name)===focus));
+    }
     if(sort.value==='priceAsc')ordered.sort((a,b)=>(a.total||Infinity)-(b.total||Infinity));
     if(sort.value==='priceDesc')ordered.sort((a,b)=>(b.total||-1)-(a.total||-1));
     if(sort.value==='rating')ordered.sort((a,b)=>(b.rating||0)-(a.rating||0));
@@ -334,7 +338,8 @@
     const label=Number(q.adults)+' '+(q.adults==='1'?'adulto':'adultos')+
       (Number(q.children)?' · '+q.children+' '+(q.children==='1'?'niño':'niños'):'');
     return q.destination+' · '+q.check_in_date+' — '+q.check_out_date+' · '+label+
-      (q.category!=='all'?' · '+q.category+' estrellas':'');
+      (q.category!=='all'?' · '+q.category+' estrellas':'')+
+      (q.hotel_name?' · '+q.hotel_name:'');
   }
   async function lookup(page=0){
     if(busy)return;
@@ -389,6 +394,36 @@
     document.body.classList.add('lx-hotel-editing');
     window.scrollTo({top:0,behavior:'smooth'});destination.focus({preventScroll:true});
   });
+  // Carrusel de alojamientos de inspiración. Se mantiene al final del contenido
+  // cuando aparecen los resultados (orden DOM: buscador → resultados → destacados).
+  const featuredTrack=$('hotelFeaturedTrack');
+  if(featuredTrack){
+    const prev=$('hotelFeaturedPrev'),next=$('hotelFeaturedNext');
+    function updateFeaturedArrows(){
+      const overflow=Math.max(0,featuredTrack.scrollWidth-featuredTrack.clientWidth);
+      prev.disabled=featuredTrack.scrollLeft<=3||overflow<3;
+      next.disabled=featuredTrack.scrollLeft>=overflow-3||overflow<3;
+    }
+    const scrollFeatured=direction=>{
+      const first=featuredTrack.querySelector('.hotel-featured-card');
+      featuredTrack.scrollBy({left:(first?first.getBoundingClientRect().width+18:290)*direction,behavior:'smooth'});
+    };
+    prev.addEventListener('click',()=>scrollFeatured(-1));
+    next.addEventListener('click',()=>scrollFeatured(1));
+    featuredTrack.addEventListener('scroll',updateFeaturedArrows,{passive:true});
+    window.addEventListener('resize',updateFeaturedArrows);
+    updateFeaturedArrows();
+    featuredTrack.querySelectorAll('[data-featured-hotel]').forEach(button=>{
+      button.addEventListener('click',()=>{
+        if(busy)return;
+        focusedHotel=button.dataset.featuredHotel||'';
+        destination.value=button.dataset.featuredCity||'';
+        closeDest();closeTravelers();
+        form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+      });
+    });
+  }
+
   // Permite precargar parámetros desde otras secciones sin limitar destinos.
   const params=new URLSearchParams(location.search);
   if(params.has('destination'))destination.value=String(params.get('destination')).slice(0,90);
