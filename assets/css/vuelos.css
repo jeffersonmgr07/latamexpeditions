@@ -902,3 +902,23 @@ body.lx-flight-searching{overflow:hidden}
   body.lx-flights-only .flight-search-summary__inner{padding:10px 12px}
   body.lx-flights-only .hero--flights{scroll-margin-top:calc(var(--latam-header-utility-height,36px) + 79px)}
 }
+
+/* Ampliación visual de resultados disponibles en la consulta actual. */
+.flight-load-more[hidden]{display:none!important}
+.flight-load-more{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width:min(100%,320px);
+  margin:19px auto 22px;
+  padding:13px 18px;
+  border:1px solid #95d7ad;
+  border-radius:999px;
+  background:#e6f7eb;
+  color:#0b6638;
+  font:800 13px Inter,system-ui,sans-serif;
+  cursor:pointer;
+  transition:background .18s,transform .18s;
+}
+.flight-load-more:hover{background:#d1f0db;transform:translateY(-1px)}
+.flight-load-more:focus-visible{outline:3px solid #7cdc98;outline-offset:3px}
