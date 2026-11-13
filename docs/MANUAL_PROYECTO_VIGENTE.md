@@ -42,6 +42,16 @@
 - Tras editar archivos de catálogo o fuentes generadas, ejecutar las herramientas de construcción/validación del repositorio (por ejemplo `python3 tools/build.py` si corresponde al archivo modificado). Inspeccionar siempre los diffs para evitar sobrescribir ediciones manuales de fichas.
 - La consola privada de productos conserva **costos de proveedores, márgenes, datos comerciales, hoteles base y borradores** fuera del HTML público. El circuito deseado es Borrador → En revisión → Aprobado → Publicado; el hecho de guardar un borrador no confirma su publicación.
 
+### Ofertas fijas de hotel · 13/11/2026
+
+- Cuatro alojamientos destacados en hoteles.html: Dreams Playa Bonita (US$284.90), Westin Playa Bonita (US$200.90), Viajero Tayrona (US$123.90), Hotel Tocarema (US$116.90), por habitación y noche, para 1–2 adultos sin niños. Importes convertidos de soles a dólares usando PEN→USD 0.293273 (13/11/2026), con descuento del 10 % y terminación comercial .90.
+- Frontend assets/js/hotel-ofertas.js: modal propio de fechas, calendario de 90 días, exclusión de fechas festivas de Panamá y Colombia, pasajeros y checkout PayPal.
+- Backend backend/Codigo.gs: precios y validación de importe independientes del navegador; recalcula noches, bloqueos y cupos confirmados, reutilizando las operaciones PayPal createOrder y captureOrder. El comprobante indica que la confirmación del establecimiento se envía por separado.
+- El cobro está bloqueado hasta configurar la propiedad privada HOTEL_OFFERS_ONLINE_ENABLED=true y los cupos autorizados en HOTEL_OFFER_INVENTORY, por ejemplo: {"hotel-oferta-hotel-tocarema":{"2026-11-18":1,"2026-11-19":1}}.
+- Bloqueos opcionales adicionales en HOTEL_OFFER_BLACKOUTS, por ejemplo: {"CO":["2026-11-20"],"PA":[],"hotel-oferta-hotel-tocarema":["2026-11-21"]}. Las exclusiones estándar se aplican en frontend y servidor.
+- Para activar pagos reales, actualizar backend/Codigo.gs en el Apps Script de Reservas y Pagos (DISTINTO del proyecto Mini API de Vuelos/Hoteles). GitHub no despliega automáticamente Apps Script. Antes de habilitar, contratar inventario con el proveedor y validar PayPal sandbox, recepción, correo y conciliación.
+- Si el servidor no valida el cupo, el usuario puede consultar por WhatsApp sin cargo.
+
 ## 4. Vuelos y hoteles: fuente actual SerpAPI
 
 **Buscador independiente de hoteles (13/11/2026):** `hoteles.html`, `assets/js/hoteles.js` y `assets/css/hoteles.css` ofrecen una página exclusiva con destino libre mundial, check-in, check-out, adultos/niños y edades, categoría 2–5 estrellas o todas, resultados con imagen, valoración y tarifa observada. El enlace de Hoteles del menú navega a `hoteles.html`. Se reutilizan los calendarios y selectores personalizados de `assets/js/home-controls.js`.
