@@ -421,7 +421,7 @@
         holder?.append(fallback);
       },{once:true});
     });
-    featuredTrack.querySelectorAll('[data-featured-hotel]').forEach(button=>{
+    featuredTrack.querySelectorAll('[data-featured-hotel]:not([data-hotel-offer-id])').forEach(button=>{
       button.addEventListener('click',()=>{
         if(busy)return;
         focusedHotel=button.dataset.featuredHotel||'';
