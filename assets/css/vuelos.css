@@ -958,3 +958,76 @@ body.lx-flights-only .flight-marketplace .flight-offer--detailed:focus-within{
   border-color:#EB09A7;
   box-shadow:0 0 0 1px rgba(235,9,167,.30),0 9px 24px rgba(235,9,167,.16);
 }
+
+/* LATAM mobile polish: simplified hero, compact results summary and pulsing brand loader. */
+.lx-flight-search-overlay__plane{background:radial-gradient(circle at 30% 30%,#fffbea,#f2f8f0 70%);border-color:#d2e7cc}
+.lx-flight-search-overlay__plane img{display:block;width:64px;height:64px;object-fit:contain;animation:lx-latam-logo-pulse 1.9s ease-in-out infinite;filter:drop-shadow(0 3px 7px rgba(158,121,20,.16))}
+.lx-flight-search-overlay__plane img[hidden],.lx-flight-search-overlay__plane i[hidden]{display:none!important}
+@keyframes lx-latam-logo-pulse{
+  0%,100%{transform:scale(.91);filter:drop-shadow(0 2px 5px rgba(190,148,32,.16))}
+  50%{transform:scale(1.10);filter:drop-shadow(0 0 14px rgba(242,186,46,.50))}
+}
+@media(max-width:650px){
+  body.lx-flights-only .hero--flights .hero__content>p:not(.flight-hero-note){display:none!important}
+  body.lx-flights-only .hero--flights .hero__content>h1{margin-bottom:20px}
+  body.lx-flights-only .flight-search-summary{
+    width:calc(100% - 20px);
+    max-width:calc(100% - 20px);
+    margin:6px auto 0;
+    border-radius:18px;
+    box-sizing:border-box;
+  }
+  body.lx-flights-only .flight-search-summary__inner{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"route edit" "date date" "pax cabin";
+    align-items:center;
+    gap:9px 10px;
+    width:100%;padding:12px 13px;
+    box-sizing:border-box;
+  }
+  body.lx-flights-only .flight-search-summary__inner>span{
+    min-width:0;
+    flex:none;
+    border:0;
+    padding:0;
+    margin:0;
+    font-size:12px;
+    line-height:1.32;
+  }
+  body.lx-flights-only .flight-search-summary__route{
+    grid-area:route;
+    font-size:clamp(12px,3.6vw,16px)!important;
+    font-weight:850;
+    letter-spacing:-.02em;
+    overflow-wrap:anywhere;
+  }
+  body.lx-flights-only .flight-search-summary__edit{
+    grid-area:edit;
+    justify-self:end;
+    flex:none;
+    margin:0;
+    padding:8px 10px;
+    white-space:nowrap;
+    font-size:11px;
+  }
+  body.lx-flights-only .flight-search-summary__date{
+    grid-area:date;
+    font-size:12px;
+    font-weight:750;
+    border-top:1px solid #e1ece3!important;
+    padding-top:10px!important;
+  }
+  body.lx-flights-only .flight-search-summary__pax{grid-area:pax}
+  body.lx-flights-only .flight-search-summary__cabin{grid-area:cabin;justify-self:end}
+  body.lx-flights-only .flight-search-summary__date::before,
+  body.lx-flights-only .flight-search-summary__pax::before,
+  body.lx-flights-only .flight-search-summary__cabin::before{font-size:12px}
+}
+@media(max-width:375px){
+  body.lx-flights-only .flight-search-summary__inner{gap:8px;padding:10px}
+  body.lx-flights-only .flight-search-summary__edit{padding:7px 8px;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .lx-flight-search-overlay__plane img{animation:none}
+}
