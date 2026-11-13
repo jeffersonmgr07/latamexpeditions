@@ -44,11 +44,45 @@
    const panel=create('div','lx-picker-popover');panel.hidden=true;
    panel.setAttribute('role','dialog');panel.setAttribute('aria-label',label?.textContent.trim()||'Seleccionar');
    host.append(trigger,panel);
+   const flightPicker=!!input.closest('body.lx-flights-only');
+   let portaled=false;
+   const positionPanel=()=>{
+     if(!portaled||panel.hidden)return;
+     const anchor=trigger.getBoundingClientRect();
+     const vw=document.documentElement.clientWidth, vh=window.innerHeight;
+     const width=Math.min(350,vw-20);
+     const left=Math.max(10,Math.min(anchor.left,vw-width-10));
+     panel.style.width=width+'px';
+     panel.style.position='fixed';
+     panel.style.left=left+'px';
+     panel.style.right='auto';
+     panel.style.zIndex='9998';
+     panel.style.maxHeight='min(430px, calc(100dvh - 25px))';
+     const usableBelow=vh-anchor.bottom-12;
+     const usableAbove=anchor.top-12;
+     const want=Math.min(340,panel.scrollHeight||340);
+     const flip=usableBelow<want&&usableAbove>usableBelow;
+     const max=Math.max(120,Math.min(430,flip?usableAbove:usableBelow));
+     panel.style.maxHeight=max+'px';
+     panel.style.top=(flip?Math.max(8,anchor.top-Math.min(want,max)-9):Math.min(vh-120,anchor.bottom+9))+'px';
+     panel.style.overflowY='auto';
+   };
    const api={input,trigger,panel,close(focus=false){
-     panel.hidden=true;trigger.setAttribute('aria-expanded','false');if(focus)trigger.focus();
-   },open(){closeOthers(api);panel.hidden=false;trigger.setAttribute('aria-expanded','true');}};
+     panel.hidden=true;trigger.setAttribute('aria-expanded','false');
+     if(portaled){host.append(panel);portaled=false;panel.removeAttribute('style')}
+     if(focus)trigger.focus();
+   },open(){
+     closeOthers(api);
+     if(flightPicker){document.body.append(panel);portaled=true}
+     panel.hidden=false;trigger.setAttribute('aria-expanded','true');
+     positionPanel();
+   }};
    active.push(api);
-   document.addEventListener('pointerdown',e=>{if(!host.contains(e.target))api.close()});
+   document.addEventListener('pointerdown',e=>{
+     if(!host.contains(e.target)&&!panel.contains(e.target))api.close();
+   });
+   window.addEventListener('resize',positionPanel);
+   window.addEventListener('scroll',positionPanel,true);
    trigger.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();api.close(true)}});
    panel.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();api.close(true)}});
    return {...api,text};
@@ -114,10 +148,43 @@
      return true;
    }
    let shown=parse(input.value)||parse(input.min)||new Date();shown=new Date(shown.getFullYear(),shown.getMonth(),1);
+   const flightsDeparture=input.id==='flightDeparture';
+   let pickingReturn=false;
+   let previewUntil='';
+   function emit(target,value){
+     target.value=value;
+     target.dispatchEvent(new Event('input',{bubbles:true}));
+     target.dispatchEvent(new Event('change',{bubbles:true}));
+   }
    function choose(value){
-     input.value=value;
-     input.dispatchEvent(new Event('input',{bubbles:true}));
-     input.dispatchEvent(new Event('change',{bubbles:true}));
+     const roundtrip=flightsDeparture&&
+       document.querySelector('#flightsForm [name="tripType"]:checked')?.value==='roundtrip';
+     if(roundtrip&&value){
+       if(!pickingReturn){
+         emit(input,value);
+         const back=document.getElementById('flightReturn');
+         if(back)emit(back,'');
+         pickingReturn=true;
+         previewUntil='';
+         draw();
+         return;
+       }
+       if(value<input.value){
+         emit(input,value);
+         previewUntil='';
+         draw();
+         return;
+       }
+       const back=document.getElementById('flightReturn');
+       if(back)emit(back,value);
+       pickingReturn=false;
+       previewUntil='';
+       refresh();
+       api.close(true);
+       return;
+     }
+     pickingReturn=false;previewUntil='';
+     emit(input,value);
      refresh();api.close(true);
    }
    function draw(){
@@ -141,6 +208,13 @@
        });
        panel.append(grid);
      }else{
+       const rangeMode=flightsDeparture&&
+         document.querySelector('#flightsForm [name="tripType"]:checked')?.value==='roundtrip';
+       if(rangeMode){
+         const hint=create('p','lx-calendar-range-hint',
+           pickingReturn?'Selecciona la fecha de regreso':'Selecciona la salida y luego el regreso');
+         panel.append(hint);
+       }
        const grid=create('div','lx-calendar-grid');
        weekdays.forEach(day=>grid.append(create('span','lx-calendar-weekday',day)));
        const first=(new Date(shown.getFullYear(),shown.getMonth(),1).getDay()+6)%7;
@@ -150,7 +224,26 @@
          const value=iso(new Date(shown.getFullYear(),shown.getMonth(),day));
          const btn=create('button','lx-calendar-day',String(day));btn.type='button';
          btn.disabled=!allowed(value);btn.classList.toggle('is-selected',value===input.value);
-         btn.setAttribute('aria-label',value);btn.addEventListener('click',()=>choose(value));grid.append(btn);
+         const back=document.getElementById('flightReturn')?.value||'';
+         const end=pickingReturn?previewUntil:back;
+         if(rangeMode&&input.value&&end&&value>input.value&&value<end)btn.classList.add('is-in-range');
+         if(rangeMode&&input.value&&value===end)btn.classList.add('is-range-end');
+         if(rangeMode&&pickingReturn&&value===input.value)btn.classList.add('is-range-start');
+         btn.setAttribute('aria-label',value);
+         btn.addEventListener('click',()=>choose(value));
+         if(rangeMode){
+           btn.addEventListener('mouseenter',()=>{
+             if(!pickingReturn||value<input.value||value===previewUntil)return;
+             previewUntil=value;
+             grid.querySelectorAll('.lx-calendar-day').forEach(dayButton=>{
+               const v=dayButton.dataset.iso;
+               dayButton.classList.toggle('is-in-range',!!v&&v>input.value&&v<value);
+               dayButton.classList.toggle('is-range-end',v===value);
+             });
+           });
+         }
+         btn.dataset.iso=value;
+         grid.append(btn);
        }
        panel.append(grid);
      }
@@ -161,6 +254,7 @@
    }
    trigger.addEventListener('click',()=>{
      if(!panel.hidden){api.close();return}
+     pickingReturn=false;previewUntil='';
      const d=parse(input.value)||parse(input.min)||new Date();
      shown=new Date(d.getFullYear(),d.getMonth(),1);draw();api.open();
      panel.querySelector('.lx-calendar-day:not(:disabled),.lx-calendar-month:not(:disabled),.lx-calendar-nav')?.focus();
