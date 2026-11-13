@@ -940,3 +940,21 @@ body.lx-flights-only .flight-sortbar__buttons button[aria-pressed="true"]{
   background:linear-gradient(110deg,#e6f9eb,#d8f0df);
   border-color:#8cd2a4;
 }
+
+/* Flight cards: always-on green outline and requested magenta hover. */
+body.lx-flights-only .flight-marketplace .flight-offer--detailed{
+  border:2px solid #07873e;
+  box-shadow:0 4px 17px rgba(7,135,62,.13);
+  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+}
+@media(hover:hover){
+  body.lx-flights-only .flight-marketplace .flight-offer--detailed:hover{
+    border-color:#EB09A7;
+    box-shadow:0 0 0 1px rgba(235,9,167,.38),0 10px 28px rgba(235,9,167,.21);
+    transform:translateY(-1px);
+  }
+}
+body.lx-flights-only .flight-marketplace .flight-offer--detailed:focus-within{
+  border-color:#EB09A7;
+  box-shadow:0 0 0 1px rgba(235,9,167,.30),0 9px 24px rgba(235,9,167,.16);
+}
