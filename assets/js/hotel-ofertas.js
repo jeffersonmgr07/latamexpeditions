@@ -37,11 +37,13 @@
     if(diff>=-7&&diff<=1||md==='05-01')return true;
     if(country==='PA'){
       if(['01-09','11-03','11-04','11-05','11-10','11-28','12-08','12-20'].includes(md))return true;
+      if((m===11&&[29,30].includes(day))||(m===12&&day===21))return true;
       if(diff>=-50&&diff<=-46)return true;
       if(m===6&&day===nthSunday(year,6,3))return true;
     }else if(country==='CO'){
       if(['01-06','07-20','08-07','11-11','12-08','12-25','01-01'].includes(md))return true;
       if(m===11&&[1,2,15,16].includes(day))return true;
+      if(m===1&&day===6+((8-new Date(Date.UTC(year,0,6)).getUTCDay())%7))return true;
       if(m===5&&day===nthSunday(year,5,2))return true;
       if(m===6&&day===nthSunday(year,6,3))return true;
     }
