@@ -132,7 +132,7 @@
     const detail = node('p','', 'Prueba otra fecha de viaje o pide ayuda a nuestro equipo para encontrar la mejor opción.');
     const btn = node('button','flight-empty-state__edit','Cambiar fechas');
     btn.type = 'button';
-    btn.addEventListener('click', () => form.scrollIntoView({behavior:'smooth',block:'center'}));
+    btn.addEventListener('click', openEditSearch);
     empty.append(graphic,title,detail,btn);
     offerContainer.append(empty);
   }
@@ -150,7 +150,7 @@
   function setBusy(busy) {
     submitButton.disabled = busy;
     submitButton.setAttribute('aria-busy', String(busy));
-    submitButton.textContent = busy ? 'Consultando tarifas…' : 'Consultar vuelos';
+    submitButton.textContent = busy ? 'Buscando vuelos…' : 'Buscar vuelos';
   }
   function airlineName(code) {
     if (airlineNames[code]) return airlineNames[code];
@@ -466,7 +466,27 @@
     renderFilteredOffers();
   });
   el('flightClearFilters').addEventListener('click',resetFilters);
-  el('flightModifySearch').addEventListener('click',()=>form.scrollIntoView({behavior:'smooth',block:'center'}));
+  function openEditSearch(){
+    document.body.classList.add('lx-flight-editing');
+    el('flightSearchSummary').querySelector('.flight-search-summary__edit')?.setAttribute('aria-expanded','true');
+    form.closest('.hero--flights')?.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  function showResultsHeader(query,tripText,labelCabin){
+    const bar=el('flightSearchSummary');
+    el('flightSummaryRoute').textContent=parseLabel(origin)+'  →  '+parseLabel(destination);
+    el('flightSummaryDate').textContent=dateLabel(query.departure)+
+      (query.trip==='roundtrip'?' — '+dateLabel(query.returnDate):' · Solo ida');
+    el('flightSummaryPax').textContent=(query.adults+query.children)+' '+
+      (query.adults+query.children===1?'viajero':'viajeros');
+    el('flightSummaryCabin').textContent=labelCabin;
+    bar.hidden=false;
+    document.body.classList.add('lx-flight-results-mode');
+    document.body.classList.remove('lx-flight-editing');
+    el('flightSummaryEdit').setAttribute('aria-expanded','false');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  el('flightSummaryEdit').addEventListener('click',openEditSearch);
+  el('flightModifySearch').addEventListener('click',openEditSearch);
   // Apps Script ContentService uses a different origin. JSONP bypasses CORS without
   // exposing the API token. The backend validates the callback and returns data only.
   function getLivePrices(query) {
@@ -522,6 +542,7 @@
     el('flightRouteDetails').textContent = (selectedPackage?selectedPackage.name+' · ':'') + tripText + ' · Salida ' + query.departure +
       (query.returnDate ? ' · Regreso ' + query.returnDate : '') +
       ' · ' + query.adults + ' adulto(s), ' + query.children + ' niño(s) · ' + labelCabin;
+    showResultsHeader(query,tripText,labelCabin);
     el('flightPriceBox').hidden = true;
     offerContainer.replaceChildren();
     allOffers = [];
