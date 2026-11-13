@@ -857,8 +857,9 @@ function searchWorldwideHotels_(p){
   // Solo permitir detalle de hoteles que haya devuelto una búsqueda válida.
   hotels.forEach(function(h){
     if(!h.propertyToken)return;
+    var identity=[h.propertyToken,destination,checkin,checkout,String(adults),String(children),ages.join(",")].join("|");
     var hash=Utilities.base64EncodeWebSafe(Utilities.computeDigest(
-      Utilities.DigestAlgorithm.SHA_256,h.propertyToken)).slice(0,42);
+      Utilities.DigestAlgorithm.SHA_256,identity)).slice(0,42);
     try{cache.put("hotel_room_authorized_"+hash,JSON.stringify({
       token:h.propertyToken,checkin:checkin,checkout:checkout,adults:adults,
       children:children,ages:ages,destination:destination,name:h.name
@@ -887,14 +888,17 @@ function searchHotelRoomDetails_(p){
   var token=String(p.property_token||"");
   if(!/^[A-Za-z0-9_-]{8,180}$/.test(token))
     return {ok:false,message:"Selecciona nuevamente el hotel."};
+  var query=[token,String(p.destination||""),String(p.check_in_date||""),
+    String(p.check_out_date||""),String(p.adults||""),String(p.children||""),
+    String(p.children_ages||"")].join("|");
   var hash=Utilities.base64EncodeWebSafe(Utilities.computeDigest(
-    Utilities.DigestAlgorithm.SHA_256,token)).slice(0,42);
+    Utilities.DigestAlgorithm.SHA_256,query)).slice(0,42);
   var cache=CacheService.getScriptCache();
   var raw=cache.get("hotel_room_authorized_"+hash);
   if(!raw)return {ok:false,message:"La consulta ha caducado. Busca nuevamente el hotel."};
   var ctx=JSON.parse(raw);
   if(ctx.token!==token)return {ok:false,message:"Selecciona nuevamente el hotel."};
-  var detailKey="hotel_rooms_v1_"+hash;
+  var detailKey="hotel_rooms_v2_"+hash;
   var cached=cache.get(detailKey);if(cached)return JSON.parse(cached);
   var key=PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
   if(!key)return {ok:false,message:"No se pudieron consultar las habitaciones."};

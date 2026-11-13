@@ -12,12 +12,18 @@ function close(){if(busy)return;modal.hidden=true;document.body.style.overflow='
 modal.querySelectorAll('[data-hotel-rooms-close]').forEach(node=>node.addEventListener('click',close));
 document.addEventListener('keydown',e=>{if(!modal.hidden&&e.key==='Escape')close()});
 const googleOrigin=origin=>{try{const u=new URL(origin);return u.protocol==='https:'&&(u.hostname==='script.google.com'||u.hostname==='script.googleusercontent.com'||u.hostname.endsWith('.script.googleusercontent.com')||u.hostname.endsWith('-script.googleusercontent.com'))}catch(_){return false}};
-function roomLookup(token){
+function roomLookup(token,search){
  const endpoint=String(window.LATAM_FLIGHTS_API_URL||'');
  if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint))return Promise.reject(Error('No se pudo consultar este hotel.'));
  return new Promise((resolve,reject)=>{
    const cb='latamFlightCb_'+Date.now()+Math.random().toString(36).slice(2,12),url=new URL(endpoint);
    url.searchParams.set('mode','hotel_rooms');url.searchParams.set('property_token',token);url.searchParams.set('callback',cb);
+   url.searchParams.set('destination',search.destination||'');
+   url.searchParams.set('check_in_date',search.check_in_date||'');
+   url.searchParams.set('check_out_date',search.check_out_date||'');
+   url.searchParams.set('adults',String(search.adults||''));
+   url.searchParams.set('children',String(search.children||0));
+   url.searchParams.set('children_ages',String(search.children_ages||''));
    const script=document.createElement('script');let done=false;
    const finish=(err,data)=>{if(done)return;done=true;clearTimeout(timer);script.remove();delete window[cb];if(err)reject(err);else resolve(data)};
    const timer=setTimeout(()=>finish(Error('La consulta de habitaciones tardó demasiado.')),45000);
@@ -75,7 +81,7 @@ window.addEventListener('latam:hotel-room-select',async event=>{
  modal.hidden=false;document.body.style.overflow='hidden';
  if(!choice.propertyToken){render([]);return}
  message('Buscando opciones de habitación…');
- try{const result=await roomLookup(choice.propertyToken);
+ try{const result=await roomLookup(choice.propertyToken,query);
    if(modal.hidden||choice!==d.hotel)return;
    if(result?.ok!==true)throw Error(result?.message||'No se pudo consultar el hotel.');
    render(Array.isArray(result.rooms)?result.rooms:[]);
