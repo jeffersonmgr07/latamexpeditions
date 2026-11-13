@@ -167,14 +167,23 @@
               <div class="flight-field"><label for="flightCabin"><i class="fa-solid fa-chair" aria-hidden="true"></i> Clase</label><select id="flightCabin" name="cabin"><option value="economy" selected>Económica</option><option value="premium_economy">Premium economy</option><option value="business">Business</option></select></div>
             </div>
             <p class="flight-form-error" id="flightError" role="alert" hidden></p>
-            <button type="submit" class="flight-submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Consultar vuelos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="submit" class="flight-submit"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Buscar vuelos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
             
           </form>
         </div>
-        <p class="flight-hero-note"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Compra con seguridad</p>
+        <p class="flight-hero-note"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> Búsqueda y compra segura</p>
       </div>
     </section>
 
+    <div class="flight-search-summary" id="flightSearchSummary" hidden aria-label="Búsqueda actual de vuelos">
+      <div class="flight-search-summary__inner">
+        <span class="flight-search-summary__route" id="flightSummaryRoute"></span>
+        <span class="flight-search-summary__date" id="flightSummaryDate"></span>
+        <span class="flight-search-summary__pax" id="flightSummaryPax"></span>
+        <span class="flight-search-summary__cabin" id="flightSummaryCabin"></span>
+        <button type="button" class="flight-search-summary__edit" id="flightSummaryEdit"><i class="fa-solid fa-pen" aria-hidden="true"></i> Editar búsqueda</button>
+      </div>
+    </div>
     <section id="flightResults" class="flight-marketplace" aria-labelledby="flightRouteTitle" hidden>
       <div class="flight-marketplace__inner">
         <div class="flight-marketplace__heading">
@@ -337,8 +346,8 @@
       <div class="flight-modal__header">
         <div>
           <span class="flight-marketplace__eyebrow">LATAM EXPEDITIONS · SOLICITUD PRIVADA</span>
-          <h2 id="flightModalTitle">Datos de pasajeros</h2>
-          <p>Completa los datos de los pasajeros para continuar con tu solicitud.</p>
+          <h2 id="flightModalTitle">Pasajero 1 y datos de contacto</h2>
+          <p>Completa los datos de cada pasajero. El pasajero 1 puede ser también el contacto principal de la reserva.</p>
         </div>
         <button type="button" class="flight-modal__close" data-flight-modal-close aria-label="Cerrar formulario"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
       </div>
