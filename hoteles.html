@@ -37,7 +37,7 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TravelAgency", "name": "Latam Expeditions", "url": "https://latamexpeditions.com", "description": "Agencia de viajes especializada en Latinoamérica: experiencias, paquetes flexibles y viajes a medida con asesoría local.", "email": "contact@latamexpeditions.com", "telephone": "+51906472060", "image": "https://latamexpeditions.com/assets/img/latam-hero-01.jpg", "areaServed": ["Perú", "Chile", "Ecuador", "Colombia", "Argentina", "Brasil", "Bolivia", "México", "Costa Rica", "Uruguay", "Venezuela"], "sameAs": []}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Latam Expeditions", "url": "https://latamexpeditions.com", "inLanguage": "es", "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://latamexpeditions.com/experiencias.html?destino={search_term_string}"}, "query-input": "required name=search_term_string"}}</script>
   <link rel="stylesheet" href="assets/css/vuelos.css?v=20261113-mobile-isotipo" />
-  <link rel="stylesheet" href="assets/css/hoteles.css?v=20261113-offers-1" />
+  <link rel="stylesheet" href="assets/css/hoteles.css?v=20261113-rooms-v2" />
 
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-latam-48.png?v=20261113" />
@@ -167,7 +167,7 @@
   </div>
   <section id="hotelResults" class="hotel-marketplace" aria-labelledby="hotelResultsTitle" hidden>
     <div class="hotel-marketplace__inner">
-      <div class="hotel-marketplace__heading"><div><h2 id="hotelResultsTitle">Hoteles disponibles para consultar</h2><p id="hotelResultDetails"></p></div><label for="hotelSort">Ordenar por <select id="hotelSort"><option value="recommended">Recomendados</option><option value="priceAsc">Menor precio</option><option value="priceDesc">Mayor precio</option><option value="rating">Mejor valoración</option></select></label></div>
+      <div class="hotel-marketplace__heading"><div><h2 id="hotelResultsTitle">Hoteles para tu estancia</h2><p id="hotelResultDetails"></p></div><label for="hotelSort">Ordenar por <select id="hotelSort"><option value="recommended">Recomendados</option><option value="priceAsc">Menor precio</option><option value="priceDesc">Mayor precio</option><option value="rating">Mejor valoración</option></select></label></div>
       <p id="hotelResultMessage" class="hotel-result-message" role="status" aria-live="polite"></p>
       <div id="hotelResultCards" class="hotel-result-grid" aria-live="polite"></div>
       <button type="button" id="hotelLoadMore" class="hotel-load-more" hidden>Ver más hoteles</button>
@@ -261,6 +261,47 @@
   </section>
 </main>
 
+
+
+  <div class="hotel-rooms-modal" id="hotelRoomsModal" role="dialog" aria-modal="true" aria-labelledby="hotelRoomsTitle" hidden>
+    <div class="hotel-rooms-modal__scrim" data-hotel-rooms-close></div>
+    <div class="hotel-rooms-modal__panel">
+      <header class="hotel-rooms-modal__head">
+        <div><span>LATAM EXPEDITIONS · HOTELES</span><h2 id="hotelRoomsTitle">Elige tu habitación</h2><p id="hotelRoomsDates"></p></div>
+        <button type="button" class="hotel-rooms-modal__close" data-hotel-rooms-close aria-label="Cerrar">×</button>
+      </header>
+      <div class="hotel-rooms-modal__content">
+        <p id="hotelRoomsMessage" class="hotel-rooms-modal__message" role="status" aria-live="polite"></p>
+        <div id="hotelRoomsList" class="hotel-rooms-modal__list"></div>
+        <section id="hotelRoomsBooking" class="hotel-rooms-modal__booking" hidden>
+          <h3 id="hotelRoomSelectedTitle">Tu selección</h3>
+          <p id="hotelRoomSelectedPrice"></p>
+          <form id="hotelRoomsRequestForm" novalidate>
+            <div class="hotel-rooms-modal__fields">
+              <label>Habitaciones solicitadas <select id="hotelRoomQuantity"><option value="1">1 habitación</option><option value="2">2 habitaciones</option><option value="3">3 habitaciones</option></select></label>
+              <label>Nombre y apellido del titular <input id="hotelRoomMainName" maxlength="120" autocomplete="name" required></label>
+              <label>Nacionalidad <input id="hotelRoomNationality" maxlength="80" required placeholder="Ej. Peruana"></label>
+              <label>Documento de identidad <input id="hotelRoomDocument" maxlength="60" required placeholder="Pasaporte, DNI o cédula"></label>
+              <label>Correo electrónico <input id="hotelRoomEmail" type="email" autocomplete="email" maxlength="254" required></label>
+              <label>WhatsApp <input id="hotelRoomPhone" type="tel" autocomplete="tel" maxlength="50" required placeholder="+51 999 999 999"></label>
+            </div>
+            <label class="hotel-rooms-modal__other-label">Otros pasajeros (opcional)
+              <textarea id="hotelRoomOtherGuests" rows="2" maxlength="800" placeholder="Puedes facilitar los nombres de los demás viajeros ahora o más adelante"></textarea>
+            </label>
+            <p class="hotel-rooms-modal__note">Revisaremos las condiciones y te enviaremos la confirmación de la reserva al correo indicado. No se realiza ningún cobro al enviar la solicitud.</p>
+            <p class="hotel-rooms-modal__error" id="hotelRoomRequestError" role="alert" hidden></p>
+            <button type="submit" id="hotelRoomRequestButton" class="hotel-rooms-modal__submit">Solicitar reserva</button>
+            <a id="hotelRoomSupplierLink" class="hotel-rooms-modal__supplier" href="#" target="_blank" rel="noopener noreferrer" hidden>Reservar directamente con el proveedor</a>
+          </form>
+        </section>
+        <section id="hotelRoomsSuccess" class="hotel-rooms-modal__success" hidden>
+          <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+          <h3>Solicitud recibida</h3>
+          <p>Te enviaremos la información de tu alojamiento al correo electrónico indicado.</p>
+        </section>
+      </div>
+    </div>
+  </div>
 
   <div class="hotel-offer-modal" id="hotelOfferModal" role="dialog" aria-modal="true" aria-labelledby="hotelOfferTitle" hidden>
     <div class="hotel-offer-modal__backdrop" data-offer-close></div>
@@ -442,7 +483,8 @@
   <script src="assets/js/cuentas.js?v=20261111-google-fix" defer></script>
   <script src="assets/js/vuelos-config.js" defer></script>
   <script src="assets/js/home-controls.js?v=20261113-hotels-1" defer></script>
-  <script src="assets/js/hoteles.js?v=20261113-offers-1" defer></script>
+  <script src="assets/js/hoteles.js?v=20261113-rooms-v2" defer></script>
+  <script src="assets/js/hotel-habitaciones.js?v=20261113-rooms-v2" defer></script>
   <script src="assets/js/hotel-ofertas.js?v=20261113-91-days-v2" defer></script>
   </body>
 </html>
