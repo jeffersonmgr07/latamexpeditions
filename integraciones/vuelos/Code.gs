@@ -165,8 +165,9 @@ function doGet(e) {
   }
   var output;
   try {
-    output = p.mode === "hotel_search" ? searchWorldwideHotels_(p) :
-      (p.mode === "hotels" ? searchBundleHotels_(p) : fetchFlightData_(p));
+    output = p.mode === "hotel_rooms" ? searchHotelRoomDetails_(p) :
+      (p.mode === "hotel_search" ? searchWorldwideHotels_(p) :
+      (p.mode === "hotels" ? searchBundleHotels_(p) : fetchFlightData_(p)));
   } catch (err) {
     output = { ok:false, error:"service_error", message:"No pudimos consultar tarifas. Intenta de nuevo o solicita una cotización." };
     console.error("Flight lookup failed: " + String(err && err.message || err).slice(0,200));
@@ -843,6 +844,7 @@ function searchWorldwideHotels_(p){
       var total=price_(h.total_rate);
       return {
         name:String(h.name).slice(0,110),
+        propertyToken:/^[A-Za-z0-9_-]{8,180}$/.test(String(h.property_token||""))?String(h.property_token):"",
         address:String(h.address||"").slice(0,160),
         thumbnail:image_(h),
         stars:stars>=2&&stars<=5?stars:null,
@@ -852,6 +854,16 @@ function searchWorldwideHotels_(p){
         source:"Google Hotels"
       };
     });
+  // Solo permitir detalle de hoteles que haya devuelto una búsqueda válida.
+  hotels.forEach(function(h){
+    if(!h.propertyToken)return;
+    var hash=Utilities.base64EncodeWebSafe(Utilities.computeDigest(
+      Utilities.DigestAlgorithm.SHA_256,h.propertyToken)).slice(0,42);
+    try{cache.put("hotel_room_authorized_"+hash,JSON.stringify({
+      token:h.propertyToken,checkin:checkin,checkout:checkout,adults:adults,
+      children:children,ages:ages,destination:destination,name:h.name
+    }),600);}catch(ignore){}
+  });
   var token=String(data.serpapi_pagination&&data.serpapi_pagination.next_page_token||"");
   var hasMore=page<2&&token.length>0&&token.length<3000;
   var result={
@@ -863,6 +875,104 @@ function searchWorldwideHotels_(p){
     if(hasMore)cache.put(baseKey+"_next_"+(page+1),token,600);
     cache.put(ck,JSON.stringify(result),600);
   }catch(ignore){}
+  return result;
+}
+
+
+/* Consulta opcional del detalle de habitaciones de Google Hotels (SerpAPI).
+ * Los tipos y las tarifas son datos observados, NO inventario reservable.
+ * Solo acepta property_token procedente de una búsqueda previa de este servicio.
+ */
+function searchHotelRoomDetails_(p){
+  var token=String(p.property_token||"");
+  if(!/^[A-Za-z0-9_-]{8,180}$/.test(token))
+    return {ok:false,message:"Selecciona nuevamente el hotel."};
+  var hash=Utilities.base64EncodeWebSafe(Utilities.computeDigest(
+    Utilities.DigestAlgorithm.SHA_256,token)).slice(0,42);
+  var cache=CacheService.getScriptCache();
+  var raw=cache.get("hotel_room_authorized_"+hash);
+  if(!raw)return {ok:false,message:"La consulta ha caducado. Busca nuevamente el hotel."};
+  var ctx=JSON.parse(raw);
+  if(ctx.token!==token)return {ok:false,message:"Selecciona nuevamente el hotel."};
+  var detailKey="hotel_rooms_v1_"+hash;
+  var cached=cache.get(detailKey);if(cached)return JSON.parse(cached);
+  var key=PropertiesService.getScriptProperties().getProperty("SERPAPI_KEY");
+  if(!key)return {ok:false,message:"No se pudieron consultar las habitaciones."};
+  // Evitar que la búsqueda de detalles agote la cuota con peticiones repetidas.
+  var props=PropertiesService.getScriptProperties();
+  var counterKey="HOTEL_PUBLIC_COUNT_"+Utilities.formatDate(new Date(),"UTC","yyyyMMdd");
+  var limit=Number(props.getProperty("HOTEL_PUBLIC_DAILY_LIMIT")||100);
+  var lock=LockService.getScriptLock();
+  if(!lock.tryLock(5000))return {ok:false,message:"Inténtalo nuevamente."};
+  try{
+    var count=Number(props.getProperty(counterKey)||0);
+    if(count>=(Number.isFinite(limit)&&limit>0?limit:100))
+      return {ok:false,message:"No podemos consultar más habitaciones por el momento."};
+    props.setProperty(counterKey,String(count+1));
+  }finally{lock.releaseLock()}
+  var params={engine:"google_hotels",property_token:token,
+    check_in_date:ctx.checkin,check_out_date:ctx.checkout,
+    adults:String(ctx.adults),children:String(ctx.children),
+    hl:"es",gl:"pe",currency:"USD",api_key:key};
+  if(ctx.children>0)params.children_ages=ctx.ages.join(",");
+  var url="https://serpapi.com/search.json?"+Object.keys(params).map(function(k){
+    return encodeURIComponent(k)+"="+encodeURIComponent(params[k]);}).join("&");
+  var response=UrlFetchApp.fetch(url,{muteHttpExceptions:true,followRedirects:true});
+  if(response.getResponseCode()!==200)
+    return {ok:false,message:"No fue posible consultar las habitaciones de este hotel."};
+  var body=JSON.parse(response.getContentText());
+  if(body.error)return {ok:false,message:"No fue posible consultar las habitaciones de este hotel."};
+  function price_(v){
+    if(typeof v==="number")return v>0&&v<1000000?v:null;
+    var n=Number(v&&(v.extracted_after_taxes_fees||v.extracted_display_price||
+      v.extracted_lowest||v.extracted_price)||0);
+    return n>0&&n<1000000?n:null;
+  }
+  function url_(v){
+    return typeof v==="string"&&/^https:\/\/[^<>"'\s]{8,1500}$/.test(v)?v:"";
+  }
+  var nights=Math.round((toUtcDay_(ctx.checkout)-toUtcDay_(ctx.checkin))/86400000);
+  var offers=[],providers=[].concat(body.featured_prices||[],body.prices||[]);
+  providers.slice(0,25).forEach(function(provider){
+    var source=String(provider.source||"").slice(0,80);
+    var rooms=Array.isArray(provider.rooms)?provider.rooms:[];
+    rooms.slice(0,18).forEach(function(room){
+      if(!room||!room.name||offers.length>=40)return;
+      var rateVariants=Array.isArray(room.rates)&&room.rates.length?room.rates:[room];
+      rateVariants.slice(0,4).forEach(function(rate){
+        if(offers.length>=40)return;
+        var night=price_(rate.rate_per_night)||price_(room.rate_per_night);
+        var total=price_(rate.total_rate)||price_(room.total_rate)||(night?Math.round(night*nights*100)/100:null);
+        var capacity=Number(rate.num_guests||room.num_guests||provider.num_guests||0);
+        offers.push({name:String(room.name).slice(0,100),source:source,
+          numGuests:Number.isInteger(capacity)&&capacity>=1&&capacity<=20?capacity:null,
+          nightlyRate:night,totalRate:total,
+          inclusions:(Array.isArray(rate.inclusions)?rate.inclusions:[]).slice(0,5)
+            .map(function(t){return String(t).slice(0,100)}),
+          bookingUrl:url_(rate.link)||url_(room.link)||url_(provider.link),
+          thumbnail:url_(room.images&&room.images[0]&&(typeof room.images[0]==="string"?
+            room.images[0]:room.images[0].thumbnail||room.images[0].original_image))
+        });
+      });
+    });
+    if(!rooms.length&&offers.length<40){
+      var night=price_(provider.rate_per_night),total=price_(provider.total_rate);
+      if(night||total)offers.push({
+        name:"Opción de alojamiento",source:source,numGuests:Number(provider.num_guests)||null,
+        nightlyRate:night,totalRate:total||(night?Math.round(night*nights*100)/100:null),
+        inclusions:[],bookingUrl:url_(provider.link),thumbnail:"",roomTypeUnspecified:true
+      });
+    }
+  });
+  var seen={};
+  offers=offers.filter(function(o){
+    var k=[o.name,o.source,o.totalRate,o.numGuests].join("|");
+    if(seen[k])return false;seen[k]=true;return true;
+  });
+  var result={ok:true,hotel:ctx.name,destination:ctx.destination,
+    checkIn:ctx.checkin,checkOut:ctx.checkout,adults:ctx.adults,children:ctx.children,
+    nights:nights,rooms:offers,source:"Google Hotels",inventoryConfirmed:false};
+  try{cache.put(detailKey,JSON.stringify(result),450);}catch(ignore){}
   return result;
 }
 
