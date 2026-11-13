@@ -603,7 +603,7 @@
       const live = await getLivePrices(query);
       if (searchId !== currentSearch) return;
       if (live.ok && showLiveOffers(live)) {
-        message = 'Tarifas sujetas a disponibilidad y confirmación antes del pago.';
+        message = 'Elige tu itinerario y consulta los detalles de la tarifa antes de reservar.';
       } else if (live.ok) {
         showEmptyState();
         message = 'Las opciones y precios están sujetos a disponibilidad.';
