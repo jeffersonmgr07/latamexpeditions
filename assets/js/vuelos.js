@@ -307,6 +307,32 @@
     });
     panel.append(line);parent.append(panel);
   }
+  function addFareDetails(parent,offer){
+    const box=node('section','flight-detail-group flight-detail-fares');
+    box.append(node('h3','','Tarifa y equipaje'));
+    const fare=String(offer.fareBrand||offer.fareFamily||offer.fareName||'').trim();
+    if(fare)box.append(node('p','flight-detail-fare-name','Tarifa: '+fare));
+    const baggage=offer.baggagePrices||offer.baggage_prices||offer.baggage||{};
+    let hasBaggage=false;
+    const sections=[
+      ['Equipaje de ida',baggage.departing||baggage.outbound],
+      ['Equipaje de regreso',baggage.returning||baggage.inbound],
+      ['Equipaje incluido',baggage.together||baggage.included]
+    ];
+    for(const [label,list] of sections){
+      const items=Array.isArray(list)?list:(typeof list==='string'?[list]:[]);
+      if(!items.length)continue;
+      hasBaggage=true;
+      const row=node('div','flight-detail-baggage');
+      row.append(node('strong','',label));
+      const ul=node('ul','');
+      items.forEach(item=>ul.append(node('li','',String(item))));
+      row.append(ul);box.append(row);
+    }
+    if(!hasBaggage)box.append(node('p','flight-detail-fare-note',
+      'Verifica el equipaje permitido, las condiciones de cambios y la familia tarifaria antes de confirmar tu reserva.'));
+    parent.append(box);
+  }
   function openFlightDetails(offer){
     const body=itineraryDialog.querySelector('.flight-details-dialog__body');
     body.replaceChildren();
@@ -314,6 +340,7 @@
     if(currentQuery.trip==='roundtrip')
       addSegments(body,'Regreso · '+(offer.returnDate||currentQuery.returnDate),offer.inbound);
     if(!body.children.length)body.append(node('p','', 'Detalles por confirmar con la aerolínea.'));
+    addFareDetails(body,offer);
     itineraryDialog.showModal();
   }
   function quotedPrice(offer) {
