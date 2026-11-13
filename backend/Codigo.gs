@@ -1225,6 +1225,7 @@ function doGet(e) {
   const action=String(e&&e.parameter&&e.parameter.action||'');
   if(action==='status'||action==='status_html')return lxResponderEstado_(e);
   if(action==='paypal_order_status')return lxResponderOrdenPayPal_(e);
+  if(action==='hotel_offer_availability')return lxOfertaDisponibilidadGet_(e);
   if(action==='health')return json({
     ok:true,version:'2026-11-10-fullpay-signed-v1',paymentMode:'completo',
     signedQuotesReady:String(PROPS.getProperty('LATAM_PRICE_QUOTE_KEY')||'').length>=40
@@ -1426,6 +1427,7 @@ function validarYCalcular(data) {
   if (!data || !data.slug) throw new Error('Faltan datos de la reserva.');
 
   const slug = textoPlano(data.slug, 100).toLowerCase();
+  if(slug.startsWith('hotel-oferta-'))return lxValidarOfertaHotel_(data);
   const viajeros = parseInt(data.travelers, 10);
   const adultos = data.adults === undefined ? viajeros : parseInt(data.adults, 10);
   const ninos = data.children === undefined ? 0 : parseInt(data.children, 10);
@@ -1729,6 +1731,12 @@ function capturarOrden(payload) {
     if (!orden) throw new Error('No encontramos la orden de pago. Vuelve a iniciar el pago.');
     if(payload&&payload.requestKey&&String(payload.requestKey)!==orden.requestKey)
       throw new Error('La orden de pago no coincide con esta solicitud.');
+
+    if (String(orden.bookingJson||'').includes('\"hotel-oferta-') && orden.estado!=='CAPTURADA') {
+      const b=JSON.parse(orden.bookingJson).booking;
+      if(Date.now()-new Date(orden.creada).getTime()>20*60000)throw new Error('La orden de esta oferta caducó. Inicia una nueva selección de fechas.');
+      lxOfertaCupos_(b.slug,b.date,b.checkout,b.requestKey);
+    }
 
     if (orden.estado === 'CAPTURADA' && orden.codigoReserva) {
       return {
@@ -2095,6 +2103,18 @@ function registrarPagoEnTour(data) {
 /* ========================================================================== */
 
 function enviarVoucher(r) {
+  if(String(r.data&&r.data.slug||'').startsWith('hotel-oferta-')){
+    MailApp.sendEmail({to:r.data.holder.email,
+      subject:'Pago recibido · Alojamiento en coordinación · '+r.code,
+      body:['LATAM EXPEDITIONS · COMPROBANTE DE PAGO','',
+        'Referencia: '+r.code,'Hotel: '+r.data.title,
+        'Ingreso: '+r.data.date,'Salida: '+r.data.checkout,
+        'Pasajeros: '+r.data.travelers,'Total pagado: USD '+Number(r.paidAmount).toFixed(2),
+        '','El pago fue recibido. El alojamiento se gestiona con el hotel. Enviaremos la confirmación del establecimiento por separado. Si no podemos cumplir el servicio contratado, gestionaremos una alternativa aceptada o la devolución correspondiente.',
+        '','Contacto: contact@latamexpeditions.com'].join('\n'),
+      name:CONFIG.agency.name,replyTo:CONFIG.agency.email});
+    return;
+  }
   if(String(r.data&&r.data.slug||'')==='desierto-atacama-premium-5d4n'){
     const cliente=r.data.holder||{};
     MailApp.sendEmail({
@@ -2343,4 +2363,170 @@ function pruebaDeInstalacion() {
   const informe = 'COMPROBACIÓN DE INSTALACIÓN\n\n' + lineas.join('\n');
   console.log(informe);
   return informe;
+}
+
+
+
+/* ========================================================================== */
+/* LATAM · Ofertas de alojamiento fijas (solo 4 hoteles seleccionados).        */
+/* No cobrar sin inventario confirmado explícitamente por el operador.        */
+/* ========================================================================== */
+const LX_OFERTAS_HOTEL={
+  'hotel-oferta-dreams-playa-bonita':{title:'Dreams Playa Bonita All Inclusive',country:'PA',rate:284.90},
+  'hotel-oferta-westin-playa-bonita':{title:'The Westin Playa Bonita Panama',country:'PA',rate:200.90},
+  'hotel-oferta-viajero-tayrona':{title:'Viajero Tayrona Hostel & Ecohabs',country:'CO',rate:123.90},
+  'hotel-oferta-hotel-tocarema':{title:'Hotel Tocarema',country:'CO',rate:116.90}
+};
+function lxOfertaUtc_(iso){return new Date(String(iso)+'T00:00:00Z');}
+function lxOfertaIso_(date){return Utilities.formatDate(date,'UTC','yyyy-MM-dd');}
+function lxOfertaPascua_(year){
+  const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),
+    e=b%4,f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),
+    h=(19*a+b-d-g+15)%30,i=Math.floor(c/4),k=c%4,
+    l=(32+2*e+2*i-h-k+7)%7,m=Math.floor((a+11*h+22*l)/451);
+  const month=Math.floor((h+l-7*m+114)/31),day=(h+l-7*m+114)%31+1;
+  return new Date(Date.UTC(year,month-1,day));
+}
+function lxOfertaNesimoDomingo_(year,month,n){
+  const first=new Date(Date.UTC(year,month-1,1)).getUTCDay();
+  return 1+((7-first)%7)+(n-1)*7;
+}
+function lxOfertaFestivo_(iso,country){
+  const d=lxOfertaUtc_(iso);
+  if(isNaN(d.getTime()))return true;
+  const m=d.getUTCMonth()+1,day=d.getUTCDate(),year=d.getUTCFullYear();
+  const mmdd=String(m).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+  // Bloqueos comerciales generales para temporadas de alta ocupación.
+  if((m===12&&day>=23)||(m===1&&day<=3))return true;
+  const easter=lxOfertaPascua_(year),diff=Math.round((d-easter)/86400000);
+  if(diff>=-7&&diff<=1)return true;
+  if(mmdd==='05-01')return true;
+  if(country==='PA'){
+    if(['01-09','11-03','11-04','11-05','11-10','11-28','12-08','12-20'].includes(mmdd))return true;
+    // Carnaval panameño, bloqueado de sábado a miércoles.
+    if(diff>=-50&&diff<=-46)return true;
+    if(m===6&&day===lxOfertaNesimoDomingo_(year,6,3))return true;
+  }else if(country==='CO'){
+    if(['01-06','07-20','08-07','11-11','12-08','12-25','01-01'].includes(mmdd))return true;
+    // Puentes de Todos los Santos e Independencia de Cartagena (noviembre).
+    if(m===11&&(day===1||day===2||day===15||day===16))return true;
+    if(m===5&&day===lxOfertaNesimoDomingo_(year,5,2))return true;
+    if(m===6&&day===lxOfertaNesimoDomingo_(year,6,3))return true;
+  }
+  // Fechas adicionales, configurables por hotel o por país en propiedades.
+  // HOTEL_OFFER_BLACKOUTS = {"PA":["2027-02-01"],"CO":[],
+  //   "hotel-oferta-dreams-playa-bonita":["2027-02-02"]}
+  return false;
+}
+function lxOfertaFechas_(slug,checkin,checkout){
+  const offer=LX_OFERTAS_HOTEL[slug];
+  if(!offer)throw Error('La oferta seleccionada no está disponible.');
+  const pattern=/^\d{4}-\d{2}-\d{2}$/;
+  if(!pattern.test(checkin)||!pattern.test(checkout))throw Error('Selecciona fechas válidas.');
+  const start=lxOfertaUtc_(checkin),end=lxOfertaUtc_(checkout);
+  if(!isFinite(start.getTime())||!isFinite(end.getTime())||
+      lxOfertaIso_(start)!==checkin||lxOfertaIso_(end)!==checkout)
+    throw Error('Selecciona fechas válidas.');
+  const days=Math.round((end-start)/86400000);
+  const today=lxOfertaUtc_(Utilities.formatDate(new Date(),'America/Lima','yyyy-MM-dd'));
+  if(!(days>=1&&start>=today&&end<=new Date(today.getTime()+90*86400000)))
+    throw Error('Elige una estancia dentro de los próximos 90 días.');
+  let blacks={};
+  try{blacks=JSON.parse(PROPS.getProperty('HOTEL_OFFER_BLACKOUTS')||'{}')}catch(ignore){}
+  for(let dt=start.getTime();dt<end.getTime();dt+=86400000){
+    const iso=lxOfertaIso_(new Date(dt));
+    if(lxOfertaFestivo_(iso,offer.country)||
+       (Array.isArray(blacks[slug])&&blacks[slug].includes(iso))||
+       (Array.isArray(blacks[offer.country])&&blacks[offer.country].includes(iso)))
+      throw Error('La oferta no aplica a una o más noches festivas de las fechas seleccionadas.');
+  }
+  return days;
+}
+function lxOfertaCupos_(slug,checkin,checkout,ignoreKey){
+  // Un inventario real sólo se acredita al registrar una habitación
+  // autorizada por el operador para cada noche en propiedades privadas.
+  if(PROPS.getProperty('HOTEL_OFFERS_ONLINE_ENABLED')!=='true')
+    throw Error('El pago de esta oferta requiere confirmación de disponibilidad.');
+  let inventory={};
+  try{inventory=JSON.parse(PROPS.getProperty('HOTEL_OFFER_INVENTORY')||'{}')}catch(ignore){}
+  const slots=inventory[slug]||{},used={};
+  const vals=hojaOrdenesPayPal().getDataRange().getValues();
+  for(let i=1;i<vals.length;i++){
+    const row=vals[i],status=String(row[OP.estado]||''),key=String(row[OP.requestKey]||'');
+    if(key===ignoreKey||!['PENDIENTE','CAPTURANDO','CAPTURADA','PAGO_SIN_REGISTRO','REVISION'].includes(status))continue;
+    if(status==='PENDIENTE'&&Date.now()-new Date(row[OP.creada]).getTime()>20*60000)continue;
+    try{
+      const b=JSON.parse(row[OP.bookingJson]).booking;
+      if(!b||b.slug!==slug||!b.checkout)continue;
+      for(let dt=lxOfertaUtc_(b.date).getTime();dt<lxOfertaUtc_(b.checkout).getTime();dt+=86400000){
+        const date=lxOfertaIso_(new Date(dt));used[date]=(used[date]||0)+1;
+      }
+    }catch(ignore){}
+  }
+  for(let dt=lxOfertaUtc_(checkin).getTime();dt<lxOfertaUtc_(checkout).getTime();dt+=86400000){
+    const iso=lxOfertaIso_(new Date(dt)),capacity=Number(slots[iso]||0);
+    if(!Number.isInteger(capacity)||capacity<1||(used[iso]||0)>=capacity)
+      throw Error('No hay habitaciones confirmadas para esas fechas. Solicita disponibilidad.');
+  }
+  return true;
+}
+function lxOfertaDisponibilidadGet_(e){
+  const p=e&&e.parameter||{},cb=String(p.callback||'');
+  if(!/^latamHotelOfferCb_[A-Za-z0-9_]{8,65}$/.test(cb))
+    return ContentService.createTextOutput('/* callback no válido */')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  let out={ok:true,available:false,message:'La disponibilidad requiere confirmación.'};
+  try{
+    const slug=String(p.slug||''),checkin=String(p.checkin||''),checkout=String(p.checkout||'');
+    lxOfertaFechas_(slug,checkin,checkout);
+    lxOfertaCupos_(slug,checkin,checkout,'');
+    out={ok:true,available:true,nightlyRate:LX_OFERTAS_HOTEL[slug].rate,
+      nights:Math.round((lxOfertaUtc_(checkout)-lxOfertaUtc_(checkin))/86400000)};
+  }catch(err){out.message=String(err.message||'No disponible').slice(0,170)}
+  return ContentService.createTextOutput(cb+'('+JSON.stringify(out).replace(/</g,'\\u003c')+');')
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
+function lxValidarOfertaHotel_(data){
+  const slug=String(data.slug||'').toLowerCase(),offer=LX_OFERTAS_HOTEL[slug];
+  if(!offer)throw Error('La oferta seleccionada no está disponible.');
+  const adults=Number(data.adults),children=Number(data.children);
+  if(!Number.isInteger(adults)||adults<1||adults>2||children!==0||
+      Number(data.travelers)!==adults)
+    throw Error('La oferta admite únicamente uno o dos adultos, sin niños.');
+  const checkin=String(data.date||''),checkout=String(data.checkout||'');
+  const nights=lxOfertaFechas_(slug,checkin,checkout);
+  const requestKey=requestKeySeguro(data.requestKey);
+  lxOfertaCupos_(slug,checkin,checkout,requestKey);
+  if(!Array.isArray(data.passengers)||data.passengers.length!==adults)
+    throw Error('Completa los datos de todos los pasajeros.');
+  const passengers=data.passengers.map((p)=>{
+    const name=textoPlano(p.name,120),nationality=textoPlano(p.nationality,60),
+      docType=textoPlano(p.docType,30),docNumber=textoPlano(p.docNumber,50),
+      birth=textoPlano(p.birth,10);
+    const birthDate=lxOfertaUtc_(birth);
+    if(name.length<3||!nationality||!docType||docNumber.length<3||
+       !/^\d{4}-\d{2}-\d{2}$/.test(birth)||isNaN(birthDate.getTime())||
+       lxOfertaIso_(birthDate)!==birth||birthDate>new Date(Date.now()-18*365.24*86400000))
+      throw Error('Completa los datos válidos de los pasajeros adultos.');
+    return {name,nationality,docType,docNumber,birth,passengerType:'adult'};
+  });
+  const holder=data.holder||{},email=String(holder.email||'').toLowerCase().trim(),
+    phone=textoPlano(holder.phone,50);
+  if(!esCorreo(email)||phone.length<6)
+    throw Error('Completa el correo y teléfono de contacto.');
+  const total=redondear2(offer.rate*nights);
+  if(data.quotedTotal!==undefined&&Math.abs(Number(data.quotedTotal)-total)>.01)
+    throw Error('El importe no coincide. Vuelve a revisar el resumen.');
+  const booking={
+    requestKey,slug,kind:'hotel',title:offer.title,date:checkin,checkout,nights,
+    departureTime:'',travelers:adults,adults,children:0,tier:null,occupancy:'double',
+    includedHotel:offer.title,roomPlan:'1 habitación · 1 o 2 adultos',
+    holder:{email,phone,notes:'Estancia '+checkin+' a '+checkout+'. '+textoMultilinea(holder.notes,500)},
+    passengers,pickupAddress:'',pickupStatus:'not_applicable',paymentMethod:'online',
+    couponCode:'',discountAmount:0,quotedTotal:total,
+    availabilityStatus:'INVENTARIO_OPERADOR_VALIDADO_PENDIENTE_CONFIRMACION_HOTEL',
+    language:'es'
+  };
+  return {precio:offer.rate,precioNino:0,viajeros:adults,adultos:adults,ninos:0,
+    total,due:total,mode:'completo',fecha:lxOfertaUtc_(checkin),booking};
 }
