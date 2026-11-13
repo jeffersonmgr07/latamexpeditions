@@ -1,0 +1,35 @@
+/* LATAM Expeditions · Catálogo de ofertas — únicamente esta página */
+body.lx-offers-catalog{background:#f5f8f5}
+.lx-offers-hero{position:relative;isolation:isolate;overflow:hidden;padding:164px 22px 77px;background:#0b3d2e;color:#fff}
+.lx-offers-hero::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(105deg,rgba(2,40,27,.92),rgba(3,49,34,.73) 60%,rgba(2,47,33,.64)),url("../img/latam-hero-01.jpg") center 45%/cover no-repeat}
+.lx-offers-hero__inner{width:min(1240px,100%);margin:auto;position:relative}
+.lx-offers-hero__eyebrow{display:inline-flex;align-items:center;gap:8px;font:800 11px/1.4 Inter,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#baf3a5}
+.lx-offers-hero h1{margin:15px 0 12px;color:#fff;font:800 clamp(30px,4.5vw,55px)/1.16 Montserrat,Inter,sans-serif;letter-spacing:-.035em;max-width:800px}
+.lx-offers-hero p{margin:0;color:#e8f5ea;font:500 clamp(13px,1.5vw,17px)/1.65 Inter,system-ui,sans-serif;max-width:670px}
+.lx-offers-section{padding:51px 22px 82px}
+.lx-offers-section__inner{max-width:1240px;margin:0 auto}
+.lx-offers-section__heading{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px}
+.lx-offers-section__kicker{color:#208348;font:800 11px/1.4 Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;margin:0 0 6px}
+.lx-offers-section__heading h2{margin:0;color:#103f2c;font:800 clamp(23px,3vw,34px)/1.25 Montserrat,Inter,sans-serif;letter-spacing:-.028em}
+.lx-offers-section__heading a{color:#1b6f41;font:750 12px Inter,sans-serif;text-decoration:none;white-space:nowrap}
+.lx-offers-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.lx-offer-card{min-width:0;display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:20px;border:1px solid #d8e5dd;box-shadow:0 6px 23px rgba(5,42,22,.07);transition:transform .2s,box-shadow .2s,border-color .2s}
+.lx-offer-card:hover,.lx-offer-card:focus-within{transform:translateY(-3px);border-color:#7ac18e;box-shadow:0 15px 36px rgba(7,67,35,.13)}
+.lx-offer-card__image{position:relative;aspect-ratio:16/10;overflow:hidden;background:#deebe2}
+.lx-offer-card__image img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .45s}
+.lx-offer-card:hover .lx-offer-card__image img{transform:scale(1.035)}
+.lx-offer-card__tag{position:absolute;bottom:13px;left:14px;display:inline-flex;align-items:center;padding:7px 11px;border:1px solid rgba(255,255,255,.7);border-radius:100px;background:rgba(5,67,37,.88);color:#fff;backdrop-filter:blur(6px);font:800 10px Inter,sans-serif;box-shadow:0 3px 14px rgba(0,0,0,.18)}
+.lx-offer-card__body{padding:20px;display:flex;flex-direction:column;flex:1}
+.lx-offer-card__location{margin:0 0 8px;color:#517462;font:750 11px/1.4 Inter,sans-serif;letter-spacing:.04em;text-transform:uppercase}
+.lx-offer-card__body h3{margin:0 0 10px;color:#153c2c;font:800 19px/1.3 Montserrat,Inter,sans-serif;letter-spacing:-.02em}
+.lx-offer-card__description{color:#5a7163;margin:0 0 19px;font:500 13px/1.55 Inter,sans-serif;flex:1}
+.lx-offer-card__price{border-top:1px solid #e5eee7;padding-top:15px;margin:0 0 14px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.lx-offer-card__price small{font:650 12px Inter,sans-serif;color:#62786b}
+.lx-offer-card__price strong{font:850 25px/1.2 Montserrat,Inter,sans-serif;color:#087c40;letter-spacing:-.03em}
+.lx-offer-card__button{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:11px 16px;border-radius:11px;background:#07873e;color:#fff!important;text-decoration:none!important;font:800 13px/1.2 Inter,sans-serif;transition:background .18s}
+.lx-offer-card__button:hover,.lx-offer-card__button:focus-visible{background:#075d31}
+.lx-offers-bottom{margin:27px 0 0;padding:17px 21px;border-radius:15px;background:#e6f3e9;display:flex;align-items:center;justify-content:space-between;gap:15px;color:#375945;font:600 13px/1.5 Inter,sans-serif}
+.lx-offers-bottom p{margin:0}
+.lx-offers-bottom a{color:#085e34;font-weight:800;white-space:nowrap}
+@media(max-width:1000px){.lx-offers-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.lx-offers-hero{padding-top:151px}}
+@media(max-width:650px){.lx-offers-hero{padding:147px 19px 49px}.lx-offers-hero h1{font-size:30px}.lx-offers-section{padding:32px 18px 58px}.lx-offers-section__heading{align-items:flex-start;flex-direction:column;gap:10px}.lx-offers-grid{grid-template-columns:minmax(0,1fr);gap:18px}.lx-offer-card__body{padding:18px}.lx-offers-bottom{flex-direction:column;align-items:flex-start}.lx-offer-card__image{aspect-ratio:16/9}}
