@@ -164,12 +164,17 @@
   searchOverlay.setAttribute('aria-live','polite');
   searchOverlay.innerHTML=
     '<div class="lx-flight-search-overlay__card">'+
-      '<div class="lx-flight-search-overlay__plane" aria-hidden="true"><i class="fa-solid fa-plane"></i></div>'+
+      '<div class="lx-flight-search-overlay__plane" aria-hidden="true"><img src="/assets/img/favicon-latam-192.png?v=20261113" width="64" height="64" alt=""><i class="fa-solid fa-plane" hidden></i></div>'+
       '<h2>Buscando vuelos</h2>'+
       '<p>Estamos comparando las opciones disponibles para tu viaje.</p>'+
       '<div class="lx-flight-search-overlay__progress" aria-hidden="true"><span></span></div>'+
     '</div>';
   document.body.append(searchOverlay);
+  const brandLoader=searchOverlay.querySelector('.lx-flight-search-overlay__plane img');
+  brandLoader?.addEventListener('error',()=>{
+    brandLoader.hidden=true;
+    searchOverlay.querySelector('.lx-flight-search-overlay__plane i').hidden=false;
+  });
   function setBusy(busy) {
     searchOverlay.hidden=!busy;
     document.body.classList.toggle('lx-flight-searching',busy);
