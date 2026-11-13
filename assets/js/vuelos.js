@@ -245,36 +245,51 @@
     if (days <= 270) return -0.10;
     return -0.15;
   }
-  // Solo se muestran logotipos oficiales disponibles en la respuesta o en Google Flights.
-  function airlineLogoUrl(seg,airline) {
-    const url=String(seg?.airlineLogo||seg?.airline_logo||'');
-    if(/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/(?:70px|100px)\/[A-Za-z0-9_-]+\.png$/.test(url))return url;
-    const raw=String(airline||seg?.airline||'').trim();
-    const normalized=raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-    const named=[
+  // Iconos por IATA guardados localmente: no dependen de bloqueo de terceros.
+  const localAirlineCodes=new Set(
+    ['AV','JA','LA','AR','H2','CM','IB','G3','AA','UA','KL','QR','DL','AM','AD','BA','AC','LH','AF','TK']
+  );
+  function airlineCode(seg,airline){
+    const value=String(airline||seg?.airline||'').trim();
+    const raw=value.toUpperCase();
+    if(localAirlineCodes.has(raw))return raw;
+    if(raw==='4C'||raw==='LP'||raw==='XL')return 'LA';
+    if(raw==='2K')return 'AV';
+    const text=value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+    const matches=[
       ['jetsmart','JA'],['latam','LA'],['avianca','AV'],['sky airline','H2'],
       ['copa','CM'],['aeromexico','AM'],['american airlines','AA'],['united','UA'],
       ['iberia','IB'],['gol','G3'],['azul','AD'],['aerolineas argentinas','AR'],
       ['klm','KL'],['qatar','QR'],['lufthansa','LH'],['air france','AF'],
       ['british airways','BA'],['air canada','AC'],['delta','DL'],['turkish','TK']
     ];
-    const code=named.find(([name])=>normalized.includes(name))?.[1]||
-      (airlineNames[raw.toUpperCase()]?raw.toUpperCase():'');
-    return code?'https://www.gstatic.com/flights/airline_logos/70px/'+code+'.png':'';
+    return matches.find(([name])=>text.includes(name))?.[1]||raw;
   }
   function logoNode(seg,airline){
-    const url=airlineLogoUrl(seg,airline);
+    const code=airlineCode(seg,airline);
     const holder=node('span','flight-offer__airline-icon');
     const fallback=node('i','fa-solid fa-plane');
     fallback.setAttribute('aria-hidden','true');
     holder.append(fallback);
-    if(url){
-      const img=document.createElement('img');
-      img.alt='';img.width=38;img.height=38;img.loading='lazy';
-      img.addEventListener('load',()=>holder.replaceChildren(img),{once:true});
-      img.addEventListener('error',()=>img.remove(),{once:true});
-      img.src=url;
+    const sources=[];
+    if(localAirlineCodes.has(code))sources.push('assets/img/airlines/'+code+'.png');
+    const provider=String(seg?.airlineLogo||seg?.airline_logo||'');
+    if(/^https:\/\/www\.gstatic\.com\/flights\/airline_logos\/(?:70px|100px)\/[A-Za-z0-9_-]+\.png$/.test(provider))
+      sources.push(provider);
+    if(/^[A-Z0-9]{2,3}$/.test(code)){
+      sources.push('https://www.gstatic.com/flights/airline_logos/70px/'+code+'.png');
+      sources.push('https://images.kiwi.com/airlines/64/'+code+'.png');
     }
+    if(!sources.length)return holder;
+    const img=document.createElement('img');
+    img.alt='';img.width=38;img.height=38;img.loading='lazy';img.decoding='async';
+    let next=0;
+    img.addEventListener('load',()=>holder.replaceChildren(img));
+    img.addEventListener('error',()=>{
+      if(next<sources.length)img.src=sources[next++];
+      else img.remove();
+    });
+    img.src=sources[next++];
     return holder;
   }
   function simpleTime(value) {
