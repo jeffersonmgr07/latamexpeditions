@@ -742,9 +742,9 @@ function searchBundleHotels_(p) {
  * Las tarifas son observaciones, NO disponibilidad reservable ni precio final.
  */
 function searchWorldwideHotels_(p){
-  var destination=String(p.destination||"").normalize("NFC").trim().replace(/\\s+/g," ");
+  var destination=String(p.destination||"").normalize("NFC").trim().replace(/\s+/g," ");
   if(destination.length<2||destination.length>90||
-     !/^[\\p{L}\\p{N}\\p{M} ,.'()\\-]+$/u.test(destination))
+     !/^[\p{L}\p{N}\p{M} ,.'()\-]+$/u.test(destination))
     return {ok:false,message:"Escribe una ciudad o destino válido."};
   var checkin=String(p.check_in_date||""),checkout=String(p.check_out_date||"");
   var adults=Number(p.adults||2),children=Number(p.children||0);
@@ -819,7 +819,7 @@ function searchWorldwideHotels_(p){
     var candidates=[h.thumbnail,h.image,
       h.images&&h.images[0]&&(h.images[0].thumbnail||h.images[0].original_image)];
     return candidates.find(function(v){return typeof v==="string"&&
-      /^https:\\/\\/[^<>"'\\s]{8,650}$/.test(v);})||"";
+      /^https:\/\/[^<>"'\s]{8,650}$/.test(v);})||"";
   }
   var seen={};
   var hotels=(Array.isArray(data.properties)?data.properties:[])
@@ -831,7 +831,7 @@ function searchWorldwideHotels_(p){
     }).slice(0,24).map(function(h){
       var stars=Number(h.extracted_hotel_class||0);
       if(!(stars>=2&&stars<=5)){
-        var found=String(h.hotel_class||"").match(/(?:^|\\D)([2-5])(?:\\s*[- ]?star|\\s*estrell)/i);
+        var found=String(h.hotel_class||"").match(/(?:^|\D)([2-5])(?:\s*[- ]?star|\s*estrell)/i);
         stars=found?Number(found[1]):null;
       }
       var nightly=price_(h.rate_per_night);
