@@ -738,3 +738,167 @@ body.lx-flight-results-mode.lx-flight-editing .hero--flights .flight-hero-note{d
 .flight-detail-baggage strong{color:#184c32;font-size:12px}
 .flight-detail-baggage ul{margin:7px 0 0;padding-left:20px;color:#506f5b;font-size:12px;line-height:1.6}
 .flight-detail-fare-note{color:#597165;font-size:12px;line-height:1.55;margin:4px 0 0}
+
+
+/* Flights UX final: floating controls, flight ranges, compact header and progress screen. */
+body.lx-flights-only main{overflow:visible}
+body.lx-flights-only .hero--flights{
+  overflow:visible!important;
+  scroll-margin-top:calc(var(--latam-header-utility-height,36px) + 93px);
+}
+body.lx-flights-only .hero--flights::before{border-radius:0}
+body.lx-flights-only .flight-search-shell{position:relative;z-index:4}
+body.lx-flights-only .hero--flights .hero__content{z-index:3}
+body.lx-flights-only>.lx-picker-popover{
+  z-index:9998!important;
+  background:#fff;
+  border:1px solid #b5dfc3;
+  border-radius:16px;
+  box-shadow:0 19px 50px rgba(3,49,29,.25);
+}
+body.lx-flights-only>.lx-picker-popover .lx-calendar-header strong{
+  color:#10452e;font-weight:850;
+}
+body.lx-flights-only>.lx-picker-popover .lx-calendar-range-hint{
+  margin:2px 0 10px;
+  padding:7px 9px;
+  background:#eaf8ee;
+  color:#1c683d;
+  border-radius:8px;
+  font:700 12px/1.35 Inter,system-ui,sans-serif;
+  text-align:center;
+}
+body.lx-flights-only>.lx-picker-popover .lx-calendar-day.is-in-range{
+  background:#d9f2dc;
+  color:#145e36;
+  border-radius:2px;
+}
+body.lx-flights-only>.lx-picker-popover .lx-calendar-day.is-range-start,
+body.lx-flights-only>.lx-picker-popover .lx-calendar-day.is-range-end{
+  background:#07873e!important;
+  color:#fff!important;
+  border-radius:9px;
+}
+body.lx-flights-only>.lx-flight-airport-list,
+body.lx-flights-only>.lx-flight-travelers-menu{
+  z-index:9998;
+  border:1px solid #b5dfc3;
+  box-shadow:0 20px 50px rgba(4,45,26,.28);
+}
+body.lx-flights-only>.lx-flight-airport-list{
+  padding:8px;
+  background:#fff;
+  border-radius:14px;
+}
+body.lx-flights-only>.lx-flight-travelers-menu{
+  padding:16px;
+  background:#fff;
+  border-radius:16px;
+}
+body.lx-flights-only .flight-search-summary{
+  position:sticky;
+  z-index:1150;
+  top:calc(var(--latam-header-utility-height,36px) + 90px);
+  width:min(1280px,calc(100% - 44px));
+  margin:6px auto 0;
+  border:1px solid #dcece1;
+  border-radius:22px;
+  box-shadow:0 14px 35px rgba(7,58,31,.13);
+  overflow:visible;
+}
+body.lx-flights-only .flight-search-summary__inner{
+  width:100%;
+  max-width:100%;
+  min-height:68px;
+  padding:11px 18px;
+}
+body.lx-flight-results-mode.lx-flight-editing .flight-search-summary{display:none!important}
+body.lx-flight-results-mode.lx-flight-editing .hero--flights{scroll-margin-top:calc(var(--latam-header-utility-height,36px) + 95px)}
+body.lx-flight-results-mode.lx-flight-editing .hero--flights .flight-search-shell{
+  width:100%;
+  border-radius:22px;
+}
+body.lx-flight-results-mode:not(.lx-flight-editing) .flight-marketplace{padding-top:16px}
+.lx-flight-search-overlay[hidden]{display:none!important}
+.lx-flight-search-overlay{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:22px;
+  background:rgba(4,29,20,.78);
+  backdrop-filter:blur(7px);
+}
+body.lx-flight-searching{overflow:hidden}
+.lx-flight-search-overlay__card{
+  width:min(100%,390px);
+  padding:36px 28px;
+  text-align:center;
+  color:#12412d;
+  background:#fff;
+  border-radius:25px;
+  box-shadow:0 30px 90px rgba(0,0,0,.27);
+  border:1px solid #d4e9d9;
+}
+.lx-flight-search-overlay__plane{
+  width:84px;height:84px;margin:0 auto 19px;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 30% 25%,#d4ffdf,#b2f0c6 68%,#92dab0);
+  border:1px solid #a7dab8;
+  border-radius:24px;
+  color:#087e41;
+  box-shadow:0 0 22px rgba(7,135,62,.24);
+}
+.lx-flight-search-overlay__plane i{
+  font-size:32px;
+  animation:lx-flight-seeking 1.75s ease-in-out infinite;
+}
+.lx-flight-search-overlay__card h2{
+  margin:0 0 8px;
+  font:850 23px Montserrat,Inter,sans-serif;
+}
+.lx-flight-search-overlay__card p{
+  margin:0 auto 22px;
+  max-width:280px;
+  color:#5d7566;
+  font:500 13px/1.6 Inter,system-ui,sans-serif;
+}
+.lx-flight-search-overlay__progress{
+  overflow:hidden;
+  height:6px;
+  border-radius:99px;
+  background:#e4f2e7;
+}
+.lx-flight-search-overlay__progress span{
+  display:block;height:100%;width:36%;
+  border-radius:inherit;background:linear-gradient(90deg,#05873b,#81de65);
+  animation:lx-flight-progress 1.6s ease-in-out infinite alternate;
+}
+@keyframes lx-flight-seeking{
+  0%,100%{transform:translate(-5px,4px) rotate(-8deg)}
+  50%{transform:translate(7px,-5px) rotate(8deg)}
+}
+@keyframes lx-flight-progress{
+  from{transform:translateX(-100%)}to{transform:translateX(280%)}
+}
+@media(prefers-reduced-motion:reduce){
+  .lx-flight-search-overlay__plane i,
+  .lx-flight-search-overlay__progress span{animation:none}
+}
+@media(max-width:900px){
+  body.lx-flights-only .flight-search-summary{
+    top:calc(var(--latam-header-utility-height,36px) + 78px);
+    border-radius:19px;
+  }
+}
+@media(max-width:650px){
+  body.lx-flights-only .flight-search-summary{
+    width:calc(100% - 20px);
+    top:calc(var(--latam-header-utility-height,36px) + 72px);
+    border-radius:16px;
+  }
+  body.lx-flights-only .flight-search-summary__inner{padding:10px 12px}
+  body.lx-flights-only .hero--flights{scroll-margin-top:calc(var(--latam-header-utility-height,36px) + 79px)}
+}
