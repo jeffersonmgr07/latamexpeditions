@@ -425,7 +425,10 @@
     const favicon=base+'assets/img/favicon-latam-48.png?v=20261113';
     const touchIcon=base+'assets/img/favicon-latam-180.png?v=20261113';
     document.querySelectorAll('link[rel="icon"],link[rel="apple-touch-icon"]').forEach(icon=>{
-      icon.href=icon.rel==='apple-touch-icon'?touchIcon:favicon;
+      const size=icon.getAttribute('sizes')||'';
+      icon.href=icon.rel==='apple-touch-icon'
+        ? touchIcon
+        : (size.includes('192')?base+'assets/img/favicon-latam-192.png?v=20261113':favicon);
       if(icon.rel==='icon')icon.type='image/png';
     });
   }
