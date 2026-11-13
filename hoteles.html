@@ -37,7 +37,7 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TravelAgency", "name": "Latam Expeditions", "url": "https://latamexpeditions.com", "description": "Agencia de viajes especializada en Latinoamérica: experiencias, paquetes flexibles y viajes a medida con asesoría local.", "email": "contact@latamexpeditions.com", "telephone": "+51906472060", "image": "https://latamexpeditions.com/assets/img/latam-hero-01.jpg", "areaServed": ["Perú", "Chile", "Ecuador", "Colombia", "Argentina", "Brasil", "Bolivia", "México", "Costa Rica", "Uruguay", "Venezuela"], "sameAs": []}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Latam Expeditions", "url": "https://latamexpeditions.com", "inLanguage": "es", "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://latamexpeditions.com/experiencias.html?destino={search_term_string}"}, "query-input": "required name=search_term_string"}}</script>
   <link rel="stylesheet" href="assets/css/vuelos.css?v=20261113-mobile-isotipo" />
-  <link rel="stylesheet" href="assets/css/hoteles.css?v=20261113-global-cards2" />
+  <link rel="stylesheet" href="assets/css/hoteles.css?v=20261113-offers-1" />
 
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-latam-48.png?v=20261113" />
@@ -180,7 +180,7 @@
       <div class="hotel-featured__heading">
         <div>
           <h2 id="hotelFeaturedTitle">Quédate en un alojamiento único</h2>
-          <p>Descubre hoteles destacados y consulta tarifas para las fechas de tu viaje.</p>
+          <p>Ofertas de alojamiento para una o dos personas. Elige tus fechas y descubre tu precio final.</p>
         </div>
         <div class="hotel-featured__controls">
           <button id="hotelFeaturedPrev" type="button" aria-label="Ver alojamientos anteriores"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
@@ -196,8 +196,13 @@
           <div class="hotel-featured-card__content">
             <p class="hotel-featured-card__type">Resort · Todo incluido</p>
             <h3>Dreams Playa Bonita All Inclusive</h3>
+            <div class="hotel-featured-card__offer">
+              <span class="hotel-featured-card__save">10% de descuento</span>
+              <div class="hotel-featured-card__rate"><del>US$316.44</del><strong>US$284.90</strong></div>
+              <small>por noche · 1 habitación · máximo 2 adultos</small>
+            </div>
             <p class="hotel-featured-card__location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Playa Bonita Village, Panamá</p>
-            <button type="button" class="hotel-featured-card__action" data-featured-hotel="Dreams Playa Bonita All Inclusive" data-featured-city="Playa Bonita Village, Panamá">Consultar tarifas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="hotel-featured-card__action" data-hotel-offer-id="hotel-oferta-dreams-playa-bonita" data-featured-hotel="Dreams Playa Bonita All Inclusive" data-featured-city="Playa Bonita Village, Panamá">Reservar oferta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
           </div>
         </article>
 
@@ -208,8 +213,13 @@
           <div class="hotel-featured-card__content">
             <p class="hotel-featured-card__type">Hotel · Frente al mar</p>
             <h3>The Westin Playa Bonita Panama</h3>
+            <div class="hotel-featured-card__offer">
+              <span class="hotel-featured-card__save">10% de descuento</span>
+              <div class="hotel-featured-card__rate"><del>US$223.47</del><strong>US$200.90</strong></div>
+              <small>por noche · 1 habitación · máximo 2 adultos</small>
+            </div>
             <p class="hotel-featured-card__location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Playa Bonita Village, Panamá</p>
-            <button type="button" class="hotel-featured-card__action" data-featured-hotel="The Westin Playa Bonita Panama" data-featured-city="Playa Bonita Village, Panamá">Consultar tarifas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="hotel-featured-card__action" data-hotel-offer-id="hotel-oferta-westin-playa-bonita" data-featured-hotel="The Westin Playa Bonita Panama" data-featured-city="Playa Bonita Village, Panamá">Reservar oferta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
           </div>
         </article>
 
@@ -220,8 +230,13 @@
           <div class="hotel-featured-card__content">
             <p class="hotel-featured-card__type">Albergue · Naturaleza</p>
             <h3>Viajero Tayrona Hostel &amp; Ecohabs</h3>
+            <div class="hotel-featured-card__offer">
+              <span class="hotel-featured-card__save">10% de descuento</span>
+              <div class="hotel-featured-card__rate"><del>US$137.55</del><strong>US$123.90</strong></div>
+              <small>por noche · 1 habitación · máximo 2 adultos</small>
+            </div>
             <p class="hotel-featured-card__location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Buritaca, Colombia</p>
-            <button type="button" class="hotel-featured-card__action" data-featured-hotel="Viajero Tayrona Hostel &amp; Ecohabs" data-featured-city="Buritaca, Colombia">Consultar tarifas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="hotel-featured-card__action" data-hotel-offer-id="hotel-oferta-viajero-tayrona" data-featured-hotel="Viajero Tayrona Hostel &amp; Ecohabs" data-featured-city="Buritaca, Colombia">Reservar oferta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
           </div>
         </article>
 
@@ -232,14 +247,92 @@
           <div class="hotel-featured-card__content">
             <p class="hotel-featured-card__type">Hotel · Piscina</p>
             <h3>Hotel Tocarema</h3>
+            <div class="hotel-featured-card__offer">
+              <span class="hotel-featured-card__save">10% de descuento</span>
+              <div class="hotel-featured-card__rate"><del>US$129.33</del><strong>US$116.90</strong></div>
+              <small>por noche · 1 habitación · máximo 2 adultos</small>
+            </div>
             <p class="hotel-featured-card__location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Girardot, Colombia</p>
-            <button type="button" class="hotel-featured-card__action" data-featured-hotel="Hotel Tocarema" data-featured-city="Girardot, Colombia">Consultar tarifas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="hotel-featured-card__action" data-hotel-offer-id="hotel-oferta-hotel-tocarema" data-featured-hotel="Hotel Tocarema" data-featured-city="Girardot, Colombia">Reservar oferta <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
           </div>
         </article>
       </div>
     </div>
   </section>
 </main>
+
+
+  <div class="hotel-offer-modal" id="hotelOfferModal" role="dialog" aria-modal="true" aria-labelledby="hotelOfferTitle" hidden>
+    <div class="hotel-offer-modal__backdrop" data-offer-close></div>
+    <div class="hotel-offer-modal__panel">
+      <header class="hotel-offer-modal__header">
+        <div>
+          <span>LATAM EXPEDITIONS · ALOJAMIENTO</span>
+          <h2 id="hotelOfferTitle">Reserva tu oferta de hotel</h2>
+          <p id="hotelOfferSubtitle">Fechas y pasajeros</p>
+        </div>
+        <button type="button" data-offer-close aria-label="Cerrar ventana" class="hotel-offer-modal__close">×</button>
+      </header>
+      <ol class="hotel-offer-modal__steps" aria-label="Pasos de reserva">
+        <li data-offer-step-nav="1" class="is-active">1. Fechas</li>
+        <li data-offer-step-nav="2">2. Pasajeros</li>
+        <li data-offer-step-nav="3">3. Pago</li>
+      </ol>
+      <form id="hotelOfferBookingForm" novalidate>
+        <p class="hotel-offer-modal__error" id="hotelOfferError" role="alert" hidden></p>
+        <section data-offer-step="1" class="hotel-offer-modal__section">
+          <div class="hotel-offer-modal__selection">
+            <div><span>Ingreso (check-in)</span><strong id="hotelOfferStart">Seleccionar fecha</strong></div>
+            <div><span>Salida (check-out)</span><strong id="hotelOfferEnd">Seleccionar fecha</strong></div>
+          </div>
+          <p class="hotel-offer-modal__hint" id="hotelOfferDateHint">Selecciona la fecha de entrada y luego la de salida. Solo fechas habilitadas dentro de los próximos 90 días.</p>
+          <div class="hotel-offer-calendar">
+            <div class="hotel-offer-calendar__head">
+              <button type="button" id="hotelOfferPrevMonth" aria-label="Mes anterior">‹</button>
+              <strong id="hotelOfferCalendarMonth"></strong>
+              <button type="button" id="hotelOfferNextMonth" aria-label="Mes siguiente">›</button>
+            </div>
+            <div id="hotelOfferCalendarGrid" class="hotel-offer-calendar__grid" role="group" aria-label="Calendario de fechas de alojamiento"></div>
+          </div>
+          <div class="hotel-offer-modal__field">
+            <label for="hotelOfferAdults">Adultos por habitación</label>
+            <select id="hotelOfferAdults"><option value="1">1 adulto</option><option value="2" selected>2 adultos</option></select>
+            <small>Una habitación. Oferta exclusiva para 1 o 2 adultos. No admite niños.</small>
+          </div>
+          <div class="hotel-offer-modal__total"><span id="hotelOfferNights">Selecciona tus fechas</span><strong id="hotelOfferTotal">—</strong></div>
+          <p class="hotel-offer-modal__note">Las noches festivas están excluidas. Las fechas habilitadas no garantizan disponibilidad; verificaremos la habitación antes del pago.</p>
+        </section>
+        <section data-offer-step="2" class="hotel-offer-modal__section" hidden>
+          <h3>Datos de los pasajeros</h3>
+          <div id="hotelOfferPassengerFields"></div>
+          <div class="hotel-offer-modal__fields">
+            <label>Correo electrónico <input id="hotelOfferEmail" type="email" required maxlength="254" autocomplete="email" placeholder="correo@ejemplo.com" /></label>
+            <label>WhatsApp (con código de país) <input id="hotelOfferPhone" type="tel" required maxlength="50" placeholder="+51 999 999 999" autocomplete="tel" /></label>
+          </div>
+        </section>
+        <section data-offer-step="3" class="hotel-offer-modal__section" hidden>
+          <h3>Resumen de tu alojamiento</h3>
+          <div class="hotel-offer-modal__receipt" id="hotelOfferSummary"></div>
+          <p id="hotelOfferAvailability" class="hotel-offer-modal__notice" role="status">Comprobando disponibilidad de esta oferta…</p>
+          <div id="hotelOfferPayment" hidden>
+            <p>Pago seguro con PayPal. El importe será calculado nuevamente por nuestro servidor antes de crear la orden.</p>
+            <div id="hotelOfferPaypalButtons"></div>
+          </div>
+          <a id="hotelOfferWhatsApp" class="hotel-offer-modal__whatsapp" href="https://wa.me/51906472060" target="_blank" rel="noopener noreferrer" hidden>Solicitar disponibilidad con un asesor</a>
+          <p class="hotel-offer-modal__note">El pago confirmado no sustituye la confirmación que emitirá el establecimiento. Recibirás la información de tu reserva por correo.</p>
+        </section>
+        <section data-offer-step="4" class="hotel-offer-modal__section hotel-offer-modal__success" hidden>
+          <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+          <h3 id="hotelOfferSuccessTitle">Pago recibido</h3>
+          <p id="hotelOfferSuccessText"></p>
+        </section>
+        <footer class="hotel-offer-modal__actions" id="hotelOfferActions">
+          <button type="button" id="hotelOfferBack" class="hotel-offer-modal__secondary" hidden>Volver</button>
+          <button type="button" id="hotelOfferNext" class="hotel-offer-modal__primary">Continuar</button>
+        </footer>
+      </form>
+    </div>
+  </div>
 
   <div class="country-modal" id="countryModal" role="dialog" aria-modal="true" aria-labelledby="countryTitle">
     <div class="country-box">
@@ -349,6 +442,7 @@
   <script src="assets/js/cuentas.js?v=20261111-google-fix" defer></script>
   <script src="assets/js/vuelos-config.js" defer></script>
   <script src="assets/js/home-controls.js?v=20261113-hotels-1" defer></script>
-  <script src="assets/js/hoteles.js?v=20261113-global-cards2" defer></script>
+  <script src="assets/js/hoteles.js?v=20261113-offers-1" defer></script>
+  <script src="assets/js/hotel-ofertas.js?v=20261113-offers-1" defer></script>
   </body>
 </html>
