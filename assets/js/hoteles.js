@@ -279,7 +279,9 @@
     }
   }
   form.addEventListener('submit',e=>{
-    e.preventDefault();closeDest();closeTravelers();showError('');
+    e.preventDefault();
+    if(busy)return;
+    closeDest();closeTravelers();showError('');
     const problem=validate();
     if(problem){showError(problem);return}
     activeQuery=queryNow();
