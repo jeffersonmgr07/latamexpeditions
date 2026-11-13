@@ -123,6 +123,7 @@
   }
   function showEmptyState() {
     offerContainer.replaceChildren();
+    if(loadMore)loadMore.hidden=true;
     const empty = node('div', 'flight-empty-state');
     const graphic = node('span','flight-empty-state__icon');
     graphic.setAttribute('aria-hidden','true');
@@ -150,6 +151,12 @@
     CM:'Copa Airlines', WN:'Southwest Airlines', G3:'GOL'
   };
   let currentSearch = 0, allOffers = [], activeSort = 'price', currentQuery = null;
+  let visibleOfferCount=6;
+  const loadMore=el('flightLoadMore');
+  loadMore?.addEventListener('click',()=>{
+    visibleOfferCount+=6;
+    renderFilteredOffers();
+  });
   const searchOverlay=document.createElement('div');
   searchOverlay.className='lx-flight-search-overlay';
   searchOverlay.hidden=true;
@@ -469,11 +476,18 @@
       if (activeSort==='duration') return durationRank(a)-durationRank(b) || quotedPrice(a)-quotedPrice(b);
       return quotedPrice(a)-quotedPrice(b);
     });
-    count.textContent = filtered.length + ' de ' + allOffers.length + ' opciones';
+    const countVisible=Math.min(visibleOfferCount,filtered.length);
+    count.textContent = countVisible+' de '+filtered.length+' opciones'+
+      (filtered.length<allOffers.length?' con estos filtros':'');
     if (!filtered.length) {
       offerContainer.append(node('div','flight-offer__empty','No hay tarifas que cumplan estos filtros. Restablece los filtros o solicita una cotización personalizada.'));
     }
-    filtered.forEach(o=>offerContainer.append(renderOffer(o)));
+    filtered.slice(0,visibleOfferCount).forEach(o=>offerContainer.append(renderOffer(o)));
+    if(loadMore){
+      const remaining=Math.max(0,filtered.length-visibleOfferCount);
+      loadMore.hidden=remaining===0;
+      loadMore.textContent=remaining?'Ver '+Math.min(6,remaining)+' vuelos más':'';
+    }
     return filtered.length;
   }
   function resetFilters() {
@@ -488,6 +502,7 @@
     if (allOffers.length) renderFilteredOffers();
   }
   function setupFilters(offers) {
+    visibleOfferCount=6;
     allOffers=offers.filter(o=>Number.isFinite(o.price)&&o.price>0);
     airlineFilters.replaceChildren();
     const names=[...new Set(allOffers.map(o=>o.airline||'??'))].sort((a,b)=>airlineName(a).localeCompare(airlineName(b)));
