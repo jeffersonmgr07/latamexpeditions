@@ -385,7 +385,7 @@
   // Las rutas se resuelven con data-base para conservar enlaces existentes.
   function applyModernNavigation() {
     const items=[
-      ['Paquetes','paquetes.html','fa-suitcase-rolling'],['Ofertas','index.html?tab=ofertas#explorar','fa-tags'],
+      ['Paquetes','paquetes.html','fa-suitcase-rolling'],['Ofertas','ofertas.html','fa-tags'],
       ['Vuelos','vuelos.html','fa-plane'],['Hoteles','index.html?tab=hoteles#explorar','fa-bed']
     ];
     const header=document.querySelector('header.topbar');
@@ -421,9 +421,12 @@
       // Eliminar la navegación histórica, sin volver a insertar enlaces duplicados.
       panel.querySelectorAll('a[data-i18n^="nav."]:not(.mobile-nav__cta)').forEach(a=>a.remove());
     }
-    const logoIcon=base+'assets/img/isotipo-latam-expeditions.png?v=2';
+    // Mantener el isotipo aprobado, transparente y sin deformación en cada página.
+    const favicon=base+'assets/img/favicon-latam-48.png?v=20261113';
+    const touchIcon=base+'assets/img/favicon-latam-180.png?v=20261113';
     document.querySelectorAll('link[rel="icon"],link[rel="apple-touch-icon"]').forEach(icon=>{
-      icon.href=logoIcon;if(icon.rel==='icon')icon.type='image/png';
+      icon.href=icon.rel==='apple-touch-icon'?touchIcon:favicon;
+      if(icon.rel==='icon')icon.type='image/png';
     });
   }
   function syncBrandContact(){
@@ -623,7 +626,7 @@
     nav.setAttribute('aria-label','Servicios turísticos');
     const items=[
       ['Paquetes','paquetes.html','paquetes'],
-      ['Ofertas','index.html?tab=ofertas#explorar','ofertas'],
+      ['Ofertas','ofertas.html','ofertas'],
       ['Vuelos','vuelos.html','vuelos'],
       ['Hoteles','index.html?tab=hoteles#explorar','hoteles']
     ];
@@ -638,7 +641,7 @@
       const key=a.dataset.headerService;
       if ((key==='paquetes' && path.endsWith('/paquetes.html')) ||
           (key==='vuelos' && path.endsWith('/vuelos.html')) ||
-          (key==='ofertas' && tab==='ofertas') ||
+          (key==='ofertas' && (path.endsWith('/ofertas.html') || tab==='ofertas')) ||
           (key==='hoteles' && tab==='hoteles')) a.classList.add('is-active');
     });
 
