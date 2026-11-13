@@ -43,45 +43,139 @@
     if(checkout.value<min){checkout.value=min;checkout.dispatchEvent(new Event('change',{bubbles:true}));}
   });
 
-  // Destino: sugerencias personalizadas; se permite cualquier otra ciudad del mundo.
+  // Destino libre en cualquier ciudad del mundo. Las sugerencias son solo una ayuda:
+  // se carga bajo demanda un índice de ciudades principales de GeoNames (CC BY 4.0).
+  // La búsqueda NO queda limitada a este catálogo: cualquier localidad escrita
+  // se pasa como texto a Google Hotels / SerpAPI.
   const list=$('hotelDestinationOptions');
   const expand=$('hotelDestinationExpand');
-  let choices=[],chosen=-1;
+  const WORLD_CITY_INDEX='https://cdn.jsdelivr.net/gh/datasets/world-cities@main/data/world-cities.csv';
+  let worldCities=[],cityIndexRequest=null,choices=[],chosen=-1,focusedHotel='';
+  const commonCountryNames={
+    'Peru':'Perú','Brazil':'Brasil','Mexico':'México','United States':'Estados Unidos',
+    'United Kingdom':'Reino Unido','Germany':'Alemania','France':'Francia',
+    'Spain':'España','Italy':'Italia','Japan':'Japón','South Korea':'Corea del Sur',
+    'Bolivia, Plurinational State of':'Bolivia','Venezuela, Bolivarian Republic of':'Venezuela',
+    'Russian Federation':'Rusia','Czechia':'Chequia','Ecuador':'Ecuador',
+    'Dominican Republic':'República Dominicana'
+  };
+  function csvRow(line){
+    const cols=[];let field='',quoted=false;
+    for(let i=0;i<line.length;i++){
+      const chr=line[i];
+      if(chr==='"'){
+        if(quoted&&line[i+1]==='"'){field+='"';i++}else quoted=!quoted;
+      }else if(chr===','&&!quoted){cols.push(field);field=''}
+      else field+=chr;
+    }
+    cols.push(field);return cols;
+  }
+  function loadWorldCityIndex(){
+    if(cityIndexRequest)return cityIndexRequest;
+    cityIndexRequest=(async()=>{
+      const response=await fetch(WORLD_CITY_INDEX,{mode:'cors'});
+      if(!response.ok)throw Error('city_index_unavailable');
+      const raw=await response.text();
+      const lines=raw.split(/\r?\n/);
+      const result=[];
+      for(let i=1;i<lines.length;i++){
+        if(!lines[i])continue;
+        const [city,country,region]=csvRow(lines[i]);
+        if(!city||!country)continue;
+        const translated=commonCountryNames[country]||country;
+        let label=city+(region?', '+region:'')+', '+translated;
+        if(label.length>90)label=city+', '+translated;
+        if(label.length>90)continue;
+        result.push({label,search:norm(label),cityNorm:norm(city)});
+      }
+      worldCities=result;
+      if(!list.hidden)openDest();
+    })().catch(()=>{/* No impedir búsquedas si falla el catálogo externo. */});
+    return cityIndexRequest;
+  }
   function closeDest(){list.hidden=true;chosen=-1;destination.setAttribute('aria-expanded','false')}
+  function chooseDest(item){
+    destination.value=item.label;
+    focusedHotel='';
+    closeDest();destination.focus();
+  }
   function openDest(all=false){
-    const q=norm(destination.value);
-    choices=(all||!q?places:places.filter(p=>norm(p).includes(q))).slice(0,35);
+    const q=norm(destination.value),suggestions=[];
+    const unique=new Set();
+    function add(label,cityNorm){
+      if(suggestions.length>=36)return;
+      const normalized=norm(label);
+      if(unique.has(normalized))return;
+      unique.add(normalized);suggestions.push({label,cityNorm:cityNorm||normalized});
+    }
+    // Destinos más buscados, seguidos por coincidencias del catálogo mundial.
+    for(const p of places){if(all||!q||norm(p).includes(q))add(p)}
+    if(q){
+      const prefix=[],other=[];
+      for(const city of worldCities){
+        if(city.cityNorm.startsWith(q)){if(prefix.length<75)prefix.push(city)}
+        else if(city.search.includes(q)&&other.length<75)other.push(city);
+      }
+      for(const item of prefix.concat(other)){add(item.label,item.cityNorm)}
+    }
+    choices=suggestions.slice(0,35);chosen=-1;
     list.replaceChildren();
-    choices.forEach((p,i)=>{
+    choices.forEach((item,i)=>{
       const button=document.createElement('button');
-      button.type='button';button.setAttribute('role','option');button.setAttribute('aria-selected','false');
-      button.textContent=p;button.addEventListener('mousedown',e=>e.preventDefault());
-      button.addEventListener('click',()=>{destination.value=p;closeDest();destination.focus()});
+      button.type='button';button.setAttribute('role','option');
+      button.setAttribute('aria-selected','false');button.textContent=item.label;
+      button.addEventListener('mousedown',e=>e.preventDefault());
+      button.addEventListener('click',()=>chooseDest(item));
       list.append(button);
     });
-    if(!choices.length){
-      const note=document.createElement('p');
-      note.textContent='Puedes buscar cualquier otra ciudad o destino escribiendo su nombre.';
-      list.append(note);
+    if(q){
+      const typed=destination.value.trim();
+      if(typed&&!unique.has(norm(typed))){
+        const button=document.createElement('button');button.type='button';
+        button.className='hotel-destination-world';
+        button.setAttribute('role','option');button.setAttribute('aria-selected','false');
+        button.textContent='Buscar hoteles en «'+typed+'»';
+        button.addEventListener('mousedown',e=>e.preventDefault());
+        button.addEventListener('click',()=>chooseDest({label:typed}));
+        list.append(button);
+        choices.push({label:typed});
+      }
     }
+    const hint=document.createElement('p');hint.className='hotel-destination-hint';
+    hint.append(document.createTextNode(worldCities.length?
+      'Puedes buscar cualquier ciudad, aunque no aparezca en la lista. Ciudades de referencia: ':
+      'Escribe cualquier ciudad del mundo, aunque no aparezca en las sugerencias. '));
+    const credit=document.createElement('a');
+    credit.href='https://www.geonames.org/';credit.textContent='GeoNames';
+    credit.target='_blank';credit.rel='noopener noreferrer';
+    if(worldCities.length){
+      hint.append(credit,document.createTextNode(' (CC BY 4.0).'));
+    }else if(cityIndexRequest){
+      hint.append(document.createTextNode('Las sugerencias mundiales se cargan al escribir.'));
+    }
+    list.append(hint);
     list.hidden=false;destination.setAttribute('aria-expanded','true');
   }
-  destination.addEventListener('focus',()=>openDest());
-  destination.addEventListener('input',()=>openDest());
-  expand.addEventListener('click',()=>{if(list.hidden){destination.focus();openDest(true)}else closeDest()});
+  destination.addEventListener('focus',()=>{openDest();loadWorldCityIndex()});
+  destination.addEventListener('input',()=>{focusedHotel='';openDest();loadWorldCityIndex()});
+  expand.addEventListener('click',()=>{
+    if(!list.hidden){closeDest();return}
+    destination.focus();openDest(true);loadWorldCityIndex();
+  });
   destination.addEventListener('keydown',e=>{
     if(e.key==='Escape'){closeDest();return}
     if(e.key==='ArrowDown'||e.key==='ArrowUp'){
       e.preventDefault();
       if(list.hidden)openDest();
-      chosen=(chosen+(e.key==='ArrowDown'?1:-1)+choices.length)%Math.max(1,choices.length);
-      list.querySelectorAll('button').forEach((b,i)=>{
+      if(!choices.length)return;
+      chosen=(chosen+(e.key==='ArrowDown'?1:-1)+choices.length)%choices.length;
+      list.querySelectorAll('[role="option"]').forEach((b,i)=>{
         b.setAttribute('aria-selected',String(i===chosen));
         if(i===chosen)b.scrollIntoView({block:'nearest'});
       });
     }
     if(e.key==='Enter'&&!list.hidden&&chosen>=0&&choices[chosen]){
-      e.preventDefault();destination.value=choices[chosen];closeDest();
+      e.preventDefault();chooseDest(choices[chosen]);
     }
   });
 
@@ -159,7 +253,7 @@
   function queryNow(){
     return {destination:destination.value.trim(),check_in_date:checkin.value,
       check_out_date:checkout.value,adults:String(adults),children:String(children),
-      children_ages:ages.join(','),category:category.value};
+      children_ages:ages.join(','),category:category.value,hotel_name:focusedHotel};
   }
   function getHotels(query,page){
     const endpoint=String(window.LATAM_FLIGHTS_API_URL||'').trim();
@@ -203,6 +297,10 @@
   function render(){
     cards.replaceChildren();
     const ordered=hotels.slice();
+    if(sort.value==='recommended'&&activeQuery&&activeQuery.hotel_name){
+      const focus=norm(activeQuery.hotel_name);
+      ordered.sort((a,b)=>Number(norm(b.name)===focus)-Number(norm(a.name)===focus));
+    }
     if(sort.value==='priceAsc')ordered.sort((a,b)=>(a.total||Infinity)-(b.total||Infinity));
     if(sort.value==='priceDesc')ordered.sort((a,b)=>(b.total||-1)-(a.total||-1));
     if(sort.value==='rating')ordered.sort((a,b)=>(b.rating||0)-(a.rating||0));
@@ -240,7 +338,8 @@
     const label=Number(q.adults)+' '+(q.adults==='1'?'adulto':'adultos')+
       (Number(q.children)?' · '+q.children+' '+(q.children==='1'?'niño':'niños'):'');
     return q.destination+' · '+q.check_in_date+' — '+q.check_out_date+' · '+label+
-      (q.category!=='all'?' · '+q.category+' estrellas':'');
+      (q.category!=='all'?' · '+q.category+' estrellas':'')+
+      (q.hotel_name?' · '+q.hotel_name:'');
   }
   async function lookup(page=0){
     if(busy)return;
@@ -295,6 +394,46 @@
     document.body.classList.add('lx-hotel-editing');
     window.scrollTo({top:0,behavior:'smooth'});destination.focus({preventScroll:true});
   });
+  // Carrusel de alojamientos de inspiración. Se mantiene al final del contenido
+  // cuando aparecen los resultados (orden DOM: buscador → resultados → destacados).
+  const featuredTrack=$('hotelFeaturedTrack');
+  if(featuredTrack){
+    const prev=$('hotelFeaturedPrev'),next=$('hotelFeaturedNext');
+    function updateFeaturedArrows(){
+      const overflow=Math.max(0,featuredTrack.scrollWidth-featuredTrack.clientWidth);
+      prev.disabled=featuredTrack.scrollLeft<=3||overflow<3;
+      next.disabled=featuredTrack.scrollLeft>=overflow-3||overflow<3;
+    }
+    const scrollFeatured=direction=>{
+      const first=featuredTrack.querySelector('.hotel-featured-card');
+      featuredTrack.scrollBy({left:(first?first.getBoundingClientRect().width+18:290)*direction,behavior:'smooth'});
+    };
+    prev.addEventListener('click',()=>scrollFeatured(-1));
+    next.addEventListener('click',()=>scrollFeatured(1));
+    featuredTrack.addEventListener('scroll',updateFeaturedArrows,{passive:true});
+    window.addEventListener('resize',updateFeaturedArrows);
+    updateFeaturedArrows();
+    featuredTrack.querySelectorAll('.hotel-featured-card__photo img').forEach(img=>{
+      img.addEventListener('error',()=>{
+        const holder=img.parentElement;img.remove();
+        const fallback=document.createElement('i');
+        fallback.className='fa-solid fa-hotel';fallback.setAttribute('aria-hidden','true');
+        holder?.append(fallback);
+      },{once:true});
+    });
+    featuredTrack.querySelectorAll('[data-featured-hotel]').forEach(button=>{
+      button.addEventListener('click',()=>{
+        if(busy)return;
+        focusedHotel=button.dataset.featuredHotel||'';
+        destination.value=button.dataset.featuredCity||'';
+        category.value='all';
+        category.dispatchEvent(new Event('change',{bubbles:true}));
+        closeDest();closeTravelers();
+        form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+      });
+    });
+  }
+
   // Permite precargar parámetros desde otras secciones sin limitar destinos.
   const params=new URLSearchParams(location.search);
   if(params.has('destination'))destination.value=String(params.get('destination')).slice(0,90);

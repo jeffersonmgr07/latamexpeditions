@@ -746,6 +746,11 @@ function searchWorldwideHotels_(p){
   if(destination.length<2||destination.length>90||
      !/^[\p{L}\p{N}\p{M} ,.'()\-]+$/u.test(destination))
     return {ok:false,message:"Escribe una ciudad o destino válido."};
+  // El modo independiente puede consultar también un hotel destacado.
+  // Nunca restringe la ciudad ni el país del viajero a una lista fija.
+  var hotelName=String(p.hotel_name||"").normalize("NFC").trim().replace(/\s+/g," ").slice(0,110);
+  if(hotelName&&!/^[\p{L}\p{N}\p{M} &.,'()\-]+$/u.test(hotelName))
+    return {ok:false,message:"El nombre del hotel no es válido."};
   var checkin=String(p.check_in_date||""),checkout=String(p.check_out_date||"");
   var adults=Number(p.adults||2),children=Number(p.children||0);
   var ages=String(p.children_ages||"").split(",").filter(function(x){return x!==""});
@@ -769,7 +774,7 @@ function searchWorldwideHotels_(p){
   if(!key)return {ok:false,message:"La consulta de hoteles no está disponible en este momento."};
   var baseKey="hotel_public_v1_"+Utilities.base64EncodeWebSafe(
     Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256,
-      [destination.toLowerCase(),checkin,checkout,adults,children,ages.join(","),category].join("|"))).slice(0,48);
+      [destination.toLowerCase(),hotelName.toLowerCase(),checkin,checkout,adults,children,ages.join(","),category].join("|"))).slice(0,48);
   var cache=CacheService.getScriptCache();
   var ck=baseKey+"_p"+page;
   var cached=cache.get(ck);
@@ -792,7 +797,7 @@ function searchWorldwideHotels_(p){
     props.setProperty(counterKey,String(count+1));
   }finally{lock.releaseLock();}
   var params={
-    engine:"google_hotels",q:"hoteles en "+destination,hl:"es",gl:"pe",currency:"USD",
+    engine:"google_hotels",q:hotelName?hotelName+" "+destination:"hoteles en "+destination,hl:"es",gl:"pe",currency:"USD",
     check_in_date:checkin,check_out_date:checkout,adults:String(adults),
     children:String(children),api_key:key
   };

@@ -37,7 +37,7 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "TravelAgency", "name": "Latam Expeditions", "url": "https://latamexpeditions.com", "description": "Agencia de viajes especializada en Latinoamérica: experiencias, paquetes flexibles y viajes a medida con asesoría local.", "email": "contact@latamexpeditions.com", "telephone": "+51906472060", "image": "https://latamexpeditions.com/assets/img/latam-hero-01.jpg", "areaServed": ["Perú", "Chile", "Ecuador", "Colombia", "Argentina", "Brasil", "Bolivia", "México", "Costa Rica", "Uruguay", "Venezuela"], "sameAs": []}</script>
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Latam Expeditions", "url": "https://latamexpeditions.com", "inLanguage": "es", "potentialAction": {"@type": "SearchAction", "target": {"@type": "EntryPoint", "urlTemplate": "https://latamexpeditions.com/experiencias.html?destino={search_term_string}"}, "query-input": "required name=search_term_string"}}</script>
   <link rel="stylesheet" href="assets/css/vuelos.css?v=20261113-mobile-isotipo" />
-  <link rel="stylesheet" href="assets/css/hoteles.css?v=20261113-1" />
+  <link rel="stylesheet" href="assets/css/hoteles.css?v=20261113-global-cards2" />
 
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-latam-48.png?v=20261113" />
@@ -122,7 +122,7 @@
             <div class="flight-field hotel-destination-field">
               <label for="hotelDestination"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Destino</label>
               <div class="hotel-destination-combobox">
-                <input type="search" id="hotelDestination" name="destination" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="hotelDestinationOptions" placeholder="Ciudad o destino, cualquier país" autocomplete="off" maxlength="90" required />
+                <input type="search" id="hotelDestination" name="destination" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="hotelDestinationOptions" placeholder="Escribe cualquier ciudad del mundo" autocomplete="off" maxlength="90" required />
                 <button type="button" id="hotelDestinationExpand" class="hotel-destination-expand" aria-label="Ver destinos sugeridos"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
                 <div class="hotel-destination-list" role="listbox" id="hotelDestinationOptions" hidden></div>
               </div>
@@ -172,6 +172,71 @@
       <div id="hotelResultCards" class="hotel-result-grid" aria-live="polite"></div>
       <button type="button" id="hotelLoadMore" class="hotel-load-more" hidden>Ver más hoteles</button>
       <p class="hotel-results-note">Las tarifas son referencias observadas en el momento de la búsqueda. La disponibilidad, los impuestos y las condiciones se confirman antes de realizar una reserva.</p>
+    </div>
+  </section>
+
+  <section class="hotel-featured" id="hotelFeatured" aria-labelledby="hotelFeaturedTitle">
+    <div class="hotel-featured__inner">
+      <div class="hotel-featured__heading">
+        <div>
+          <h2 id="hotelFeaturedTitle">Quédate en un alojamiento único</h2>
+          <p>Descubre hoteles destacados y consulta tarifas para las fechas de tu viaje.</p>
+        </div>
+        <div class="hotel-featured__controls">
+          <button id="hotelFeaturedPrev" type="button" aria-label="Ver alojamientos anteriores"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+          <button id="hotelFeaturedNext" type="button" aria-label="Ver más alojamientos"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+      <div class="hotel-featured__track" id="hotelFeaturedTrack" aria-label="Alojamientos destacados">
+
+        <article class="hotel-featured-card">
+          <div class="hotel-featured-card__photo">
+            <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2021/10/20/0853/DDPBP-P0001-Aerial-Exterior.jpg/DDPBP-P0001-Aerial-Exterior.16x9.jpg" alt="Dreams Playa Bonita All Inclusive" />
+          </div>
+          <div class="hotel-featured-card__content">
+            <p class="hotel-featured-card__type">Resort · Todo incluido</p>
+            <h3>Dreams Playa Bonita All Inclusive</h3>
+            <p class="hotel-featured-card__location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Playa Bonita Village, Panamá</p>
+            <button type="button" class="hotel-featured-card__action" data-featured-hotel="Dreams Playa Bonita All Inclusive" data-featured-city="Playa Bonita Village, Panamá">Consultar tarifas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="hotel-featured-card">
+          <div class="hotel-featured-card__photo">
+            <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="https://cache.marriott.com/content/dam/marriott-renditions/PTYBW/ptybw-exterior-2742-hor-wide.jpg?downsize=1336px%3A%2A&amp;interpolation=progressive-bilinear&amp;output-quality=70" alt="The Westin Playa Bonita Panama" />
+          </div>
+          <div class="hotel-featured-card__content">
+            <p class="hotel-featured-card__type">Hotel · Frente al mar</p>
+            <h3>The Westin Playa Bonita Panama</h3>
+            <p class="hotel-featured-card__location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Playa Bonita Village, Panamá</p>
+            <button type="button" class="hotel-featured-card__action" data-featured-hotel="The Westin Playa Bonita Panama" data-featured-city="Playa Bonita Village, Panamá">Consultar tarifas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="hotel-featured-card">
+          <div class="hotel-featured-card__photo">
+            <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/24/d5/e6/eb/viajero-tayrona-hostel.jpg?h=800&amp;s=1&amp;w=1400" alt="Viajero Tayrona Hostel &amp; Ecohabs" />
+          </div>
+          <div class="hotel-featured-card__content">
+            <p class="hotel-featured-card__type">Albergue · Naturaleza</p>
+            <h3>Viajero Tayrona Hostel &amp; Ecohabs</h3>
+            <p class="hotel-featured-card__location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Buritaca, Colombia</p>
+            <button type="button" class="hotel-featured-card__action" data-featured-hotel="Viajero Tayrona Hostel &amp; Ecohabs" data-featured-city="Buritaca, Colombia">Consultar tarifas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+        </article>
+
+        <article class="hotel-featured-card">
+          <div class="hotel-featured-card__photo">
+            <img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="https://www.hoteltocarema.com/assets/img/Hotel_Tocarema.jpg" alt="Hotel Tocarema" />
+          </div>
+          <div class="hotel-featured-card__content">
+            <p class="hotel-featured-card__type">Hotel · Piscina</p>
+            <h3>Hotel Tocarema</h3>
+            <p class="hotel-featured-card__location"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Girardot, Colombia</p>
+            <button type="button" class="hotel-featured-card__action" data-featured-hotel="Hotel Tocarema" data-featured-city="Girardot, Colombia">Consultar tarifas <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 </main>
@@ -284,6 +349,6 @@
   <script src="assets/js/cuentas.js?v=20261111-google-fix" defer></script>
   <script src="assets/js/vuelos-config.js" defer></script>
   <script src="assets/js/home-controls.js?v=20261113-hotels-1" defer></script>
-  <script src="assets/js/hoteles.js?v=20261113-1" defer></script>
+  <script src="assets/js/hoteles.js?v=20261113-global-cards2" defer></script>
   </body>
 </html>
