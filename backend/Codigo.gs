@@ -2431,8 +2431,8 @@ function lxOfertaFechas_(slug,checkin,checkout){
     throw Error('Selecciona fechas válidas.');
   const days=Math.round((end-start)/86400000);
   const today=lxOfertaUtc_(Utilities.formatDate(new Date(),'America/Lima','yyyy-MM-dd'));
-  if(!(days>=1&&start>=today&&end<=new Date(today.getTime()+90*86400000)))
-    throw Error('Elige una estancia dentro de los próximos 90 días.');
+  if(!(days>=1&&start>=new Date(today.getTime()+91*86400000)&&days<=3650))
+    throw Error('Selecciona una fecha de entrada a partir del día 91.');
   let blacks={};
   try{blacks=JSON.parse(PROPS.getProperty('HOTEL_OFFER_BLACKOUTS')||'{}')}catch(ignore){}
   for(let dt=start.getTime();dt<end.getTime();dt+=86400000){
