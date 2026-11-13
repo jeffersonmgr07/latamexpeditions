@@ -16,7 +16,7 @@ function roomLookup(token){
  const endpoint=String(window.LATAM_FLIGHTS_API_URL||'');
  if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint))return Promise.reject(Error('No se pudo consultar este hotel.'));
  return new Promise((resolve,reject)=>{
-   const cb='latamFlightCb_'+Date.now()+'_'+Math.random().toString(36).slice(2,12),url=new URL(endpoint);
+   const cb='latamFlightCb_'+Date.now()+Math.random().toString(36).slice(2,12),url=new URL(endpoint);
    url.searchParams.set('mode','hotel_rooms');url.searchParams.set('property_token',token);url.searchParams.set('callback',cb);
    const script=document.createElement('script');let done=false;
    const finish=(err,data)=>{if(done)return;done=true;clearTimeout(timer);script.remove();delete window[cb];if(err)reject(err);else resolve(data)};
