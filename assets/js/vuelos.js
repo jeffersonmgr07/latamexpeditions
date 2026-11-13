@@ -150,7 +150,22 @@
     CM:'Copa Airlines', WN:'Southwest Airlines', G3:'GOL'
   };
   let currentSearch = 0, allOffers = [], activeSort = 'price', currentQuery = null;
+  const searchOverlay=document.createElement('div');
+  searchOverlay.className='lx-flight-search-overlay';
+  searchOverlay.hidden=true;
+  searchOverlay.setAttribute('role','status');
+  searchOverlay.setAttribute('aria-live','polite');
+  searchOverlay.innerHTML=
+    '<div class="lx-flight-search-overlay__card">'+
+      '<div class="lx-flight-search-overlay__plane" aria-hidden="true"><i class="fa-solid fa-plane"></i></div>'+
+      '<h2>Buscando vuelos</h2>'+
+      '<p>Estamos comparando las opciones disponibles para tu viaje.</p>'+
+      '<div class="lx-flight-search-overlay__progress" aria-hidden="true"><span></span></div>'+
+    '</div>';
+  document.body.append(searchOverlay);
   function setBusy(busy) {
+    searchOverlay.hidden=!busy;
+    document.body.classList.toggle('lx-flight-searching',busy);
     submitButton.disabled = busy;
     submitButton.setAttribute('aria-busy', String(busy));
     submitButton.innerHTML = busy
@@ -513,8 +528,11 @@
   el('flightClearFilters').addEventListener('click',resetFilters);
   function openEditSearch(){
     document.body.classList.add('lx-flight-editing');
-    el('flightSearchSummary').querySelector('.flight-search-summary__edit')?.setAttribute('aria-expanded','true');
-    form.closest('.hero--flights')?.scrollIntoView({behavior:'smooth',block:'start'});
+    const summary=el('flightSearchSummary');
+    summary.hidden=true;
+    summary.querySelector('.flight-search-summary__edit')?.setAttribute('aria-expanded','true');
+    const search= form.closest('.hero--flights');
+    search?.scrollIntoView({behavior:'smooth',block:'start'});
   }
   function showResultsHeader(query,tripText,labelCabin){
     const bar=el('flightSearchSummary');
