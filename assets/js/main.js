@@ -386,7 +386,7 @@
   function applyModernNavigation() {
     const items=[
       ['Paquetes','paquetes.html','fa-suitcase-rolling'],['Ofertas','ofertas.html','fa-tags'],
-      ['Vuelos','vuelos.html','fa-plane'],['Hoteles','index.html?tab=hoteles#explorar','fa-bed']
+      ['Vuelos','vuelos.html','fa-plane'],['Hoteles','hoteles.html','fa-bed']
     ];
     const header=document.querySelector('header.topbar');
     const nav=header?.querySelector('.nav');
@@ -631,7 +631,7 @@
       ['Paquetes','paquetes.html','paquetes'],
       ['Ofertas','ofertas.html','ofertas'],
       ['Vuelos','vuelos.html','vuelos'],
-      ['Hoteles','index.html?tab=hoteles#explorar','hoteles']
+      ['Hoteles','hoteles.html','hoteles']
     ];
     nav.innerHTML=items.map(([label,href,key])=>
       '<a href="'+base+href+'" data-header-service="'+key+'">'+label+'</a>'
@@ -645,7 +645,7 @@
       if ((key==='paquetes' && path.endsWith('/paquetes.html')) ||
           (key==='vuelos' && path.endsWith('/vuelos.html')) ||
           (key==='ofertas' && (path.endsWith('/ofertas.html') || tab==='ofertas')) ||
-          (key==='hoteles' && tab==='hoteles')) a.classList.add('is-active');
+          (key==='hoteles' && path.endsWith('/hoteles.html'))) a.classList.add('is-active');
     });
 
     // Mostrar el PNG transparente proporcionado por el usuario como imagen real.
