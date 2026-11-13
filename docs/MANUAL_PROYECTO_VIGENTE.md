@@ -44,6 +44,15 @@
 
 ## 4. Vuelos y hoteles: fuente actual SerpAPI
 
+**Buscador independiente de hoteles (13/11/2026):** `hoteles.html`, `assets/js/hoteles.js` y `assets/css/hoteles.css` ofrecen una página exclusiva con destino libre mundial, check-in, check-out, adultos/niños y edades, categoría 2–5 estrellas o todas, resultados con imagen, valoración y tarifa observada. El enlace de Hoteles del menú navega a `hoteles.html`. Se reutilizan los calendarios y selectores personalizados de `assets/js/home-controls.js`.
+
+- La consulta usa `mode=hotel_search` en el Apps Script **de vuelos/hoteles**, con `SERPAPI_KEY` privada. El modo existente `mode=hotels` para hoteles alternativos de paquetes conserva sus restricciones y reglas.
+- Para habilitar resultados reales, desplegar una **nueva versión** del código `integraciones/vuelos/Code.gs` en el proyecto Apps Script correspondiente y mantener el mismo endpoint en `assets/js/vuelos-config.js`. GitHub Pages no despliega archivos `.gs`.
+- Para proteger la cuota del proveedor, se cachean las consultas 10 minutos y hay un límite global por día de 100 nuevas consultas (`HOTEL_PUBLIC_DAILY_LIMIT` puede configurarse en las propiedades privadas). Las páginas posteriores dependen de tokens conservados en el cache del servidor.
+- Los resultados son referencias de Google Hotels; las tarjetas permiten **solicitar disponibilidad**, no reservan automáticamente ni habilitan cobro de hotel.
+
+
+
 1. El frontend consulta la URL configurada para la mini API de vuelos/hoteles.
 2. `integraciones/vuelos/Code.gs` realiza la consulta autorizada a **SerpAPI** con `SERPAPI_KEY` en las propiedades privadas de Apps Script; aplica caché, formato y paginación según el tipo de resultado.
 3. Los vuelos usan datos de Google Flights y los hoteles usan Google Hotels. Los filtros, fechas, ocupación, escalas, equipajes, clase y precio aplican según los datos efectivamente devueltos; no inventar una oferta ausente.

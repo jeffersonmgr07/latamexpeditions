@@ -7,7 +7,8 @@
   'homeFlightDestination','homeFlightDeparture','homeFlightReturn',
   'homeFlightAdults','homeHotelDestination','homeHotelCheckin',
   'homeHotelCheckout','homeHotelGuests',
-  'flightDeparture','flightReturn','flightCabin'];
+  'flightDeparture','flightReturn','flightCabin',
+   'hotelCheckin','hotelCheckout','hotelCategory'];
  const months=['enero','febrero','marzo','abril','mayo','junio','julio',
   'agosto','septiembre','octubre','noviembre','diciembre'];
  const shortMonths=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
@@ -44,7 +45,7 @@
    const panel=create('div','lx-picker-popover');panel.hidden=true;
    panel.setAttribute('role','dialog');panel.setAttribute('aria-label',label?.textContent.trim()||'Seleccionar');
    host.append(trigger,panel);
-   const flightPicker=!!input.closest('body.lx-flights-only');
+   const flightPicker=!!input.closest('body.lx-flights-only,body.lx-hotels-only');
    let portaled=false;
    const positionPanel=()=>{
      if(!portaled||panel.hidden)return;

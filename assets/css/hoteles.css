@@ -1,0 +1,93 @@
+/* Latam Expeditions | página exclusiva de búsqueda hotelera.
+   Reutiliza el diseño y los controles de la página de vuelos. */
+body.lx-hotels-only .hero--hotels {min-height:520px;padding:56px 0 82px}
+body.lx-hotels-only .hero--hotels .hero__content {padding-top:28px}
+body.lx-hotels-only .hero--hotels .hero__content>p {margin-bottom:32px}
+body.lx-hotels-only .flight-search-shell {position:relative}
+body.lx-hotels-only .hotel-search-grid {display:grid;grid-template-columns:minmax(205px,2fr) repeat(4,minmax(130px,1fr));gap:10px;margin:0 0 19px}
+body.lx-hotels-only .flight-field {min-width:0;position:relative}
+body.lx-hotels-only .flight-field .lx-picker-trigger,
+body.lx-hotels-only .hotel-travelers-field .lx-flight-travelers-trigger {width:100%;font-size:13px;line-height:1.3;min-height:29px}
+body.lx-hotels-only .flight-field .lx-picker-trigger {display:flex;align-items:center;justify-content:space-between;border:0;background:transparent;color:#153f2f;font-weight:700;padding:4px 0;cursor:pointer}
+body.lx-hotels-only .flight-field .lx-picker-trigger i {color:#07873e}
+body.lx-hotels-only .flight-field .lx-original-control {display:none!important}
+body.lx-hotels-only .flight-field .lx-picker-popover {width:min(350px,calc(100vw - 28px));text-align:left;border:1px solid #bde1cb;box-shadow:0 16px 36px rgba(6,57,28,.2)}
+body.lx-hotels-only .flight-field .lx-control-host {width:100%}
+.hotel-destination-combobox {position:relative}
+body.lx-hotels-only .flight-field input#hotelDestination {font-size:13px;min-height:29px;padding:4px 22px 4px 0;outline:none;text-overflow:ellipsis}
+.hotel-destination-expand {position:absolute;right:0;top:0;width:25px;height:30px;border:0;background:none;color:#07873e;cursor:pointer}
+.hotel-destination-list {position:absolute;z-index:100;width:min(360px,calc(100vw - 30px));top:calc(100% + 13px);left:-12px;max-height:295px;overflow-y:auto;overscroll-behavior:contain;background:#fff;border:1px solid #bde1cb;border-radius:15px;box-shadow:0 18px 38px rgba(5,56,26,.2);padding:7px}
+.hotel-destination-list[hidden],.lx-hotels-only .lx-flight-travelers-menu[hidden],.lx-hotels-only #hotelResults[hidden],.lx-hotels-only #hotelSearchSummary[hidden] {display:none!important}
+.hotel-destination-list button {display:block;border:0;width:100%;background:transparent;text-align:left;padding:11px 12px;border-radius:9px;color:#173d29;font-size:13px;font-weight:650;cursor:pointer}
+.hotel-destination-list button:hover,.hotel-destination-list button:focus,.hotel-destination-list button[aria-selected=true] {background:#e9f7ec}
+.hotel-destination-list p {padding:8px 12px;color:#526f5c;font-size:12px;margin:0}
+body.lx-hotels-only .hotel-travelers-field .lx-flight-travelers-menu {text-align:left;z-index:140;left:auto;right:0;width:min(320px,calc(100vw - 30px));font-family:Inter,system-ui,sans-serif}
+.hotel-traveler-row {display:flex;justify-content:space-between;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid #e5eee8}
+.hotel-traveler-row strong,.hotel-traveler-row small {display:block;color:#1b4530}
+.hotel-traveler-row strong {font-size:13px}
+.hotel-traveler-row small {font-size:11px;color:#647e6b;margin-top:4px}
+.hotel-counter {display:flex;align-items:center;gap:9px}
+.hotel-counter button {width:32px;height:32px;border-radius:10px;border:1px solid #b3d4c0;color:#086b3d;background:#eff8f1;cursor:pointer;font-size:18px}
+.hotel-counter button:disabled {opacity:.4;cursor:not-allowed}
+.hotel-counter output {font-weight:800;min-width:17px;text-align:center;color:#17402b}
+.hotel-children-ages {display:grid;gap:9px;padding-top:10px}
+.hotel-age-row {display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hotel-age-row label {font-size:12px!important;margin:0!important}
+.hotel-age-row select {border:1px solid #b3d4c0!important;background:#fff!important;border-radius:9px!important;padding:8px!important;width:125px!important;color:#173d2a!important}
+.hotel-travelers-field .lx-flight-traveler-done {margin-top:12px}
+.hotel-search-summary {background:#fff;border-bottom:1px solid #e1ede5;color:#1a4831}
+.hotel-search-summary__inner {max-width:1180px;margin:auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;font-size:13px;font-weight:700}
+.hotel-search-summary__inner button {flex-shrink:0;display:inline-flex;align-items:center;gap:8px;border:1px solid #bed9c6;background:#f0f8f1;color:#0b6537;border-radius:25px;padding:10px 17px;cursor:pointer;font-weight:800}
+body.lx-hotel-results-mode:not(.lx-hotel-editing) .hero--hotels {display:none}
+.hotel-marketplace {background:#f5f7ef;min-height:330px;color:#183d2b;padding:38px 22px 64px}
+.hotel-marketplace__inner {max-width:1170px;margin:auto}
+.hotel-marketplace__heading {display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:24px}
+.hotel-marketplace__heading h2 {font-family:Montserrat,sans-serif;font-size:clamp(22px,2.9vw,30px);margin:0 0 9px;line-height:1.2;color:#0c3c27}
+.hotel-marketplace__heading p {margin:0;color:#526c5b;font-size:13px}
+.hotel-marketplace__heading label {display:flex;align-items:center;gap:10px;color:#526c5b;font-size:12px;font-weight:700;white-space:nowrap}
+.hotel-marketplace__heading select {border:1px solid #c7dccb;border-radius:11px;padding:10px 13px;color:#16472f;background:#fff;font:700 12px Inter,system-ui;cursor:pointer}
+.hotel-result-message {font-size:14px;margin:0 0 18px;color:#4e6558}
+.hotel-result-message:empty {display:none}
+.hotel-result-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:19px}
+.hotel-result-card {min-width:0;overflow:hidden;background:#fff;border-radius:18px;border:1px solid #e0e9e2;box-shadow:0 10px 26px rgba(11,56,31,.07);display:flex;flex-direction:column}
+.hotel-result-card__photo {height:192px;background:linear-gradient(125deg,#e7efe8,#bfd8c4);overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hotel-result-card__photo img {width:100%;height:100%;object-fit:cover;display:block}
+.hotel-result-card__photo i {font-size:32px;color:#6fa182}
+.hotel-result-card__body {padding:18px;flex:1;display:flex;flex-direction:column;align-items:stretch;gap:9px}
+.hotel-result-card__category {color:#39704f;font-size:11px;font-weight:750}
+.hotel-result-card h3 {font:750 17px/1.35 Montserrat,Inter,sans-serif;color:#113c29;margin:0}
+.hotel-result-card__address {color:#647b6a;font-size:12px;line-height:1.4;min-height:18px;margin:0}
+.hotel-result-card__rating {font-size:12px;color:#385c45;font-weight:700;margin:0}
+.hotel-result-card__price {margin-top:auto;padding-top:11px;border-top:1px solid #e8f0e9}
+.hotel-result-card__price b {color:#0b6535;font:800 23px Montserrat,Inter,sans-serif}
+.hotel-result-card__price span {font-size:12px;font-weight:650;color:#5c7464;margin-left:5px}
+.hotel-result-card__price small {display:block;color:#718477;font-size:11px;margin-top:5px}
+.hotel-result-card__cta {display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;background:#07873e;border-radius:30px;padding:12px 14px;color:#fff!important;text-decoration:none;font:800 13px Inter,sans-serif;margin-top:6px}
+.hotel-result-card__cta:hover {background:#05672e}
+.hotel-load-more {display:block;margin:26px auto 0;border:1px solid #b9d9c5;background:#fff;border-radius:24px;padding:11px 26px;color:#0b6438;cursor:pointer;font-weight:800}
+.hotel-load-more[hidden] {display:none}
+.hotel-results-note {font-size:12px;color:#627a69;line-height:1.55;margin:25px 0 0}
+body.lx-hotels-only .flight-submit[disabled] {opacity:.6;cursor:progress}
+@media(max-width:1020px){
+  body.lx-hotels-only .hotel-search-grid {grid-template-columns:repeat(4,minmax(0,1fr))}
+  body.lx-hotels-only .hotel-destination-field {grid-column:1/-1}
+  .hotel-result-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:690px){
+  body.lx-hotels-only .hero--hotels {padding:28px 0 46px;min-height:0}
+  body.lx-hotels-only .hero--hotels .hero__content {padding-top:14px}
+  body.lx-hotels-only .hotel-search-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  body.lx-hotels-only .hotel-destination-field {grid-column:1/-1}
+  body.lx-hotels-only .hotel-search-grid .flight-field:last-child {grid-column:1/-1}
+  body.lx-hotels-only .flight-field input#hotelDestination {font-size:12.5px}
+  .hotel-marketplace {padding:25px 13px 45px}
+  .hotel-marketplace__heading {flex-direction:column;align-items:flex-start}
+  .hotel-result-grid {grid-template-columns:1fr}
+  .hotel-search-summary__inner {padding:11px 13px;align-items:flex-start;font-size:12px}
+  .hotel-result-card__photo {height:185px}
+}
+@media(max-width:410px){
+  body.lx-hotels-only .hotel-travelers-field .lx-flight-travelers-menu {width:calc(100vw - 28px)}
+  .hotel-search-summary__inner {flex-direction:column;align-items:stretch}
+  .hotel-search-summary__inner button {align-self:flex-end}
+}
