@@ -260,7 +260,7 @@
     const value=String(airline||seg?.airline||'').trim();
     const raw=value.toUpperCase();
     if(localAirlineCodes.has(raw))return raw;
-    if(raw==='4C'||raw==='LP'||raw==='XL')return 'LA';
+    if(['4C','LP','XL','JJ','PZ','TAM','LATAM BRASIL','LATAM AIRLINES BRASIL'].includes(raw))return 'LA';
     if(raw==='2K')return 'AV';
     const text=value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
     const matches=[
@@ -289,9 +289,18 @@
     }
     if(!sources.length)return holder;
     const img=document.createElement('img');
-    img.alt='';img.width=38;img.height=38;img.loading='lazy';img.decoding='async';
+    img.alt='';img.width=38;img.height=38;img.loading='eager';img.decoding='async';
+    // La imagen debe estar en el DOM antes de iniciar la carga. Con lazy
+    // y sin insertar el elemento, el evento load podía no ejecutarse.
+    img.style.visibility='hidden';
+    holder.append(img);
     let next=0;
-    img.addEventListener('load',()=>holder.replaceChildren(img));
+    img.addEventListener('load',()=>{
+      if(img.naturalWidth>0){
+        fallback.remove();
+        img.style.visibility='visible';
+      }
+    });
     img.addEventListener('error',()=>{
       if(next<sources.length)img.src=sources[next++];
       else img.remove();
