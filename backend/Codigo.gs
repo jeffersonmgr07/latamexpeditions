@@ -1148,7 +1148,7 @@ function doPost(e) {
     }
 
     const formRequest = Boolean(e.parameter &&
-      /^(registerPayOnTour|createOrder|captureOrder)$/.test(e.parameter.action||'') && e.parameter.payload);
+      /^(registerPayOnTour|createOrder|captureOrder|hotelRoomRequest)$/.test(e.parameter.action||'') && e.parameter.payload);
     const body = formRequest
       ? {action:String(e.parameter.action),data:JSON.parse(String(e.parameter.payload))}
       : JSON.parse(e.postData.contents);
@@ -1156,6 +1156,11 @@ function doPost(e) {
     const data = body.data || {};
 
     // --- Reservas y pago (Codigo.gs) ---
+    if(action==='hotelRoomRequest'){
+      const result=lxRegistrarSolicitudHabitacion_(data);
+      return formRequest?lxHtmlAcuse_({type:'latam-hotel-room-receipt',
+        requestKey:String(data.requestKey||''),ok:true,reference:result.reference}):json(result);
+    }
     if (action === 'registerPayOnTour') {
       const result = registrarPagoEnTour(data);
       return formRequest ? lxHtmlAcuse_({
@@ -1210,11 +1215,11 @@ function doPost(e) {
     // Nunca registrar formularios completos: incluyen nombres y documentos de identidad.
     const action=String(e&&e.parameter&&e.parameter.action||'');
     registrarError(error, 'doPost · '+(action||'json').slice(0,60));
-    if(/^(registerPayOnTour|createOrder|captureOrder)$/.test(action) && e&&e.parameter&&e.parameter.payload){
+    if(/^(registerPayOnTour|createOrder|captureOrder|hotelRoomRequest)$/.test(action) && e&&e.parameter&&e.parameter.payload){
       const rawKey=String(e.parameter.payload||'');
       let key='';
       try{key=String(JSON.parse(rawKey).requestKey||'');}catch(ignore){}
-      return lxHtmlAcuse_({type:action==='registerPayOnTour'?'latam-booking-receipt':'latam-paypal-response',
+      return lxHtmlAcuse_({type:action==='hotelRoomRequest'?'latam-hotel-room-receipt':(action==='registerPayOnTour'?'latam-booking-receipt':'latam-paypal-response'),
         action:action,requestKey:key,ok:false,pending:false,emailSent:false,error:mensajeSeguro(error)});
     }
     return json({ ok: false, error: mensajeSeguro(error) });
@@ -2431,8 +2436,8 @@ function lxOfertaFechas_(slug,checkin,checkout){
     throw Error('Selecciona fechas válidas.');
   const days=Math.round((end-start)/86400000);
   const today=lxOfertaUtc_(Utilities.formatDate(new Date(),'America/Lima','yyyy-MM-dd'));
-  if(!(days>=1&&start>=today&&end<=new Date(today.getTime()+90*86400000)))
-    throw Error('Elige una estancia dentro de los próximos 90 días.');
+  if(!(days>=1&&start>=new Date(today.getTime()+91*86400000)&&days<=3650))
+    throw Error('Selecciona una fecha de entrada a partir del día 91.');
   let blacks={};
   try{blacks=JSON.parse(PROPS.getProperty('HOTEL_OFFER_BLACKOUTS')||'{}')}catch(ignore){}
   for(let dt=start.getTime();dt<end.getTime();dt+=86400000){
@@ -2531,4 +2536,85 @@ function lxValidarOfertaHotel_(data){
   };
   return {precio:offer.rate,precioNino:0,viajeros:adults,adultos:adults,ninos:0,
     total,due:total,mode:'completo',fecha:lxOfertaUtc_(checkin),booking};
+}
+
+
+/* Solicitud de habitación de Google Hotels. No supone inventario ni pago
+ * validado: se registra en privado y se solicita confirmación al proveedor.
+ */
+function lxRegistrarSolicitudHabitacion_(d){
+  if(!d||!d.requestKey||!/^[A-Za-z0-9_-]{16,80}$/.test(String(d.requestKey)))
+    throw Error('Revisa tu solicitud e inténtalo nuevamente.');
+  const clean=(v,n)=>textoPlano(v,n);
+  const hotel=clean(d.hotel,110),destination=clean(d.destination,120),
+    room=clean(d.room,110),provider=clean(d.provider,90);
+  const date=String(d.checkin||''),checkout=String(d.checkout||'');
+  if(!hotel||!destination||!/^\d{4}-\d\d-\d\d$/.test(date)||
+     !/^\d{4}-\d\d-\d\d$/.test(checkout)||!isFinite(Date.parse(date))||
+     checkout<=date||!isFinite(Date.parse(checkout)))
+    throw Error('Revisa los datos del alojamiento y las fechas.');
+  const today=Utilities.formatDate(new Date(),'America/Lima','yyyy-MM-dd');
+  if(date<today||((Date.parse(checkout)-Date.parse(date))/86400000)>30)
+    throw Error('Selecciona fechas válidas.');
+  const adults=Number(d.adults||0),children=Number(d.children||0),rooms=Number(d.rooms||0);
+  if(!Number.isInteger(adults)||adults<1||adults>8||
+     !Number.isInteger(children)||children<0||children>6||
+     !Number.isInteger(rooms)||rooms<1||rooms>3)
+    throw Error('Revisa los viajeros y las habitaciones solicitadas.');
+  const guest=clean(d.mainGuest,120),nationality=clean(d.nationality,80),
+    document=clean(d.document,80),email=String(d.email||'').trim().toLowerCase(),
+    phone=clean(d.phone,50),others=textoMultilinea(d.otherGuests,800);
+  if(guest.length<3||!nationality||document.length<3||!esCorreo(email)||
+     phone.replace(/\D/g,'').length<7)
+    throw Error('Completa los datos del primer viajero y de contacto.');
+  const ref='HT-'+String(d.requestKey).slice(0,12).toUpperCase();
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+  const sheet=SpreadsheetApp.openById(CONFIG.sheetId);
+  let tab=sheet.getSheetByName('Solicitudes hoteles');
+  if(!tab){
+    tab=sheet.insertSheet('Solicitudes hoteles');
+    tab.appendRow(['Fecha','Referencia','Hotel','Destino','Habitación','Proveedor',
+      'Ingreso','Salida','Adultos','Niños','Habitaciones solicitadas','Titular',
+      'Nacionalidad','Documento','Email','Teléfono','Otros viajeros','Estado']);
+    tab.setFrozenRows(1);
+  }
+  const entries=tab.getDataRange().getValues();
+  if(entries.some(function(row,i){return i>0&&String(row[1])===ref}))
+    return {ok:true,reference:ref,duplicate:true};
+  // Restringir solicitudes automatizadas y evitar duplicados.
+  const prop=PropertiesService.getScriptProperties();
+  const dailyKey='HOTEL_ROOM_REQUESTS_'+Utilities.formatDate(new Date(),'UTC','yyyyMMdd');
+  const count=Number(prop.getProperty(dailyKey)||0);
+  if(count>=60)throw Error('No pudimos registrar la solicitud en este momento.');
+  tab.appendRow([new Date(),ref,textoHoja(hotel),textoHoja(destination),textoHoja(room),textoHoja(provider),date,checkout,
+    adults,children,rooms,textoHoja(guest),textoHoja(nationality),textoHoja(document),textoHoja(email),textoHoja(phone),textoHoja(others),
+    'PENDIENTE_DE_CONFIRMACION_HOTEL']);
+  prop.setProperty(dailyKey,String(count+1));
+  }finally{lock.releaseLock();}
+  const body=[
+    'Nueva solicitud de alojamiento',
+    'Referencia: '+ref,'Hotel: '+hotel,'Destino: '+destination,
+    'Opción solicitada: '+room,'Proveedor de tarifa: '+provider,
+    'Entrada: '+date,'Salida: '+checkout,
+    'Adultos: '+adults+'; niños: '+children+'; habitaciones: '+rooms,
+    'Titular: '+guest,'Nacionalidad: '+nationality,'Documento: '+document,
+    'Email: '+email,'Teléfono: '+phone,
+    'Otros pasajeros: '+(others||'Por completar'),
+    '',
+    'Se solicita comprobar disponibilidad, tipo de habitación, tarifa final y condiciones antes de aceptar pago.'
+  ].join('\n');
+  try{MailApp.sendEmail({to:CONFIG.notifyEmail,
+    subject:'[Alojamiento] Solicitud '+ref+' · '+hotel,body:body,
+    replyTo:email,name:CONFIG.agency.name});}
+  catch(err){registrarError(err,'Notificación solicitud habitación '+ref);}
+  try{MailApp.sendEmail({to:email,
+    subject:'Recibimos tu solicitud de alojamiento · '+ref,
+    body:'Hola,\n\nHemos recibido tu solicitud de alojamiento en '+hotel+
+      ' del '+date+' al '+checkout+'.\nReferencia: '+ref+
+      '\n\nTe enviaremos las opciones y condiciones de reserva por correo antes de realizar cualquier cobro.\n\nLatam Expeditions',
+    name:CONFIG.agency.name,replyTo:CONFIG.agency.email});}
+  catch(err){registrarError(err,'Acuse solicitud habitación '+ref);}
+  return {ok:true,reference:ref};
 }

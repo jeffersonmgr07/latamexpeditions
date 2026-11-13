@@ -204,3 +204,53 @@ body.lx-hotels-only .flight-submit[disabled] {opacity:.6;cursor:progress}
   .hotel-offer-passenger__grid,.hotel-offer-modal__fields{grid-template-columns:1fr}
   .hotel-offer-modal__actions{padding:14px 16px}
 }
+
+/* Modal de habitaciones y solicitud privada: búsqueda general de hoteles. */
+.lx-hotels-only .hotel-result-card__cta{border:0;width:100%;cursor:pointer;font-family:Inter,system-ui,sans-serif}
+.hotel-rooms-modal[hidden],.hotel-rooms-modal__booking[hidden],.hotel-rooms-modal__success[hidden],
+.hotel-rooms-modal__supplier[hidden],.hotel-rooms-modal__error[hidden]{display:none!important}
+.hotel-rooms-modal{position:fixed;inset:0;z-index:10998;display:flex;align-items:center;justify-content:center;padding:12px;font-family:Inter,system-ui,sans-serif}
+.hotel-rooms-modal__scrim{position:absolute;inset:0;background:rgba(5,28,17,.76);backdrop-filter:blur(4px)}
+.hotel-rooms-modal__panel{position:relative;background:#fff;width:min(780px,100%);max-height:96dvh;border-radius:23px;overflow-y:auto;box-shadow:0 25px 80px rgba(0,0,0,.28);color:#183f2a}
+.hotel-rooms-modal__head{position:sticky;top:0;z-index:3;background:#f9fcfa;border-bottom:1px solid #dcebe0;display:flex;align-items:start;justify-content:space-between;gap:16px;padding:22px 25px}
+.hotel-rooms-modal__head span{font:800 11px Inter,sans-serif;letter-spacing:.09em;color:#07873e}
+.hotel-rooms-modal__head h2{font:780 clamp(20px,3vw,27px)/1.3 Montserrat,Inter,sans-serif;color:#123d28;margin:6px 0}
+.hotel-rooms-modal__head p{color:#647e6c;margin:0;font-size:12px}
+.hotel-rooms-modal__close{border:0;background:#e5f3e9;color:#0a6936;flex-shrink:0;width:34px;height:34px;border-radius:50%;font-size:24px;cursor:pointer}
+.hotel-rooms-modal__content{padding:20px 25px 28px}
+.hotel-rooms-modal__message{font-size:13px;color:#526d5e;line-height:1.55;margin:0 0 14px}
+.hotel-rooms-modal__list{display:grid;gap:12px}
+.hotel-rooms-modal__option{display:flex;gap:17px;align-items:stretch;overflow:hidden;border:1px solid #dcece0;border-radius:15px;background:#fbfdfa}
+.hotel-rooms-modal__option img{width:160px;min-height:170px;object-fit:cover;flex-shrink:0}
+.hotel-rooms-modal__option-body{flex:1;padding:16px;display:flex;flex-direction:column;gap:7px}
+.hotel-rooms-modal__option-body h3{font:800 16px/1.3 Montserrat,Inter,sans-serif;margin:0;color:#153f2b}
+.hotel-rooms-modal__option-body p{font:500 12px/1.5 Inter,sans-serif;margin:0;color:#667b6b}
+.hotel-rooms-modal__price{font:800 18px Montserrat,Inter,sans-serif;color:#08673b}
+.hotel-rooms-modal__choose,.hotel-rooms-modal__submit{border:0;border-radius:100px;background:#07873e;color:white;cursor:pointer;padding:12px 15px;font:800 13px Inter,sans-serif}
+.hotel-rooms-modal__choose{margin-top:4px;align-self:start}
+.hotel-rooms-modal__choose:hover,.hotel-rooms-modal__submit:hover{background:#056d34}
+.hotel-rooms-modal__booking{margin-top:22px;border-top:1px solid #dcebe0;padding-top:19px}
+.hotel-rooms-modal__booking h3{font:800 18px Montserrat,Inter,sans-serif;margin:0 0 9px}
+.hotel-rooms-modal__booking>p{font-size:13px;color:#4a6554;line-height:1.5}
+.hotel-rooms-modal__fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:17px 0}
+.hotel-rooms-modal__fields label,.hotel-rooms-modal__other-label{display:grid;gap:6px;color:#305442;font:750 12px Inter,sans-serif}
+.hotel-rooms-modal__fields input,.hotel-rooms-modal__fields select,.hotel-rooms-modal__other-label textarea{width:100%;padding:12px;border:1px solid #c9ddcf;border-radius:11px;font:600 13px Inter,system-ui,sans-serif;color:#173c29;background:#fff;min-width:0}
+.hotel-rooms-modal__other-label textarea{resize:vertical}
+.hotel-rooms-modal__note{font-size:12px;line-height:1.5;color:#617966;margin:14px 0}
+.hotel-rooms-modal__error{color:#9c2b22;background:#fff1ef;border:1px solid #eec8c4;border-radius:11px;padding:11px;font-size:12px}
+.hotel-rooms-modal__submit{display:block;width:100%;margin-top:12px}
+.hotel-rooms-modal__submit:disabled{opacity:.5;cursor:progress}
+.hotel-rooms-modal__supplier{display:block;text-align:center;padding:13px;color:#0a673c!important;font-size:12px;font-weight:750}
+.hotel-rooms-modal__success{text-align:center;padding:30px 12px}
+.hotel-rooms-modal__success i{font-size:36px;color:#07873e}
+.hotel-rooms-modal__success h3{font-size:21px;color:#17472e}
+.hotel-rooms-modal__success p{line-height:1.55;color:#557263}
+@media(max-width:590px){
+ .hotel-rooms-modal{padding:6px}
+ .hotel-rooms-modal__panel{max-height:98dvh;border-radius:15px}
+ .hotel-rooms-modal__head{padding:15px}
+ .hotel-rooms-modal__content{padding:14px}
+ .hotel-rooms-modal__option{flex-direction:column}
+ .hotel-rooms-modal__option img{width:100%;height:170px;min-height:0}
+ .hotel-rooms-modal__fields{grid-template-columns:1fr}
+}

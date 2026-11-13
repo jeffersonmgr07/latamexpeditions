@@ -56,8 +56,8 @@
   const busyText=(t)=>{msg.textContent=t};
   const rangeValid=(from,to)=>{
     if(!from||!to||from>=to)return false;
-    const min=iso(now()),max=iso(addDays(now(),90));
-    if(from<min||to>max||nights(from,to)<1)return false;
+    const min=iso(addDays(now(),91));
+    if(from<min||nights(from,to)<1||nights(from,to)>3650)return false;
     for(let i=0;i<nights(from,to);i++){
       const night=iso(addDays(new Date(from+'T12:00:00'),i));
       if(blackout(night,selected.country))return false;
@@ -74,9 +74,9 @@
   function drawCalendar(){
     const year=displayMonth.getFullYear(),month=displayMonth.getMonth();
     $('hotelOfferCalendarMonth').textContent=months[month]+' '+year;
-    $('hotelOfferPrevMonth').disabled=year===now().getFullYear()&&month===now().getMonth();
-    const max=addDays(now(),90);
-    $('hotelOfferNextMonth').disabled=year===max.getFullYear()&&month===max.getMonth();
+    const firstAllowed=addDays(now(),91);
+    $('hotelOfferPrevMonth').disabled=year===firstAllowed.getFullYear()&&month===firstAllowed.getMonth();
+    $('hotelOfferNextMonth').disabled=year>=2099&&month===11;
     calendar.replaceChildren();
     ['Lu','Ma','Mi','Ju','Vi','Sa','Do'].forEach(day=>{
       const w=document.createElement('span');w.textContent=day;w.className='hotel-offer-calendar__weekday';calendar.append(w);
@@ -87,7 +87,7 @@
       const d=new Date(year,month,day),date=iso(d),button=document.createElement('button');
       button.type='button';button.className='hotel-offer-calendar__day';
       button.textContent=String(day);button.setAttribute('aria-label',date);
-      const disabled=date<iso(now())||date>iso(max)||blackout(date,selected.country);
+      const disabled=date<iso(firstAllowed)||blackout(date,selected.country);
       button.disabled=disabled;button.classList.toggle('is-blocked',disabled);
       if(date===start||date===end)button.classList.add('is-selected');
       else if(start&&end&&date>start&&date<end)button.classList.add('is-range');
@@ -101,7 +101,7 @@
       start=date;end='';
       $('hotelOfferDateHint').textContent='Ahora elige la fecha de salida. Las noches festivas están excluidas.';
     }else if(!rangeValid(start,date)){
-      showError('La estancia incluye días excluidos o supera el período permitido. Selecciona otras fechas.');
+      showError('Las fechas elegidas incluyen noches no disponibles para esta oferta. Selecciona otras fechas.');
       return;
     }else{
       end=date;
@@ -198,8 +198,9 @@
     $('hotelOfferAdults').value='2';$('hotelOfferEmail').value='';$('hotelOfferPhone').value='';
     $('hotelOfferTitle').textContent=selected.title;
     $('hotelOfferSubtitle').textContent='Oferta especial · '+fmt.format(selected.night)+' por noche';
-    displayMonth=new Date(now().getFullYear(),now().getMonth(),1);
-    $('hotelOfferDateHint').textContent='Selecciona la entrada y luego la salida. Solo fechas dentro de los próximos 90 días.';
+    const firstBookable=addDays(now(),91);
+    displayMonth=new Date(firstBookable.getFullYear(),firstBookable.getMonth(),1);
+    $('hotelOfferDateHint').textContent='Elige tu fecha de ingreso y después la fecha de salida.';
     $('hotelOfferPaypalButtons').replaceChildren();
     $('hotelOfferPayment').hidden=true;$('hotelOfferWhatsApp').hidden=true;
     modal.hidden=false;document.body.style.overflow='hidden';
@@ -289,7 +290,7 @@
         busyText('La habitación necesita confirmación para estas fechas. Puedes consultarla con nuestro equipo sin realizar un pago.');
         $('hotelOfferWhatsApp').hidden=false;return;
       }
-      busyText('Tenemos cupos confirmados por el operador para estas fechas. Puedes continuar al pago seguro.');
+      busyText('Tu estancia está disponible para continuar con el pago seguro.');
       const cfg=await getConfig();
       if(!cfg.clientId||cfg.currency!=='USD')throw Error('El pago seguro no está habilitado actualmente.');
       $('hotelOfferPayment').hidden=false;
@@ -415,7 +416,7 @@
       await buttons.render('#hotelOfferPaypalButtons');
     }catch(e){
       paySetup=false;
-      busyText('El pago seguro no está disponible ahora. Puedes solicitar disponibilidad con un asesor.');
+      busyText('No podemos completar esta reserva en línea por el momento. Nuestro equipo puede ayudarte.');
       $('hotelOfferPayment').hidden=true;$('hotelOfferWhatsApp').hidden=false;
     }
   }
