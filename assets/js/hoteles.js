@@ -413,11 +413,21 @@
     featuredTrack.addEventListener('scroll',updateFeaturedArrows,{passive:true});
     window.addEventListener('resize',updateFeaturedArrows);
     updateFeaturedArrows();
+    featuredTrack.querySelectorAll('.hotel-featured-card__photo img').forEach(img=>{
+      img.addEventListener('error',()=>{
+        const holder=img.parentElement;img.remove();
+        const fallback=document.createElement('i');
+        fallback.className='fa-solid fa-hotel';fallback.setAttribute('aria-hidden','true');
+        holder?.append(fallback);
+      },{once:true});
+    });
     featuredTrack.querySelectorAll('[data-featured-hotel]').forEach(button=>{
       button.addEventListener('click',()=>{
         if(busy)return;
         focusedHotel=button.dataset.featuredHotel||'';
         destination.value=button.dataset.featuredCity||'';
+        category.value='all';
+        category.dispatchEvent(new Event('change',{bubbles:true}));
         closeDest();closeTravelers();
         form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
       });
