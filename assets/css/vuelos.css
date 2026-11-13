@@ -581,3 +581,151 @@ body.flight-modal-open {overflow:hidden}
   .lx-flight-airport-list{width:min(345px,calc(100vw - 30px));left:-8px}
   .lx-flights-only .flight-search-head{border-radius:22px 22px 0 0}
 }
+
+/* LATAM Flight Results UX — compact query bar, official logos and central modal. */
+body.lx-flights-only .hero--flights::before{
+  background-image:linear-gradient(102deg,rgba(3,30,21,.91),rgba(5,49,33,.80),rgba(2,28,19,.75)),url("../img/latam-hero-01.jpg")!important;
+  background-size:cover!important;
+  background-position:center 45%!important;
+  background-repeat:no-repeat!important;
+}
+body.lx-flights-only .hero--flights::after{opacity:.08}
+body.lx-flight-results-mode:not(.lx-flight-editing) .hero--flights{display:none!important}
+body.lx-flight-results-mode .flight-marketplace{
+  padding-top:28px;
+  min-height:calc(100dvh - 225px);
+}
+.flight-search-summary{
+  position:sticky;
+  z-index:1090;
+  top:calc(var(--latam-header-utility-height, 36px) + 72px);
+  background:#fff;
+  box-shadow:0 5px 18px rgba(5,47,27,.08);
+  border-bottom:1px solid #dbe8df;
+}
+.flight-search-summary[hidden]{display:none!important}
+.flight-search-summary__inner{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  width:min(1280px,calc(100% - 40px));
+  margin:auto;
+  padding:16px 0;
+  color:#123e2b;
+  font:750 13px/1.35 Inter,system-ui,sans-serif;
+}
+.flight-search-summary__inner>span{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+}
+.flight-search-summary__route{font-size:16px;font-weight:850;flex:1 1 auto}
+.flight-search-summary__date,.flight-search-summary__pax,.flight-search-summary__cabin{
+  border-left:1px solid #d8e7dc;
+  padding-left:16px;
+  flex:0 1 auto;
+}
+.flight-search-summary__edit{
+  margin-left:auto;flex:0 0 auto;
+  padding:10px 14px;
+  display:inline-flex;align-items:center;gap:8px;
+  background:#e8f7ed;color:#085d30;
+  border:1px solid #c5e5cf;border-radius:10px;
+  font:800 12px Inter,system-ui,sans-serif;
+  cursor:pointer;
+}
+.flight-search-summary__edit:hover,
+.flight-search-summary__edit[aria-expanded="true"]{background:#d6eedf}
+.flight-search-summary__edit:focus-visible{outline:3px solid #68cc7e;outline-offset:2px}
+.flight-search-summary__date::before{content:"\f073";font-family:"Font Awesome 6 Free";font-weight:900;color:#07873e}
+.flight-search-summary__pax::before{content:"\f007";font-family:"Font Awesome 6 Free";font-weight:900;color:#07873e}
+.flight-search-summary__cabin::before{content:"\f0ab";font-family:"Font Awesome 6 Free";font-weight:900;color:#07873e}
+body.lx-flight-results-mode.lx-flight-editing .hero--flights{
+  min-height:0;
+  padding:20px 0 30px;
+}
+body.lx-flight-results-mode.lx-flight-editing .hero--flights .hero__content{padding-top:25px}
+body.lx-flight-results-mode.lx-flight-editing .hero--flights .hero__content>.eyebrow,
+body.lx-flight-results-mode.lx-flight-editing .hero--flights .hero__content>h1,
+body.lx-flight-results-mode.lx-flight-editing .hero--flights .hero__content>p:not(.flight-hero-note){display:none}
+body.lx-flight-results-mode.lx-flight-editing .hero--flights .flight-search-shell{box-shadow:0 18px 40px rgba(0,0,0,.24)}
+body.lx-flight-results-mode.lx-flight-editing .hero--flights .flight-hero-note{display:none}
+.flight-marketplace .flight-offer__carrier{font-size:14px;font-weight:800;gap:9px}
+.flight-marketplace .flight-offer__airline-icon{
+  width:40px;height:40px;min-width:40px;
+  background:#f0f7f2;border:1px solid #e2ebe4;
+  border-radius:10px;
+}
+.flight-marketplace .flight-offer__airline-icon img{
+  width:38px;height:38px;
+  object-fit:contain;
+}
+.flight-marketplace .flight-leg__time{
+  font-size:clamp(19px,2.2vw,25px);
+  color:#143f2b;
+  font-weight:800;
+}
+.flight-marketplace .flight-leg__endpoint--end .flight-leg__time{
+  font-size:clamp(19px,2.2vw,25px);
+  color:#143f2b;
+}
+.flight-marketplace .flight-leg__endpoint small{
+  font-size:13px;font-weight:750;color:#567365;
+}
+.flight-marketplace .flight-leg__label{font-size:12px}
+.flight-marketplace .flight-leg__middle{font-size:12px;gap:5px}
+.flight-marketplace .flight-leg__middle span:nth-child(2){font-size:18px;letter-spacing:.08em}
+.flight-marketplace .flight-leg__middle small{font-size:12px}
+.flight-marketplace .flight-offer__body{gap:14px}
+.flight-details-dialog{
+  position:fixed;
+  inset:0;
+  width:min(880px,calc(100vw - 32px));
+  max-width:calc(100vw - 32px);
+  height:auto;
+  max-height:min(90dvh,920px);
+  margin:auto;
+  border:0;border-radius:20px;
+  background:#f8fbf9;
+  color:#163b29;
+  overflow-y:auto;
+  box-shadow:0 24px 70px rgba(0,21,12,.28);
+}
+.flight-details-dialog::backdrop{background:rgba(2,25,14,.65);backdrop-filter:blur(5px)}
+.flight-details-dialog__head{background:#fff;z-index:4}
+.flight-details-dialog__head h2{color:#0b3d2e}
+.flight-detail-group{border-color:#e3ebe4}
+.flight-detail-group h3,.flight-detail-point strong{color:#143f2b}
+.flight-details-dialog .flight-offer__airline-icon{
+  display:grid;place-items:center;
+  width:44px;height:44px;min-width:44px;
+  background:#eaf6ed;border-radius:11px;
+}
+.flight-details-dialog .flight-offer__airline-icon img{
+  width:42px;height:42px;object-fit:contain
+}
+.flight-details-dialog__footer button{background:#07873e}
+@media(max-width:900px){
+  .flight-search-summary{top:calc(var(--latam-header-utility-height, 36px) + 64px)}
+  .flight-search-summary__inner{gap:9px;flex-wrap:wrap;padding:12px 0}
+  .flight-search-summary__date,.flight-search-summary__pax,.flight-search-summary__cabin{
+    padding-left:10px;
+  }
+}
+@media(max-width:650px){
+  .flight-search-summary{top:calc(var(--latam-header-utility-height, 36px) + 62px)}
+  .flight-search-summary__inner{width:calc(100% - 28px);gap:8px 10px}
+  .flight-search-summary__route{font-size:15px;flex-basis:calc(100% - 130px)}
+  .flight-search-summary__edit{margin-left:auto;font-size:11px;padding:8px}
+  .flight-search-summary__date{order:3;flex-basis:calc(65% - 8px);padding-left:0;border:0}
+  .flight-search-summary__pax{order:4;flex:1 1 auto;padding-left:0;border:0}
+  .flight-search-summary__cabin{order:5;padding-left:0;border:0}
+  .flight-marketplace .flight-offer__carrier{font-size:12px}
+  .flight-marketplace .flight-leg__time,
+  .flight-marketplace .flight-leg__endpoint--end .flight-leg__time{font-size:clamp(16px,4.2vw,20px)}
+  .flight-marketplace .flight-leg__endpoint small{font-size:11.5px}
+  .flight-marketplace .flight-leg__middle span:nth-child(2){font-size:14px;letter-spacing:0}
+  .flight-details-dialog{width:calc(100vw - 12px);max-width:calc(100vw - 12px);max-height:94dvh;border-radius:15px}
+  body.lx-flight-results-mode .flight-marketplace{padding-top:18px}
+}
