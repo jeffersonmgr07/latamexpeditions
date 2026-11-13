@@ -281,19 +281,12 @@
     return {name:h.name.slice(0,110),address:String(h.address||'').slice(0,160),
       photo:typeof h.thumbnail==='string'&&/^https:\/\//.test(h.thumbnail)?h.thumbnail:'',
       stars:[2,3,4,5].includes(Number(h.stars))?Number(h.stars):null,
-      rating:numeric(h.rating),night:numeric(h.nightlyRate),total:numeric(h.totalRate)};
+      rating:numeric(h.rating),night:numeric(h.nightlyRate),total:numeric(h.totalRate),
+      propertyToken:typeof h.propertyToken==='string'?h.propertyToken:''};
   }
   const element=(tag,cls,txt)=>{
     const n=document.createElement(tag);if(cls)n.className=cls;if(txt!==undefined)n.textContent=String(txt);return n;
   };
-  function consultUrl(h){
-    const bits=['Hola, Latam Expeditions. Quisiera consultar disponibilidad del hotel '+h.name+'.',
-      'Destino: '+activeQuery.destination+'.',
-      'Check-in: '+activeQuery.check_in_date+'. Check-out: '+activeQuery.check_out_date+'.',
-      'Viajeros: '+activeQuery.adults+' adultos y '+activeQuery.children+' niños'+
-        (activeQuery.children_ages?' (edades: '+activeQuery.children_ages+')':'')+'.'];
-    return 'https://wa.me/51906472060?text='+encodeURIComponent(bits.join('\n'));
-  }
   function render(){
     cards.replaceChildren();
     const ordered=hotels.slice();
@@ -326,8 +319,10 @@
         price.append(element('b','',numberFormatter.format(h.total)),element('span','','por estancia'));
       }else price.append(element('span','','Tarifa por confirmar'));
       body.append(price);
-      const cta=element('a','hotel-result-card__cta','Consultar disponibilidad');
-      cta.href=consultUrl(h);cta.target='_blank';cta.rel='noopener noreferrer';
+      const cta=element('button','hotel-result-card__cta',h.propertyToken?'Ver habitaciones':'Ver opciones de alojamiento');
+      cta.type='button';
+      cta.addEventListener('click',()=>window.dispatchEvent(new CustomEvent('latam:hotel-room-select',{
+        detail:{hotel:h,search:{...activeQuery}}})));
       body.append(cta);card.append(photo,body);cards.append(card);
     });
     const count=hotels.length;
