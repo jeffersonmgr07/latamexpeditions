@@ -153,7 +153,9 @@
   function setBusy(busy) {
     submitButton.disabled = busy;
     submitButton.setAttribute('aria-busy', String(busy));
-    submitButton.textContent = busy ? 'Buscando vuelos…' : 'Buscar vuelos';
+    submitButton.innerHTML = busy
+      ? '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Buscando vuelos…'
+      : '<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i> Buscar vuelos <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
   }
   function airlineName(code) {
     if (airlineNames[code]) return airlineNames[code];
