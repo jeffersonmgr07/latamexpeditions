@@ -158,6 +158,7 @@
       if(!v.firstName||!v.lastName||!v.docType||v.docNumber.length<3||!v.nationality)
         throw Error('Completa los datos de los dos pasajeros, o del pasajero seleccionado.');
       if(!/^\d{4}-\d{2}-\d{2}$/.test(v.birth)||!Number.isFinite(utc(v.birth).getTime())||
+         utc(v.birth).toISOString().slice(0,10)!==v.birth||
          utc(v.birth)>new Date(Date.now()-18*365.24*86400000))
         throw Error('Introduce fechas de nacimiento válidas de adultos en formato AAAA-MM-DD.');
       records.push({name:v.firstName+' '+v.lastName,nationality:v.nationality,
@@ -189,7 +190,8 @@
     if(n===3)checkout();
   }
   function open(id){
-    selected={...rates[id],id};if(!selected)return;
+    if(!rates[id])return;
+    selected={...rates[id],id};
     start='';end='';adults=2;requestKey=makeKey();orderId='';paySetup=false;
     $('hotelOfferAdults').value='2';$('hotelOfferEmail').value='';$('hotelOfferPhone').value='';
     $('hotelOfferTitle').textContent=selected.title;
