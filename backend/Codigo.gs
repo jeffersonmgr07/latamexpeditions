@@ -2568,6 +2568,9 @@ function lxRegistrarSolicitudHabitacion_(d){
      phone.replace(/\D/g,'').length<7)
     throw Error('Completa los datos del primer viajero y de contacto.');
   const ref='HT-'+String(d.requestKey).slice(0,12).toUpperCase();
+  const lock=LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
   const sheet=SpreadsheetApp.openById(CONFIG.sheetId);
   let tab=sheet.getSheetByName('Solicitudes hoteles');
   if(!tab){
@@ -2580,9 +2583,16 @@ function lxRegistrarSolicitudHabitacion_(d){
   const entries=tab.getDataRange().getValues();
   if(entries.some(function(row,i){return i>0&&String(row[1])===ref}))
     return {ok:true,reference:ref,duplicate:true};
-  tab.appendRow([new Date(),ref,hotel,destination,room,provider,date,checkout,
-    adults,children,rooms,guest,nationality,document,email,phone,others,
+  // Restringir solicitudes automatizadas y evitar duplicados.
+  const prop=PropertiesService.getScriptProperties();
+  const dailyKey='HOTEL_ROOM_REQUESTS_'+Utilities.formatDate(new Date(),'UTC','yyyyMMdd');
+  const count=Number(prop.getProperty(dailyKey)||0);
+  if(count>=60)throw Error('No pudimos registrar la solicitud en este momento.');
+  tab.appendRow([new Date(),ref,textoHoja(hotel),textoHoja(destination),textoHoja(room),textoHoja(provider),date,checkout,
+    adults,children,rooms,textoHoja(guest),textoHoja(nationality),textoHoja(document),textoHoja(email),textoHoja(phone),textoHoja(others),
     'PENDIENTE_DE_CONFIRMACION_HOTEL']);
+  prop.setProperty(dailyKey,String(count+1));
+  }finally{lock.releaseLock();}
   const body=[
     'Nueva solicitud de alojamiento',
     'Referencia: '+ref,'Hotel: '+hotel,'Destino: '+destination,
