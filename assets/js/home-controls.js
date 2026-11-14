@@ -174,7 +174,7 @@
          draw();
          return;
        }
-       if(value<=input.value){
+       if(hotelsCheckin?value<=input.value:value<input.value){
          emit(input,value);
          if(paired)emit(paired,'');
          previewUntil='';
@@ -236,12 +236,12 @@
          const rangeEnd=hotelsCheckout?input.value:(pickingReturn?previewUntil:(document.getElementById(paired)?.value||''));
          if(rangeMode&&rangeStart&&rangeEnd&&value>rangeStart&&value<rangeEnd)btn.classList.add('is-in-range');
          if(rangeMode&&rangeStart&&value===rangeEnd)btn.classList.add('is-range-end');
-         if(rangeMode&&rangeStart&&value===rangeStart)btn.classList.add('is-range-start');
+         if(rangeMode&&rangeStart&&value===rangeStart&&(hotelsCheckin||pickingReturn))btn.classList.add('is-range-start');
          btn.setAttribute('aria-label',value);
          btn.addEventListener('click',()=>choose(value));
          if(rangeMode&&(!hotelsCheckout)){
            btn.addEventListener('mouseenter',()=>{
-             if(!pickingReturn||value<=input.value||value===previewUntil)return;
+             if(!pickingReturn||(hotelsCheckin?value<=input.value:value<input.value)||value===previewUntil)return;
              previewUntil=value;
              grid.querySelectorAll('.lx-calendar-day').forEach(dayButton=>{
                const v=dayButton.dataset.iso;
