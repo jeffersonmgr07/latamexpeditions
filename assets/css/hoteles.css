@@ -254,3 +254,84 @@ body.lx-hotels-only .flight-submit[disabled] {opacity:.6;cursor:progress}
  .hotel-rooms-modal__option img{width:100%;height:170px;min-height:0}
  .hotel-rooms-modal__fields{grid-template-columns:1fr}
 }
+
+
+/* Hoteles · tarjetas completas en móvil, carrusel automático de una oferta. */
+@media(max-width:720px){
+  .lx-hotels-only .hotel-featured__heading{
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    gap:0;
+    width:100%;
+    margin-bottom:16px;
+  }
+  .lx-hotels-only .hotel-featured__heading>div:first-child,
+  .lx-hotels-only .hotel-featured__heading h2,
+  .lx-hotels-only .hotel-featured__heading p{
+    width:100%;
+    max-width:none;
+    min-width:0;
+  }
+  .lx-hotels-only .hotel-featured__heading p{
+    margin:0;
+    line-height:1.6;
+    text-align:left;
+  }
+  .lx-hotels-only .hotel-featured__controls{
+    display:flex;
+    align-self:flex-end;
+    margin-top:12px;
+  }
+  .lx-hotels-only .hotel-featured__track{
+    grid-auto-columns:100%;
+    column-gap:14px;
+    padding:0 0 16px;
+    scroll-padding-inline:0;
+  }
+  .lx-hotels-only .hotel-featured-card{
+    width:100%;
+    min-width:0;
+    scroll-snap-align:start;
+  }
+  .lx-hotels-only .hotel-featured-card__photo{
+    aspect-ratio:16/9;
+    height:clamp(160px,48vw,232px);
+    min-height:0;
+  }
+  .lx-hotels-only .hotel-featured-card__content{
+    padding:16px 17px;
+  }
+  .lx-hotels-only .hotel-featured-card h3{
+    min-height:0;
+  }
+}
+@media(max-width:480px){
+  .lx-hotels-only .hotel-featured__track{
+    grid-auto-columns:100%;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .lx-hotels-only .hotel-featured__track{
+    scroll-behavior:auto;
+  }
+}
+/* Check-in / check-out: marcar claramente extremos y tramo seleccionado. */
+body.lx-hotels-only .lx-picker-popover .lx-calendar-day.is-range-start,
+body.lx-hotels-only .lx-picker-popover .lx-calendar-day.is-range-end{
+  background:#07873e;
+  color:#fff;
+  border-radius:10px;
+  font-weight:800;
+}
+body.lx-hotels-only .lx-picker-popover .lx-calendar-day.is-in-range{
+  background:#d5f1df;
+  color:#0b5c34;
+  border-radius:4px;
+}
+body.lx-hotels-only .lx-picker-popover .lx-calendar-range-hint{
+  color:#2d6544;
+  font-weight:700;
+  font-size:12px;
+  margin:8px 0 10px;
+}

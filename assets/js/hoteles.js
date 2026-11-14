@@ -394,20 +394,58 @@
   const featuredTrack=$('hotelFeaturedTrack');
   if(featuredTrack){
     const prev=$('hotelFeaturedPrev'),next=$('hotelFeaturedNext');
+    const mobileOffers=window.matchMedia('(max-width: 720px)');
+    const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+    const offerCards=[...featuredTrack.querySelectorAll('.hotel-featured-card')];
+    let autoSlideTimer=null;
+    const slideStep=()=>{
+      const first=offerCards[0];
+      if(!first)return 1;
+      const gap=Number.parseFloat(window.getComputedStyle(featuredTrack).columnGap)||0;
+      return first.getBoundingClientRect().width+gap;
+    };
+    const slideIndex=()=>Math.min(offerCards.length-1,Math.max(0,
+      Math.round(featuredTrack.scrollLeft/slideStep())));
     function updateFeaturedArrows(){
       const overflow=Math.max(0,featuredTrack.scrollWidth-featuredTrack.clientWidth);
-      prev.disabled=featuredTrack.scrollLeft<=3||overflow<3;
-      next.disabled=featuredTrack.scrollLeft>=overflow-3||overflow<3;
+      if(mobileOffers.matches){
+        prev.disabled=offerCards.length<2||overflow<3;
+        next.disabled=offerCards.length<2||overflow<3;
+      }else{
+        prev.disabled=featuredTrack.scrollLeft<=3||overflow<3;
+        next.disabled=featuredTrack.scrollLeft>=overflow-3||overflow<3;
+      }
     }
-    const scrollFeatured=direction=>{
-      const first=featuredTrack.querySelector('.hotel-featured-card');
-      featuredTrack.scrollBy({left:(first?first.getBoundingClientRect().width+18:290)*direction,behavior:'smooth'});
-    };
-    prev.addEventListener('click',()=>scrollFeatured(-1));
-    next.addEventListener('click',()=>scrollFeatured(1));
+    function scrollFeatured(direction){
+      if(!offerCards.length)return;
+      if(mobileOffers.matches){
+        // En móvil siempre muestra una tarjeta y recorre las cuatro ofertas en bucle.
+        const index=(slideIndex()+direction+offerCards.length)%offerCards.length;
+        featuredTrack.scrollTo({left:index*slideStep(),behavior:'smooth'});
+      }else featuredTrack.scrollBy({left:direction*slideStep(),behavior:'smooth'});
+    }
+    function stopAutoSlide(){
+      if(autoSlideTimer!==null){window.clearInterval(autoSlideTimer);autoSlideTimer=null;}
+    }
+    function restartAutoSlide(){
+      stopAutoSlide();
+      if(!mobileOffers.matches||reducedMotion.matches||
+         document.hidden||offerCards.length<2)return;
+      autoSlideTimer=window.setInterval(()=>scrollFeatured(1),3500);
+    }
+    prev.addEventListener('click',()=>{scrollFeatured(-1);restartAutoSlide();});
+    next.addEventListener('click',()=>{scrollFeatured(1);restartAutoSlide();});
     featuredTrack.addEventListener('scroll',updateFeaturedArrows,{passive:true});
-    window.addEventListener('resize',updateFeaturedArrows);
+    featuredTrack.addEventListener('pointerdown',restartAutoSlide,{passive:true});
+    window.addEventListener('resize',()=>{
+      updateFeaturedArrows();
+      restartAutoSlide();
+    });
+    mobileOffers.addEventListener('change',restartAutoSlide);
+    reducedMotion.addEventListener('change',restartAutoSlide);
+    document.addEventListener('visibilitychange',restartAutoSlide);
     updateFeaturedArrows();
+    restartAutoSlide();
     featuredTrack.querySelectorAll('.hotel-featured-card__photo img').forEach(img=>{
       img.addEventListener('error',()=>{
         const holder=img.parentElement;img.remove();

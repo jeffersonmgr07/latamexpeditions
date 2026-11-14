@@ -150,6 +150,10 @@
    }
    let shown=parse(input.value)||parse(input.min)||new Date();shown=new Date(shown.getFullYear(),shown.getMonth(),1);
    const flightsDeparture=input.id==='flightDeparture';
+   const hotelsCheckin=input.id==='hotelCheckin';
+   const hotelsCheckout=input.id==='hotelCheckout';
+   // La selección del check-in hotelero puede finalizar con el check-out
+   // dentro del MISMO calendario. No cambia el selector de vuelos ni otros productos.
    let pickingReturn=false;
    let previewUntil='';
    function emit(target,value){
@@ -160,24 +164,24 @@
    function choose(value){
      const roundtrip=flightsDeparture&&
        document.querySelector('#flightsForm [name="tripType"]:checked')?.value==='roundtrip';
-     if(roundtrip&&value){
+     if((roundtrip||hotelsCheckin)&&value){
+       const paired=document.getElementById(hotelsCheckin?'hotelCheckout':'flightReturn');
        if(!pickingReturn){
          emit(input,value);
-         const back=document.getElementById('flightReturn');
-         if(back)emit(back,'');
+         if(paired)emit(paired,'');
          pickingReturn=true;
          previewUntil='';
          draw();
          return;
        }
-       if(value<input.value){
+       if(hotelsCheckin?value<=input.value:value<input.value){
          emit(input,value);
+         if(paired)emit(paired,'');
          previewUntil='';
          draw();
          return;
        }
-       const back=document.getElementById('flightReturn');
-       if(back)emit(back,value);
+       if(paired)emit(paired,value);
        pickingReturn=false;
        previewUntil='';
        refresh();
@@ -209,10 +213,12 @@
        });
        panel.append(grid);
      }else{
-       const rangeMode=flightsDeparture&&
-         document.querySelector('#flightsForm [name="tripType"]:checked')?.value==='roundtrip';
+       const rangeMode=hotelsCheckin||hotelsCheckout||(flightsDeparture&&
+         document.querySelector('#flightsForm [name="tripType"]:checked')?.value==='roundtrip');
        if(rangeMode){
          const hint=create('p','lx-calendar-range-hint',
+           hotelsCheckin?(pickingReturn?'Selecciona la fecha de salida':'Selecciona la entrada y después la salida'):
+           hotelsCheckout?'Selecciona una nueva fecha de salida':
            pickingReturn?'Selecciona la fecha de regreso':'Selecciona la salida y luego el regreso');
          panel.append(hint);
        }
@@ -225,16 +231,17 @@
          const value=iso(new Date(shown.getFullYear(),shown.getMonth(),day));
          const btn=create('button','lx-calendar-day',String(day));btn.type='button';
          btn.disabled=!allowed(value);btn.classList.toggle('is-selected',value===input.value);
-         const back=document.getElementById('flightReturn')?.value||'';
-         const end=pickingReturn?previewUntil:back;
-         if(rangeMode&&input.value&&end&&value>input.value&&value<end)btn.classList.add('is-in-range');
-         if(rangeMode&&input.value&&value===end)btn.classList.add('is-range-end');
-         if(rangeMode&&pickingReturn&&value===input.value)btn.classList.add('is-range-start');
+         const paired=hotelsCheckin?'hotelCheckout':'flightReturn';
+         const rangeStart=hotelsCheckout?(document.getElementById('hotelCheckin')?.value||''):input.value;
+         const rangeEnd=hotelsCheckout?input.value:(pickingReturn?previewUntil:(document.getElementById(paired)?.value||''));
+         if(rangeMode&&rangeStart&&rangeEnd&&value>rangeStart&&value<rangeEnd)btn.classList.add('is-in-range');
+         if(rangeMode&&rangeStart&&value===rangeEnd)btn.classList.add('is-range-end');
+         if(rangeMode&&rangeStart&&value===rangeStart&&(hotelsCheckin||pickingReturn))btn.classList.add('is-range-start');
          btn.setAttribute('aria-label',value);
          btn.addEventListener('click',()=>choose(value));
-         if(rangeMode){
+         if(rangeMode&&(!hotelsCheckout)){
            btn.addEventListener('mouseenter',()=>{
-             if(!pickingReturn||value<input.value||value===previewUntil)return;
+             if(!pickingReturn||(hotelsCheckin?value<=input.value:value<input.value)||value===previewUntil)return;
              previewUntil=value;
              grid.querySelectorAll('.lx-calendar-day').forEach(dayButton=>{
                const v=dayButton.dataset.iso;
