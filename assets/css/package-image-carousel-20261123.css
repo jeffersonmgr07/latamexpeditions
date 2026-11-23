@@ -1,0 +1,15 @@
+/* Carrusel de fotografías en la ficha de cada paquete. */
+.lx-package-carousel{position:relative;width:100%;margin:0 0 20px;border-radius:16px;overflow:hidden;background:#eef1ef;isolation:isolate}
+.lx-package-carousel__viewport{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden}
+.lx-package-carousel__slide{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s ease}
+.lx-package-carousel__slide.is-active{opacity:1;visibility:visible;pointer-events:auto}
+.lx-package-carousel__slide img{display:block;width:100%;height:100%;object-fit:cover;border-radius:0!important;margin:0!important;max-height:none!important}
+.lx-package-carousel__arrow{position:absolute;z-index:2;top:50%;transform:translateY(-50%);width:36px;height:36px;border:1px solid rgba(255,255,255,.65);border-radius:50%;background:rgba(8,27,19,.6);color:#fff;display:flex;justify-content:center;align-items:center;font-family:Arial,sans-serif;font-size:22px;line-height:1;cursor:pointer;transition:background .2s ease}
+.lx-package-carousel__arrow:hover,.lx-package-carousel__arrow:focus-visible{background:rgba(5,54,35,.93)}
+.lx-package-carousel__arrow:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.lx-package-carousel__arrow--prev{left:10px}
+.lx-package-carousel__arrow--next{right:10px}
+.lx-package-carousel__counter{position:absolute;z-index:2;bottom:10px;right:12px;padding:3px 9px;border-radius:20px;background:rgba(8,27,19,.65);color:#fff;font-size:12px;font-weight:600;pointer-events:none}
+.lx-package-carousel[data-lx-single] .lx-package-carousel__arrow,.lx-package-carousel[data-lx-single] .lx-package-carousel__counter{display:none}
+@media(max-width:640px){.lx-package-carousel__arrow{width:34px;height:34px}.lx-package-carousel{border-radius:14px}}
+@media(prefers-reduced-motion:reduce){.lx-package-carousel__slide{transition:none}}
