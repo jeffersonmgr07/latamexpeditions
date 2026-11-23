@@ -62,7 +62,7 @@
   children:Math.max(0,Math.min(8,Number(q.get('children'))||0)),
   origin:(params.slug==='chile-atacama-5d4n'?'SCL':q.get('origen')||(params.destination==='IPC'?'SCL':defaults[country])||'LIM').toUpperCase(),
   tier:firstTier?.code||'',occupancy:'double',hotelPicked:false,customHotel:'',
-  hotelPhotos:{},couponCode:'',couponPercent:0,roomPlan:'',hotelQuotePending:false,hotelAlternative:null,childrenAges:[],flight:null,baggage:'none',offers:[],outboundKey:'',choice:null,flightStage:'outbound',flightSearch:null
+  hotelPhotos:{},couponCode:'',couponPercent:0,couponExpiresAt:'',roomPlan:'',hotelQuotePending:false,hotelAlternative:null,childrenAges:[],flight:null,baggage:'none',offers:[],outboundKey:'',choice:null,flightStage:'outbound',flightSearch:null
  };
  if(state.adults+state.children>9)state.children=Math.max(0,9-state.adults);
  function defaultRoom(){
@@ -130,7 +130,7 @@
   hotelAlternative:state.hotelAlternative?{...state.hotelAlternative}:null,hotelSupplement:extraHotelCost(),
   roomPlan:state.roomPlan,hotelQuotePending:state.hotelQuotePending,
   flight:state.flight?{...state.flight,baggage:state.baggage}:null,
-  totalEstimate:total(),packageEstimate:pricePackage(),couponCode:state.couponCode,couponPercent:state.couponPercent,discountAmount:discountAmount(),origin:state.origin};}
+  totalEstimate:total(),packageEstimate:pricePackage(),couponCode:state.couponCode,couponPercent:state.couponPercent,couponExpiresAt:state.couponExpiresAt,discountAmount:discountAmount(),origin:state.origin};}
  window.LatamPackageDetails={getSelection};
  function removeInternalNotes(){
   // Conservar la información esencial del producto: ubicación, duración y condiciones de viaje.
@@ -154,6 +154,7 @@
   '<div class="lx-travel-field"><label for="lxProductTotalPax">Viajeros</label><button id="lxProductTotalPax" class="lx-travel-trigger" type="button">2 viajeros</button></div></div>'+
   '<div id="lxProductPriceDetails" class="lx-package-price-details" aria-live="polite"></div>'+
   '<div class="lx-product-coupon" style="margin:12px 0"><label for="lxCouponCode" style="display:block;margin-bottom:6px;font-size:13px;font-weight:600">Código de descuento</label><div style="display:flex;gap:8px"><input id="lxCouponCode" maxlength="32" placeholder="Ingresa tu cupón" style="min-width:0;flex:1;border:1px solid #ccd6d0;border-radius:9px;padding:10px"><button type="button" id="lxCouponApply" style="border:0;background:#176b45;color:white;border-radius:9px;padding:10px 15px">Aplicar</button></div><small id="lxCouponNotice" role="status" aria-live="polite" style="display:block;margin-top:6px"></small></div>'+
+  '<div id="lxProductCouponStatus" class="lx-bf-status" hidden></div>'+
   '<div class="lx-package-discount-applied" id="lxProductDiscountApplied" hidden><span>Descuento aplicado</span><strong id="lxProductDiscountValue"></strong></div>'+ 
   '<div class="lx-package-quick-total"><small>Total a pagar</small><strong id="lxProductGroupPrice"></strong></div>'+
   '<div id="lxProductFlightPrice" class="lx-package-flight-price" hidden></div>'+
@@ -161,25 +162,27 @@
  side.querySelector('.price-block')?.after(panel);
  $('lxCouponApply').addEventListener('click',async()=>{
    const btn=$('lxCouponApply'),code=String($('lxCouponCode').value||'').trim().toUpperCase(),date=state.date;
-   if(!code){state.couponCode='';state.couponPercent=0;$('lxCouponNotice').textContent='Cupón eliminado.';update();return;}
+   if(!code){state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';$('lxCouponNotice').textContent='Cupón eliminado.';update();return;}
    btn.disabled=true;$('lxCouponNotice').textContent='Validando cupón…';
    try{
      if(typeof window.LatamBfCouponQuote!=='function')throw new Error('La validación de cupones no está disponible.');
      const quote=await window.LatamBfCouponQuote(code,date);
      if(state.date!==date||String($('lxCouponCode').value||'').trim().toUpperCase()!==code)throw new Error('Vuelve a aplicar el cupón para las nuevas fechas.');
-     state.couponCode=code;state.couponPercent=quote.percent;
-     $('lxCouponNotice').textContent='Descuento del '+quote.percent+' % aplicado al precio base. Vuelos y extras excluidos.';
-   }catch(err){state.couponCode='';state.couponPercent=0;$('lxCouponNotice').textContent=err.message||'Cupón no disponible.';}
+     if(!Number.isFinite(Date.parse(quote.expiresAt)))
+       throw new Error('Actualiza el backend para activar el contador del cupón.');
+     state.couponCode=code;state.couponPercent=quote.percent;state.couponExpiresAt=quote.expiresAt;
+     $('lxCouponNotice').textContent='';
+   }catch(err){state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';$('lxCouponNotice').textContent=err.message||'Cupón no disponible.';}
    finally{btn.disabled=false;update();}
  });
  $('lxCouponCode').addEventListener('input',()=>{
-   if(state.couponCode&&$('lxCouponCode').value.trim().toUpperCase()!==state.couponCode){state.couponCode='';state.couponPercent=0;$('lxCouponNotice').textContent='Vuelve a aplicar el código.';update()}
+   if(state.couponCode&&$('lxCouponCode').value.trim().toUpperCase()!==state.couponCode){state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';$('lxCouponNotice').textContent='Vuelve a aplicar el código.';update()}
  });
  $('lxProductDate').min=minDate;$('lxProductDate').value=state.date;
  const productCalendar=window.LatamProductControls.calendar($('lxProductDate'));
  $('lxProductDate').addEventListener('change',()=>{
    const next=$('lxProductDate').value;
-   if(next!==state.date){state.date=next;state.couponCode='';state.couponPercent=0;$('lxCouponNotice').textContent='Vuelve a aplicar el cupón para esta fecha.';$('lxCouponCode').value='';resetSelections();}update();
+   if(next!==state.date){state.date=next;state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';$('lxCouponNotice').textContent='Vuelve a aplicar el cupón para esta fecha.';$('lxCouponCode').value='';resetSelections();}update();
  });
  const productTravelers=window.LatamProductControls.travelers(
    $('lxProductTotalPax'),
@@ -686,6 +689,13 @@ function showTierQuote(){
   const datePlaceholder=panel.querySelector('.lx-custom-date-field .lx-date-display');
   if(datePlaceholder&&!state.date)datePlaceholder.textContent='Seleccionar';
   renderPriceBreakdown();
+  const host=$('lxProductCouponStatus');
+  if(state.couponCode&&state.couponPercent>0&&state.couponExpiresAt)
+    window.LatamBfShowCoupon?.(host,state.couponPercent,state.couponExpiresAt,()=>{
+      state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';
+      $('lxCouponNotice').textContent='El cupón ha caducado.';update();
+    });
+  else window.LatamBfShowCoupon?.(host,0,'');
   const appliedDiscount=discountAmount();
   const discountRow=$('lxProductDiscountApplied');
   discountRow.hidden=appliedDiscount<=0;
