@@ -93,6 +93,7 @@ function lxBfValidar_(code,travelDate,orderId,email) {
   const bound=String(v[10]||'').trim().toLowerCase(),buyer=String(email||'').trim().toLowerCase();
   if(bound&&buyer&&bound!==buyer)throw new Error('El cupón está asociado a otro correo electrónico.');
   const end=v[9] instanceof Date?v[9].getTime():(v[9]?new Date(v[9]).getTime():0);
+  if(orderId && !end)throw new Error('Primero aplica tu cupón antes de pagar.');
   if(end&&Date.now()>=end)throw new Error('El cupón ha caducado.');
   if(v[1]==='VENCIDO')throw new Error('El cupón ha caducado.');
   if(v[1]==='USADO' && String(v[4])===String(orderId||'') && orderId){
