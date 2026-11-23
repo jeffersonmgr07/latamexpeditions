@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="assets/css/black-friday-20261123.css?v=2">
 <script src="assets/js/main.js?v=20261123-mobile-unified" defer></script>
 <script src="assets/js/cuentas.js?v=20261111-google-fix" defer></script>
-<script src="assets/js/black-friday-claim.js?v=20261123-ack-v3" defer></script>
+<script src="assets/js/black-friday-claim.js?v=20261123-otp-v4" defer></script>
 </head>
 <body class="bf-landing">
 <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
@@ -153,8 +153,10 @@
           <label class="bf-field" for="bfOtp">Código de verificación<input class="bf-otp" inputmode="numeric" autocomplete="one-time-code" id="bfOtp" pattern="[0-9]{6}" minlength="6" maxlength="6" required placeholder="000000"></label>
           <button id="bfVerify" class="bf-action" type="submit">Verificar y obtener mi cupón</button>
         </form>
-        <p class="bf-muted">El código de verificación vence en 10 minutos.</p>
-        <button type="button" class="bf-action bf-action--secondary" id="bfRestart">Corregir mis datos</button>
+        <p class="bf-muted">El código de verificación es válido durante 5 minutos.</p>
+        <p class="bf-otp-countdown" id="bfOtpClock" aria-live="off">Tiempo restante: <strong id="bfOtpTime">05:00</strong></p>
+        <button type="button" class="bf-action bf-action--secondary" id="bfResend" hidden>Reenviar código</button>
+        <button type="button" class="bf-action bf-action--secondary bf-action--quiet" id="bfRestart">Corregir mis datos</button>
       </div>
       <div id="bfStep3" hidden>
         <h2>¡Tu cupón está listo!</h2>
