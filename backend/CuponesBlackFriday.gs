@@ -167,3 +167,10 @@ function lxBfPruebaInstalacion_() {
   return {ok:true,cuponesInstalados:matching.length,campanaVigente:lxBfVigente_(),
     pestaña:h.getName(),descuentosVerificados:true};
 }
+
+/** Función pública visible en el selector Ejecutar de Google Apps Script. */
+function pruebaCuponesBlackFriday() {
+  const resultado = lxBfPruebaInstalacion_();
+  Logger.log(JSON.stringify(resultado));
+  return resultado;
+}
