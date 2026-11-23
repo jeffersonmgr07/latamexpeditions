@@ -121,11 +121,8 @@
   totalEstimate:total(),packageEstimate:pricePackage(),couponCode:state.couponCode,discountAmount:discountAmount(),origin:state.origin};}
  window.LatamPackageDetails={getSelection};
  function removeInternalNotes(){
-  const facts=main.querySelector('.tour-facts.product-facts');
-  if(facts){const useful=[...facts.children].filter(div=>/duraci[oó]n|comidas|idiomas/i.test(div.querySelector('span')?.textContent||''));
-   if(useful.length){facts.replaceChildren(...useful)}
-  }
-  side.querySelectorAll('.fact-row,.dynamic-rate-note,.tour-booking-note,.package-flights-box').forEach(x=>x.remove());
+  // Conservar la información esencial del producto: ubicación, duración y condiciones de viaje.
+  side.querySelectorAll('.dynamic-rate-note,.tour-booking-note,.package-flights-box').forEach(x=>x.remove());
   // La selección de hotel se hace en el modal: evitar tabla duplicada en la ficha.
   main.querySelectorAll(':scope > .detail-card').forEach(card=>{
     if(/^Categor[ií]as? de alojamiento\b/i.test(card.querySelector(':scope > h2')?.textContent?.trim()||''))card.remove();
@@ -1232,42 +1229,12 @@ $('lxFlightBackStep').addEventListener('click',()=>{state.flightStage='outbound'
  $('lxHotelTier').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null;clearHotelLookup()});
  $('lxHotelOccupancy').addEventListener('change',()=>{hotelsPendingName='';hotelsPendingSelection=null;clearHotelLookup()});
  // Para más de cuatro viajeros, no presentar como un precio listo para cobrarse.
- // Los paquetes con hotel/proveedor pendientes son exclusivamente de consulta:
- // nunca abrir el modal de pago ni procesar un importe referencial.
+ // El botón Reservar siempre abre el modal unificado de pasajeros de booking.js.
+ // Los productos de cotización no reciben pago hasta validar la disponibilidad.
  if(book.dataset.bookQuoteOnly==='true'){
-   book.addEventListener('click',event=>{
-     event.preventDefault();event.stopImmediatePropagation();
-     const tier=currentTier();
-     const lines=[
-       'Hola, quiero solicitar una cotización de LATAM Expeditions.',
-       'Paquete: '+params.title,
-       'Fecha de llegada: '+(state.date||'por definir'),
-       'Viajeros: '+passengerText(),
-       'Categoría: '+(tier?.name||'hotel de cuatro estrellas'),
-       'Hotel de referencia: '+(tier?.hotels||[]).join(' / '),
-       'Tarifa por persona: '+fmt(tier?.pricePerPerson||params.base),
-       state.couponCode?'Cupón solicitado: '+state.couponCode:'',
-       state.flight?'Vuelos de referencia: '+state.origin+' · importe estimado '+fmt(priceFlight()):'Vuelos no incluidos',
-       'Por favor, confirmen hoteles, excursiones, disponibilidad y tarifa final antes de realizar cualquier pago.'
-     ].filter(Boolean);
-     const link='https://wa.me/51906472060?text='+encodeURIComponent(lines.join('\n'));
-     window.location.assign(link);
-   },true);
+   const note=$('lxProductQuoteNote');
+   if(note)note.textContent='Puedes registrar a los pasajeros y enviar tu solicitud sin pagar. Confirmaremos disponibilidad y tarifa antes de solicitar el pago.';
  }
- book.addEventListener('click',event=>{
-  if(state.adults+state.children<=maxHotelOccupancy&&!needsChileQuote())return;
-  event.preventDefault();event.stopImmediatePropagation();
-  const note=$('lxProductQuoteNote');
-  note.textContent=needsChileQuote()?
-    'Esta acomodación aún no tiene una tarifa confirmada. Solicita una cotización antes de reservar.':
-    'Para este grupo necesitamos confirmar la distribución hotelera. Escríbenos para una cotización completa antes de reservar.';
-  const link=el('a','','Solicitar cotización por WhatsApp');
-  link.href='https://wa.me/51906472060?text='+encodeURIComponent(
-   'Hola, quiero cotizar '+params.title+' para '+passengerText()+
-   (state.date?', llegada '+state.date:'')+'.');
-  link.target='_blank';link.rel='noopener noreferrer';link.style.display='block';link.style.marginTop='8px';
-  note.append(link);note.scrollIntoView({behavior:'smooth',block:'center'});
- },true);
  update();
  // Mantener fechas y viajeros en enlace al volver a buscar en el catálogo.
  const findPage=document.querySelector('a[href*="paquetes.html"]');

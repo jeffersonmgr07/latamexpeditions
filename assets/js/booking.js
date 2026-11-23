@@ -1170,8 +1170,7 @@
     panel.scrollIntoView({behavior:'smooth',block:'center'});
     panel.querySelector('#lxExperiencePickupInput')?.focus();return false;
   }
-    // Backend actual: solo correo. No habilitar PayPal por error al añadir un Client ID.
-  // El cobro solo se habilita tras pruebas y activación explícita en catalog.json.
+    // Pagos sujetos a tarifas verificadas en el backend; los productos de cotización solo registran solicitud.
   const onlineConfigured = () => Boolean(!PRODUCT.quoteOnly &&
     (PRODUCT.slug!=='desierto-atacama-premium-5d4n'||(state.adults>=1&&state.adults<=2&&state.children===0)) &&
     CONFIG?.paypalEnabled === true &&
@@ -1562,7 +1561,7 @@
     $('#bkDateTrigger')?.setAttribute('aria-invalid', String(!validDate));
     valid = valid && validDate;
     const total = Number($('#bkAdults').value) + Number($('#bkChildren').value);
-    if (['chile-atacama-5d4n','chile-patagonia-6d5n'].includes(PRODUCT.slug)) {
+    if (!PRODUCT.quoteOnly && ['chile-atacama-5d4n','chile-patagonia-6d5n'].includes(PRODUCT.slug)) {
       const tier=PRODUCT.tiers.find(t=>t.code===($('#bkTier')?.value||state.tier));
       const occupancy=$('#bkOccupancy')?.value||state.occupancy;
       const rate=tier?.occupancyPrices?.[occupancy];
@@ -1572,7 +1571,7 @@
         return false;
       }
     }
-    if (PRODUCT.slug==='desierto-atacama-premium-5d4n' &&
+    if (!PRODUCT.quoteOnly && PRODUCT.slug==='desierto-atacama-premium-5d4n' &&
         (Number($('#bkChildren').value)>0 || Number($('#bkAdults').value)>2)) {
       showError('Atacama Premium tiene tarifa confirmada solo para 1 o 2 adultos. Para grupos o menores, solicita una cotización personalizada antes de continuar.');
       return false;
@@ -1899,6 +1898,7 @@
       pickupStatus: 'pending_validation',
       paymentMethod: state.paymentMethod,
       paymentStatus: state.paymentMethod === 'pay_on_tour' ? 'pending' : 'awaiting_payment',
+      quoteOnly: PRODUCT.quoteOnly,
       passengers: state.passengers,
       tourLanguage:state.holder.tourLanguage||'es',
       couponCode:state.couponCode,
@@ -2511,7 +2511,7 @@
           extras.push('Total a pagar '+money(estimated)+(state.hotelQuotePending?' · cambio de hotel pendiente, no incluido':''));
         $('#bkPackageSelectionDetail').textContent=extras.filter(Boolean).join(' · ');
       }
-      return dateValid&&paxValid;
+      return true; // El calendario del modal valida la fecha; abrir no depende de la preselección.
     }
     const open = () => {
       lastFocused=document.activeElement;

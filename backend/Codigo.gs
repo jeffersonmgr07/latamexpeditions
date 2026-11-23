@@ -2026,6 +2026,36 @@ function registrarError(error, contexto) {
 }
 
 /** Registra una solicitud sin cobrar. Nunca la presenta como pagada. */
+
+/**
+ * Solicitudes de paquetes aún no habilitados para cobro.
+ * Valida identidad básica y fecha; NUNCA valida ni cobra un precio referencial.
+ * Las tarifas no verificadas quedan exclusivamente a revisión comercial.
+ */
+function lxValidarSolicitudSinTarifa_(data) {
+  var viajeros=Number(data.travelers), adultos=Number(data.adults), ninos=Number(data.children);
+  if(!Number.isInteger(viajeros)||viajeros<1||viajeros>12||
+     !Number.isInteger(adultos)||adultos<1||
+     !Number.isInteger(ninos)||ninos<0||adultos+ninos!==viajeros)
+    throw new Error('Cantidad de viajeros no válida.');
+  var fecha=String(data.date||'');
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(fecha)||isNaN(Date.parse(fecha+'T12:00:00')))
+    throw new Error('Fecha de viaje inválida.');
+  var titular=data.holder||{};
+  if(!esCorreo(String(titular.email||'').trim().toLowerCase())||
+     String(titular.phone||'').trim().length<5)
+    throw new Error('Faltan datos de contacto válidos.');
+  if(!Array.isArray(data.passengers)||data.passengers.length!==viajeros)
+    throw new Error('Faltan los pasajeros.');
+  data.passengers.forEach(function(p){
+    if(!p||textoPlano(p.name,120).length<3||
+       !textoPlano(p.nationality,60)||!textoPlano(p.docType,30)||
+       !textoPlano(p.docNumber,50)||!/^\d{4}-\d{2}-\d{2}$/.test(String(p.birth||'')))
+      throw new Error('Completa los datos de todos los pasajeros.');
+  });
+  return {total:0,precio:0};
+}
+
 function registrarPagoEnTour(data) {
   // No se realizan cobros: registra una solicitud para emisión y confirmación manual.
   const lock=LockService.getScriptLock();
@@ -2034,7 +2064,9 @@ function registrarPagoEnTour(data) {
     if(data.paymentMethod!=='pay_on_tour')throw Error('Forma de pago no válida.');
     const key=textoPlano(data.requestKey,80);
     if(!/^[A-Za-z0-9]{16,80}$/.test(key))throw Error('Identificador de reserva inválido.');
-    const hasExtras=Boolean(data.flightSelection||data.alternateHotel||data.hotelQuotePending);
+    const quoteRequest=String(data.kind||'')==='package' &&
+      (data.quoteOnly===true || !PRECIOS_PAQUETES[String(data.slug||'').toLowerCase()]);
+    const hasExtras=Boolean(quoteRequest||data.flightSelection||data.alternateHotel||data.hotelQuotePending);
     // La tarifa dinámica enviada por la web es únicamente una estimación de solicitud.
     // Para NO PAGADO se valida el precio BASE contra la tabla oficial del servidor.
     const baseData=Object.assign({},data);
@@ -2043,7 +2075,7 @@ function registrarPagoEnTour(data) {
       delete baseData.flightSelection;delete baseData.alternateHotel;
       delete baseData.hotelQuotePending;delete baseData.alternateHotelDetails;
     }
-    const calc=validarYCalcular(baseData);
+    const calc=quoteRequest?lxValidarSolicitudSinTarifa_(baseData):validarYCalcular(baseData);
     const hoja=hojaReservas();
     const valores=hoja.getDataRange().getValues();
     for(let i=1;i<valores.length;i++)if(String(valores[i][17])==='CASH:'+key){
