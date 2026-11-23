@@ -144,3 +144,26 @@ function lxBfResponderCotizacion_(e) {
   return ContentService.createTextOutput(callback+'('+raw+');')
     .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
+
+
+/**
+ * EJECUTAR UNA SOLA VEZ DESDE EL EDITOR DE APPS SCRIPT (no está expuesto por HTTP).
+ * Crea/verifica la pestaña privada y comprueba las diez huellas sin consumir códigos.
+ */
+function lxBfPruebaInstalacion_() {
+  const h=lxBfHoja_();
+  const rows=h.getDataRange().getValues().slice(1);
+  const matching=rows.filter(function(row){return LX_BF_HASHES_2026.indexOf(String(row[0]))>=0;});
+  const unique=new Set(matching.map(function(row){return String(row[0]);}));
+  if(matching.length!==10 || unique.size!==10)throw new Error('La campaña no tiene diez cupones distintos.');
+  const testDate=function(days){
+    const base=lxBfHoy_().split('-').map(Number);
+    const d=new Date(Date.UTC(base[0],base[1]-1,base[2]+days));
+    return Utilities.formatDate(d,'UTC','yyyy-MM-dd');
+  };
+  const tests=[[30,10],[31,20],[60,20],[61,30],[75,30],[76,40],[100,40],[101,50]];
+  tests.forEach(function(t){if(lxBfPorcentaje_(testDate(t[0]))!==t[1])
+    throw new Error('Los tramos de descuento no coinciden.');});
+  return {ok:true,cuponesInstalados:matching.length,campanaVigente:lxBfVigente_(),
+    pestaña:h.getName(),descuentosVerificados:true};
+}
