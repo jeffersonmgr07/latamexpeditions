@@ -1230,6 +1230,7 @@ function doGet(e) {
   const action=String(e&&e.parameter&&e.parameter.action||'');
   if(action==='status'||action==='status_html')return lxResponderEstado_(e);
   if(action==='paypal_order_status')return lxResponderOrdenPayPal_(e);
+  if(action==='bf_coupon_quote')return lxBfResponderCotizacion_(e);
   if(action==='hotel_offer_availability')return lxOfertaDisponibilidadGet_(e);
   if(action==='health')return json({
     ok:true,version:'2026-11-10-fullpay-signed-v1',paymentMode:'completo',
@@ -1279,7 +1280,7 @@ function mensajeSeguro(error) {
     'Demasiados viajeros', 'Fecha demasiado próxima', 'Fecha inválida',
     'La solicitud es demasiado grande', 'La orden de pago', 'No se pudo iniciar el pago',
     'El pago no se completó', 'El pago fue recibido', 'No encontramos la orden de pago',
-    'Las tarifas adicionales',
+    'Las tarifas adicionales', 'El cupón', 'Este cupón', 'Selecciona una fecha de viaje',
     // Cuentas
     'Introduce un correo', 'Indícanos tu nombre', 'La contraseña debe',
     'Ya existe una cuenta', 'Correo o contraseña', 'Esta cuenta está desactivada',
@@ -1428,7 +1429,7 @@ function lxQuoteValidateHotel_(data,context){
   }};
 }
 
-function validarYCalcular(data) {
+function validarYCalcular(data,couponOrderId) {
   if (!data || !data.slug) throw new Error('Faltan datos de la reserva.');
 
   const slug = textoPlano(data.slug, 100).toLowerCase();
@@ -1509,14 +1510,21 @@ function validarYCalcular(data) {
   const validatedFlight=lxQuoteValidateFlight_(data.flightSelection,ctx);
   const validatedHotel=lxQuoteValidateHotel_(data,ctx);
   // Si el cambio de hotel sigue pendiente, el cobro conserva el hotel base incluido.
-  // Los cupones se validan siempre en el servidor; NUNCA confiar en la resta del navegador.
+  // Descuento Black Friday: sólo sobre tarifa del tour/paquete, nunca cotizaciones aéreas/hoteleras.
+  // Validación segura en Sheets; el navegador sólo muestra una estimación.
   const couponCode=textoPlano(data.couponCode||'',32).toUpperCase();
-  if(couponCode&&!['LATAM10EXP','LATAM10'].includes(couponCode))
-    throw new Error('El cupón indicado no es válido.');
-  if(couponCode&& !PRECIOS_PAQUETES[slug])
-    throw new Error('Este cupón solo está disponible para paquetes de viaje.');
   const packageBase=redondear2(tarifas.adulto*adultos+tarifas.nino*ninos);
-  const discountAmount=['LATAM10EXP','LATAM10'].includes(couponCode)?redondear2(packageBase*0.10):0;
+  // La mejora de categoría o acomodación hotelera es un suplemento, sin descuento.
+  const tiersBase=PRECIOS_PAQUETES[slug];
+  const firstTier=tiersBase?tiersBase[Object.keys(tiersBase)[0]]:null;
+  const standardDouble=firstTier&&Number(firstTier.double)>0?Number(firstTier.double):tarifas.adulto;
+  const stdChildFactor=tiersBase?(slug==='lima-paracas-ica-huacachina-2d1n'?1:0.70):
+    (typeof FACTOR_NINOS[slug]==='number'?FACTOR_NINOS[slug]:0.75);
+  const discountBase=redondear2(
+    Math.min(tarifas.adulto,standardDouble)*adultos+
+    Math.min(tarifas.nino,redondear2(standardDouble*stdChildFactor))*ninos);
+  const couponPercent=couponCode?lxBfValidar_(couponCode,fechaTexto,couponOrderId||'').percent:0;
+  const discountAmount=redondear2(discountBase*couponPercent/100);
   const total = redondear2(packageBase+validatedFlight.amount+validatedHotel.amount-discountAmount);
   const cobro = calcularCobro(total);
 
@@ -1557,6 +1565,7 @@ function validarYCalcular(data) {
     alternateHotelSupplement: validatedHotel.amount,
     couponCode:couponCode,
     discountAmount:discountAmount,
+    couponPercent:couponPercent,
     hotelQuotePending:Boolean(validatedHotel.pendingName),
     pendingHotelRequest:textoPlano(validatedHotel.pendingName||'',110),
     quotedTotal:total,
@@ -1674,7 +1683,9 @@ function crearOrden(data) {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
-  const c = validarYCalcular(data);
+  const priorKey=String(data&&data.requestKey||'');
+  const priorOrder=priorKey?buscarOrdenPorRequestKey(priorKey):null;
+  const c = validarYCalcular(data,priorOrder?priorOrder.orderId:'');
   const booking = c.booking;
   const fingerprint = huellaReserva(booking, c);
   const existente = buscarOrdenPorRequestKey(booking.requestKey);
@@ -1683,7 +1694,10 @@ function crearOrden(data) {
     if (existente.fingerprint !== fingerprint) {
       throw new Error('La orden de pago ya no coincide con la reserva. Vuelve al paso anterior y genera un pago nuevo.');
     }
-    if (existente.orderId) return existente.orderId;
+    if (existente.orderId) {
+      if (booking.couponCode)lxBfReservar_(booking.couponCode,booking.date,existente.orderId);
+      return existente.orderId;
+    }
   }
 
   const descripcion = (c.mode === 'completo' ? 'Pago total' : 'Depósito de reserva') +
@@ -1708,6 +1722,8 @@ function crearOrden(data) {
     throw new Error('No se pudo iniciar el pago. Inténtalo nuevamente.');
   }
 
+  // Concurrencia: el bloqueo del cupón y la orden se registran con el mismo lock.
+  if(booking.couponCode)lxBfReservar_(booking.couponCode,booking.date,resultado.body.id);
   guardarOrdenPendiente({
     orderId: resultado.body.id,
     requestKey: booking.requestKey,
@@ -1753,6 +1769,8 @@ function capturarOrden(payload) {
       };
     }
 
+    const previewBooking=JSON.parse(orden.bookingJson).booking;
+    if(previewBooking.couponCode)lxBfVerificarCaptura_(previewBooking.couponCode,previewBooking.date,orderId);
     actualizarOrdenPayPal(orden.fila, { estado: 'CAPTURANDO', error: '' });
 
     const requestId = idSolicitudPayPal('capture', orden.requestKey);
@@ -1798,6 +1816,16 @@ function capturarOrden(payload) {
     const dataGuardada = JSON.parse(orden.bookingJson);
     const booking = dataGuardada.booking;
     const calc = dataGuardada.calc;
+    // Primero se consume el código si PayPal ya recibió el cobro: una compra = un uso.
+    if(booking.couponCode){
+      try{lxBfConsumir_(booking.couponCode,orderId);}
+      catch(couponErr){
+        actualizarOrdenPayPal(orden.fila,{estado:'REVISION',captureId:captura.id,
+          error:'Cupón pendiente de conciliación'});
+        registrarError(couponErr,'Cupón cobrado sin conciliación: '+orderId);
+        throw new Error('El pago fue recibido, pero requiere revisión manual. No vuelvas a pagar. Orden: '+orderId+'.');
+      }
+    }
     const reserva = {
       code: orden.codigoReserva || generarCodigo(),
       orderId: orderId,

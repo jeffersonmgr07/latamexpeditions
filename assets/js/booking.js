@@ -8,6 +8,29 @@
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const BASE = document.documentElement.dataset.base || './';
+  // Fecha y porcentaje se validan únicamente en Apps Script.
+  window.LatamBfCouponQuote = async (code,date) => {
+    if(!date)throw new Error('Selecciona la fecha del viaje antes de aplicar el cupón.');
+    const cfg=await fetch(BASE+'assets/data/catalog.json',{cache:'no-store'}).then(r=>{
+      if(!r.ok)throw new Error('No fue posible consultar la promoción.');
+      return r.json();
+    });
+    const endpoint=String(cfg?.booking?.endpoint||'');
+    if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint))
+      throw new Error('La validación de cupones no está disponible.');
+    return new Promise((resolve,reject)=>{
+      const name='__latamBf_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,14);
+      const script=document.createElement('script');let finished=false;
+      const done=(err,data)=>{if(finished)return;finished=true;clearTimeout(timer);script.remove();delete window[name];err?reject(err):resolve(data);};
+      window[name]=result=>result?.ok&&Number(result.percent)>0&&Number(result.percent)<=50?
+        done(null,{percent:Number(result.percent)}):
+        done(new Error(result?.error||'Cupón no disponible para esta reserva.'));
+      const timer=setTimeout(()=>done(new Error('No se pudo verificar el cupón. Inténtalo de nuevo.')),10000);
+      script.onerror=()=>done(new Error('No se pudo conectar con la validación del cupón.'));
+      script.src=endpoint+'?'+new URLSearchParams({action:'bf_coupon_quote',code:String(code||'').trim().toUpperCase(),date,callback:name,_:String(Date.now())});
+      document.head.appendChild(script);
+    });
+  };
   const T = (text) => window.LatamI18n?.t ? window.LatamI18n.t(text) : text;
   const applyI18n = (root) => { try { window.LatamI18n?.apply?.(root); } catch (_) {} };
   const trigger = $('[data-book]');
@@ -1125,7 +1148,7 @@
     date: '', departureTime: PRODUCT.departures[0] || '', adults: 2, children: 0,
     travelers: 2, tier: PRODUCT.tiers[0]?.code || null, occupancy: 'double',
     holder: {}, passengers: [], adultUnit: PRODUCT.price, childUnit: round2(PRODUCT.price * PRODUCT.childFactor),
-    total: 0, due: 0, mode: 'completo', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', hotelAlternative: null, hotelSupplement: 0, roomPlan: '', hotelQuotePending: false, couponCode: ''
+    total: 0, due: 0, mode: 'completo', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', hotelAlternative: null, hotelSupplement: 0, roomPlan: '', hotelQuotePending: false, couponCode: '', couponPercent: 0, discountAmount: 0
   };
 
   // El punto de recojo de experiencias se indica ahora en la ficha y no en el modal.
@@ -1252,7 +1275,15 @@
     state.total = round2(state.adults * state.adultUnit + state.children * state.childUnit +
       (validFlight ? Number(state.flightQuote.displayedPrice || 0) : 0) +
       (state.customHotel ? Number(state.hotelSupplement||0) : 0));
-    if(state.couponCode==='LATAM10EXP'&&PRODUCT.kind==='package')state.total=round2(state.total-round2((state.adults*state.adultUnit+state.children*state.childUnit)*0.10));
+    // No descontar vuelos, hoteles alternativos ni otros extras.
+    const standard=PRODUCT.tiers.length?
+      Number(PRODUCT.tiers[0]?.occupancyPrices?.double??PRODUCT.tiers[0]?.pricePerPerson??PRODUCT.price):state.adultUnit;
+    const eligibleBase=round2(
+      Math.min(state.adultUnit,standard)*state.adults+
+      Math.min(state.childUnit,round2(standard*PRODUCT.childFactor))*state.children);
+    state.discountAmount=state.couponCode&&state.couponPercent>0?
+      round2(eligibleBase*state.couponPercent/100):0;
+    state.total=round2(state.total-state.discountAmount);
     const charge = calculateCharge(state.total);
     state.due = charge.due;
     state.mode = charge.mode;
@@ -1451,6 +1482,15 @@
               <div class="fact-row"><span>Tarifa adulto</span><strong id="bkSumAdultUnit">—</strong></div>
               <div class="fact-row" id="bkChildPriceRow"><span>Tarifa niño</span><strong id="bkSumChildUnit">—</strong></div>
               <p id="bkExtraTravelSummary" class="form-note" hidden></p>
+              <div class="form-field" style="margin:12px 0">
+                <label for="bkCouponCode">¿Tienes un cupón promocional?</label>
+                <div style="display:flex;gap:8px">
+                  <input type="text" id="bkCouponCode" maxlength="32" autocomplete="off" placeholder="Tu código" style="flex:1;min-width:0">
+                  <button type="button" class="btn-outline" id="bkCouponApply">Aplicar</button>
+                </div>
+                <small id="bkCouponNotice" role="status" aria-live="polite"></small>
+              </div>
+              <div class="fact-row" id="bkCouponSavingRow" hidden><span>Descuento promocional</span><strong id="bkCouponSaving">—</strong></div>
               <div class="booking-total"><span>Total del viaje</span><strong id="bkSumTotal">—</strong></div>
             </div>
             <div class="booking-pay">
@@ -1508,7 +1548,9 @@
   }
 
   function saveStep1() {
+    const previousDate=state.date;
     state.date = $('#bkDate').value;
+    if(previousDate&&previousDate!==state.date){state.couponCode='';state.couponPercent=0;}
     state.departureTime = $('#bkDeparture')?.value || '';
     state.adults = Number($('#bkAdults').value);
     state.children = Number($('#bkChildren').value);
@@ -1828,7 +1870,7 @@
     const addonSummary = $('#bkExtraTravelSummary');
     if (addonSummary) {
       const details = [];
-      if(state.couponCode==='LATAM10EXP')details.push('Cupón LATAM10EXP · 10 % de descuento en el paquete');
+      if(state.couponCode&&state.couponPercent>0)details.push('Cupón promocional aplicado · '+state.couponPercent+' %');
       if (state.flightQuote) details.push('Vuelos ida y regreso · '+money(state.flightQuote.displayedPrice)+
         (state.flightQuote.baggage === 'checked' ? ' · maleta facturada por cotizar' : ''));
       if (state.customHotel) details.push('Hotel alternativo: '+state.customHotel+' · '+
@@ -1837,6 +1879,11 @@
       addonSummary.textContent = details.join('  |  ');
       addonSummary.hidden = !details.length;
     }
+    $('#bkCouponSavingRow').hidden=!(state.discountAmount>0);
+    $('#bkCouponSaving').textContent=state.discountAmount>0?'-'+money(state.discountAmount):'';
+    $('#bkCouponCode').value=state.couponCode||'';
+    $('#bkCouponNotice').textContent=state.couponCode&&state.couponPercent>0?
+      'Descuento del '+state.couponPercent+' % aplicado. No incluye vuelos ni servicios adicionales.':'';
     $('#bkSumTotal').textContent = PRODUCT.quoteOnly && state.total <= 0 ? 'Pendiente de cotización' : money(state.total);
     $('#bkPayAmount').textContent = money(state.due);
     const isEnglish = document.documentElement.lang === 'en';
@@ -2427,6 +2474,45 @@
     state.adults = Number(CONFIG.defaultAdults || 2);
     state.children = Number(CONFIG.defaultChildren || 0);
     const modal = buildModal();
+    const couponInput=$('#bkCouponCode'),couponNotice=$('#bkCouponNotice'),couponBtn=$('#bkCouponApply');
+    couponBtn.addEventListener('click',async()=>{
+      if(paymentInProgress)return;
+      const code=String(couponInput.value||'').trim().toUpperCase();
+      if(!code){state.couponCode='';state.couponPercent=0;recalculate();paintSummary();couponNotice.textContent='Cupón eliminado.';return;}
+      couponBtn.disabled=true;couponNotice.textContent='Validando cupón…';
+      try{
+        const result=await window.LatamBfCouponQuote(code,state.date);
+        state.couponCode=code;state.couponPercent=result.percent;recalculate();paintSummary();
+        couponNotice.textContent='Descuento del '+result.percent+' % aplicado al precio base.';
+      }catch(err){
+        state.couponCode='';state.couponPercent=0;recalculate();paintSummary();
+        couponNotice.textContent=err.message||'El cupón no está disponible.';
+      }finally{
+        if(state.requestKey)state.requestKey=requestKey();
+        if(state.paymentMethod==='online')mountPayment();
+        couponBtn.disabled=false;
+      }
+    });
+    couponInput.addEventListener('input',()=>{
+      if(paymentInProgress)return;
+      if(couponInput.value.trim().toUpperCase()!==state.couponCode){
+        state.couponCode='';state.couponPercent=0;recalculate();
+        if(state.requestKey)state.requestKey=requestKey();
+        if(state.paymentMethod==='online'){
+          // No crear una orden PayPal por cada tecla escrita.
+          const cash=$('input[name="bkPaymentMethod"][value="pay_on_tour"]');
+          if(cash)cash.checked=true;
+          state.paymentMethod='pay_on_tour';
+          $('#bkPayOnTour').hidden=false;$('#bkPayOnline').hidden=true;
+          try{paypalButtons?.close?.();}catch(_){}
+          $('#paypalButtons').replaceChildren();
+          couponNotice.textContent='Aplica el cupón y después selecciona pagar online.';
+        }
+        $('#bkCouponSavingRow').hidden=true;$('#bkSumTotal').textContent=money(state.total);
+        $('#bkPayAmount').textContent=money(state.due);
+        couponNotice.textContent='';
+      }
+    });
     if(PRODUCT.kind==='package')modal.classList.add('booking-modal--package');
     else setupExperiencePickup();
     $('#bkLeadDays').textContent = String(CONFIG.minLeadDays);
@@ -2470,7 +2556,8 @@
       state.hotelAlternative=hasRate?{...alternative}:null;
       state.hotelSupplement=hasRate?round2(Number(alternative.supplement)):0;
       state.roomPlan=String(source.roomPlan||'').slice(0,120);
-      state.couponCode=source.couponCode==='LATAM10EXP'?'LATAM10EXP':'';
+      state.couponCode=typeof source.couponCode==='string'?source.couponCode.slice(0,32):'';
+       state.couponPercent=state.couponCode&&Number(source.couponPercent)>0?Number(source.couponPercent):0;
       state.hotelQuotePending=Boolean(source.hotelQuotePending);
       if(state.hotelQuotePending){state.hotelSupplement=0;state.hotelAlternative=alternative?{...alternative,supplement:null,pending:true}:null;}
       const flight=source.flight;
@@ -2503,7 +2590,7 @@
           ' · '+(state.adults+state.children)+' viajero(s)';
         const hotel=state.customHotel||tierOptionLabel(getTier());
         const extras=[hotel,
-          state.couponCode==='LATAM10EXP'?'Cupón LATAM10EXP aplicado':'',
+          state.couponCode&&state.couponPercent>0?'Cupón promocional aplicado':'',
           state.roomPlan||occupancyLabel(state.occupancy),
           state.flightQuote?'Vuelos seleccionados desde '+state.flightQuote.origin:'Vuelos no añadidos'];
         const estimated=Number(source.totalEstimate);
