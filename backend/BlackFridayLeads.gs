@@ -56,6 +56,15 @@ function lxBfLeadStart_(data) {
     const lastSent=old?.data?.[1] instanceof Date?old.data[1].getTime():0;
     if(lastSent&&Date.now()-lastSent<60*1000)
       throw new Error('Ya enviamos un código recientemente. Revisa tu correo.');
+    const available=lxBfHoja_().getDataRange().getValues().slice(1).some(function(r){
+      return String(r[13])==='CAPTACION_2026'&&String(r[1])==='DISPONIBLE'&&!r[10];
+    });
+    if(!available && !lxBfHoja_().getDataRange().getValues().slice(1).some(function(r){
+      return String(r[10]||'').trim().toLowerCase()===email&&Boolean(r[12]);
+    }))throw new Error('Los cupones de esta campaña se agotaron.');
+    const day='LX_BF_MAILS_'+lxBfHoy_();
+    const sentToday=Number(PROPS.getProperty(day)||0);
+    if(sentToday>=80)throw new Error('No podemos enviar más verificaciones por el momento. Inténtalo más tarde.');
     if(MailApp.getRemainingDailyQuota()<1)
       throw new Error('No podemos enviar más verificaciones por el momento. Inténtalo más tarde.');
     const digits=parseInt(Utilities.getUuid().replace(/-/g,'').slice(0,8),16)%1000000;
@@ -75,6 +84,7 @@ function lxBfLeadStart_(data) {
       name:'Latam Expeditions'
     });
     cache.put(limitKey,'1',60);
+    PROPS.setProperty(day,String(sentToday+1));
     return {ok:true,verificationRequired:true,message:'Enviamos un código de seis dígitos a tu correo.'};
   } finally {lock.releaseLock();}
 }
