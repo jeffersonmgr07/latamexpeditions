@@ -136,3 +136,31 @@ function lxBfLeadVerify_(data) {
     return {ok:true,code:code,message:'Correo verificado. Este es tu cupón exclusivo.'};
   } finally {lock.releaseLock();}
 }
+
+/**
+ * Black Friday: resultado efímero por solicitud POST.
+ * El frontend consulta SOLO un identificador aleatorio; nunca envía correo o teléfono por GET.
+ * Resuelve los bloqueos de iframe/sandbox de Google Apps Script.
+ */
+function lxBfClaimKey_(requestKey) {
+  const key=String(requestKey||'');
+  if(!/^[0-9a-f]{32}$/.test(key))throw new Error('Solicitud de campaña no válida.');
+  return 'bf_ack_'+lxBfHash_(key).slice(0,48);
+}
+function lxBfClaimSave_(requestKey,payload) {
+  CacheService.getScriptCache().put(lxBfClaimKey_(requestKey),JSON.stringify(payload),180);
+}
+function lxBfClaimStatusGet_(e) {
+  const p=e&&e.parameter||{},cb=String(p.callback||'');
+  if(!/^__lxBfClaim_[A-Za-z0-9_]{8,90}$/.test(cb))
+    return ContentService.createTextOutput('/* callback inválido */').setMimeType(ContentService.MimeType.JAVASCRIPT);
+  let result;
+  try {
+    const raw=CacheService.getScriptCache().get(lxBfClaimKey_(p.requestKey));
+    result=raw?JSON.parse(raw):{pending:true};
+  } catch(ignore) {
+    result={ok:false,error:'No se pudo consultar el estado de la solicitud.'};
+  }
+  const safe=JSON.stringify(result).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
+  return ContentService.createTextOutput(cb+'('+safe+');').setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
