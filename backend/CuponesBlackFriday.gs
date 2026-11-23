@@ -18,7 +18,10 @@ const LX_BF_HASHES_2026 = [
 '459c68a047d7dba4670a0382f6255c574f044428d4ab861c889c887985ec1fd1'
 ];
 const LX_BF_SHEET = 'Cupones BF 2026';
-const LX_BF_HEADER = ['Hash SHA256','Estado','Orden reservada','Reserva hasta','Orden utilizada','Usado el','Porcentaje fijo','Actualizado'];
+const LX_BF_HEADER = ['Hash SHA256','Estado','Orden reservada','Reserva hasta','Orden utilizada','Usado el','Porcentaje fijo','Actualizado','Activado el','Caduca el','Correo asignado','Nombre de cliente','Código privado','Origen'];
+const LX_BF_END_UTC = Date.parse('2026-11-30T00:00:00-05:00');
+const LX_BF_APPLY_MS = 5 * 60 * 60 * 1000;
+const LX_BF_CAMPAIGN_NEW_CODES = 40;
 const LX_BF_TZ = 'America/Lima';
 const LX_BF_HOLD_MS = 30 * 60 * 1000;
 
@@ -47,6 +50,11 @@ function lxBfHoja_() {
     sheet.appendRow(LX_BF_HEADER);
     sheet.getRange(1,1,1,LX_BF_HEADER.length).setFontWeight('bold').setBackground('#0a3d2c').setFontColor('#ffffff');
     sheet.setFrozenRows(1);
+  } else {
+    // Ampliar la hoja histórica de ocho columnas sin tocar las 10 primeras huellas.
+    const head=sheet.getRange(1,1,1,LX_BF_HEADER.length).getValues()[0];
+    if(head.some(function(v,i){return String(v)!==LX_BF_HEADER[i];}))
+      sheet.getRange(1,1,1,LX_BF_HEADER.length).setValues([LX_BF_HEADER]);
   }
   const rows=sheet.getDataRange().getValues();
   const existing={};
@@ -54,8 +62,8 @@ function lxBfHoja_() {
   const missing=LX_BF_HASHES_2026.filter(function(hash){return !existing[hash];});
   if(missing.length){
     const now=new Date();
-    sheet.getRange(sheet.getLastRow()+1,1,missing.length,8).setValues(
-      missing.map(function(hash){return [hash,'DISPONIBLE','','','','','',now];})
+    sheet.getRange(sheet.getLastRow()+1,1,missing.length,LX_BF_HEADER.length).setValues(
+      missing.map(function(hash){return [hash,'DISPONIBLE','','','','','',now,'','','','','','MANUAL'];})
     );
   }
   return sheet;
@@ -79,9 +87,14 @@ function lxBfPorcentaje_(travelDate) {
     throw new Error('Selecciona una fecha de viaje válida.');
   return delta<=30?10:delta<=60?20:delta<=75?30:delta<=100?40:50;
 }
-function lxBfValidar_(code,travelDate,orderId) {
+function lxBfValidar_(code,travelDate,orderId,email) {
   if(!lxBfVigente_())throw new Error('El cupón no está disponible.');
   const found=lxBfBuscar_(code),v=found.data;
+  const bound=String(v[10]||'').trim().toLowerCase(),buyer=String(email||'').trim().toLowerCase();
+  if(bound&&buyer&&bound!==buyer)throw new Error('El cupón está asociado a otro correo electrónico.');
+  const end=v[9] instanceof Date?v[9].getTime():(v[9]?new Date(v[9]).getTime():0);
+  if(end&&Date.now()>=end)throw new Error('El cupón ha caducado.');
+  if(v[1]==='VENCIDO')throw new Error('El cupón ha caducado.');
   if(v[1]==='USADO' && String(v[4])===String(orderId||'') && orderId){
     const fixed=Number(v[6]);
     return {percent:v[6]!==''&&Number.isInteger(fixed)&&fixed>=1&&fixed<=50?fixed:lxBfPorcentaje_(travelDate),found:found,alreadyUsed:true};
@@ -94,17 +107,39 @@ function lxBfValidar_(code,travelDate,orderId) {
   const percent=v[6]!==''&&Number.isInteger(fixed)&&fixed>=1&&fixed<=50?fixed:lxBfPorcentaje_(travelDate);
   return {percent:percent,found:found};
 }
+/**
+ * La PRIMERA aplicación inicia cinco horas reales, persistidas en Sheets.
+ * Las siguientes lecturas nunca reinician el reloj.
+ */
 function lxBfCotizar_(code,travelDate) {
-  const result=lxBfValidar_(code,travelDate,'');
-  return {ok:true,percent:result.percent};
+  const lock=LockService.getScriptLock();lock.waitLock(30000);
+  try {
+    const result=lxBfValidar_(code,travelDate,'');
+    const found=result.found;
+    const old=found.data[9] instanceof Date?found.data[9].getTime():new Date(found.data[9]).getTime();
+    let expiry=Number.isFinite(old)?old:0;
+    if(!expiry){
+      const now=Date.now();
+      expiry=Math.min(now+LX_BF_APPLY_MS,LX_BF_END_UTC);
+      if(expiry<=now)throw new Error('El cupón no está disponible.');
+      found.sheet.getRange(found.row,9,1,2).setValues([[new Date(now),new Date(expiry)]]);
+      if(String(found.data[1])==='DISPONIBLE')
+        found.sheet.getRange(found.row,2).setValue('ACTIVO');
+      found.sheet.getRange(found.row,8).setValue(new Date(now));
+    }
+    return {ok:true,percent:result.percent,expiresAt:new Date(expiry).toISOString()};
+  } finally {lock.releaseLock();}
 }
 /** Crear o renovar una reserva de cupón dentro del LockService del flujo PayPal. */
+function vToMs_(v){const ms=v instanceof Date?v.getTime():v?new Date(v).getTime():0;return Number.isFinite(ms)?ms:0;}
 function lxBfReservar_(code,travelDate,orderId) {
   if(!code)return;
   const r=lxBfValidar_(code,travelDate,orderId);
   if(r.alreadyUsed)return;
   const sheet=r.found.sheet,row=r.found.row;
-  sheet.getRange(row,2,1,3).setValues([['RESERVADO',String(orderId),new Date(Date.now()+LX_BF_HOLD_MS)]]);
+  const couponExpires=vToMs_(r.found.data[9]);
+  sheet.getRange(row,2,1,3).setValues([['RESERVADO',String(orderId),
+    new Date(Math.min(Date.now()+LX_BF_HOLD_MS,couponExpires||LX_BF_END_UTC))]]);
   sheet.getRange(row,8).setValue(new Date());
 }
 /** Debe llamarse ANTES de capturar fondos, manteniendo el lock del proceso. */
@@ -173,4 +208,38 @@ function pruebaCuponesBlackFriday() {
   const resultado = lxBfPruebaInstalacion_();
   Logger.log(JSON.stringify(resultado));
   return resultado;
+}
+
+/**
+ * ADMINISTRACIÓN. Crear 40 códigos adicionales, 50 en total con los 10 originales.
+ * La lista privada con códigos legibles permanece SOLO en Google Sheets.
+ * Nunca compartir esa pestaña con el público.
+ */
+function prepararCampanaBlackFriday() {
+  const lock=LockService.getScriptLock();lock.waitLock(30000);
+  try {
+    const sheet=lxBfHoja_(),rows=sheet.getDataRange().getValues();
+    const existing=new Set(rows.slice(1).map(function(r){return String(r[0]);}));
+    const already=rows.slice(1).filter(function(r){return String(r[13])==='CAPTACION_2026';}).length;
+    const missing=Math.max(0,LX_BF_CAMPAIGN_NEW_CODES-already);
+    const generated=[];
+    const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    for(let i=0;i<missing;i++){
+      let code,hash;
+      do {
+        const hex=Utilities.getUuid().replace(/-/g,'')+Utilities.getUuid().replace(/-/g,'');
+        let chars='';
+        for(let j=0;j<16;j++)chars+=alphabet[parseInt(hex.slice(j*2,j*2+2),16)%alphabet.length];
+        code='BF26-'+chars.match(/.{4}/g).join('-');
+        hash=lxBfHash_(code);
+      }while(existing.has(hash));
+      existing.add(hash);
+      generated.push([hash,'DISPONIBLE','','','','','',new Date(),'','','','',code,'CAPTACION_2026']);
+    }
+    if(generated.length)sheet.getRange(sheet.getLastRow()+1,1,generated.length,LX_BF_HEADER.length).setValues(generated);
+    const result={ok:true,codigosOriginales:10,nuevos:already+generated.length,total:10+already+generated.length,
+      disponiblesParaCampana:already+generated.length};
+    Logger.log(JSON.stringify(result));
+    return result;
+  } finally {lock.releaseLock();}
 }
