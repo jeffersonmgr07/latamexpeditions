@@ -1184,10 +1184,19 @@ function doPost(e) {
 
     // Black Friday: captura segura por POST con acuse en iframe (sin datos personales en URL).
     if(action==='bfLeadStart'||action==='bfLeadVerify'){
-      const output=action==='bfLeadStart'?lxBfLeadStart_(data):lxBfLeadVerify_(data);
-      return formRequest?lxHtmlAcuse_(Object.assign({
-        type:'latam-bf-claim-response',action:action,requestKey:String(data.requestKey||'')
-      },output)):json(output);
+      // POST mantiene los datos personales fuera de URLs; el estado se consulta
+      // por una clave de 128 bits aleatoria y de vida muy corta.
+      const key=String(data.requestKey||'');
+      lxBfClaimKey_(key);
+      try {
+        const output=action==='bfLeadStart'?lxBfLeadStart_(data):lxBfLeadVerify_(data);
+        lxBfClaimSave_(key,Object.assign({ok:true},output));
+        return json({ok:true,accepted:true});
+      }catch(err){
+        registrarError(err,'Black Friday '+action);
+        lxBfClaimSave_(key,{ok:false,error:mensajeSeguro(err)});
+        return json({ok:false,accepted:true});
+      }
     }
 
     // --- Cuentas y consultas (Cuentas.gs) ---
@@ -1239,12 +1248,14 @@ function doGet(e) {
   if(action==='status'||action==='status_html')return lxResponderEstado_(e);
   if(action==='paypal_order_status')return lxResponderOrdenPayPal_(e);
   if(action==='bf_coupon_quote')return lxBfResponderCotizacion_(e);
+  if(action==='bf_claim_status')return lxBfClaimStatusGet_(e);
   if(action==='hotel_offer_availability')return lxOfertaDisponibilidadGet_(e);
   if(action==='health')return json({
     ok:true,version:'2026-11-10-fullpay-signed-v1',paymentMode:'completo',
     signedQuotesReady:String(PROPS.getProperty('LATAM_PRICE_QUOTE_KEY')||'').length>=40,
     blackFridayCouponsReady:typeof lxBfResponderCotizacion_==='function',
-    blackFridayLeadReady:typeof lxBfLeadVerify_==='function'
+    blackFridayLeadReady:typeof lxBfLeadVerify_==='function',
+    blackFridayAckReady:typeof lxBfClaimStatusGet_==='function'
   });
   return ContentService
     .createTextOutput('Latam Expeditions — backend de reservas activo. Usa POST.')
