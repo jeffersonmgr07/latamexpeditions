@@ -1429,7 +1429,7 @@ function lxQuoteValidateHotel_(data,context){
   }};
 }
 
-function validarYCalcular(data) {
+function validarYCalcular(data,couponOrderId) {
   if (!data || !data.slug) throw new Error('Faltan datos de la reserva.');
 
   const slug = textoPlano(data.slug, 100).toLowerCase();
@@ -1514,8 +1514,16 @@ function validarYCalcular(data) {
   // Validación segura en Sheets; el navegador sólo muestra una estimación.
   const couponCode=textoPlano(data.couponCode||'',32).toUpperCase();
   const packageBase=redondear2(tarifas.adulto*adultos+tarifas.nino*ninos);
-  const couponPercent=couponCode?lxBfValidar_(couponCode,fechaTexto,'').percent:0;
-  const discountAmount=redondear2(packageBase*couponPercent/100);
+  // La mejora de categoría o acomodación hotelera es un suplemento, sin descuento.
+  const tiersBase=PRECIOS_PAQUETES[slug];
+  const firstTier=tiersBase?tiersBase[Object.keys(tiersBase)[0]]:null;
+  const standardDouble=firstTier&&Number(firstTier.double)>0?Number(firstTier.double):tarifas.adulto;
+  const stdChildFactor=slug==='lima-paracas-ica-huacachina-2d1n'?1:0.70;
+  const discountBase=redondear2(
+    Math.min(tarifas.adulto,standardDouble)*adultos+
+    Math.min(tarifas.nino,redondear2(standardDouble*stdChildFactor))*ninos);
+  const couponPercent=couponCode?lxBfValidar_(couponCode,fechaTexto,couponOrderId||'').percent:0;
+  const discountAmount=redondear2(discountBase*couponPercent/100);
   const total = redondear2(packageBase+validatedFlight.amount+validatedHotel.amount-discountAmount);
   const cobro = calcularCobro(total);
 
@@ -1674,7 +1682,9 @@ function crearOrden(data) {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
-  const c = validarYCalcular(data);
+  const priorKey=String(data&&data.requestKey||'');
+  const priorOrder=priorKey?buscarOrdenPorRequestKey(priorKey):null;
+  const c = validarYCalcular(data,priorOrder?priorOrder.orderId:'');
   const booking = c.booking;
   const fingerprint = huellaReserva(booking, c);
   const existente = buscarOrdenPorRequestKey(booking.requestKey);
