@@ -11,12 +11,20 @@ los cupones deben validarse en el servidor antes de activar el formulario públi
    desde `backend/CuponesBlackFriday.gs`. No introducir códigos en archivos públicos.
 4. Guardar y **Gestionar implementaciones → Editar → Nueva versión → Implementar**.
    Mantener la URL `/exec` ya configurada en `assets/data/catalog.json`.
-5. Probar, con un código privado y un paquete que permita pago online, que el
+5. Antes de hacer una compra, seleccionar la función `lxBfPruebaInstalacion_`
+   en el desplegable del editor de Apps Script y pulsar **Ejecutar**. Autorizar
+   los permisos si se solicitan. En el registro debe aparecer un objeto
+   con `ok:true`, `cuponesInstalados:10` y `descuentosVerificados:true`.
+   Esta prueba **no consume** códigos ni hace cargos.
+6. Comprobar que la URL pública `/exec?action=health` devuelve el campo
+   `blackFridayCouponsReady:true`. Si no aparece, la implementación activa
+   continúa siendo la anterior.
+7. Probar, con un código privado y un paquete que permita pago online, que el
    servidor devuelva el descuento y que el total excluya vuelos y suplementos.
-6. Verificar en Google Sheets la pestaña privada `Cupones BF 2026`:
+8. Verificar en Google Sheets la pestaña privada `Cupones BF 2026`:
    `DISPONIBLE` → `RESERVADO` (iniciar orden PayPal) → `USADO`
    (captura confirmada). Una reserva sin pago no consume el código.
-7. Solo después de actualizar el backend, fusionar esta rama con `main`
+9. Solo después de actualizar el backend, fusionar esta rama con `main`
    y verificar en la web la compra real de prueba.
 
 ## Administración
