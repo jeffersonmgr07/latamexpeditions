@@ -630,7 +630,7 @@ function showTierQuote(){
      if(pending)item.classList.add('is-pending');
      rows.append(item);
    }
-   addLine('Paquete base',baseAmount,false,'('+people+')');
+   addLine('Paquete base',baseAmount,book.dataset.bookQuoteOnly==='true' && params.base<=0,'('+people+')');
    const adjustment=Math.round((pricePackage()-baseAmount)*100)/100;
    if(Math.abs(adjustment)>=.01){
      const arrangement=state.roomPlan||roomPlans(state.adults+state.children).find(p=>p.code===state.occupancy)?.label||'';
@@ -672,7 +672,7 @@ function showTierQuote(){
   discountRow.hidden=appliedDiscount<=0;
   $('lxProductDiscountValue').textContent=appliedDiscount>0?'-'+fmt(appliedDiscount):'';
   const needsGroupQuote=state.adults+state.children>maxHotelOccupancy||state.hotelQuotePending||needsChileQuote();
-  $('lxProductGroupPrice').textContent=needsChileQuote()?'Por cotizar':state.adults+state.children>maxHotelOccupancy?'Consultar':fmt(total());
+  $('lxProductGroupPrice').textContent=(book.dataset.bookQuoteOnly==='true'&&params.base<=0)?'Pendiente de cotización':needsChileQuote()?'Por cotizar':state.adults+state.children>maxHotelOccupancy?'Consultar':fmt(total());
   // Mostrar avisos solo cuando afectan al itinerario; nunca añadir textos de cotización al importe.
   const notice=needsChileQuote()?'La tarifa automática de este producto está disponible para 2 adultos con habitación doble (o matrimonial si la categoría indica ese precio). Para otras ocupaciones, niños o grupos, solicita cotización.':
     state.adults+state.children>maxHotelOccupancy?'La distribución de habitaciones requiere una tarifa adicional.':

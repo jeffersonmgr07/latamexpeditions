@@ -1264,9 +1264,9 @@
     const totalPax = $('#bkTravelerTotal');
     if (totalPax) totalPax.textContent = String(state.travelers);
     const live = $('#bkLivePrice');
-    if (live) live.textContent = money(state.total);
+    if (live) live.textContent = PRODUCT.quoteOnly && state.total <= 0 ? 'Cotización pendiente' : money(state.total);
     const unit = $('#bkLiveUnit');
-    if (unit) unit.textContent = state.children ? `${money(state.adultUnit)} / ${money(state.childUnit)}` : money(state.adultUnit);
+    if (unit) unit.textContent = PRODUCT.quoteOnly && state.total <= 0 ? 'Tarifa por confirmar' : (state.children ? `${money(state.adultUnit)} / ${money(state.childUnit)}` : money(state.adultUnit));
   }
 
 
@@ -1837,7 +1837,7 @@
       addonSummary.textContent = details.join('  |  ');
       addonSummary.hidden = !details.length;
     }
-    $('#bkSumTotal').textContent = money(state.total);
+    $('#bkSumTotal').textContent = PRODUCT.quoteOnly && state.total <= 0 ? 'Pendiente de cotización' : money(state.total);
     $('#bkPayAmount').textContent = money(state.due);
     const isEnglish = document.documentElement.lang === 'en';
     $('#bkPayLabel').textContent = state.mode === 'completo'
