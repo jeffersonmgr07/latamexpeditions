@@ -1291,7 +1291,7 @@ function mensajeSeguro(error) {
     'La solicitud es demasiado grande', 'La orden de pago', 'No se pudo iniciar el pago',
     'El pago no se completó', 'El pago fue recibido', 'No encontramos la orden de pago',
     'Las tarifas adicionales', 'El cupón', 'Este cupón', 'Selecciona una fecha de viaje',
-    'La campaña', 'Revisa el nombre', 'Debes aceptar', 'Ya enviamos un código',
+    'La campaña', 'Revisa el nombre', 'Debes aceptar', 'Ya enviamos un código', 'Primero aplica tu cupón',
     'No podemos enviar', 'No encontramos un registro', 'Introduce el código de seis',
     'Superaste el máximo', 'Los cupones de esta campaña',
     // Cuentas
