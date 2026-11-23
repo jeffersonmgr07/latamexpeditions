@@ -7,7 +7,7 @@
   if(s.includes('<section class="page-hero">'))
     s=s.replace('<section class="page-hero">','<section class="page-hero lx-package-hero" style="--lx-hero-img:url(\''+first+'\')">');
   s=s.replace(/<section class="product-hero-clean package-hero-clean[^"]*"(?:\s+style="[^"]*")?[^>]*>/,tag=>{
-    if(tag.includes('--lx-hero-img:'))return tag.replace(/--lx-hero-img:[^;"']+(?:\([^)]*\))?/,'--lx-hero-img:url(\''+first+'\')');
+    if(tag.includes('--lx-hero-img:'))return tag.replace(/\s+style="[^"]*"/,' style="--lx-hero-img:url(\''+first+'\')"');
     return tag.replace(/>$/,' style="--lx-hero-img:url(\''+first+'\')">');
   });
   if(s.includes('class="detail-grid"')){
