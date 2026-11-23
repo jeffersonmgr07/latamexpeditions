@@ -1234,7 +1234,8 @@ function doGet(e) {
   if(action==='hotel_offer_availability')return lxOfertaDisponibilidadGet_(e);
   if(action==='health')return json({
     ok:true,version:'2026-11-10-fullpay-signed-v1',paymentMode:'completo',
-    signedQuotesReady:String(PROPS.getProperty('LATAM_PRICE_QUOTE_KEY')||'').length>=40
+    signedQuotesReady:String(PROPS.getProperty('LATAM_PRICE_QUOTE_KEY')||'').length>=40,
+    blackFridayCouponsReady:typeof lxBfResponderCotizacion_==='function'
   });
   return ContentService
     .createTextOutput('Latam Expeditions — backend de reservas activo. Usa POST.')
