@@ -82,6 +82,10 @@ function lxBfPorcentaje_(travelDate) {
 function lxBfValidar_(code,travelDate,orderId) {
   if(!lxBfVigente_())throw new Error('El cupón no está disponible.');
   const found=lxBfBuscar_(code),v=found.data;
+  if(v[1]==='USADO' && String(v[4])===String(orderId||'') && orderId){
+    const fixed=Number(v[6]);
+    return {percent:v[6]!==''&&Number.isInteger(fixed)&&fixed>=1&&fixed<=50?fixed:lxBfPorcentaje_(travelDate),found:found,alreadyUsed:true};
+  }
   if(v[1]==='USADO'||v[1]==='BLOQUEADO')throw new Error('El cupón ya no está disponible.');
   const held=String(v[2]||''),until=v[3] instanceof Date?v[3].getTime():new Date(v[3]).getTime();
   if(held && Number.isFinite(until) && until>Date.now() && held!==String(orderId||''))
@@ -98,6 +102,7 @@ function lxBfCotizar_(code,travelDate) {
 function lxBfReservar_(code,travelDate,orderId) {
   if(!code)return;
   const r=lxBfValidar_(code,travelDate,orderId);
+  if(r.alreadyUsed)return;
   const sheet=r.found.sheet,row=r.found.row;
   sheet.getRange(row,2,1,3).setValues([['RESERVADO',String(orderId),new Date(Date.now()+LX_BF_HOLD_MS)]]);
   sheet.getRange(row,8).setValue(new Date());
