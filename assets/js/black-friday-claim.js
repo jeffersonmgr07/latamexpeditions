@@ -13,14 +13,14 @@
   function closeDial(){
     dialMenu.hidden=true;dialButton.setAttribute('aria-expanded','false');
   }
-  function chooseDial(country){
+  function chooseDial(country,focusPhone=true){
     const [name,dial,iso]=country;
     selectedDial=dial;
     $('bfDialCode').textContent=dial;
     $('bfDialFlag').textContent=flagOf(iso);
     dialButton.setAttribute('aria-label','Código de país: '+name+' '+dial+'. Cambiar país.');
     closeDial();
-    $('bfPhone').focus();
+    if(focusPhone)$('bfPhone').focus();
   }
   function renderDialList(rawQuery=''){
     const query=cleanSearch(rawQuery);
@@ -70,7 +70,7 @@
   });
   document.addEventListener('pointerdown',event=>{if(!dialWrap.contains(event.target))closeDial();});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!dialMenu.hidden){closeDial();dialButton.focus();}});
-  chooseDial(PHONE_COUNTRIES.find(x=>x[2]==='PE')||PHONE_COUNTRIES[0]);
+  chooseDial(PHONE_COUNTRIES.find(x=>x[2]==='PE')||PHONE_COUNTRIES[0],false);
   
   const status=(message,error=false)=>{const e=$('bfStatus');e.textContent=message||'';e.classList.toggle('is-error',Boolean(error));};
   const toggleBusy=(value)=>{
