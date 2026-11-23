@@ -1,0 +1,23 @@
+/* Consistencia visual de fichas de paquetes, noviembre 2026. */
+.page-hero.lx-package-hero{background-color:#164631;background-image:linear-gradient(100deg,rgba(4,36,24,.83),rgba(7,50,34,.57) 53%,rgba(7,45,32,.47)),var(--lx-hero-img);background-size:cover;background-position:center center;min-height:220px;display:flex;align-items:center}
+.page-hero.lx-package-hero .page-hero__inner{position:relative;z-index:1;width:100%}
+.page-hero.lx-package-hero h1,.page-hero.lx-package-hero p,.page-hero.lx-package-hero .breadcrumb,.page-hero.lx-package-hero .breadcrumb a,.page-hero.lx-package-hero .eyebrow{color:#fff}
+.lx-standard-highlight-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+.lx-standard-highlight-list li{display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+.lx-standard-highlight-list li::before{content:"✓";font-weight:800;color:#07873e;flex:0 0 18px}
+.lx-standard-operations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.lx-standard-operations>.detail-card{min-width:0}
+.lx-standard-operations h2{margin-bottom:12px}
+.lx-standard-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+.lx-standard-actions a{display:inline-flex;justify-content:center;align-items:center;min-height:43px;padding:9px 17px;border:1px solid #138047;border-radius:10px;text-decoration:none;font-weight:700;color:#176b45}
+.lx-standard-actions a:first-child{background:#07873e;color:#fff}
+.lx-standard-actions a:hover{filter:brightness(.95)}
+.lx-standard-faq details{border-bottom:1px solid #e3eae6;padding:12px 0}
+.lx-standard-faq details:last-child{border-bottom:none}
+.lx-standard-faq summary{font-weight:700;cursor:pointer}
+.lx-standard-faq details p{margin:10px 0 2px;line-height:1.6}
+.lx-standard-facts>div{min-width:0}
+.lx-standard-facts strong{overflow-wrap:anywhere}
+.lx-standard-conditions p{line-height:1.65;margin:0}
+.product-detail-section .detail-main>.detail-card,.product-detail-section .detail-main>.lx-standard-operations{scroll-margin-top:90px}
+@media(max-width:720px){.lx-standard-operations{grid-template-columns:1fr}.page-hero.lx-package-hero{min-height:195px}.lx-standard-actions{flex-direction:column}.lx-standard-actions a{width:100%}}
