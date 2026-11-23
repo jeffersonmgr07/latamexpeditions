@@ -8,6 +8,57 @@
   const $ = (selector, scope = document) => scope.querySelector(selector);
   const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
   const BASE = document.documentElement.dataset.base || './';
+  // Borde dorado pulsante; el reloj se basa en fecha absoluta del servidor.
+  if(!document.getElementById('lxBlackFridayCouponCSS')){
+    const style=document.createElement('style');
+    style.id='lxBlackFridayCouponCSS';
+    style.textContent=`
+      .lx-bf-status{text-align:center;margin:12px auto 6px;max-width:400px}
+      .lx-bf-badge{display:inline-block;padding:9px 17px;border:2px solid #e2ac18;
+        border-radius:999px;background:#f9fbf8;color:#164c37;font-weight:800;font-size:14px;
+        line-height:1.45;animation:lxBfBorderPulse 1.8s ease-in-out infinite}
+      .lx-bf-countdown{margin:8px 0 4px;color:#225440;font-size:13px;font-weight:700}
+      .lx-bf-countdown strong{font-variant-numeric:tabular-nums;font-size:16px;letter-spacing:.05em}
+      .lx-bf-exclusion{display:block;font-size:11.5px;color:#66756b;margin:5px 0 0}
+      @keyframes lxBfBorderPulse{
+        0%,100%{border-color:#d5a92d;box-shadow:0 0 2px rgba(244,191,54,.18)}
+        50%{border-color:#ffd967;box-shadow:0 0 13px 3px rgba(241,189,49,.65)}
+      }
+      @media(prefers-reduced-motion:reduce){.lx-bf-badge{animation:none}}
+      .lx-bf-status[hidden]{display:none!important}
+    `;
+    document.head.appendChild(style);
+  }
+  window.LatamBfShowCoupon = (host,percent,expiry,onExpire)=>{
+    if(!host)return;
+    if(host._lxCouponTicker)clearInterval(host._lxCouponTicker);
+    host._lxCouponTicker=null;host.replaceChildren();
+    const limit=Date.parse(String(expiry||''));
+    if(!(percent>0)||!Number.isFinite(limit)){host.hidden=true;return;}
+    host.hidden=false;host.classList.add('lx-bf-status');
+    const badge=document.createElement('div');badge.className='lx-bf-badge';
+    badge.textContent='Descuento del '+percent+'% aplicado';
+    const timer=document.createElement('div');timer.className='lx-bf-countdown';
+    timer.append('Cupón caduca en ');
+    const number=document.createElement('strong');timer.append(number);
+    const note=document.createElement('small');note.className='lx-bf-exclusion';
+    note.textContent='(No aplica para vuelos y extras)';
+    host.append(badge,timer,note);
+    const tick=()=>{
+      const sec=Math.max(0,Math.ceil((limit-Date.now())/1000));
+      const h=String(Math.floor(sec/3600)).padStart(2,'0');
+      const m=String(Math.floor((sec%3600)/60)).padStart(2,'0');
+      const ss=String(sec%60).padStart(2,'0');
+      number.textContent=h+':'+m+':'+ss;
+      if(!sec){
+        clearInterval(host._lxCouponTicker);host._lxCouponTicker=null;
+        host.replaceChildren();host.hidden=true;
+        if(typeof onExpire==='function')onExpire();
+      }
+    };
+    tick();
+    if(!host.hidden)host._lxCouponTicker=setInterval(tick,1000);
+  };
   // Fecha y porcentaje se validan únicamente en Apps Script.
   window.LatamBfCouponQuote = async (code,date) => {
     if(!date)throw new Error('Selecciona la fecha del viaje antes de aplicar el cupón.');
@@ -23,7 +74,7 @@
       const script=document.createElement('script');let finished=false;
       const done=(err,data)=>{if(finished)return;finished=true;clearTimeout(timer);script.remove();delete window[name];err?reject(err):resolve(data);};
       window[name]=result=>result?.ok&&Number(result.percent)>0&&Number(result.percent)<=50?
-        done(null,{percent:Number(result.percent)}):
+        done(null,{percent:Number(result.percent),expiresAt:String(result.expiresAt||'')}):
         done(new Error(result?.error||'Cupón no disponible para esta reserva.'));
       const timer=setTimeout(()=>done(new Error('No se pudo verificar el cupón. Inténtalo de nuevo.')),10000);
       script.onerror=()=>done(new Error('No se pudo conectar con la validación del cupón.'));
@@ -1148,7 +1199,7 @@
     date: '', departureTime: PRODUCT.departures[0] || '', adults: 2, children: 0,
     travelers: 2, tier: PRODUCT.tiers[0]?.code || null, occupancy: 'double',
     holder: {}, passengers: [], adultUnit: PRODUCT.price, childUnit: round2(PRODUCT.price * PRODUCT.childFactor),
-    total: 0, due: 0, mode: 'completo', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', hotelAlternative: null, hotelSupplement: 0, roomPlan: '', hotelQuotePending: false, couponCode: '', couponPercent: 0, discountAmount: 0
+    total: 0, due: 0, mode: 'completo', requestKey: '', pickupAddress: '', pickupStatus: 'pending_validation', paymentMethod: 'pay_on_tour', flightQuote: null, customHotel: '', hotelAlternative: null, hotelSupplement: 0, roomPlan: '', hotelQuotePending: false, couponCode: '', couponPercent: 0, couponExpiresAt:'', discountAmount: 0
   };
 
   // El punto de recojo de experiencias se indica ahora en la ficha y no en el modal.
@@ -1490,6 +1541,7 @@
                 </div>
                 <small id="bkCouponNotice" role="status" aria-live="polite"></small>
               </div>
+              <div id="bkCouponPromoStatus" class="lx-bf-status" hidden></div>
               <div class="fact-row" id="bkCouponSavingRow" hidden><span>Descuento promocional</span><strong id="bkCouponSaving">—</strong></div>
               <div class="booking-total"><span>Total del viaje</span><strong id="bkSumTotal">—</strong></div>
             </div>
@@ -1550,7 +1602,7 @@
   function saveStep1() {
     const previousDate=state.date;
     state.date = $('#bkDate').value;
-    if(previousDate&&previousDate!==state.date){state.couponCode='';state.couponPercent=0;}
+    if(previousDate&&previousDate!==state.date){state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';}
     state.departureTime = $('#bkDeparture')?.value || '';
     state.adults = Number($('#bkAdults').value);
     state.children = Number($('#bkChildren').value);
@@ -1882,8 +1934,15 @@
     $('#bkCouponSavingRow').hidden=!(state.discountAmount>0);
     $('#bkCouponSaving').textContent=state.discountAmount>0?'-'+money(state.discountAmount):'';
     $('#bkCouponCode').value=state.couponCode||'';
-    $('#bkCouponNotice').textContent=state.couponCode&&state.couponPercent>0?
-      'Descuento del '+state.couponPercent+' % aplicado. No incluye vuelos ni servicios adicionales.':'';
+    if(state.couponCode&&state.couponPercent>0&&state.couponExpiresAt)
+      window.LatamBfShowCoupon($('#bkCouponPromoStatus'),state.couponPercent,state.couponExpiresAt,()=>{
+        state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';recalculate();
+        $('#bkCouponSavingRow').hidden=true;
+        $('#bkSumTotal').textContent=money(state.total);
+        $('#bkPayAmount').textContent=money(state.due);
+        $('#bkCouponNotice').textContent='El cupón ha caducado.';
+      });
+    else window.LatamBfShowCoupon($('#bkCouponPromoStatus'),0,'');
     $('#bkSumTotal').textContent = PRODUCT.quoteOnly && state.total <= 0 ? 'Pendiente de cotización' : money(state.total);
     $('#bkPayAmount').textContent = money(state.due);
     const isEnglish = document.documentElement.lang === 'en';
@@ -2478,14 +2537,16 @@
     couponBtn.addEventListener('click',async()=>{
       if(paymentInProgress)return;
       const code=String(couponInput.value||'').trim().toUpperCase();
-      if(!code){state.couponCode='';state.couponPercent=0;recalculate();paintSummary();couponNotice.textContent='Cupón eliminado.';return;}
+      if(!code){state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';recalculate();paintSummary();couponNotice.textContent='Cupón eliminado.';return;}
       couponBtn.disabled=true;couponNotice.textContent='Validando cupón…';
       try{
         const result=await window.LatamBfCouponQuote(code,state.date);
-        state.couponCode=code;state.couponPercent=result.percent;recalculate();paintSummary();
-        couponNotice.textContent='Descuento del '+result.percent+' % aplicado al precio base.';
+        if(!Number.isFinite(Date.parse(result.expiresAt)))throw new Error('La versión del servidor debe actualizarse para activar el contador.');
+        state.couponCode=code;state.couponPercent=result.percent;state.couponExpiresAt=result.expiresAt;
+        recalculate();paintSummary();
+        couponNotice.textContent='';
       }catch(err){
-        state.couponCode='';state.couponPercent=0;recalculate();paintSummary();
+        state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';recalculate();paintSummary();
         couponNotice.textContent=err.message||'El cupón no está disponible.';
       }finally{
         if(state.requestKey)state.requestKey=requestKey();
@@ -2496,7 +2557,8 @@
     couponInput.addEventListener('input',()=>{
       if(paymentInProgress)return;
       if(couponInput.value.trim().toUpperCase()!==state.couponCode){
-        state.couponCode='';state.couponPercent=0;recalculate();
+        state.couponCode='';state.couponPercent=0;state.couponExpiresAt='';recalculate();
+        window.LatamBfShowCoupon($('#bkCouponPromoStatus'),0,'');
         if(state.requestKey)state.requestKey=requestKey();
         if(state.paymentMethod==='online'){
           // No crear una orden PayPal por cada tecla escrita.
@@ -2558,6 +2620,7 @@
       state.roomPlan=String(source.roomPlan||'').slice(0,120);
       state.couponCode=typeof source.couponCode==='string'?source.couponCode.slice(0,32):'';
        state.couponPercent=state.couponCode&&Number(source.couponPercent)>0?Number(source.couponPercent):0;
+       state.couponExpiresAt=state.couponCode?String(source.couponExpiresAt||''):'';
       state.hotelQuotePending=Boolean(source.hotelQuotePending);
       if(state.hotelQuotePending){state.hotelSupplement=0;state.hotelAlternative=alternative?{...alternative,supplement:null,pending:true}:null;}
       const flight=source.flight;
