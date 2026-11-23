@@ -77,3 +77,10 @@ body.bf-landing{background:#080b0a;color:#fff}
 @media(max-width:760px){.bf-main{padding:55px 18px 68px}.bf-layout{grid-template-columns:1fr;max-width:580px;gap:26px}.bf-intro{padding:0}.bf-intro h1{font-size:clamp(39px,8vw,56px);margin:16px 0}.bf-intro__lead{font-size:15px;margin-bottom:22px}.bf-conditions{margin-top:17px}.bf-form-card{padding:25px 20px}.bf-background::after{background:linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,0,0,.68) 50%,rgba(0,0,0,.84))}.bf-offer{padding:13px 16px}}
 @media(max-width:425px){.bf-form__row{grid-template-columns:1fr;gap:14px}.bf-main{padding:36px 14px 60px}.bf-form-card{padding:22px 17px}.bf-intro h1{font-size:37px}.bf-phone-grid{grid-template-columns:121px minmax(0,1fr)}.bf-dial-trigger{padding:9px 7px;font-size:12px}.bf-dial-trigger__flag{font-size:19px}.bf-action-row{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.bf-scene{animation:none!important;opacity:0}.bf-scene:first-child{opacity:1}.bf-action{transition:none}}
+
+/* Verificación Black Friday: la cuenta regresiva es visible sin esperar al servidor. */
+.bf-otp-countdown{margin:11px 0 13px;font:600 13px/1.5 Inter,Arial,sans-serif;color:#c7fba0;text-align:center}
+.bf-otp-countdown strong{font-size:21px;font-variant-numeric:tabular-nums;letter-spacing:.04em;margin-left:7px;color:#fff}
+.bf-otp-countdown.is-expired,.bf-otp-countdown.is-expired strong{color:#ff94c3}
+.bf-action--quiet{margin-top:10px;background:transparent;border:1px solid #485c4d;color:#bed3c0}
+.bf-action--quiet:hover{background:rgba(190,255,112,.08);border-color:#709275;color:#fff}

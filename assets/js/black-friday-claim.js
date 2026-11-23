@@ -87,7 +87,7 @@
     const bytes=new Uint8Array(16);window.crypto.getRandomValues(bytes);
     const requestKey=Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
     const body=new URLSearchParams({action,payload:JSON.stringify({...data,requestKey})});
-    const limit=Date.now()+35000;
+    const limit=Date.now()+60000;
     let settled=false,script=null,callback='',wait=null;
     const tidy=()=>{
       if(wait)clearTimeout(wait);
@@ -104,7 +104,7 @@
       if(Date.now()>limit){
         done(Error('No pudimos confirmar el envío del código. Inténtalo de nuevo más tarde.'));
       }else{
-        wait=setTimeout(poll,1350);
+        wait=setTimeout(poll,2250);
       }
     };
     const poll=()=>{
@@ -139,6 +139,26 @@
     wait=setTimeout(poll,1200);
   });
   const step=n=>{for(let i=1;i<=3;i++)$('bfStep'+i).hidden=i!==n;status('');};
+  let otpDeadline=0,otpTicker=null,otpSentAt=0,otpRequestVersion=0,sendingCode=false;
+  function updateOtpTimer(){
+    const sec=Math.max(0,Math.ceil((otpDeadline-Date.now())/1000));
+    const mins=String(Math.floor(sec/60)).padStart(2,'0');
+    const secs=String(sec%60).padStart(2,'0');
+    $('bfOtpTime').textContent=mins+':'+secs;
+    $('bfOtpClock').classList.toggle('is-expired',sec===0);
+    $('bfVerify').disabled=busy||sec===0;
+    $('bfResend').hidden=(Date.now()-otpSentAt<60000)&&sec>0;
+    $('bfResend').disabled=sendingCode||busy;
+    if(sec===0&&!$('bfStep2').hidden&&!sendingCode)
+      status('El código ha caducado. Solicita uno nuevo para continuar.',true);
+  }
+  function startOtpTimer(date){
+    if(otpTicker)clearInterval(otpTicker);
+    const server=Date.parse(String(date||''));
+    otpDeadline=Number.isFinite(server)?server:Date.now()+5*60*1000;
+    updateOtpTimer();
+    otpTicker=setInterval(updateOtpTimer,1000);
+  }
   const init=async()=>{
     try{
       const r=await fetch('assets/data/catalog.json',{cache:'no-store'});
@@ -147,39 +167,91 @@
       if(!endpoint)throw Error('El registro no está disponible por el momento.');
     }catch(e){status(e.message||'No se pudo iniciar el registro.',true);$('bfRequest').disabled=true;}
   };
-  $('bfForm').addEventListener('submit',async event=>{
-    event.preventDefault();if(busy)return;
+  function requestOtp(isResend){
+    if(sendingCode||busy)return;
     const firstName=$('bfFirst').value.trim(),lastName=$('bfLast').value.trim();
     email=$('bfEmail').value.trim().toLowerCase();
     const digits=$('bfPhone').value.replace(/\D/g,'');
     if(digits.length<6||digits.length>15){
       status('Introduce un número de WhatsApp válido, sin el código de país.',true);
-      $('bfPhone').focus();
-      return;
+      $('bfPhone').focus();return;
     }
     const whatsapp=selectedDial+digits;
-    toggleBusy(true);status('Enviando código de verificación…');
-    try{
-      await post('bfLeadStart',{firstName,lastName,email,whatsapp,
-        privacyAccepted:$('bfPrivacy').checked,marketingAccepted:$('bfMarketing').checked});
-      $('bfEmailPreview').textContent=email;
-      step(2);$('bfOtp').focus();
-    }catch(e){status(e.message||'No pudimos enviar el código.',true);}
-    finally{toggleBusy(false);}
+    const version=++otpRequestVersion;
+    sendingCode=true;otpSentAt=Date.now();$('bfRequest').disabled=true;
+    $('bfEmailPreview').textContent=email;
+    // Abrir la verificación inmediatamente: el envío de MailApp y el acuse
+    // remoto pueden tardar, pero nunca deben bloquear el campo de seis dígitos.
+    if(!isResend){
+      $('bfOtp').value='';
+      step(2);
+      startOtpTimer('');
+      $('bfOtp').focus();
+    }
+    status(isResend?'Solicitando un nuevo código…':
+      'Estamos enviando tu código. Si ya lo recibiste, puedes escribirlo aquí.');
+    updateOtpTimer();
+    post('bfLeadStart',{firstName,lastName,email,whatsapp,
+      privacyAccepted:$('bfPrivacy').checked,marketingAccepted:$('bfMarketing').checked})
+    .then(reply=>{
+      if(version!==otpRequestVersion||$('bfStep2').hidden)return;
+      if(reply.expiresAt)startOtpTimer(reply.expiresAt);
+      else if(isResend)startOtpTimer('');
+      if(isResend)$('bfOtp').value='';
+      status('Código enviado. Revisa tu bandeja de entrada y correo no deseado.');
+    }).catch(error=>{
+      if(version!==otpRequestVersion||$('bfStep2').hidden)return;
+      const msg=String(error?.message||'');
+      if(/No pudimos confirmar|conexión|tardó|demasiado|temporalmente/i.test(msg)){
+        status('No pudimos confirmar la respuesta. Si ya recibiste el código, introdúcelo aquí. Si no llega, podrás solicitar otro.',true);
+      }else{
+        status(msg||'No se pudo enviar el código. Puedes volver a solicitarlo.',true);
+      }
+    }).finally(()=>{
+      if(version!==otpRequestVersion)return;
+      sendingCode=false;$('bfRequest').disabled=false;
+      updateOtpTimer();
+    });
+  }
+  $('bfForm').addEventListener('submit',event=>{
+    event.preventDefault();
+    requestOtp(false);
+  });
+  $('bfResend').addEventListener('click',()=>{
+    if(Date.now()-otpSentAt<60000&&!(!otpDeadline||Date.now()>=otpDeadline)){
+      status('Por favor, espera un momento antes de solicitar otro código.',true);
+      return;
+    }
+    requestOtp(true);
   });
   $('bfVerifyForm').addEventListener('submit',async event=>{
     event.preventDefault();if(busy)return;
+    if(Date.now()>=otpDeadline){
+      updateOtpTimer();
+      status('Tu código ha caducado. Solicita uno nuevo.',true);
+      return;
+    }
     const otp=$('bfOtp').value.trim();
-    toggleBusy(true);status('Verificando el código…');
+    toggleBusy(true);status('Verificando tu código…');
     try{
       const r=await post('bfLeadVerify',{email,otp});
       if(!/^BF26-[A-Z0-9-]{19}$/.test(String(r.code||'')))throw Error('No recibimos el cupón. Contáctanos.');
       coupon=r.code;$('bfCode').textContent=coupon;
+      if(otpTicker){clearInterval(otpTicker);otpTicker=null;}
       step(3);
-    }catch(e){status(e.message||'No pudimos verificar el correo.',true);}
-    finally{toggleBusy(false);}
+    }catch(e){
+      const msg=String(e?.message||'');
+      if(/No pudimos confirmar|conexión|demasiado/i.test(msg)){
+        status('No se pudo confirmar la respuesta. Si recibiste el cupón en tu correo, puedes utilizarlo. De lo contrario, vuelve a intentar.',true);
+      }else status(msg||'No pudimos verificar el correo.',true);
+    }finally{toggleBusy(false);updateOtpTimer();}
   });
-  $('bfRestart').addEventListener('click',()=>step(1));
+  $('bfRestart').addEventListener('click',()=>{
+    otpRequestVersion++;
+    if(otpTicker){clearInterval(otpTicker);otpTicker=null;}
+    otpDeadline=0;otpSentAt=0;sendingCode=false;
+    $('bfRequest').disabled=false;step(1);
+  });
   $('bfCopy').addEventListener('click',async()=>{
     try{await navigator.clipboard.writeText(coupon);$('bfCopy').textContent='¡Copiado!';}
     catch(_){status('Selecciona el código y cópialo manualmente.',true);}
