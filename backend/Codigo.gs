@@ -1518,7 +1518,8 @@ function validarYCalcular(data,couponOrderId) {
   const tiersBase=PRECIOS_PAQUETES[slug];
   const firstTier=tiersBase?tiersBase[Object.keys(tiersBase)[0]]:null;
   const standardDouble=firstTier&&Number(firstTier.double)>0?Number(firstTier.double):tarifas.adulto;
-  const stdChildFactor=slug==='lima-paracas-ica-huacachina-2d1n'?1:0.70;
+  const stdChildFactor=tiersBase?(slug==='lima-paracas-ica-huacachina-2d1n'?1:0.70):
+    (typeof FACTOR_NINOS[slug]==='number'?FACTOR_NINOS[slug]:0.75);
   const discountBase=redondear2(
     Math.min(tarifas.adulto,standardDouble)*adultos+
     Math.min(tarifas.nino,redondear2(standardDouble*stdChildFactor))*ninos);
