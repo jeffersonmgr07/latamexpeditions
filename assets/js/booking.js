@@ -2498,7 +2498,16 @@
       if(couponInput.value.trim().toUpperCase()!==state.couponCode){
         state.couponCode='';state.couponPercent=0;recalculate();
         if(state.requestKey)state.requestKey=requestKey();
-        if(state.paymentMethod==='online')mountPayment();
+        if(state.paymentMethod==='online'){
+          // No crear una orden PayPal por cada tecla escrita.
+          const cash=$('input[name="bkPaymentMethod"][value="pay_on_tour"]');
+          if(cash)cash.checked=true;
+          state.paymentMethod='pay_on_tour';
+          $('#bkPayOnTour').hidden=false;$('#bkPayOnline').hidden=true;
+          try{paypalButtons?.close?.();}catch(_){}
+          $('#paypalButtons').replaceChildren();
+          couponNotice.textContent='Aplica el cupón y después selecciona pagar online.';
+        }
         $('#bkCouponSavingRow').hidden=true;$('#bkSumTotal').textContent=money(state.total);
         $('#bkPayAmount').textContent=money(state.due);
         couponNotice.textContent='';
