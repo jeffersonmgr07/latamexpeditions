@@ -94,7 +94,11 @@ function lxBfValidar_(code,travelDate,orderId,email) {
   if(bound&&buyer&&bound!==buyer)throw new Error('El cupón está asociado a otro correo electrónico.');
   const end=v[9] instanceof Date?v[9].getTime():(v[9]?new Date(v[9]).getTime():0);
   if(orderId && !end)throw new Error('Primero aplica tu cupón antes de pagar.');
-  if(end&&Date.now()>=end)throw new Error('El cupón ha caducado.');
+  if(end&&Date.now()>=end){
+    if(v[1]!=='USADO'&&v[1]!=='VENCIDO'&&v[1]!=='BLOQUEADO')
+      found.sheet.getRange(found.row,2).setValue('VENCIDO');
+    throw new Error('El cupón ha caducado.');
+  }
   if(v[1]==='VENCIDO')throw new Error('El cupón ha caducado.');
   if(v[1]==='USADO' && String(v[4])===String(orderId||'') && orderId){
     const fixed=Number(v[6]);
@@ -175,7 +179,8 @@ function lxBfResponderCotizacion_(e) {
       .setMimeType(ContentService.MimeType.JAVASCRIPT);
   let result;
   try{result=lxBfCotizar_(p.code,p.date);}
-  catch(err){result={ok:false,error:'El cupón no está disponible para esta reserva.'};}
+  catch(err){result={ok:false,error:String(err&&err.message||'').startsWith('El cupón ha caducado')?
+    'El cupón ha caducado.':'El cupón no está disponible para esta reserva.'};}
   const raw=JSON.stringify(result).replace(/</g,'\\u003c');
   return ContentService.createTextOutput(callback+'('+raw+');')
     .setMimeType(ContentService.MimeType.JAVASCRIPT);
