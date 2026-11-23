@@ -221,6 +221,7 @@
    notice.style.cssText='font-weight:650;padding:10px;background:#eef7f0;border-radius:10px;margin:12px 0 0';
    addonHotels.append(notice);
  }
+ main.querySelectorAll('[data-lx-flight-fallback],[data-lx-hotel-fallback]').forEach(node=>node.remove());
  if(sectionAt){sectionAt.before(addonFlights,addonHotels)}
  else main.prepend(addonFlights,addonHotels);
  // En móvil, la fecha y los viajeros deben quedar antes de personalizar el paquete.
