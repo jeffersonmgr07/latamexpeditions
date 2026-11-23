@@ -76,13 +76,18 @@ function lxBfLeadStart_(data) {
     if(old)sheet.getRange(old.row,1,1,LX_BF_LEADS_HEADERS.length).setValues([values]);
     else sheet.appendRow(values);
     // El OTP nunca se escribe en el registro, solo su hash.
-    MailApp.sendEmail({
-      to:email,
-      subject:'Verifica tu correo para recibir tu cupón · Latam Expeditions',
-      body:'Hola, '+first+'.\n\nTu código de verificación es: '+otp+
-        '\n\nCaduca en 10 minutos. Si no solicitaste este código, ignora el mensaje.\n\nLatam Expeditions',
-      name:'Latam Expeditions'
-    });
+    try {
+      MailApp.sendEmail({
+        to:email,
+        subject:'Verifica tu correo para recibir tu cupón · Latam Expeditions',
+        body:'Hola, '+first+'.\n\nTu código de verificación es: '+otp+
+          '\n\nCaduca en 10 minutos. Si no solicitaste este código, ignora el mensaje.\n\nLatam Expeditions',
+        name:'Latam Expeditions'
+      });
+    } catch(mailError) {
+      registrarError(mailError,'Black Friday: error enviando OTP');
+      throw new Error('No podemos enviar el código de verificación en este momento.');
+    }
     cache.put(limitKey,'1',60);
     PROPS.setProperty(day,String(sentToday+1));
     return {ok:true,verificationRequired:true,message:'Enviamos un código de seis dígitos a tu correo.'};
@@ -163,4 +168,25 @@ function lxBfClaimStatusGet_(e) {
   }
   const safe=JSON.stringify(result).replace(/</g,'\\u003c').replace(/\u2028/g,'\\u2028').replace(/\u2029/g,'\\u2029');
   return ContentService.createTextOutput(cb+'('+safe+');').setMimeType(ContentService.MimeType.JAVASCRIPT);
+}
+
+/**
+ * Función administrativa visible en el editor de Google Apps Script.
+ * Comprueba permisos/cupo y si hay inventario, sin enviar emails reales.
+ */
+function diagnosticoBlackFridayRegistro() {
+  const rows=lxBfHoja_().getDataRange().getValues().slice(1);
+  const info={
+    ok:true,
+    campanaVigente:lxBfVigente_(),
+    backendRegistroActivo:typeof lxBfLeadStart_==='function',
+    backendAcuseActivo:typeof lxBfClaimStatusGet_==='function',
+    cuponesCampana:rows.filter(function(r){return String(r[13])==='CAPTACION_2026';}).length,
+    cuponesDisponibles:rows.filter(function(r){
+      return String(r[13])==='CAPTACION_2026'&&String(r[1])==='DISPONIBLE'&&!r[10];
+    }).length,
+    cuotaCorreoRestante:MailApp.getRemainingDailyQuota()
+  };
+  Logger.log(JSON.stringify(info));
+  return info;
 }
