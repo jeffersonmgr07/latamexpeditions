@@ -1276,8 +1276,13 @@
       (validFlight ? Number(state.flightQuote.displayedPrice || 0) : 0) +
       (state.customHotel ? Number(state.hotelSupplement||0) : 0));
     // No descontar vuelos, hoteles alternativos ni otros extras.
+    const standard=PRODUCT.tiers.length?
+      Number(PRODUCT.tiers[0]?.occupancyPrices?.double??PRODUCT.tiers[0]?.pricePerPerson??PRODUCT.price):state.adultUnit;
+    const eligibleBase=round2(
+      Math.min(state.adultUnit,standard)*state.adults+
+      Math.min(state.childUnit,round2(standard*PRODUCT.childFactor))*state.children);
     state.discountAmount=state.couponCode&&state.couponPercent>0?
-      round2((state.adults*state.adultUnit+state.children*state.childUnit)*state.couponPercent/100):0;
+      round2(eligibleBase*state.couponPercent/100):0;
     state.total=round2(state.total-state.discountAmount);
     const charge = calculateCharge(state.total);
     state.due = charge.due;
@@ -2471,6 +2476,7 @@
     const modal = buildModal();
     const couponInput=$('#bkCouponCode'),couponNotice=$('#bkCouponNotice'),couponBtn=$('#bkCouponApply');
     couponBtn.addEventListener('click',async()=>{
+      if(paymentInProgress)return;
       const code=String(couponInput.value||'').trim().toUpperCase();
       if(!code){state.couponCode='';state.couponPercent=0;recalculate();paintSummary();couponNotice.textContent='Cupón eliminado.';return;}
       couponBtn.disabled=true;couponNotice.textContent='Validando cupón…';
@@ -2481,11 +2487,18 @@
       }catch(err){
         state.couponCode='';state.couponPercent=0;recalculate();paintSummary();
         couponNotice.textContent=err.message||'El cupón no está disponible.';
-      }finally{couponBtn.disabled=false;}
+      }finally{
+        if(state.requestKey)state.requestKey=requestKey();
+        if(state.paymentMethod==='online')mountPayment();
+        couponBtn.disabled=false;
+      }
     });
     couponInput.addEventListener('input',()=>{
+      if(paymentInProgress)return;
       if(couponInput.value.trim().toUpperCase()!==state.couponCode){
         state.couponCode='';state.couponPercent=0;recalculate();
+        if(state.requestKey)state.requestKey=requestKey();
+        if(state.paymentMethod==='online')mountPayment();
         $('#bkCouponSavingRow').hidden=true;$('#bkSumTotal').textContent=money(state.total);
         $('#bkPayAmount').textContent=money(state.due);
         couponNotice.textContent='';
