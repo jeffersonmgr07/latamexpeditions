@@ -1148,7 +1148,7 @@ function doPost(e) {
     }
 
     const formRequest = Boolean(e.parameter &&
-      /^(registerPayOnTour|createOrder|captureOrder|hotelRoomRequest)$/.test(e.parameter.action||'') && e.parameter.payload);
+      /^(registerPayOnTour|createOrder|captureOrder|hotelRoomRequest|bfLeadStart|bfLeadVerify)$/.test(e.parameter.action||'') && e.parameter.payload);
     const body = formRequest
       ? {action:String(e.parameter.action),data:JSON.parse(String(e.parameter.payload))}
       : JSON.parse(e.postData.contents);
@@ -1180,6 +1180,14 @@ function doPost(e) {
       return formRequest ? lxHtmlAcuse_(Object.assign({
         type:'latam-paypal-response',action:'captureOrder',requestKey:String(data.requestKey||'')
       },output)) : json(output);
+    }
+
+    // Black Friday: captura segura por POST con acuse en iframe (sin datos personales en URL).
+    if(action==='bfLeadStart'||action==='bfLeadVerify'){
+      const output=action==='bfLeadStart'?lxBfLeadStart_(data):lxBfLeadVerify_(data);
+      return formRequest?lxHtmlAcuse_(Object.assign({
+        type:'latam-bf-claim-response',action:action,requestKey:String(data.requestKey||'')
+      },output)):json(output);
     }
 
     // --- Cuentas y consultas (Cuentas.gs) ---
@@ -1215,11 +1223,11 @@ function doPost(e) {
     // Nunca registrar formularios completos: incluyen nombres y documentos de identidad.
     const action=String(e&&e.parameter&&e.parameter.action||'');
     registrarError(error, 'doPost · '+(action||'json').slice(0,60));
-    if(/^(registerPayOnTour|createOrder|captureOrder|hotelRoomRequest)$/.test(action) && e&&e.parameter&&e.parameter.payload){
+    if(/^(registerPayOnTour|createOrder|captureOrder|hotelRoomRequest|bfLeadStart|bfLeadVerify)$/.test(action) && e&&e.parameter&&e.parameter.payload){
       const rawKey=String(e.parameter.payload||'');
       let key='';
       try{key=String(JSON.parse(rawKey).requestKey||'');}catch(ignore){}
-      return lxHtmlAcuse_({type:action==='hotelRoomRequest'?'latam-hotel-room-receipt':(action==='registerPayOnTour'?'latam-booking-receipt':'latam-paypal-response'),
+      return lxHtmlAcuse_({type:/^bfLead/.test(action)?'latam-bf-claim-response':(action==='hotelRoomRequest'?'latam-hotel-room-receipt':(action==='registerPayOnTour'?'latam-booking-receipt':'latam-paypal-response')),
         action:action,requestKey:key,ok:false,pending:false,emailSent:false,error:mensajeSeguro(error)});
     }
     return json({ ok: false, error: mensajeSeguro(error) });
@@ -1235,7 +1243,8 @@ function doGet(e) {
   if(action==='health')return json({
     ok:true,version:'2026-11-10-fullpay-signed-v1',paymentMode:'completo',
     signedQuotesReady:String(PROPS.getProperty('LATAM_PRICE_QUOTE_KEY')||'').length>=40,
-    blackFridayCouponsReady:typeof lxBfResponderCotizacion_==='function'
+    blackFridayCouponsReady:typeof lxBfResponderCotizacion_==='function',
+    blackFridayLeadReady:typeof lxBfLeadVerify_==='function'
   });
   return ContentService
     .createTextOutput('Latam Expeditions — backend de reservas activo. Usa POST.')
@@ -1282,6 +1291,9 @@ function mensajeSeguro(error) {
     'La solicitud es demasiado grande', 'La orden de pago', 'No se pudo iniciar el pago',
     'El pago no se completó', 'El pago fue recibido', 'No encontramos la orden de pago',
     'Las tarifas adicionales', 'El cupón', 'Este cupón', 'Selecciona una fecha de viaje',
+    'La campaña', 'Revisa el nombre', 'Debes aceptar', 'Ya enviamos un código',
+    'No podemos enviar', 'No encontramos un registro', 'Introduce el código de seis',
+    'Superaste el máximo', 'Los cupones de esta campaña',
     // Cuentas
     'Introduce un correo', 'Indícanos tu nombre', 'La contraseña debe',
     'Ya existe una cuenta', 'Correo o contraseña', 'Esta cuenta está desactivada',
@@ -1524,7 +1536,7 @@ function validarYCalcular(data,couponOrderId) {
   const discountBase=redondear2(
     Math.min(tarifas.adulto,standardDouble)*adultos+
     Math.min(tarifas.nino,redondear2(standardDouble*stdChildFactor))*ninos);
-  const couponPercent=couponCode?lxBfValidar_(couponCode,fechaTexto,couponOrderId||'').percent:0;
+  const couponPercent=couponCode?lxBfValidar_(couponCode,fechaTexto,couponOrderId||'',email).percent:0;
   const discountAmount=redondear2(discountBase*couponPercent/100);
   const total = redondear2(packageBase+validatedFlight.amount+validatedHotel.amount-discountAmount);
   const cobro = calcularCobro(total);
