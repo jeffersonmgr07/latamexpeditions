@@ -77,43 +77,66 @@
     busy=value;
     ['bfRequest','bfVerify'].forEach(id=>{const e=$(id);if(e)e.disabled=value;});
   };
-  const trusted=(origin)=>{
-    try{
-      const url=new URL(origin);return url.protocol==='https:'&&(
-        url.hostname==='script.google.com'||url.hostname==='script.googleusercontent.com'||
-        url.hostname.endsWith('.script.googleusercontent.com')||
-        url.hostname.endsWith('-script.googleusercontent.com'));
-    }catch(_){return false;}
-  };
+  // Apps Script HTMLService usa iframes aislados y puede no transmitir postMessage.
+  // Enviamos PII únicamente por POST; consultamos un acuse efímero por clave secreta.
   const post=(action,data)=>new Promise((resolve,reject)=>{
     if(!/^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(endpoint))
-      {reject(Error('La campaña todavía no está conectada.'));return;}
-    const requestKey='bf'+Date.now().toString(36)+Math.random().toString(36).slice(2,14);
-    const iframe=document.createElement('iframe');
-    iframe.hidden=true;iframe.setAttribute('aria-hidden','true');iframe.name='lx_bf_'+requestKey;
-    const form=document.createElement('form');form.hidden=true;form.method='POST';
-    form.action=endpoint;form.target=iframe.name;
-    for(const [name,value] of Object.entries({action,payload:JSON.stringify({...data,requestKey})})){
-      const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.append(input);
-    }
-    let settled=false;
-    const finish=(err,result)=>{
-      if(settled)return;settled=true;clearTimeout(timer);window.removeEventListener('message',onMessage);
-      form.remove();setTimeout(()=>iframe.remove(),350);
-      err?reject(err):resolve(result);
+      {reject(Error('El registro no está disponible por el momento.'));return;}
+    if(!window.crypto?.getRandomValues)
+      {reject(Error('No se pudo iniciar una solicitud segura.'));return;}
+    const bytes=new Uint8Array(16);window.crypto.getRandomValues(bytes);
+    const requestKey=Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
+    const body=new URLSearchParams({action,payload:JSON.stringify({...data,requestKey})});
+    const limit=Date.now()+35000;
+    let settled=false,script=null,callback='',wait=null;
+    const tidy=()=>{
+      if(wait)clearTimeout(wait);
+      if(script)script.remove();
+      if(callback){delete window[callback];callback='';}
+      script=null;wait=null;
     };
-    const onMessage=event=>{
-      const reply=event.data;
-      if(event.source!==iframe.contentWindow||!trusted(event.origin)||
-        !reply||reply.type!=='latam-bf-claim-response'||reply.action!==action||
-        reply.requestKey!==requestKey)return;
-      if(reply.ok!==true)finish(Error(reply.error||'No se pudo procesar la solicitud.'));
-      else finish(null,reply);
+    const done=(error,response)=>{
+      if(settled)return;settled=true;tidy();
+      error?reject(error):resolve(response);
     };
-    window.addEventListener('message',onMessage);
-    const timer=setTimeout(()=>finish(Error('La conexión tardó demasiado. Revisa tu correo antes de reintentar.')),45000);
-    document.body.append(iframe,form);
-    try{form.submit();}catch(e){finish(e);}
+    const again=()=>{
+      if(settled)return;
+      if(Date.now()>limit){
+        done(Error('No pudimos confirmar el envío del código. Inténtalo de nuevo más tarde.'));
+      }else{
+        wait=setTimeout(poll,1350);
+      }
+    };
+    const poll=()=>{
+      if(settled)return;
+      tidy();
+      callback='__lxBfClaim_'+requestKey;
+      script=document.createElement('script');
+      script.async=true;
+      let answered=false;
+      const noReply=()=>{
+        if(answered||settled)return;answered=true;tidy();again();
+      };
+      window[callback]=reply=>{
+        if(answered||settled)return;answered=true;tidy();
+        if(reply?.pending===true){again();return;}
+        if(reply?.ok===true){done(null,reply);return;}
+        done(Error(reply?.error||'No pudimos completar la solicitud.'));
+      };
+      script.onerror=noReply;
+      script.onload=()=>{wait=setTimeout(noReply,900);};
+      script.src=endpoint+'?'+new URLSearchParams({
+        action:'bf_claim_status',requestKey,callback,_:String(Date.now())
+      });
+      document.head.append(script);
+    };
+    // La respuesta de fetch es opaca por las restricciones CORS de Apps Script.
+    // El resultado confiable se obtiene del backend mediante bf_claim_status.
+    fetch(endpoint,{method:'POST',mode:'no-cors',body,credentials:'omit',
+      cache:'no-store',redirect:'follow'}).catch(()=>{
+        console.warn('[BF] No fue posible confirmar el envío POST. Revisando acuse del servidor.');
+      });
+    wait=setTimeout(poll,1200);
   });
   const step=n=>{for(let i=1;i<=3;i++)$('bfStep'+i).hidden=i!==n;status('');};
   const init=async()=>{
