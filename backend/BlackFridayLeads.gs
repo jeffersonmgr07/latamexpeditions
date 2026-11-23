@@ -6,7 +6,7 @@
 const LX_BF_LEADS_SHEET='Registros BF 2026';
 const LX_BF_LEADS_HEADERS=['Creado','Actualizado','Nombre','Apellidos','Correo','WhatsApp',
   'Código de verificación hash','Vence verificación','Intentos','Verificado','Cupón hash','Publicidad autorizada'];
-const LX_BF_OTP_MS=10*60*1000;
+const LX_BF_OTP_MS=5*60*1000;
 function lxBfLeadText_(v,max) {
   return String(v==null?'':v).replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim().slice(0,max);
 }
@@ -14,6 +14,50 @@ function lxBfSheetValue_(v) {
   const s=String(v==null?'':v);
   return /^[=+@-]/.test(s)?"'"+s:s;
 }
+
+/** Correo promocional compatible con Gmail y lectores habituales; todos los datos se escapan. */
+function lxBfEmailEscape_(value) {
+  return String(value==null?'':value).replace(/[&<>"']/g,function(ch){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+  });
+}
+function lxBfEmailHtml_(name,code,kind) {
+  const first=lxBfEmailEscape_(name),token=lxBfEmailEscape_(code);
+  const verification=kind==='otp';
+  const title=verification?'Verifica tu correo':'¡Tu cupón Black Friday está listo!';
+  const introductory=verification?'Introduce este código en la página de Latam Expeditions para confirmar tu correo y reclamar tu cupón.':
+    'Tu correo ya está verificado. Este es tu cupón exclusivo para tu próxima aventura en Latinoamérica.';
+  const validity=verification?'Este código vence en 5 minutos.':
+    'Tu cupón es válido para una compra. Su plazo de uso comienza al pulsar «Aplicar» y no se reinicia.';
+  const action=verification?'Volver a verificar':'Explorar paquetes';
+  const href=verification?'https://latamexpeditions.com/black-friday.html':'https://latamexpeditions.com/paquetes.html';
+  return '<!doctype html><html lang="es"><head><meta charset="utf-8"></head>'+
+    '<body style="margin:0;padding:0;background:#f1f5f1;font-family:Arial,Helvetica,sans-serif;color:#213a2b;">'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background:#f1f5f1;padding:28px 12px;"><tr><td align="center">'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;background:#ffffff;border:1px solid #dfe9df;border-radius:16px;overflow:hidden;">'+
+    '<tr><td style="background:#092b1d;padding:26px 30px;text-align:center;">'+
+    '<img src="https://latamexpeditions.com/assets/img/logo-header-latam.png" width="198" alt="LATAM EXPEDITIONS" style="display:inline-block;border:0;max-width:100%;height:auto;">'+
+    '<div style="color:#c5fb83;letter-spacing:3px;font-size:11px;font-weight:bold;margin-top:15px;">BLACK FRIDAY 2026</div></td></tr>'+
+    '<tr><td style="padding:35px 31px 30px;">'+
+    '<p style="margin:0 0 13px;font-size:15px;color:#4e6655;">Hola, '+first+'.</p>'+
+    '<h1 style="margin:0 0 16px;color:#113f2c;font-size:25px;line-height:1.2;font-weight:800;">'+title+'</h1>'+
+    '<p style="margin:0 0 23px;font-size:15px;line-height:1.65;color:#496052;">'+introductory+'</p>'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border:2px solid #b7e87b;border-radius:12px;background:#f6fced;"><tr><td align="center" style="padding:18px 12px;">'+
+    '<div style="color:#65816c;font-size:11px;font-weight:bold;letter-spacing:2px;">'+(verification?'TU CÓDIGO DE VERIFICACIÓN':'TU CUPÓN EXCLUSIVO')+'</div>'+
+    '<div style="font-weight:800;font-size:'+(verification?'34':'21')+'px;letter-spacing:'+(verification?'9':'2')+'px;color:#0a713d;line-height:1.5;">'+token+'</div>'+
+    '</td></tr></table>'+
+    '<p style="margin:17px 0 24px;color:#48604c;font-size:13px;line-height:1.6;">'+validity+'</p>'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td bgcolor="#07873e" style="border-radius:9px;">'+
+    '<a href="'+href+'" style="display:inline-block;padding:14px 27px;color:#fff;font-weight:bold;text-decoration:none;font-size:14px;">'+action+'</a></td></tr></table>'+
+    '<p style="margin:28px 0 0;font-size:12px;color:#7b8d80;line-height:1.6;">'+
+    (verification?'Si no solicitaste este mensaje, puedes ignorarlo.':'Guarda este correo: el código también permanecerá asociado a tu correo verificado.')+
+    '</p></td></tr>'+
+    '<tr><td style="background:#092b1d;color:#c7d6cb;font-size:11px;text-align:center;padding:19px 22px;line-height:1.6;">'+
+    'LATAM EXPEDITIONS · Experiencias memorables en Latinoamérica<br>'+
+    '<a href="https://latamexpeditions.com" style="color:#d1fca2;text-decoration:none;">latamexpeditions.com</a>'+
+    '</td></tr></table></td></tr></table></body></html>';
+}
+
 function lxBfLeadsHoja_() {
   const book=SpreadsheetApp.openById(CONFIG.sheetId);
   let sheet=book.getSheetByName(LX_BF_LEADS_SHEET);
@@ -81,7 +125,8 @@ function lxBfLeadStart_(data) {
         to:email,
         subject:'Verifica tu correo para recibir tu cupón · Latam Expeditions',
         body:'Hola, '+first+'.\n\nTu código de verificación es: '+otp+
-          '\n\nCaduca en 10 minutos. Si no solicitaste este código, ignora el mensaje.\n\nLatam Expeditions',
+          '\n\nCaduca en 5 minutos. Si no solicitaste este código, ignora el mensaje.\n\nLatam Expeditions',
+        htmlBody:lxBfEmailHtml_(first,otp,'otp'),
         name:'Latam Expeditions'
       });
     } catch(mailError) {
@@ -90,7 +135,8 @@ function lxBfLeadStart_(data) {
     }
     cache.put(limitKey,'1',60);
     PROPS.setProperty(day,String(sentToday+1));
-    return {ok:true,verificationRequired:true,message:'Enviamos un código de seis dígitos a tu correo.'};
+    return {ok:true,verificationRequired:true,expiresAt:values[7].toISOString(),
+      message:'Enviamos un código de seis dígitos a tu correo.'};
   } finally {lock.releaseLock();}
 }
 function lxBfLeadVerify_(data) {
@@ -136,7 +182,8 @@ function lxBfLeadVerify_(data) {
           '\n\nPuedes aplicarlo en https://latamexpeditions.com/paquetes.html o en nuestras experiencias.'+
           '\nEl plazo de uso de cinco horas empezará cuando pulses Aplicar en la reserva.'+
           '\nEl cupón se asocia a este mismo correo y es válido para una sola compra pagada.'+
-          '\n\nLatam Expeditions',name:'Latam Expeditions'});
+          '\n\nLatam Expeditions',
+        htmlBody:lxBfEmailHtml_(String(v[2]),code,'coupon'),name:'Latam Expeditions'});
     }catch(err){registrarError(err,'Envío cupón Black Friday');}
     return {ok:true,code:code,message:'Correo verificado. Este es tu cupón exclusivo.'};
   } finally {lock.releaseLock();}
