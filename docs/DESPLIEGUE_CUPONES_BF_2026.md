@@ -11,7 +11,7 @@ los cupones deben validarse en el servidor antes de activar el formulario públi
    desde `backend/CuponesBlackFriday.gs`. No introducir códigos en archivos públicos.
 4. Guardar y **Gestionar implementaciones → Editar → Nueva versión → Implementar**.
    Mantener la URL `/exec` ya configurada en `assets/data/catalog.json`.
-5. Antes de hacer una compra, seleccionar la función `lxBfPruebaInstalacion_`
+5. Antes de hacer una compra, seleccionar la función `pruebaCuponesBlackFriday`
    en el desplegable del editor de Apps Script y pulsar **Ejecutar**. Autorizar
    los permisos si se solicitan. En el registro debe aparecer un objeto
    con `ok:true`, `cuponesInstalados:10` y `descuentosVerificados:true`.
