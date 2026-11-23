@@ -116,9 +116,12 @@
     if(!state.couponCode||!state.couponPercent)return 0;
     // El incremento por categoría/acomodación hotelera no recibe descuento.
     const standard=Number(firstTier?.occupancyPrices?.double??firstTier?.pricePerPerson??params.base);
-    const selected=pricePackage();
-    const eligible=Math.min(selected,Math.round(standard*(state.adults+state.children*params.childFactor)*100)/100);
-    return Math.round(eligible*state.couponPercent)/100;
+    const tier=currentTier();
+    const rate=Number(tier?.occupancyPrices?.[state.occupancy]??tier?.pricePerPerson??params.base);
+    const round=n=>Math.round(n*100)/100;
+    const eligible=round(Math.min(rate,standard)*state.adults+
+      Math.min(round(rate*params.childFactor),round(standard*params.childFactor))*state.children);
+    return round(eligible*state.couponPercent/100);
   }
  function total(){return Math.round((pricePackage()+priceFlight()+extraHotelCost()-discountAmount())*100)/100}
  function passengerText(){return state.adults+(state.adults===1?' adulto':' adultos')+(state.children?', '+state.children+(state.children===1?' niño':' niños'):'')}
